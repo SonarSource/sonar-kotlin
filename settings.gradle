@@ -5,6 +5,10 @@ pluginManagement {
         }
         gradlePluginPortal()
     }
+
+    plugins {
+        id 'org.jetbrains.kotlin.jvm' version "${kotlinVersion}"
+    }
 }
 
 rootProject.name = 'slang'

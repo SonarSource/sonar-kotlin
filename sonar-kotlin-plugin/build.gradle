@@ -1,9 +1,6 @@
 plugins {
     id 'com.github.johnrengelman.shadow' version '6.1.0'
-}
-
-ext {
-    kotlinVersion = '1.4.10'
+    id 'org.jetbrains.kotlin.jvm'
 }
 
 dependencies {
@@ -15,7 +12,6 @@ dependencies {
     implementation 'org.sonarsource.analyzer-commons:sonar-analyzer-commons'
     implementation 'org.sonarsource.analyzer-commons:sonar-xml-parsing'
     implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:${kotlinVersion}"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
     implementation 'com.fasterxml.staxmate:staxmate:2.3.1'
     testImplementation "org.junit.jupiter:junit-jupiter-api"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
@@ -30,6 +26,10 @@ dependencies {
 tasks.withType(JavaCompile) {
     // Prevent warning: Gradle 5.0 will ignore annotation processors
     options.compilerArgs += [ "-proc:none" ]
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8
 }
 
 jar {
@@ -79,7 +79,7 @@ shadowJar {
     exclude 'org/jetbrains/kotlin/types/**'
     exclude 'org/jetbrains/org/**'
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.archiveFile.get().asFile, 8_000_000L, 8_500_000L)
+        enforceJarSizeAndCheckContent(shadowJar.archiveFile.get().asFile, 8_500_000L, 9_000_000L)
     }
 }
 
