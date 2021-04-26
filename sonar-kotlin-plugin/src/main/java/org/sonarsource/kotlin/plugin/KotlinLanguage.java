@@ -39,5 +39,4 @@ public class KotlinLanguage extends AbstractLanguage {
     }
     return suffixes;
   }
-
 }

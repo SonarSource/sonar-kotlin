@@ -55,7 +55,7 @@ public class KotlinCodeVerifier implements CodeVerifier {
     }
     try {
       String wrappedContent = "fun function () { " + content + " }";
-      KotlinConverter.KotlinTree kotlinTree = new KotlinConverter.KotlinTree(wrappedContent);
+      KotlinTree kotlinTree = new KotlinTree(wrappedContent);
       return !isSimpleExpression(kotlinTree.psiFile);
     } catch (ParseException e) {
       // do nothing
@@ -70,12 +70,8 @@ public class KotlinCodeVerifier implements CodeVerifier {
   // Filter natural language sentences parsed
   // as literals, infix notations or single expressions
   private static boolean isSimpleExpression(PsiFile tree) {
-    // Since kotlin 1.3, compiler adds 2 hidden elements in the hierarchy: a `KtScript`, having a `KtBlockExpression`
-    PsiElement content = getLastChild(getLastChild(getLastChild(tree.getLastChild())));
-    if (content == null) {
-      throw new IllegalStateException("AST is missing expected elements");
-    }
-    PsiElement[] elements = content.getChildren();
+    // FIXME  Since kotlin 1.3, compiler adds 2 hidden elements in the hierarchy: a `KtScript`, having a `KtBlockExpression`
+    PsiElement[] elements = tree.getLastChild().getLastChild().getChildren();
     return Arrays.stream(elements).allMatch(element ->
       element instanceof KtNameReferenceExpression ||
         element instanceof KtCollectionLiteralExpression ||

@@ -31,9 +31,6 @@
 'kotlin-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/messaging/RPCServer.kt':[
 314,
 ],
-'kotlin-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SingleThreadedStateMachineManager.kt':[
-754,
-],
 'kotlin-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/transitions/StartedFlowTransition.kt':[
 269,
 ],
@@ -213,9 +210,6 @@
 ],
 'kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/DaemonParams.kt':[
 145,
-],
-'kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/CompileServiceImpl.kt':[
-411,
 ],
 'kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/report/CompileServicesFacadeMessageCollector.kt':[
 47,

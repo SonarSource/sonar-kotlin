@@ -147,7 +147,15 @@ public class SlangRulingTest {
   public void test_kotlin() throws IOException {
     Map<String, String> properties = new HashMap<>();
     properties.put("sonar.inclusions", "sources/kotlin/**/*.kt, ruling/src/test/resources/sources/kotlin/**/*.kt");
-    properties.put("sonar.exclusions", "**/testData/**/*");
+    properties.put("sonar.exclusions", String.join(",",
+            "**/testData/**/*"
+            , "sources/kotlin/corda/samples/simm-valuation-demo/flows/src/main/kotlin/net/corda/vega/analytics/example/OGSwapPricingCcpExample.kt"
+            , "sources/kotlin/corda/samples/simm-valuation-demo/flows/src/main/kotlin/net/corda/vega/analytics/example/OGSwapPricingExample.kt"
+            , "sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/CompileServiceImpl.kt"
+            , "sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/psiUtil/ktPsiUtil.kt"
+            , "sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/psiUtil/psiUtils.kt"
+            , "sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ast/Statements.kt"
+    ));
     run_ruling_test("kotlin", properties);
   }
 

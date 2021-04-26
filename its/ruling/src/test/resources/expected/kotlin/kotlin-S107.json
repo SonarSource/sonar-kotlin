@@ -1,7 +1,4 @@
 {
-'kotlin-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/LedgerTransaction.kt':[
-405,
-],
 'kotlin-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/crypto/X509Utilities.kt':[
 151,
 199,

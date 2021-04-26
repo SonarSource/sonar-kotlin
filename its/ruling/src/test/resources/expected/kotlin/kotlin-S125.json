@@ -27,9 +27,6 @@
 'kotlin-project:sources/kotlin/corda/samples/network-visualiser/src/main/kotlin/net/corda/netmap/VisualiserView.kt':[
 70,
 ],
-'kotlin-project:sources/kotlin/corda/samples/simm-valuation-demo/flows/src/main/kotlin/net/corda/vega/analytics/example/OGSwapPricingExample.kt':[
-94,
-],
 'kotlin-project:sources/kotlin/corda/samples/simm-valuation-demo/src/test/kotlin/net/corda/vega/SwapExample.kt':[
 82,
 ],

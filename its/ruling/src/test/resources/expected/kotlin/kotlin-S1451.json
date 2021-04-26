@@ -1064,9 +1064,6 @@
 'kotlin-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/ContractUpgradeTransactions.kt':[
 0,
 ],
-'kotlin-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/LedgerTransaction.kt':[
-0,
-],
 'kotlin-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/MerkleTransaction.kt':[
 0,
 ],
@@ -1131,9 +1128,6 @@
 0,
 ],
 'kotlin-project:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/contracts/AmountTests.kt':[
-0,
-],
-'kotlin-project:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/contracts/ContractsDSLTests.kt':[
 0,
 ],
 'kotlin-project:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/contracts/PrivacySaltTest.kt':[
@@ -2390,9 +2384,6 @@
 'kotlin-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SessionRejectException.kt':[
 0,
 ],
-'kotlin-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SingleThreadedStateMachineManager.kt':[
-0,
-],
 'kotlin-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/StaffedFlowHospital.kt':[
 0,
 ],
@@ -2943,12 +2934,6 @@
 0,
 ],
 'kotlin-project:sources/kotlin/corda/samples/simm-valuation-demo/flows/src/main/kotlin/net/corda/vega/analytics/OGUtils.kt':[
-0,
-],
-'kotlin-project:sources/kotlin/corda/samples/simm-valuation-demo/flows/src/main/kotlin/net/corda/vega/analytics/example/OGSwapPricingCcpExample.kt':[
-0,
-],
-'kotlin-project:sources/kotlin/corda/samples/simm-valuation-demo/flows/src/main/kotlin/net/corda/vega/analytics/example/OGSwapPricingExample.kt':[
 0,
 ],
 'kotlin-project:sources/kotlin/corda/samples/simm-valuation-demo/flows/src/main/kotlin/net/corda/vega/flows/IRSTradeFlow.kt':[

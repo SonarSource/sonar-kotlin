@@ -49,6 +49,7 @@ public class KotlinPlugin implements Plugin {
 
   public static final String KOTLIN_FILE_SUFFIXES_KEY = "sonar.kotlin.file.suffixes";
   public static final String KOTLIN_FILE_SUFFIXES_DEFAULT_VALUE = ".kt";
+  public static final String SONAR_JAVA_BINARIES = "sonar.java.binaries";
 
   @Override
   public void define(Context context) {
@@ -92,6 +93,10 @@ public class KotlinPlugin implements Plugin {
           .subCategory(ANDROID_SUBCATEGORY)
           .onQualifiers(Qualifiers.PROJECT)
           .multiValues(true)
+          .build(),
+        PropertyDefinition.builder(SONAR_JAVA_BINARIES)
+          .description("Comma-separated paths to directories containing the binary files (directories with class files).")
+          .hidden()
           .build());
     }
   }

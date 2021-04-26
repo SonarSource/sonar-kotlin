@@ -23,9 +23,6 @@
 'kotlin-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/services/events/ScheduledFlowIntegrationTests.kt':[
 82,
 ],
-'kotlin-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SingleThreadedStateMachineManager.kt':[
-750,
-],
 'kotlin-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/utilities/PersistentMap.kt':[
 47,
 ],

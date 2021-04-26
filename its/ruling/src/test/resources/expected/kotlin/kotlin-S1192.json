@@ -18,10 +18,6 @@
 'kotlin-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/vault/QueryCriteriaUtils.kt':[
 236,
 ],
-'kotlin-project:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/contracts/ContractsDSLTests.kt':[
-39,
-40,
-],
 'kotlin-project:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/contracts/StructuresTests.kt':[
 51,
 ],

@@ -22,10 +22,6 @@
 'kotlin-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/messaging/RPCServer.kt':[
 300,
 ],
-'kotlin-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SingleThreadedStateMachineManager.kt':[
-605,
-624,
-],
 'kotlin-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/transitions/DeliverSessionMessageTransition.kt':[
 58,
 ],
@@ -127,9 +123,6 @@
 ],
 'kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/DaemonParams.kt':[
 143,
-],
-'kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/CompileServiceImpl.kt':[
-407,
 ],
 'kotlin-project:sources/kotlin/kotlin/compiler/frontend.java/src/org/jetbrains/kotlin/resolve/jvm/checkers/JavaNullabilityChecker.kt':[
 53,

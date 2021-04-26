@@ -40,7 +40,7 @@ jar {
                 'Build-Time': buildDate,
                 'Implementation-Build': 'git rev-parse HEAD'.execute().text.trim(),
                 'Plugin-BuildDate': buildDate,
-                'Plugin-ChildFirstClassLoader': 'false',
+                'Plugin-ChildFirstClassLoader': 'true',
                 'Plugin-Class': 'org.sonarsource.kotlin.plugin.KotlinPlugin',
                 'Plugin-Description': 'Code Analyzer for Kotlin',
                 'Plugin-Developers': 'SonarSource Team',
@@ -62,24 +62,24 @@ jar {
 }
 
 shadowJar {
-    minimize { }
-    exclude 'kotlin/comparisons/**'
+    //minimize { }
+    //exclude 'kotlin/comparisons/**'
     exclude 'kotlin/scripts/**'
-    exclude 'org/jetbrains/kotlin/org/jdom/**'
+    //exclude 'org/jetbrains/kotlin/org/jdom/**'
     exclude 'org/jetbrains/kotlin/com/intellij/icons/**'
-    exclude 'org/jetbrains/kotlin/com/intellij/lang/jvm/**'
-    exclude 'org/jetbrains/kotlin/com/intellij/ui/**'
-    exclude 'org/jetbrains/kotlin/com/intellij/util/ui/**'
-    exclude 'org/jetbrains/kotlin/com/intellij/util/xmlb/**'
-    exclude 'org/jetbrains/kotlin/builtins/**'
-    exclude 'org/jetbrains/kotlin/descriptors/**'
-    exclude 'org/jetbrains/kotlin/renderer/**'
-    exclude 'org/jetbrains/kotlin/resolve/**'
-    exclude 'org/jetbrains/kotlin/storage/**'
-    exclude 'org/jetbrains/kotlin/types/**'
-    exclude 'org/jetbrains/org/**'
+    //exclude 'org/jetbrains/kotlin/com/intellij/lang/jvm/**'
+    //exclude 'org/jetbrains/kotlin/com/intellij/ui/**'
+    //exclude 'org/jetbrains/kotlin/com/intellij/util/ui/**'
+    //exclude 'org/jetbrains/kotlin/com/intellij/util/xmlb/**'
+    //exclude 'org/jetbrains/kotlin/builtins/**'
+    //exclude 'org/jetbrains/kotlin/descriptors/**'
+    //exclude 'org/jetbrains/kotlin/renderer/**'
+    //exclude 'org/jetbrains/kotlin/resolve/**'
+    //exclude 'org/jetbrains/kotlin/storage/**'
+    //exclude 'org/jetbrains/kotlin/types/**'
+    //exclude 'org/jetbrains/org/**'
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.archiveFile.get().asFile, 8_500_000L, 9_000_000L)
+        enforceJarSizeAndCheckContent(shadowJar.archiveFile.get().asFile, 50_000_000L, 60_500_000L)
     }
 }
 

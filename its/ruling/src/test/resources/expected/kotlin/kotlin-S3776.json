@@ -34,9 +34,6 @@
 'kotlin-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/NodeStartup.kt':[
 53,
 ],
-'kotlin-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SingleThreadedStateMachineManager.kt':[
-327,
-],
 'kotlin-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/transactions/RaftTransactionCommitLog.kt':[
 75,
 ],
@@ -297,9 +294,6 @@
 'kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-client/src/org/jetbrains/kotlin/daemon/client/KotlinCompilerClient.kt':[
 234,
 312,
-],
-'kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/CompileServiceImpl.kt':[
-364,
 ],
 'kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/RemoteCompilationCanceledStatusClient.kt':[
 36,
