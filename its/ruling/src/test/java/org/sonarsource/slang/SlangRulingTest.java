@@ -32,9 +32,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.commons.lang.StringUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -156,8 +158,54 @@ public class SlangRulingTest {
             , "sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/psiUtil/psiUtils.kt"
             , "sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ast/Statements.kt"
     ));
+
+    List<String> ktorDirs = Arrays.asList(
+      "ktor-client/ktor-client-apache/",
+      "ktor-client/ktor-client-cio/",
+      "ktor-client/ktor-client-core/",
+      "ktor-client/ktor-client-jetty/",
+      "ktor-client/ktor-client-tests/",
+      "ktor-features/ktor-auth/",
+      "ktor-features/ktor-auth-jwt/",
+      "ktor-features/ktor-auth-ldap/",
+      "ktor-features/ktor-freemarker/",
+      "ktor-features/ktor-gson/",
+      "ktor-features/ktor-html-builder/",
+      "ktor-features/ktor-jackson/",
+      "ktor-features/ktor-locations/",
+      "ktor-features/ktor-metrics/",
+      "ktor-features/ktor-server-sessios/",
+      "ktor-features/ktor-velocity/",
+      "ktor-features/ktor-websockets/",
+      "ktor-http/",
+      "ktor-http-cio/",
+      "ktor-network/",
+      "ktor-network-tls/",
+      "ktor-server/ktor-server-cio/",
+      "ktor-server/ktor-server-core/",
+      "ktor-server/ktor-server-host-common/",
+      "ktor-server/ktor-server-jetty/",
+      "ktor-server/ktor-server-netty/",
+      "ktor-server/ktor-server-servlet/",
+      "ktor-server/ktor-server-test-host/",
+      "ktor-server/ktor-server-tomcat/");
+    
+    String binaries = ktorDirs.stream().map(dir -> FileLocation.of("../sources/kotlin/ktor/" + dir + "build/classes"))
+      .map(SlangRulingTest::getFileLocationAbsolutePath)
+      .collect(Collectors.joining(","));
+    properties.put("sonar.java.binaries", binaries);
+    
     run_ruling_test("kotlin", properties);
   }
+
+  private static String getFileLocationAbsolutePath(FileLocation location) {
+    try {
+      return location.getFile().getCanonicalFile().getAbsolutePath();
+    } catch (IOException e) {
+      return "";
+    }
+  }
+
 
   @Test
   public void test_ruby() throws IOException {

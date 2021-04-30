@@ -17,26 +17,26 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.converter;
+package org.sonarsource.kotlin.converter
 
-import java.util.Arrays;
-import java.util.stream.Stream;
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement;
-import org.sonarsource.slang.api.ASTConverter;
-import org.sonarsource.slang.api.Tree;
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.sonarsource.slang.api.ASTConverter
+import org.sonarsource.slang.api.Tree
+import java.util.Arrays
+import java.util.stream.Stream
 
-public class KotlinConverter implements ASTConverter {
-
-  @Override
-  public Tree parse(String content) {
-    KotlinTree kotlinTree = new KotlinTree(content);
-    KotlinTreeVisitor kotlinTreeVisitor = new KotlinTreeVisitor(kotlinTree.psiFile, kotlinTree.metaDataProvider);
-    return kotlinTreeVisitor.getSLangAST();
+class KotlinConverter(private val classpath: List<String>) : ASTConverter {
+  override fun parse(content: String): Tree {
+    val kotlinTree = KotlinTree(content, classpath)
+    val kotlinTreeVisitor = KotlinTreeVisitor(kotlinTree.psiFile, kotlinTree.metaDataProvider)
+    return kotlinTreeVisitor.sLangAST
   }
 
-  public static Stream<PsiElement> descendants(PsiElement element) {
-    return Arrays.stream(element.getChildren()).flatMap(
-      tree -> Stream.concat(Stream.of(tree), descendants(tree)));
+  companion object {
+    @JvmStatic
+    fun descendants(element: PsiElement): Stream<PsiElement> {
+      return Arrays.stream(element.children)
+        .flatMap { tree: PsiElement -> Stream.concat(Stream.of(tree), descendants(tree)) }
+    }
   }
-
 }

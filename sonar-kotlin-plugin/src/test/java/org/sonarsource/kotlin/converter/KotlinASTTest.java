@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,7 +36,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class KotlinASTTest {
-  private static KotlinConverter converter = new KotlinConverter();
+  private static KotlinConverter converter = new KotlinConverter(Collections.emptyList());
 
   @Test
   void all_kotlin_files() throws IOException {

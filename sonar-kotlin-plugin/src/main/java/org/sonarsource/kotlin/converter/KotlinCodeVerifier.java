@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.converter;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.CheckForNull;
@@ -55,7 +56,7 @@ public class KotlinCodeVerifier implements CodeVerifier {
     }
     try {
       String wrappedContent = "fun function () { " + content + " }";
-      KotlinTree kotlinTree = new KotlinTree(wrappedContent);
+      KotlinTree kotlinTree = new KotlinTree(wrappedContent, Collections.emptyList());
       return !isSimpleExpression(kotlinTree.psiFile);
     } catch (ParseException e) {
       // do nothing

@@ -19,6 +19,8 @@
  */
 package org.sonarsource.kotlin.converter;
 
+import java.util.Collections;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable;
@@ -35,9 +37,6 @@ import org.jetbrains.kotlin.resolve.BindingContext;
 import org.sonarsource.slang.api.ParseException;
 import org.sonarsource.slang.api.TextPointer;
 import org.sonarsource.slang.impl.TreeMetaDataProvider;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 import static org.sonarsource.kotlin.converter.KotlinCoreEnvironmentToolsKt.compilerConfiguration;
 import static org.sonarsource.kotlin.converter.KotlinCoreEnvironmentToolsKt.kotlinCoreEnvironment;
@@ -59,7 +58,7 @@ public class KotlinTree {
   );
   private static KtPsiFactory ktPsiFactory = new KtPsiFactory(environment.getProject(), false);
 
-  public KotlinTree(String content) {
+  public KotlinTree(String content, List<String> classpath) {
     KtFile ktFile = ktPsiFactory.createFile(normalizeEol(content));
     psiFile = ktFile;
     try {
@@ -78,7 +77,7 @@ public class KotlinTree {
     bindingContext = KotlinCoreEnvironmentToolsKt.bindingContext(
       environment,
       // FIXME Add classpath
-      Arrays.asList(""),
+      classpath, 
       Collections.singletonList(ktFile));
   }
 

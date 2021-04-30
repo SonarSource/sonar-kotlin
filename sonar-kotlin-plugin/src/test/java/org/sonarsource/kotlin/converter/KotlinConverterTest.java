@@ -77,7 +77,7 @@ import static org.sonarsource.slang.testing.TreesAssert.assertTrees;
 
 class KotlinConverterTest {
 
-  private KotlinConverter converter = new KotlinConverter();
+  private KotlinConverter converter = new KotlinConverter(Collections.emptyList());
 
   @Test
   void testParseException() {

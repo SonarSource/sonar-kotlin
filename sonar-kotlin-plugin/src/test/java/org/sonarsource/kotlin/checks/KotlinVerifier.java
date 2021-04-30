@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.checks;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import org.sonarsource.kotlin.converter.KotlinConverter;
 import org.sonarsource.slang.api.ASTConverter;
 import org.sonarsource.slang.checks.api.SlangCheck;
@@ -28,7 +29,7 @@ import org.sonarsource.slang.checks.api.SlangCheck;
 public class KotlinVerifier {
 
   private static final Path BASE_DIR = Paths.get("src", "test", "resources", "checks");
-  private static final ASTConverter CONVERTER = new KotlinConverter();
+  private static final ASTConverter CONVERTER = new KotlinConverter(Collections.emptyList());
 
   public static void verify(String fileName, SlangCheck check) {
     org.sonarsource.slang.testing.Verifier.verify(CONVERTER, BASE_DIR.resolve(fileName), check);
