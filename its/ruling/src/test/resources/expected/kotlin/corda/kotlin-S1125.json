@@ -1,0 +1,14 @@
+{
+'kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/contracts/ContractsDSL.kt':[
+42,
+43,
+56,
+57,
+],
+'kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/contracts/UniqueIdentifier.kt':[
+35,
+],
+'kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/vault/HibernateQueryCriteriaParser.kt':[
+304,
+],
+}

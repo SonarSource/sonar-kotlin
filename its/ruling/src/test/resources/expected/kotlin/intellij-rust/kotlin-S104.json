@@ -1,0 +1,14 @@
+{
+'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/TypeInference.kt':[
+0,
+],
+'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsErrorAnnotatorTest.kt':[
+0,
+],
+'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/import/AutoImportFixTest.kt':[
+0,
+],
+'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsGenericExpressionTypeInferenceTest.kt':[
+0,
+],
+}

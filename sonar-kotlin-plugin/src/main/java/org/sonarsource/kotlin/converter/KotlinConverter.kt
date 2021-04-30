@@ -19,24 +19,16 @@
  */
 package org.sonarsource.kotlin.converter
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.sonarsource.slang.api.ASTConverter
 import org.sonarsource.slang.api.Tree
-import java.util.Arrays
-import java.util.stream.Stream
 
-class KotlinConverter(private val classpath: List<String>) : ASTConverter {
-  override fun parse(content: String): Tree {
-    val kotlinTree = KotlinTree(content, classpath)
-    val kotlinTreeVisitor = KotlinTreeVisitor(kotlinTree.psiFile, kotlinTree.metaDataProvider)
-    return kotlinTreeVisitor.sLangAST
-  }
 
-  companion object {
-    @JvmStatic
-    fun descendants(element: PsiElement): Stream<PsiElement> {
-      return Arrays.stream(element.children)
-        .flatMap { tree: PsiElement -> Stream.concat(Stream.of(tree), descendants(tree)) }
+class KotlinConverter(classpath: List<String>) : ASTConverter {
+    val environment: Environment = Environment(classpath)
+
+    override fun parse(content: String): Tree {
+        val kotlinTree = KotlinTree(content, environment)
+        val kotlinTreeVisitor = KotlinTreeVisitor(kotlinTree.psiFile, kotlinTree.metaDataProvider)
+        return kotlinTreeVisitor.sLangAST
     }
-  }
 }

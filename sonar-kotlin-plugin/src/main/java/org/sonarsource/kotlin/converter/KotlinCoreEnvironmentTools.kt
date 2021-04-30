@@ -22,8 +22,6 @@ package org.sonarsource.kotlin.converter
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
-import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
-import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
@@ -33,83 +31,97 @@ import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.pom.PomModel
-import org.jetbrains.kotlin.config.*
+import org.jetbrains.kotlin.config.ApiVersion
+import org.jetbrains.kotlin.config.CommonConfigurationKeys
+import org.jetbrains.kotlin.config.CompilerConfiguration
+import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.config.JvmTarget
+import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
+import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
-import kotlin.random.Random
+
+class Environment(val classpath: List<String>) {
+    private val disposable = Disposer.newDisposable()
+    val configuration = compilerConfiguration(classpath, LanguageVersion.KOTLIN_1_4, JvmTarget.JVM_1_8)
+    val env = kotlinCoreEnvironment(configuration, disposable)
+    val ktPsiFactory: KtPsiFactory = KtPsiFactory(env.project, false)
+}
 
 fun kotlinCoreEnvironment(
-  configuration: CompilerConfiguration,
-  disposable: Disposable
+    configuration: CompilerConfiguration,
+    disposable: Disposable,
 ): KotlinCoreEnvironment {
-  configuration.put(
-    CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
-    MessageCollector.NONE
-  )
-  configuration.put(CommonConfigurationKeys.MODULE_NAME, "sonar-kotlin-ng")
+    configuration.put(
+        CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
+        MessageCollector.NONE
+    )
+    configuration.put(CommonConfigurationKeys.MODULE_NAME, "sonar-kotlin-ng")
 
-  val environment = KotlinCoreEnvironment.createForProduction(
-    disposable,
-    configuration,
-    // FIXME Add support of Kotlin/JS Kotlin/Native
-    EnvironmentConfigFiles.JVM_CONFIG_FILES,
-  )
+    val environment = KotlinCoreEnvironment.createForProduction(
+        disposable,
+        configuration,
+        // FIXME Add support of Kotlin/JS Kotlin/Native
+        EnvironmentConfigFiles.JVM_CONFIG_FILES,
+    )
 
-  val project = environment.project as MockProject
+    val project = environment.project as MockProject
 
-  project.registerService(PomModel::class.java, SonarPomModel(project))
+    project.registerService(PomModel::class.java, SonarPomModel(project))
 
-  return environment
+    return environment
 }
 
 fun bindingContext(
-  environment: KotlinCoreEnvironment,
-  classpath: List<String>,
-  files: List<KtFile>,
+    environment: KotlinCoreEnvironment,
+    classpath: List<String>,
+    files: List<KtFile>,
 ): BindingContext =
-  if (classpath.isEmpty())
-    BindingContext.EMPTY
-  else
-    analyzeAndGetBindingContext(environment, files)
+    if (classpath.isEmpty())
+        BindingContext.EMPTY
+    else
+        analyzeAndGetBindingContext(environment, files)
 
 private fun analyzeAndGetBindingContext(
-  env: KotlinCoreEnvironment,
-  ktFiles: List<KtFile>
+    env: KotlinCoreEnvironment,
+    ktFiles: List<KtFile>,
 ): BindingContext {
-  val analyzer = AnalyzerWithCompilerReport(
-    MessageCollector.NONE,
-    env.configuration.languageVersionSettings
-  )
-  analyzer.analyzeAndReport(ktFiles) {
-    TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
-      env.project,
-      ktFiles,
-      NoScopeRecordCliBindingTrace(),
-      env.configuration,
-      env::createPackagePartProvider,
-      ::FileBasedDeclarationProviderFactory
+    val analyzer = AnalyzerWithCompilerReport(
+        MessageCollector.NONE,
+        env.configuration.languageVersionSettings
     )
-  }
-  return analyzer.analysisResult.bindingContext
+    analyzer.analyzeAndReport(ktFiles) {
+        TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
+            env.project,
+            ktFiles,
+            NoScopeRecordCliBindingTrace(),
+            env.configuration,
+            env::createPackagePartProvider,
+            ::FileBasedDeclarationProviderFactory
+        )
+    }
+    return analyzer.analysisResult.bindingContext
 }
 
 fun compilerConfiguration(
-  classpath: List<String>,
-  languageVersion: LanguageVersion,
-  jvmTarget: JvmTarget,
+    classpath: List<String>,
+    languageVersion: LanguageVersion,
+    jvmTarget: JvmTarget,
 ): CompilerConfiguration {
-  val classpathFiles = classpath.map(::File)
-  val versionSettings = LanguageVersionSettingsImpl(
-    languageVersion, 
-    ApiVersion.createByLanguageVersion(languageVersion),
-  )
+    val classpathFiles = classpath.map(::File)
+    val versionSettings = LanguageVersionSettingsImpl(
+        languageVersion,
+        ApiVersion.createByLanguageVersion(languageVersion),
+    )
 
-  return CompilerConfiguration().apply {
-    put(CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS, versionSettings)
-    put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
-    addJvmClasspathRoots(classpathFiles)
-  }
+    return CompilerConfiguration().apply {
+        put(CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS, versionSettings)
+        put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
+        addJvmClasspathRoots(classpathFiles)
+    }
 }
 

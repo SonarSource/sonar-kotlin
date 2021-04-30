@@ -1,0 +1,11 @@
+{
+'kotlin-kotlin-project:ruling/src/test/resources/sources/kotlin/S1763.kt':[
+2,
+],
+'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/InlineCodegen.kt':[
+172,
+],
+'kotlin-kotlin-project:sources/kotlin/kotlin/plugins/android-extensions/android-extensions-idea/tests/org/jetbrains/kotlin/android/AbstractAndroidFindUsagesTest.kt':[
+23,
+],
+}

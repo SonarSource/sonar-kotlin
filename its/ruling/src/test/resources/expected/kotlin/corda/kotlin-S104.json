@@ -1,0 +1,11 @@
+{
+'kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/vault/VaultQueryTests.kt':[
+0,
+],
+'kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationOutputTests.kt':[
+0,
+],
+'kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/DriverDSLImpl.kt':[
+0,
+],
+}

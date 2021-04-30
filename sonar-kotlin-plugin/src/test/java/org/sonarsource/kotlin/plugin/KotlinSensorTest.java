@@ -19,16 +19,8 @@
  */
 package org.sonarsource.kotlin.plugin;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
-
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextPointer;
 import org.sonar.api.batch.rule.CheckFactory;
@@ -42,6 +34,7 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonarsource.slang.testing.AbstractSensorTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonarsource.kotlin.plugin.KotlinPlugin.SONAR_JAVA_BINARIES;
 import static org.sonarsource.slang.testing.TextRangeAssert.assertTextRange;
 
 class KotlinSensorTest extends AbstractSensorTest {
@@ -155,6 +148,34 @@ class KotlinSensorTest extends AbstractSensorTest {
     assertThat(textPointer.lineOffset()).isEqualTo(14);
 
     assertThat(logTester.logs()).contains(String.format("Unable to parse file: %s. Parse error at position 1:14", inputFile.uri()));
+  }
+
+  @Test
+  void test_with_classpath() {
+    MapSettings settings = new MapSettings();
+    settings.setProperty(SONAR_JAVA_BINARIES, "classes/");
+    context.setSettings(settings);
+
+    InputFile inputFile = createInputFile("file1.kt", "class A { fun f() = TODO() }");
+    context.fileSystem().add(inputFile);
+    CheckFactory checkFactory = checkFactory("S1764");
+    sensor(checkFactory).execute(context);
+    Collection<AnalysisError> analysisErrors = context.allAnalysisErrors();
+    assertThat(analysisErrors).isEmpty();
+  }
+
+  @Test
+  void test_with_blank_classpath() {
+    MapSettings settings = new MapSettings();
+    settings.setProperty(SONAR_JAVA_BINARIES, " ");
+    context.setSettings(settings);
+
+    InputFile inputFile = createInputFile("file1.kt", "class A { fun f() = TODO() }");
+    context.fileSystem().add(inputFile);
+    CheckFactory checkFactory = checkFactory("S1764");
+    sensor(checkFactory).execute(context);
+    Collection<AnalysisError> analysisErrors = context.allAnalysisErrors();
+    assertThat(analysisErrors).isEmpty();
   }
 
   @Override

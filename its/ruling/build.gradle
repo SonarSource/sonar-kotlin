@@ -16,7 +16,7 @@ test {
                 project.hasProperty("ruling-go")
     }
     if (project.hasProperty("ruling-kotlin")) {
-        filter { includeTestsMatching 'org.sonarsource.slang.SlangRulingTest.test_kotlin' }
+        filter { includeTestsMatching 'org.sonarsource.slang.SlangRulingTest.test_kotlin*' }
     } else if (project.hasProperty("ruling-ruby")) {
         filter { includeTestsMatching 'org.sonarsource.slang.SlangRulingTest.test_ruby' }
     } else if (project.hasProperty("ruling-scala")) {

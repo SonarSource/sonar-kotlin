@@ -56,7 +56,7 @@ public class KotlinCodeVerifier implements CodeVerifier {
     }
     try {
       String wrappedContent = "fun function () { " + content + " }";
-      KotlinTree kotlinTree = new KotlinTree(wrappedContent, Collections.emptyList());
+      KotlinTree kotlinTree = new KotlinTree(wrappedContent, new Environment(Collections.emptyList()));
       return !isSimpleExpression(kotlinTree.psiFile);
     } catch (ParseException e) {
       // do nothing
@@ -82,14 +82,6 @@ public class KotlinCodeVerifier implements CodeVerifier {
         element instanceof KtStringTemplateExpression ||
         isInfixNotation(element))
       || isSingleExpression(elements);
-  }
-
-  @CheckForNull
-  private static PsiElement getLastChild(@Nullable PsiElement tree) {
-    if (tree != null) {
-      return tree.getLastChild();
-    }
-    return null;
   }
 
   private static PsiElement[] removeParenthesizedExpressions(PsiElement[] elements) {

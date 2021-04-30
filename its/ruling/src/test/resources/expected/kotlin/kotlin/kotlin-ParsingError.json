@@ -1,0 +1,14 @@
+{
+'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/manyClasses/src/main/kotlin/classes.kt':[
+7,
+],
+'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/maven-archetypes/kotlin-archetype-js/src/main/resources/archetype-resources/src/main/kotlin/Hello.kt':[
+1,
+],
+'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/maven-archetypes/kotlin-archetype-jvm/src/main/resources/archetype-resources/src/main/kotlin/Hello.kt':[
+1,
+],
+'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/maven-archetypes/kotlin-archetype-jvm/src/main/resources/archetype-resources/src/test/kotlin/HelloTest.kt':[
+1,
+],
+}

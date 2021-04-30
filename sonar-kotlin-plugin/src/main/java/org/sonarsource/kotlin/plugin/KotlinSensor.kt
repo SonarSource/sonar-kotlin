@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.plugin
 import org.sonar.api.batch.rule.CheckFactory
 import org.sonar.api.batch.rule.Checks
 import org.sonar.api.batch.sensor.SensorContext
+import org.sonar.api.config.Configuration
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContextFactory
 import org.sonarsource.kotlin.converter.KotlinCodeVerifier
@@ -33,27 +34,33 @@ import org.sonarsource.slang.checks.api.SlangCheck
 import org.sonarsource.slang.plugin.SlangSensor
 
 class KotlinSensor(
-  checkFactory: CheckFactory,
-  fileLinesContextFactory: FileLinesContextFactory?,
-  noSonarFilter: NoSonarFilter?,
-  language: KotlinLanguage?
+    checkFactory: CheckFactory,
+    fileLinesContextFactory: FileLinesContextFactory,
+    noSonarFilter: NoSonarFilter,
+    language: KotlinLanguage,
 ) : SlangSensor(noSonarFilter, fileLinesContextFactory, language) {
-  private val checks: Checks<SlangCheck> = checkFactory.create(KotlinPlugin.KOTLIN_REPOSITORY_KEY)
-  init {
-    checks.addAnnotatedChecks(KotlinCheckList.checks() as Iterable<*>)
-    checks.addAnnotatedChecks(CommentedCodeCheck(KotlinCodeVerifier()))
-  }
-  
-  override fun astConverter(sensorContext: SensorContext): ASTConverter {
-    return KotlinConverter(sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList())
-  }
+    private val checks: Checks<SlangCheck> = checkFactory.create(KotlinPlugin.KOTLIN_REPOSITORY_KEY)
 
-  override fun checks(): Checks<SlangCheck> {
-    return checks
-  }
+    init {
+        checks.addAnnotatedChecks(KotlinCheckList.checks() as Iterable<*>)
+        checks.addAnnotatedChecks(CommentedCodeCheck(KotlinCodeVerifier()))
+    }
 
-  override fun repositoryKey(): String {
-    return KotlinPlugin.KOTLIN_REPOSITORY_KEY
-  }
+    override fun astConverter(sensorContext: SensorContext): ASTConverter {
+        return KotlinConverter(getFilesFromProperty(sensorContext.config(), SONAR_JAVA_BINARIES))
+    }
 
+    override fun checks(): Checks<SlangCheck> {
+        return checks
+    }
+
+    override fun repositoryKey(): String {
+        return KotlinPlugin.KOTLIN_REPOSITORY_KEY
+    }
 }
+
+fun getFilesFromProperty(settings: Configuration, property: String): List<String> =
+    settings.get(property).map {
+        if (it.isNotBlank()) it.split(",").toList() else emptyList()
+    }.orElse(emptyList())
+

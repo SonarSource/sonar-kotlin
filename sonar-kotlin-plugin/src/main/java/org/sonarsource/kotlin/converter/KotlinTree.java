@@ -19,27 +19,19 @@
  */
 package org.sonarsource.kotlin.converter;
 
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
-import org.jetbrains.kotlin.com.intellij.openapi.Disposable;
 import org.jetbrains.kotlin.com.intellij.openapi.editor.Document;
-import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer;
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement;
 import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement;
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile;
-import org.jetbrains.kotlin.config.JvmTarget;
-import org.jetbrains.kotlin.config.LanguageVersion;
 import org.jetbrains.kotlin.psi.KtFile;
-import org.jetbrains.kotlin.psi.KtPsiFactory;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.sonarsource.slang.api.ParseException;
 import org.sonarsource.slang.api.TextPointer;
 import org.sonarsource.slang.impl.TreeMetaDataProvider;
-
-import static org.sonarsource.kotlin.converter.KotlinCoreEnvironmentToolsKt.compilerConfiguration;
-import static org.sonarsource.kotlin.converter.KotlinCoreEnvironmentToolsKt.kotlinCoreEnvironment;
 
 public class KotlinTree {
   final PsiFile psiFile;
@@ -47,19 +39,8 @@ public class KotlinTree {
   final TreeMetaDataProvider metaDataProvider;
   final BindingContext bindingContext;
 
-  private static Disposable disposable = Disposer.newDisposable();
-  private static KotlinCoreEnvironment environment = kotlinCoreEnvironment(
-    compilerConfiguration(
-      Collections.emptyList(),
-      LanguageVersion.KOTLIN_1_4,
-      JvmTarget.JVM_1_8
-    ),
-    disposable
-  );
-  private static KtPsiFactory ktPsiFactory = new KtPsiFactory(environment.getProject(), false);
-
-  public KotlinTree(String content, List<String> classpath) {
-    KtFile ktFile = ktPsiFactory.createFile(normalizeEol(content));
+  public KotlinTree(String content, Environment environment) {
+    KtFile ktFile = environment.getKtPsiFactory().createFile(normalizeEol(content));
     psiFile = ktFile;
     try {
       document = psiFile
@@ -75,14 +56,13 @@ public class KotlinTree {
     checkParsingErrors(psiFile, document, metaDataProvider);
 
     bindingContext = KotlinCoreEnvironmentToolsKt.bindingContext(
-      environment,
-      // FIXME Add classpath
-      classpath, 
+      environment.getEnv(),
+      environment.getClasspath(),
       Collections.singletonList(ktFile));
   }
 
   private static void checkParsingErrors(PsiFile psiFile, Document document, TreeMetaDataProvider metaDataProvider) {
-    KotlinConverter.descendants(psiFile)
+    descendants(psiFile)
       .filter(PsiErrorElement.class::isInstance)
       .findFirst()
       .ifPresent(element -> {
@@ -98,5 +78,10 @@ public class KotlinTree {
   @NotNull
   private static String normalizeEol(String content) {
     return content.replaceAll("\\r\\n?", "\n");
+  }
+
+  private static Stream<PsiElement> descendants(PsiElement element) {
+    return Arrays.stream(element.getChildren())
+      .flatMap(tree -> Stream.concat(Stream.of(tree), descendants(tree)));
   }
 }

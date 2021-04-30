@@ -39,7 +39,11 @@ class SonarPomModel(project: Project) : UserDataHolderBase(), PomModel {
         }
     }
 
-    override fun <T : PomModelAspect?> getModelAspect(p0: Class<T>): T? { return null }
+    override fun <T : PomModelAspect?> getModelAspect(p0: Class<T>): T? {
+        return null
+    }
 
-    override fun runTransaction(p0: PomTransaction) { /* TODO Add body */ }
+    override fun runTransaction(p0: PomTransaction) { 
+        // TODO Add body
+    }
 }

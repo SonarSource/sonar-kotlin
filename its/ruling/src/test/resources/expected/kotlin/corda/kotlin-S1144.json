@@ -1,0 +1,12 @@
+{
+'kotlin-corda-project:sources/kotlin/corda/experimental/behave/src/main/kotlin/net/corda/behave/database/DatabaseConnection.kt':[
+44,
+],
+'kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/statemachine/FlowFrameworkTests.kt':[
+765,
+769,
+],
+'kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/DeserializedParameterizedType.kt':[
+24,
+],
+}

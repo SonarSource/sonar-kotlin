@@ -1,0 +1,12 @@
+{
+'kotlin-corda-project:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/identity/PartyAndCertificateTest.kt':[
+48,
+],
+'kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/config/NodeConfigurationImplTest.kt':[
+213,
+214,
+],
+'kotlin-corda-project:sources/kotlin/corda/samples/irs-demo/web/src/test/kotlin/net/corda/irs/web/IrsDemoWebApplicationTests.kt':[
+11,
+],
+}

@@ -19,9 +19,6 @@
  */
 package org.sonarsource.kotlin.converter;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.sonarsource.slang.api.Annotation;
 import org.sonarsource.slang.api.AssignmentExpressionTree;
@@ -55,6 +52,10 @@ import org.sonarsource.slang.api.Tree;
 import org.sonarsource.slang.api.VariableDeclarationTree;
 import org.sonarsource.slang.impl.ModifierTreeImpl;
 import org.sonarsource.slang.parser.SLangConverter;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;

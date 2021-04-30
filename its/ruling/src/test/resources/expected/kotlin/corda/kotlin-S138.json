@@ -1,0 +1,11 @@
+{
+'kotlin-corda-project:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/crypto/EdDSATests.kt':[
+20,
+],
+'kotlin-corda-project:sources/kotlin/corda/docs/source/example-code/src/main/kotlin/net/corda/docs/FlowCookbook.kt':[
+89,
+],
+'kotlin-corda-project:sources/kotlin/corda/samples/irs-demo/cordapp/src/test/kotlin/net/corda/irs/contract/IRSTests.kt':[
+56,
+],
+}
