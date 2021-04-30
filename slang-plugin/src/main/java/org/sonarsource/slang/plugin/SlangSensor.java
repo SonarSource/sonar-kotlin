@@ -20,7 +20,9 @@
 package org.sonarsource.slang.plugin;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -176,18 +178,29 @@ public abstract class SlangSensor implements Sensor {
   }
 
   private List<TreeVisitor<InputFileContext>> visitors(SensorContext sensorContext, DurationStatistics statistics) {
+    List<TreeVisitor<InputFileContext>> treeVisitors;
     if (sensorContext.runtime().getProduct() == SonarProduct.SONARLINT) {
-      return Arrays.asList(
+      treeVisitors = Arrays.asList(
         new IssueSuppressionVisitor(),
         new ChecksVisitor(checks(), statistics)
       );
     } else {
-      return Arrays.asList(
+      treeVisitors = Arrays.asList(
         new IssueSuppressionVisitor(),
         new MetricVisitor(fileLinesContextFactory, noSonarFilter),
         new ChecksVisitor(checks(), statistics),
         new CpdVisitor(),
         new SyntaxHighlighter());
     }
+
+    // TODO: remove this workaround once the Kotlin plugin is extracted
+    List<TreeVisitor<InputFileContext>> languageSpecificTreeVisitors = new ArrayList<>(treeVisitors);
+    languageSpecificTreeVisitors.addAll(languageSpecificVisitors(sensorContext));
+
+    return languageSpecificTreeVisitors;
+  }
+
+  protected List<TreeVisitor<InputFileContext>> languageSpecificVisitors(SensorContext sensorContext) {
+    return Collections.emptyList();
   }
 }

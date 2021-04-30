@@ -56,8 +56,8 @@ public class KotlinCodeVerifier implements CodeVerifier {
     }
     try {
       String wrappedContent = "fun function () { " + content + " }";
-      KotlinTree kotlinTree = new KotlinTree(wrappedContent, new Environment(Collections.emptyList()));
-      return !isSimpleExpression(kotlinTree.psiFile);
+      KotlinTree kotlinTree = KotlinTree.of(wrappedContent, new Environment(Collections.emptyList()));
+      return !isSimpleExpression(kotlinTree.getPsiFile());
     } catch (ParseException e) {
       // do nothing
     }

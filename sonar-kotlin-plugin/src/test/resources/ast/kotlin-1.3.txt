@@ -1,6 +1,6 @@
 AST node class                                         | first…last tokens    | line:col     
 -------------------------------------------------------|----------------------|--------------
-TopLevelTree {                                         | import … )           | 1:1 … 78:1   
+KotlinTree {                                           | import … )           | 1:1 … 78:1   
   ImportDeclarationTree {                              | import … *           | 1:1 … 1:28   
     ?KtImportDirective? {                              | import … *           | 1:1 … 1:28   
       ?KtDotQualifiedExpression? {                     | kotlinx … coroutines | 1:8 … 1:26   

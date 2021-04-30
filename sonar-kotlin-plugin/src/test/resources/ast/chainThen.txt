@@ -1,6 +1,6 @@
 AST node class                                                                                                             | first…last tokens | line:col     
 ---------------------------------------------------------------------------------------------------------------------------|-------------------|--------------
-TopLevelTree {                                                                                                             | val … )           | 1:1 … 44:1   
+KotlinTree {                                                                                                               | val … )           | 1:1 … 44:1   
   ?KtProperty[v]? {                                                                                                        | val … )           | 1:1 … 43:2   
     ?KtCallExpression? {                                                                                                   | thenChain … )     | 1:9 … 43:2   
       IdentifierTree                                                                                                       | thenChain         | 1:9 … 1:18   

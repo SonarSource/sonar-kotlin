@@ -33,7 +33,7 @@ class KotlinTreeTest {
     val environment = Environment(listOf("src/test/resources/classes"))
     val path = Paths.get("src/test/resources/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
-    val tree = KotlinTree(content, environment)
+    val tree = KotlinTree.of(content, environment)
     assertThat(tree.psiFile.children).hasSize(7)
 
     assertThat(tree.bindingContext.getSliceContents(BindingContext.RESOLVED_CALL)).hasSize(8)

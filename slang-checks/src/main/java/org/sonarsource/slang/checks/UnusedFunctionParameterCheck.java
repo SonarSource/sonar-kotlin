@@ -19,18 +19,18 @@
  */
 package org.sonarsource.slang.checks;
 
-import org.sonarsource.slang.api.FunctionDeclarationTree;
-import org.sonarsource.slang.api.IdentifierTree;
-import org.sonarsource.slang.api.ParameterTree;
-import org.sonarsource.slang.checks.api.CheckContext;
-import org.sonarsource.slang.checks.api.InitContext;
-import org.sonarsource.slang.checks.api.SecondaryLocation;
-import org.sonarsource.slang.checks.api.SlangCheck;
-import org.sonarsource.slang.impl.TopLevelTreeImpl;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.sonar.check.Rule;
+import org.sonarsource.slang.api.FunctionDeclarationTree;
+import org.sonarsource.slang.api.IdentifierTree;
+import org.sonarsource.slang.api.ParameterTree;
+import org.sonarsource.slang.api.TopLevelTree;
+import org.sonarsource.slang.checks.api.CheckContext;
+import org.sonarsource.slang.checks.api.InitContext;
+import org.sonarsource.slang.checks.api.SecondaryLocation;
+import org.sonarsource.slang.checks.api.SlangCheck;
 
 import static org.sonarsource.slang.checks.utils.FunctionUtils.isOverrideMethod;
 import static org.sonarsource.slang.checks.utils.FunctionUtils.isPrivateMethod;
@@ -63,16 +63,16 @@ public class UnusedFunctionParameterCheck implements SlangCheck {
     return functionDeclarationTree.formalParameters().stream()
       .filter(ParameterTree.class::isInstance)
       .map(ParameterTree.class::cast)
-        .filter(parameterTree -> parameterTree.modifiers().isEmpty() && functionDeclarationTree.descendants()
+      .filter(parameterTree -> parameterTree.modifiers().isEmpty() && functionDeclarationTree.descendants()
         .noneMatch(tree -> !tree.equals(parameterTree.identifier()) && areEquivalent(tree, parameterTree.identifier())))
       .collect(Collectors.toList());
   }
 
   protected void reportUnusedParameters(CheckContext ctx, List<ParameterTree> unusedParameters) {
     List<SecondaryLocation> secondaryLocations = unusedParameters.stream()
-        .map(unusedParameter ->
-            new SecondaryLocation(unusedParameter.identifier(), "Remove this unused method parameter " + unusedParameter.identifier().name() + "\"."))
-        .collect(Collectors.toList());
+      .map(unusedParameter ->
+        new SecondaryLocation(unusedParameter.identifier(), "Remove this unused method parameter " + unusedParameter.identifier().name() + "\"."))
+      .collect(Collectors.toList());
 
     IdentifierTree firstUnused = unusedParameters.get(0).identifier();
     String msg;
@@ -87,7 +87,7 @@ public class UnusedFunctionParameterCheck implements SlangCheck {
   }
 
   protected boolean isValidFunctionForRule(CheckContext ctx, FunctionDeclarationTree tree) {
-    return ctx.parent() instanceof TopLevelTreeImpl || (isPrivateMethod(tree) && !isOverrideMethod(tree));
+    return ctx.parent() instanceof TopLevelTree || (isPrivateMethod(tree) && !isOverrideMethod(tree));
   }
 
   protected boolean shouldBeIgnored(CheckContext ctx, FunctionDeclarationTree tree) {

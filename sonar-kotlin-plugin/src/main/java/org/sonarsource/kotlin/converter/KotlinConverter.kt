@@ -20,15 +20,9 @@
 package org.sonarsource.kotlin.converter
 
 import org.sonarsource.slang.api.ASTConverter
-import org.sonarsource.slang.api.Tree
-
 
 class KotlinConverter(classpath: List<String>) : ASTConverter {
     val environment: Environment = Environment(classpath)
 
-    override fun parse(content: String): Tree {
-        val kotlinTree = KotlinTree(content, environment)
-        val kotlinTreeVisitor = KotlinTreeVisitor(kotlinTree.psiFile, kotlinTree.metaDataProvider)
-        return kotlinTreeVisitor.sLangAST
-    }
+    override fun parse(content: String) = KotlinTree.of(content, environment)
 }

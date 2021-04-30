@@ -20,15 +20,15 @@
 package org.sonarsource.kotlin.plugin
 
 import org.sonar.api.batch.rule.CheckFactory
-import org.sonar.api.batch.rule.Checks
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.config.Configuration
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContextFactory
+import org.sonarsource.kotlin.api.KotlinCheck
 import org.sonarsource.kotlin.converter.KotlinCodeVerifier
 import org.sonarsource.kotlin.converter.KotlinConverter
-import org.sonarsource.kotlin.plugin.KotlinPlugin.SONAR_JAVA_BINARIES
-import org.sonarsource.slang.api.ASTConverter
+import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_BINARIES
+import org.sonarsource.kotlin.visiting.KtChecksVisitor
 import org.sonarsource.slang.checks.CommentedCodeCheck
 import org.sonarsource.slang.checks.api.SlangCheck
 import org.sonarsource.slang.plugin.SlangSensor
@@ -39,28 +39,27 @@ class KotlinSensor(
     noSonarFilter: NoSonarFilter,
     language: KotlinLanguage,
 ) : SlangSensor(noSonarFilter, fileLinesContextFactory, language) {
-    private val checks: Checks<SlangCheck> = checkFactory.create(KotlinPlugin.KOTLIN_REPOSITORY_KEY)
 
-    init {
-        checks.addAnnotatedChecks(KotlinCheckList.checks() as Iterable<*>)
-        checks.addAnnotatedChecks(CommentedCodeCheck(KotlinCodeVerifier()))
+    @Deprecated("Use Kotlin-native checks instead", replaceWith = ReplaceWith("checks"))
+    val legacyChecks = checkFactory.create<SlangCheck>(KotlinPlugin.KOTLIN_REPOSITORY_KEY).run {
+        addAnnotatedChecks(KotlinCheckList.checks() as Iterable<*>)
+        addAnnotatedChecks(CommentedCodeCheck(KotlinCodeVerifier()))
     }
 
-    override fun astConverter(sensorContext: SensorContext): ASTConverter {
-        return KotlinConverter(getFilesFromProperty(sensorContext.config(), SONAR_JAVA_BINARIES))
-    }
+    val checks = checkFactory.create<KotlinCheck>(KotlinPlugin.KOTLIN_REPOSITORY_KEY)
 
-    override fun checks(): Checks<SlangCheck> {
-        return checks
-    }
+    override fun astConverter(sensorContext: SensorContext) =
+        KotlinConverter(getFilesFromProperty(sensorContext.config(), SONAR_JAVA_BINARIES))
 
-    override fun repositoryKey(): String {
-        return KotlinPlugin.KOTLIN_REPOSITORY_KEY
-    }
+    override fun languageSpecificVisitors(sensorContext: SensorContext) = listOf(KtChecksVisitor(checks))
+
+    @Deprecated("Use native Kotlin API instead", replaceWith = ReplaceWith("legacyChecks"))
+    override fun checks() = legacyChecks
+
+    override fun repositoryKey() = KotlinPlugin.KOTLIN_REPOSITORY_KEY
 }
 
 fun getFilesFromProperty(settings: Configuration, property: String): List<String> =
     settings.get(property).map {
         if (it.isNotBlank()) it.split(",").toList() else emptyList()
     }.orElse(emptyList())
-

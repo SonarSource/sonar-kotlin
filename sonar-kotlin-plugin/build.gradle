@@ -18,6 +18,7 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-migrationsupport"
     testImplementation 'org.assertj:assertj-core'
     testImplementation 'org.mockito:mockito-core'
+    testImplementation 'io.mockk:mockk:1.10.6'
     testImplementation 'io.github.classgraph:classgraph'
     testImplementation project(':slang-antlr')
     testImplementation project(':slang-testing')

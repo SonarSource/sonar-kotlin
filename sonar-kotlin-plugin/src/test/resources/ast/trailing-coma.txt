@@ -1,6 +1,6 @@
 AST node class                             | first…last tokens | line:col   
 -------------------------------------------|-------------------|------------
-TopLevelTree {                             | package … }       | 1:1 … 11:1 
+KotlinTree {                               | package … }       | 1:1 … 11:1 
   PackageDeclarationTree {                 | package … ast     | 1:1 … 1:45 
     ?KtPackageDirective? {                 | package … ast     | 1:1 … 1:45 
       ?KtDotQualifiedExpression? {         | org … ast         | 1:9 … 1:45 

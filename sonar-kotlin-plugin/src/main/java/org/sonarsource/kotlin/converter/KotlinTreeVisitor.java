@@ -142,6 +142,10 @@ import static org.sonarsource.slang.api.ModifierTree.Kind.OVERRIDE;
 import static org.sonarsource.slang.api.ModifierTree.Kind.PRIVATE;
 import static org.sonarsource.slang.api.ModifierTree.Kind.PUBLIC;
 
+/**
+* @deprecated Use Kotlin-native PSI and visitors for rules instead.
+*/
+@Deprecated
 class KotlinTreeVisitor {
   private static final Map<KtToken, Operator> BINARY_OPERATOR_MAP = Collections.unmodifiableMap(Stream.of(
     new SimpleEntry<>(KtTokens.EQEQ, Operator.EQUAL_TO),
