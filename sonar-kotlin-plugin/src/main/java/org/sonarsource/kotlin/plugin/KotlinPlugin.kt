@@ -93,10 +93,6 @@ class KotlinPlugin : Plugin {
                     .subCategory(ANDROID_SUBCATEGORY)
                     .onQualifiers(Qualifiers.PROJECT)
                     .multiValues(true)
-                    .build(),
-                PropertyDefinition.builder(SONAR_JAVA_BINARIES)
-                    .description("Comma-separated paths to directories containing the binary files (directories with class files).")
-                    .hidden()
                     .build())
         }
     }
