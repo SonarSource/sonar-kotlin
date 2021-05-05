@@ -17,25 +17,14 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.checks;
+package org.sonarsource.kotlin.plugin
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
-import org.sonarsource.kotlin.converter.KotlinConverter;
-import org.sonarsource.slang.api.ASTConverter;
-import org.sonarsource.slang.checks.api.SlangCheck;
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.sonarsource.slang.plugin.InputFileContext
 
-public class KotlinVerifier {
-
-  private static final Path BASE_DIR = Paths.get("src", "test", "resources", "checks");
-  private static final ASTConverter CONVERTER = new KotlinConverter(Collections.emptyList());
-
-  public static void verify(String fileName, SlangCheck check) {
-    org.sonarsource.slang.testing.Verifier.verify(CONVERTER, BASE_DIR.resolve(fileName), check);
-  }
-
-  public static void verifyNoIssue(String fileName, SlangCheck check) {
-    org.sonarsource.slang.testing.Verifier.verifyNoIssue(CONVERTER, BASE_DIR.resolve(fileName), check);
-  }
-}
+class KotlinFileContext(
+    val inputFileContext: InputFileContext,
+    val ktFile: KtFile,
+    val bindingContext: BindingContext,
+)

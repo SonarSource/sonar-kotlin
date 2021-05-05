@@ -37,7 +37,7 @@ public class KotlinRulesDefinition implements RulesDefinition {
       .setName(KotlinPlugin.REPOSITORY_NAME);
     RuleMetadataLoader ruleMetadataLoader = new RuleMetadataLoader(RESOURCE_FOLDER, KotlinProfileDefinition.PATH_TO_JSON);
 
-    ArrayList<Class<?>> checks = new ArrayList<>(KotlinCheckList.checks());
+    ArrayList<Class<?>> checks = new ArrayList<>(KotlinCheckList.INSTANCE.legacyChecks());
     checks.add(CommentedCodeCheck.class);
     ruleMetadataLoader.addRulesByAnnotatedClass(repository, checks);
 

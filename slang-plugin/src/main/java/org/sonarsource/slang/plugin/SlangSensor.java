@@ -195,12 +195,12 @@ public abstract class SlangSensor implements Sensor {
 
     // TODO: remove this workaround once the Kotlin plugin is extracted
     List<TreeVisitor<InputFileContext>> languageSpecificTreeVisitors = new ArrayList<>(treeVisitors);
-    languageSpecificTreeVisitors.addAll(languageSpecificVisitors(sensorContext));
+    languageSpecificTreeVisitors.addAll(languageSpecificVisitors());
 
     return languageSpecificTreeVisitors;
   }
 
-  protected List<TreeVisitor<InputFileContext>> languageSpecificVisitors(SensorContext sensorContext) {
+  protected List<TreeVisitor<InputFileContext>> languageSpecificVisitors() {
     return Collections.emptyList();
   }
 }

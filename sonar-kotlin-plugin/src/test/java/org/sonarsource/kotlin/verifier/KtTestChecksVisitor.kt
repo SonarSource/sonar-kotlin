@@ -17,10 +17,10 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.visiting
+package org.sonarsource.kotlin.verifier
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.sonar.api.batch.rule.Checks
+import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.api.KotlinCheck
 import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.plugin.KotlinFileContext
@@ -28,7 +28,10 @@ import org.sonarsource.slang.api.Tree
 import org.sonarsource.slang.plugin.InputFileContext
 import org.sonarsource.slang.visitors.TreeVisitor
 
-class KtChecksVisitor(val checks: Checks<out KotlinCheck<PsiElement>>) : TreeVisitor<InputFileContext>() {
+class KtTestChecksVisitor<T : PsiElement>(private val check: KotlinCheck<T>) : TreeVisitor<InputFileContext>() {
+    init {
+        check.initialize(RuleKey.of("Kotlin", "Dummy"))
+    }
 
     override fun scan(fileContext: InputFileContext, root: Tree?) {
         if (root is KotlinTree) {
@@ -37,13 +40,9 @@ class KtChecksVisitor(val checks: Checks<out KotlinCheck<PsiElement>>) : TreeVis
     }
 
     private fun visit(kotlinFileContext: KotlinFileContext) {
-        flattenNodes(listOf(kotlinFileContext.ktFile)).let { flatNodes ->
-            checks.all().forEach { check ->
-                flatNodes.forEach { node ->
-                    if (check.nodesToVisit().isAssignableFrom(node::class.java)) {
-                        check.visitNode(kotlinFileContext, check.nodesToVisit().cast(node))
-                    }
-                }
+        flattenNodes(listOf(kotlinFileContext.ktFile)).forEach { node ->
+            if (check.nodesToVisit().isAssignableFrom(node::class.java)) {
+                check.visitNode(kotlinFileContext, check.nodesToVisit().cast(node))
             }
         }
     }

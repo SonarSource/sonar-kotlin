@@ -17,15 +17,24 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.checks;
+package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.verifier.KotlinVerifier
 
-class UnusedPrivateMethodKotlinCheckTest {
+internal class DummyKotlinCheckTest {
+    @Test
+    fun test() {
+        KotlinVerifier(DummyKotlinCheck()) {
+            fileName = "Dummy.kt"
+            classpath = emptyList()
+        }.verify()
+    }
 
-  @Test
-  void test() {
-    KotlinVerifier.verify("UnusedPrivateMethodKotlin.kt", new UnusedPrivateMethodKotlinCheck());
-  }
-
+    @Test
+    fun testNoIssues() {
+        KotlinVerifier(DummyKotlinCheck()) {
+            fileName = "DummyNoIssues.kt"
+        }.verifyNoIssue()
+    }
 }

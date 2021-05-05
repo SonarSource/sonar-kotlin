@@ -19,7 +19,9 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.sonar.api.batch.rule.CheckFactory
+import org.sonar.api.batch.rule.Checks
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.config.Configuration
 import org.sonar.api.issue.NoSonarFilter
@@ -41,17 +43,20 @@ class KotlinSensor(
 ) : SlangSensor(noSonarFilter, fileLinesContextFactory, language) {
 
     @Deprecated("Use Kotlin-native checks instead", replaceWith = ReplaceWith("checks"))
-    val legacyChecks = checkFactory.create<SlangCheck>(KotlinPlugin.KOTLIN_REPOSITORY_KEY).run {
-        addAnnotatedChecks(KotlinCheckList.checks() as Iterable<*>)
+    val legacyChecks: Checks<SlangCheck> = checkFactory.create<SlangCheck>(KotlinPlugin.KOTLIN_REPOSITORY_KEY).apply {
+        addAnnotatedChecks(KotlinCheckList.legacyChecks() as Iterable<*>)
         addAnnotatedChecks(CommentedCodeCheck(KotlinCodeVerifier()))
     }
 
-    val checks = checkFactory.create<KotlinCheck>(KotlinPlugin.KOTLIN_REPOSITORY_KEY)
+    val checks: Checks<KotlinCheck<PsiElement>> = checkFactory.create<KotlinCheck<PsiElement>>(KotlinPlugin.KOTLIN_REPOSITORY_KEY).apply {
+        addAnnotatedChecks(KotlinCheckList.checks() as Iterable<*>)
+        all().forEach { it.initialize(ruleKey(it)!!) }
+    }
 
     override fun astConverter(sensorContext: SensorContext) =
         KotlinConverter(getFilesFromProperty(sensorContext.config(), SONAR_JAVA_BINARIES))
 
-    override fun languageSpecificVisitors(sensorContext: SensorContext) = listOf(KtChecksVisitor(checks))
+    override fun languageSpecificVisitors() = listOf(KtChecksVisitor(checks))
 
     @Deprecated("Use native Kotlin API instead", replaceWith = ReplaceWith("legacyChecks"))
     override fun checks() = legacyChecks

@@ -17,15 +17,14 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.checks;
+package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.verifier.KotlinVerifier
 
-class TooManyParametersKotlinCheckTest {
-
-  @Test
-  void test() {
-    KotlinVerifier.verify("TooManyParametersKotlinCheck.kt", new TooManyParametersKotlinCheck());
-  }
-
+internal class TooManyParametersKotlinCheckTest {
+    @Test
+    fun test() {
+        KotlinVerifier.verify("TooManyParametersKotlinCheck.kt", TooManyParametersKotlinCheck())
+    }
 }

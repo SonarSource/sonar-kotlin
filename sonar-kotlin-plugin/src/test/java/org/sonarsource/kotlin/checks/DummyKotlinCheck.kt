@@ -17,14 +17,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.api
+package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.sonar.api.rule.RuleKey
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-interface KotlinCheck<T: PsiElement> {
-    fun nodesToVisit(): Class<T>
-    fun visitNode(kotlinFileContext: KotlinFileContext, node: T)
-    fun initialize(ruleKey: RuleKey)
+class DummyKotlinCheck : AbstractCheck<KtNamedFunction>() {
+    override fun nodesToVisit(): Class<KtNamedFunction> = KtNamedFunction::class.java
+
+    override fun visitNode(kotlinFileContext: KotlinFileContext, node: KtNamedFunction) {
+        kotlinFileContext.reportIssue(psiElement = node, message = "Hello World!")
+    }
 }

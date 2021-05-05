@@ -1,26 +1,42 @@
+/*
+ * SonarSource SLang
+ * Copyright (C) 2018-2021 SonarSource SA
+ * mailto:info AT sonarsource DOT com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 package org.sonarsource.kotlin.plugin
 
 import io.mockk.spyk
 import io.mockk.verify
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.junit.jupiter.api.Test
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.issue.NoSonarFilter
+import org.sonar.api.rule.RuleKey
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.InitContext
-import org.sonarsource.kotlin.api.KotlinCheck
-import org.sonarsource.slang.plugin.InputFileContext
+import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.slang.testing.AbstractSensorTest
 
 class CheckRegistrationTest : AbstractSensorTest() {
-    val spyVisitor = spyk({ _: InputFileContext, _: PsiElement -> })
 
     @Rule(key = "S99999")
-    inner class DummyCheck : KotlinCheck {
+    class DummyCheck : AbstractCheck<KtNamedFunction>() {
+        override fun nodesToVisit(): Class<KtNamedFunction> = KtNamedFunction::class.java
 
-        override fun initialize(initContext: InitContext) {
-            initContext.register(KtNamedFunction::class.java, spyVisitor)
+        override fun visitNode(kotlinFileContext: KotlinFileContext, node: KtNamedFunction) {
         }
     }
 
@@ -38,8 +54,8 @@ class CheckRegistrationTest : AbstractSensorTest() {
             sensor.execute(context)
         }
 
-        verify(exactly = 1) { dummyCheck.initialize(any()) }
-        verify(exactly = 1) { spyVisitor(any(), any()) }
+        verify { dummyCheck.nodesToVisit() }
+        verify(exactly = 1) { dummyCheck.visitNode(any(), any()) }
     }
 
     override fun repositoryKey(): String {
