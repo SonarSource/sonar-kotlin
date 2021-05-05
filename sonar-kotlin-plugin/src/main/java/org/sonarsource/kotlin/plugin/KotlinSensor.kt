@@ -30,6 +30,7 @@ import org.sonarsource.kotlin.api.KotlinCheck
 import org.sonarsource.kotlin.converter.KotlinCodeVerifier
 import org.sonarsource.kotlin.converter.KotlinConverter
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_BINARIES
+import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
 import org.sonarsource.slang.checks.CommentedCodeCheck
 import org.sonarsource.slang.checks.api.SlangCheck
@@ -54,7 +55,8 @@ class KotlinSensor(
     }
 
     override fun astConverter(sensorContext: SensorContext) =
-        KotlinConverter(getFilesFromProperty(sensorContext.config(), SONAR_JAVA_BINARIES))
+        KotlinConverter(getFilesFromProperty(sensorContext.config(), SONAR_JAVA_BINARIES)
+            + getFilesFromProperty(sensorContext.config(), SONAR_JAVA_LIBRARIES))
 
     override fun languageSpecificVisitors() = listOf(KtChecksVisitor(checks))
 

@@ -50,6 +50,7 @@ class KotlinPlugin : Plugin {
         const val KOTLIN_FILE_SUFFIXES_KEY = "sonar.kotlin.file.suffixes"
         const val KOTLIN_FILE_SUFFIXES_DEFAULT_VALUE = ".kt"
         const val SONAR_JAVA_BINARIES = "sonar.java.binaries"
+        const val SONAR_JAVA_LIBRARIES = "sonar.java.libraries"
     }
 
     override fun define(context: Plugin.Context) {
@@ -57,7 +58,7 @@ class KotlinPlugin : Plugin {
             KotlinLanguage::class.java,
             KotlinSensor::class.java,
             KotlinRulesDefinition::class.java,
-            KotlinProfileDefinition::class.java
+            KotlinProfileDefinition::class.java,
         )
 
         if (context.runtime.product != SonarProduct.SONARLINT) {
@@ -93,7 +94,8 @@ class KotlinPlugin : Plugin {
                     .subCategory(ANDROID_SUBCATEGORY)
                     .onQualifiers(Qualifiers.PROJECT)
                     .multiValues(true)
-                    .build())
+                    .build(),
+            )
         }
     }
 }

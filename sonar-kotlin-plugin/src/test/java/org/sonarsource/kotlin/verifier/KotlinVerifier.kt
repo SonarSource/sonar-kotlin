@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.verifier
 
+import io.mockk.InternalPlatformDsl.toStr
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
 import org.sonarsource.kotlin.api.KotlinCheck
@@ -28,28 +29,38 @@ import org.sonarsource.slang.api.Comment
 import org.sonarsource.slang.api.TopLevelTree
 import org.sonarsource.slang.checks.api.SlangCheck
 import org.sonarsource.slang.testing.Verifier
+import java.io.IOException
 import java.nio.charset.StandardCharsets
+import java.nio.file.FileVisitResult
+import java.nio.file.FileVisitor
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
 
-class KotlinVerifier(private val check: KotlinCheck<*>) { 
+class KotlinVerifier(private val check: KotlinCheck<*>) {
     var fileName: String = ""
-    var classpath: List<String> = emptyList()
+    var classpath: List<String> = listOf(KOTLIN_CLASSPATH)
+    var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
 
     fun verify() {
-        val converter = KotlinConverter(classpath)
-        createVerifier(converter, BASE_DIR.resolve(fileName), check)
+        val converter = KotlinConverter(classpath + deps)
+        createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check)
             .assertOneOrMoreIssues()
     }
 
     fun verifyNoIssue() {
-        val converter = KotlinConverter(classpath)
-        createVerifier(converter, BASE_DIR.resolve(fileName), check)
+        val converter = KotlinConverter(classpath + deps)
+        createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check)
             .assertNoIssues()
     }
 
-    private fun <T : PsiElement> createVerifier(converter: ASTConverter, path: Path, check: KotlinCheck<T>): SingleFileVerifier {
+    private fun <T : PsiElement> createVerifier(
+        converter: ASTConverter,
+        path: Path,
+        check: KotlinCheck<T>,
+    ): SingleFileVerifier {
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
         val root = converter.parse(testFileContent, null)
@@ -65,15 +76,49 @@ class KotlinVerifier(private val check: KotlinCheck<*>) {
 
     companion object {
         private val BASE_DIR = Paths.get("src", "test", "resources", "checks")
+        private val KOTLIN_BASE_DIR = Paths.get("..", "kotlin-checks-test-sources", "src", "main", "kotlin", "checks")
+        private val KOTLIN_CLASSPATH = "../kotlin-checks-test-sources/build/classes"
+        private val DEFAULT_TEST_JARS_DIRECTORY = "../kotlin-checks-test-sources/build/test-jars"
         private val CONVERTER: ASTConverter = KotlinConverter(emptyList())
 
         @JvmStatic
+        @Deprecated("Use KotlinVerifier#verify for testing KotlinChecks instead.")
         fun verify(fileName: String, check: SlangCheck) {
             Verifier.verify(CONVERTER, BASE_DIR.resolve(fileName), check)
         }
     }
+
+    private fun getClassPath(jarsDirectory: String): List<String> {
+        var classpath = mutableListOf<String>()
+        val testJars = Paths.get(jarsDirectory)
+        if (testJars.toFile().exists()) {
+            classpath = getFilesRecursively(testJars)
+        } else if (DEFAULT_TEST_JARS_DIRECTORY != jarsDirectory) {
+            throw AssertionError(
+                "The directory to be used to extend class path does not exists (${testJars.toAbsolutePath()})."
+            )
+        }
+        return classpath
+    }
+
+    private fun getFilesRecursively(root: Path): MutableList<String> {
+        val files: MutableList<String> = ArrayList()
+        val visitor: FileVisitor<Path> = object : SimpleFileVisitor<Path>() {
+            override fun visitFile(filePath: Path, attrs: BasicFileAttributes): FileVisitResult {
+                files.add(filePath.toStr())
+                return FileVisitResult.CONTINUE
+            }
+
+            override fun visitFileFailed(file: Path, exc: IOException): FileVisitResult {
+                return FileVisitResult.CONTINUE
+            }
+        }
+        Files.walkFileTree(root, visitor)
+        return files
+    }
 }
 
-fun KotlinVerifier(check: KotlinCheck<*>, block: KotlinVerifier.() -> Unit) = 
+fun KotlinVerifier(check: KotlinCheck<*>, block: KotlinVerifier.() -> Unit) =
     KotlinVerifier(check)
         .apply(block)
+

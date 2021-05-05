@@ -39,6 +39,7 @@ public class KotlinRulesDefinition implements RulesDefinition {
 
     ArrayList<Class<?>> checks = new ArrayList<>(KotlinCheckList.INSTANCE.legacyChecks());
     checks.add(CommentedCodeCheck.class);
+    checks.addAll(KotlinCheckList.INSTANCE.checks());
     ruleMetadataLoader.addRulesByAnnotatedClass(repository, checks);
 
     RulesDefinitionUtils.setDefaultValuesForParameters(repository, checks, Language.KOTLIN);
