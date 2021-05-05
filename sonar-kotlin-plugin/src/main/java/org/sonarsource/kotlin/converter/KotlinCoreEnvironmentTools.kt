@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.converter
 
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
+import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
@@ -56,6 +57,7 @@ fun kotlinCoreEnvironment(
     configuration: CompilerConfiguration,
     disposable: Disposable,
 ): KotlinCoreEnvironment {
+    setIdeaIoUseFallback()
     configuration.put(
         CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
         MessageCollector.NONE

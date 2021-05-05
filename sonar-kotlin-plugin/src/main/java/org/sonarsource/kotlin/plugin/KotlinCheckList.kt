@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.sonarsource.kotlin.api.KotlinCheck
 import org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck
+import org.sonarsource.kotlin.checks.WeakSSLContextCheck
 import org.sonarsource.slang.checks.CheckList
 import org.sonarsource.slang.checks.MatchWithoutElseCheck
 import org.sonarsource.slang.checks.OctalValuesCheck
@@ -45,7 +46,7 @@ object KotlinCheckList {
     )
 
     private val KOTLIN_CHECKS = listOf<Class<out KotlinCheck<out PsiElement>>>(
-
+        WeakSSLContextCheck::class.java
     )
 
     @Deprecated("Use Kotlin-native checks instead")
