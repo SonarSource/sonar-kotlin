@@ -23,10 +23,8 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-class DummyKotlinCheck : AbstractCheck<KtNamedFunction>() {
-    override fun nodesToVisit(): Class<KtNamedFunction> = KtNamedFunction::class.java
-
-    override fun visitNode(kotlinFileContext: KotlinFileContext, node: KtNamedFunction) {
+class DummyKotlinCheck : AbstractCheck() {
+    override fun visitNamedFunction(node: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         kotlinFileContext.reportIssue(psiElement = node, message = "Hello World!")
     }
 }

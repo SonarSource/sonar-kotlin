@@ -32,10 +32,8 @@ import org.sonarsource.slang.testing.AbstractSensorTest
 class CheckRegistrationTest : AbstractSensorTest() {
 
     @Rule(key = "S99999")
-    class DummyCheck : AbstractCheck<KtNamedFunction>() {
-        override fun nodesToVisit(): Class<KtNamedFunction> = KtNamedFunction::class.java
-
-        override fun visitNode(kotlinFileContext: KotlinFileContext, node: KtNamedFunction) {
+    class DummyCheck : AbstractCheck() {
+        override fun visitNamedFunction(function: KtNamedFunction, data: KotlinFileContext?) {
         }
     }
 
@@ -53,8 +51,7 @@ class CheckRegistrationTest : AbstractSensorTest() {
             sensor.execute(context)
         }
 
-        verify { dummyCheck.nodesToVisit() }
-        verify(exactly = 1) { dummyCheck.visitNode(any(), any()) }
+        verify(exactly = 1) { dummyCheck.visitNamedFunction(any(), any()) }
     }
 
     override fun repositoryKey(): String {

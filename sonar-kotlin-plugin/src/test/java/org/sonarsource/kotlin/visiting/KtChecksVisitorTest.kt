@@ -23,10 +23,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.rule.Checks
-import org.sonarsource.kotlin.api.KotlinCheck
+import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.slang.api.Tree
 import org.sonarsource.slang.impl.BaseTreeImpl
@@ -34,7 +33,7 @@ import org.sonarsource.slang.impl.BaseTreeImpl
 class KtChecksVisitorTest {
     @Test
     fun `invalid node type passed to scan`() {
-        val checks = mockk<Checks<KotlinCheck<PsiElement>>> {
+        val checks = mockk<Checks<AbstractCheck>> {
             every { all() } returns emptyList()
         }
 

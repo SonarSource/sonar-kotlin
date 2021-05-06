@@ -37,9 +37,8 @@ import org.sonarsource.slang.impl.TextRangeImpl
 import java.util.stream.Stream
 
 class AbstractCheckTest {
-    class DummyCheck(val reportingFunction: (DummyCheck, KotlinFileContext, PsiElement) -> Unit) : AbstractCheck<KtNamedFunction>() {
-        override fun nodesToVisit() = KtNamedFunction::class.java
-        override fun visitNode(kotlinFileContext: KotlinFileContext, node: KtNamedFunction) {
+    class DummyCheck(val reportingFunction: (DummyCheck, KotlinFileContext, PsiElement) -> Unit) : AbstractCheck() {
+        override fun visitNamedFunction(node: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
             reportingFunction(this, kotlinFileContext, node)
         }
     }

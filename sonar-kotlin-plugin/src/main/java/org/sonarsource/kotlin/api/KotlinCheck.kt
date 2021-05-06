@@ -19,12 +19,8 @@
  */
 package org.sonarsource.kotlin.api
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.sonar.api.rule.RuleKey
-import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-interface KotlinCheck<T: PsiElement> {
-    fun nodesToVisit(): Class<T>
-    fun visitNode(kotlinFileContext: KotlinFileContext, node: T)
+interface KotlinCheck {
     fun initialize(ruleKey: RuleKey)
 }

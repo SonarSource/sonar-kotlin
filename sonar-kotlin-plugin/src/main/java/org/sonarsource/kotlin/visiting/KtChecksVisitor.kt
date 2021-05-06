@@ -20,15 +20,16 @@
 package org.sonarsource.kotlin.visiting
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtElement
 import org.sonar.api.batch.rule.Checks
-import org.sonarsource.kotlin.api.KotlinCheck
+import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.slang.api.Tree
 import org.sonarsource.slang.plugin.InputFileContext
 import org.sonarsource.slang.visitors.TreeVisitor
 
-class KtChecksVisitor(val checks: Checks<out KotlinCheck<PsiElement>>) : TreeVisitor<InputFileContext>() {
+class KtChecksVisitor(val checks: Checks<out AbstractCheck>) : TreeVisitor<InputFileContext>() {
 
     override fun scan(fileContext: InputFileContext, root: Tree?) {
         if (root is KotlinTree) {
@@ -39,9 +40,11 @@ class KtChecksVisitor(val checks: Checks<out KotlinCheck<PsiElement>>) : TreeVis
     private fun visit(kotlinFileContext: KotlinFileContext) {
         flattenNodes(listOf(kotlinFileContext.ktFile)).let { flatNodes ->
             checks.all().forEach { check ->
-                flatNodes.forEach { node ->
-                    if (check.nodesToVisit().isAssignableFrom(node::class.java)) {
-                        check.visitNode(kotlinFileContext, check.nodesToVisit().cast(node))
+                flatNodes.forEach {
+                    // Note: we only visit KtElements. If we need to visit PsiElement, add a
+                    // visitPsiElement function in KotlinCheck and call it here in the else branch.
+                    when (it) {
+                        is KtElement -> it.accept(check, kotlinFileContext)
                     }
                 }
             }

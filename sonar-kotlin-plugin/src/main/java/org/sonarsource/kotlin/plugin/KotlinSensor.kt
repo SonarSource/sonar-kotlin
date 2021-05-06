@@ -19,14 +19,13 @@
  */
 package org.sonarsource.kotlin.plugin
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.sonar.api.batch.rule.CheckFactory
 import org.sonar.api.batch.rule.Checks
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.config.Configuration
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContextFactory
-import org.sonarsource.kotlin.api.KotlinCheck
+import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.converter.KotlinCodeVerifier
 import org.sonarsource.kotlin.converter.KotlinConverter
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_BINARIES
@@ -49,7 +48,7 @@ class KotlinSensor(
         addAnnotatedChecks(CommentedCodeCheck(KotlinCodeVerifier()))
     }
 
-    val checks: Checks<KotlinCheck<PsiElement>> = checkFactory.create<KotlinCheck<PsiElement>>(KotlinPlugin.KOTLIN_REPOSITORY_KEY).apply {
+    val checks: Checks<AbstractCheck> = checkFactory.create<AbstractCheck>(KotlinPlugin.KOTLIN_REPOSITORY_KEY).apply {
         addAnnotatedChecks(KotlinCheckList.checks() as Iterable<*>)
         all().forEach { it.initialize(ruleKey(it)!!) }
     }

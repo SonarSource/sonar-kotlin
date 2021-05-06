@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.api
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtVisitor
 import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.converter.KotlinTextRanges
 import org.sonarsource.kotlin.plugin.KotlinFileContext
@@ -27,7 +28,7 @@ import org.sonarsource.slang.checks.api.SecondaryLocation
 import org.sonarsource.slang.api.TextRange as SonarTextRange
 
 
-abstract class AbstractCheck<T : PsiElement> : KotlinCheck<T> {
+abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>() {
     lateinit var ruleKey: RuleKey
         private set
 

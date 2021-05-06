@@ -19,8 +19,7 @@
  */
 package org.sonarsource.kotlin.plugin
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.sonarsource.kotlin.api.KotlinCheck
+import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck
 import org.sonarsource.kotlin.checks.WeakSSLContextCheck
@@ -45,7 +44,7 @@ object KotlinCheckList {
         TooManyParametersKotlinCheck::class.java,
     )
 
-    private val KOTLIN_CHECKS = listOf<Class<out KotlinCheck<out PsiElement>>>(
+    private val KOTLIN_CHECKS = listOf<Class<out AbstractCheck>>(
         WeakSSLContextCheck::class.java
     )
 

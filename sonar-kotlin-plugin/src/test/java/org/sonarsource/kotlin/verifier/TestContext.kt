@@ -19,21 +19,20 @@
  */
 package org.sonarsource.kotlin.verifier
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.sonar.api.rule.RuleKey
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
-import org.sonarsource.kotlin.api.KotlinCheck
+import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.slang.api.TextRange
 import org.sonarsource.slang.api.Tree
 import org.sonarsource.slang.checks.api.SecondaryLocation
 import org.sonarsource.slang.plugin.InputFileContext
 import java.util.function.Consumer
 
-internal class TestContext<T : PsiElement>(
+internal class TestContext(
     private val verifier: SingleFileVerifier,
-    check: KotlinCheck<T>,
+    check: AbstractCheck,
 ) : InputFileContext(null, null) {
-    private val visitor: KtTestChecksVisitor<T> = KtTestChecksVisitor(check)
+    private val visitor: KtTestChecksVisitor = KtTestChecksVisitor(check)
     fun scan(root: Tree?) {
         visitor.scan(this, root)
     }

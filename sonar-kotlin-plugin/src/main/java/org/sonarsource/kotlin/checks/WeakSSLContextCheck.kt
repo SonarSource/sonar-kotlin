@@ -39,7 +39,7 @@ import org.sonarsource.slang.checks.api.SecondaryLocation
 
 
 @Rule(key = "S4423")
-class WeakSSLContextCheck : AbstractCheck<KtCallExpression>() {
+class WeakSSLContextCheck : AbstractCheck() {
     private val WEAK_FOR_OK_HTTP = setOf(
         "TLSv1",
         "TLSv1.1",
@@ -60,9 +60,7 @@ class WeakSSLContextCheck : AbstractCheck<KtCallExpression>() {
         "DTLSv1.0",
     )
 
-    override fun nodesToVisit(): Class<KtCallExpression> = KtCallExpression::class.java
-
-    override fun visitNode(kotlinFileContext: KotlinFileContext, node: KtCallExpression) {
+    override fun visitCallExpression(node: KtCallExpression, kotlinFileContext: KotlinFileContext) {
         val (_, ktFile, bindingContext) = kotlinFileContext
         val call = node.getCall(bindingContext)
         val resolvedCall = bindingContext.get(RESOLVED_CALL, call)

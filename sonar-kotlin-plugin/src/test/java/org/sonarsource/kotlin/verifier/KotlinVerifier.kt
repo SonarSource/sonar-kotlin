@@ -20,9 +20,8 @@
 package org.sonarsource.kotlin.verifier
 
 import io.mockk.InternalPlatformDsl.toStr
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
-import org.sonarsource.kotlin.api.KotlinCheck
+import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.converter.KotlinConverter
 import org.sonarsource.slang.api.ASTConverter
 import org.sonarsource.slang.api.Comment
@@ -39,7 +38,7 @@ import java.nio.file.Paths
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 
-class KotlinVerifier(private val check: KotlinCheck<*>) {
+class KotlinVerifier(private val check: AbstractCheck) {
     var fileName: String = ""
     var classpath: List<String> = listOf(KOTLIN_CLASSPATH)
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
@@ -56,10 +55,10 @@ class KotlinVerifier(private val check: KotlinCheck<*>) {
             .assertNoIssues()
     }
 
-    private fun <T : PsiElement> createVerifier(
+    private fun createVerifier(
         converter: ASTConverter,
         path: Path,
-        check: KotlinCheck<T>,
+        check: AbstractCheck,
     ): SingleFileVerifier {
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
@@ -118,7 +117,7 @@ class KotlinVerifier(private val check: KotlinCheck<*>) {
     }
 }
 
-fun KotlinVerifier(check: KotlinCheck<*>, block: KotlinVerifier.() -> Unit) =
+fun KotlinVerifier(check: AbstractCheck, block: KotlinVerifier.() -> Unit) =
     KotlinVerifier(check)
         .apply(block)
 
