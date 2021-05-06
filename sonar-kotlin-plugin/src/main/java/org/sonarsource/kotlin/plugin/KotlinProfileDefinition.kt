@@ -17,20 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.plugin;
+package org.sonarsource.kotlin.plugin
 
-import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
-import org.sonarsource.analyzer.commons.BuiltInQualityProfileJsonLoader;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
+import org.sonarsource.analyzer.commons.BuiltInQualityProfileJsonLoader
 
-public class KotlinProfileDefinition implements BuiltInQualityProfilesDefinition {
+class KotlinProfileDefinition : BuiltInQualityProfilesDefinition {
+    companion object {
+        const val PATH_TO_JSON = "org/sonar/l10n/kotlin/rules/kotlin/Sonar_way_profile.json"
+    }
 
-  static final String PATH_TO_JSON = "org/sonar/l10n/kotlin/rules/kotlin/Sonar_way_profile.json";
-
-  @Override
-  public void define(Context context) {
-    NewBuiltInQualityProfile profile = context.createBuiltInQualityProfile(KotlinPlugin.PROFILE_NAME, KotlinPlugin.KOTLIN_LANGUAGE_KEY);
-    BuiltInQualityProfileJsonLoader.load(profile, KotlinPlugin.KOTLIN_REPOSITORY_KEY, PATH_TO_JSON);
-    profile.done();
-  }
-
+    override fun define(context: BuiltInQualityProfilesDefinition.Context) {
+        context.createBuiltInQualityProfile(KotlinPlugin.PROFILE_NAME, KotlinPlugin.KOTLIN_LANGUAGE_KEY).let { profile ->
+            BuiltInQualityProfileJsonLoader.load(profile, KotlinPlugin.KOTLIN_REPOSITORY_KEY, PATH_TO_JSON)
+            profile.done()
+        }
+    }
 }

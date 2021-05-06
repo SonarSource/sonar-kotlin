@@ -31,7 +31,7 @@ import org.sonarsource.slang.impl.TreeMetaDataProvider
 
 class KotlinTree(
     val psiFile: KtFile,
-    val document: Document?,
+    val document: Document,
     val metaDataProvider: TreeMetaDataProvider,
     val bindingContext: BindingContext,
     private val slangAst: TopLevelTree,
@@ -41,7 +41,7 @@ class KotlinTree(
         fun of(content: String, environment: Environment): KotlinTree {
             val psiFile: KtFile = environment.ktPsiFactory.createFile(normalizeEol(content))
             val document = try {
-                psiFile.viewProvider.document
+                psiFile.viewProvider.document ?: throw ParseException("Cannot extract document")
             } catch (e: AssertionError) {
                 // A KotlinLexerException may occur when attempting to read invalid files
                 throw ParseException("Cannot correctly map AST with a null Document object")

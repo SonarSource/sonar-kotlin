@@ -27,6 +27,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement;
 
+/**
+ * @deprecated Belongs to deprecated {@link KotlinTreeVisitor}
+ */
+@Deprecated
 public class KotlinNativeKind implements NativeKind {
 
   private final Class<? extends PsiElement> psiElementClass;
