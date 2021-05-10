@@ -40,7 +40,7 @@ import java.nio.file.attribute.BasicFileAttributes
 
 class KotlinVerifier(private val check: AbstractCheck) {
     var fileName: String = ""
-    var classpath: List<String> = listOf(KOTLIN_CLASSPATH)
+    var classpath: List<String> = System.getProperty("java.class.path").split(":") + listOf(KOTLIN_CLASSPATH)
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
 
     fun verify() {
