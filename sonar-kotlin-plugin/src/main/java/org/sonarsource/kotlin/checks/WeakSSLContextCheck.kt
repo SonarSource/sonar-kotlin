@@ -28,15 +28,13 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.REFERENCE_TARGET
-import org.jetbrains.kotlin.resolve.BindingContext.RESOLVED_CALL
-import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.converter.KotlinTextRanges
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.slang.checks.api.SecondaryLocation
-
 
 @Rule(key = "S4423")
 class WeakSSLContextCheck : AbstractCheck() {
@@ -60,13 +58,23 @@ class WeakSSLContextCheck : AbstractCheck() {
         "DTLSv1.0",
     )
 
+    private val OKHTTP_MATCHER = FunMatcher {
+        type = "okhttp3.ConnectionSpec.Builder"
+        names = listOf("tlsVersions")
+    }
+
+    private val SSL_CONTEXT_MATCHER = FunMatcher {
+        type = "javax.net.ssl.SSLContext"
+        names = listOf("getInstance")
+    }
+
     override fun visitCallExpression(node: KtCallExpression, kotlinFileContext: KotlinFileContext) {
         val (_, ktFile, bindingContext) = kotlinFileContext
-        val call = node.getCall(bindingContext)
-        val resolvedCall = bindingContext.get(RESOLVED_CALL, call)
-        when (resolvedCall?.resultingDescriptor?.fqNameOrNull()?.asString()) {
-            "javax.net.ssl.SSLContext.getInstance" -> handleSSL(node, bindingContext, ktFile, kotlinFileContext)
-            "okhttp3.ConnectionSpec.Builder.tlsVersions" -> handleOkHttp(node, bindingContext, ktFile, kotlinFileContext)
+        when {
+            SSL_CONTEXT_MATCHER.matches(node, bindingContext) ->
+                handleSSL(node, bindingContext, ktFile, kotlinFileContext)
+            OKHTTP_MATCHER.matches(node, bindingContext) ->
+                handleOkHttp(node, bindingContext, ktFile, kotlinFileContext)
         }
     }
 

@@ -30,13 +30,13 @@ class KotlinTreeTest {
 
   @Test
   fun testCreateKotlinTree() {
-    val environment = Environment(listOf("src/test/resources/classes"))
-    val path = Paths.get("src/test/resources/sample/functions.kt")
+    val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"))
+    val path = Paths.get("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
     val tree = KotlinTree.of(content, environment)
-    assertThat(tree.psiFile.children).hasSize(7)
+    assertThat(tree.psiFile.children).hasSize(8)
 
-    assertThat(tree.bindingContext.getSliceContents(BindingContext.RESOLVED_CALL)).hasSize(8)
+    assertThat(tree.bindingContext.getSliceContents(BindingContext.RESOLVED_CALL)).hasSize(9)
 
     val ktCallExpression = tree.psiFile.children[3].children[1].children[1].children[1].children[0] as KtElement
     val call = tree.bindingContext.get(BindingContext.CALL, ktCallExpression)
