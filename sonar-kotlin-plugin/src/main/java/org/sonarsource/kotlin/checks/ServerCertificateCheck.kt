@@ -32,7 +32,7 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 class ServerCertificateCheck : AbstractCheck() {
     companion object {
         private val methodNames = setOf("checkClientTrusted", "checkServerTrusted")
-        private val firstArgRegex = Regex("""Array<(out )?X509Certificate>\??""")
+        private val firstArgRegex = Regex("""Array<(out )?X509Certificate\??>\??""")
         private val secondArgRegex = Regex("""String\??""")
     }
 

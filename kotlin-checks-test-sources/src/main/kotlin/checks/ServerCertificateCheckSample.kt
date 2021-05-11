@@ -34,6 +34,28 @@ internal class TrustAllManager : X509TrustManager {
     }
 }
 
+internal class TrustAllManagerNullable : X509TrustManager {
+    @Throws(CertificateException::class)
+    override fun checkClientTrusted( // Noncompliant {{Enable server certificate validation on this SSL/TLS connection.}}
+        x509Certificates: Array<X509Certificate?>,
+        s: String,
+    ) {
+    }
+
+    @Throws(CertificateException::class)
+    override fun checkServerTrusted(x509Certificates: Array<X509Certificate?>, s: String) { // Noncompliant
+        LOG.log(Level.SEVERE, "ERROR $s")
+    }
+
+    override fun getAcceptedIssuers(): Array<X509Certificate?> {
+        return emptyArray()
+    }
+
+    companion object {
+        private val LOG = Logger.getLogger("TrustAllManager")
+    }
+}
+
 internal object Main {
     @JvmStatic
     fun main(args: Array<String>) {
