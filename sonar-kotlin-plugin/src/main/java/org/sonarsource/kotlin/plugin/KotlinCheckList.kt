@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
 import org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck
@@ -44,7 +45,8 @@ object KotlinCheckList {
         TooManyParametersKotlinCheck::class.java,
     )
 
-    val KOTLIN_CHECKS = listOf(
+    private val KOTLIN_CHECKS = listOf(
+        ClearTextProtocolCheck::class.java,
         ServerCertificateCheck::class.java,
         WeakSSLContextCheck::class.java,
     )

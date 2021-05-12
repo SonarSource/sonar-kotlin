@@ -227,9 +227,8 @@ class FunMatcherTest {
 
     @Test
     fun `Match constructor`() {
-        val funMatcher = FunMatcher {
+        val funMatcher = ConstructorMatcher {
             type = "sample.SampleClass"
-            addConstructorMatcher()
             withNoArguments()
         }
 
@@ -240,9 +239,8 @@ class FunMatcherTest {
 
     @Test
     fun `Don't match constructor without binding context`() {
-        val funMatcher = FunMatcher {
+        val funMatcher = ConstructorMatcher {
             type = "sample.SampleClass"
-            addConstructorMatcher()
             withNoArguments()
         }
 
@@ -255,9 +253,8 @@ class FunMatcherTest {
 
     @Test
     fun `Don't match constructor`() {
-        val funMatcher = FunMatcher {
+        val funMatcher = ConstructorMatcher {
             type = "sample.SampleClass"
-            addConstructorMatcher()
             withArguments("String")
         }
 
@@ -268,9 +265,8 @@ class FunMatcherTest {
 
     @Test
     fun `Don't match the constructor by supertype`() {
-        val funMatcher = FunMatcher {
+        val funMatcher = ConstructorMatcher {
             supertype = "sample.MyInterface"
-            addConstructorMatcher()
             withNoArguments()
         }
 

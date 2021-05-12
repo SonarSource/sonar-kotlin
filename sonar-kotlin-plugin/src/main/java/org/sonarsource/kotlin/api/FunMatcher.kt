@@ -28,12 +28,14 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
-class FunMatcher {
-    var type: String? = null
-    var supertype: String? = null
-    var names: List<String> = emptyList()
-    private var matchConstructor: Boolean = false
-    private val arguments: MutableList<List<String>> = mutableListOf()
+class FunMatcher(
+    var type: String? = null,
+    var names: List<String> = emptyList(),
+    arguments: List<List<String>> = mutableListOf(),
+    var supertype: String? = null,
+    private val matchConstructor: Boolean = false
+) {
+    private val arguments: MutableList<List<String>> = arguments.toMutableList()
 
     fun matches(node: KtCallExpression, bindingContext: BindingContext): Boolean {
         val call = node.getCall(bindingContext)
@@ -97,10 +99,6 @@ class FunMatcher {
         }
     }
 
-    fun addConstructorMatcher() {
-        matchConstructor = true
-    }
-
     fun withArguments(vararg args: String) {
         arguments.add(listOf(*args))
     }
@@ -114,3 +112,6 @@ class FunMatcher {
 
 fun FunMatcher(block: FunMatcher.() -> Unit) =
     FunMatcher().apply(block)
+
+fun ConstructorMatcher(typeName: String? = null, arguments: List<List<String>> = emptyList(), block: FunMatcher.() -> Unit = {}) =
+    FunMatcher(type = typeName, arguments = arguments, matchConstructor = true).apply(block)

@@ -30,6 +30,8 @@ import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.BindingContext.RESOLVED_CALL
+import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getFunctionResolvedCallWithAssert
 import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperClassNotAny
 import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperInterfaces
@@ -89,8 +91,11 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
     internal fun KtNamedFunction.listStatements(): List<KtExpression> =
         bodyBlockExpression?.statements ?: (bodyExpression?.let { listOf(it) } ?: emptyList())
 
+    internal fun KtCallExpression.getResolvedCall(bindingContext: BindingContext) =
+        getCall(bindingContext)?.let { bindingContext.get(RESOLVED_CALL, it) }
+
     internal fun ClassDescriptor?.getAllSuperTypesInterfaces() =
-        this?.let { getAllSuperTypesInterfaces(getSuperInterfaces() + superClassAsList())} ?: emptyList()
+        this?.let { getAllSuperTypesInterfaces(getSuperInterfaces() + superClassAsList()) } ?: emptyList()
 
     private fun getAllSuperTypesInterfaces(classes: List<ClassDescriptor>): List<ClassDescriptor> =
         classes + classes.flatMap { getAllSuperTypesInterfaces(it.getSuperInterfaces() + it.superClassAsList()) }
