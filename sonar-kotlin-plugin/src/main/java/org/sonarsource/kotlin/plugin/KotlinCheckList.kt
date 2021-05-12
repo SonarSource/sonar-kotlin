@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.plugin
 
-import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
 import org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck
@@ -45,9 +44,9 @@ object KotlinCheckList {
         TooManyParametersKotlinCheck::class.java,
     )
 
-    private val KOTLIN_CHECKS = listOf<Class<out AbstractCheck>>(
-        WeakSSLContextCheck::class.java,
+    val KOTLIN_CHECKS = listOf(
         ServerCertificateCheck::class.java,
+        WeakSSLContextCheck::class.java,
     )
 
     @Deprecated("Use Kotlin-native checks instead")

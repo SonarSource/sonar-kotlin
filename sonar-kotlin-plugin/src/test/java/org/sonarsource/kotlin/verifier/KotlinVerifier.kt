@@ -75,7 +75,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
 
     companion object {
         private val BASE_DIR = Paths.get("src", "test", "resources", "checks")
-        private val KOTLIN_BASE_DIR = Paths.get("..", "kotlin-checks-test-sources", "src", "main", "kotlin", "checks")
+        val KOTLIN_BASE_DIR = Paths.get("..", "kotlin-checks-test-sources", "src", "main", "kotlin", "checks")
         private val KOTLIN_CLASSPATH = "../kotlin-checks-test-sources/build/classes"
         private val DEFAULT_TEST_JARS_DIRECTORY = "../kotlin-checks-test-sources/build/test-jars"
         private val CONVERTER: ASTConverter = KotlinConverter(emptyList())

@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException
 import java.security.NoSuchProviderException
 import javax.net.ssl.SSLContext
 
-class WeakSSLContextCheck {
+class WeakSSLContextCheckSample {
     fun okHttp(argumentVersion: String) {
         val spec: ConnectionSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
             .tlsVersions(TlsVersion.TLS_1_0) // Noncompliant {{Change this code to use a stronger protocol.}}

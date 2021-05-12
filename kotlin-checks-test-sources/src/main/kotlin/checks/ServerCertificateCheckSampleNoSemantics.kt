@@ -9,7 +9,7 @@ import javax.net.ssl.SSLEngine
 import javax.net.ssl.X509ExtendedTrustManager
 import javax.net.ssl.X509TrustManager
 
-class ServerCertificateCheckSampleNoSemantic {
+class ServerCertificateCheckSampleNoSemantics {
 }
 
 internal class TrustAllManager2 : X509TrustManager {
@@ -17,7 +17,7 @@ internal class TrustAllManager2 : X509TrustManager {
     override fun checkClientTrusted( // FN due to missing binding context
         x509Certificates: Array<X509Certificate>,
         s: String,
-    ) { 
+    ) {
     }
 
     @Throws(CertificateException::class)
@@ -91,7 +91,7 @@ internal object Main2 {
             }
         }
         var extendedManager: X509ExtendedTrustManager = EmptyX509ExtendedTrustManager()
-        
+
         extendedManager = object : X509ExtendedTrustManager() {
             override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?, socket: Socket?) =
                 throw CertificateException()
@@ -125,27 +125,27 @@ internal object Main2 {
 internal class EmptyX509ExtendedTrustManager2 : X509ExtendedTrustManager() {
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String, socket: Socket) {
-    } 
+    }
 
     @Throws(CertificateException::class)
     override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String, engine: SSLEngine) {
-    } 
+    }
 
     @Throws(CertificateException::class)
     override fun checkClientTrusted(x509Certificates: Array<X509Certificate>, s: String) { // FN due to missing binding context
-    } 
+    }
 
     @Throws(CertificateException::class)
     override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String, socket: Socket) { // FN due to missing binding context
-    } 
+    }
 
     @Throws(CertificateException::class)
     override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String, sslEngine: SSLEngine) { // FN due to missing binding context
-    } 
+    }
 
     @Throws(CertificateException::class)
     override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String) { // FN due to missing binding context
-    } 
+    }
 
     override fun getAcceptedIssuers(): Array<X509Certificate> {
         return emptyArray()
