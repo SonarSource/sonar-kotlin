@@ -25,9 +25,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
+import org.sonarsource.kotlin.converter.bindingContext
 
 class FunMatcherTest {
     val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"))
@@ -223,6 +225,28 @@ class FunMatcherTest {
         val ktNamedFunction = tree.psiFile.children[5].children[1].children[0] as KtNamedFunction
 
         assertThat(funMatcher.matches(ktNamedFunction, BindingContext.EMPTY)).isFalse
+    }
+
+    @Test
+    fun `Don't match method call without binding context`() {
+        val funMatcher = FunMatcher {
+            type = "sample.MySampleClass"
+            names = listOf("sayHello")
+            withArguments("String")
+        }
+        val call = ktCallExpression1.getCall(tree.bindingContext)
+        assertThat(funMatcher.matches(call!!, BindingContext.EMPTY)).isFalse
+    }
+
+    @Test
+    fun `Don't match method call by supertype without binding context`() {
+        val funMatcher = FunMatcher {
+            supertype = "sample.MyInterface"
+            names = listOf("sayHello")
+            withArguments("String")
+        }
+        val call = ktCallExpression1.getCall(tree.bindingContext)
+        assertThat(funMatcher.matches(call!!, BindingContext.EMPTY)).isFalse
     }
 
     @Test

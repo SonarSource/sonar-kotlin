@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.api
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -45,6 +46,11 @@ class FunMatcher(
 
     fun matches(node: KtNamedFunction, bindingContext: BindingContext): Boolean {
         val functionDescriptor = bindingContext.get(BindingContext.FUNCTION, node)
+        return checkFunctionDescriptor(functionDescriptor)
+    }
+
+    fun matches(call: Call, bindingContext: BindingContext): Boolean {
+        val functionDescriptor = bindingContext.get(BindingContext.RESOLVED_CALL, call)?.resultingDescriptor
         return checkFunctionDescriptor(functionDescriptor)
     }
 

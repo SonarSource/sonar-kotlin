@@ -23,6 +23,7 @@ import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
 import org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck
+import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
 import org.sonarsource.kotlin.checks.WeakSSLContextCheck
 import org.sonarsource.slang.checks.CheckList
 import org.sonarsource.slang.checks.MatchWithoutElseCheck
@@ -49,6 +50,7 @@ object KotlinCheckList {
         ClearTextProtocolCheck::class.java,
         ServerCertificateCheck::class.java,
         WeakSSLContextCheck::class.java,
+        VerifiedServerHostnamesCheck::class.java,
     )
 
     @Deprecated("Use Kotlin-native checks instead")
