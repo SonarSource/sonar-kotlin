@@ -87,14 +87,10 @@ subprojects {
         }
     }
 
-    compileJava {
+    java.sourceCompatibility = JavaVersion.VERSION_1_8
+    tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
-        options.compilerArgs.addAll(['--release', '8'])
-    }
-
-    compileTestJava {
-        options.encoding = "UTF-8"
-        options.compilerArgs.addAll(['--release', '8'])
+        options.release = java.sourceCompatibility.majorVersion as int
     }
 
     jacoco {
