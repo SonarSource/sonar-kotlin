@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import org.sonarsource.kotlin.checks.AllBranchesIdenticalCheck
 import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
 import org.sonarsource.kotlin.checks.TabsCheck
@@ -41,7 +42,8 @@ object KotlinCheckList {
             UnusedPrivateMethodCheck::class.java,
             TooManyParametersCheck::class.java,
 
-            org.sonarsource.slang.checks.TabsCheck::class.java
+            org.sonarsource.slang.checks.AllBranchesIdenticalCheck::class.java,
+            org.sonarsource.slang.checks.TabsCheck::class.java,
         )
 
     val SLANG_CHECKS = listOf(
@@ -50,6 +52,7 @@ object KotlinCheckList {
     )
 
     private val KOTLIN_CHECKS = listOf(
+        AllBranchesIdenticalCheck::class.java,
         ClearTextProtocolCheck::class.java,
         ServerCertificateCheck::class.java,
         TabsCheck::class.java,
