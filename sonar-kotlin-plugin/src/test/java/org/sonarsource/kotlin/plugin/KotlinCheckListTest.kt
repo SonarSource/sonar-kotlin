@@ -29,11 +29,6 @@ import java.util.stream.Collectors
 
 internal class KotlinCheckListTest {
     @Test
-    fun kotlin_checks_size() {
-        Assertions.assertThat(legacyChecks().size).isGreaterThanOrEqualTo(40)
-    }
-
-    @Test
     fun kotlin_specific_checks_are_added_to_check_list() {
         val languageImplementation = PackageScanner.findSlangChecksInPackage(KOTLIN_CHECKS_PACKAGE)
         val checkListNames = legacyChecks().map { obj: Class<*> -> obj.name }
