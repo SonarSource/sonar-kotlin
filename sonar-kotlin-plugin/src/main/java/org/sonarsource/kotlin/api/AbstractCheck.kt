@@ -55,6 +55,9 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
         this.ruleKey = ruleKey
     }
 
+    /**
+     * @param textRange `null` when on file
+     */
     internal fun KotlinFileContext.reportIssue(
         textRange: SonarTextRange? = null,
         message: String,

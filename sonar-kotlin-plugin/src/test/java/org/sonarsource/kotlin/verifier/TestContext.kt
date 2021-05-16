@@ -44,12 +44,13 @@ internal class TestContext(
         secondaryLocations: List<SecondaryLocation>,
         gap: Double?,
     ) {
-        val start = textRange!!.start()
-        val end = textRange.end()
-        val issue = verifier
-            .reportIssue(message)
-            .onRange(start.line(), start.lineOffset() + 1, end.line(), end.lineOffset())
-            .withGap(gap)
+        val issue = textRange?.let {
+            val start = textRange.start()
+            val end = textRange.end()
+            verifier.reportIssue(message)
+                .onRange(start.line(), start.lineOffset() + 1, end.line(), end.lineOffset())
+        } ?: verifier.reportIssue(message).onFile()
+        issue.withGap(gap)
         secondaryLocations.forEach(Consumer { secondary: SecondaryLocation ->
             issue.addSecondary(
                 secondary.textRange.start().line(),

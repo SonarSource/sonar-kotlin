@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.plugin
 
 import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
+import org.sonarsource.kotlin.checks.TabsCheck
 import org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck
 import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
@@ -39,6 +40,8 @@ object KotlinCheckList {
             OctalValuesCheck::class.java,  // Language specific implementation is provided.
             UnusedPrivateMethodCheck::class.java,
             TooManyParametersCheck::class.java,
+
+            org.sonarsource.slang.checks.TabsCheck::class.java
         )
 
     val SLANG_CHECKS = listOf(
@@ -49,6 +52,7 @@ object KotlinCheckList {
     private val KOTLIN_CHECKS = listOf(
         ClearTextProtocolCheck::class.java,
         ServerCertificateCheck::class.java,
+        TabsCheck::class.java,
         WeakSSLContextCheck::class.java,
         VerifiedServerHostnamesCheck::class.java,
     )
