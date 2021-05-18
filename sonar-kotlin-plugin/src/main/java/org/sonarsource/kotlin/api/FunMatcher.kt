@@ -32,11 +32,11 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 class FunMatcher(
     var type: String? = null,
     var names: List<String> = emptyList(),
-    arguments: List<List<String>> = mutableListOf(),
+    arguments: List<List<ArgumentMatcher>> = mutableListOf(),
     var supertype: String? = null,
-    private val matchConstructor: Boolean = false
+    private val matchConstructor: Boolean = false,
 ) {
-    private val arguments: MutableList<List<String>> = arguments.toMutableList()
+    private val arguments = arguments.toMutableList()
 
     fun matches(node: KtCallExpression, bindingContext: BindingContext): Boolean {
         val call = node.getCall(bindingContext)
@@ -55,58 +55,67 @@ class FunMatcher(
     }
 
     private fun checkFunctionDescriptor(functionDescriptor: CallableDescriptor?) =
-        checkName(functionDescriptor) &&
+        functionDescriptor != null &&
+            checkName(functionDescriptor) &&
             checkTypeOrSupertype(functionDescriptor) &&
             checkCallParameters(functionDescriptor)
 
-    private fun checkTypeOrSupertype(functionDescriptor: CallableDescriptor?) =
-        checkType(functionDescriptor) ||
-            type.isNullOrEmpty() && supertype.isNullOrEmpty() ||
+    private fun checkTypeOrSupertype(functionDescriptor: CallableDescriptor) =
+        type.isNullOrEmpty() && supertype.isNullOrEmpty() ||
+            checkType(functionDescriptor) ||
             type.isNullOrEmpty() && checkSubType(functionDescriptor)
 
-    private fun checkType(functionDescriptor: CallableDescriptor?): Boolean =
+    private fun checkType(functionDescriptor: CallableDescriptor): Boolean =
         type?.let {
             when (functionDescriptor) {
                 is ConstructorDescriptor ->
                     functionDescriptor.constructedClass.fqNameSafe.asString() == type
                 else ->
-                    functionDescriptor?.fqNameSafe?.asString()?.substringBeforeLast(".") == type
+                    functionDescriptor.fqNameSafe.asString().substringBeforeLast(".") == type
             }
         } ?: false
 
-    private fun checkSubType(functionDescriptor: CallableDescriptor?): Boolean =
+    private fun checkSubType(functionDescriptor: CallableDescriptor): Boolean =
         when (functionDescriptor) {
             is ConstructorDescriptor -> false
             else -> {
-                functionDescriptor?.overriddenDescriptors?.any {
+                functionDescriptor.overriddenDescriptors.any {
                     it?.fqNameSafe?.asString()?.substringBeforeLast(".") == supertype
                 }
             }
-        } ?: false
-
-    private fun checkName(functionDescriptor: CallableDescriptor?): Boolean =
-        if (functionDescriptor is ConstructorDescriptor) {
-            matchConstructor
-        } else {
-            names.any {
-                it == functionDescriptor?.name?.asString()
-            }
         }
 
-    private fun checkCallParameters(descriptor: CallableDescriptor?): Boolean {
+    private fun checkName(functionDescriptor: CallableDescriptor): Boolean =
+        if (functionDescriptor is ConstructorDescriptor) {
+            matchConstructor
+        } else if (!matchConstructor) {
+            names.isEmpty() || names.any {
+                it == functionDescriptor.name.asString()
+            }
+        } else false
+
+    private fun checkCallParameters(descriptor: CallableDescriptor): Boolean {
         val valueParameters: List<ValueParameterDescriptor> =
-            descriptor?.valueParameters ?: emptyList()
+            descriptor.valueParameters
 
         return arguments.isEmpty() || arguments.any {
             (valueParameters.size == it.size) &&
                 it.foldRightIndexed(true) { i, argType, acc ->
-                    acc && valueParameters[i].typeAsString() == argType
+                    acc && argType.matches(valueParameters[i])
                 }
         }
     }
 
     fun withArguments(vararg args: String) {
-        arguments.add(listOf(*args))
+        withArguments(args.map { ArgumentMatcher(it) })
+    }
+
+    fun withArguments(vararg args: ArgumentMatcher) {
+        withArguments(listOf(*args))
+    }
+
+    fun withArguments(args: List<ArgumentMatcher>) {
+        arguments.add(args)
     }
 
     fun withNoArguments() {
@@ -119,5 +128,5 @@ class FunMatcher(
 fun FunMatcher(block: FunMatcher.() -> Unit) =
     FunMatcher().apply(block)
 
-fun ConstructorMatcher(typeName: String? = null, arguments: List<List<String>> = emptyList(), block: FunMatcher.() -> Unit = {}) =
+fun ConstructorMatcher(typeName: String? = null, arguments: List<List<ArgumentMatcher>> = emptyList(), block: FunMatcher.() -> Unit = {}) =
     FunMatcher(type = typeName, arguments = arguments, matchConstructor = true).apply(block)

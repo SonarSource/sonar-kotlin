@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
+import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
@@ -36,8 +37,16 @@ class FunMatcherTest {
     val path = Paths.get("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
     val tree = KotlinTree.of(content, environment)
+
+    // sampleClass.sayHello("Kotlin")
     val ktCallExpression1 = tree.psiFile.children[3].children[1].children[1].children[1] as KtCallExpression
+
+    // sampleClass.sayHello("Java")
     val ktCallExpression2 = tree.psiFile.children[3].children[1].children[2].children[1] as KtCallExpression
+
+    // sampleClass.sayHelloNullable("nothingness")
+    val ktCallExpression3 = tree.psiFile.children[3].children[1].children[3].children[1] as KtCallExpression
+
 
     @Test
     fun `match method by type and name`() {
@@ -85,7 +94,19 @@ class FunMatcherTest {
         val funMatcher = FunMatcher {
             type = "sample.SampleClass"
             names = listOf("sayHello")
-            withArguments("String")
+            withArguments("kotlin.String")
+        }
+
+        assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
+        assertThat(funMatcher.matches(ktCallExpression2, tree.bindingContext)).isTrue
+    }
+
+    @Test
+    fun `Match method with unqualified parameters`() {
+        val funMatcher = FunMatcher {
+            type = "sample.SampleClass"
+            names = listOf("sayHello")
+            withArguments(ArgumentMatcher("String", qualified = false))
         }
 
         assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
@@ -96,7 +117,7 @@ class FunMatcherTest {
     fun `Match method without type`() {
         val funMatcher = FunMatcher {
             names = listOf("sayHello")
-            withArguments("String")
+            withArguments("kotlin.String")
         }
 
         assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
@@ -108,7 +129,7 @@ class FunMatcherTest {
         val funMatcher = FunMatcher {
             type = "sample.SampleClass"
             names = listOf("sayHello")
-            withArguments("String", "String")
+            withArguments("kotlin.String", "kotlin.String")
         }
 
         assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isFalse
@@ -145,7 +166,7 @@ class FunMatcherTest {
         val funMatcher = FunMatcher {
             type = "sample.SampleClass"
             names = listOf("sayHello")
-            withArguments("String")
+            withArguments("kotlin.String")
             withNoArguments()
         }
 
@@ -158,7 +179,7 @@ class FunMatcherTest {
         val funMatcher = FunMatcher {
             type = "sample.MySampleClass"
             names = listOf("sayHello")
-            withArguments("String")
+            withArguments("kotlin.String")
             withNoArguments()
         }
         val ktNamedFunction = tree.psiFile.children[5].children[1].children[0] as KtNamedFunction
@@ -171,7 +192,7 @@ class FunMatcherTest {
         val funMatcher = FunMatcher {
             type = "sample.MySampleClass"
             names = listOf("sayHello")
-            withArguments("String")
+            withArguments("kotlin.String")
             withNoArguments()
         }
         val ktNamedFunction = tree.psiFile.children[5].children[1].children[0] as KtNamedFunction
@@ -196,7 +217,7 @@ class FunMatcherTest {
         val funMatcher = FunMatcher {
             supertype = "sample.MySampleClass"
             names = listOf("sayHello")
-            withArguments("String")
+            withArguments("kotlin.String")
         }
         val ktNamedFunction = tree.psiFile.children[5].children[1].children[0] as KtNamedFunction
 
@@ -208,7 +229,7 @@ class FunMatcherTest {
         val funMatcher = FunMatcher {
             supertype = "sample.MyInterface"
             names = listOf("sayHello")
-            withArguments("String")
+            withArguments("kotlin.String")
         }
         val ktNamedFunction = tree.psiFile.children[5].children[1].children[0] as KtNamedFunction
 
@@ -220,7 +241,7 @@ class FunMatcherTest {
         val funMatcher = FunMatcher {
             supertype = "sample.MyInterface"
             names = listOf("sayHello")
-            withArguments("String")
+            withArguments("kotlin.String")
         }
         val ktNamedFunction = tree.psiFile.children[5].children[1].children[0] as KtNamedFunction
 
@@ -232,7 +253,7 @@ class FunMatcherTest {
         val funMatcher = FunMatcher {
             type = "sample.MySampleClass"
             names = listOf("sayHello")
-            withArguments("String")
+            withArguments("kotlin.String")
         }
         val call = ktCallExpression1.getCall(tree.bindingContext)
         assertThat(funMatcher.matches(call!!, BindingContext.EMPTY)).isFalse
@@ -243,7 +264,7 @@ class FunMatcherTest {
         val funMatcher = FunMatcher {
             supertype = "sample.MyInterface"
             names = listOf("sayHello")
-            withArguments("String")
+            withArguments("kotlin.String")
         }
         val call = ktCallExpression1.getCall(tree.bindingContext)
         assertThat(funMatcher.matches(call!!, BindingContext.EMPTY)).isFalse
@@ -279,7 +300,7 @@ class FunMatcherTest {
     fun `Don't match constructor`() {
         val funMatcher = ConstructorMatcher {
             type = "sample.SampleClass"
-            withArguments("String")
+            withArguments("kotlin.String")
         }
 
         val callExpression = tree.psiFile.children[3].children[1].children[0].children[0] as KtCallExpression
@@ -294,8 +315,52 @@ class FunMatcherTest {
             withNoArguments()
         }
 
-        val callExpression = tree.psiFile.children[3].children[1].children[3].children[0] as KtCallExpression
+        val callExpression = tree.psiFile.children[3].children[1].children[4].children[0] as KtCallExpression
 
         assertThat(funMatcher.matches(callExpression, tree.bindingContext)).isFalse
+    }
+
+    @Test
+    fun `Match only methods with non-nullable paramter`() {
+        val funMatcher = FunMatcher {
+            withArguments(ArgumentMatcher(nullability = TypeNullability.NOT_NULL))
+        }
+
+        assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
+        assertThat(funMatcher.matches(ktCallExpression2, tree.bindingContext)).isTrue
+        assertThat(funMatcher.matches(ktCallExpression3, tree.bindingContext)).isFalse
+    }
+
+    @Test
+    fun `Match only methods with nullable parameter`() {
+        val funMatcher = FunMatcher {
+            withArguments(ArgumentMatcher(nullability = TypeNullability.NULLABLE))
+        }
+
+        assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isFalse
+        assertThat(funMatcher.matches(ktCallExpression2, tree.bindingContext)).isFalse
+        assertThat(funMatcher.matches(ktCallExpression3, tree.bindingContext)).isTrue
+    }
+
+    @Test
+    fun `Match methods with a parameter with any nullability`() {
+        val funMatcher = FunMatcher {
+            withArguments(ArgumentMatcher(nullability = null))
+        }
+
+        assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
+        assertThat(funMatcher.matches(ktCallExpression2, tree.bindingContext)).isTrue
+        assertThat(funMatcher.matches(ktCallExpression3, tree.bindingContext)).isTrue
+    }
+
+    @Test
+    fun `Don't match methods without flexible nullability parameter`() {
+        val funMatcher = FunMatcher {
+            withArguments(ArgumentMatcher(nullability = TypeNullability.FLEXIBLE))
+        }
+
+        assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isFalse
+        assertThat(funMatcher.matches(ktCallExpression2, tree.bindingContext)).isFalse
+        assertThat(funMatcher.matches(ktCallExpression3, tree.bindingContext)).isFalse
     }
 }

@@ -34,9 +34,9 @@ class KotlinTreeTest {
     val path = Paths.get("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
     val tree = KotlinTree.of(content, environment)
-    assertThat(tree.psiFile.children).hasSize(8)
+    assertThat(tree.psiFile.children).hasSize(9)
 
-    assertThat(tree.bindingContext.getSliceContents(BindingContext.RESOLVED_CALL)).hasSize(9)
+    assertThat(tree.bindingContext.getSliceContents(BindingContext.RESOLVED_CALL)).hasSize(12)
 
     val ktCallExpression = tree.psiFile.children[3].children[1].children[1].children[1].children[0] as KtElement
     val call = tree.bindingContext.get(BindingContext.CALL, ktCallExpression)

@@ -5,4 +5,7 @@ class SampleClass {
         println("Hello, $name!")
     }
 
+    fun sayHelloNullable(name: String?) {
+        println("Hello, ${name ?: "empty void"}!")
+    }
 }
