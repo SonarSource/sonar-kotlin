@@ -1,6 +1,4 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.4.32'
-}
+apply plugin: 'org.jetbrains.kotlin.jvm'
 
 group 'org.sonarsource.slang'
 version '1.9.0-SNAPSHOT'

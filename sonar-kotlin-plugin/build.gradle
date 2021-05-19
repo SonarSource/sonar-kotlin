@@ -1,7 +1,8 @@
 plugins {
     id 'com.github.johnrengelman.shadow' version '6.1.0'
-    id 'org.jetbrains.kotlin.jvm'
 }
+
+apply plugin: 'org.jetbrains.kotlin.jvm'
 
 dependencies {
     implementation project(':slang-api')
