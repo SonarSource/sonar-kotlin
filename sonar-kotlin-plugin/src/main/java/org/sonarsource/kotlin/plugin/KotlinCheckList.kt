@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.plugin
 import org.sonarsource.kotlin.checks.AllBranchesIdenticalCheck
 import org.sonarsource.kotlin.checks.BadClassNameCheck
 import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
+import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
 import org.sonarsource.kotlin.checks.TabsCheck
 import org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck
@@ -57,6 +58,7 @@ object KotlinCheckList {
         AllBranchesIdenticalCheck::class.java,
         BadClassNameCheck::class.java,
         ClearTextProtocolCheck::class.java,
+        EncryptionAlgorithmCheck::class.java,
         ServerCertificateCheck::class.java,
         TabsCheck::class.java,
         WeakSSLContextCheck::class.java,

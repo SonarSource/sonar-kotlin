@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.converter
 
 import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.slang.api.TextPointer
 import org.sonarsource.slang.api.TextRange
 import org.sonarsource.slang.impl.TextPointerImpl
@@ -40,5 +41,7 @@ object KotlinTextRanges {
         val startLineOffset = startOffset - startLineNumberOffset
         return TextPointerImpl(startLineNumber + 1, startLineOffset)
     }
+    
+    fun KotlinFileContext.textRange(psiElement: PsiElement) = textRange(ktFile.viewProvider.document!!, psiElement)
 
 }

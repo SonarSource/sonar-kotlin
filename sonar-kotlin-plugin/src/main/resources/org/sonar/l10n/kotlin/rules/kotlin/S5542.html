@@ -1,0 +1,40 @@
+<p>Encryption operation mode and the padding scheme should be chosen appropriately to guarantee data confidentiality, integrity and authenticity:</p>
+<ul>
+  <li> For block cipher encryption algorithms (like AES):
+    <ul>
+      <li> The GCM (Galois Counter Mode) mode which <a href="https://en.wikipedia.org/wiki/Galois/Counter_Mode#Mathematical_basis">works
+      internally</a> with zero/no padding scheme, is recommended, as it is designed to provide both data authenticity (integrity) and confidentiality.
+      Other similar modes are CCM, CWC, EAX, IAPM and OCB. </li>
+      <li> The CBC (Cipher Block Chaining) mode by itself provides only data confidentiality, it's recommended to use it along with Message
+      Authentication Code or similar to achieve data authenticity (integrity) too and thus to <a
+      href="https://en.wikipedia.org/wiki/Padding_oracle_attack">prevent padding oracle attacks</a>. </li>
+      <li> The ECB (Electronic Codebook) mode doesn't provide serious message confidentiality: under a given key any given plaintext block always gets
+      encrypted to the same ciphertext block. This mode should not be used. </li>
+    </ul> </li>
+  <li> For RSA encryption algorithm, the recommended padding scheme is OAEP. </li>
+</ul>
+<h2>Noncompliant Code Example</h2>
+<pre>
+val c1 = Cipher.getInstance("AES") // Noncompliant: by default ECB mode is chosen
+val c2 = Cipher.getInstance("AES/ECB/NoPadding") // Noncompliant: ECB doesn't provide serious message confidentiality
+
+val c3 = Cipher.getInstance("RSA/NONE/NoPadding") // Noncompliant: RSA without OAEP padding scheme is not recommanded
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+// Recommended for block ciphers
+val c1 = Cipher.getInstance("AES/GCM/NoPadding"); // Compliant
+
+// Recommended for RSA
+val c2= Cipher.getInstance("RSA/None/OAEPWithSHA-1AndMGF1Padding") // Compliant
+val c3 = Cipher.getInstance("RSA/None/OAEPWITHSHA-256ANDMGF1PADDING") // Compliant
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
+  Misconfiguration </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/327.html">MITRE, CWE-327</a> - Use of a Broken or Risky Cryptographic Algorithm </li>
+  <li> <a href="https://wiki.sei.cmu.edu/confluence/x/hDdGBQ">CERT, MSC61-J.</a> - Do not use insecure or weak cryptographic algorithms </li>
+  <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
+</ul>
+

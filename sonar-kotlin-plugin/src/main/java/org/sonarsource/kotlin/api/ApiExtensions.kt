@@ -44,12 +44,16 @@ internal fun KtExpression.predictRuntimeStringValue(bindingContext: BindingConte
 
 internal fun KtExpression.predictRuntimeStringValueWithSecondaries(bindingContext: BindingContext) =
     mutableListOf<PsiElement>().let {
-        predictRuntimeValueExpression(bindingContext).stringValue(bindingContext, it) to it
+        predictRuntimeValueExpression(bindingContext, it)
+            .stringValue(bindingContext, it) to it
     }
 
-internal fun KtExpression.predictRuntimeValueExpression(bindingContext: BindingContext): KtExpression =
+internal fun KtExpression.predictRuntimeValueExpression(
+    bindingContext: BindingContext,
+    declarations: MutableList<PsiElement> = mutableListOf(),
+): KtExpression =
     if (this is KtReferenceExpression) {
-        this.extractFromInitializer(bindingContext)
+        this.extractFromInitializer(bindingContext, declarations)
     } else {
         getCall(bindingContext)?.predictValueExpression(bindingContext)
     } ?: this
@@ -62,7 +66,10 @@ private fun KtExpression.stringValue(
     declarations: MutableList<PsiElement> = mutableListOf(),
 ): String? = when (this) {
     is KtStringTemplateExpression -> {
-        val entries = entries.map { if (it.expression != null) it.expression!!.stringValue(bindingContext) else it.text }
+        val entries = entries.map {
+            if (it.expression != null) it.expression!!.stringValue(bindingContext,
+                declarations) else it.text
+        }
         if (entries.all { it != null }) entries.joinToString("") else null
     }
     is KtNameReferenceExpression -> {
@@ -71,14 +78,14 @@ private fun KtExpression.stringValue(
             val declaration = DescriptorToSourceUtils.descriptorToDeclaration(descriptor)
             if (declaration is KtProperty && !declaration.isVar) {
                 declarations.add(declaration)
-                declaration.delegateExpressionOrInitializer?.stringValue(bindingContext)
+                declaration.delegateExpressionOrInitializer?.stringValue(bindingContext, declarations)
             } else null
         }
     }
-    is KtDotQualifiedExpression -> selectorExpression?.stringValue(bindingContext)
+    is KtDotQualifiedExpression -> selectorExpression?.stringValue(bindingContext, declarations)
     is KtBinaryExpression ->
         if (operationToken == KtTokens.PLUS)
-            left?.stringValue(bindingContext)?.plus(right?.stringValue(bindingContext))
+            left?.stringValue(bindingContext, declarations)?.plus(right?.stringValue(bindingContext, declarations))
         else null
     else -> null
 }
@@ -88,11 +95,15 @@ private fun Call.predictValueExpression(bindingContext: BindingContext) =
         valueArguments[1].getArgumentExpression()
     } else null
 
-private fun KtReferenceExpression.extractFromInitializer(bindingContext: BindingContext) =
+private fun KtReferenceExpression.extractFromInitializer(
+    bindingContext: BindingContext,
+    declarations: MutableList<PsiElement> = mutableListOf(),
+) =
     bindingContext.get(BindingContext.REFERENCE_TARGET, this)?.let {
         DescriptorToSourceUtils.descriptorToDeclaration(it) as? KtProperty
     }?.let { declaration ->
         if (!declaration.isVar) {
+            declarations.add(declaration)
             declaration.delegateExpressionOrInitializer?.predictRuntimeValueExpression(bindingContext)
         } else null
     }
