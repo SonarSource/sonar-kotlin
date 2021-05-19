@@ -24,6 +24,7 @@ import org.sonarsource.kotlin.checks.BadClassNameCheck
 import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
+import org.sonarsource.kotlin.checks.StrongCipherAlgorithmCheck
 import org.sonarsource.kotlin.checks.TabsCheck
 import org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck
@@ -60,6 +61,7 @@ object KotlinCheckList {
         ClearTextProtocolCheck::class.java,
         EncryptionAlgorithmCheck::class.java,
         ServerCertificateCheck::class.java,
+        StrongCipherAlgorithmCheck::class.java,
         TabsCheck::class.java,
         WeakSSLContextCheck::class.java,
         VerifiedServerHostnamesCheck::class.java,
