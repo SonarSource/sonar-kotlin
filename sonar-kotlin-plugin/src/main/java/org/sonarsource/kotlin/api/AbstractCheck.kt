@@ -65,6 +65,12 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
         gap: Double? = null,
     ) = inputFileContext.reportIssue(ruleKey, textRange, message, secondaryLocations, gap)
 
+    internal fun KotlinFileContext.locationListOf(vararg nodesForSecondaryLocations: Pair<PsiElement, String>) =
+        ktFile.viewProvider.document?.let { document ->
+            nodesForSecondaryLocations.map { (psiElement, msg) ->
+                SecondaryLocation(KotlinTextRanges.textRange(document, psiElement), msg)
+            }
+        } ?: emptyList()
 
     internal fun KotlinFileContext.reportIssue(
         psiElement: PsiElement,

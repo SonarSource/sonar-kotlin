@@ -20,11 +20,15 @@
 package org.sonarsource.kotlin.api
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
@@ -32,12 +36,25 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getCalleeExpressionIfAny
+import org.jetbrains.kotlin.resolve.calls.callUtil.getFirstArgumentExpression
+import org.jetbrains.kotlin.resolve.calls.callUtil.getParentCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getReceiverExpression
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getType
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.resolvedCallUtil.getImplicitReceiverValue
+import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
+import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
 
-val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
+private val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
     qualifier = "java.util.Properties"
     name = "getProperty"
     withArguments("kotlin.String", "kotlin.String")
 }
+
+private val KOTLIN_CHAIN_CALL_CONSTRUCTS = listOf("let", "also", "run")
+private const val MAX_AST_PARENT_TRAVERSALS = 25
 
 internal fun KtExpression.predictRuntimeStringValue(bindingContext: BindingContext) =
     predictRuntimeValueExpression(bindingContext).stringValue(bindingContext)
@@ -48,15 +65,44 @@ internal fun KtExpression.predictRuntimeStringValueWithSecondaries(bindingContex
             .stringValue(bindingContext, it) to it
     }
 
+internal fun KtExpression.predictRuntimeIntValue(bindingContext: BindingContext) =
+    predictRuntimeValueExpression(bindingContext).let { runtimeValueExpression ->
+        runtimeValueExpression.getType(bindingContext)?.let {
+            bindingContext.get(BindingContext.COMPILE_TIME_VALUE, runtimeValueExpression)?.getValue(it) as? Int
+        }
+    }
+
 internal fun KtExpression.predictRuntimeValueExpression(
     bindingContext: BindingContext,
     declarations: MutableList<PsiElement> = mutableListOf(),
 ): KtExpression =
     if (this is KtReferenceExpression) {
-        this.extractFromInitializer(bindingContext, declarations)
+        val referenceTarget = extractLetAlsoTargetExpression(bindingContext)
+            ?: extractFromInitializer(bindingContext, declarations)
+
+        referenceTarget?.predictRuntimeValueExpression(bindingContext, declarations)
     } else {
         getCall(bindingContext)?.predictValueExpression(bindingContext)
     } ?: this
+
+internal fun KtCallExpression.predictReceiverExpression(
+    bindingContext: BindingContext,
+    precomputedResolvedCall: ResolvedCall<*>? = null,
+): KtExpression? {
+    val resolvedCall = precomputedResolvedCall ?: getResolvedCall(bindingContext)
+
+    // For calls of the format `foo.bar()` (i.e. with explicit receiver)
+    resolvedCall?.getReceiverExpression()?.let { explicitReceiver ->
+        return explicitReceiver.predictRuntimeValueExpression(bindingContext)
+    }
+
+    // For calls of the format `foo()` (i.e. where `this` is the implicit receiver)
+    resolvedCall?.getImplicitReceiverValue()?.let { implicitReceiver ->
+        return implicitReceiver.extractWithRunTargetExpression(this, bindingContext)
+    }
+
+    return null
+}
 
 /**
  * @param declarations is used to collect all visited declaration for reporting secondary locations
@@ -107,3 +153,43 @@ private fun KtReferenceExpression.extractFromInitializer(
             declaration.delegateExpressionOrInitializer?.predictRuntimeValueExpression(bindingContext)
         } else null
     }
+
+private fun KtReferenceExpression.extractLetAlsoTargetExpression(bindingContext: BindingContext) =
+    findReceiverScopeFunctionLiteral(bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
+
+private fun ImplicitReceiver.extractWithRunTargetExpression(startNode: PsiElement, bindingContext: BindingContext) =
+    findReceiverScopeFunctionLiteral(startNode, bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
+
+private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(bindingContext: BindingContext): KtExpression? {
+    getParentCall(bindingContext)?.let { larwCallCandidate ->
+        val callName = larwCallCandidate.callElement.getCalleeExpressionIfAny()?.text
+        if (callName in KOTLIN_CHAIN_CALL_CONSTRUCTS) {
+            return (larwCallCandidate.explicitReceiver as? ExpressionReceiver)?.expression?.predictRuntimeValueExpression(bindingContext)
+        } else if (callName == "with") {
+            return larwCallCandidate.getResolvedCall(bindingContext)?.getFirstArgumentExpression()
+                ?.predictRuntimeValueExpression(bindingContext)
+        }
+    }
+    return null
+}
+
+private fun KtReferenceExpression.findReceiverScopeFunctionLiteral(bindingContext: BindingContext): KtFunctionLiteral? =
+    (bindingContext.get(BindingContext.REFERENCE_TARGET, this) as? ValueParameterDescriptor)?.containingDeclaration
+        ?.findFunctionLiteral(this, bindingContext)
+
+private fun ImplicitReceiver.findReceiverScopeFunctionLiteral(startNode: PsiElement, bindingContext: BindingContext): KtFunctionLiteral? =
+    declarationDescriptor.findFunctionLiteral(startNode, bindingContext)
+
+private fun DeclarationDescriptor.findFunctionLiteral(
+    startNode: PsiElement,
+    bindingContext: BindingContext,
+): KtFunctionLiteral? {
+    var curNode: PsiElement? = startNode
+    for (i in 0 until MAX_AST_PARENT_TRAVERSALS) {
+        curNode = curNode?.parent ?: break
+        if (curNode is KtFunctionLiteral && bindingContext.get(BindingContext.FUNCTION, curNode) === this) {
+            return curNode
+        }
+    }
+    return null
+}

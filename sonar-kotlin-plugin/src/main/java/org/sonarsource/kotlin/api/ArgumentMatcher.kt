@@ -34,6 +34,10 @@ class ArgumentMatcher(
     private val nullability: TypeNullability? = null,
     private val qualified: Boolean = true,
 ) {
+    companion object {
+        val ANY = ArgumentMatcher()
+    }
+
     fun matches(descriptor: ValueParameterDescriptor) =
         matchesName(descriptor) && matchesNullability(descriptor)
 
