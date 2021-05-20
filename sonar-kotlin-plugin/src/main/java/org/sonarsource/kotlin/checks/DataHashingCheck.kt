@@ -11,7 +11,7 @@ import org.sonarsource.kotlin.api.ArgumentMatcher
 import org.sonarsource.kotlin.api.ConstructorMatcher
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.GET_INSTANCE
-import org.sonarsource.kotlin.api.STRING
+import org.sonarsource.kotlin.api.STRING_TYPE
 import org.sonarsource.kotlin.api.predictRuntimeStringValue
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
@@ -58,7 +58,7 @@ private val DEPRECATED_SPRING_PASSWORD_ENCODERS = setOf(
 
 private val WEAK_METHOD_MATCHERS = listOf(
     FunMatcher(qualifier = "org.apache.commons.codec.digest.DigestUtils", name = "getDigest") {
-        withArguments(STRING)
+        withArguments(STRING_TYPE)
     },
     FunMatcher(qualifier = "org.apache.commons.codec.digest.DigestUtils") {
         withNames(*ALGORITHM_BY_METHOD_NAME.keys.toTypedArray())
@@ -72,8 +72,8 @@ private val WEAK_METHOD_MATCHERS = listOf(
     },
 ) + CRYPTO_APIS.map {
     FunMatcher(qualifier = it, name = GET_INSTANCE) {
-        withArguments(STRING)
-        withArguments(ArgumentMatcher(typeName = STRING), ANY)
+        withArguments(STRING_TYPE)
+        withArguments(ArgumentMatcher(typeName = STRING_TYPE), ANY)
     }
 }
 

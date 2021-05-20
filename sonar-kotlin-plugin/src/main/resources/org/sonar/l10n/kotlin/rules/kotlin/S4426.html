@@ -1,0 +1,54 @@
+<p>Most of cryptographic systems require a sufficient key size to be robust against brute-force attacks.</p>
+<p><a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf">NIST recommendations</a> will be checked for these
+use-cases:</p>
+<p><strong>Digital Signature Generation</strong> and <strong>Verification:</strong> </p>
+<ul>
+  <li> p ≥ 2048 AND q ≥ 224 for DSA (<code>p</code> is key length and <code>q</code> the modulus length) </li>
+  <li> n ≥ 2048 for RSA (<code>n</code> is the key length) </li>
+</ul>
+<p><strong>Key Agreement</strong>: </p>
+<ul>
+  <li> p ≥ 2048 AND q ≥ 224 for DH and MQV </li>
+  <li> n ≥ 224 for ECDH and ECMQV (Examples: <code>secp192r1</code> is a non-compliant curve (<code>n</code> &lt; 224) but <code>secp224k1</code> is
+  compliant (<code>n</code> &gt;= 224)) </li>
+</ul>
+<p><strong>Symmetric keys</strong>: </p>
+<ul>
+  <li> key length ≥ 128 bits </li>
+</ul>
+<p>This rule will not raise issues for ciphers that are considered weak (no matter the key size) like <code>DES</code>, <code>Blowfish</code>.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+val keyPairGen1 = KeyPairGenerator.getInstance("RSA")
+keyPairGen1.initialize(1024) // Noncompliant
+
+val keyPairGen5 = KeyPairGenerator.getInstance("EC")
+val ecSpec1 = ECGenParameterSpec("secp112r1") // Noncompliant
+keyPairGen5.initialize(ecSpec1)
+
+val keyGen1 = KeyGenerator.getInstance("AES")
+keyGen1.init(64) // Noncompliant
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+val keyPairGen6 = KeyPairGenerator.getInstance("RSA")
+keyPairGen6.initialize(2048) // Compliant
+
+val keyPairGen5 = KeyPairGenerator.getInstance("EC")
+val ecSpec1 = ECGenParameterSpec("secp256r1") // Compliant
+keyPairGen5.initialize(ecSpec1)
+
+val keyGen2 = KeyGenerator.getInstance("AES")
+keyGen2.init(128) // Compliant
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
+  </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
+  Misconfiguration </li>
+  <li> <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar1.pdf">NIST 800-131A</a> - Recommendation for Transitioning the
+  Use of Cryptographic Algorithms and Key Lengths </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/326.html">MITRE, CWE-326</a> - Inadequate Encryption Strength </li>
+</ul>
+

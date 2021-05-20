@@ -97,11 +97,7 @@ internal fun KtCallExpression.predictReceiverExpression(
     }
 
     // For calls of the format `foo()` (i.e. where `this` is the implicit receiver)
-    resolvedCall?.getImplicitReceiverValue()?.let { implicitReceiver ->
-        return implicitReceiver.extractWithRunTargetExpression(this, bindingContext)
-    }
-
-    return null
+    return resolvedCall?.getImplicitReceiverValue()?.extractWithRunTargetExpression(this, bindingContext)
 }
 
 /**
@@ -160,18 +156,19 @@ private fun KtReferenceExpression.extractLetAlsoTargetExpression(bindingContext:
 private fun ImplicitReceiver.extractWithRunTargetExpression(startNode: PsiElement, bindingContext: BindingContext) =
     findReceiverScopeFunctionLiteral(startNode, bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
 
-private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(bindingContext: BindingContext): KtExpression? {
+private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(bindingContext: BindingContext): KtExpression? =
     getParentCall(bindingContext)?.let { larwCallCandidate ->
-        val callName = larwCallCandidate.callElement.getCalleeExpressionIfAny()?.text
-        if (callName in KOTLIN_CHAIN_CALL_CONSTRUCTS) {
-            return (larwCallCandidate.explicitReceiver as? ExpressionReceiver)?.expression?.predictRuntimeValueExpression(bindingContext)
-        } else if (callName == "with") {
-            return larwCallCandidate.getResolvedCall(bindingContext)?.getFirstArgumentExpression()
-                ?.predictRuntimeValueExpression(bindingContext)
+        when (larwCallCandidate.callElement.getCalleeExpressionIfAny()?.text) {
+            in KOTLIN_CHAIN_CALL_CONSTRUCTS -> {
+                (larwCallCandidate.explicitReceiver as? ExpressionReceiver)?.expression?.predictRuntimeValueExpression(bindingContext)
+            }
+            "with" -> {
+                larwCallCandidate.getResolvedCall(bindingContext)?.getFirstArgumentExpression()
+                    ?.predictRuntimeValueExpression(bindingContext)
+            }
+            else -> null
         }
     }
-    return null
-}
 
 private fun KtReferenceExpression.findReceiverScopeFunctionLiteral(bindingContext: BindingContext): KtFunctionLiteral? =
     (bindingContext.get(BindingContext.REFERENCE_TARGET, this) as? ValueParameterDescriptor)?.containingDeclaration
