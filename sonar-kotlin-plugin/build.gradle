@@ -44,7 +44,8 @@ jar {
                 'Build-Time': buildDate,
                 'Implementation-Build': 'git rev-parse HEAD'.execute().text.trim(),
                 'Plugin-BuildDate': buildDate,
-                'Plugin-ChildFirstClassLoader': 'true',
+                // Note that use of ChildFirstClassLoader is deprecated since SonarQube 7.9
+                'Plugin-ChildFirstClassLoader': 'false',
                 'Plugin-Class': 'org.sonarsource.kotlin.plugin.KotlinPlugin',
                 'Plugin-Description': 'Code Analyzer for Kotlin',
                 'Plugin-Developers': 'SonarSource Team',
