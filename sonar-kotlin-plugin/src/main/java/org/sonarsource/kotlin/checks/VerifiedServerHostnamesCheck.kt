@@ -37,12 +37,12 @@ class VerifiedServerHostnamesCheck : AbstractCheck() {
     companion object {
         val VERIFY_MATCHER = FunMatcher {
             supertype = "javax.net.ssl.HostnameVerifier"
-            names = listOf("verify")
+            name = "verify"
         }
 
         val HOSTNAME_VERIFIER_MATCHER = FunMatcher {
-            type = "okhttp3.OkHttpClient.Builder"
-            names = listOf("hostnameVerifier")
+            qualifier = "okhttp3.OkHttpClient.Builder"
+            name = "hostnameVerifier"
         }
         
         const val MESSAGE = "Enable server hostname verification on this SSL/TLS connection"

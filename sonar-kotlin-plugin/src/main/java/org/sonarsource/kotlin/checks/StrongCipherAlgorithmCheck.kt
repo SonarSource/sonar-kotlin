@@ -39,7 +39,7 @@ private val weakCiphers = listOf(
     "RC4",
 )
 private const val msg = "Use a strong cipher algorithm."
-private val cipherGetInstanceMatcher = FunMatcher(type = "javax.crypto.Cipher", names = listOf("getInstance"))
+private val cipherGetInstanceMatcher = FunMatcher(qualifier = "javax.crypto.Cipher", name = "getInstance")
 private val nullCipherConstructorMatcher = ConstructorMatcher("javax.crypto.NullCipher")
 
 @Rule(key = "S5547")

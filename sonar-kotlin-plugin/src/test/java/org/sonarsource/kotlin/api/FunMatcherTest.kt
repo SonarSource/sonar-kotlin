@@ -30,7 +30,6 @@ import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
-import org.sonarsource.kotlin.converter.bindingContext
 
 class FunMatcherTest {
     val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"))
@@ -51,8 +50,19 @@ class FunMatcherTest {
     @Test
     fun `match method by type and name`() {
         val funMatcher = FunMatcher {
-            type = "sample.SampleClass"
-            names = listOf("sayHello")
+            qualifier = "sample.SampleClass"
+            name = "sayHello"
+        }
+
+        assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
+        assertThat(funMatcher.matches(ktCallExpression2, tree.bindingContext)).isTrue
+    }
+
+    @Test
+    fun `match method by type and name and multiple names`() {
+        val funMatcher = FunMatcher {
+            qualifier = "sample.SampleClass"
+            withNames("sayHello", "sayHelloTo")
         }
 
         assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
@@ -62,13 +72,13 @@ class FunMatcherTest {
     @Test
     fun `Don't match method by type or name`() {
         val wrongTypeMethodMatcher = FunMatcher {
-            type = "sample.MySampleClass"
-            names = listOf("sayHello")
+            qualifier = "sample.MySampleClass"
+            name = "sayHello"
         }
 
         val wrongNameMethodMatcher = FunMatcher {
-            type = "sample.SampleClass"
-            names = listOf("sayBye")
+            qualifier = "sample.SampleClass"
+            name = "sayBye"
         }
 
         assertThat(wrongTypeMethodMatcher.matches(ktCallExpression1, tree.bindingContext)).isFalse
@@ -81,8 +91,8 @@ class FunMatcherTest {
     @Test
     fun `Don't match method without binding context`() {
         val funMatcher = FunMatcher {
-            type = "sample.SampleClass"
-            names = listOf("sayHello")
+            qualifier = "sample.SampleClass"
+            name = "sayHello"
         }
 
         assertThat(funMatcher.matches(ktCallExpression1, BindingContext.EMPTY)).isFalse
@@ -92,8 +102,8 @@ class FunMatcherTest {
     @Test
     fun `Match method with parameters`() {
         val funMatcher = FunMatcher {
-            type = "sample.SampleClass"
-            names = listOf("sayHello")
+            qualifier = "sample.SampleClass"
+            name = "sayHello"
             withArguments("kotlin.String")
         }
 
@@ -104,8 +114,8 @@ class FunMatcherTest {
     @Test
     fun `Match method with unqualified parameters`() {
         val funMatcher = FunMatcher {
-            type = "sample.SampleClass"
-            names = listOf("sayHello")
+            qualifier = "sample.SampleClass"
+            name = "sayHello"
             withArguments(ArgumentMatcher("String", qualified = false))
         }
 
@@ -116,7 +126,7 @@ class FunMatcherTest {
     @Test
     fun `Match method without type`() {
         val funMatcher = FunMatcher {
-            names = listOf("sayHello")
+            name = "sayHello"
             withArguments("kotlin.String")
         }
 
@@ -127,8 +137,8 @@ class FunMatcherTest {
     @Test
     fun `Don't match method with wrong number of parameters`() {
         val funMatcher = FunMatcher {
-            type = "sample.SampleClass"
-            names = listOf("sayHello")
+            qualifier = "sample.SampleClass"
+            name = "sayHello"
             withArguments("kotlin.String", "kotlin.String")
         }
 
@@ -139,8 +149,8 @@ class FunMatcherTest {
     @Test
     fun `Don't match method with wrong parameters`() {
         val funMatcher = FunMatcher {
-            type = "sample.SampleClass"
-            names = listOf("sayHello")
+            qualifier = "sample.SampleClass"
+            name = "sayHello"
             withArguments("Int")
         }
 
@@ -151,8 +161,8 @@ class FunMatcherTest {
     @Test
     fun `Don't match method with no parameters matcher`() {
         val funMatcher = FunMatcher {
-            type = "sample.SampleClass"
-            names = listOf("sayHello")
+            qualifier = "sample.SampleClass"
+            name = "sayHello"
             withArguments("Int")
             withNoArguments()
         }
@@ -164,8 +174,8 @@ class FunMatcherTest {
     @Test
     fun `Match method with no parameters matcher`() {
         val funMatcher = FunMatcher {
-            type = "sample.SampleClass"
-            names = listOf("sayHello")
+            qualifier = "sample.SampleClass"
+            name = "sayHello"
             withArguments("kotlin.String")
             withNoArguments()
         }
@@ -177,8 +187,8 @@ class FunMatcherTest {
     @Test
     fun `Match method declaration`() {
         val funMatcher = FunMatcher {
-            type = "sample.MySampleClass"
-            names = listOf("sayHello")
+            qualifier = "sample.MySampleClass"
+            name = "sayHello"
             withArguments("kotlin.String")
             withNoArguments()
         }
@@ -190,8 +200,8 @@ class FunMatcherTest {
     @Test
     fun `Don't match method declaration without binding context`() {
         val funMatcher = FunMatcher {
-            type = "sample.MySampleClass"
-            names = listOf("sayHello")
+            qualifier = "sample.MySampleClass"
+            name = "sayHello"
             withArguments("kotlin.String")
             withNoArguments()
         }
@@ -203,8 +213,8 @@ class FunMatcherTest {
     @Test
     fun `Don't match method declaration with wrong parameters`() {
         val funMatcher = FunMatcher {
-            type = "sample.MySampleClass"
-            names = listOf("sayHello")
+            qualifier = "sample.MySampleClass"
+            name = "sayHello"
             withNoArguments()
         }
         val ktNamedFunction = tree.psiFile.children[5].children[1].children[0] as KtNamedFunction
@@ -216,7 +226,7 @@ class FunMatcherTest {
     fun `Don't match method declaration with wrong supertype`() {
         val funMatcher = FunMatcher {
             supertype = "sample.MySampleClass"
-            names = listOf("sayHello")
+            name = "sayHello"
             withArguments("kotlin.String")
         }
         val ktNamedFunction = tree.psiFile.children[5].children[1].children[0] as KtNamedFunction
@@ -228,7 +238,7 @@ class FunMatcherTest {
     fun `Match method declaration by supertype`() {
         val funMatcher = FunMatcher {
             supertype = "sample.MyInterface"
-            names = listOf("sayHello")
+            name = "sayHello"
             withArguments("kotlin.String")
         }
         val ktNamedFunction = tree.psiFile.children[5].children[1].children[0] as KtNamedFunction
@@ -240,7 +250,7 @@ class FunMatcherTest {
     fun `Don't match method declaration by supertype without binding context`() {
         val funMatcher = FunMatcher {
             supertype = "sample.MyInterface"
-            names = listOf("sayHello")
+            name = "sayHello"
             withArguments("kotlin.String")
         }
         val ktNamedFunction = tree.psiFile.children[5].children[1].children[0] as KtNamedFunction
@@ -251,8 +261,8 @@ class FunMatcherTest {
     @Test
     fun `Don't match method call without binding context`() {
         val funMatcher = FunMatcher {
-            type = "sample.MySampleClass"
-            names = listOf("sayHello")
+            qualifier = "sample.MySampleClass"
+            name = "sayHello"
             withArguments("kotlin.String")
         }
         val call = ktCallExpression1.getCall(tree.bindingContext)
@@ -263,7 +273,7 @@ class FunMatcherTest {
     fun `Don't match method call by supertype without binding context`() {
         val funMatcher = FunMatcher {
             supertype = "sample.MyInterface"
-            names = listOf("sayHello")
+            name = "sayHello"
             withArguments("kotlin.String")
         }
         val call = ktCallExpression1.getCall(tree.bindingContext)
@@ -273,7 +283,7 @@ class FunMatcherTest {
     @Test
     fun `Match constructor`() {
         val funMatcher = ConstructorMatcher {
-            type = "sample.SampleClass"
+            qualifier = "sample.SampleClass"
             withNoArguments()
         }
 
@@ -285,7 +295,7 @@ class FunMatcherTest {
     @Test
     fun `Don't match constructor without binding context`() {
         val funMatcher = ConstructorMatcher {
-            type = "sample.SampleClass"
+            qualifier = "sample.SampleClass"
             withNoArguments()
         }
 
@@ -299,7 +309,7 @@ class FunMatcherTest {
     @Test
     fun `Don't match constructor`() {
         val funMatcher = ConstructorMatcher {
-            type = "sample.SampleClass"
+            qualifier = "sample.SampleClass"
             withArguments("kotlin.String")
         }
 

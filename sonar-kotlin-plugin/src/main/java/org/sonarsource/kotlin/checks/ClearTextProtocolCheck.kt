@@ -27,7 +27,7 @@ class ClearTextProtocolCheck : AbstractCheck() {
 
         private val UNSAFE_CALLS_OK_HTTP = listOf(
             ConstructorMatcher("okhttp3.ConnectionSpec.Builder"),
-            FunMatcher(type = "okhttp3.OkHttpClient.Builder", names = listOf("connectionSpecs"))
+            FunMatcher(qualifier = "okhttp3.OkHttpClient.Builder", name = "connectionSpecs")
         )
 
         private fun msg(insecure: String, replaceWith: String) = "Using $insecure is insecure. Use $replaceWith instead."

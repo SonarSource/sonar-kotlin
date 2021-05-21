@@ -59,13 +59,13 @@ class WeakSSLContextCheck : AbstractCheck() {
     )
 
     private val OKHTTP_MATCHER = FunMatcher {
-        type = "okhttp3.ConnectionSpec.Builder"
-        names = listOf("tlsVersions")
+        qualifier = "okhttp3.ConnectionSpec.Builder"
+        name = "tlsVersions"
     }
 
     private val SSL_CONTEXT_MATCHER = FunMatcher {
-        type = "javax.net.ssl.SSLContext"
-        names = listOf("getInstance")
+        qualifier = "javax.net.ssl.SSLContext"
+        name = "getInstance"
     }
 
     override fun visitCallExpression(node: KtCallExpression, kotlinFileContext: KotlinFileContext) {

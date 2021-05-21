@@ -26,17 +26,29 @@ import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.BindingContext.RESOLVED_CALL
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.tasks.isDynamic
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
 class FunMatcher(
-    var type: String? = null,
-    var names: List<String> = emptyList(),
+    // In case of Top Level function there is no type there,
+    // so you just need to specify the package
+    var qualifier: String? = null,
+    var name: String? = null,
     arguments: List<List<ArgumentMatcher>> = mutableListOf(),
     var supertype: String? = null,
     private val matchConstructor: Boolean = false,
+    var dynamic: Boolean? = null,
+    block: FunMatcher.() -> Unit = {},
 ) {
     private val arguments = arguments.toMutableList()
+    private val names = mutableSetOf<String>()
+    init {
+        block()
+        name?.let { names += it }
+    }
 
     fun matches(node: KtCallExpression, bindingContext: BindingContext): Boolean {
         val call = node.getCall(bindingContext)
@@ -49,29 +61,29 @@ class FunMatcher(
         return checkFunctionDescriptor(functionDescriptor)
     }
 
-    fun matches(call: Call, bindingContext: BindingContext): Boolean {
-        val functionDescriptor = bindingContext.get(BindingContext.RESOLVED_CALL, call)?.resultingDescriptor
-        return checkFunctionDescriptor(functionDescriptor)
-    }
+    fun matches(call: Call, bindingContext: BindingContext) = matches(bindingContext.get(RESOLVED_CALL, call))
+
+    fun matches(call: ResolvedCall<*>?) = checkFunctionDescriptor(call?.resultingDescriptor)
 
     private fun checkFunctionDescriptor(functionDescriptor: CallableDescriptor?) =
         functionDescriptor != null &&
+            checkIsDynamic(functionDescriptor) &&
             checkName(functionDescriptor) &&
             checkTypeOrSupertype(functionDescriptor) &&
             checkCallParameters(functionDescriptor)
 
     private fun checkTypeOrSupertype(functionDescriptor: CallableDescriptor) =
-        type.isNullOrEmpty() && supertype.isNullOrEmpty() ||
+        qualifier.isNullOrEmpty() && supertype.isNullOrEmpty() ||
             checkType(functionDescriptor) ||
-            type.isNullOrEmpty() && checkSubType(functionDescriptor)
+            qualifier.isNullOrEmpty() && checkSubType(functionDescriptor)
 
     private fun checkType(functionDescriptor: CallableDescriptor): Boolean =
-        type?.let {
+        qualifier?.let {
             when (functionDescriptor) {
                 is ConstructorDescriptor ->
-                    functionDescriptor.constructedClass.fqNameSafe.asString() == type
+                    functionDescriptor.constructedClass.fqNameSafe.asString() == qualifier
                 else ->
-                    functionDescriptor.fqNameSafe.asString().substringBeforeLast(".") == type
+                    functionDescriptor.fqNameSafe.asString().substringBeforeLast(".") == qualifier
             }
         } ?: false
 
@@ -89,9 +101,7 @@ class FunMatcher(
         if (functionDescriptor is ConstructorDescriptor) {
             matchConstructor
         } else if (!matchConstructor) {
-            names.isEmpty() || names.any {
-                it == functionDescriptor.name.asString()
-            }
+            names.isEmpty() || functionDescriptor.name.asString() in names
         } else false
 
     private fun checkCallParameters(descriptor: CallableDescriptor): Boolean {
@@ -104,6 +114,13 @@ class FunMatcher(
                     acc && argType.matches(valueParameters[i])
                 }
         }
+    }
+
+    private fun checkIsDynamic(descriptor: CallableDescriptor): Boolean =
+        dynamic?.let { it == descriptor.isDynamic() } ?: true
+
+    fun withNames(vararg args: String) {
+        names += listOf(*args)
     }
 
     fun withArguments(vararg args: String) {
@@ -125,8 +142,5 @@ class FunMatcher(
     private fun ValueParameterDescriptor.typeAsString() = this.type.toString()
 }
 
-fun FunMatcher(block: FunMatcher.() -> Unit) =
-    FunMatcher().apply(block)
-
 fun ConstructorMatcher(typeName: String? = null, arguments: List<List<ArgumentMatcher>> = emptyList(), block: FunMatcher.() -> Unit = {}) =
-    FunMatcher(type = typeName, arguments = arguments, matchConstructor = true).apply(block)
+    FunMatcher(qualifier = typeName, arguments = arguments, matchConstructor = true, block = block)

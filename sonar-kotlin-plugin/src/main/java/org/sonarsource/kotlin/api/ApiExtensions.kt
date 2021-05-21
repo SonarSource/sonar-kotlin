@@ -34,8 +34,8 @@ import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 
 val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
-    type = "java.util.Properties"
-    names = listOf("getProperty")
+    qualifier = "java.util.Properties"
+    name = "getProperty"
     withArguments("kotlin.String", "kotlin.String")
 }
 

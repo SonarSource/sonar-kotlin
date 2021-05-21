@@ -33,8 +33,8 @@ private val ALGORITHM_PATTERN = Regex("([^/]+)/([^/]+)/([^/]+)")
 private const val MESSAGE = "Use secure mode and padding scheme."
 
 val CIPHER_GET_INSTANCE_MATCHER = FunMatcher {
-    type = "javax.crypto.Cipher"
-    names = listOf("getInstance")
+    qualifier = "javax.crypto.Cipher"
+    name = "getInstance"
 }
 
 @Rule(key = "S5542")
