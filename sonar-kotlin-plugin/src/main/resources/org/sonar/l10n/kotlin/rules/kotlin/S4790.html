@@ -1,0 +1,58 @@
+<p>The MD5 algorithm and its successor, SHA-1, are no longer considered secure, because it is too easy to create hash collisions with them. That is,
+it takes too little computational effort to come up with a different input that produces the same MD5 or SHA-1 hash, and using the new, same-hash
+value gives an attacker the same access as if he had the originally-hashed value. This applies as well to the other Message-Digest algorithms: MD2,
+MD4, MD6, HAVAL-128, HMAC-MD5, DSA (which uses SHA-1), RIPEMD, RIPEMD-128, RIPEMD-160, HMACRIPEMD160.</p>
+<p>The following APIs are tracked for use of obsolete crypto algorithms:</p>
+<ul>
+  <li> <code>java.security.AlgorithmParameters</code> (JDK) </li>
+  <li> <code>java.security.AlgorithmParameterGenerator</code> (JDK) </li>
+  <li> <code>java.security.MessageDigest</code> (JDK) </li>
+  <li> <code>java.security.KeyFactory</code> (JDK) </li>
+  <li> <code>java.security.KeyPairGenerator</code> (JDK) </li>
+  <li> <code>java.security.Signature</code> (JDK) </li>
+  <li> <code>javax.crypto.Mac</code> (JDK) </li>
+  <li> <code>javax.crypto.KeyGenerator</code> (JDK) </li>
+  <li> <code>org.apache.commons.codec.digest.DigestUtils</code> (Apache Commons Codec) </li>
+  <li> <code>org.springframework.util.DigestUtils</code> </li>
+  <li> <code>com.google.common.hash.Hashing</code> (Guava) </li>
+  <li> <code>org.springframework.security.authentication.encoding.ShaPasswordEncoder</code> (Spring Security 4.2.x) </li>
+  <li> <code>org.springframework.security.authentication.encoding.Md5PasswordEncoder</code> (Spring Security 4.2.x) </li>
+  <li> <code>org.springframework.security.crypto.password.LdapShaPasswordEncoder</code> (Spring Security 5.0.x) </li>
+  <li> <code>org.springframework.security.crypto.password.Md4PasswordEncoder</code> (Spring Security 5.0.x) </li>
+  <li> <code>org.springframework.security.crypto.password.MessageDigestPasswordEncoder</code> (Spring Security 5.0.x) </li>
+  <li> <code>org.springframework.security.crypto.password.NoOpPasswordEncoder</code> (Spring Security 5.0.x) </li>
+  <li> <code>org.springframework.security.crypto.password.StandardPasswordEncoder</code> (Spring Security 5.0.x) </li>
+</ul>
+<h2>Ask Yourself Whether</h2>
+<p>The hashed value is used in a security context like:</p>
+<ul>
+  <li> User-password storage. </li>
+  <li> Security token generation (used to confirm e-mail when registering on a website, reset password, etc ...). </li>
+  <li> To compute some message integrity. </li>
+</ul>
+<p>There is a risk if you answered yes to any of those questions.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<p>Safer alternatives, such as <code>SHA-256</code>, <code>SHA-512</code>, <code>SHA-3</code> are recommended, and for password hashing, it's even
+better to use algorithms that do not compute too "quickly", like <code>bcrypt</code>, <code>scrypt</code>, <code>argon2</code> or <code>pbkdf2</code>
+because it slows down <code>brute force attacks</code>.</p>
+<h2>Sensitive Code Example</h2>
+<pre>
+val md1: MessageDigest = MessageDigest.getInstance("SHA");  // Sensitive:  SHA is not a standard name, for most security providers it's an alias of SHA-1
+val md2: MessageDigest = MessageDigest.getInstance("SHA1");  // Sensitive
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+val md1: MessageDigest = MessageDigest.getInstance("SHA-512"); // Compliant
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
+  </li>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A6-Security_Misconfiguration">OWASP Top 10 2017 Category A6</a> - Security
+  Misconfiguration </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/327.html">MITRE, CWE-327</a> - Use of a Broken or Risky Cryptographic Algorithm </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/916.html">MITRE, CWE-916</a> - Use of Password Hash With Insufficient Computational Effort
+  </li>
+  <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
+</ul>
+

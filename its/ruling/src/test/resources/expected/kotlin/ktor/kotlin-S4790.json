@@ -1,0 +1,14 @@
+{
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-features/ktor-auth/src/io/ktor/auth/DigestAuth.kt':[
+19,
+],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-features/ktor-auth/src/io/ktor/auth/OAuth1a.kt':[
+191,
+],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-test-host/src/io/ktor/server/testing/EngineTestSuite.kt':[
+1542,
+],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-utils/src/io/ktor/util/Crypto.kt':[
+16,
+],
+}

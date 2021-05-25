@@ -53,3 +53,5 @@ class ArgumentMatcher(
         // as it seems to be the best option to get a type's simple name
         typeName?.let { it == descriptor.type.nameIfStandardType?.asString() } ?: true
 }
+
+val ANY = ArgumentMatcher()

@@ -1,0 +1,27 @@
+{
+  "title": "Using weak hashing algorithms is security-sensitive",
+  "type": "SECURITY_HOTSPOT",
+  "status": "ready",
+  "tags": [
+    "cwe",
+    "spring",
+    "owasp-a6",
+    "sans-top25-porous",
+    "owasp-a3"
+  ],
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-4790",
+  "sqKey": "S4790",
+  "scope": "Main",
+  "securityStandards": {
+    "CWE": [
+      916,
+      327,
+      328
+    ],
+    "OWASP": [
+      "A3",
+      "A6"
+    ]
+  }
+}
