@@ -25,6 +25,7 @@ import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.DataHashingCheck
 import org.sonarsource.kotlin.checks.DuplicateBranchCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
+import org.sonarsource.kotlin.checks.PseudoRandomCheck
 import org.sonarsource.kotlin.checks.RobustCryptographicKeysCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
 import org.sonarsource.kotlin.checks.StrongCipherAlgorithmCheck
@@ -66,6 +67,7 @@ object KotlinCheckList {
         DataHashingCheck::class.java,
         DuplicateBranchCheck::class.java,
         EncryptionAlgorithmCheck::class.java,
+        PseudoRandomCheck::class.java,
         RobustCryptographicKeysCheck::class.java,
         ServerCertificateCheck::class.java,
         StrongCipherAlgorithmCheck::class.java,
