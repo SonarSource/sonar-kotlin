@@ -98,7 +98,13 @@ class DataHashingCheck : AbstractCheck() {
 }
 
 enum class InsecureAlgorithm {
-    MD2, MD4, MD5, MD6, RIPEMD, HAVAL128, SHA1,
+    MD2, MD4, MD5, MD6, RIPEMD, HAVAL128, SHA1, SHA0, SHA224,
+    SHA {
+        override fun match(algorithm: String): Boolean {
+            // exact match required for SHA, so it doesn't match SHA-512
+            return algorithm.equals("sha", ignoreCase = true)
+        }
+    },
     DSA {
         override fun match(algorithm: String): Boolean {
             // exact match required for DSA, so it doesn't match ECDSA

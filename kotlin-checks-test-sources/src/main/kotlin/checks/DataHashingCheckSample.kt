@@ -33,6 +33,11 @@ internal class HashMethodsCheck {
         var md: MessageDigest? = null
 
         md = DigestUtils.getDigest("MD2") // Noncompliant
+        md = DigestUtils.getDigest("MD4") // Noncompliant
+        md = DigestUtils.getDigest("MD5") // Noncompliant
+        md = DigestUtils.getDigest("SHA") // Noncompliant
+        md = DigestUtils.getDigest("SHA-0") // Noncompliant
+        md = DigestUtils.getDigest("SHA-224") // Noncompliant
         md = DigestUtils.getDigest("MD5") // Noncompliant
         md = DigestUtils.getDigest("SHA-1") // Noncompliant
         md = DigestUtils.getDigest("SHA-256")
@@ -57,6 +62,12 @@ internal class HashMethodsCheck {
         Hashing.sha1() // Noncompliant
         Hashing.sha256()
         md = MessageDigest.getInstance("MD5", provider) // Noncompliant
+        md = MessageDigest.getInstance("MD2", provider) // Noncompliant
+        md = MessageDigest.getInstance("MD4", provider) // Noncompliant
+        md = MessageDigest.getInstance("SHA", provider) // Noncompliant
+        md = MessageDigest.getInstance("SHA-0", provider) // Noncompliant
+        md = MessageDigest.getInstance("SHA-1", provider) // Noncompliant
+        md = MessageDigest.getInstance("SHA-224", provider) // Noncompliant
         md = MessageDigest.getInstance("SHA1", "provider") // Noncompliant
         md = MessageDigest.getInstance("sha-1", "provider") // Noncompliant
         val myAlgo = props.getProperty("myCoolAlgo", "SHA1")
