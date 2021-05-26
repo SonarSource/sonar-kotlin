@@ -12,9 +12,6 @@
 82,
 126,
 ],
-'kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/ErrorMessagesTests.kt':[
-72,
-],
 'kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/carpenter/CompositeMemberCompositeSchemaToClassCarpenterTests.kt':[
 210,
 ],
