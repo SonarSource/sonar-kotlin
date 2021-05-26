@@ -19,13 +19,11 @@
  */
 package org.sonarsource.kotlin.plugin
 
-import org.assertj.core.api.Assertions
-import org.assertj.core.api.Java6Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.plugin.KotlinCheckList.legacyChecks
 import org.sonarsource.slang.checks.api.SlangCheck
 import org.sonarsource.slang.testing.PackageScanner
-import java.util.stream.Collectors
 
 internal class KotlinCheckListTest {
     @Test
@@ -34,9 +32,9 @@ internal class KotlinCheckListTest {
         val checkListNames = legacyChecks().map { obj: Class<*> -> obj.name }
         val kotlinSpecificCheckList = KotlinCheckList.SLANG_CHECKS.map { obj: Class<out SlangCheck?> -> obj.name }
         for (languageCheck in languageImplementation) {
-            Java6Assertions.assertThat(checkListNames).contains(languageCheck)
-            Java6Assertions.assertThat(kotlinSpecificCheckList).contains(languageCheck)
-            Java6Assertions.assertThat(languageCheck).endsWith("KotlinCheck")
+            assertThat(checkListNames).contains(languageCheck)
+            assertThat(kotlinSpecificCheckList).contains(languageCheck)
+            assertThat(languageCheck).endsWith("KotlinCheck")
         }
     }
 
@@ -44,7 +42,7 @@ internal class KotlinCheckListTest {
     fun kotlin_excluded_not_present() {
         val checks = legacyChecks()
         for (excluded in KotlinCheckList.SLANG_EXCLUDED_CHECKS) {
-            Java6Assertions.assertThat(checks).doesNotContain(excluded)
+            assertThat(checks).doesNotContain(excluded)
         }
     }
 
@@ -52,7 +50,7 @@ internal class KotlinCheckListTest {
     fun kotlin_included_are_present() {
         val checks = legacyChecks()
         for (specificCheck in KotlinCheckList.SLANG_CHECKS) {
-            Java6Assertions.assertThat(checks).contains(specificCheck)
+            assertThat(checks).contains(specificCheck)
         }
     }
 

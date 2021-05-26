@@ -27,6 +27,7 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -111,4 +112,12 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
 
     private fun ClassDescriptor.superClassAsList(): List<ClassDescriptor> =
         getSuperClassNotAny()?.let { listOf(it) } ?: emptyList()
+
+    internal fun KtExpression.skipParentheses(): KtExpression {
+        var expr = this
+        while (expr is KtParenthesizedExpression) {
+            expr = expr.expression!!
+        }
+        return expr
+    }
 }
