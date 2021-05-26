@@ -53,7 +53,7 @@ private val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
     withArguments("kotlin.String", "kotlin.String")
 }
 
-private val KOTLIN_CHAIN_CALL_CONSTRUCTS = listOf("let", "also", "run")
+private val KOTLIN_CHAIN_CALL_CONSTRUCTS = listOf("let", "also", "run", "apply")
 private const val MAX_AST_PARENT_TRAVERSALS = 25
 
 internal fun KtExpression.predictRuntimeStringValue(bindingContext: BindingContext) =

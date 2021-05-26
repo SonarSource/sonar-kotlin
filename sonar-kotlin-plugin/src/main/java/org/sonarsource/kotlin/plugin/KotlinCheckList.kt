@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.plugin
 
 import org.sonarsource.kotlin.checks.AllBranchesIdenticalCheck
 import org.sonarsource.kotlin.checks.BadClassNameCheck
+import org.sonarsource.kotlin.checks.CipherBlockChainingCheck
 import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.DataHashingCheck
 import org.sonarsource.kotlin.checks.DuplicateBranchCheck
@@ -65,6 +66,7 @@ object KotlinCheckList {
     private val KOTLIN_CHECKS = listOf(
         AllBranchesIdenticalCheck::class.java,
         BadClassNameCheck::class.java,
+        CipherBlockChainingCheck::class.java,
         ClearTextProtocolCheck::class.java,
         DataHashingCheck::class.java,
         DuplicateBranchCheck::class.java,
