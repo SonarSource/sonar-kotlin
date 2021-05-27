@@ -36,6 +36,7 @@ import org.sonarsource.kotlin.checks.SelfAssignmentCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
 import org.sonarsource.kotlin.checks.StrongCipherAlgorithmCheck
 import org.sonarsource.kotlin.checks.TabsCheck
+import org.sonarsource.kotlin.checks.TooLongLineCheck
 import org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck
 import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
@@ -64,6 +65,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.IdenticalConditionsCheck::class.java,
             org.sonarsource.slang.checks.SelfAssignmentCheck::class.java,
             org.sonarsource.slang.checks.TabsCheck::class.java,
+            org.sonarsource.slang.checks.TooLongLineCheck::class.java,
         )
 
     val SLANG_CHECKS = listOf(
@@ -89,6 +91,7 @@ object KotlinCheckList {
         ServerCertificateCheck::class.java,
         StrongCipherAlgorithmCheck::class.java,
         TabsCheck::class.java,
+        TooLongLineCheck::class.java,
         WeakSSLContextCheck::class.java,
         VerifiedServerHostnamesCheck::class.java,
     )
