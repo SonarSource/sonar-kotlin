@@ -30,6 +30,7 @@ import org.sonarsource.kotlin.checks.DuplicatedFunctionImplementationCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
 import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
+import org.sonarsource.kotlin.checks.NestedMatchCheck
 import org.sonarsource.kotlin.checks.PseudoRandomCheck
 import org.sonarsource.kotlin.checks.RobustCryptographicKeysCheck
 import org.sonarsource.kotlin.checks.SelfAssignmentCheck
@@ -63,6 +64,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.DuplicatedFunctionImplementationCheck::class.java,
             org.sonarsource.slang.checks.IdenticalBinaryOperandCheck::class.java,
             org.sonarsource.slang.checks.IdenticalConditionsCheck::class.java,
+            org.sonarsource.slang.checks.NestedMatchCheck::class.java,
             org.sonarsource.slang.checks.SelfAssignmentCheck::class.java,
             org.sonarsource.slang.checks.TabsCheck::class.java,
             org.sonarsource.slang.checks.TooLongLineCheck::class.java,
@@ -85,6 +87,7 @@ object KotlinCheckList {
         EncryptionAlgorithmCheck::class.java,
         IdenticalBinaryOperandCheck::class.java,
         IdenticalConditionsCheck::class.java,
+        NestedMatchCheck::class.java,
         PseudoRandomCheck::class.java,
         RobustCryptographicKeysCheck::class.java,
         SelfAssignmentCheck::class.java,
