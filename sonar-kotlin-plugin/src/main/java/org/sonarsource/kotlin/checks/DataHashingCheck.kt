@@ -113,8 +113,8 @@ enum class InsecureAlgorithm {
     };
 
     open fun match(algorithm: String): Boolean {
-        val normalizedName = algorithm.replace("-", "").toLowerCase(Locale.ROOT)
-        return normalizedName.contains(name.toLowerCase(Locale.ROOT))
+        val normalizedName = algorithm.replace("-", "").lowercase()
+        return normalizedName.contains(name.lowercase())
     }
 }
 

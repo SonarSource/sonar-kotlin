@@ -44,9 +44,9 @@ class KotlinASTTest {
       Path astPath = Paths.get(kotlinPath.toString().replaceFirst("\\.kts?$", ".txt"));
       String actualAst = TreePrinter.table(parse(kotlinPath));
       String expectingAst = astPath.toFile().exists() ? new String(Files.readAllBytes(astPath), UTF_8) : "";
-      assertThat(actualAst)
+      assertThat(actualAst.trim())
         .describedAs("In the file: " + astPath + " (run KotlinASTTest.main manually)")
-        .isEqualTo(expectingAst);
+        .isEqualTo(expectingAst.trim());
     }
   }
 

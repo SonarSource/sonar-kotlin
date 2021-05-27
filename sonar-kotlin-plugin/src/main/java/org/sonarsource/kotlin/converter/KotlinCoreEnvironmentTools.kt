@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.converter
 
+import java.io.File
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
@@ -28,10 +29,8 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
-import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
-import org.jetbrains.kotlin.com.intellij.pom.PomModel
 import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -44,11 +43,10 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
-import java.io.File
 
 class Environment(val classpath: List<String>) {
     private val disposable = Disposer.newDisposable()
-    val configuration = compilerConfiguration(classpath, LanguageVersion.KOTLIN_1_4, JvmTarget.JVM_1_8)
+    val configuration = compilerConfiguration(classpath, LanguageVersion.KOTLIN_1_5, JvmTarget.JVM_1_8)
     val env = kotlinCoreEnvironment(configuration, disposable)
     val ktPsiFactory: KtPsiFactory = KtPsiFactory(env.project, false)
 }
@@ -64,18 +62,12 @@ fun kotlinCoreEnvironment(
     )
     configuration.put(CommonConfigurationKeys.MODULE_NAME, "sonar-kotlin-ng")
 
-    val environment = KotlinCoreEnvironment.createForProduction(
+    return KotlinCoreEnvironment.createForProduction(
         disposable,
         configuration,
         // FIXME Add support of Kotlin/JS Kotlin/Native
         EnvironmentConfigFiles.JVM_CONFIG_FILES,
     )
-
-    val project = environment.project as MockProject
-
-    project.registerService(PomModel::class.java, SonarPomModel(project))
-
-    return environment
 }
 
 fun bindingContext(

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.plugin.KotlinCheckList
 import java.nio.file.Files
 import java.nio.file.Path
-import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.isRegularFile
 import kotlin.streams.asSequence
 
@@ -32,6 +31,5 @@ class CheckConfigurationIntegrityTest {
         Assertions.assertThat(actualChecks).containsOnlyElementsOf(expectedChecks)
     }
 
-    @OptIn(ExperimentalPathApi::class)
     private fun isCheckFile(candidate: Path) = candidate.isRegularFile() && candidate.fileName.toString().endsWith("Check.kt")
 }

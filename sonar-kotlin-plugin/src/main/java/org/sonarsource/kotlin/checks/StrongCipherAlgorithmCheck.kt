@@ -44,7 +44,6 @@ private val nullCipherConstructorMatcher = ConstructorMatcher("javax.crypto.Null
 
 @Rule(key = "S5547")
 class StrongCipherAlgorithmCheck : AbstractCheck() {
-    @OptIn(ExperimentalStdlibApi::class)
     override fun visitCallExpression(callExpr: KtCallExpression, kotlinFileContext: KotlinFileContext) {
         val (_, _, bindingContext) = kotlinFileContext
         if (nullCipherConstructorMatcher.matches(callExpr, bindingContext)) {

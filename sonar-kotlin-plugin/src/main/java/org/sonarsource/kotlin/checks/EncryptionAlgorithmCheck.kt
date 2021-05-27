@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.checks
 
-import java.util.Locale
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
@@ -64,7 +63,7 @@ class EncryptionAlgorithmCheck : AbstractCheck() {
             val isRSA = "RSA".equals(algorithm, ignoreCase = true)
             return if ("ECB".equals(mode, ignoreCase = true) && !isRSA) true
             else if ("CBC".equals(mode, ignoreCase = true)) false
-            else isRSA && !padding.toUpperCase(Locale.ROOT).startsWith("OAEP")
+            else isRSA && !padding.uppercase().startsWith("OAEP")
         }
         // By default, ECB is used.
             ?: return true

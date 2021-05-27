@@ -9,7 +9,6 @@ import org.sonarsource.kotlin.plugin.KotlinCheckList
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 import java.nio.file.Files
 import java.nio.file.Path
-import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.isRegularFile
 import kotlin.streams.asSequence
 
@@ -60,7 +59,6 @@ class AutomaticCheckTests {
             }).map { Arguments.of(it, it.testName) }
         }
 
-        @OptIn(ExperimentalPathApi::class)
         private fun isTestFileWithoutSemantics(candidate: Path) =
             candidate.isRegularFile() && candidate.fileName.toString().endsWith(NO_SEMANTICS_TEST_FILE_POSTFIX)
     }

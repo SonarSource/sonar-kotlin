@@ -1,0 +1,70 @@
+AST node class                              | first…last tokens | line:col   
+--------------------------------------------|-------------------|------------
+KotlinTree {                                | @ … )             | 1:1 … 10:1 
+  ClassDeclarationTree {                    | @ … )             | 1:1 … 2:48 
+    ?KtClass? {                             | @ … )             | 1:1 … 2:48 
+      ?KtDeclarationModifierList? {         | @ … data          | 1:1 … 2:5  
+        ?KtAnnotationEntry? {               | @ … JvmRecord     | 1:1 … 1:11 
+          ?KtConstructorCalleeExpression? { | JvmRecord         | 1:2 … 1:11 
+            ?KtTypeReference? {             | JvmRecord         | 1:2 … 1:11 
+              ?KtUserType? {                | JvmRecord         | 1:2 … 1:11 
+                IdentifierTree              | JvmRecord         | 1:2 … 1:11 
+              }                             |                   |            
+            }                               |                   |            
+          }                                 |                   |            
+        }                                   |                   |            
+      }                                     |                   |            
+      FunctionDeclarationTree {             | ( … )             | 2:16 … 2:48
+        ParameterTree {                     | val … String      | 2:17 … 2:33
+          IdentifierTree                    | name              | 2:21 … 2:25
+          ?KtTypeReference? {               | String            | 2:27 … 2:33
+            ?KtUserType? {                  | String            | 2:27 … 2:33
+              IdentifierTree                | String            | 2:27 … 2:33
+            }                               |                   |            
+          }                                 |                   |            
+        }                                   |                   |            
+        ParameterTree {                     | val … Int         | 2:35 … 2:47
+          IdentifierTree                    | age               | 2:39 … 2:42
+          ?KtTypeReference? {               | Int               | 2:44 … 2:47
+            ?KtUserType? {                  | Int               | 2:44 … 2:47
+              IdentifierTree                | Int               | 2:44 … 2:47
+            }                               |                   |            
+          }                                 |                   |            
+        }                                   |                   |            
+      }                                     |                   |            
+      IdentifierTree                        | User              | 2:12 … 2:16
+    }                                       |                   |            
+  }                                         |                   |            
+  ClassDeclarationTree {                    | sealed … Polygon  | 4:1 … 4:25 
+    ?KtClass? {                             | sealed … Polygon  | 4:1 … 4:25 
+      ?KtDeclarationModifierList?           | sealed            | 4:1 … 4:7  
+      IdentifierTree                        | Polygon           | 4:18 … 4:25
+    }                                       |                   |            
+  }                                         |                   |            
+  ClassDeclarationTree {                    | @ … )             | 6:1 … 7:36 
+    ?KtClass? {                             | @ … )             | 6:1 … 7:36 
+      ?KtDeclarationModifierList? {         | @ … value         | 6:1 … 7:6  
+        ?KtAnnotationEntry? {               | @ … JvmInline     | 6:1 … 6:11 
+          ?KtConstructorCalleeExpression? { | JvmInline         | 6:2 … 6:11 
+            ?KtTypeReference? {             | JvmInline         | 6:2 … 6:11 
+              ?KtUserType? {                | JvmInline         | 6:2 … 6:11 
+                IdentifierTree              | JvmInline         | 6:2 … 6:11 
+              }                             |                   |            
+            }                               |                   |            
+          }                                 |                   |            
+        }                                   |                   |            
+      }                                     |                   |            
+      FunctionDeclarationTree {             | ( … )             | 7:21 … 7:36
+        ParameterTree {                     | val … String      | 7:22 … 7:35
+          IdentifierTree                    | s                 | 7:26 … 7:27
+          ?KtTypeReference? {               | String            | 7:29 … 7:35
+            ?KtUserType? {                  | String            | 7:29 … 7:35
+              IdentifierTree                | String            | 7:29 … 7:35
+            }                               |                   |            
+          }                                 |                   |            
+        }                                   |                   |            
+      }                                     |                   |            
+      IdentifierTree                        | Password          | 7:13 … 7:21
+    }                                       |                   |            
+  }                                         |                   |            
+}                                           |                   |

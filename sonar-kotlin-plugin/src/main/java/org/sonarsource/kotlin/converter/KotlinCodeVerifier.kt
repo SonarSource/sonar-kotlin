@@ -36,7 +36,6 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.sonarsource.slang.api.CodeVerifier
 import org.sonarsource.slang.api.ParseException
-import java.util.Locale
 
 class KotlinCodeVerifier : CodeVerifier {
 
@@ -45,7 +44,7 @@ class KotlinCodeVerifier : CodeVerifier {
             "@param", "@name", "@return", "@constructor", "@receiver", "@property", "@throws",
             "@exception", "@sample", "@see", "@author", "@since", "@suppress")
 
-        private fun isKDoc(content: String) = KDOC_TAGS.any { content.toLowerCase(Locale.ENGLISH).contains(it) }
+        private fun isKDoc(content: String) = KDOC_TAGS.any { content.lowercase().contains(it) }
 
         // Filter natural language sentences parsed
         // as literals, infix notations or single expressions

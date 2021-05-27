@@ -80,7 +80,6 @@ class RobustCryptographicKeysCheck : AbstractCheck() {
         }
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     private fun handleECGenParameterSpec(callExpr: KtCallExpression, context: KotlinFileContext) {
         callExpr.valueArguments[0].getArgumentExpression()?.let { specArgExpr ->
             if (specArgExpr.predictRuntimeStringValue(context.bindingContext)?.lowercase() in INSECURE_EC_SPECS) {
@@ -89,7 +88,6 @@ class RobustCryptographicKeysCheck : AbstractCheck() {
         }
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     private fun handleKeyGeneratorAndKeyPairGenerator(
         callExpr: KtCallExpression,
         resolvedCall: ResolvedCall<*>,
