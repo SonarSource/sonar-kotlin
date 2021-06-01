@@ -27,6 +27,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig.Companion.loadResource
 import org.apache.commons.text.StringEscapeUtils
+import org.sonarsource.kotlin.externalreport.ExternalRule
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
@@ -118,15 +119,4 @@ internal object DetektRuleDefinitionGenerator {
             "$url.html#${rule.ruleId.lowercase()}"
         } else null
     }
-
-    private data class ExternalRule(
-        var key: String,
-        var name: String,
-        var description: String?,
-        var url: String?,
-        var tags: Set<String>,
-        var type: String,
-        var severity: String? = null,
-        var constantDebtMinutes: Long,
-    )
 }

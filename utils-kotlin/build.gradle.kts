@@ -5,14 +5,20 @@ plugins {
 }
 
 val detektVersion = "1.17.1"
+val ktlintVersion = "0.41.0"
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-
-    implementation("com.google.code.gson:gson:2.8.7")
     implementation("io.gitlab.arturbosch.detekt", "detekt-cli", detektVersion)
     implementation("io.gitlab.arturbosch.detekt", "detekt-core", detektVersion)
     implementation("io.gitlab.arturbosch.detekt", "detekt-api", detektVersion)
+    implementation("com.pinterest", "ktlint", ktlintVersion)
+    implementation("com.pinterest.ktlint", "ktlint-core", ktlintVersion)
+    implementation("com.pinterest.ktlint", "ktlint-ruleset-standard", ktlintVersion)
+    implementation("com.pinterest.ktlint", "ktlint-ruleset-experimental", ktlintVersion)
+
+    implementation(kotlin("stdlib-jdk8"))
+
+    implementation("com.google.code.gson:gson:2.8.7")
     implementation("com.beust:jcommander:1.81")
     implementation("org.apache.commons:commons-text:1.9")
 
@@ -29,9 +35,20 @@ tasks {
     task<JavaExec>("updateDetektRules") {
         group = "Application"
         classpath = sourceSets.main.get().runtimeClasspath
+        main = "org.sonarsource.kotlin.externalreport.detekt.DetektRuleDefinitionGeneratorKt"
+
         doFirst {
             println("Updating rules for Detekt version $detektVersion...")
         }
-        main = "org.sonarsource.kotlin.externalreport.detekt.DetektRuleDefinitionGeneratorKt"
+    }
+
+    task<JavaExec>("updateKtlintRules") {
+        group = "Application"
+        classpath = sourceSets.main.get().runtimeClasspath
+        main = "org.sonarsource.kotlin.externalreport.ktlint.KtlintRuleDefinitionGeneratorKt"
+
+        doFirst {
+            println("Updating rules for ktlint version $detektVersion...")
+        }
     }
 }
