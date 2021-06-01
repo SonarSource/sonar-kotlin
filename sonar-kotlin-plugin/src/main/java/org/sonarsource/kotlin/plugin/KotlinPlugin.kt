@@ -27,6 +27,8 @@ import org.sonarsource.kotlin.externalreport.androidlint.AndroidLintRulesDefinit
 import org.sonarsource.kotlin.externalreport.androidlint.AndroidLintSensor
 import org.sonarsource.kotlin.externalreport.detekt.DetektRulesDefinition
 import org.sonarsource.kotlin.externalreport.detekt.DetektSensor
+import org.sonarsource.kotlin.externalreport.ktlint.KtlintRulesDefinition
+import org.sonarsource.kotlin.externalreport.ktlint.KtlintSensor
 import org.sonarsource.kotlin.plugin.surefire.KotlinResourcesLocator
 import org.sonarsource.kotlin.plugin.surefire.KotlinSurefireParser
 import org.sonarsource.kotlin.plugin.surefire.KotlinSurefireSensor
@@ -70,6 +72,8 @@ class KotlinPlugin : Plugin {
                 DetektSensor::class.java,
                 AndroidLintRulesDefinition::class.java,
                 AndroidLintSensor::class.java,
+                KtlintRulesDefinition::class.java,
+                KtlintSensor::class.java,
                 PropertyDefinition.builder(KOTLIN_FILE_SUFFIXES_KEY)
                     .defaultValue(KOTLIN_FILE_SUFFIXES_DEFAULT_VALUE)
                     .name("File Suffixes")

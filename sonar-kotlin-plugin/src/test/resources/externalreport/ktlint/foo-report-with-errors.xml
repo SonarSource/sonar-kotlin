@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<checkstyle version="8.0">
+	<file></file>
+	<file name="non-existent-file.kt">
+		<error line="4" column="2" severity="info" message="This empty block of code can be removed." source="detekt.EmptyIfBlock" />
+	</file>
+	<file name="Foo.kt">
+		<error line="3" column="1" severity="error" message="Wildcard import (cannot be auto-corrected)" source="no-wildcard-imports" />
+		<error />
+		<error line="7" column="1" severity="error" message="First line in a method block should not be empty" source="experimental:no-empty-first-line-in-method-block" />
+		<error line="8" column="44" severity="error" message="Unnecessary semicolon" source="no-semi" />
+		<error line="10" column="1" severity="error" message="Unexpected blank line(s) before &quot;}&quot;" source="no-blank-line-before-rbrace" />
+		<error line="4" column="2" severity="error" source="some-rule-key" />
+	</file>
+</checkstyle>

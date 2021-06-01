@@ -1,0 +1,31 @@
+[
+  {
+    "file": "Foo.kt",
+    "errors": [
+      {
+        "line": 3,
+        "column": 1,
+        "message": "Wildcard import (cannot be auto-corrected)",
+        "rule": "no-wildcard-imports"
+      },
+      {
+        "line": 7,
+        "column": 1,
+        "message": "First line in a method block should not be empty",
+        "rule": "experimental:no-empty-first-line-in-method-block"
+      },
+      {
+        "line": 8,
+        "column": 44,
+        "message": "Unnecessary semicolon",
+        "rule": "no-semi"
+      },
+      {
+        "line": 10,
+        "column": 1,
+        "message": "Unexpected blank line(s) before \"}\"",
+        "rule": "no-blank-line-before-rbrace"
+      }
+    ]
+  }
+]
