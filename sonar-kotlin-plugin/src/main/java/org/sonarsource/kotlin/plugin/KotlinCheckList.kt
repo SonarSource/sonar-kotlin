@@ -41,6 +41,7 @@ import org.sonarsource.kotlin.checks.SelfAssignmentCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
 import org.sonarsource.kotlin.checks.StrongCipherAlgorithmCheck
 import org.sonarsource.kotlin.checks.TabsCheck
+import org.sonarsource.kotlin.checks.TodoCommentCheck
 import org.sonarsource.kotlin.checks.TooLongLineCheck
 import org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck
@@ -75,6 +76,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.RedundantParenthesesCheck::class.java,
             org.sonarsource.slang.checks.SelfAssignmentCheck::class.java,
             org.sonarsource.slang.checks.TabsCheck::class.java,
+            org.sonarsource.slang.checks.TodoCommentCheck::class.java,
             org.sonarsource.slang.checks.TooLongLineCheck::class.java,
         )
 
@@ -106,6 +108,7 @@ object KotlinCheckList {
         ServerCertificateCheck::class.java,
         StrongCipherAlgorithmCheck::class.java,
         TabsCheck::class.java,
+        TodoCommentCheck::class.java,
         TooLongLineCheck::class.java,
         WeakSSLContextCheck::class.java,
         VerifiedServerHostnamesCheck::class.java,
