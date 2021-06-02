@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.api
 
+import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.name.FqName
@@ -29,6 +30,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.RESOLVED_CALL
@@ -120,4 +122,19 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
         }
         return expr
     }
+
+    internal fun PsiElement.hasComment(): Boolean {
+        var result = false
+        this.accept(object : KtTreeVisitorVoid() {
+            /** Note [visitComment] not called for [org.jetbrains.kotlin.kdoc.psi.api.KDoc] */
+            override fun visitElement(element: PsiElement) {
+                super.visitElement(element)
+                if (element is PsiComment) {
+                    result = true
+                }
+            }
+        })
+        return result
+    }
+
 }

@@ -27,6 +27,7 @@ import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.DataHashingCheck
 import org.sonarsource.kotlin.checks.DuplicateBranchCheck
 import org.sonarsource.kotlin.checks.DuplicatedFunctionImplementationCheck
+import org.sonarsource.kotlin.checks.EmptyFunctionCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
 import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
@@ -63,6 +64,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.BadFunctionNameCheck::class.java,
             org.sonarsource.slang.checks.DuplicateBranchCheck::class.java,
             org.sonarsource.slang.checks.DuplicatedFunctionImplementationCheck::class.java,
+            org.sonarsource.slang.checks.EmptyFunctionCheck::class.java,
             org.sonarsource.slang.checks.IdenticalBinaryOperandCheck::class.java,
             org.sonarsource.slang.checks.IdenticalConditionsCheck::class.java,
             org.sonarsource.slang.checks.NestedMatchCheck::class.java,
@@ -86,6 +88,7 @@ object KotlinCheckList {
         DataHashingCheck::class.java,
         DuplicateBranchCheck::class.java,
         DuplicatedFunctionImplementationCheck::class.java,
+        EmptyFunctionCheck::class.java,
         EncryptionAlgorithmCheck::class.java,
         IdenticalBinaryOperandCheck::class.java,
         IdenticalConditionsCheck::class.java,
