@@ -17,5 +17,23 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-@javax.annotation.ParametersAreNonnullByDefault
-package org.sonarsource.kotlin.externalreport.detekt;
+package org.sonarsource.kotlin.externalreport.detekt
+
+import org.sonar.api.server.rule.RulesDefinition
+import org.sonarsource.analyzer.commons.ExternalRuleLoader
+import org.sonarsource.kotlin.plugin.KotlinPlugin
+
+class DetektRulesDefinition : RulesDefinition {
+
+    companion object {
+        val RULE_LOADER = ExternalRuleLoader(
+            DetektSensor.LINTER_KEY,
+            DetektSensor.LINTER_NAME,
+            "org/sonar/l10n/kotlin/rules/detekt/rules.json",
+            KotlinPlugin.KOTLIN_LANGUAGE_KEY)
+    }
+
+    override fun define(context: RulesDefinition.Context) {
+        RULE_LOADER.createExternalRuleRepository(context)
+    }
+}

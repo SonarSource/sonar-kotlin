@@ -39,14 +39,14 @@ class DetektRulesDefinitionTest {
     assertThat(repository.language()).isEqualTo("kotlin");
     assertThat(repository.isExternal()).isTrue();
 
-    assertThat(repository.rules().size()).isEqualTo(111);
+    assertThat(repository.rules().size()).isEqualTo(179);
 
     RulesDefinition.Rule classNaming = repository.rule("ClassNaming");
     assertThat(classNaming).isNotNull();
     assertThat(classNaming.name()).isEqualTo("Class Naming");
     assertThat(classNaming.type()).isEqualTo(RuleType.CODE_SMELL);
     assertThat(classNaming.severity()).isEqualTo("INFO");
-    assertThat(classNaming.htmlDescription()).isEqualTo("<p>A classes name should fit the naming pattern defined in the projects configuration.</p> " +
+    assertThat(classNaming.htmlDescription()).isEqualTo("<p>A class or object's name should fit the naming pattern defined in the projects configuration.</p> " +
       "<p>See more at the <a href=\"https://arturbosch.github.io/detekt/naming.html#classnaming\">detekt website</a>.</p>");
     assertThat(classNaming.tags()).containsExactlyInAnyOrder("style");
     assertThat(classNaming.debtRemediationFunction().baseEffort()).isEqualTo("5min");
