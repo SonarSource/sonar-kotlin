@@ -31,6 +31,7 @@ import org.sonarsource.kotlin.checks.DuplicatedFunctionImplementationCheck
 import org.sonarsource.kotlin.checks.EmptyBlockCheck
 import org.sonarsource.kotlin.checks.EmptyFunctionCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
+import org.sonarsource.kotlin.checks.FixMeCommentCheck
 import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
 import org.sonarsource.kotlin.checks.NestedMatchCheck
@@ -70,6 +71,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.DuplicatedFunctionImplementationCheck::class.java,
             org.sonarsource.slang.checks.EmptyBlockCheck::class.java,
             org.sonarsource.slang.checks.EmptyFunctionCheck::class.java,
+            org.sonarsource.slang.checks.FixMeCommentCheck::class.java,
             org.sonarsource.slang.checks.IdenticalBinaryOperandCheck::class.java,
             org.sonarsource.slang.checks.IdenticalConditionsCheck::class.java,
             org.sonarsource.slang.checks.NestedMatchCheck::class.java,
@@ -98,6 +100,7 @@ object KotlinCheckList {
         EmptyBlockCheck::class.java,
         EmptyFunctionCheck::class.java,
         EncryptionAlgorithmCheck::class.java,
+        FixMeCommentCheck::class.java,
         IdenticalBinaryOperandCheck::class.java,
         IdenticalConditionsCheck::class.java,
         NestedMatchCheck::class.java,
