@@ -29,6 +29,7 @@ import org.sonarsource.kotlin.checks.DataHashingCheck
 import org.sonarsource.kotlin.checks.DuplicateBranchCheck
 import org.sonarsource.kotlin.checks.DuplicatedFunctionImplementationCheck
 import org.sonarsource.kotlin.checks.EmptyBlockCheck
+import org.sonarsource.kotlin.checks.EmptyCommentCheck
 import org.sonarsource.kotlin.checks.EmptyFunctionCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
 import org.sonarsource.kotlin.checks.FixMeCommentCheck
@@ -70,6 +71,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.DuplicateBranchCheck::class.java,
             org.sonarsource.slang.checks.DuplicatedFunctionImplementationCheck::class.java,
             org.sonarsource.slang.checks.EmptyBlockCheck::class.java,
+            org.sonarsource.slang.checks.EmptyCommentCheck::class.java,
             org.sonarsource.slang.checks.EmptyFunctionCheck::class.java,
             org.sonarsource.slang.checks.FixMeCommentCheck::class.java,
             org.sonarsource.slang.checks.IdenticalBinaryOperandCheck::class.java,
@@ -79,7 +81,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.SelfAssignmentCheck::class.java,
             org.sonarsource.slang.checks.TabsCheck::class.java,
             org.sonarsource.slang.checks.TodoCommentCheck::class.java,
-            org.sonarsource.slang.checks.TooLongLineCheck::class.java,
+            org.sonarsource.slang.checks.TooLongLineCheck::class.java
         )
 
     val SLANG_CHECKS = listOf(
@@ -98,6 +100,7 @@ object KotlinCheckList {
         DuplicateBranchCheck::class.java,
         DuplicatedFunctionImplementationCheck::class.java,
         EmptyBlockCheck::class.java,
+        EmptyCommentCheck::class.java,
         EmptyFunctionCheck::class.java,
         EncryptionAlgorithmCheck::class.java,
         FixMeCommentCheck::class.java,
