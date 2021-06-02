@@ -33,6 +33,7 @@ import org.sonarsource.kotlin.checks.EmptyBlockCheck
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
 import org.sonarsource.kotlin.checks.EmptyFunctionCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
+import org.sonarsource.kotlin.checks.FileHeaderCheck
 import org.sonarsource.kotlin.checks.FixMeCommentCheck
 import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
@@ -76,6 +77,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.EmptyBlockCheck::class.java,
             org.sonarsource.slang.checks.EmptyCommentCheck::class.java,
             org.sonarsource.slang.checks.EmptyFunctionCheck::class.java,
+            org.sonarsource.slang.checks.FileHeaderCheck::class.java,
             org.sonarsource.slang.checks.FixMeCommentCheck::class.java,
             org.sonarsource.slang.checks.IdenticalBinaryOperandCheck::class.java,
             org.sonarsource.slang.checks.IdenticalConditionsCheck::class.java,
@@ -108,6 +110,7 @@ object KotlinCheckList {
         EmptyCommentCheck::class.java,
         EmptyFunctionCheck::class.java,
         EncryptionAlgorithmCheck::class.java,
+        FileHeaderCheck::class.java,
         FixMeCommentCheck::class.java,
         IdenticalBinaryOperandCheck::class.java,
         IdenticalConditionsCheck::class.java,
