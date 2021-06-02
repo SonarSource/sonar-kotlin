@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.plugin
 import org.sonarsource.kotlin.checks.AllBranchesIdenticalCheck
 import org.sonarsource.kotlin.checks.BadClassNameCheck
 import org.sonarsource.kotlin.checks.BadFunctionNameCheck
+import org.sonarsource.kotlin.checks.BooleanLiteralCheck
 import org.sonarsource.kotlin.checks.CipherBlockChainingCheck
 import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.CodeAfterJumpCheck
@@ -67,6 +68,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.AllBranchesIdenticalCheck::class.java,
             org.sonarsource.slang.checks.BadClassNameCheck::class.java,
             org.sonarsource.slang.checks.BadFunctionNameCheck::class.java,
+            org.sonarsource.slang.checks.BooleanLiteralCheck::class.java,
             org.sonarsource.slang.checks.CodeAfterJumpCheck::class.java,
             org.sonarsource.slang.checks.DuplicateBranchCheck::class.java,
             org.sonarsource.slang.checks.DuplicatedFunctionImplementationCheck::class.java,
@@ -93,6 +95,7 @@ object KotlinCheckList {
         AllBranchesIdenticalCheck::class.java,
         BadClassNameCheck::class.java,
         BadFunctionNameCheck::class.java,
+        BooleanLiteralCheck::class.java,
         CipherBlockChainingCheck::class.java,
         ClearTextProtocolCheck::class.java,
         CodeAfterJumpCheck::class.java,
