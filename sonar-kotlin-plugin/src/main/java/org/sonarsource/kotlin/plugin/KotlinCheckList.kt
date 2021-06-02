@@ -50,6 +50,7 @@ import org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck
 import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
 import org.sonarsource.kotlin.checks.WeakSSLContextCheck
+import org.sonarsource.kotlin.checks.WrongAssignmentOperatorCheck
 import org.sonarsource.slang.checks.CheckList
 import org.sonarsource.slang.checks.MatchWithoutElseCheck
 import org.sonarsource.slang.checks.OctalValuesCheck
@@ -83,7 +84,8 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.SelfAssignmentCheck::class.java,
             org.sonarsource.slang.checks.TabsCheck::class.java,
             org.sonarsource.slang.checks.TodoCommentCheck::class.java,
-            org.sonarsource.slang.checks.TooLongLineCheck::class.java
+            org.sonarsource.slang.checks.TooLongLineCheck::class.java,
+            org.sonarsource.slang.checks.WrongAssignmentOperatorCheck::class.java,
         )
 
     val SLANG_CHECKS = listOf(
@@ -120,6 +122,7 @@ object KotlinCheckList {
         TodoCommentCheck::class.java,
         TooLongLineCheck::class.java,
         WeakSSLContextCheck::class.java,
+        WrongAssignmentOperatorCheck::class.java,
         VerifiedServerHostnamesCheck::class.java,
     )
 
