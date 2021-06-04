@@ -21,6 +21,8 @@ package org.sonarsource.kotlin.api
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -42,6 +44,7 @@ import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.converter.KotlinTextRanges
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.slang.checks.api.SecondaryLocation
+import java.util.BitSet
 import org.sonarsource.slang.api.TextRange as SonarTextRange
 
 
@@ -135,6 +138,23 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
             }
         })
         return result
+    }
+
+    /**
+     * Replacement for [org.sonarsource.slang.impl.TreeMetaDataProvider.TreeMetaDataImpl.computeLinesOfCode]
+     */
+    internal fun PsiElement.numberOfLinesOfCode(): Int {
+        val lines = BitSet()
+        val document = this.containingFile.viewProvider.document!!
+        this.accept(object : KtTreeVisitorVoid() {
+            override fun visitElement(element: PsiElement) {
+                super.visitElement(element)
+                if (element is LeafPsiElement && element !is PsiWhiteSpace && element !is PsiComment) {
+                    lines.set(document.getLineNumber(element.textRange.startOffset))
+                }
+            }
+        })
+        return lines.cardinality()
     }
 
 }

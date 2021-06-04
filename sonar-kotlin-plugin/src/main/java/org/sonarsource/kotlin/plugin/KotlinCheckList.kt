@@ -37,6 +37,7 @@ import org.sonarsource.kotlin.checks.FileHeaderCheck
 import org.sonarsource.kotlin.checks.FixMeCommentCheck
 import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
+import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
 import org.sonarsource.kotlin.checks.NestedMatchCheck
 import org.sonarsource.kotlin.checks.PseudoRandomCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
@@ -82,6 +83,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.FixMeCommentCheck::class.java,
             org.sonarsource.slang.checks.IdenticalBinaryOperandCheck::class.java,
             org.sonarsource.slang.checks.IdenticalConditionsCheck::class.java,
+            org.sonarsource.slang.checks.MatchCaseTooBigCheck::class.java,
             org.sonarsource.slang.checks.NestedMatchCheck::class.java,
             org.sonarsource.slang.checks.RedundantParenthesesCheck::class.java,
             org.sonarsource.slang.checks.SelfAssignmentCheck::class.java,
@@ -116,6 +118,7 @@ object KotlinCheckList {
         FixMeCommentCheck::class.java,
         IdenticalBinaryOperandCheck::class.java,
         IdenticalConditionsCheck::class.java,
+        MatchCaseTooBigCheck::class.java,
         NestedMatchCheck::class.java,
         RedundantParenthesesCheck::class.java,
         PseudoRandomCheck::class.java,

@@ -19,35 +19,34 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 /**
- * Replacement for [org.sonarsource.slang.checks.TooManyLinesOfCodeFileCheck]
+ * Replacement for [org.sonarsource.slang.checks.MatchCaseTooBigCheck]
  */
-@Rule(key = "S104")
-class TooManyLinesOfCodeFileCheck : AbstractCheck() {
+@Rule(key = "S1151")
+class MatchCaseTooBigCheck : AbstractCheck() {
     companion object {
-        const val DEFAULT_MAX = 1000
+        const val DEFAULT_MAX = 15
     }
 
     @RuleProperty(
         key = "max",
-        description = "Maximum authorized lines of code in a file.",
+        description = "Maximum number of lines",
         defaultValue = "" + DEFAULT_MAX,
     )
     var max: Int = DEFAULT_MAX
 
-    override fun visitKtFile(file: KtFile, kotlinFileContext: KotlinFileContext) {
-        val numberOfLinesOfCode = file.numberOfLinesOfCode()
+    override fun visitWhenEntry(whenEntry: KtWhenEntry, kotlinFileContext: KotlinFileContext) {
+        val numberOfLinesOfCode = whenEntry.numberOfLinesOfCode()
         if (numberOfLinesOfCode > max) {
             kotlinFileContext.reportIssue(
-                null,
-                // TODO add filename to the message
-                "File has $numberOfLinesOfCode lines, which is greater than $max authorized. Split it into smaller files.")
+                whenEntry,
+                "Reduce this case clause number of lines from $numberOfLinesOfCode to at most $max, for example by extracting code into methods.")
         }
     }
 
