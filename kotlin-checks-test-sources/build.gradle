@@ -23,6 +23,10 @@ sonarqube {
     skipProject = true
 }
 
+compileKotlin {
+    kotlinOptions.suppressWarnings = true
+}
+
 task copyAllDependencies(type: Copy) {
     from configurations.runtimeClasspath
     into 'build/test-jars'
