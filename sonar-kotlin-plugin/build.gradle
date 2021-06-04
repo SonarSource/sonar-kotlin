@@ -36,6 +36,8 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8
 }
 
+test.dependsOn(project(':kotlin-checks-test-sources').tasks.named('build'))
+
 jar {
     manifest {
         def displayVersion = (project.buildNumber == null ? project.version : project.version.substring(0, project.version.lastIndexOf('.')) + " (build ${project.buildNumber})")
