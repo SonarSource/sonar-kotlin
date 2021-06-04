@@ -29,7 +29,9 @@ tasks {
     task<JavaExec>("updateDetektRules") {
         group = "Application"
         classpath = sourceSets.main.get().runtimeClasspath
-        println("Updating rules for Detekt version $detektVersion...")
+        doFirst {
+            println("Updating rules for Detekt version $detektVersion...")
+        }
         main = "org.sonarsource.kotlin.externalreport.detekt.DetektRuleDefinitionGeneratorKt"
     }
 }
