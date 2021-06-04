@@ -36,6 +36,10 @@ class AutomaticCheckTests {
             return (OVERRIDDEN_CONFIG +
                 KotlinCheckList.checks()
                     .filter { it !in checksWithOverriddenTestsConfig }
+                    .filter {
+                        /** Tested in [TooManyLinesOfCodeFileCheckTest] */
+                        it != TooManyLinesOfCodeFileCheck::class.java
+                    }
                     .map { check -> TestConfiguration(check) }
                 ).map { Arguments.of(it, it.testName) }
         }
