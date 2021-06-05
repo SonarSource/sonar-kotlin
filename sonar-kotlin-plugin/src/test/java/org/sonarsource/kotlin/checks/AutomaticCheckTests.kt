@@ -39,6 +39,8 @@ class AutomaticCheckTests {
                     .filter {
                         /** Tested in [TooManyLinesOfCodeFileCheckTest] */
                         it != TooManyLinesOfCodeFileCheck::class.java
+                            /** Tested in [TooLongFunctionCheckTest] */
+                            && it != TooLongFunctionCheck::class.java
                     }
                     .map { check -> TestConfiguration(check) }
                 ).map { Arguments.of(it, it.testName) }
