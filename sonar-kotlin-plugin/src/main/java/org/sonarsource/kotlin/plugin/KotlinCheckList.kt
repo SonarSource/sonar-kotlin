@@ -39,6 +39,7 @@ import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
 import org.sonarsource.kotlin.checks.NestedMatchCheck
+import org.sonarsource.kotlin.checks.OneStatementPerLineCheck
 import org.sonarsource.kotlin.checks.PseudoRandomCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RobustCryptographicKeysCheck
@@ -85,6 +86,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.IdenticalConditionsCheck::class.java,
             org.sonarsource.slang.checks.MatchCaseTooBigCheck::class.java,
             org.sonarsource.slang.checks.NestedMatchCheck::class.java,
+            org.sonarsource.slang.checks.OneStatementPerLineCheck::class.java,
             org.sonarsource.slang.checks.RedundantParenthesesCheck::class.java,
             org.sonarsource.slang.checks.SelfAssignmentCheck::class.java,
             org.sonarsource.slang.checks.TabsCheck::class.java,
@@ -120,6 +122,7 @@ object KotlinCheckList {
         IdenticalConditionsCheck::class.java,
         MatchCaseTooBigCheck::class.java,
         NestedMatchCheck::class.java,
+        OneStatementPerLineCheck::class.java,
         RedundantParenthesesCheck::class.java,
         PseudoRandomCheck::class.java,
         RobustCryptographicKeysCheck::class.java,
