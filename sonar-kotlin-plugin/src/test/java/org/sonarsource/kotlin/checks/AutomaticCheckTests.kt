@@ -41,6 +41,8 @@ class AutomaticCheckTests {
                         it != TooManyLinesOfCodeFileCheck::class.java
                             /** Tested in [TooLongFunctionCheckTest] */
                             && it != TooLongFunctionCheck::class.java
+                            /** Tested in [TooManyCasesCheckTest] */
+                            && it != TooManyCasesCheck::class.java
                     }
                     .map { check -> TestConfiguration(check) }
                 ).map { Arguments.of(it, it.testName) }

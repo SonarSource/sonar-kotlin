@@ -50,6 +50,7 @@ import org.sonarsource.kotlin.checks.TabsCheck
 import org.sonarsource.kotlin.checks.TodoCommentCheck
 import org.sonarsource.kotlin.checks.TooLongFunctionCheck
 import org.sonarsource.kotlin.checks.TooLongLineCheck
+import org.sonarsource.kotlin.checks.TooManyCasesCheck
 import org.sonarsource.kotlin.checks.TooManyLinesOfCodeFileCheck
 import org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck
@@ -94,6 +95,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.TodoCommentCheck::class.java,
             org.sonarsource.slang.checks.TooLongFunctionCheck::class.java,
             org.sonarsource.slang.checks.TooLongLineCheck::class.java,
+            org.sonarsource.slang.checks.TooManyCasesCheck::class.java,
             org.sonarsource.slang.checks.TooManyLinesOfCodeFileCheck::class.java,
             org.sonarsource.slang.checks.WrongAssignmentOperatorCheck::class.java,
         )
@@ -135,6 +137,7 @@ object KotlinCheckList {
         TodoCommentCheck::class.java,
         TooLongFunctionCheck::class.java,
         TooLongLineCheck::class.java,
+        TooManyCasesCheck::class.java,
         TooManyLinesOfCodeFileCheck::class.java,
         WeakSSLContextCheck::class.java,
         WrongAssignmentOperatorCheck::class.java,
