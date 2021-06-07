@@ -22,9 +22,22 @@ package org.sonarsource.kotlin.checks
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 
-internal class TooManyParametersKotlinCheckTest {
+class TooManyParametersCheckTest {
+    @Test
+    fun slang() {
+        val check = org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck()
+        check.max = 1
+        KotlinVerifier.verify(
+            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/TooManyParametersCheckSample.kt",
+            check)
+    }
+
     @Test
     fun test() {
-        KotlinVerifier.verify("TooManyParametersKotlinCheck.kt", TooManyParametersKotlinCheck())
+        val check = TooManyParametersCheck()
+        check.max = 1
+        KotlinVerifier(check) {
+            fileName = "TooManyParametersCheckSample.kt"
+        }.verify()
     }
 }

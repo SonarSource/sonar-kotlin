@@ -21,11 +21,16 @@ package org.sonarsource.kotlin.checks;
 
 import java.util.Arrays;
 import java.util.List;
+
 import org.sonar.check.Rule;
 import org.sonarsource.slang.api.Annotation;
 import org.sonarsource.slang.api.FunctionDeclarationTree;
 import org.sonarsource.slang.checks.TooManyParametersCheck;
 
+/**
+ * @deprecated replaced by {@link org.sonarsource.kotlin.checks.TooManyParametersCheck}
+ */
+@Deprecated
 @Rule(key = "S107")
 public class TooManyParametersKotlinCheck extends TooManyParametersCheck {
 

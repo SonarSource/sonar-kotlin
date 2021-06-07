@@ -31,7 +31,10 @@ internal class KotlinCheckListTest {
         val languageImplementation = PackageScanner.findSlangChecksInPackage(KOTLIN_CHECKS_PACKAGE)
         val checkListNames = legacyChecks().map { obj: Class<*> -> obj.name }
         val kotlinSpecificCheckList = KotlinCheckList.SLANG_CHECKS.map { obj: Class<out SlangCheck?> -> obj.name }
-        for (languageCheck in languageImplementation) {
+        for (languageCheck in languageImplementation.filter {
+            /** Replaced by [org.sonarsource.kotlin.checks.TooManyParametersCheck] */
+            it != org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck::class.java.name
+        }) {
             assertThat(checkListNames).contains(languageCheck)
             assertThat(kotlinSpecificCheckList).contains(languageCheck)
             assertThat(languageCheck).endsWith("KotlinCheck")

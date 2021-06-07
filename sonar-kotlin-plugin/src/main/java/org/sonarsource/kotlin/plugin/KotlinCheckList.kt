@@ -52,7 +52,7 @@ import org.sonarsource.kotlin.checks.TooLongFunctionCheck
 import org.sonarsource.kotlin.checks.TooLongLineCheck
 import org.sonarsource.kotlin.checks.TooManyCasesCheck
 import org.sonarsource.kotlin.checks.TooManyLinesOfCodeFileCheck
-import org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck
+import org.sonarsource.kotlin.checks.TooManyParametersCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck
 import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
 import org.sonarsource.kotlin.checks.WeakSSLContextCheck
@@ -60,7 +60,6 @@ import org.sonarsource.kotlin.checks.WrongAssignmentOperatorCheck
 import org.sonarsource.slang.checks.CheckList
 import org.sonarsource.slang.checks.MatchWithoutElseCheck
 import org.sonarsource.slang.checks.OctalValuesCheck
-import org.sonarsource.slang.checks.TooManyParametersCheck
 import org.sonarsource.slang.checks.UnusedPrivateMethodCheck
 
 object KotlinCheckList {
@@ -70,7 +69,6 @@ object KotlinCheckList {
             MatchWithoutElseCheck::class.java,  // Rule does not apply here as octal values do not exist in Kotlin
             OctalValuesCheck::class.java,  // Language specific implementation is provided.
             UnusedPrivateMethodCheck::class.java,
-            TooManyParametersCheck::class.java,
 
             org.sonarsource.slang.checks.AllBranchesIdenticalCheck::class.java,
             org.sonarsource.slang.checks.BadClassNameCheck::class.java,
@@ -97,12 +95,12 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.TooLongLineCheck::class.java,
             org.sonarsource.slang.checks.TooManyCasesCheck::class.java,
             org.sonarsource.slang.checks.TooManyLinesOfCodeFileCheck::class.java,
+            org.sonarsource.slang.checks.TooManyParametersCheck::class.java,
             org.sonarsource.slang.checks.WrongAssignmentOperatorCheck::class.java,
         )
 
     val SLANG_CHECKS = listOf(
         UnusedPrivateMethodKotlinCheck::class.java,
-        TooManyParametersKotlinCheck::class.java,
     )
 
     private val KOTLIN_CHECKS = listOf(
@@ -139,6 +137,7 @@ object KotlinCheckList {
         TooLongLineCheck::class.java,
         TooManyCasesCheck::class.java,
         TooManyLinesOfCodeFileCheck::class.java,
+        TooManyParametersCheck::class.java,
         WeakSSLContextCheck::class.java,
         WrongAssignmentOperatorCheck::class.java,
         VerifiedServerHostnamesCheck::class.java,
