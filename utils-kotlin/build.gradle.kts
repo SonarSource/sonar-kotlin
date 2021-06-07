@@ -51,4 +51,14 @@ tasks {
             println("Updating rules for ktlint version $detektVersion...")
         }
     }
+
+    task<JavaExec>("updateAndroidLintRules") {
+        group = "Application"
+        classpath = sourceSets.main.get().runtimeClasspath
+        main = "org.sonarsource.kotlin.externalreport.androidlint.AndroidLintRuleDefinitionKt"
+        
+        doFirst {
+            println("Updating rules for Android Lint")
+        }
+    }
 }

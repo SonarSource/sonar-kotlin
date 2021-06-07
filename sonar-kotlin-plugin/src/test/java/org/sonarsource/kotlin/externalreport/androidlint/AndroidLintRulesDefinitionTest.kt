@@ -35,7 +35,7 @@ internal class AndroidLintRulesDefinitionTest {
         assertThat(repository!!.name()).isEqualTo("Android Lint")
         assertThat(repository.language()).isEqualTo("kotlin")
         assertThat(repository.isExternal).isTrue
-        assertThat(repository.rules().size).isEqualTo(313)
+        assertThat(repository.rules().size).isEqualTo(387)
         val rule = repository.rule("AaptCrash")
         assertThat(rule).isNotNull
         assertThat(rule!!.name()).isEqualTo("Potential AAPT crash")
@@ -49,8 +49,6 @@ internal class AndroidLintRulesDefinitionTest {
                 this, declare the id explicitly with &lt;item type=&quot;id&quot; name=&quot;...&quot; /&gt; instead.
                 </p>
                 <p>
-                More information: <br />
-                <a href="https://code.google.com/p/android/issues/detail?id=20479">https://code.google.com/p/android/issues/detail?id=20479</a><br />
                 </p>
                 """.trimIndent())
         assertThat(rule.tags()).containsExactlyInAnyOrder("android")

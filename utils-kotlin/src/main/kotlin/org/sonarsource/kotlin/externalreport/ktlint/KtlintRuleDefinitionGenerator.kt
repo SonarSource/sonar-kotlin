@@ -31,7 +31,7 @@ import com.pinterest.ktlint.core.Rule as KtlintRule
 internal val DEFAULT_RULES_FILE = Paths.get("sonar-kotlin-plugin", "src", "main", "resources",
     "org", "sonar", "l10n", "kotlin", "rules", "ktlint", "rules.json")
 
-fun main(vararg args: String) {
+fun main(vararg args: String?) {
     val rulesFile =
         if (args.isNotEmpty() && !args[0].isNullOrBlank()) Path.of(args[0])
         else DEFAULT_RULES_FILE

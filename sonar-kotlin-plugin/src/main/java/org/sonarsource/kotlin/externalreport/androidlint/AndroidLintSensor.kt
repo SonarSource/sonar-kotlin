@@ -19,11 +19,6 @@
  */
 package org.sonarsource.kotlin.externalreport.androidlint
 
-import java.io.File
-import java.io.FileInputStream
-import java.io.IOException
-import java.util.function.Consumer
-import javax.xml.stream.XMLStreamException
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.config.Configuration
@@ -31,6 +26,9 @@ import org.sonar.api.notifications.AnalysisWarnings
 import org.sonar.api.utils.log.Loggers
 import org.sonarsource.kotlin.plugin.KotlinPlugin
 import org.sonarsource.slang.plugin.AbstractPropertyHandlerSensor
+import java.io.File
+import java.io.FileInputStream
+import java.util.function.Consumer
 
 private val LOG = Loggers.get(AndroidLintSensor::class.java)
 const val NO_ISSUES_ERROR_MESSAGE = "No issues information will be saved as the report file '{}' can't be read."
@@ -53,29 +51,15 @@ class AndroidLintSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHa
             .name("Import of $LINTER_NAME issues")
     }
 
-    override fun reportConsumer(context: SensorContext): Consumer<File> {
-        return Consumer { file: File -> importReport(file, context) }
-    }
+    override fun reportConsumer(context: SensorContext) = Consumer { file: File -> importReport(file, context) }
 }
 
 private fun importReport(reportPath: File, context: SensorContext) {
     try {
         FileInputStream(reportPath).use {
-            AndroidLintXmlReportReader.read(it) { id, file, line, message ->
-                saveIssue(
-                    context,
-                    id,
-                    file,
-                    line,
-                    message,
-                )
-            }
+            AndroidLintXmlReportReader.read(it) { id, file, line, message -> saveIssue(context, id, file, line, message) }
         }
-    } catch (e: IOException) {
-        LOG.error(NO_ISSUES_ERROR_MESSAGE, reportPath, e)
-    } catch (e: XMLStreamException) {
-        LOG.error(NO_ISSUES_ERROR_MESSAGE, reportPath, e)
-    } catch (e: RuntimeException) {
+    } catch (e: Exception) {
         LOG.error(NO_ISSUES_ERROR_MESSAGE, reportPath, e)
     }
 }

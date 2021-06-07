@@ -27,7 +27,7 @@ private const val RULES_JSON = "org/sonar/l10n/android/rules/androidlint/rules.j
 /**
  * Android lint scopes could be: ".xml", ".java", ".kt", ".kts", ".properties", ".gradle", "proguard.cfg", "proguard-project.txt", ".png", ".class"
  * ( https://android.googlesource.com/platform/tools/base/+/studio-master-dev/lint/libs/lint-api/src/main/java/com/android/tools/lint/detector/api/Scope.kt )
- * But this sensor provides rule descriptions only for ".xml", ".java", ".kt"
+ * This sensor won't report any issue on the given file if it wasn't located in our file system
  */
 private const val RULE_REPOSITORY_LANGUAGE = KotlinPlugin.KOTLIN_LANGUAGE_KEY
 private val TEXT_FILE_EXTENSIONS = listOf(".xml", ".java", ".kt", ".kts", ".properties", ".gradle", ".cfg", ".txt")
@@ -39,9 +39,7 @@ val RULE_LOADER = ExternalRuleLoader(
     RULE_REPOSITORY_LANGUAGE,
 )
 
-fun isTextFile(file: String): Boolean {
-    return TEXT_FILE_EXTENSIONS.stream().anyMatch { file.endsWith(it) }
-}
+fun isTextFile(file: String) = TEXT_FILE_EXTENSIONS.stream().anyMatch { file.endsWith(it) }
 
 class AndroidLintRulesDefinition : RulesDefinition {
     override fun define(context: RulesDefinition.Context) {

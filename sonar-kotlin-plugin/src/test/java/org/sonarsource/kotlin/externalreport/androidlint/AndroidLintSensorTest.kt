@@ -19,8 +19,6 @@
  */
 package org.sonarsource.kotlin.externalreport.androidlint
 
-import java.io.IOException
-import java.nio.file.Paths
 import org.assertj.core.api.Assertions
 import org.junit.Rule
 import org.junit.jupiter.api.BeforeEach
@@ -29,18 +27,26 @@ import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor
 import org.sonar.api.batch.sensor.issue.ExternalIssue
+import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rules.RuleType
 import org.sonar.api.utils.log.LoggerLevel
 import org.sonar.api.utils.log.ThreadLocalLogTester
 import org.sonarsource.kotlin.externalreport.ExternalReportTestUtils
+import java.io.IOException
+import java.nio.file.Paths
+
+private val PROJECT_DIR = Paths.get("src", "test", "resources", "externalreport", "androidlint")
 
 @EnableRuleMigrationSupport
 internal class AndroidLintSensorTest {
+    
     private val analysisWarnings: MutableList<String> = ArrayList()
+    
     @BeforeEach
     fun setup() {
         analysisWarnings.clear()
     }
+    
     val logTester = ThreadLocalLogTester()
         @Rule get
 
@@ -152,16 +158,16 @@ internal class AndroidLintSensorTest {
 
     @Throws(IOException::class)
     private fun executeSensorImporting(fileName: String?): List<ExternalIssue> {
+        
         val context = ExternalReportTestUtils.createContext(PROJECT_DIR)
         if (fileName != null) {
+            val settings = MapSettings()
             val path = PROJECT_DIR.resolve(fileName).toAbsolutePath().toString()
-            context.settings().setProperty("sonar.androidLint.reportPaths", path)
+            settings.setProperty("sonar.androidLint.reportPaths", path)
+            
+            context.setSettings(settings)
         }
         AndroidLintSensor { e: String -> analysisWarnings.add(e) }.execute(context)
         return ArrayList(context.allExternalIssues())
-    }
-
-    companion object {
-        private val PROJECT_DIR = Paths.get("src", "test", "resources", "externalreport", "androidlint")
     }
 }

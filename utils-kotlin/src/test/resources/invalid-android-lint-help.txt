@@ -1,0 +1,17 @@
+Correctness
+===========
+
+AdapterViewChildren
+-------------------
+Summary: AdapterView cannot have children in XML
+
+Priority: 10 / 10
+Severity: Warning
+Category: Correctness
+
+An AdapterView such as a `ListView`s must be configured with data from Java
+code, such as a ListAdapter.
+
+More information: 
+https://developer.android.com/reference/android/widget/AdapterView.html
+
