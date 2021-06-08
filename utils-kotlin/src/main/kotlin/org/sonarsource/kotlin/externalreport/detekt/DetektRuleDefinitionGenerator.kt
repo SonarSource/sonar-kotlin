@@ -53,7 +53,7 @@ fun main(vararg args: String?) {
 }
 
 internal object DetektRuleDefinitionGenerator {
-    private const val BASE_URL = "https://arturbosch.github.io/detekt/"
+    private const val BASE_URL = "https://detekt.github.io/detekt/"
     private const val BASE_PKG = "io.gitlab.arturbosch.detekt.rules."
     private const val STYLE = "style"
     private val PACKAGE_TO_URL = mapOf(

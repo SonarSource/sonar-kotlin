@@ -3,7 +3,7 @@
     "key": "AbsentOrWrongFileLicense",
     "name": "Absent Or Wrong File License",
     "description": "License text is absent or incorrect in the file.",
-    "url": "https://arturbosch.github.io/detekt/comments.html#absentorwrongfilelicense",
+    "url": "https://detekt.github.io/detekt/comments.html#absentorwrongfilelicense",
     "tags": [
       "maintainability"
     ],
@@ -15,7 +15,7 @@
     "key": "ArrayPrimitive",
     "name": "Array Primitive",
     "description": "Using Array\u0026lt;Primitive\u0026gt; leads to implicit boxing and a performance hit",
-    "url": "https://arturbosch.github.io/detekt/performance.html#arrayprimitive",
+    "url": "https://detekt.github.io/detekt/performance.html#arrayprimitive",
     "tags": [
       "performance"
     ],
@@ -27,7 +27,7 @@
     "key": "CastToNullableType",
     "name": "Cast To Nullable Type",
     "description": "Disallow to cast to nullable types",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#casttonullabletype",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#casttonullabletype",
     "tags": [
       "defect"
     ],
@@ -39,7 +39,7 @@
     "key": "ClassNaming",
     "name": "Class Naming",
     "description": "A class or object\u0027s name should fit the naming pattern defined in the projects configuration.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#classnaming",
+    "url": "https://detekt.github.io/detekt/naming.html#classnaming",
     "tags": [
       "style"
     ],
@@ -51,7 +51,7 @@
     "key": "ClassOrdering",
     "name": "Class Ordering",
     "description": "Class contents should be in this order: Property declarations/initializer blocks; secondary constructors; method declarations then companion objects.",
-    "url": "https://arturbosch.github.io/detekt/style.html#classordering",
+    "url": "https://detekt.github.io/detekt/style.html#classordering",
     "tags": [
       "style"
     ],
@@ -63,7 +63,7 @@
     "key": "CollapsibleIfStatements",
     "name": "Collapsible If Statements",
     "description": "Two if statements which could be collapsed were detected. These statements can be merged to improve readability.",
-    "url": "https://arturbosch.github.io/detekt/style.html#collapsibleifstatements",
+    "url": "https://detekt.github.io/detekt/style.html#collapsibleifstatements",
     "tags": [
       "style"
     ],
@@ -75,7 +75,7 @@
     "key": "CommentOverPrivateFunction",
     "name": "Comment Over Private Function",
     "description": "Comments for private functions should be avoided. Prefer giving the function an expressive name. Split it up in smaller, self-explaining functions if necessary.",
-    "url": "https://arturbosch.github.io/detekt/comments.html#commentoverprivatefunction",
+    "url": "https://detekt.github.io/detekt/comments.html#commentoverprivatefunction",
     "tags": [
       "maintainability"
     ],
@@ -87,7 +87,7 @@
     "key": "CommentOverPrivateProperty",
     "name": "Comment Over Private Property",
     "description": "Private properties should be named such that they explain themselves even without a comment.",
-    "url": "https://arturbosch.github.io/detekt/comments.html#commentoverprivateproperty",
+    "url": "https://detekt.github.io/detekt/comments.html#commentoverprivateproperty",
     "tags": [
       "maintainability"
     ],
@@ -99,7 +99,7 @@
     "key": "ComplexCondition",
     "name": "Complex Condition",
     "description": "Complex conditions should be simplified and extracted into well-named methods if necessary.",
-    "url": "https://arturbosch.github.io/detekt/complexity.html#complexcondition",
+    "url": "https://detekt.github.io/detekt/complexity.html#complexcondition",
     "tags": [
       "maintainability"
     ],
@@ -111,7 +111,7 @@
     "key": "ComplexInterface",
     "name": "Complex Interface",
     "description": "An interface contains too many functions and properties. Large classes tend to handle many things at once. An interface should have one responsibility. Split up large interfaces into smaller ones that are easier to understand.",
-    "url": "https://arturbosch.github.io/detekt/complexity.html#complexinterface",
+    "url": "https://detekt.github.io/detekt/complexity.html#complexinterface",
     "tags": [
       "maintainability"
     ],
@@ -123,7 +123,7 @@
     "key": "ComplexMethod",
     "name": "Complex Method",
     "description": "Prefer splitting up complex methods into smaller, easier to understand methods.",
-    "url": "https://arturbosch.github.io/detekt/complexity.html#complexmethod",
+    "url": "https://detekt.github.io/detekt/complexity.html#complexmethod",
     "tags": [
       "maintainability"
     ],
@@ -135,7 +135,7 @@
     "key": "ConstructorParameterNaming",
     "name": "Constructor Parameter Naming",
     "description": "Constructor parameter names should follow the naming convention set in the projects configuration.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#constructorparameternaming",
+    "url": "https://detekt.github.io/detekt/naming.html#constructorparameternaming",
     "tags": [
       "style"
     ],
@@ -147,7 +147,7 @@
     "key": "DataClassContainsFunctions",
     "name": "Data Class Contains Functions",
     "description": "Data classes should mainly be used to store data and should not have any extra functions. (Compiler will automatically generate equals, toString and hashCode functions)",
-    "url": "https://arturbosch.github.io/detekt/style.html#dataclasscontainsfunctions",
+    "url": "https://detekt.github.io/detekt/style.html#dataclasscontainsfunctions",
     "tags": [
       "style"
     ],
@@ -159,7 +159,7 @@
     "key": "DataClassShouldBeImmutable",
     "name": "Data Class Should Be Immutable",
     "description": "Data classes should mainly be immutable and should not have any side effects. (To copy an object altering some of its properties use the copy function)",
-    "url": "https://arturbosch.github.io/detekt/style.html#dataclassshouldbeimmutable",
+    "url": "https://detekt.github.io/detekt/style.html#dataclassshouldbeimmutable",
     "tags": [
       "style"
     ],
@@ -171,7 +171,7 @@
     "key": "DeprecatedBlockTag",
     "name": "Deprecated Block Tag",
     "description": "Do not use the @deprecated block tag, which is not supported by KDoc. Use the @Deprecated annotation instead.",
-    "url": "https://arturbosch.github.io/detekt/comments.html#deprecatedblocktag",
+    "url": "https://detekt.github.io/detekt/comments.html#deprecatedblocktag",
     "tags": [
       "defect"
     ],
@@ -183,7 +183,7 @@
     "key": "Deprecation",
     "name": "Deprecation",
     "description": "Deprecated elements should not be used.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#deprecation",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#deprecation",
     "tags": [
       "defect"
     ],
@@ -195,7 +195,7 @@
     "key": "DestructuringDeclarationWithTooManyEntries",
     "name": "Destructuring Declaration With Too Many Entries",
     "description": "The destructuring declaration contains too many entries, making it difficult to read. Consider refactoring to avoid using a destructuring declaration for this case.",
-    "url": "https://arturbosch.github.io/detekt/style.html#destructuringdeclarationwithtoomanyentries",
+    "url": "https://detekt.github.io/detekt/style.html#destructuringdeclarationwithtoomanyentries",
     "tags": [
       "style"
     ],
@@ -207,7 +207,7 @@
     "key": "DontDowncastCollectionTypes",
     "name": "Dont Downcast Collection Types",
     "description": "Down-casting immutable collection types is breaking the collection contract",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#dontdowncastcollectiontypes",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#dontdowncastcollectiontypes",
     "tags": [
       "warning"
     ],
@@ -219,7 +219,7 @@
     "key": "DoubleMutabilityInCollection",
     "name": "Double Mutability In Collection",
     "description": "Using var with mutable collections leads to double mutability. Consider using val or immutable collection types.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#doublemutabilityincollection",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#doublemutabilityincollection",
     "tags": [
       "codesmell"
     ],
@@ -231,7 +231,7 @@
     "key": "DuplicateCaseInWhenExpression",
     "name": "Duplicate Case In When Expression",
     "description": "Duplicated case statements in when expression. Both cases should be merged.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#duplicatecaseinwhenexpression",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#duplicatecaseinwhenexpression",
     "tags": [
       "warning"
     ],
@@ -243,7 +243,7 @@
     "key": "EmptyCatchBlock",
     "name": "Empty Catch Block",
     "description": "Empty catch block detected. Empty catch blocks indicate that an exception is ignored and not handled.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptycatchblock",
+    "url": "https://detekt.github.io/detekt/empty.html#emptycatchblock",
     "tags": [
       "minor"
     ],
@@ -255,7 +255,7 @@
     "key": "EmptyClassBlock",
     "name": "Empty Class Block",
     "description": "Empty block of code detected. As they serve no purpose they should be removed.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptyclassblock",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyclassblock",
     "tags": [
       "minor"
     ],
@@ -267,7 +267,7 @@
     "key": "EmptyDefaultConstructor",
     "name": "Empty Default Constructor",
     "description": "Empty block of code detected. As they serve no purpose they should be removed.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptydefaultconstructor",
+    "url": "https://detekt.github.io/detekt/empty.html#emptydefaultconstructor",
     "tags": [
       "minor"
     ],
@@ -279,7 +279,7 @@
     "key": "EmptyDoWhileBlock",
     "name": "Empty Do While Block",
     "description": "Empty block of code detected. As they serve no purpose they should be removed.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptydowhileblock",
+    "url": "https://detekt.github.io/detekt/empty.html#emptydowhileblock",
     "tags": [
       "minor"
     ],
@@ -291,7 +291,7 @@
     "key": "EmptyElseBlock",
     "name": "Empty Else Block",
     "description": "Empty block of code detected. As they serve no purpose they should be removed.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptyelseblock",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyelseblock",
     "tags": [
       "minor"
     ],
@@ -303,7 +303,7 @@
     "key": "EmptyFinallyBlock",
     "name": "Empty Finally Block",
     "description": "Empty block of code detected. As they serve no purpose they should be removed.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptyfinallyblock",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyfinallyblock",
     "tags": [
       "minor"
     ],
@@ -315,7 +315,7 @@
     "key": "EmptyForBlock",
     "name": "Empty For Block",
     "description": "Empty block of code detected. As they serve no purpose they should be removed.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptyforblock",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyforblock",
     "tags": [
       "minor"
     ],
@@ -327,7 +327,7 @@
     "key": "EmptyFunctionBlock",
     "name": "Empty Function Block",
     "description": "Empty block of code detected. As they serve no purpose they should be removed.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptyfunctionblock",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyfunctionblock",
     "tags": [
       "minor"
     ],
@@ -339,7 +339,7 @@
     "key": "EmptyIfBlock",
     "name": "Empty If Block",
     "description": "Empty block of code detected. As they serve no purpose they should be removed.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptyifblock",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyifblock",
     "tags": [
       "minor"
     ],
@@ -351,7 +351,7 @@
     "key": "EmptyInitBlock",
     "name": "Empty Init Block",
     "description": "Empty block of code detected. As they serve no purpose they should be removed.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptyinitblock",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyinitblock",
     "tags": [
       "minor"
     ],
@@ -363,7 +363,7 @@
     "key": "EmptyKtFile",
     "name": "Empty Kt File",
     "description": "Empty block of code detected. As they serve no purpose they should be removed.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptyktfile",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyktfile",
     "tags": [
       "minor"
     ],
@@ -375,7 +375,7 @@
     "key": "EmptySecondaryConstructor",
     "name": "Empty Secondary Constructor",
     "description": "Empty block of code detected. As they serve no purpose they should be removed.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptysecondaryconstructor",
+    "url": "https://detekt.github.io/detekt/empty.html#emptysecondaryconstructor",
     "tags": [
       "minor"
     ],
@@ -387,7 +387,7 @@
     "key": "EmptyTryBlock",
     "name": "Empty Try Block",
     "description": "Empty block of code detected. As they serve no purpose they should be removed.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptytryblock",
+    "url": "https://detekt.github.io/detekt/empty.html#emptytryblock",
     "tags": [
       "minor"
     ],
@@ -399,7 +399,7 @@
     "key": "EmptyWhenBlock",
     "name": "Empty When Block",
     "description": "Empty block of code detected. As they serve no purpose they should be removed.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptywhenblock",
+    "url": "https://detekt.github.io/detekt/empty.html#emptywhenblock",
     "tags": [
       "minor"
     ],
@@ -411,7 +411,7 @@
     "key": "EmptyWhileBlock",
     "name": "Empty While Block",
     "description": "Empty block of code detected. As they serve no purpose they should be removed.",
-    "url": "https://arturbosch.github.io/detekt/empty.html#emptywhileblock",
+    "url": "https://detekt.github.io/detekt/empty.html#emptywhileblock",
     "tags": [
       "minor"
     ],
@@ -423,7 +423,7 @@
     "key": "EndOfSentenceFormat",
     "name": "End Of Sentence Format",
     "description": "The first sentence in a KDoc comment should end with correct punctuation.",
-    "url": "https://arturbosch.github.io/detekt/comments.html#endofsentenceformat",
+    "url": "https://detekt.github.io/detekt/comments.html#endofsentenceformat",
     "tags": [
       "maintainability"
     ],
@@ -435,7 +435,7 @@
     "key": "EnumNaming",
     "name": "Enum Naming",
     "description": "Enum names should follow the naming convention set in the projects configuration.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#enumnaming",
+    "url": "https://detekt.github.io/detekt/naming.html#enumnaming",
     "tags": [
       "style"
     ],
@@ -447,7 +447,7 @@
     "key": "EqualsAlwaysReturnsTrueOrFalse",
     "name": "Equals Always Returns True Or False",
     "description": "Having an equals method which always returns true or false is not a good idea. It does not follow the contract of this method. Consider a good default implementation. For example this \u003d\u003d other",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#equalsalwaysreturnstrueorfalse",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#equalsalwaysreturnstrueorfalse",
     "tags": [
       "defect"
     ],
@@ -459,7 +459,7 @@
     "key": "EqualsNullCall",
     "name": "Equals Null Call",
     "description": "Equals() method is called with null as parameter. Consider using \u003d\u003d to compare to null.",
-    "url": "https://arturbosch.github.io/detekt/style.html#equalsnullcall",
+    "url": "https://detekt.github.io/detekt/style.html#equalsnullcall",
     "tags": [
       "style"
     ],
@@ -471,7 +471,7 @@
     "key": "EqualsOnSignatureLine",
     "name": "Equals On Signature Line",
     "description": "Equals signs for expression style functions should be on the same line as the signature",
-    "url": "https://arturbosch.github.io/detekt/style.html#equalsonsignatureline",
+    "url": "https://detekt.github.io/detekt/style.html#equalsonsignatureline",
     "tags": [
       "style"
     ],
@@ -483,7 +483,7 @@
     "key": "EqualsWithHashCodeExist",
     "name": "Equals With Hash Code Exist",
     "description": "Always override hashCode when you override equals. All hash-based collections depend on objects meeting the equals-contract. Two equal objects must produce the same hashcode. When inheriting equals or hashcode, override the inherited and call the super method for clarification.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#equalswithhashcodeexist",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#equalswithhashcodeexist",
     "tags": [
       "defect"
     ],
@@ -495,7 +495,7 @@
     "key": "ExceptionRaisedInUnexpectedLocation",
     "name": "Exception Raised In Unexpected Location",
     "description": "This method is not expected to throw exceptions. This can cause weird behavior.",
-    "url": "https://arturbosch.github.io/detekt/exceptions.html#exceptionraisedinunexpectedlocation",
+    "url": "https://detekt.github.io/detekt/exceptions.html#exceptionraisedinunexpectedlocation",
     "tags": [
       "codesmell"
     ],
@@ -507,7 +507,7 @@
     "key": "ExitOutsideMain",
     "name": "Exit Outside Main",
     "description": "Do not directly exit the process outside the `main` function. Throw an exception instead.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#exitoutsidemain",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#exitoutsidemain",
     "tags": [
       "warning"
     ],
@@ -519,7 +519,7 @@
     "key": "ExplicitCollectionElementAccessMethod",
     "name": "Explicit Collection Element Access Method",
     "description": "Prefer usage of indexed access operator [] for map element access or insert methods",
-    "url": "https://arturbosch.github.io/detekt/style.html#explicitcollectionelementaccessmethod",
+    "url": "https://detekt.github.io/detekt/style.html#explicitcollectionelementaccessmethod",
     "tags": [
       "style"
     ],
@@ -531,7 +531,7 @@
     "key": "ExplicitGarbageCollectionCall",
     "name": "Explicit Garbage Collection Call",
     "description": "Don\u0027t try to be smarter than the JVM. Your code should work independently if the garbage collector is disabled or not. If you face memory issues, try tuning the JVM options instead of relying on code itself.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#explicitgarbagecollectioncall",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#explicitgarbagecollectioncall",
     "tags": [
       "defect"
     ],
@@ -543,7 +543,7 @@
     "key": "ExplicitItLambdaParameter",
     "name": "Explicit It Lambda Parameter",
     "description": "Declaring lambda parameters as `it` is redundant.",
-    "url": "https://arturbosch.github.io/detekt/style.html#explicititlambdaparameter",
+    "url": "https://detekt.github.io/detekt/style.html#explicititlambdaparameter",
     "tags": [
       "style"
     ],
@@ -555,7 +555,7 @@
     "key": "ExpressionBodySyntax",
     "name": "Expression Body Syntax",
     "description": "Functions with exact one statement, the return statement, can be rewritten with ExpressionBodySyntax.",
-    "url": "https://arturbosch.github.io/detekt/style.html#expressionbodysyntax",
+    "url": "https://detekt.github.io/detekt/style.html#expressionbodysyntax",
     "tags": [
       "style"
     ],
@@ -567,7 +567,7 @@
     "key": "ForEachOnRange",
     "name": "For Each On Range",
     "description": "Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.",
-    "url": "https://arturbosch.github.io/detekt/performance.html#foreachonrange",
+    "url": "https://detekt.github.io/detekt/performance.html#foreachonrange",
     "tags": [
       "performance"
     ],
@@ -579,7 +579,7 @@
     "key": "ForbiddenClassName",
     "name": "Forbidden Class Name",
     "description": "Forbidden class name as per configuration detected.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#forbiddenclassname",
+    "url": "https://detekt.github.io/detekt/naming.html#forbiddenclassname",
     "tags": [
       "style"
     ],
@@ -591,7 +591,7 @@
     "key": "ForbiddenComment",
     "name": "Forbidden Comment",
     "description": "Flags a forbidden comment.",
-    "url": "https://arturbosch.github.io/detekt/style.html#forbiddencomment",
+    "url": "https://detekt.github.io/detekt/style.html#forbiddencomment",
     "tags": [
       "style"
     ],
@@ -603,7 +603,7 @@
     "key": "ForbiddenImport",
     "name": "Forbidden Import",
     "description": "Mark forbidden imports. A forbidden import could be an import for an unstable / experimental apiand hence you might want to mark it as forbidden in order to get warned about the usage.",
-    "url": "https://arturbosch.github.io/detekt/style.html#forbiddenimport",
+    "url": "https://detekt.github.io/detekt/style.html#forbiddenimport",
     "tags": [
       "style"
     ],
@@ -615,7 +615,7 @@
     "key": "ForbiddenMethodCall",
     "name": "Forbidden Method Call",
     "description": "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental method and hence you might want to mark it as forbidden in order to get warned about the usage.",
-    "url": "https://arturbosch.github.io/detekt/style.html#forbiddenmethodcall",
+    "url": "https://detekt.github.io/detekt/style.html#forbiddenmethodcall",
     "tags": [
       "style"
     ],
@@ -627,7 +627,7 @@
     "key": "ForbiddenPublicDataClass",
     "name": "Forbidden Public Data Class",
     "description": "The data classes are bad for the binary compatibility in public APIs. Avoid to use it.",
-    "url": "https://arturbosch.github.io/detekt/style.html#forbiddenpublicdataclass",
+    "url": "https://detekt.github.io/detekt/style.html#forbiddenpublicdataclass",
     "tags": [
       "style"
     ],
@@ -639,7 +639,7 @@
     "key": "ForbiddenVoid",
     "name": "Forbidden Void",
     "description": "`Unit` should be used instead of `Void`.",
-    "url": "https://arturbosch.github.io/detekt/style.html#forbiddenvoid",
+    "url": "https://detekt.github.io/detekt/style.html#forbiddenvoid",
     "tags": [
       "style"
     ],
@@ -651,7 +651,7 @@
     "key": "FunctionMaxLength",
     "name": "Function Max Length",
     "description": "Function names should not be longer than the maximum set in the project configuration.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#functionmaxlength",
+    "url": "https://detekt.github.io/detekt/naming.html#functionmaxlength",
     "tags": [
       "style"
     ],
@@ -663,7 +663,7 @@
     "key": "FunctionMinLength",
     "name": "Function Min Length",
     "description": "Function names should not be shorter than the minimum defined in the configuration.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#functionminlength",
+    "url": "https://detekt.github.io/detekt/naming.html#functionminlength",
     "tags": [
       "style"
     ],
@@ -675,7 +675,7 @@
     "key": "FunctionNaming",
     "name": "Function Naming",
     "description": "Function names should follow the naming convention set in the configuration.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#functionnaming",
+    "url": "https://detekt.github.io/detekt/naming.html#functionnaming",
     "tags": [
       "style"
     ],
@@ -687,7 +687,7 @@
     "key": "FunctionOnlyReturningConstant",
     "name": "Function Only Returning Constant",
     "description": "A function that only returns a constant is misleading. Consider declaring a constant instead",
-    "url": "https://arturbosch.github.io/detekt/style.html#functiononlyreturningconstant",
+    "url": "https://detekt.github.io/detekt/style.html#functiononlyreturningconstant",
     "tags": [
       "style"
     ],
@@ -699,7 +699,7 @@
     "key": "FunctionParameterNaming",
     "name": "Function Parameter Naming",
     "description": "Function parameter names should follow the naming convention set in the projects configuration.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#functionparameternaming",
+    "url": "https://detekt.github.io/detekt/naming.html#functionparameternaming",
     "tags": [
       "style"
     ],
@@ -722,7 +722,7 @@
     "key": "HasPlatformType",
     "name": "Has Platform Type",
     "description": "Platform types must be declared explicitly in public APIs.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#hasplatformtype",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#hasplatformtype",
     "tags": [
       "maintainability"
     ],
@@ -734,7 +734,7 @@
     "key": "IgnoredReturnValue",
     "name": "Ignored Return Value",
     "description": "This call returns a value which is ignored",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#ignoredreturnvalue",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#ignoredreturnvalue",
     "tags": [
       "defect"
     ],
@@ -746,7 +746,7 @@
     "key": "ImplicitDefaultLocale",
     "name": "Implicit Default Locale",
     "description": "Implicit default locale used for string processing. Consider using explicit locale.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#implicitdefaultlocale",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#implicitdefaultlocale",
     "tags": [
       "codesmell"
     ],
@@ -758,7 +758,7 @@
     "key": "ImplicitUnitReturnType",
     "name": "Implicit Unit Return Type",
     "description": "Functions using expression statements have an implicit return type.\nChanging the type of the expression accidentally, changes the function return type.\nThis may lead to backward incompatibility.\nUse a block statement to make clear this function will never return a value.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#implicitunitreturntype",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#implicitunitreturntype",
     "tags": [
       "defect"
     ],
@@ -770,7 +770,7 @@
     "key": "InstanceOfCheckForException",
     "name": "Instance Of Check For Exception",
     "description": "Instead of checking for a general exception type and checking for a specific exception type use multiple catch blocks.",
-    "url": "https://arturbosch.github.io/detekt/exceptions.html#instanceofcheckforexception",
+    "url": "https://detekt.github.io/detekt/exceptions.html#instanceofcheckforexception",
     "tags": [
       "codesmell"
     ],
@@ -782,7 +782,7 @@
     "key": "InvalidPackageDeclaration",
     "name": "Invalid Package Declaration",
     "description": "Kotlin source files should be stored in the directory corresponding to its package statement.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#invalidpackagedeclaration",
+    "url": "https://detekt.github.io/detekt/naming.html#invalidpackagedeclaration",
     "tags": [
       "maintainability"
     ],
@@ -794,7 +794,7 @@
     "key": "InvalidRange",
     "name": "Invalid Range",
     "description": "If a for loops condition is false before the first iteration, the loop will never get executed.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#invalidrange",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#invalidrange",
     "tags": [
       "defect"
     ],
@@ -806,7 +806,7 @@
     "key": "IteratorHasNextCallsNextMethod",
     "name": "Iterator Has Next Calls Next Method",
     "description": "The hasNext() method of an Iterator implementation should not call the next() method. The state of the iterator should not be changed inside the hasNext() method. The hasNext() method is not supposed to have any side effects.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#iteratorhasnextcallsnextmethod",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#iteratorhasnextcallsnextmethod",
     "tags": [
       "defect"
     ],
@@ -818,7 +818,7 @@
     "key": "IteratorNotThrowingNoSuchElementException",
     "name": "Iterator Not Throwing No Such Element Exception",
     "description": "The next() method of an Iterator implementation should throw a NoSuchElementException when there are no more elements to return",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#iteratornotthrowingnosuchelementexception",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#iteratornotthrowingnosuchelementexception",
     "tags": [
       "defect"
     ],
@@ -830,7 +830,7 @@
     "key": "LabeledExpression",
     "name": "Labeled Expression",
     "description": "Expression with labels increase complexity and affect maintainability.",
-    "url": "https://arturbosch.github.io/detekt/complexity.html#labeledexpression",
+    "url": "https://detekt.github.io/detekt/complexity.html#labeledexpression",
     "tags": [
       "maintainability"
     ],
@@ -842,7 +842,7 @@
     "key": "LargeClass",
     "name": "Large Class",
     "description": "One class should have one responsibility. Large classes tend to handle many things at once. Split up large classes into smaller classes that are easier to understand.",
-    "url": "https://arturbosch.github.io/detekt/complexity.html#largeclass",
+    "url": "https://detekt.github.io/detekt/complexity.html#largeclass",
     "tags": [
       "maintainability"
     ],
@@ -854,7 +854,7 @@
     "key": "LateinitUsage",
     "name": "Lateinit Usage",
     "description": "Usage of lateinit detected. Using lateinit for property initialization is error prone, try using constructor injection or delegation.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#lateinitusage",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#lateinitusage",
     "tags": [
       "defect"
     ],
@@ -866,7 +866,7 @@
     "key": "LibraryCodeMustSpecifyReturnType",
     "name": "Library Code Must Specify Return Type",
     "description": "Library functions/properties should have an explicit return type. Inferred return type can easily be changed by mistake which may lead to breaking changes.",
-    "url": "https://arturbosch.github.io/detekt/style.html#librarycodemustspecifyreturntype",
+    "url": "https://detekt.github.io/detekt/style.html#librarycodemustspecifyreturntype",
     "tags": [
       "style"
     ],
@@ -878,7 +878,7 @@
     "key": "LibraryEntitiesShouldNotBePublic",
     "name": "Library Entities Should Not Be Public",
     "description": "Library class should not be public",
-    "url": "https://arturbosch.github.io/detekt/style.html#libraryentitiesshouldnotbepublic",
+    "url": "https://detekt.github.io/detekt/style.html#libraryentitiesshouldnotbepublic",
     "tags": [
       "style"
     ],
@@ -890,7 +890,7 @@
     "key": "LongMethod",
     "name": "Long Method",
     "description": "One method should have one responsibility. Long methods tend to handle many things at once. Prefer smaller methods to make them easier to understand.",
-    "url": "https://arturbosch.github.io/detekt/complexity.html#longmethod",
+    "url": "https://detekt.github.io/detekt/complexity.html#longmethod",
     "tags": [
       "maintainability"
     ],
@@ -902,7 +902,7 @@
     "key": "LongParameterList",
     "name": "Long Parameter List",
     "description": "The more parameters a function has the more complex it is. Long parameter lists are often used to control complex algorithms and violate the Single Responsibility Principle. Prefer functions with short parameter lists.",
-    "url": "https://arturbosch.github.io/detekt/complexity.html#longparameterlist",
+    "url": "https://detekt.github.io/detekt/complexity.html#longparameterlist",
     "tags": [
       "maintainability"
     ],
@@ -914,7 +914,7 @@
     "key": "LoopWithTooManyJumpStatements",
     "name": "Loop With Too Many Jump Statements",
     "description": "The loop contains more than one break or continue statement. The code should be refactored to increase readability.",
-    "url": "https://arturbosch.github.io/detekt/style.html#loopwithtoomanyjumpstatements",
+    "url": "https://detekt.github.io/detekt/style.html#loopwithtoomanyjumpstatements",
     "tags": [
       "style"
     ],
@@ -926,7 +926,7 @@
     "key": "MagicNumber",
     "name": "Magic Number",
     "description": "Report magic numbers. Magic number is a numeric literal that is not defined as a constant and hence it\u0027s unclear what the purpose of this number is. It\u0027s better to declare such numbers as constants and give them a proper name. By default, -1, 0, 1, and 2 are not considered to be magic numbers.",
-    "url": "https://arturbosch.github.io/detekt/style.html#magicnumber",
+    "url": "https://detekt.github.io/detekt/style.html#magicnumber",
     "tags": [
       "style"
     ],
@@ -938,7 +938,7 @@
     "key": "MandatoryBracesIfStatements",
     "name": "Mandatory Braces If Statements",
     "description": "Multi-line if statement was found that does not have braces. These should be added to improve readability.",
-    "url": "https://arturbosch.github.io/detekt/style.html#mandatorybracesifstatements",
+    "url": "https://detekt.github.io/detekt/style.html#mandatorybracesifstatements",
     "tags": [
       "style"
     ],
@@ -950,7 +950,7 @@
     "key": "MandatoryBracesLoops",
     "name": "Mandatory Braces Loops",
     "description": "Multi-line loop was found that does not have braces. These should be added to improve readability.",
-    "url": "https://arturbosch.github.io/detekt/style.html#mandatorybracesloops",
+    "url": "https://detekt.github.io/detekt/style.html#mandatorybracesloops",
     "tags": [
       "style"
     ],
@@ -962,7 +962,7 @@
     "key": "MapGetWithNotNullAssertionOperator",
     "name": "Map Get With Not Null Assertion Operator",
     "description": "map.get() with not-null assertion operator (!!) can result in a NullPointerException. Consider usage of map.getValue(), map.getOrDefault() or map.getOrElse() instead.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#mapgetwithnotnullassertionoperator",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#mapgetwithnotnullassertionoperator",
     "tags": [
       "codesmell"
     ],
@@ -974,7 +974,7 @@
     "key": "MatchingDeclarationName",
     "name": "Matching Declaration Name",
     "description": "If a source file contains only a single non-private top-level class or object, the file name should reflect the case-sensitive name plus the .kt extension.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#matchingdeclarationname",
+    "url": "https://detekt.github.io/detekt/naming.html#matchingdeclarationname",
     "tags": [
       "style"
     ],
@@ -986,7 +986,7 @@
     "key": "MaxLineLength",
     "name": "Max Line Length",
     "description": "Line detected that is longer than the defined maximum line length in the code style.",
-    "url": "https://arturbosch.github.io/detekt/style.html#maxlinelength",
+    "url": "https://detekt.github.io/detekt/style.html#maxlinelength",
     "tags": [
       "style"
     ],
@@ -998,7 +998,7 @@
     "key": "MayBeConst",
     "name": "May Be Const",
     "description": "Reports vals that can be const val instead.",
-    "url": "https://arturbosch.github.io/detekt/style.html#maybeconst",
+    "url": "https://detekt.github.io/detekt/style.html#maybeconst",
     "tags": [
       "style"
     ],
@@ -1010,7 +1010,7 @@
     "key": "MemberNameEqualsClassName",
     "name": "Member Name Equals Class Name",
     "description": "A member should not be given the same name as its parent class or object.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#membernameequalsclassname",
+    "url": "https://detekt.github.io/detekt/naming.html#membernameequalsclassname",
     "tags": [
       "style"
     ],
@@ -1022,7 +1022,7 @@
     "key": "MethodOverloading",
     "name": "Method Overloading",
     "description": "Methods which are overloaded often might be harder to maintain. Furthermore, these methods are tightly coupled. Refactor these methods and try to use optional parameters.",
-    "url": "https://arturbosch.github.io/detekt/complexity.html#methodoverloading",
+    "url": "https://detekt.github.io/detekt/complexity.html#methodoverloading",
     "tags": [
       "maintainability"
     ],
@@ -1034,7 +1034,7 @@
     "key": "MissingWhenCase",
     "name": "Missing When Case",
     "description": "Check usage of `when` used as a statement and don\u0027t compare all enum or sealed class cases.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#missingwhencase",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#missingwhencase",
     "tags": [
       "defect"
     ],
@@ -1046,7 +1046,7 @@
     "key": "ModifierOrder",
     "name": "Modifier Order",
     "description": "Modifiers are not in the correct order.",
-    "url": "https://arturbosch.github.io/detekt/style.html#modifierorder",
+    "url": "https://detekt.github.io/detekt/style.html#modifierorder",
     "tags": [
       "style"
     ],
@@ -1058,7 +1058,7 @@
     "key": "MultilineLambdaItParameter",
     "name": "Multiline Lambda It Parameter",
     "description": "Multiline lambdas should not use `it` as a parameter name",
-    "url": "https://arturbosch.github.io/detekt/style.html#multilinelambdaitparameter",
+    "url": "https://detekt.github.io/detekt/style.html#multilinelambdaitparameter",
     "tags": [
       "style"
     ],
@@ -1070,7 +1070,7 @@
     "key": "NamedArguments",
     "name": "Named Arguments",
     "description": "Function invocation with more than 3 parameters must all be named",
-    "url": "https://arturbosch.github.io/detekt/complexity.html#namedarguments",
+    "url": "https://detekt.github.io/detekt/complexity.html#namedarguments",
     "tags": [
       "maintainability"
     ],
@@ -1082,7 +1082,7 @@
     "key": "NestedBlockDepth",
     "name": "Nested Block Depth",
     "description": "Excessive nesting leads to hidden complexity. Prefer extracting code to make it easier to understand.",
-    "url": "https://arturbosch.github.io/detekt/complexity.html#nestedblockdepth",
+    "url": "https://detekt.github.io/detekt/complexity.html#nestedblockdepth",
     "tags": [
       "maintainability"
     ],
@@ -1094,7 +1094,7 @@
     "key": "NestedClassesVisibility",
     "name": "Nested Classes Visibility",
     "description": "The explicit public modifier still results in an internal nested class.",
-    "url": "https://arturbosch.github.io/detekt/style.html#nestedclassesvisibility",
+    "url": "https://detekt.github.io/detekt/style.html#nestedclassesvisibility",
     "tags": [
       "style"
     ],
@@ -1106,7 +1106,7 @@
     "key": "NewLineAtEndOfFile",
     "name": "New Line At End Of File",
     "description": "Checks whether files end with a line separator.",
-    "url": "https://arturbosch.github.io/detekt/style.html#newlineatendoffile",
+    "url": "https://detekt.github.io/detekt/style.html#newlineatendoffile",
     "tags": [
       "style"
     ],
@@ -1118,7 +1118,7 @@
     "key": "NoNameShadowing",
     "name": "No Name Shadowing",
     "description": "Disallows shadowing variable declarations.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#nonameshadowing",
+    "url": "https://detekt.github.io/detekt/naming.html#nonameshadowing",
     "tags": [
       "defect"
     ],
@@ -1130,7 +1130,7 @@
     "key": "NoTabs",
     "name": "No Tabs",
     "description": "Checks if tabs are used in Kotlin files.",
-    "url": "https://arturbosch.github.io/detekt/style.html#notabs",
+    "url": "https://detekt.github.io/detekt/style.html#notabs",
     "tags": [
       "style"
     ],
@@ -1142,7 +1142,7 @@
     "key": "NonBooleanPropertyPrefixedWithIs",
     "name": "Non Boolean Property Prefixed With Is",
     "description": "Only boolean property names can start with \u0027is\u0027 prefix.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#nonbooleanpropertyprefixedwithis",
+    "url": "https://detekt.github.io/detekt/naming.html#nonbooleanpropertyprefixedwithis",
     "tags": [
       "warning"
     ],
@@ -1154,7 +1154,7 @@
     "key": "NotImplementedDeclaration",
     "name": "Not Implemented Declaration",
     "description": "The NotImplementedDeclaration should only be used when a method stub is necessary. This defers the development of the functionality of this function. Hence, the NotImplementedDeclaration should only serve as a temporary declaration. Before releasing, this type of declaration should be removed.",
-    "url": "https://arturbosch.github.io/detekt/exceptions.html#notimplementeddeclaration",
+    "url": "https://detekt.github.io/detekt/exceptions.html#notimplementeddeclaration",
     "tags": [
       "codesmell"
     ],
@@ -1166,7 +1166,7 @@
     "key": "NullableToStringCall",
     "name": "Nullable To String Call",
     "description": "This call may return the string \u0026quot;null\u0026quot;",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#nullabletostringcall",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#nullabletostringcall",
     "tags": [
       "defect"
     ],
@@ -1178,7 +1178,7 @@
     "key": "ObjectExtendsThrowable",
     "name": "Object Extends Throwable",
     "description": "An `object` should not extend and type of Throwable. Throwables are stateful and should be instantiated only when needed for when a specific error occurs. An `object`, being a singleton, that extends any type of Throwable consequently introduces a global singleton exception whose instance may be inadvertently reused from multiple places, thus introducing shared mutable state.",
-    "url": "https://arturbosch.github.io/detekt/exceptions.html#objectextendsthrowable",
+    "url": "https://detekt.github.io/detekt/exceptions.html#objectextendsthrowable",
     "tags": [
       "codesmell"
     ],
@@ -1190,7 +1190,7 @@
     "key": "ObjectLiteralToLambda",
     "name": "Object Literal To Lambda",
     "description": "Report object literals that can be changed to lambdas.",
-    "url": "https://arturbosch.github.io/detekt/style.html#objectliteraltolambda",
+    "url": "https://detekt.github.io/detekt/style.html#objectliteraltolambda",
     "tags": [
       "style"
     ],
@@ -1202,7 +1202,7 @@
     "key": "ObjectPropertyNaming",
     "name": "Object Property Naming",
     "description": "Property names inside objects should follow the naming convention set in the projects configuration.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#objectpropertynaming",
+    "url": "https://detekt.github.io/detekt/naming.html#objectpropertynaming",
     "tags": [
       "style"
     ],
@@ -1214,7 +1214,7 @@
     "key": "OptionalAbstractKeyword",
     "name": "Optional Abstract Keyword",
     "description": "Unnecessary abstract modifier in interface",
-    "url": "https://arturbosch.github.io/detekt/style.html#optionalabstractkeyword",
+    "url": "https://detekt.github.io/detekt/style.html#optionalabstractkeyword",
     "tags": [
       "style"
     ],
@@ -1226,7 +1226,7 @@
     "key": "OptionalUnit",
     "name": "Optional Unit",
     "description": "Return type of \u0027Unit\u0027 is unnecessary and can be safely removed.",
-    "url": "https://arturbosch.github.io/detekt/style.html#optionalunit",
+    "url": "https://detekt.github.io/detekt/style.html#optionalunit",
     "tags": [
       "style"
     ],
@@ -1238,7 +1238,7 @@
     "key": "OptionalWhenBraces",
     "name": "Optional When Braces",
     "description": "Optional braces in when expression",
-    "url": "https://arturbosch.github.io/detekt/style.html#optionalwhenbraces",
+    "url": "https://detekt.github.io/detekt/style.html#optionalwhenbraces",
     "tags": [
       "style"
     ],
@@ -1250,7 +1250,7 @@
     "key": "PackageNaming",
     "name": "Package Naming",
     "description": "Package names should match the naming convention set in the configuration.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#packagenaming",
+    "url": "https://detekt.github.io/detekt/naming.html#packagenaming",
     "tags": [
       "style"
     ],
@@ -1262,7 +1262,7 @@
     "key": "PreferToOverPairSyntax",
     "name": "Prefer To Over Pair Syntax",
     "description": "Pair was created using the Pair constructor, using the to syntax is preferred.",
-    "url": "https://arturbosch.github.io/detekt/style.html#prefertooverpairsyntax",
+    "url": "https://detekt.github.io/detekt/style.html#prefertooverpairsyntax",
     "tags": [
       "style"
     ],
@@ -1274,7 +1274,7 @@
     "key": "PrintStackTrace",
     "name": "Print Stack Trace",
     "description": "Do not print an stack trace. These debug statements should be replaced with a logger or removed.",
-    "url": "https://arturbosch.github.io/detekt/exceptions.html#printstacktrace",
+    "url": "https://detekt.github.io/detekt/exceptions.html#printstacktrace",
     "tags": [
       "codesmell"
     ],
@@ -1286,7 +1286,7 @@
     "key": "ProtectedMemberInFinalClass",
     "name": "Protected Member In Final Class",
     "description": "Member with protected visibility in final class is private. Consider using private or internal as modifier.",
-    "url": "https://arturbosch.github.io/detekt/style.html#protectedmemberinfinalclass",
+    "url": "https://detekt.github.io/detekt/style.html#protectedmemberinfinalclass",
     "tags": [
       "warning"
     ],
@@ -1298,7 +1298,7 @@
     "key": "RedundantElseInWhen",
     "name": "Redundant Else In When",
     "description": "Check for redundant `else` case in `when` expression when used as statement.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#redundantelseinwhen",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#redundantelseinwhen",
     "tags": [
       "warning"
     ],
@@ -1310,7 +1310,7 @@
     "key": "RedundantExplicitType",
     "name": "Redundant Explicit Type",
     "description": "Type does not need to be stated explicitly and can be removed.",
-    "url": "https://arturbosch.github.io/detekt/style.html#redundantexplicittype",
+    "url": "https://detekt.github.io/detekt/style.html#redundantexplicittype",
     "tags": [
       "style"
     ],
@@ -1322,7 +1322,7 @@
     "key": "RedundantHigherOrderMapUsage",
     "name": "Redundant Higher Order Map Usage",
     "description": "Checks for Redundant \u0027map\u0027 calls.",
-    "url": "https://arturbosch.github.io/detekt/style.html#redundanthigherordermapusage",
+    "url": "https://detekt.github.io/detekt/style.html#redundanthigherordermapusage",
     "tags": [
       "style"
     ],
@@ -1345,7 +1345,7 @@
     "key": "RedundantVisibilityModifierRule",
     "name": "Redundant Visibility Modifier Rule",
     "description": "Checks for redundant visibility modifiers.",
-    "url": "https://arturbosch.github.io/detekt/style.html#redundantvisibilitymodifierrule",
+    "url": "https://detekt.github.io/detekt/style.html#redundantvisibilitymodifierrule",
     "tags": [
       "style"
     ],
@@ -1357,7 +1357,7 @@
     "key": "ReplaceSafeCallChainWithRun",
     "name": "Replace Safe Call Chain With Run",
     "description": "Chains of safe calls on non-nullable types can be surrounded with run {}",
-    "url": "https://arturbosch.github.io/detekt/complexity.html#replacesafecallchainwithrun",
+    "url": "https://detekt.github.io/detekt/complexity.html#replacesafecallchainwithrun",
     "tags": [
       "maintainability"
     ],
@@ -1369,7 +1369,7 @@
     "key": "RethrowCaughtException",
     "name": "Rethrow Caught Exception",
     "description": "Do not rethrow a caught exception of the same type.",
-    "url": "https://arturbosch.github.io/detekt/exceptions.html#rethrowcaughtexception",
+    "url": "https://detekt.github.io/detekt/exceptions.html#rethrowcaughtexception",
     "tags": [
       "codesmell"
     ],
@@ -1381,7 +1381,7 @@
     "key": "ReturnCount",
     "name": "Return Count",
     "description": "Restrict the number of return statements in methods.",
-    "url": "https://arturbosch.github.io/detekt/style.html#returncount",
+    "url": "https://detekt.github.io/detekt/style.html#returncount",
     "tags": [
       "style"
     ],
@@ -1393,7 +1393,7 @@
     "key": "ReturnFromFinally",
     "name": "Return From Finally",
     "description": "Do not return within a finally statement. This can discard exceptions.",
-    "url": "https://arturbosch.github.io/detekt/exceptions.html#returnfromfinally",
+    "url": "https://detekt.github.io/detekt/exceptions.html#returnfromfinally",
     "tags": [
       "defect"
     ],
@@ -1405,7 +1405,7 @@
     "key": "SafeCast",
     "name": "Safe Cast",
     "description": "Safe cast instead of if-else-null",
-    "url": "https://arturbosch.github.io/detekt/style.html#safecast",
+    "url": "https://detekt.github.io/detekt/style.html#safecast",
     "tags": [
       "style"
     ],
@@ -1417,7 +1417,7 @@
     "key": "SerialVersionUIDInSerializableClass",
     "name": "Serial Version UIDIn Serializable Class",
     "description": "A class which implements the Serializable interface does not define a correct serialVersionUID field. The serialVersionUID field should be a constant long value inside a companion object.",
-    "url": "https://arturbosch.github.io/detekt/style.html#serialversionuidinserializableclass",
+    "url": "https://detekt.github.io/detekt/style.html#serialversionuidinserializableclass",
     "tags": [
       "warning"
     ],
@@ -1440,7 +1440,7 @@
     "key": "SpacingBetweenPackageAndImports",
     "name": "Spacing Between Package And Imports",
     "description": "Violation of the package declaration style.",
-    "url": "https://arturbosch.github.io/detekt/style.html#spacingbetweenpackageandimports",
+    "url": "https://detekt.github.io/detekt/style.html#spacingbetweenpackageandimports",
     "tags": [
       "style"
     ],
@@ -1452,7 +1452,7 @@
     "key": "SpreadOperator",
     "name": "Spread Operator",
     "description": "In most cases using a spread operator causes a full copy of the array to be created before calling a method. This may result in a performance penalty.",
-    "url": "https://arturbosch.github.io/detekt/performance.html#spreadoperator",
+    "url": "https://detekt.github.io/detekt/performance.html#spreadoperator",
     "tags": [
       "performance"
     ],
@@ -1464,7 +1464,7 @@
     "key": "StringLiteralDuplication",
     "name": "String Literal Duplication",
     "description": "Multiple occurrences of the same string literal within a single file detected.",
-    "url": "https://arturbosch.github.io/detekt/complexity.html#stringliteralduplication",
+    "url": "https://detekt.github.io/detekt/complexity.html#stringliteralduplication",
     "tags": [
       "maintainability"
     ],
@@ -1487,7 +1487,7 @@
     "key": "SwallowedException",
     "name": "Swallowed Exception",
     "description": "The caught exception is swallowed. The original exception could be lost.",
-    "url": "https://arturbosch.github.io/detekt/exceptions.html#swallowedexception",
+    "url": "https://detekt.github.io/detekt/exceptions.html#swallowedexception",
     "tags": [
       "codesmell"
     ],
@@ -1499,7 +1499,7 @@
     "key": "ThrowingExceptionFromFinally",
     "name": "Throwing Exception From Finally",
     "description": "Do not throw an exception within a finally statement. This can discard exceptions and is confusing.",
-    "url": "https://arturbosch.github.io/detekt/exceptions.html#throwingexceptionfromfinally",
+    "url": "https://detekt.github.io/detekt/exceptions.html#throwingexceptionfromfinally",
     "tags": [
       "defect"
     ],
@@ -1511,7 +1511,7 @@
     "key": "ThrowingExceptionInMain",
     "name": "Throwing Exception In Main",
     "description": "The main method should not throw an exception.",
-    "url": "https://arturbosch.github.io/detekt/exceptions.html#throwingexceptioninmain",
+    "url": "https://detekt.github.io/detekt/exceptions.html#throwingexceptioninmain",
     "tags": [
       "codesmell"
     ],
@@ -1523,7 +1523,7 @@
     "key": "ThrowingExceptionsWithoutMessageOrCause",
     "name": "Throwing Exceptions Without Message Or Cause",
     "description": "A call to the default constructor of an exception was detected. Instead one of the constructor overloads should be called. This allows to provide more meaningful exceptions.",
-    "url": "https://arturbosch.github.io/detekt/exceptions.html#throwingexceptionswithoutmessageorcause",
+    "url": "https://detekt.github.io/detekt/exceptions.html#throwingexceptionswithoutmessageorcause",
     "tags": [
       "warning"
     ],
@@ -1535,7 +1535,7 @@
     "key": "ThrowingNewInstanceOfSameException",
     "name": "Throwing New Instance Of Same Exception",
     "description": "Avoid catch blocks that rethrow a caught exception wrapped inside a new instance of the same exception.",
-    "url": "https://arturbosch.github.io/detekt/exceptions.html#throwingnewinstanceofsameexception",
+    "url": "https://detekt.github.io/detekt/exceptions.html#throwingnewinstanceofsameexception",
     "tags": [
       "defect"
     ],
@@ -1547,7 +1547,7 @@
     "key": "ThrowsCount",
     "name": "Throws Count",
     "description": "Restrict the number of throw statements in methods.",
-    "url": "https://arturbosch.github.io/detekt/style.html#throwscount",
+    "url": "https://detekt.github.io/detekt/style.html#throwscount",
     "tags": [
       "style"
     ],
@@ -1559,7 +1559,7 @@
     "key": "TooGenericExceptionCaught",
     "name": "Too Generic Exception Caught",
     "description": "Caught exception is too generic. Prefer catching specific exceptions to the case that is currently handled.",
-    "url": "https://arturbosch.github.io/detekt/exceptions.html#toogenericexceptioncaught",
+    "url": "https://detekt.github.io/detekt/exceptions.html#toogenericexceptioncaught",
     "tags": [
       "defect"
     ],
@@ -1571,7 +1571,7 @@
     "key": "TooGenericExceptionThrown",
     "name": "Too Generic Exception Thrown",
     "description": "Thrown exception is too generic. Prefer throwing project specific exceptions to handle error cases.",
-    "url": "https://arturbosch.github.io/detekt/exceptions.html#toogenericexceptionthrown",
+    "url": "https://detekt.github.io/detekt/exceptions.html#toogenericexceptionthrown",
     "tags": [
       "defect"
     ],
@@ -1583,7 +1583,7 @@
     "key": "TooManyFunctions",
     "name": "Too Many Functions",
     "description": "Too many functions inside a/an file/class/object/interface always indicate a violation of the single responsibility principle. Maybe the file/class/object/interface wants to manage too many things at once. Extract functionality which clearly belongs together.",
-    "url": "https://arturbosch.github.io/detekt/complexity.html#toomanyfunctions",
+    "url": "https://detekt.github.io/detekt/complexity.html#toomanyfunctions",
     "tags": [
       "maintainability"
     ],
@@ -1595,7 +1595,7 @@
     "key": "TopLevelPropertyNaming",
     "name": "Top Level Property Naming",
     "description": "Top level property names should follow the naming convention set in the projects configuration.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#toplevelpropertynaming",
+    "url": "https://detekt.github.io/detekt/naming.html#toplevelpropertynaming",
     "tags": [
       "style"
     ],
@@ -1607,7 +1607,7 @@
     "key": "TrailingWhitespace",
     "name": "Trailing Whitespace",
     "description": "Checks which lines end with a whitespace.",
-    "url": "https://arturbosch.github.io/detekt/style.html#trailingwhitespace",
+    "url": "https://detekt.github.io/detekt/style.html#trailingwhitespace",
     "tags": [
       "style"
     ],
@@ -1619,7 +1619,7 @@
     "key": "UnconditionalJumpStatementInLoop",
     "name": "Unconditional Jump Statement In Loop",
     "description": "An unconditional jump statement in a loop is useless. The loop itself is only executed once.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#unconditionaljumpstatementinloop",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unconditionaljumpstatementinloop",
     "tags": [
       "defect"
     ],
@@ -1631,7 +1631,7 @@
     "key": "UnderscoresInNumericLiterals",
     "name": "Underscores In Numeric Literals",
     "description": "Report missing or invalid underscores in decimal base 10 numeric literals. Numeric literals should be underscore separated to increase readability. Underscores that do not make groups of 3 digits are also reported.",
-    "url": "https://arturbosch.github.io/detekt/style.html#underscoresinnumericliterals",
+    "url": "https://detekt.github.io/detekt/style.html#underscoresinnumericliterals",
     "tags": [
       "style"
     ],
@@ -1643,7 +1643,7 @@
     "key": "UndocumentedPublicClass",
     "name": "Undocumented Public Class",
     "description": "Public classes, interfaces and objects require documentation.",
-    "url": "https://arturbosch.github.io/detekt/comments.html#undocumentedpublicclass",
+    "url": "https://detekt.github.io/detekt/comments.html#undocumentedpublicclass",
     "tags": [
       "maintainability"
     ],
@@ -1655,7 +1655,7 @@
     "key": "UndocumentedPublicFunction",
     "name": "Undocumented Public Function",
     "description": "Public functions require documentation.",
-    "url": "https://arturbosch.github.io/detekt/comments.html#undocumentedpublicfunction",
+    "url": "https://detekt.github.io/detekt/comments.html#undocumentedpublicfunction",
     "tags": [
       "maintainability"
     ],
@@ -1667,7 +1667,7 @@
     "key": "UndocumentedPublicProperty",
     "name": "Undocumented Public Property",
     "description": "Public properties require documentation.",
-    "url": "https://arturbosch.github.io/detekt/comments.html#undocumentedpublicproperty",
+    "url": "https://detekt.github.io/detekt/comments.html#undocumentedpublicproperty",
     "tags": [
       "maintainability"
     ],
@@ -1679,7 +1679,7 @@
     "key": "UnnecessaryAbstractClass",
     "name": "Unnecessary Abstract Class",
     "description": "An abstract class is unnecessary and can be refactored. An abstract class should have both abstract and concrete properties or functions. An abstract class without a concrete member can be refactored to an interface. An abstract class without an abstract member can be refactored to a concrete class.",
-    "url": "https://arturbosch.github.io/detekt/style.html#unnecessaryabstractclass",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessaryabstractclass",
     "tags": [
       "style"
     ],
@@ -1691,7 +1691,7 @@
     "key": "UnnecessaryAnnotationUseSiteTarget",
     "name": "Unnecessary Annotation Use Site Target",
     "description": "Unnecessary Annotation use-site Target. It can be removed.",
-    "url": "https://arturbosch.github.io/detekt/style.html#unnecessaryannotationusesitetarget",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessaryannotationusesitetarget",
     "tags": [
       "style"
     ],
@@ -1703,7 +1703,7 @@
     "key": "UnnecessaryApply",
     "name": "Unnecessary Apply",
     "description": "The `apply` usage is unnecessary",
-    "url": "https://arturbosch.github.io/detekt/style.html#unnecessaryapply",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessaryapply",
     "tags": [
       "style"
     ],
@@ -1715,7 +1715,7 @@
     "key": "UnnecessaryFilter",
     "name": "Unnecessary Filter",
     "description": "filter() with other collection operations may be simplified.",
-    "url": "https://arturbosch.github.io/detekt/style.html#unnecessaryfilter",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessaryfilter",
     "tags": [
       "style"
     ],
@@ -1727,7 +1727,7 @@
     "key": "UnnecessaryInheritance",
     "name": "Unnecessary Inheritance",
     "description": "The extended super type is unnecessary.",
-    "url": "https://arturbosch.github.io/detekt/style.html#unnecessaryinheritance",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessaryinheritance",
     "tags": [
       "style"
     ],
@@ -1739,7 +1739,7 @@
     "key": "UnnecessaryLet",
     "name": "Unnecessary Let",
     "description": "The `let` usage is unnecessary",
-    "url": "https://arturbosch.github.io/detekt/style.html#unnecessarylet",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessarylet",
     "tags": [
       "style"
     ],
@@ -1751,7 +1751,7 @@
     "key": "UnnecessaryNotNullOperator",
     "name": "Unnecessary Not Null Operator",
     "description": "Unnecessary not-null unary operator (!!) detected.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#unnecessarynotnulloperator",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unnecessarynotnulloperator",
     "tags": [
       "defect"
     ],
@@ -1763,7 +1763,7 @@
     "key": "UnnecessaryParentheses",
     "name": "Unnecessary Parentheses",
     "description": "Unnecessary parentheses don\u0027t add any value to the code and should be removed.",
-    "url": "https://arturbosch.github.io/detekt/style.html#unnecessaryparentheses",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessaryparentheses",
     "tags": [
       "style"
     ],
@@ -1775,7 +1775,7 @@
     "key": "UnnecessarySafeCall",
     "name": "Unnecessary Safe Call",
     "description": "Unnecessary safe call operator detected.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#unnecessarysafecall",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unnecessarysafecall",
     "tags": [
       "defect"
     ],
@@ -1787,7 +1787,7 @@
     "key": "UnnecessaryTemporaryInstantiation",
     "name": "Unnecessary Temporary Instantiation",
     "description": "Avoid temporary objects when converting primitive types to String.",
-    "url": "https://arturbosch.github.io/detekt/performance.html#unnecessarytemporaryinstantiation",
+    "url": "https://detekt.github.io/detekt/performance.html#unnecessarytemporaryinstantiation",
     "tags": [
       "performance"
     ],
@@ -1799,7 +1799,7 @@
     "key": "UnreachableCatchBlock",
     "name": "Unreachable Catch Block",
     "description": "Unreachable catch block detected.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#unreachablecatchblock",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unreachablecatchblock",
     "tags": [
       "warning"
     ],
@@ -1811,7 +1811,7 @@
     "key": "UnreachableCode",
     "name": "Unreachable Code",
     "description": "Unreachable code detected. This code should be removed",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#unreachablecode",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unreachablecode",
     "tags": [
       "warning"
     ],
@@ -1823,7 +1823,7 @@
     "key": "UnsafeCallOnNullableType",
     "name": "Unsafe Call On Nullable Type",
     "description": "It will throw a NullPointerException at runtime if your nullable value is null.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#unsafecallonnullabletype",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unsafecallonnullabletype",
     "tags": [
       "defect"
     ],
@@ -1835,7 +1835,7 @@
     "key": "UnsafeCast",
     "name": "Unsafe Cast",
     "description": "Cast operator throws an exception if the cast is not possible.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#unsafecast",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unsafecast",
     "tags": [
       "defect"
     ],
@@ -1847,7 +1847,7 @@
     "key": "UntilInsteadOfRangeTo",
     "name": "Until Instead Of Range To",
     "description": "\u0027..\u0027 call can be replaced with \u0027until\u0027",
-    "url": "https://arturbosch.github.io/detekt/style.html#untilinsteadofrangeto",
+    "url": "https://detekt.github.io/detekt/style.html#untilinsteadofrangeto",
     "tags": [
       "style"
     ],
@@ -1859,7 +1859,7 @@
     "key": "UnusedImports",
     "name": "Unused Imports",
     "description": "Unused Imports are dead code and should be removed.",
-    "url": "https://arturbosch.github.io/detekt/style.html#unusedimports",
+    "url": "https://detekt.github.io/detekt/style.html#unusedimports",
     "tags": [
       "style"
     ],
@@ -1871,7 +1871,7 @@
     "key": "UnusedPrivateClass",
     "name": "Unused Private Class",
     "description": "Private class is unused.",
-    "url": "https://arturbosch.github.io/detekt/style.html#unusedprivateclass",
+    "url": "https://detekt.github.io/detekt/style.html#unusedprivateclass",
     "tags": [
       "maintainability"
     ],
@@ -1883,7 +1883,7 @@
     "key": "UnusedPrivateMember",
     "name": "Unused Private Member",
     "description": "Private member is unused.",
-    "url": "https://arturbosch.github.io/detekt/style.html#unusedprivatemember",
+    "url": "https://detekt.github.io/detekt/style.html#unusedprivatemember",
     "tags": [
       "maintainability"
     ],
@@ -1895,7 +1895,7 @@
     "key": "UnusedUnaryOperator",
     "name": "Unused Unary Operator",
     "description": "This unary operator is not used",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#unusedunaryoperator",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unusedunaryoperator",
     "tags": [
       "defect"
     ],
@@ -1907,7 +1907,7 @@
     "key": "UseArrayLiteralsInAnnotations",
     "name": "Use Array Literals In Annotations",
     "description": "Array literals \u0027[...]\u0027 should be preferred as they are more readable than \u0027arrayOf(...)\u0027 expressions.",
-    "url": "https://arturbosch.github.io/detekt/style.html#usearrayliteralsinannotations",
+    "url": "https://detekt.github.io/detekt/style.html#usearrayliteralsinannotations",
     "tags": [
       "style"
     ],
@@ -1919,7 +1919,7 @@
     "key": "UseCheckNotNull",
     "name": "Use Check Not Null",
     "description": "Use checkNotNull() instead of check() for checking not-null.",
-    "url": "https://arturbosch.github.io/detekt/style.html#usechecknotnull",
+    "url": "https://detekt.github.io/detekt/style.html#usechecknotnull",
     "tags": [
       "style"
     ],
@@ -1931,7 +1931,7 @@
     "key": "UseCheckOrError",
     "name": "Use Check Or Error",
     "description": "Use check() or error() instead of throwing an IllegalStateException.",
-    "url": "https://arturbosch.github.io/detekt/style.html#usecheckorerror",
+    "url": "https://detekt.github.io/detekt/style.html#usecheckorerror",
     "tags": [
       "style"
     ],
@@ -1943,7 +1943,7 @@
     "key": "UseDataClass",
     "name": "Use Data Class",
     "description": "Classes that do nothing but hold data should be replaced with a data class.",
-    "url": "https://arturbosch.github.io/detekt/style.html#usedataclass",
+    "url": "https://detekt.github.io/detekt/style.html#usedataclass",
     "tags": [
       "style"
     ],
@@ -1955,7 +1955,7 @@
     "key": "UseEmptyCounterpart",
     "name": "Use Empty Counterpart",
     "description": "Instantiation of an object\u0027s \u0026quot;empty\u0026quot; state should use the object\u0027s \u0026quot;empty\u0026quot; initializer",
-    "url": "https://arturbosch.github.io/detekt/style.html#useemptycounterpart",
+    "url": "https://detekt.github.io/detekt/style.html#useemptycounterpart",
     "tags": [
       "style"
     ],
@@ -1967,7 +1967,7 @@
     "key": "UseIfEmptyOrIfBlank",
     "name": "Use If Empty Or If Blank",
     "description": "Use \u0027ifEmpty\u0027 or \u0027ifBlank\u0027 instead of \u0027isEmpty\u0027 or \u0027isBlank\u0027 to assign default value.",
-    "url": "https://arturbosch.github.io/detekt/style.html#useifemptyorifblank",
+    "url": "https://detekt.github.io/detekt/style.html#useifemptyorifblank",
     "tags": [
       "style"
     ],
@@ -1979,7 +1979,7 @@
     "key": "UseIfInsteadOfWhen",
     "name": "Use If Instead Of When",
     "description": "Binary expressions are better expressed using an \u0027if\u0027 expression than a \u0027when\u0027 expression.",
-    "url": "https://arturbosch.github.io/detekt/style.html#useifinsteadofwhen",
+    "url": "https://detekt.github.io/detekt/style.html#useifinsteadofwhen",
     "tags": [
       "style"
     ],
@@ -1991,7 +1991,7 @@
     "key": "UseIsNullOrEmpty",
     "name": "Use Is Null Or Empty",
     "description": "Use \u0027isNullOrEmpty()\u0027 call instead of \u0027x \u003d\u003d null || x.isEmpty()\u0027",
-    "url": "https://arturbosch.github.io/detekt/style.html#useisnullorempty",
+    "url": "https://detekt.github.io/detekt/style.html#useisnullorempty",
     "tags": [
       "style"
     ],
@@ -2003,7 +2003,7 @@
     "key": "UseOrEmpty",
     "name": "Use Or Empty",
     "description": "Use \u0027orEmpty()\u0027 call instead of \u0027?: emptyList()\u0027",
-    "url": "https://arturbosch.github.io/detekt/style.html#useorempty",
+    "url": "https://detekt.github.io/detekt/style.html#useorempty",
     "tags": [
       "style"
     ],
@@ -2015,7 +2015,7 @@
     "key": "UseRequire",
     "name": "Use Require",
     "description": "Use require() instead of throwing an IllegalArgumentException.",
-    "url": "https://arturbosch.github.io/detekt/style.html#userequire",
+    "url": "https://detekt.github.io/detekt/style.html#userequire",
     "tags": [
       "style"
     ],
@@ -2027,7 +2027,7 @@
     "key": "UseRequireNotNull",
     "name": "Use Require Not Null",
     "description": "Use requireNotNull() instead of require() for checking not-null.",
-    "url": "https://arturbosch.github.io/detekt/style.html#userequirenotnull",
+    "url": "https://detekt.github.io/detekt/style.html#userequirenotnull",
     "tags": [
       "style"
     ],
@@ -2039,7 +2039,7 @@
     "key": "UselessCallOnNotNull",
     "name": "Useless Call On Not Null",
     "description": "This call on non-null reference may be reduced or removed. Some calls are intended to be called on nullable collection or text types (e.g. String?). When this call is used on a reference to a non-null type (e.g. String) it is redundant and will have no effect, so it can be removed.",
-    "url": "https://arturbosch.github.io/detekt/style.html#uselesscallonnotnull",
+    "url": "https://detekt.github.io/detekt/style.html#uselesscallonnotnull",
     "tags": [
       "performance"
     ],
@@ -2051,7 +2051,7 @@
     "key": "UselessPostfixExpression",
     "name": "Useless Postfix Expression",
     "description": "The incremented or decremented value is unused. This value is replaced with the original value.",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#uselesspostfixexpression",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#uselesspostfixexpression",
     "tags": [
       "defect"
     ],
@@ -2063,7 +2063,7 @@
     "key": "UtilityClassWithPublicConstructor",
     "name": "Utility Class With Public Constructor",
     "description": "The class declaration is unnecessary because it only contains utility functions. An object declaration should be used instead.",
-    "url": "https://arturbosch.github.io/detekt/style.html#utilityclasswithpublicconstructor",
+    "url": "https://detekt.github.io/detekt/style.html#utilityclasswithpublicconstructor",
     "tags": [
       "style"
     ],
@@ -2075,7 +2075,7 @@
     "key": "VarCouldBeVal",
     "name": "Var Could Be Val",
     "description": "Var declaration could be val.",
-    "url": "https://arturbosch.github.io/detekt/style.html#varcouldbeval",
+    "url": "https://detekt.github.io/detekt/style.html#varcouldbeval",
     "tags": [
       "maintainability"
     ],
@@ -2087,7 +2087,7 @@
     "key": "VariableMaxLength",
     "name": "Variable Max Length",
     "description": "Variable names should not be longer than the maximum set in the configuration.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#variablemaxlength",
+    "url": "https://detekt.github.io/detekt/naming.html#variablemaxlength",
     "tags": [
       "style"
     ],
@@ -2099,7 +2099,7 @@
     "key": "VariableMinLength",
     "name": "Variable Min Length",
     "description": "Variable names should not be shorter than the minimum defined in the configuration.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#variableminlength",
+    "url": "https://detekt.github.io/detekt/naming.html#variableminlength",
     "tags": [
       "style"
     ],
@@ -2111,7 +2111,7 @@
     "key": "VariableNaming",
     "name": "Variable Naming",
     "description": "Variable names should follow the naming convention set in the projects configuration.",
-    "url": "https://arturbosch.github.io/detekt/naming.html#variablenaming",
+    "url": "https://detekt.github.io/detekt/naming.html#variablenaming",
     "tags": [
       "style"
     ],
@@ -2123,7 +2123,7 @@
     "key": "WildcardImport",
     "name": "Wildcard Import",
     "description": "Wildcard imports should be replaced with imports using fully qualified class names. Wildcard imports can lead to naming conflicts. A library update can introduce naming clashes with your classes which results in compilation errors.",
-    "url": "https://arturbosch.github.io/detekt/style.html#wildcardimport",
+    "url": "https://detekt.github.io/detekt/style.html#wildcardimport",
     "tags": [
       "style"
     ],
@@ -2135,7 +2135,7 @@
     "key": "WrongEqualsTypeParameter",
     "name": "Wrong Equals Type Parameter",
     "description": "Wrong parameter type for equals() method found. To correctly override the equals() method use Any?",
-    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#wrongequalstypeparameter",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#wrongequalstypeparameter",
     "tags": [
       "defect"
     ],
