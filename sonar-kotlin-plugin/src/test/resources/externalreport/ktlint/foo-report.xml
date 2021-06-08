@@ -5,5 +5,6 @@
 		<error line="7" column="1" severity="error" message="First line in a method block should not be empty" source="experimental:no-empty-first-line-in-method-block" />
 		<error line="8" column="44" severity="error" message="Unnecessary semicolon" source="no-semi" />
 		<error line="10" column="1" severity="error" message="Unexpected blank line(s) before &quot;}&quot;" source="no-blank-line-before-rbrace" />
+		<error line="8" column="1" severity="error" message="Custom rule" source="Unknown-Or-Custom-Rule-Key" />
 	</file>
 </checkstyle>

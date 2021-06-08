@@ -22,14 +22,21 @@ package org.sonarsource.kotlin.externalreport.ktlint
 import com.google.gson.GsonBuilder
 import com.pinterest.ktlint.ruleset.experimental.ExperimentalRuleSetProvider
 import com.pinterest.ktlint.ruleset.standard.StandardRuleSetProvider
+import org.sonarsource.kotlin.externalreport.ExternalReporting
 import org.sonarsource.kotlin.externalreport.ExternalRule
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import com.pinterest.ktlint.core.Rule as KtlintRule
 
-internal val DEFAULT_RULES_FILE = Paths.get("sonar-kotlin-plugin", "src", "main", "resources",
-    "org", "sonar", "l10n", "kotlin", "rules", "ktlint", "rules.json")
+internal val DEFAULT_RULES_FILE = Paths.get("sonar-kotlin-plugin", "src", "main", "resources")
+    .resolve(Path.of(KtlintRulesDefinition.RULES_FILE))
+
+private val TAGS = setOf("ktlint", "style")
+private const val KTLINT_RULES_WEBPAGE = "https://ktlint.github.io/#rules"
+private const val DEFAULT_RULE_TYPE = "CODE_SMELL"
+private const val DEFAULT_RULE_SEVERITY = "MAJOR"
+private const val DEFAULT_DEBT = 0L
 
 fun main(vararg args: String?) {
     val rulesFile =
@@ -52,7 +59,19 @@ fun generateRuleDefinitionsJson(): String {
         println("Importing ${it.size} experimental rules")
     }
 
-    return (standardRules + experimentalRules)
+    val fallbackRule = ExternalRule(
+        key = ExternalReporting.FALLBACK_RULE_KEY,
+        name = "Ktlint Rule",
+        description = "This reporting may be triggered by a custom ktlint rule or by a default ktlint rule that has not yet " +
+            "been added to the Sonar Kotlin plugin.",
+        url = KTLINT_RULES_WEBPAGE,
+        tags = TAGS,
+        type = DEFAULT_RULE_TYPE,
+        severity = DEFAULT_RULE_SEVERITY,
+        constantDebtMinutes = DEFAULT_DEBT,
+    )
+
+    return (standardRules + experimentalRules + fallbackRule)
         .let { ktlintRules ->
             GsonBuilder().setPrettyPrinting().create().toJson(ktlintRules)
         }
@@ -63,11 +82,11 @@ fun ktlintToExternalRule(ktLintRule: KtlintRule) =
         key = ktLintRule.id,
         name = generateRuleName(ktLintRule),
         description = null,
-        url = "https://ktlint.github.io/#rules",
-        tags = setOf("ktlint", "style"),
-        type = "CODE_SMELL",
-        severity = "MAJOR",
-        constantDebtMinutes = 0,
+        url = KTLINT_RULES_WEBPAGE,
+        tags = TAGS,
+        type = DEFAULT_RULE_TYPE,
+        severity = DEFAULT_RULE_SEVERITY,
+        constantDebtMinutes = DEFAULT_DEBT,
     )
 
 private fun generateRuleName(rule: KtlintRule): String =

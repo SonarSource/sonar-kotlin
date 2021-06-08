@@ -66,7 +66,7 @@ class KtlintSensorTest {
     @CsvSource("foo-report.xml", "foo-report.json")
     fun `issues with sonarqube`(reportFile: String) {
         val externalIssues = executeSensorImporting(reportFile)
-        assertThat(externalIssues).hasSize(4)
+        assertThat(externalIssues).hasSize(5)
 
         val first = externalIssues[0]
         assertThat(first.primaryLocation().inputComponent().key()).isEqualTo("ktlint-project:Foo.kt")
@@ -78,10 +78,9 @@ class KtlintSensorTest {
 
         val second = externalIssues[1]
         assertThat(second.primaryLocation().inputComponent().key()).isEqualTo("ktlint-project:Foo.kt")
-        assertThat(second.ruleKey().rule()).isEqualTo("experimental:no-empty-first-line-in-method-block")
+        assertThat(second.ruleKey().rule()).isEqualTo("no-empty-first-line-in-method-block")
         assertThat(second.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(second.severity()).isEqualTo(Severity.MAJOR)
-        assertThat(second.remediationEffort()!!.toLong()).isEqualTo(5L)
         assertThat(second.primaryLocation().message()).isEqualTo("First line in a method block should not be empty")
         assertThat(second.primaryLocation().textRange()!!.start().line()).isEqualTo(7)
 
@@ -100,6 +99,14 @@ class KtlintSensorTest {
         assertThat(fourth.severity()).isEqualTo(Severity.MAJOR)
         assertThat(fourth.primaryLocation().message()).isEqualTo("""Unexpected blank line(s) before "}"""")
         assertThat(fourth.primaryLocation().textRange()!!.start().line()).isEqualTo(10)
+
+        val fifth = externalIssues[4]
+        assertThat(fifth.primaryLocation().inputComponent().key()).isEqualTo("ktlint-project:Foo.kt")
+        assertThat(fifth.ruleKey().rule()).isEqualTo("external.catchall")
+        assertThat(fifth.type()).isEqualTo(RuleType.CODE_SMELL)
+        assertThat(fifth.severity()).isEqualTo(Severity.MAJOR)
+        assertThat(fifth.primaryLocation().message()).isEqualTo("""Custom rule""")
+        assertThat(fifth.primaryLocation().textRange()!!.start().line()).isEqualTo(8)
 
         assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty()
     }
@@ -138,7 +145,7 @@ class KtlintSensorTest {
         }
         ktlintSensor.execute(context)
         val externalIssues = context.allExternalIssues()
-        assertThat(externalIssues).hasSize(4)
+        assertThat(externalIssues).hasSize(5)
         assertThat(logTester.logs(LoggerLevel.INFO))
             .hasSize(1)
             .allMatch { info: String -> info.startsWith("Importing") && info.endsWith("foo-report.xml") }

@@ -22,12 +22,14 @@ package org.sonarsource.kotlin.externalreport.ktlint
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.notifications.AnalysisWarnings
 import org.sonar.api.utils.log.Loggers
+import org.sonarsource.kotlin.externalreport.ExternalReporting
+import org.sonarsource.kotlin.externalreport.ktlint.KtlintRulesDefinition.Companion.EXPERIMENTAL_RULE_PREFIX
 import java.io.File
 import java.util.function.Consumer
 
 internal val LOG = Loggers.get(ReportImporter::class.java)
 
-class ReportImporter(val analysisWarnings: AnalysisWarnings, val context: SensorContext) : Consumer<File> {
+internal class ReportImporter(val analysisWarnings: AnalysisWarnings, val context: SensorContext) : Consumer<File> {
     fun importFile(reportFile: File) {
         when (reportFile.extension) {
             "json" -> importJsonFile(reportFile)
@@ -75,18 +77,27 @@ class ReportImporter(val analysisWarnings: AnalysisWarnings, val context: Sensor
             }
 
         val ruleLoader = KtlintRulesDefinition.RULE_LOADER
-        linterFindings.forEach { (line, _, message, ruleId) ->
+        linterFindings.forEach { (line, _, message, preliminaryRuleKey) ->
+
+            val truncatedPrelimRuleKey =
+                if (preliminaryRuleKey.startsWith(EXPERIMENTAL_RULE_PREFIX)) preliminaryRuleKey.substring(EXPERIMENTAL_RULE_PREFIX.length)
+                else preliminaryRuleKey
+
+            val ruleKey =
+                if (KtlintRulesDefinition.RULE_LOADER.ruleKeys().contains(truncatedPrelimRuleKey)) truncatedPrelimRuleKey
+                else ExternalReporting.FALLBACK_RULE_KEY
+
             context.newExternalIssue().apply {
-                type(ruleLoader.ruleType(ruleId))
-                severity(ruleLoader.ruleSeverity(ruleId))
-                remediationEffortMinutes(ruleLoader.ruleConstantDebtMinutes(ruleId))
+                type(ruleLoader.ruleType(ruleKey))
+                severity(ruleLoader.ruleSeverity(ruleKey))
+                remediationEffortMinutes(ruleLoader.ruleConstantDebtMinutes(ruleKey))
                 at(
                     newLocation().message(message)
                         .on(inputFile)
                         .at(inputFile.selectLine(line))
                 )
                 engineId(KtlintSensor.LINTER_KEY)
-                ruleId(ruleId)
+                ruleId(ruleKey)
                 save()
             }
         }

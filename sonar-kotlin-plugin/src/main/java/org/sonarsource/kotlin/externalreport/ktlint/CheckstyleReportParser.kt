@@ -20,10 +20,25 @@
 package org.sonarsource.kotlin.externalreport.ktlint
 
 import org.sonar.api.batch.sensor.SensorContext
+import org.sonar.api.rule.RuleKey
+import org.sonarsource.kotlin.externalreport.ExternalReporting
+import org.sonarsource.kotlin.externalreport.ktlint.KtlintRulesDefinition.Companion.EXPERIMENTAL_RULE_PREFIX
 import org.sonarsource.slang.externalreport.CheckstyleFormatImporterWithRuleLoader
 
-class CheckstyleReportParser(context: SensorContext) : CheckstyleFormatImporterWithRuleLoader(
+internal class CheckstyleReportParser(context: SensorContext) : CheckstyleFormatImporterWithRuleLoader(
     context,
     KtlintSensor.LINTER_KEY,
     KtlintRulesDefinition.RULE_LOADER,
-)
+) {
+    override fun createRuleKey(source: String): RuleKey? {
+        val preliminaryRuleKey =
+            if (source.startsWith(EXPERIMENTAL_RULE_PREFIX)) source.substring(EXPERIMENTAL_RULE_PREFIX.length)
+            else source
+
+        val ruleKey =
+            if (KtlintRulesDefinition.RULE_LOADER.ruleKeys().contains(preliminaryRuleKey)) preliminaryRuleKey
+            else ExternalReporting.FALLBACK_RULE_KEY
+
+        return super.createRuleKey(ruleKey)
+    }
+}

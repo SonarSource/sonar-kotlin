@@ -27,7 +27,7 @@ import org.sonar.api.server.rule.RulesDefinition
 class KtlintRulesDefinitionTest {
 
     @Test
-    fun detekt_external_repository() {
+    fun `ktlint external repository`() {
         val context = RulesDefinition.Context()
         val rulesDefinition = KtlintRulesDefinition()
         rulesDefinition.define(context)
@@ -36,7 +36,7 @@ class KtlintRulesDefinitionTest {
         assertThat(repository.name()).isEqualTo("ktlint")
         assertThat(repository.language()).isEqualTo("kotlin")
         assertThat(repository.isExternal).isTrue
-        assertThat(repository.rules().size).isEqualTo(41)
+        assertThat(repository.rules().size).isEqualTo(42)
         val modifierOrder = repository.rule("modifier-order")!!
         assertThat(modifierOrder).isNotNull
         assertThat(modifierOrder.name()).isEqualTo("Modifier Order")

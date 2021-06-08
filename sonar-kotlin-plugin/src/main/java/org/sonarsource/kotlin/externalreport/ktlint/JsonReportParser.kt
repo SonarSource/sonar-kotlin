@@ -25,7 +25,7 @@ import com.eclipsesource.json.JsonValue
 import java.nio.file.Path
 import kotlin.io.path.reader
 
-class JsonReportParser(private val reportFile: Path) {
+internal class JsonReportParser(private val reportFile: Path) {
 
     var report: Map<String, List<Finding>> = emptyMap()
         private set

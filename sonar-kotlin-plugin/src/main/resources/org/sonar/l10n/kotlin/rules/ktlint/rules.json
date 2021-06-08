@@ -490,5 +490,18 @@
     "type": "CODE_SMELL",
     "severity": "MAJOR",
     "constantDebtMinutes": 0
+  },
+  {
+    "key": "external.catchall",
+    "name": "Ktlint Rule",
+    "description": "This reporting may be triggered by a custom ktlint rule or by a default ktlint rule that has not yet been added to the Sonar Kotlin plugin.",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
   }
 ]

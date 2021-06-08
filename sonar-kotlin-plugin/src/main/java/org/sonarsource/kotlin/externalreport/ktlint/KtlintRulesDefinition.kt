@@ -22,14 +22,19 @@ package org.sonarsource.kotlin.externalreport.ktlint
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonarsource.analyzer.commons.ExternalRuleLoader
 import org.sonarsource.kotlin.plugin.KotlinPlugin
+import java.nio.file.Path
 
 class KtlintRulesDefinition : RulesDefinition {
     companion object {
+        const val RULES_FILE = "org/sonar/l10n/kotlin/rules/ktlint/rules.json"
+
         val RULE_LOADER = ExternalRuleLoader(
             KtlintSensor.LINTER_KEY,
             KtlintSensor.LINTER_NAME,
-            "org/sonar/l10n/kotlin/rules/ktlint/rules.json",
+            RULES_FILE,
             KotlinPlugin.KOTLIN_LANGUAGE_KEY)
+
+        internal const val EXPERIMENTAL_RULE_PREFIX = "experimental:"
     }
 
     override fun define(context: RulesDefinition.Context) {

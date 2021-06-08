@@ -21,6 +21,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.7")
     implementation("com.beust:jcommander:1.81")
     implementation("org.apache.commons:commons-text:1.9")
+    implementation(project(":sonar-kotlin-plugin"))
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
@@ -56,7 +57,7 @@ tasks {
         group = "Application"
         classpath = sourceSets.main.get().runtimeClasspath
         main = "org.sonarsource.kotlin.externalreport.androidlint.AndroidLintRuleDefinitionKt"
-        
+
         doFirst {
             println("Updating rules for Android Lint")
         }
