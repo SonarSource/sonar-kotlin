@@ -157,4 +157,6 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
         return lines.cardinality()
     }
 
+    internal fun KotlinFileContext.textRange(element: PsiElement) =
+        KotlinTextRanges.textRange(ktFile.viewProvider.document!!, element)
 }
