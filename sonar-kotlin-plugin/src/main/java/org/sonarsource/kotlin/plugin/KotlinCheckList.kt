@@ -26,6 +26,7 @@ import org.sonarsource.kotlin.checks.BooleanLiteralCheck
 import org.sonarsource.kotlin.checks.CipherBlockChainingCheck
 import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.CodeAfterJumpCheck
+import org.sonarsource.kotlin.checks.CollapsibleIfStatementsCheck
 import org.sonarsource.kotlin.checks.DataHashingCheck
 import org.sonarsource.kotlin.checks.DuplicateBranchCheck
 import org.sonarsource.kotlin.checks.DuplicatedFunctionImplementationCheck
@@ -76,6 +77,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.BadFunctionNameCheck::class.java,
             org.sonarsource.slang.checks.BooleanLiteralCheck::class.java,
             org.sonarsource.slang.checks.CodeAfterJumpCheck::class.java,
+            org.sonarsource.slang.checks.CollapsibleIfStatementsCheck::class.java,
             org.sonarsource.slang.checks.DuplicateBranchCheck::class.java,
             org.sonarsource.slang.checks.DuplicatedFunctionImplementationCheck::class.java,
             org.sonarsource.slang.checks.EmptyBlockCheck::class.java,
@@ -113,6 +115,7 @@ object KotlinCheckList {
         CipherBlockChainingCheck::class.java,
         ClearTextProtocolCheck::class.java,
         CodeAfterJumpCheck::class.java,
+        CollapsibleIfStatementsCheck::class.java,
         DataHashingCheck::class.java,
         DuplicateBranchCheck::class.java,
         DuplicatedFunctionImplementationCheck::class.java,
