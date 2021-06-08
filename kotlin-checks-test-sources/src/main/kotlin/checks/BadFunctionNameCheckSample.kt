@@ -10,4 +10,6 @@ class BadFunctionNameCheckSample {
     // TODO false-negative
     fun String.`foo bar`() {}
 
+    val anonymousFunction = fun() {}
+
 }

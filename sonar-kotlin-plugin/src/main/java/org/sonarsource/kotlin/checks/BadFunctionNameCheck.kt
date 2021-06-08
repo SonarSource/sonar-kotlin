@@ -55,7 +55,7 @@ class BadFunctionNameCheck : AbstractCheck() {
             /** see [org.sonarsource.kotlin.converter.KotlinTreeVisitor.createFunctionDeclarationTree] */
             return
         }
-        val name = function.name!!
+        val name = function.name ?: /* in case of anonymous functions */ return
         if (!name.matches(formatRegex)) {
             kotlinFileContext.reportIssue(
                 function.nameIdentifier!!,
