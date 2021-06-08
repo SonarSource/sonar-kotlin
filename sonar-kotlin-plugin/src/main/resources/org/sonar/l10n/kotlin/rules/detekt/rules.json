@@ -2142,5 +2142,14 @@
     "type": "CODE_SMELL",
     "severity": "CRITICAL",
     "constantDebtMinutes": 10
+  },
+  {
+    "key": "external.catchall",
+    "name": "Detekt Rule",
+    "description": "This reporting may be triggered by a custom Detekt rule or by a default Detekt rule that has not yet been added to the Sonar Kotlin plugin.",
+    "url": "https://detekt.github.io/detekt/",
+    "tags": [],
+    "type": "CODE_SMELL",
+    "constantDebtMinutes": 0
   }
 ]

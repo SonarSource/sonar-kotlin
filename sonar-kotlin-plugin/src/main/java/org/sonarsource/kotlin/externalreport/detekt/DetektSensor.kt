@@ -19,15 +19,16 @@
  */
 package org.sonarsource.kotlin.externalreport.detekt
 
-import java.io.File
-import java.util.function.Consumer
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.notifications.AnalysisWarnings
 import org.sonar.api.rule.RuleKey
 import org.sonar.api.utils.log.Loggers
+import org.sonarsource.kotlin.externalreport.ExternalReporting
 import org.sonarsource.kotlin.plugin.KotlinPlugin
 import org.sonarsource.slang.externalreport.CheckstyleFormatImporterWithRuleLoader
 import org.sonarsource.slang.plugin.AbstractPropertyHandlerSensor
+import java.io.File
+import java.util.function.Consumer
 
 class DetektSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandlerSensor(
     analysisWarnings,
@@ -43,14 +44,24 @@ class DetektSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandler
         private const val DETEKT_PREFIX = "detekt."
         const val REPORT_PROPERTY_KEY = "sonar.kotlin.detekt.reportPaths"
 
-        private class ReportImporter(context: SensorContext) :
-            CheckstyleFormatImporterWithRuleLoader(context, LINTER_KEY, DetektRulesDefinition.RULE_LOADER) {
+        private class ReportImporter(
+            context: SensorContext,
+        ) : CheckstyleFormatImporterWithRuleLoader(context, LINTER_KEY, DetektRulesDefinition.RULE_LOADER) {
+
             override fun createRuleKey(source: String): RuleKey? {
-                if (!source.startsWith(DETEKT_PREFIX)) {
-                    LOG.debug("Unexpected rule key without '{}' suffix: '{}'", DETEKT_PREFIX, source)
-                    return null
-                }
-                return super.createRuleKey(source.substring(DETEKT_PREFIX.length))
+                val preliminaryRuleKey =
+                    if (source.startsWith(DETEKT_PREFIX)) {
+                        source.substring(DETEKT_PREFIX.length)
+                    } else {
+                        LOG.debug("Unexpected rule key without '{}' suffix: '{}'", DETEKT_PREFIX, source)
+                        return null
+                    }
+
+                val ruleKey =
+                    if (DetektRulesDefinition.RULE_LOADER.ruleKeys().contains(preliminaryRuleKey)) preliminaryRuleKey
+                    else ExternalReporting.FALLBACK_RULE_KEY
+
+                return super.createRuleKey(ruleKey)
             }
         }
     }

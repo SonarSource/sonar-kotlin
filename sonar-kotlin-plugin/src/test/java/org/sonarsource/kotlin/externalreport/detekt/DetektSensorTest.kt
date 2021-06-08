@@ -31,6 +31,7 @@ import org.sonar.api.rules.RuleType
 import org.sonar.api.utils.log.LoggerLevel
 import org.sonar.api.utils.log.ThreadLocalLogTester
 import org.sonarsource.kotlin.externalreport.ExternalReportTestUtils
+import org.sonarsource.kotlin.externalreport.ExternalReporting
 import java.nio.file.Paths
 
 @EnableRuleMigrationSupport
@@ -63,7 +64,7 @@ internal class DetektSensorTest {
     @Test
     fun issues_with_sonarqube() {
         val externalIssues = executeSensorImporting("detekt-checkstyle.xml")
-        assertThat(externalIssues).hasSize(3)
+        assertThat(externalIssues).hasSize(4)
 
         val first = externalIssues[0]
         assertThat(first.primaryLocation().inputComponent().key()).isEqualTo("detekt-project:main.kt")
@@ -91,6 +92,14 @@ internal class DetektSensorTest {
         assertThat(third.primaryLocation().message())
             .isEqualTo("A class should always override hashCode when overriding equals and the other way around.")
         assertThat(third.primaryLocation().textRange()!!.start().line()).isEqualTo(3)
+
+        val fourth = externalIssues[3]
+        assertThat(fourth.primaryLocation().inputComponent().key()).isEqualTo("detekt-project:A.kt")
+        assertThat(fourth.ruleKey().rule()).isEqualTo(ExternalReporting.FALLBACK_RULE_KEY)
+        assertThat(fourth.type()).isEqualTo(RuleType.CODE_SMELL)
+        assertThat(fourth.severity()).isEqualTo(Severity.MAJOR)
+        assertThat(fourth.primaryLocation().message()).isEqualTo("Custom rule")
+        assertThat(fourth.primaryLocation().textRange()!!.start().line()).isEqualTo(3)
 
         assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty()
     }
@@ -127,7 +136,7 @@ internal class DetektSensorTest {
         val detektSensor = DetektSensor { e: String -> analysisWarnings.add(e) }
         detektSensor.execute(context)
         val externalIssues = context.allExternalIssues()
-        assertThat(externalIssues).hasSize(3)
+        assertThat(externalIssues).hasSize(4)
         assertThat(logTester.logs(LoggerLevel.INFO))
             .hasSize(1)
             .allMatch { info: String -> info.startsWith("Importing") && info.endsWith("detekt-checkstyle.xml") }
@@ -169,7 +178,7 @@ internal class DetektSensorTest {
         assertThat(externalIssues).hasSize(1)
         val first = externalIssues[0]
         assertThat(first.primaryLocation().inputComponent().key()).isEqualTo("detekt-project:main.kt")
-        assertThat(first.ruleKey().rule()).isEqualTo("UnknownRuleKey")
+        assertThat(first.ruleKey().rule()).isEqualTo(ExternalReporting.FALLBACK_RULE_KEY)
         assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(first.severity()).isEqualTo(Severity.MAJOR)
         assertThat(first.primaryLocation().message()).isEqualTo("Error at file level with an unknown rule key.")

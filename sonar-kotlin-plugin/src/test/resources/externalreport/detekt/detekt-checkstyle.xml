@@ -6,5 +6,6 @@
 </file>
 <file name="A.kt">
 	<error line="3" column="1" severity="error" message="A class should always override hashCode when overriding equals and the other way around." source="detekt.EqualsWithHashCodeExist" />
+	<error line="3" column="2" severity="error" message="Custom rule" source="detekt.Unknown-Or-Custom-Rule" />
 </file>
 </checkstyle>

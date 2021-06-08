@@ -22,14 +22,17 @@ package org.sonarsource.kotlin.externalreport.detekt
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonarsource.analyzer.commons.ExternalRuleLoader
 import org.sonarsource.kotlin.plugin.KotlinPlugin
+import java.nio.file.Path
 
 class DetektRulesDefinition : RulesDefinition {
 
     companion object {
+        const val RULES_FILE = "org/sonar/l10n/kotlin/rules/detekt/rules.json"
+
         val RULE_LOADER = ExternalRuleLoader(
             DetektSensor.LINTER_KEY,
             DetektSensor.LINTER_NAME,
-            "org/sonar/l10n/kotlin/rules/detekt/rules.json",
+            RULES_FILE,
             KotlinPlugin.KOTLIN_LANGUAGE_KEY)
     }
 
