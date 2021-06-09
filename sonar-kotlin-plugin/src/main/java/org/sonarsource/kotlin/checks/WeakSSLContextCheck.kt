@@ -145,7 +145,4 @@ class WeakSSLContextCheck : AbstractCheck() {
         }
         else -> null
     }
-
-    private fun KtStringTemplateExpression.asConstant() = entries.joinToString { it.text }
-
 }

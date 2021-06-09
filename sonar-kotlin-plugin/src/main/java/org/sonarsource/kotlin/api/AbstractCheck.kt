@@ -45,6 +45,7 @@ import org.sonarsource.kotlin.converter.KotlinTextRanges
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.slang.checks.api.SecondaryLocation
 import java.util.BitSet
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.sonarsource.slang.api.TextRange as SonarTextRange
 
 
@@ -159,4 +160,6 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
 
     internal fun KotlinFileContext.textRange(element: PsiElement) =
         KotlinTextRanges.textRange(ktFile.viewProvider.document!!, element)
+
+    fun KtStringTemplateExpression.asConstant() = entries.joinToString { it.text }
 }
