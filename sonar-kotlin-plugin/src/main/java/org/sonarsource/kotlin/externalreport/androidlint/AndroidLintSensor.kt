@@ -24,6 +24,7 @@ import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.config.Configuration
 import org.sonar.api.notifications.AnalysisWarnings
 import org.sonar.api.utils.log.Loggers
+import org.sonarsource.kotlin.externalreport.ExternalReporting
 import org.sonarsource.kotlin.plugin.KotlinPlugin
 import org.sonarsource.slang.plugin.AbstractPropertyHandlerSensor
 import java.io.File
@@ -82,12 +83,17 @@ private fun saveIssue(context: SensorContext, id: String, file: String, line: St
         LOG.warn("No input file found for {}. No android lint issues will be imported on this file.", file)
         return
     }
-    val newExternalIssue = context.newExternalIssue()
     val externalRuleLoader = RULE_LOADER
+
+    val ruleKey =
+        if (externalRuleLoader.ruleKeys().contains(id)) id
+        else ExternalReporting.FALLBACK_RULE_KEY
+
+    val newExternalIssue = context.newExternalIssue()
     newExternalIssue
-        .type(externalRuleLoader.ruleType(id))
-        .severity(externalRuleLoader.ruleSeverity(id))
-        .remediationEffortMinutes(externalRuleLoader.ruleConstantDebtMinutes(id))
+        .type(externalRuleLoader.ruleType(ruleKey))
+        .severity(externalRuleLoader.ruleSeverity(ruleKey))
+        .remediationEffortMinutes(externalRuleLoader.ruleConstantDebtMinutes(ruleKey))
     val primaryLocation = newExternalIssue.newLocation()
         .message(message)
         .on(inputFile)
@@ -97,6 +103,6 @@ private fun saveIssue(context: SensorContext, id: String, file: String, line: St
     newExternalIssue
         .at(primaryLocation)
         .engineId(AndroidLintSensor.LINTER_KEY)
-        .ruleId(id)
+        .ruleId(ruleKey)
         .save()
 }

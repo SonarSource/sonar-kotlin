@@ -20,17 +20,18 @@
 package org.sonarsource.kotlin.externalreport.androidlint
 
 import com.google.gson.GsonBuilder
+import org.apache.commons.text.StringEscapeUtils
+import org.sonarsource.kotlin.externalreport.ExternalReporting
+import org.sonarsource.kotlin.externalreport.ExternalRule
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import org.apache.commons.text.StringEscapeUtils
-import org.sonarsource.kotlin.externalreport.ExternalRule
 
-internal val RULES_FILE = Paths.get("sonar-kotlin-plugin", "src", "main", "resources",
-    "org", "sonar", "l10n", "android", "rules", "androidlint", "rules.json")
-private val ANDROID_LINT_HELP = Paths.get( "utils-kotlin", "src", "main", "resources", "android-lint-help.txt")
+internal val DEFAULT_RULES_FILE = Path.of("sonar-kotlin-plugin", "src", "main", "resources")
+    .resolve(Path.of(RULES_FILE))
+private val ANDROID_LINT_HELP = Path.of("utils-kotlin", "src", "main", "resources", "android-lint-help.txt")
 
 private val NON_SPACES = Regex("\\S+")
 private val WORDS = Regex("\\w+")
@@ -41,7 +42,7 @@ private val WORDS = Regex("\\w+")
 fun main(vararg args: String?) {
     val rulesFile =
         if (args.isNotEmpty() && !args[0].isNullOrBlank()) Path.of(args[0])
-        else RULES_FILE
+        else DEFAULT_RULES_FILE
 
     val androidLintHelpPath =
         if (args.size > 1 && !args[1].isNullOrBlank()) Path.of(args[1])
@@ -89,8 +90,20 @@ private object AndroidLintDefinitionGenerator {
             externalRule = help.read()
         }
         externalRules.sortBy { it.key }
+
+        val fallbackRule = ExternalRule(
+            key = ExternalReporting.FALLBACK_RULE_KEY,
+            name = "Android Lint Rule",
+            description = "This reporting may be triggered by a custom Android Lint rule or by a default Android Lint rule that has " +
+                "not yet been added to the Sonar Kotlin plugin.",
+            url = null,
+            tags = setOf("android"),
+            type = "CODE_SMELL",
+            constantDebtMinutes = 0,
+        )
+
         val gson = GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create()
-        return gson.toJson(externalRules)
+        return gson.toJson(externalRules + fallbackRule)
     }
 }
 

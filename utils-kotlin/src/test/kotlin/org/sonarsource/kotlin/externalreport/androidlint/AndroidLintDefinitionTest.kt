@@ -10,7 +10,7 @@ import kotlin.io.path.readText
 class AndroidLintDefinitionTest {
     @Test
     fun `ensure that the script generates the same result as the current mapping`() {
-        val expected = Path.of("..").resolve(RULES_FILE).readText()
+        val expected = Path.of("..").resolve(DEFAULT_RULES_FILE).readText()
         val androidLintHelperPath = "src/main/resources/android-lint-help.txt"
 
         val actual = getActual(androidLintHelperPath) { main(*it) }

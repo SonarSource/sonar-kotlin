@@ -4414,5 +4414,15 @@
     "type": "BUG",
     "severity": "MAJOR",
     "constantDebtMinutes": 5
+  },
+  {
+    "key": "external.catchall",
+    "name": "Android Lint Rule",
+    "description": "This reporting may be triggered by a custom Android Lint rule or by a default Android Lint rule that has not yet been added to the Sonar Kotlin plugin.",
+    "tags": [
+      "android"
+    ],
+    "type": "CODE_SMELL",
+    "constantDebtMinutes": 0
   }
 ]

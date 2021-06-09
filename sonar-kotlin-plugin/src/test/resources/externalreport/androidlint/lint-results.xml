@@ -47,4 +47,8 @@ ere you deliberately want to stick with an older version. However, you may simpl
                 column="5"/>
     </issue>
 
+    <issue id="Unknown-Or-Custom-Rule" message="foo">
+        <location file="B.kt" line="1" column="2"/>
+    </issue>
+
 </issues>

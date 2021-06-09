@@ -22,8 +22,10 @@ package org.sonarsource.kotlin.externalreport.androidlint
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonarsource.analyzer.commons.ExternalRuleLoader
 import org.sonarsource.kotlin.plugin.KotlinPlugin
+import java.nio.file.Path
 
-private const val RULES_JSON = "org/sonar/l10n/android/rules/androidlint/rules.json"
+const val RULES_FILE = "org/sonar/l10n/android/rules/androidlint/rules.json"
+
 /**
  * Android lint scopes could be: ".xml", ".java", ".kt", ".kts", ".properties", ".gradle", "proguard.cfg", "proguard-project.txt", ".png", ".class"
  * ( https://android.googlesource.com/platform/tools/base/+/studio-master-dev/lint/libs/lint-api/src/main/java/com/android/tools/lint/detector/api/Scope.kt )
@@ -35,7 +37,7 @@ private val TEXT_FILE_EXTENSIONS = listOf(".xml", ".java", ".kt", ".kts", ".prop
 val RULE_LOADER = ExternalRuleLoader(
     AndroidLintSensor.LINTER_KEY,
     AndroidLintSensor.LINTER_NAME,
-    RULES_JSON,
+    RULES_FILE,
     RULE_REPOSITORY_LANGUAGE,
 )
 
