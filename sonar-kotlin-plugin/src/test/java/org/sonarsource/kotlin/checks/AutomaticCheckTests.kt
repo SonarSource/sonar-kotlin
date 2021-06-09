@@ -45,6 +45,8 @@ class AutomaticCheckTests {
                             && it != TooManyCasesCheck::class.java
                             /** Tested in [TooManyParametersCheckTest] */
                             && it != TooManyParametersCheck::class.java
+                            /** Tested in [VariableAndParameterNameCheckTest] */
+                            && it != VariableAndParameterNameCheck::class.java
                     }
                     .map { check -> TestConfiguration(check) }
                 ).map { Arguments.of(it, it.testName) }

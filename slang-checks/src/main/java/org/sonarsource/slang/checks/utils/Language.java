@@ -41,7 +41,12 @@ public enum Language {
    */
   @Deprecated
   public static final String KOTLIN_FUNCTION_NAMING = "^[a-zA-Z][a-zA-Z0-9]*$";
+
   // Default regex + backticked identifier (used to escape kotlin keywords)
+  /**
+   * @deprecated scheduled for removal
+   */
+  @Deprecated
   public static final String KOTLIN_PARAMETERS_AND_VARIABLE_NAMING = "^`?[_a-z][a-zA-Z0-9]*`?$";
 
   public static final int GO_NESTED_STATEMENT_MAX_DEPTH = 4;

@@ -59,6 +59,7 @@ import org.sonarsource.kotlin.checks.TooManyParametersCheck
 import org.sonarsource.kotlin.checks.UnusedFunctionParameterCheck
 import org.sonarsource.kotlin.checks.UnusedLocalVariableCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck
+import org.sonarsource.kotlin.checks.VariableAndParameterNameCheck
 import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
 import org.sonarsource.kotlin.checks.WeakSSLContextCheck
 import org.sonarsource.kotlin.checks.WrongAssignmentOperatorCheck
@@ -106,6 +107,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.TooManyParametersCheck::class.java,
             org.sonarsource.slang.checks.UnusedFunctionParameterCheck::class.java,
             org.sonarsource.slang.checks.UnusedLocalVariableCheck::class.java,
+            org.sonarsource.slang.checks.VariableAndParameterNameCheck::class.java,
             org.sonarsource.slang.checks.WrongAssignmentOperatorCheck::class.java,
         )
 
@@ -153,6 +155,7 @@ object KotlinCheckList {
         TooManyParametersCheck::class.java,
         UnusedFunctionParameterCheck::class.java,
         UnusedLocalVariableCheck::class.java,
+        VariableAndParameterNameCheck::class.java,
         WeakSSLContextCheck::class.java,
         WrongAssignmentOperatorCheck::class.java,
         VerifiedServerHostnamesCheck::class.java,
