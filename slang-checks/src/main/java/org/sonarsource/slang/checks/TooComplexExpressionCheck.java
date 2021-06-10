@@ -67,7 +67,9 @@ public class TooComplexExpressionCheck implements SlangCheck {
       Tree parentExpression = iterator.next();
       if (parentExpression instanceof BinaryExpressionTree) {
         return false;
-      } else if (!(parentExpression instanceof UnaryExpressionTree) || !(parentExpression instanceof ParenthesizedExpressionTree)) {
+      } else if (!(parentExpression instanceof UnaryExpressionTree)
+        // TODO(Godin): seems that instead of logical-or should be logical-and
+        || !(parentExpression instanceof ParenthesizedExpressionTree)) {
         return true;
       }
     }
