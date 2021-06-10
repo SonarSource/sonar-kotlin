@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtVisitor
@@ -45,7 +46,6 @@ import org.sonarsource.kotlin.converter.KotlinTextRanges
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.slang.checks.api.SecondaryLocation
 import java.util.BitSet
-import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.sonarsource.slang.api.TextRange as SonarTextRange
 
 
