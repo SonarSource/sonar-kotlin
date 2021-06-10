@@ -31,6 +31,7 @@ import org.sonarsource.kotlin.checks.CollapsibleIfStatementsCheck
 import org.sonarsource.kotlin.checks.DataHashingCheck
 import org.sonarsource.kotlin.checks.DuplicateBranchCheck
 import org.sonarsource.kotlin.checks.DuplicatedFunctionImplementationCheck
+import org.sonarsource.kotlin.checks.ElseIfWithoutElseCheck
 import org.sonarsource.kotlin.checks.EmptyBlockCheck
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
 import org.sonarsource.kotlin.checks.EmptyFunctionCheck
@@ -85,6 +86,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.CollapsibleIfStatementsCheck::class.java,
             org.sonarsource.slang.checks.DuplicateBranchCheck::class.java,
             org.sonarsource.slang.checks.DuplicatedFunctionImplementationCheck::class.java,
+            org.sonarsource.slang.checks.ElseIfWithoutElseCheck::class.java,
             org.sonarsource.slang.checks.EmptyBlockCheck::class.java,
             org.sonarsource.slang.checks.EmptyCommentCheck::class.java,
             org.sonarsource.slang.checks.EmptyFunctionCheck::class.java,
@@ -128,6 +130,7 @@ object KotlinCheckList {
         DataHashingCheck::class.java,
         DuplicateBranchCheck::class.java,
         DuplicatedFunctionImplementationCheck::class.java,
+        ElseIfWithoutElseCheck::class.java,
         EmptyBlockCheck::class.java,
         EmptyCommentCheck::class.java,
         EmptyFunctionCheck::class.java,
