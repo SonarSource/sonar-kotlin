@@ -17,19 +17,23 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.plugin
+package org.sonarsource.kotlin.checks
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.plugin.KotlinCheckList.legacyChecks
+import org.sonarsource.kotlin.verifier.KotlinVerifier
 
-internal class KotlinCheckListTest {
+class UnusedPrivateMethodCheckTest {
+    @Test
+    fun slang() {
+        KotlinVerifier.verify(
+            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/UnusedPrivateMethodCheckSample.kt",
+            org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck())
+    }
 
     @Test
-    fun kotlin_excluded_not_present() {
-        val checks = legacyChecks()
-        for (excluded in KotlinCheckList.SLANG_EXCLUDED_CHECKS) {
-            assertThat(checks).doesNotContain(excluded)
-        }
+    fun test() {
+        KotlinVerifier(UnusedPrivateMethodCheck()) {
+            fileName = "UnusedPrivateMethodCheckSample.kt"
+        }.verify()
     }
 }

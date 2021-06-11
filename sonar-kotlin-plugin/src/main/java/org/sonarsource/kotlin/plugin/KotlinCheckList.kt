@@ -62,7 +62,7 @@ import org.sonarsource.kotlin.checks.TooManyLinesOfCodeFileCheck
 import org.sonarsource.kotlin.checks.TooManyParametersCheck
 import org.sonarsource.kotlin.checks.UnusedFunctionParameterCheck
 import org.sonarsource.kotlin.checks.UnusedLocalVariableCheck
-import org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck
+import org.sonarsource.kotlin.checks.UnusedPrivateMethodCheck
 import org.sonarsource.kotlin.checks.VariableAndParameterNameCheck
 import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
 import org.sonarsource.kotlin.checks.WeakSSLContextCheck
@@ -70,7 +70,6 @@ import org.sonarsource.kotlin.checks.WrongAssignmentOperatorCheck
 import org.sonarsource.slang.checks.CheckList
 import org.sonarsource.slang.checks.MatchWithoutElseCheck
 import org.sonarsource.slang.checks.OctalValuesCheck
-import org.sonarsource.slang.checks.UnusedPrivateMethodCheck
 
 object KotlinCheckList {
     val SLANG_EXCLUDED_CHECKS =
@@ -78,7 +77,6 @@ object KotlinCheckList {
             // FP rate too high for now in Kotlin on 'when' statements due to enum/sealed class that have all branches covered
             MatchWithoutElseCheck::class.java,  // Rule does not apply here as octal values do not exist in Kotlin
             OctalValuesCheck::class.java,  // Language specific implementation is provided.
-            UnusedPrivateMethodCheck::class.java,
 
             org.sonarsource.slang.checks.AllBranchesIdenticalCheck::class.java,
             org.sonarsource.slang.checks.BadClassNameCheck::class.java,
@@ -115,13 +113,10 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.TooManyParametersCheck::class.java,
             org.sonarsource.slang.checks.UnusedFunctionParameterCheck::class.java,
             org.sonarsource.slang.checks.UnusedLocalVariableCheck::class.java,
+            org.sonarsource.slang.checks.UnusedPrivateMethodCheck::class.java,
             org.sonarsource.slang.checks.VariableAndParameterNameCheck::class.java,
             org.sonarsource.slang.checks.WrongAssignmentOperatorCheck::class.java,
         )
-
-    val SLANG_CHECKS = listOf(
-        UnusedPrivateMethodKotlinCheck::class.java,
-    )
 
     private val KOTLIN_CHECKS = listOf(
         AllBranchesIdenticalCheck::class.java,
@@ -167,6 +162,7 @@ object KotlinCheckList {
         TooManyParametersCheck::class.java,
         UnusedFunctionParameterCheck::class.java,
         UnusedLocalVariableCheck::class.java,
+        UnusedPrivateMethodCheck::class.java,
         VariableAndParameterNameCheck::class.java,
         WeakSSLContextCheck::class.java,
         WrongAssignmentOperatorCheck::class.java,
@@ -174,7 +170,7 @@ object KotlinCheckList {
     )
 
     @Deprecated("Use Kotlin-native checks instead")
-    fun legacyChecks() = CheckList.excludeChecks(SLANG_EXCLUDED_CHECKS) + SLANG_CHECKS
+    fun legacyChecks() = CheckList.excludeChecks(SLANG_EXCLUDED_CHECKS)
 
     fun checks() = KOTLIN_CHECKS
 }

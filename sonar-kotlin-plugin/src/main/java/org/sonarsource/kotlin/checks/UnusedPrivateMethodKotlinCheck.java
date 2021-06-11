@@ -29,6 +29,10 @@ import org.sonarsource.slang.api.IdentifierTree;
 import org.sonarsource.slang.checks.UnusedPrivateMethodCheck;
 import org.sonarsource.slang.impl.NativeTreeImpl;
 
+/**
+ * @deprecated replaced by {@link org.sonarsource.kotlin.checks.UnusedPrivateMethodCheck}
+ */
+@Deprecated
 @Rule(key = "S1144")
 public class UnusedPrivateMethodKotlinCheck extends UnusedPrivateMethodCheck {
 
