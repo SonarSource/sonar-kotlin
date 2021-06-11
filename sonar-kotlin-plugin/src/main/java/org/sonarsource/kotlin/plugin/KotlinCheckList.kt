@@ -42,6 +42,7 @@ import org.sonarsource.kotlin.checks.HardcodedCredentialsCheck
 import org.sonarsource.kotlin.checks.HardcodedIpCheck
 import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
+import org.sonarsource.kotlin.checks.IfConditionalAlwaysTrueOrFalseCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
 import org.sonarsource.kotlin.checks.NestedMatchCheck
 import org.sonarsource.kotlin.checks.OneStatementPerLineCheck
@@ -98,6 +99,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.HardcodedIpCheck::class.java,
             org.sonarsource.slang.checks.IdenticalBinaryOperandCheck::class.java,
             org.sonarsource.slang.checks.IdenticalConditionsCheck::class.java,
+            org.sonarsource.slang.checks.IfConditionalAlwaysTrueOrFalseCheck::class.java,
             org.sonarsource.slang.checks.MatchCaseTooBigCheck::class.java,
             org.sonarsource.slang.checks.NestedMatchCheck::class.java,
             org.sonarsource.slang.checks.OneStatementPerLineCheck::class.java,
@@ -145,6 +147,7 @@ object KotlinCheckList {
         HardcodedIpCheck::class.java,
         IdenticalBinaryOperandCheck::class.java,
         IdenticalConditionsCheck::class.java,
+        IfConditionalAlwaysTrueOrFalseCheck::class.java,
         MatchCaseTooBigCheck::class.java,
         NestedMatchCheck::class.java,
         OneStatementPerLineCheck::class.java,
