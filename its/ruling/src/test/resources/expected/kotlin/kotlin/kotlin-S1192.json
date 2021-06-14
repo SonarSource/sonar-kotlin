@@ -77,6 +77,12 @@
 'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/expressions/impl/IrBlockImpl.kt':[
 56,
 ],
+'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/expressions/impl/IrCallImpl.kt':[
+64,
+],
+'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/expressions/impl/IrPrimitiveCall.kt':[
+120,
+],
 'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/util/DumpIrTree.kt':[
 89,
 ],
@@ -150,6 +156,10 @@
 132,
 133,
 134,
+],
+'kotlin-kotlin-project:sources/kotlin/kotlin/core/builtins/native/kotlin/Primitives.kt':[
+122,
+122,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/core/builtins/src/kotlin/Progressions.kt':[
 23,
@@ -545,6 +555,10 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/annotations.kt':[
 15,
+],
+'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/js.math.kt':[
+32,
+38,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/io/files/Utils.kt':[
 186,

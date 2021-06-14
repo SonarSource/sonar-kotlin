@@ -133,6 +133,9 @@
 'kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/AuthDBTests.kt':[
 147,
 ],
+'kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/CertificateRevocationListNodeTests.kt':[
+381,
+],
 'kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/ProtonWrapperTests.kt':[
 366,
 ],
@@ -236,6 +239,9 @@
 ],
 'kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/CorDappSerializerTests.kt':[
 77,
+],
+'kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/ErrorMessagesTests.kt':[
+22,
 ],
 'kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/OverridePKSerializerTest.kt':[
 29,

@@ -86,6 +86,9 @@
 225,
 325,
 ],
+'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/psi/RsLiteralOffsetsTest.kt':[
+56,
+],
 'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsStdlibResolveTest.kt':[
 387,
 ],

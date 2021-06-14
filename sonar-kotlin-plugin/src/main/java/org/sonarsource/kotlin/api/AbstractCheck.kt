@@ -119,6 +119,9 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
     private fun ClassDescriptor.superClassAsList(): List<ClassDescriptor> =
         getSuperClassNotAny()?.let { listOf(it) } ?: emptyList()
 
+    internal fun KotlinFileContext.textRange(element: PsiElement) =
+        KotlinTextRanges.textRange(ktFile.viewProvider.document!!, element)
+
     internal fun KtExpression.skipParentheses(): KtExpression {
         var expr = this
         while (expr is KtParenthesizedExpression) {
@@ -158,8 +161,8 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
         return lines.cardinality()
     }
 
-    internal fun KotlinFileContext.textRange(element: PsiElement) =
-        KotlinTextRanges.textRange(ktFile.viewProvider.document!!, element)
-
     fun KtStringTemplateExpression.asConstant() = entries.joinToString { it.text }
+
+    internal fun KtStringTemplateExpression.asText() = entries.joinToString("") { it.text }
+
 }

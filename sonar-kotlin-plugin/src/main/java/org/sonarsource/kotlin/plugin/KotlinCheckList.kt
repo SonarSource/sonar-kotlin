@@ -51,6 +51,7 @@ import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RobustCryptographicKeysCheck
 import org.sonarsource.kotlin.checks.SelfAssignmentCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
+import org.sonarsource.kotlin.checks.StringLiteralDuplicatedCheck
 import org.sonarsource.kotlin.checks.StrongCipherAlgorithmCheck
 import org.sonarsource.kotlin.checks.TabsCheck
 import org.sonarsource.kotlin.checks.TodoCommentCheck
@@ -103,6 +104,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.OneStatementPerLineCheck::class.java,
             org.sonarsource.slang.checks.RedundantParenthesesCheck::class.java,
             org.sonarsource.slang.checks.SelfAssignmentCheck::class.java,
+            org.sonarsource.slang.checks.StringLiteralDuplicatedCheck::class.java,
             org.sonarsource.slang.checks.TabsCheck::class.java,
             org.sonarsource.slang.checks.TodoCommentCheck::class.java,
             org.sonarsource.slang.checks.TooComplexExpressionCheck::class.java,
@@ -151,6 +153,7 @@ object KotlinCheckList {
         RobustCryptographicKeysCheck::class.java,
         SelfAssignmentCheck::class.java,
         ServerCertificateCheck::class.java,
+        StringLiteralDuplicatedCheck::class.java,
         StrongCipherAlgorithmCheck::class.java,
         TabsCheck::class.java,
         TodoCommentCheck::class.java,
