@@ -41,9 +41,6 @@
 227,
 256,
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-network/src/io/ktor/network/selector/ActorSelectorManager.kt':[
-62,
-],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-network/src/io/ktor/network/sockets/CIOReader.kt':[
 65,
 ],

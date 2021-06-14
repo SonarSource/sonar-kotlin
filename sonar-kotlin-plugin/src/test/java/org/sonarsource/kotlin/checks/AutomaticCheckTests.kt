@@ -47,6 +47,8 @@ class AutomaticCheckTests {
                             && it != TooManyParametersCheck::class.java
                             /** Tested in [VariableAndParameterNameCheckTest] */
                             && it != VariableAndParameterNameCheck::class.java
+                            /** Tested in [TooDeeplyNestedStatementsCheckTest] */
+                            && it != TooDeeplyNestedStatementsCheck::class.java
                     }
                     .map { check -> TestConfiguration(check) }
                 ).map { Arguments.of(it, it.testName) }

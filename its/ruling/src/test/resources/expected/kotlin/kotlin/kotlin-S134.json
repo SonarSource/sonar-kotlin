@@ -302,9 +302,6 @@
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/highlighter/KotlinPsiChecker.kt':[
 298,
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/references/referenceUtil.kt':[
-120,
-],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/search/KotlinIndexers.kt':[
 95,
 ],
@@ -382,7 +379,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/handlers/KotlinClassifierInsertHandler.kt':[
 66,
-73,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/handlers/KotlinFunctionInsertHandler.kt':[
 109,
@@ -403,7 +399,6 @@
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/ExpectedInfos.kt':[
 424,
 429,
-484,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/KotlinIndicesHelper.kt':[
 123,
@@ -454,7 +449,6 @@
 113,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/DebuggerClassNameProvider.kt':[
-140,
 167,
 285,
 ],
@@ -565,10 +559,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/inspections/UnusedSymbolInspection.kt':[
 251,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/AddAnnotationUseSiteTargetIntention.kt':[
-102,
-107,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertFunctionToPropertyIntention.kt':[
 123,
@@ -681,7 +671,6 @@
 183,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/introduce/extractionEngine/inferParameterInfo.kt':[
-224,
 240,
 261,
 276,
@@ -754,7 +743,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ConstructorConverter.kt':[
 57,
-138,
 269,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/Converter.kt':[
@@ -784,7 +772,6 @@
 351,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/importConversion.kt':[
-104,
 136,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/propertyDetection.kt':[
@@ -831,18 +818,12 @@
 98,
 113,
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/scripting/common/src/kotlin/script/experimental/host/scriptHostUtil.kt':[
-39,
-],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/scripting/jvm/src/kotlin/script/experimental/jvm/runners/BasicJvmScriptEvaluator.kt':[
 29,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/common/src/generated/_Collections.kt':[
 562,
 565,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/coroutines/src/kotlin/coroutines/CoroutineContext.kt':[
-41,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/collections/InternalHashCodeMap.kt':[
 82,
@@ -853,9 +834,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/runtime/kotlin/jvm/internal/CollectionToArray.kt':[
 73,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/io/files/FilePathComponents.kt':[
-38,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/io/files/Utils.kt':[
 273,
@@ -868,12 +846,6 @@
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/io/Files.kt':[
 472,
 539,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/SlidingWindow.kt':[
-37,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/coroutines/experimental/CoroutineContext.kt':[
-41,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/ranges/ProgressionLastElementTest.kt':[
 72,
@@ -897,9 +869,6 @@
 63,
 91,
 165,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/src/org/jetbrains/uast/kotlin/KotlinUastLanguagePlugin.kt':[
-361,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/src/org/jetbrains/uast/kotlin/expressions/KotlinUSimpleReferenceExpression.kt':[
 84,

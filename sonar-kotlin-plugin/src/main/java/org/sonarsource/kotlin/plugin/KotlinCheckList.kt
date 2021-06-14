@@ -56,6 +56,7 @@ import org.sonarsource.kotlin.checks.StrongCipherAlgorithmCheck
 import org.sonarsource.kotlin.checks.TabsCheck
 import org.sonarsource.kotlin.checks.TodoCommentCheck
 import org.sonarsource.kotlin.checks.TooComplexExpressionCheck
+import org.sonarsource.kotlin.checks.TooDeeplyNestedStatementsCheck
 import org.sonarsource.kotlin.checks.TooLongFunctionCheck
 import org.sonarsource.kotlin.checks.TooLongLineCheck
 import org.sonarsource.kotlin.checks.TooManyCasesCheck
@@ -108,6 +109,7 @@ object KotlinCheckList {
             org.sonarsource.slang.checks.TabsCheck::class.java,
             org.sonarsource.slang.checks.TodoCommentCheck::class.java,
             org.sonarsource.slang.checks.TooComplexExpressionCheck::class.java,
+            org.sonarsource.slang.checks.TooDeeplyNestedStatementsCheck::class.java,
             org.sonarsource.slang.checks.TooLongFunctionCheck::class.java,
             org.sonarsource.slang.checks.TooLongLineCheck::class.java,
             org.sonarsource.slang.checks.TooManyCasesCheck::class.java,
@@ -158,6 +160,7 @@ object KotlinCheckList {
         TabsCheck::class.java,
         TodoCommentCheck::class.java,
         TooComplexExpressionCheck::class.java,
+        TooDeeplyNestedStatementsCheck::class.java,
         TooLongFunctionCheck::class.java,
         TooLongLineCheck::class.java,
         TooManyCasesCheck::class.java,
