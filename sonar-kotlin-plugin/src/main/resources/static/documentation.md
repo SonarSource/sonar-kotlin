@@ -13,5 +13,5 @@ key: kotlin
 You can discover and update Kotlin-specific [properties](/analysis/analysis-parameters/) in:  <!-- sonarcloud -->Project <!-- /sonarcloud -->**[Administration > General Settings > Kotlin](/#sonarqube-admin#/admin/settings?category=kotlin)**.
 
 ## Related Pages
-* [Importing External Issues](/analysis/external-issues/) (AndroidLint and Detekt)
+* [Importing External Issues](/analysis/external-issues/) (AndroidLint, Detekt and ktlint)
 * [Test Coverage & Execution](/analysis/coverage/) (JaCoCo)

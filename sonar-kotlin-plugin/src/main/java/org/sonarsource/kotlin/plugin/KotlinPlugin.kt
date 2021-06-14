@@ -99,6 +99,14 @@ class KotlinPlugin : Plugin {
                     .onQualifiers(Qualifiers.PROJECT)
                     .multiValues(true)
                     .build(),
+                PropertyDefinition.builder(KtlintSensor.REPORT_PROPERTY_KEY)
+                    .name("ktlint Report Files")
+                    .description("Paths (absolute or relative) to checkstyle xml or json files with ktlint issues.")
+                    .category(EXTERNAL_ANALYZERS_CATEGORY)
+                    .subCategory(KOTLIN_SUBCATEGORY)
+                    .onQualifiers(Qualifiers.PROJECT)
+                    .multiValues(true)
+                    .build()
             )
         }
     }
