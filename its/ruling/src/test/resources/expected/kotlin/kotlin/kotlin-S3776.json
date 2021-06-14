@@ -96,9 +96,6 @@
 'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/optimization/nullCheck/RedundantNullCheckMethodTransformer.kt':[
 155,
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/range/PrimitiveNumberRangeIntrinsicRangeValue.kt':[
-74,
-],
 'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/range/forLoop/ForInDefinitelySafeSimpleProgressionLoopGenerator.kt':[
 84,
 ],
@@ -154,7 +151,6 @@
 78,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-client/src/org/jetbrains/kotlin/daemon/client/KotlinCompilerClient.kt':[
-234,
 312,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/RemoteCompilationCanceledStatusClient.kt':[
@@ -328,7 +324,6 @@
 259,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/types/expressions/PatternMatchingTypingVisitor.kt':[
-202,
 328,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/src/org/jetbrains/kotlin/incremental/IncrementalCompilerRunner.kt':[
@@ -416,7 +411,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/types/TypeApproximator.kt':[
 122,
-176,
 341,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/serialization/src/org/jetbrains/kotlin/serialization/DescriptorSerializer.kt':[
@@ -514,7 +508,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/ide-common/src/org/jetbrains/kotlin/idea/util/psi/patternMatching/KotlinPsiUnifier.kt':[
 172,
-297,
 330,
 510,
 587,
@@ -728,9 +721,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/overrideImplement/OverrideMembersHandler.kt':[
 27,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/j2k/IdeaDocCommentConverter.kt':[
-224,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/src/org/jetbrains/kotlin/idea/configuration/GroovyBuildScriptManipulator.kt':[
 57,
@@ -1118,9 +1108,6 @@
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/quickfix/QuickFixFactoryForTypeMismatchError.kt':[
 58,
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/quickfix/SpecifyOverrideExplicitlyFix.kt':[
-45,
-],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/quickfix/SuperClassNotInitialized.kt':[
 52,
 ],
@@ -1220,6 +1207,7 @@
 468,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/kotlinRefactoringUtil.kt':[
+361,
 572,
 734,
 ],
@@ -1477,9 +1465,6 @@
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/scripting/jvm/src/kotlin/script/experimental/jvm/jvmScriptEnvironment.kt':[
 20,
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/coroutines/src/kotlin/coroutines/CoroutineContext.kt':[
-32,
-],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/collections/InternalHashCodeMap.kt':[
 126,
 ],
@@ -1492,15 +1477,8 @@
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/SlidingWindow.kt':[
 25,
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/coroutines/experimental/CoroutineContext.kt':[
-32,
-],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/text/Strings.kt':[
 1045,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/collections/ArraysTest.kt':[
-742,
-758,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/ranges/ProgressionLastElementTest.kt':[
 66,

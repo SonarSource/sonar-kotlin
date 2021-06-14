@@ -49,6 +49,8 @@ class AutomaticCheckTests {
                             && it != VariableAndParameterNameCheck::class.java
                             /** Tested in [TooDeeplyNestedStatementsCheckTest] */
                             && it != TooDeeplyNestedStatementsCheck::class.java
+                            /** Tested in [FunctionCognitiveComplexityCheckTest] */
+                            && it != FunctionCognitiveComplexityCheck::class.java
                     }
                     .map { check -> TestConfiguration(check) }
                 ).map { Arguments.of(it, it.testName) }
