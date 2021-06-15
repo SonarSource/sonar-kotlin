@@ -28,6 +28,7 @@ import org.sonarsource.kotlin.checks.CipherBlockChainingCheck
 import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.CodeAfterJumpCheck
 import org.sonarsource.kotlin.checks.CollapsibleIfStatementsCheck
+import org.sonarsource.kotlin.checks.CommentedCodeCheck
 import org.sonarsource.kotlin.checks.DataHashingCheck
 import org.sonarsource.kotlin.checks.DuplicateBranchCheck
 import org.sonarsource.kotlin.checks.DuplicatedFunctionImplementationCheck
@@ -135,6 +136,7 @@ object KotlinCheckList {
         ClearTextProtocolCheck::class.java,
         CodeAfterJumpCheck::class.java,
         CollapsibleIfStatementsCheck::class.java,
+        CommentedCodeCheck::class.java,
         DataHashingCheck::class.java,
         DuplicateBranchCheck::class.java,
         DuplicatedFunctionImplementationCheck::class.java,

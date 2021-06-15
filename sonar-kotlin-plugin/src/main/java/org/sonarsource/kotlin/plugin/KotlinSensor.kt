@@ -45,7 +45,6 @@ class KotlinSensor(
     @Deprecated("Use Kotlin-native checks instead", replaceWith = ReplaceWith("checks"))
     val legacyChecks: Checks<SlangCheck> = checkFactory.create<SlangCheck>(KotlinPlugin.KOTLIN_REPOSITORY_KEY).apply {
         addAnnotatedChecks(KotlinCheckList.legacyChecks() as Iterable<*>)
-        addAnnotatedChecks(CommentedCodeCheck(KotlinCodeVerifier()))
     }
 
     val checks: Checks<AbstractCheck> = checkFactory.create<AbstractCheck>(KotlinPlugin.KOTLIN_REPOSITORY_KEY).apply {

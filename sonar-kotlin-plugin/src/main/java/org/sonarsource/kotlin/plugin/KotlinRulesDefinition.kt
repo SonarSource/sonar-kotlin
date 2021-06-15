@@ -23,7 +23,6 @@ import org.sonar.api.server.rule.RulesDefinition
 import org.sonarsource.analyzer.commons.RuleMetadataLoader
 import org.sonarsource.kotlin.plugin.KotlinCheckList.checks
 import org.sonarsource.kotlin.plugin.KotlinCheckList.legacyChecks
-import org.sonarsource.slang.checks.CommentedCodeCheck
 import org.sonarsource.slang.checks.utils.Language
 import org.sonarsource.slang.plugin.RulesDefinitionUtils
 
@@ -37,7 +36,7 @@ class KotlinRulesDefinition : RulesDefinition {
         context
             .createRepository(KotlinPlugin.KOTLIN_REPOSITORY_KEY, KotlinPlugin.KOTLIN_LANGUAGE_KEY)
             .setName(KotlinPlugin.REPOSITORY_NAME).let { repository ->
-                val checks = legacyChecks() + CommentedCodeCheck::class.java + checks()
+                val checks = legacyChecks() + checks()
                 RuleMetadataLoader(RESOURCE_FOLDER, KotlinProfileDefinition.PATH_TO_JSON).addRulesByAnnotatedClass(repository, checks)
                 RulesDefinitionUtils.setDefaultValuesForParameters(repository, checks, Language.KOTLIN)
                 repository.done()
