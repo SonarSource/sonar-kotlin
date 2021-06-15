@@ -85,7 +85,7 @@ class KotlinPlugin : Plugin {
                     .build(),
                 PropertyDefinition.builder(DetektSensor.REPORT_PROPERTY_KEY)
                     .name("Detekt Report Files")
-                    .description("Paths (absolute or relative) to checkstyle xml files with detekt issues.")
+                    .description("Paths (absolute or relative) to checkstyle xml files with Detekt issues.")
                     .category(EXTERNAL_ANALYZERS_CATEGORY)
                     .subCategory(KOTLIN_SUBCATEGORY)
                     .onQualifiers(Qualifiers.PROJECT)
@@ -100,8 +100,8 @@ class KotlinPlugin : Plugin {
                     .multiValues(true)
                     .build(),
                 PropertyDefinition.builder(KtlintSensor.REPORT_PROPERTY_KEY)
-                    .name("ktlint Report Files")
-                    .description("Paths (absolute or relative) to checkstyle xml or json files with ktlint issues.")
+                    .name("Ktlint Report Files")
+                    .description("Paths (absolute or relative) to checkstyle xml or json files with Ktlint issues.")
                     .category(EXTERNAL_ANALYZERS_CATEGORY)
                     .subCategory(KOTLIN_SUBCATEGORY)
                     .onQualifiers(Qualifiers.PROJECT)
