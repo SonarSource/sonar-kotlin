@@ -78,8 +78,9 @@ object KotlinCheckList {
     val SLANG_EXCLUDED_CHECKS =
         arrayOf<Class<*>>(
             // FP rate too high for now in Kotlin on 'when' statements due to enum/sealed class that have all branches covered
-            MatchWithoutElseCheck::class.java,  // Rule does not apply here as octal values do not exist in Kotlin
-            OctalValuesCheck::class.java,  // Language specific implementation is provided.
+            MatchWithoutElseCheck::class.java,
+            // Rule does not apply here as octal values do not exist in Kotlin
+            OctalValuesCheck::class.java,
 
             org.sonarsource.slang.checks.AllBranchesIdenticalCheck::class.java,
             org.sonarsource.slang.checks.BadClassNameCheck::class.java,
