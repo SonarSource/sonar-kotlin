@@ -19,19 +19,19 @@
  */
 package org.sonarsource.kotlin.converter
 
+import java.nio.file.Files
+import java.nio.file.Path
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
-import java.nio.file.Paths
 
 class KotlinTreeTest {
 
   @Test
   fun testCreateKotlinTree() {
     val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"))
-    val path = Paths.get("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
+    val path = Path.of("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
     val tree = KotlinTree.of(content, environment)
     assertThat(tree.psiFile.children).hasSize(9)

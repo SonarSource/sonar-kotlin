@@ -17,24 +17,22 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.plugin;
+package org.sonarsource.kotlin.plugin
 
-import org.junit.jupiter.api.Test;
-import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInActiveRule;
-import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
-import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context;
+import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.Test
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
 
-import static org.assertj.core.api.Assertions.assertThat;
+internal class KotlinProfileDefinitionTest {
 
-class KotlinProfileDefinitionTest {
-
-  @Test
-  void profile() {
-    Context context = new Context();
-    new KotlinProfileDefinition().define(context);
-    BuiltInQualityProfile profile = context.profile("kotlin", "Sonar way");
-    assertThat(profile.rules().size()).isGreaterThan(2);
-    assertThat(profile.rules()).extracting(BuiltInActiveRule::ruleKey).contains("S1764");
-  }
-
+    @Test
+    fun profile() {
+        val context = BuiltInQualityProfilesDefinition.Context()
+        KotlinProfileDefinition().define(context)
+        val profile = context.profile("kotlin", "Sonar way")
+        Assertions.assertThat(profile.rules().size).isGreaterThan(2)
+        Assertions.assertThat(profile.rules())
+            .extracting { obj: BuiltInQualityProfilesDefinition.BuiltInActiveRule -> obj.ruleKey() }
+            .contains("S1764")
+    }
 }
