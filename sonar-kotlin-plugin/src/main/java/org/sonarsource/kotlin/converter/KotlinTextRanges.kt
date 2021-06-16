@@ -41,7 +41,8 @@ object KotlinTextRanges {
         val startLineOffset = startOffset - startLineNumberOffset
         return TextPointerImpl(startLineNumber + 1, startLineOffset)
     }
-    
+
     fun KotlinFileContext.textRange(psiElement: PsiElement) = textRange(ktFile.viewProvider.document!!, psiElement)
 
+    fun KotlinFileContext.commonTextRange(psiElement: PsiElement) = inputFileContext.textRange(textRange(psiElement))
 }

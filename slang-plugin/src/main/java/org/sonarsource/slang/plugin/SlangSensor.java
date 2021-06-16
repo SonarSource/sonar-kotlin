@@ -20,9 +20,7 @@
 package org.sonarsource.slang.plugin;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -194,13 +192,12 @@ public abstract class SlangSensor implements Sensor {
     }
 
     // TODO: remove this workaround once the Kotlin plugin is extracted
-    List<TreeVisitor<InputFileContext>> languageSpecificTreeVisitors = new ArrayList<>(treeVisitors);
-    languageSpecificTreeVisitors.addAll(languageSpecificVisitors());
+    List<TreeVisitor<InputFileContext>> languageSpecificTreeVisitors = languageSpecificVisitors(treeVisitors);
 
     return languageSpecificTreeVisitors;
   }
 
-  protected List<TreeVisitor<InputFileContext>> languageSpecificVisitors() {
-    return Collections.emptyList();
+  protected List<TreeVisitor<InputFileContext>> languageSpecificVisitors(List<TreeVisitor<InputFileContext>> defaultVisitors) {
+    return defaultVisitors;
   }
 }

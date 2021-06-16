@@ -23,21 +23,11 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtElement
 import org.sonar.api.batch.rule.Checks
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.api.Tree
-import org.sonarsource.slang.plugin.InputFileContext
-import org.sonarsource.slang.visitors.TreeVisitor
 
-class KtChecksVisitor(val checks: Checks<out AbstractCheck>) : TreeVisitor<InputFileContext>() {
+class KtChecksVisitor(val checks: Checks<out AbstractCheck>) : KotlinFileVisitor() {
 
-    override fun scan(fileContext: InputFileContext, root: Tree?) {
-        if (root is KotlinTree) {
-            visit(KotlinFileContext(fileContext, root.psiFile, root.bindingContext))
-        }
-    }
-
-    private fun visit(kotlinFileContext: KotlinFileContext) {
+    override fun visit(kotlinFileContext: KotlinFileContext) {
         flattenNodes(listOf(kotlinFileContext.ktFile)).let { flatNodes ->
             checks.all().forEach { check ->
                 flatNodes.forEach {
