@@ -4,6 +4,7 @@ class EmptyFunctionCheckSample {
 
     // Noncompliant@+1 {{Add a nested comment explaining why this function is empty or complete the implementation.}}
     fun empty() {}
+//              ^^
 
     fun withComment() {
         // comment
@@ -29,5 +30,11 @@ class EmptyFunctionCheckSample {
     // TODO false-negative
     fun String.extension() {
     }
+
+    // Noncompliant@+1 {{Add a nested comment explaining why this function is empty or complete the implementation.}}
+    val emptyAnonymousFunction = fun() {}
+//                                     ^^
+
+    val emptyLambda = {}
 
 }
