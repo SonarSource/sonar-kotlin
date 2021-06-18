@@ -47,6 +47,10 @@ class UnusedLocalVariableCheckSample {
             var b = 0 // Noncompliant
         }
     }
+
+    fun String.extension() {
+        val unused = 0 // Noncompliant
+    }
 }
 
 class HappyPath {

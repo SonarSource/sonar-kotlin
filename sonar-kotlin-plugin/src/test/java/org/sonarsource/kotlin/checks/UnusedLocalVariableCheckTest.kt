@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class UnusedLocalVariableCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/UnusedLocalVariableCheckSample.kt",
-            org.sonarsource.slang.checks.UnusedLocalVariableCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(UnusedLocalVariableCheck()) {
             fileName = "UnusedLocalVariableCheckSample.kt"
