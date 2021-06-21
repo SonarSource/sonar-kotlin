@@ -31,10 +31,6 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 class EmptyFunctionCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        if (function.receiverTypeReference != null) {
-            /** see [org.sonarsource.kotlin.converter.KotlinTreeVisitor.createFunctionDeclarationTree] */
-            return
-        }
         val bodyBlockExpression = function.bodyBlockExpression
         if (bodyBlockExpression != null
             && bodyBlockExpression.statements.isEmpty()

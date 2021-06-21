@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class EmptyFunctionCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/EmptyFunctionCheckSample.kt",
-            org.sonarsource.slang.checks.EmptyFunctionCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(EmptyFunctionCheck()) {
             fileName = "EmptyFunctionCheckSample.kt"

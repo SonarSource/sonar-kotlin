@@ -548,6 +548,9 @@
 374,
 425,
 ],
+'kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/jps-tests/test/org/jetbrains/kotlin/jps/build/AbstractLookupTrackerTest.kt':[
+268,
+],
 'kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/jps-tests/test/org/jetbrains/kotlin/jps/build/KotlinJpsBuildTest.kt':[
 983,
 984,
@@ -719,6 +722,9 @@
 7,
 11,
 ],
+'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/customJdk/src/main.kt':[
+2,
+],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/duplicatedClass/app/src/main/kotlin/A.kt':[
 2,
 ],
@@ -793,6 +799,9 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/tasks/KotlinJsDce.kt':[
 60,
+],
+'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-customJdk/src/main/kotlin/main.kt':[
+2,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-js-suppressWarnings/src/main/kotlin/org/jetbrains/HelloWorld.kt':[
 5,

@@ -27,9 +27,9 @@ class EmptyFunctionCheckSample {
 
     fun withExpression() = 42
 
-    // TODO false-negative
-    fun String.extension() {
-    }
+    // Noncompliant@+1 {{Add a nested comment explaining why this function is empty or complete the implementation.}}
+    fun String.emptyExtensionFunction() {}
+//                                      ^^
 
     // Noncompliant@+1 {{Add a nested comment explaining why this function is empty or complete the implementation.}}
     val emptyAnonymousFunction = fun() {}
