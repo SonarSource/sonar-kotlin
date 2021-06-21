@@ -20,8 +20,6 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.KtFunction
-import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
@@ -54,16 +52,7 @@ class TooManyParametersCheck : AbstractCheck() {
         "PatchMapping",
         "JsonCreator")
 
-    override fun visitLambdaExpression(expression: KtLambdaExpression, kotlinFileContext: KotlinFileContext) {
-        // TODO Slang has no notion of lambda expressions, they are treated as functions
-        check(expression.functionLiteral, kotlinFileContext)
-    }
-
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        check(function, kotlinFileContext)
-    }
-
-    private fun check(function: KtFunction, kotlinFileContext: KotlinFileContext) {
         if (function.receiverTypeReference != null) {
             /** see [org.sonarsource.kotlin.converter.KotlinTreeVisitor.createFunctionDeclarationTree] */
             return

@@ -9,11 +9,6 @@ open class TooManyParametersCheckSample(p1: Int, p2: Int) {
     // Noncompliant@+1 {{This function has 3 parameters, which is greater than the 1 authorized.}}
     open fun sample(p1: Int, p2: Int, p3: Int) {
 //           ^^^^^^          ^^^^^^^< ^^^^^^^<
-
-        // TODO false-positive
-        // Noncompliant@+1 {{This function has 2 parameters, which is greater than the 1 authorized.}}
-        { p1: Int, p2: Int -> }
-//      ^^^^^^^^^^^^^^^^^^^^^^^
     }
 
     fun compliant(p1: Int) = Unit
@@ -31,6 +26,13 @@ open class TooManyParametersCheckSample(p1: Int, p2: Int) {
 
     abstract class OverrideIsCompliant : TooManyParametersCheckSample() {
         override fun sample(p1: Int, p2: Int, p3: Int) = Unit
+    }
+
+    fun lambda(
+        // TODO false-negative
+        p: (Int, Int) -> Int
+    ) {
+        lambda { p1, p2 -> p1 + p2 }
     }
 
 }

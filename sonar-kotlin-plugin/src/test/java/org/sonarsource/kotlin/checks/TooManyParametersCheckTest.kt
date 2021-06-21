@@ -24,15 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class TooManyParametersCheckTest {
     @Test
-    fun slang() {
-        val check = org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck()
-        check.max = 1
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/TooManyParametersCheckSample.kt",
-            check)
-    }
-
-    @Test
     fun test() {
         val check = TooManyParametersCheck()
         check.max = 1
