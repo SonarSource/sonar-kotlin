@@ -14,6 +14,10 @@
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-http/src/io/ktor/http/Cookie.kt':[
 74,
 ],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-network-tls/src/io/ktor/network/tls/certificates/Certificates.kt':[
+81,
+181,
+],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/src/io/ktor/response/ResponseCookies.kt':[
 16,
 ],

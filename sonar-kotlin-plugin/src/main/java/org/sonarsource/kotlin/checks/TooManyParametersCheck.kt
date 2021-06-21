@@ -19,8 +19,11 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtFunctionType
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtParameter
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
@@ -53,25 +56,39 @@ class TooManyParametersCheck : AbstractCheck() {
         "JsonCreator")
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        if (function.receiverTypeReference != null) {
-            /** see [org.sonarsource.kotlin.converter.KotlinTreeVisitor.createFunctionDeclarationTree] */
-            return
-        }
         if (function.valueParameters.size > max
             && !function.hasModifier(KtTokens.OVERRIDE_KEYWORD)
             && function.annotationEntries.none { exceptionsList.contains(it.shortName?.asString()) }
         ) {
-            val document = function.containingKtFile.viewProvider.document!!
-            kotlinFileContext.reportIssue(
+            report(
                 /** see [org.sonarsource.slang.impl.FunctionDeclarationTreeImpl.rangeToHighlight] */
                 function.nameIdentifier ?: function,
-                "This function has ${function.valueParameters.size} parameters, which is greater than the $max authorized.",
-                secondaryLocations = function.valueParameters.asSequence()
-                    .drop(max)
-                    .map { SecondaryLocation(KotlinTextRanges.textRange(document, it), null) }
-                    .toList(),
+                function.valueParameters,
+                kotlinFileContext,
             )
         }
     }
 
+    override fun visitFunctionType(type: KtFunctionType, kotlinFileContext: KotlinFileContext) {
+        if (type.parameters.size > max) {
+            report(type, type.parameters, kotlinFileContext)
+        }
+    }
+
+    private fun report(
+        reportingLocation: PsiElement,
+        parameters: List<KtParameter>,
+        kotlinFileContext: KotlinFileContext,
+    ) {
+        kotlinFileContext.reportIssue(
+            reportingLocation,
+            "This function has ${parameters.size} parameters, which is greater than the $max authorized.",
+            secondaryLocations = parameters.asSequence()
+                .drop(max)
+                .map {
+                    SecondaryLocation(KotlinTextRanges.textRange(it.containingKtFile.viewProvider.document!!, it), null)
+                }
+                .toList(),
+        )
+    }
 }

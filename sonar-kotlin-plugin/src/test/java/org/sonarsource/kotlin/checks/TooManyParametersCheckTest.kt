@@ -26,7 +26,7 @@ class TooManyParametersCheckTest {
     @Test
     fun test() {
         val check = TooManyParametersCheck()
-        check.max = 1
+        check.max = 2
         KotlinVerifier(check) {
             fileName = "TooManyParametersCheckSample.kt"
         }.verify()
