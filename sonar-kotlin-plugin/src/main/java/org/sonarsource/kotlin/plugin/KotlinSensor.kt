@@ -33,6 +33,7 @@ import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
 import org.sonarsource.slang.checks.CommentedCodeCheck
 import org.sonarsource.slang.checks.api.SlangCheck
+import org.sonarsource.slang.plugin.CpdVisitor
 import org.sonarsource.slang.plugin.InputFileContext
 import org.sonarsource.slang.plugin.SlangSensor
 import org.sonarsource.slang.visitors.TreeVisitor
@@ -60,8 +61,9 @@ class KotlinSensor(
             + getFilesFromProperty(sensorContext.config(), SONAR_JAVA_LIBRARIES))
 
     override fun languageSpecificVisitors(defaultVisitors: List<TreeVisitor<InputFileContext>>) =
-        defaultVisitors.filter { it !is SlangSyntaxHighlighter } +
+        defaultVisitors.filterNot { it is SlangSyntaxHighlighter || it is CpdVisitor } +
             SyntaxHighlighter() +
+            CopyPasteDetector() +
             KtChecksVisitor(checks)
 
     @Deprecated("Use native Kotlin API instead", replaceWith = ReplaceWith("legacyChecks"))
