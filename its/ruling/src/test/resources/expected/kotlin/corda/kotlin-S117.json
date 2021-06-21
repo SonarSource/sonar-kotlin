@@ -34,6 +34,9 @@
 'kotlin-corda-project:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/serialization/TransactionSerializationTests.kt':[
 104,
 ],
+'kotlin-corda-project:sources/kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/Literal.kt':[
+142,
+],
 'kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/NodePerformanceTests.kt':[
 56,
 ],
@@ -72,6 +75,7 @@
 'kotlin-corda-project:sources/kotlin/corda/samples/simm-valuation-demo/src/main/kotlin/net/corda/vega/api/SwapDataView.kt':[
 24,
 25,
+31,
 ],
 'kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/CorDappSerializerTests.kt':[
 20,

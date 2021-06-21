@@ -64,21 +64,11 @@ class VariableAndParameterNameCheck : AbstractCheck() {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        if (function.receiverTypeReference != null) {
-            /** see [org.sonarsource.kotlin.converter.KotlinTreeVisitor.createFunctionDeclarationTree] */
-            return
-        }
         function.valueParameters.forEach { check("parameter", it, kotlinFileContext) }
     }
 
     override fun visitProperty(property: KtProperty, kotlinFileContext: KotlinFileContext) {
-        val containingDeclarationForPseudocode = property.containingDeclarationForPseudocode
-        if (containingDeclarationForPseudocode is KtFunction && containingDeclarationForPseudocode.receiverTypeReference != null) {
-            /** see [org.sonarsource.kotlin.converter.KotlinTreeVisitor.createFunctionDeclarationTree] */
-            return
-        }
-        /** see `hasDelegate` in [org.sonarsource.kotlin.converter.KotlinTreeVisitor.createVariableDeclaration] */
-        if (property.isLocal && !property.hasDelegate()) {
+        if (property.isLocal) {
             check("local variable", property, kotlinFileContext)
         }
     }

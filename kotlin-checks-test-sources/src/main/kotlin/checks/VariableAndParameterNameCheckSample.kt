@@ -27,18 +27,17 @@ class VariableAndParameterNameCheckSample(
 
         c.joinToString { (A, B) -> "" }
 
-        // TODO false-negative
-        val LOCAL_DELEGATE by lazy { "" }
+        val LOCAL_DELEGATE // Noncompliant {{Rename this local variable to match the regular expression "^[_a-z][a-zA-Z0-9]*$".}}
+            by lazy { "" }
     }
 
-    // TODO false-negatives
     fun String.extension(
-        PARAM: String,
+        PARAM: String, // Noncompliant {{Rename this parameter to match the regular expression "^[_a-z][a-zA-Z0-9]*$".}}
     ) {
-        val LOCAL = ""
+        val LOCAL = ""// Noncompliant {{Rename this local variable to match the regular expression "^[_a-z][a-zA-Z0-9]*$".}}
 
-        { PARAM: String -> // Noncompliant
-            var LOCAL = "" // Noncompliant
+        { PARAM: String -> // Noncompliant {{Rename this parameter to match the regular expression "^[_a-z][a-zA-Z0-9]*$".}}
+            var LOCAL = "" // Noncompliant {{Rename this local variable to match the regular expression "^[_a-z][a-zA-Z0-9]*$".}}
         }
     }
 

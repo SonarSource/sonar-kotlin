@@ -24,15 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class VariableAndParameterNameCheckTest {
     @Test
-    fun slang() {
-        val check = org.sonarsource.slang.checks.VariableAndParameterNameCheck()
-        check.format = "^[_a-z][a-zA-Z0-9]*$"
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/VariableAndParameterNameCheckSample.kt",
-            check)
-    }
-
-    @Test
     fun test() {
         val check = VariableAndParameterNameCheck()
         check.format = "^[_a-z][a-zA-Z0-9]*$"
@@ -40,5 +31,4 @@ class VariableAndParameterNameCheckTest {
             fileName = "VariableAndParameterNameCheckSample.kt"
         }.verify()
     }
-
 }
