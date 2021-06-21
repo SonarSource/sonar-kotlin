@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class BooleanInversionCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/BooleanInversionCheckSample.kt",
-            org.sonarsource.slang.checks.BooleanInversionCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(BooleanInversionCheck()) {
             fileName = "BooleanInversionCheckSample.kt"

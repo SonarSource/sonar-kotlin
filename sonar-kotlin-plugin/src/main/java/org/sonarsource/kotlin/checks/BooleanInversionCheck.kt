@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
@@ -35,6 +36,8 @@ class BooleanInversionCheck : AbstractCheck() {
         private val OPERATORS = mapOf(
             KtTokens.EQEQ to "!=",
             KtTokens.EXCLEQ to "==",
+            KtTokens.EQEQEQ to "!==",
+            KtTokens.EXCLEQEQEQ to "===",
             KtTokens.LT to ">=",
             KtTokens.GT to "<=",
             KtTokens.LTEQ to ">",
@@ -44,10 +47,15 @@ class BooleanInversionCheck : AbstractCheck() {
 
     override fun visitUnaryExpression(expression: KtUnaryExpression, context: KotlinFileContext) {
         if (expression.operationToken != KtTokens.EXCL) return
-        val innerExpression = expression.baseExpression!!.skipParentheses()
-        if (innerExpression is KtBinaryExpression) {
-            val oppositeOperator = OPERATORS[innerExpression.operationToken]
-            if (oppositeOperator != null) {
+        when (val innerExpression = expression.baseExpression!!.skipParentheses()) {
+            is KtBinaryExpression -> {
+                val oppositeOperator = OPERATORS[innerExpression.operationToken]
+                if (oppositeOperator != null) {
+                    context.reportIssue(expression, "Use the opposite operator (\"$oppositeOperator\") instead.")
+                }
+            }
+            is KtIsExpression -> {
+                val oppositeOperator = if (innerExpression.isNegated) "is" else "!is"
                 context.reportIssue(expression, "Use the opposite operator (\"$oppositeOperator\") instead.")
             }
         }
