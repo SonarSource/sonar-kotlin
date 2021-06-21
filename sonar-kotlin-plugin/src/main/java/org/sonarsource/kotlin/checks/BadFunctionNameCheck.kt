@@ -51,10 +51,6 @@ class BadFunctionNameCheck : AbstractCheck() {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        if (function.receiverTypeReference != null) {
-            /** see [org.sonarsource.kotlin.converter.KotlinTreeVisitor.createFunctionDeclarationTree] */
-            return
-        }
         val name = function.name ?: /* in case of anonymous functions */ return
         if (!name.matches(formatRegex)) {
             kotlinFileContext.reportIssue(

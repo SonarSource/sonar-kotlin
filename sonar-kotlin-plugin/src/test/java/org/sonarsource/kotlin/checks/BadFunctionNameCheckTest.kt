@@ -21,18 +21,8 @@ package org.sonarsource.kotlin.checks
 
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.verifier.KotlinVerifier
-import org.sonarsource.slang.checks.utils.Language
 
 class BadFunctionNameCheckTest {
-    @Test
-    fun slang() {
-        var check = org.sonarsource.slang.checks.BadFunctionNameCheck()
-        check.format = Language.KOTLIN_FUNCTION_NAMING
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/BadFunctionNameCheckSample.kt",
-            check)
-    }
-
     @Test
     fun test() {
         KotlinVerifier(BadFunctionNameCheck()) {

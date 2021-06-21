@@ -7,8 +7,8 @@ class BadFunctionNameCheckSample {
 
     fun `else`() {}  // Compliant
 
-    // TODO false-negative
-    fun String.`foo bar`() {}
+    fun String.`foo bar`() {} // Noncompliant {{Rename function "foo bar" to match the regular expression ^[a-zA-Z][a-zA-Z0-9]*$}}
+//             ^^^^^^^^^
 
     val anonymousFunction = fun() {}
 

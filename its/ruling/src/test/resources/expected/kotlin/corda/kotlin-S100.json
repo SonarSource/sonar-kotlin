@@ -648,9 +648,15 @@
 33,
 34,
 35,
+47,
+48,
 ],
 'kotlin-corda-project:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/contracts/CommercialPaper.kt':[
 94,
+],
+'kotlin-corda-project:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/contracts/asset/Obligation.kt':[
+801,
+802,
 ],
 'kotlin-corda-project:sources/kotlin/corda/finance/src/test/kotlin/net/corda/finance/CurrenciesTests.kt':[
 9,
