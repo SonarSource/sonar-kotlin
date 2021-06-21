@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class ElseIfWithoutElseCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/ElseIfWithoutElseCheckSample.kt",
-            org.sonarsource.slang.checks.ElseIfWithoutElseCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(ElseIfWithoutElseCheck()) {
             fileName = "ElseIfWithoutElseCheckSample.kt"

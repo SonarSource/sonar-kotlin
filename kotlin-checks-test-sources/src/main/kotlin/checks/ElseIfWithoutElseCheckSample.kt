@@ -27,11 +27,10 @@ class ElseIfWithoutElseCheckSample {
                 throw RuntimeException()
         }
 
-        // TODO false-positive
         emptyList<Int>().forEach {
             if (it > 0)
                 return@forEach
-            else if (it < 0) // Noncompliant
+            else if (it < 0)
                 return@forEach
         }
     }

@@ -70,10 +70,8 @@ class ElseIfWithoutElseCheck : AbstractCheck() {
     }
 
     private fun KtIfExpression.terminates(): Boolean =
-        when (val it = then!!.lastBlockStatementOrThis()) {
-            /** see [org.sonarsource.kotlin.converter.KotlinTreeVisitor.createReturnTree] */
-            is KtReturnExpression -> it.labeledExpression == null
-            is KtThrowExpression, is KtBreakExpression, is KtContinueExpression -> true
+        when (then!!.lastBlockStatementOrThis()) {
+            is KtReturnExpression, is KtThrowExpression, is KtBreakExpression, is KtContinueExpression -> true
             else -> false
         }
 
