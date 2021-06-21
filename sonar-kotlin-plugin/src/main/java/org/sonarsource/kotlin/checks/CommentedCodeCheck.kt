@@ -45,6 +45,7 @@ class CommentedCodeCheck : AbstractCheck() {
             override fun visitElement(element: PsiElement) {
                 super.visitElement(element)
                 if (element !is PsiComment) return
+                if (element.tokenType == KtTokens.DOC_COMMENT) return
                 if (currentGroup.isNotEmpty() && !areAdjacent(currentGroup.last(), element)) {
                     currentGroup = mutableListOf()
                     groupedComments.add(currentGroup)
@@ -77,7 +78,6 @@ class CommentedCodeCheck : AbstractCheck() {
      */
     private fun getContent(comment: PsiComment) =
         when (comment.tokenType) {
-            KtTokens.DOC_COMMENT -> comment.text.substring(3, comment.textLength - 2)
             KtTokens.BLOCK_COMMENT -> comment.text.substring(2, comment.textLength - 2)
             KtTokens.EOL_COMMENT -> comment.text.substring(2, comment.textLength)
             else -> comment.text

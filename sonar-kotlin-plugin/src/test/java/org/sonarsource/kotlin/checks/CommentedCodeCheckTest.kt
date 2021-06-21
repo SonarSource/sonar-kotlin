@@ -25,13 +25,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class CommentedCodeCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/CommentedCodeCheckSample.kt",
-            org.sonarsource.slang.checks.CommentedCodeCheck(KotlinCodeVerifier()))
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(CommentedCodeCheck()) {
             fileName = "CommentedCodeCheckSample.kt"
