@@ -2,7 +2,8 @@ package checks
 
 class UnusedPrivateMethodKotlinCheckTest {
 
-    private fun unused() { // Noncompliant
+    private fun unused() { // Noncompliant {{Remove this unused private "unused" method.}}
+//              ^^^^^^
     }
 
     private fun used() {
@@ -22,8 +23,7 @@ class UnusedPrivateMethodKotlinCheckTest {
     fun publicUnusedFun() {
     }
 
-    // TODO false-negative
-    private fun String.unusedExtension() {
+    private fun String.unusedExtension() { // Noncompliant {{Remove this unused private "unusedExtension" method.}}
     }
 
     // Serializable method should not raise any issue in Kotlin.

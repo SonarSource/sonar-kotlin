@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class UnusedPrivateMethodCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/UnusedPrivateMethodCheckSample.kt",
-            org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(UnusedPrivateMethodCheck()) {
             fileName = "UnusedPrivateMethodCheckSample.kt"

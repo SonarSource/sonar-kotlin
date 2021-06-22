@@ -6,8 +6,14 @@
 'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/InlineCodegen.kt':[
 214,
 ],
+'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/VarianceChecker.kt':[
+199,
+],
 'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/types/expressions/FunctionsTypingVisitor.kt':[
 169,
+],
+'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/util/DumpIrTree.kt':[
+288,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/ide-common/src/org/jetbrains/kotlin/idea/util/psi/patternMatching/KotlinPsiUnifier.kt':[
 575,

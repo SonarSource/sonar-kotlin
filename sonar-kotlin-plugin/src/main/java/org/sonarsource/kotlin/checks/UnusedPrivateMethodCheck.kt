@@ -62,7 +62,5 @@ class UnusedPrivateMethodCheck : AbstractCheck() {
 
     private fun KtNamedFunction.shouldCheckForUsage() =
         isPrivate() && !hasModifier(KtTokens.OPERATOR_KEYWORD)
-            /** see [org.sonarsource.kotlin.converter.KotlinTreeVisitor.createFunctionDeclarationTree] */
-            && receiverTypeReference == null
 
 }
