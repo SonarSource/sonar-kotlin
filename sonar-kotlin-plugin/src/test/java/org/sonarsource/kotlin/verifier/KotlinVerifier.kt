@@ -47,12 +47,14 @@ class KotlinVerifier(private val check: AbstractCheck) {
         val converter = KotlinConverter(classpath + deps)
         createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check)
             .assertOneOrMoreIssues()
+        converter.terminate()
     }
 
     fun verifyNoIssue() {
         val converter = KotlinConverter(classpath + deps)
         createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check)
             .assertNoIssues()
+        converter.terminate()
     }
 
     private fun createVerifier(

@@ -19,10 +19,15 @@
  */
 package org.sonarsource.kotlin.converter
 
+import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.sonarsource.slang.api.ASTConverter
 
 class KotlinConverter(classpath: List<String>) : ASTConverter {
     val environment: Environment = Environment(classpath)
 
     override fun parse(content: String) = KotlinTree.of(content, environment)
+
+    override fun terminate() {
+        Disposer.dispose(environment.disposable)
+    }
 }

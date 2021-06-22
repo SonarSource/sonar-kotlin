@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.converter
 
+import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -98,12 +99,15 @@ class KotlinCodeVerifier : CodeVerifier {
         return if (words < 2 || isKDoc(content)) {
             false
         } else {
+            val environment = Environment(emptyList())
             try {
                 val wrappedContent = "fun function () { $content }"
-                val kotlinTree = KotlinTree.of(wrappedContent, Environment(emptyList()))
+                val kotlinTree = KotlinTree.of(wrappedContent, environment)
                 !isSimpleExpression(kotlinTree.psiFile)
             } catch (e: ParseException) {
                 false
+            } finally {
+                Disposer.dispose(environment.disposable)
             }
         }
     }
