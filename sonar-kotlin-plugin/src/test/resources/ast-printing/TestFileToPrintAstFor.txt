@@ -1,0 +1,71 @@
+KtFile: [dummy.kt] package Fooimport ...    fun test() {}}
+  KtPackageDirective: [] package Foo
+    LeafPsiElement: [package] package
+    PsiWhiteSpaceImpl: [WHITE_SPACE] 
+    KtNameReferenceExpression: [] Foo
+      LeafPsiElement: [IDENTIFIER] Foo
+  PsiWhiteSpaceImpl: [WHITE_SPACE] 
+  KtImportList: [] import a.b.c
+    KtImportDirective: [] import a.b.c
+      LeafPsiElement: [import] import
+      PsiWhiteSpaceImpl: [WHITE_SPACE] 
+      KtDotQualifiedExpression: [] a.b.c
+        KtDotQualifiedExpression: [] a.b
+          KtNameReferenceExpression: [] a
+            LeafPsiElement: [IDENTIFIER] a
+          LeafPsiElement: [DOT] .
+          KtNameReferenceExpression: [] b
+            LeafPsiElement: [IDENTIFIER] b
+        LeafPsiElement: [DOT] .
+        KtNameReferenceExpression: [] c
+          LeafPsiElement: [IDENTIFIER] c
+  PsiWhiteSpaceImpl: [WHITE_SPACE] 
+  KtClass: [] class TestClass {  ...    fun test() {}}
+    LeafPsiElement: [class] class
+    PsiWhiteSpaceImpl: [WHITE_SPACE] 
+    LeafPsiElement: [IDENTIFIER] TestClass
+    PsiWhiteSpaceImpl: [WHITE_SPACE] 
+    KtClassBody: [] {    companion obje...    fun test() {}}
+      LeafPsiElement: [LBRACE] {
+      PsiWhiteSpaceImpl: [WHITE_SPACE] 
+      KtObjectDeclaration: [] companion object { ...x = "foo<br/>"    }
+        KtDeclarationModifierList: [] companion
+          LeafPsiElement: [companion] companion
+        PsiWhiteSpaceImpl: [WHITE_SPACE] 
+        LeafPsiElement: [object] object
+        PsiWhiteSpaceImpl: [WHITE_SPACE] 
+        KtClassBody: [] {        const val x = "foo<br/>"    }
+          LeafPsiElement: [LBRACE] {
+          PsiWhiteSpaceImpl: [WHITE_SPACE] 
+          KtProperty: [] const val x = "foo<br/>"
+            KtDeclarationModifierList: [] const
+              LeafPsiElement: [const] const
+            PsiWhiteSpaceImpl: [WHITE_SPACE] 
+            LeafPsiElement: [val] val
+            PsiWhiteSpaceImpl: [WHITE_SPACE] 
+            LeafPsiElement: [IDENTIFIER] x
+            PsiWhiteSpaceImpl: [WHITE_SPACE] 
+            LeafPsiElement: [EQ] =
+            PsiWhiteSpaceImpl: [WHITE_SPACE] 
+            KtStringTemplateExpression: [] "foo<br/>"
+              LeafPsiElement: [OPEN_QUOTE] "
+              KtLiteralStringTemplateEntry: [] foo<br/>
+                LeafPsiElement: [REGULAR_STRING_PART] foo<br/>
+              LeafPsiElement: [CLOSING_QUOTE] "
+          PsiWhiteSpaceImpl: [WHITE_SPACE] 
+          LeafPsiElement: [RBRACE] }
+      PsiWhiteSpaceImpl: [WHITE_SPACE] 
+      KtNamedFunction: [] fun test() {}
+        LeafPsiElement: [fun] fun
+        PsiWhiteSpaceImpl: [WHITE_SPACE] 
+        LeafPsiElement: [IDENTIFIER] test
+        KtParameterList: [] ()
+          LeafPsiElement: [LPAR] (
+          LeafPsiElement: [RPAR] )
+        PsiWhiteSpaceImpl: [WHITE_SPACE] 
+        KtBlockExpression: [] {}
+          LeafPsiElement: [LBRACE] {
+          LeafPsiElement: [RBRACE] }
+      PsiWhiteSpaceImpl: [WHITE_SPACE] 
+      LeafPsiElement: [RBRACE] }
+  PsiWhiteSpaceImpl: [WHITE_SPACE] 
