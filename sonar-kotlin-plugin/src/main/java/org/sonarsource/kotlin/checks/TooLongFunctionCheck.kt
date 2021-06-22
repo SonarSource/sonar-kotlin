@@ -58,10 +58,6 @@ class TooLongFunctionCheck : AbstractCheck() {
     }
 
     private fun check(function: KtFunction, kotlinFileContext: KotlinFileContext) {
-        if (function.receiverTypeReference != null) {
-            /** see [org.sonarsource.kotlin.converter.KotlinTreeVisitor.createFunctionDeclarationTree] */
-            return
-        }
         val expression = function.bodyBlockExpression ?: function.bodyExpression ?: return
         val numberOfLinesOfCode = expression.numberOfLinesOfCode()
         if (numberOfLinesOfCode > max) {

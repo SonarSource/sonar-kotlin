@@ -24,15 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class TooLongFunctionCheckTest {
     @Test
-    fun slang() {
-        val check = org.sonarsource.slang.checks.TooLongFunctionCheck()
-        check.max = 3
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/TooLongFunctionCheckSample.kt",
-            check)
-    }
-
-    @Test
     fun test() {
         val check = TooLongFunctionCheck()
         check.max = 3

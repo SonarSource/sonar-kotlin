@@ -7,7 +7,7 @@ abstract class TooLongFunctionCheckSample {
         println()
     }
 
-    // TODO false-negative
+    // TODO false-negative?
     init {
         println()
         println()
@@ -40,8 +40,8 @@ abstract class TooLongFunctionCheckSample {
 
     abstract fun abstractFun()
 
-    // TODO false-negative
-    fun String.extension() {
+    fun String.extension() { // Noncompliant {{This function has 4 lines of code, which is greater than the 3 authorized. Split it into smaller functions.}}
+//             ^^^^^^^^^
         println()
         println()
     }
