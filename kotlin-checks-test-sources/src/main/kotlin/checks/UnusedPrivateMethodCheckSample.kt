@@ -12,6 +12,13 @@ class UnusedPrivateMethodKotlinCheckTest {
     private operator fun plus(p: Int) {
     }
 
+    // TODO false-positive
+    private infix fun usedInfix(p: Int) = p // Noncompliant
+//                    ^^^^^^^^^
+    init {
+        this usedInfix 1
+    }
+
     fun publicUnusedFun() {
     }
 
