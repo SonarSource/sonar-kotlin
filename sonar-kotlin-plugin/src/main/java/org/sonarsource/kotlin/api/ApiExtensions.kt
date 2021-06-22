@@ -19,7 +19,10 @@
  */
 package org.sonarsource.kotlin.api
 
+import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -33,6 +36,7 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
@@ -46,6 +50,7 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.resolvedCallUtil.getImplicitReceiverValue
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
+import org.sonarsource.kotlin.checks.EmptyCommentCheck
 
 private val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
     qualifier = "java.util.Properties"
@@ -99,6 +104,34 @@ internal fun KtCallExpression.predictReceiverExpression(
     // For calls of the format `foo()` (i.e. where `this` is the implicit receiver)
     return resolvedCall?.getImplicitReceiverValue()?.extractWithRunTargetExpression(this, bindingContext)
 }
+
+/**
+ * Replacement for [org.sonarsource.slang.impl.TreeMetaDataProvider.TreeMetaDataImpl.computeLinesOfCode]
+ */
+internal fun PsiElement.linesOfCode(): Set<Int> {
+    val lines = mutableSetOf<Int>()
+    val document = this.containingFile.viewProvider.document!!
+    this.accept(object : KtTreeVisitorVoid() {
+        override fun visitElement(element: PsiElement) {
+            super.visitElement(element)
+            if (element is LeafPsiElement && element !is PsiWhiteSpace && element !is PsiComment) {
+                lines.add(document.getLineNumber(element.textRange.startOffset) + 1)
+            }
+        }
+    })
+    return lines
+}
+
+/**
+ * Replacement for [org.sonarsource.kotlin.converter.CommentAnnotationsAndTokenVisitor.createComment]
+ * TODO unify with similar code in [EmptyCommentCheck]
+ */
+internal fun PsiComment.getContent() =
+    when (tokenType) {
+        KtTokens.BLOCK_COMMENT -> text.substring(2, textLength - 2)
+        KtTokens.EOL_COMMENT -> text.substring(2, textLength)
+        else -> text
+    }
 
 /**
  * @param declarations is used to collect all visited declaration for reporting secondary locations

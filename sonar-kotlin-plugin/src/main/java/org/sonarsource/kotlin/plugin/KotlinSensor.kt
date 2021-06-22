@@ -26,23 +26,22 @@ import org.sonar.api.config.Configuration
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContextFactory
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.KotlinCodeVerifier
 import org.sonarsource.kotlin.converter.KotlinConverter
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
-import org.sonarsource.slang.checks.CommentedCodeCheck
 import org.sonarsource.slang.checks.api.SlangCheck
 import org.sonarsource.slang.plugin.CpdVisitor
 import org.sonarsource.slang.plugin.InputFileContext
 import org.sonarsource.slang.plugin.SlangSensor
 import org.sonarsource.slang.visitors.TreeVisitor
 import org.sonarsource.slang.plugin.SyntaxHighlighter as SlangSyntaxHighlighter
+import org.sonarsource.slang.plugin.MetricVisitor as SlangMetricVisitor
 
 class KotlinSensor(
     checkFactory: CheckFactory,
-    fileLinesContextFactory: FileLinesContextFactory,
-    noSonarFilter: NoSonarFilter,
+    private val fileLinesContextFactory: FileLinesContextFactory,
+    private val noSonarFilter: NoSonarFilter,
     language: KotlinLanguage,
 ) : SlangSensor(noSonarFilter, fileLinesContextFactory, language) {
 
@@ -61,9 +60,10 @@ class KotlinSensor(
             + getFilesFromProperty(sensorContext.config(), SONAR_JAVA_LIBRARIES))
 
     override fun languageSpecificVisitors(defaultVisitors: List<TreeVisitor<InputFileContext>>) =
-        defaultVisitors.filterNot { it is SlangSyntaxHighlighter || it is CpdVisitor } +
+        defaultVisitors.filterNot { it is SlangSyntaxHighlighter || it is CpdVisitor || it is SlangMetricVisitor } +
             SyntaxHighlighter() +
             CopyPasteDetector() +
+            MetricVisitor(fileLinesContextFactory, noSonarFilter) +
             KtChecksVisitor(checks)
 
     @Deprecated("Use native Kotlin API instead", replaceWith = ReplaceWith("legacyChecks"))

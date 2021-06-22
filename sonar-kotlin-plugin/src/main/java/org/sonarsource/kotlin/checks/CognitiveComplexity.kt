@@ -125,18 +125,26 @@ class CognitiveComplexity(val root: KtElement) {
         private fun nestingLevel(ktElement: KtElement): Int {
             var nestingLevel = 0
             var parent: PsiElement? = ktElement.parent
+            var isInsideFunction = root is KtFunction
+
+            val ancestors = ArrayDeque<PsiElement>()
             while (parent != null && parent != root) {
-                if (parent is KtFunction) {
-                    nestingLevel++
-                } else if (parent is KtIfExpression && !isElseIfBranch(parent.parent?.parent, parent) ||
-                    parent is KtWhenExpression || parent is KtLoopExpression || parent is KtCatchClause
-                ) {
-                    nestingLevel++
-                } else if (parent is KtClass) {
-                    return 0
-                }
+                ancestors.addFirst(parent)
                 parent = parent.parent
             }
+
+           for (element in ancestors) {
+               if (element is KtFunction) {
+                   if (isInsideFunction) nestingLevel++
+                   isInsideFunction = true
+               } else if (element is KtIfExpression && !isElseIfBranch(element.parent?.parent, element) ||
+                   element is KtWhenExpression || element is KtLoopExpression || element is KtCatchClause) {
+                   nestingLevel++
+               } else if (element is KtClass) {
+                   nestingLevel = 0
+                   isInsideFunction = false
+               }
+           }
             return nestingLevel
         }
 

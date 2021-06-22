@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.getContent
 import org.sonarsource.kotlin.converter.KotlinCodeVerifier
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.slang.impl.TextRanges
@@ -56,7 +57,7 @@ class CommentedCodeCheck : AbstractCheck() {
 
         val codeVerifier = KotlinCodeVerifier()
         groupedComments.forEach { comments ->
-            val content = comments.joinToString("\n") { getContent(it) }
+            val content = comments.joinToString("\n") { it.getContent() }
             if (codeVerifier.containsCode(content)) {
                 val textRanges = comments.map { kotlinFileContext.textRange(it) }
                 kotlinFileContext.reportIssue(TextRanges.merge(textRanges), "Remove this commented out code.")
@@ -71,16 +72,5 @@ class CommentedCodeCheck : AbstractCheck() {
         val document = c1.containingFile.viewProvider.document!!
         return document.getLineNumber(c1.textRange.startOffset) + 1 == document.getLineNumber(c2.textRange.startOffset)
     }
-
-    /**
-     * Replacement for [org.sonarsource.kotlin.converter.CommentAnnotationsAndTokenVisitor.createComment]
-     * TODO unify with similar code in [EmptyCommentCheck]
-     */
-    private fun getContent(comment: PsiComment) =
-        when (comment.tokenType) {
-            KtTokens.BLOCK_COMMENT -> comment.text.substring(2, comment.textLength - 2)
-            KtTokens.EOL_COMMENT -> comment.text.substring(2, comment.textLength)
-            else -> comment.text
-        }
 
 }

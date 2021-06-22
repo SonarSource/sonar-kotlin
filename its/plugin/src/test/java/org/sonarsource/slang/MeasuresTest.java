@@ -53,7 +53,7 @@ public class MeasuresTest extends TestBase {
     assertThat(getMeasureAsInt(file2, "statements")).isEqualTo(2);
 
     assertThat(getMeasureAsInt(file1, "cognitive_complexity")).isEqualTo(0);
-    assertThat(getMeasureAsInt(file2, "cognitive_complexity")).isEqualTo(3);
+    assertThat(getMeasureAsInt(file2, "cognitive_complexity")).isEqualTo(2);
 
     assertThat(getMeasure(emptyFile, "ncloc_data")).isNull();
     assertThat(getMeasure(file1, "ncloc_data").getValue()).isEqualTo("1=1;3=1;4=1;7=1;8=1;13=1;14=1");
