@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.asString
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.slang.checks.api.SecondaryLocation
 
@@ -55,7 +56,7 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
                 val first = occurrences[0]
                 context.reportIssue(
                     first,
-                    "Define a constant instead of duplicating this literal \"${first.asText()}\" $size times.",
+                    "Define a constant instead of duplicating this literal \"${first.asString()}\" $size times.",
                     secondaryLocations = occurrences.asSequence()
                         .drop(1)
                         .map { SecondaryLocation(context.textRange(it), "Duplication") }
@@ -68,7 +69,7 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
         val occurrences = file.collectDescendantsOfType<KtStringTemplateExpression> { !it.hasInterpolation() }
-            .map { it to it.asText() }
+            .map { it to it.asString() }
             .filter { (_, text) -> text.length > MINIMAL_LITERAL_LENGTH && !NO_SEPARATOR_REGEXP.matches(text) }
             .groupBy({ (_, text) -> text }) { it.first }
         check(context, occurrences)

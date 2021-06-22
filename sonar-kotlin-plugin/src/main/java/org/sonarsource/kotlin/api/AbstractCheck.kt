@@ -162,7 +162,4 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
     }
 
     fun KtStringTemplateExpression.asConstant() = entries.joinToString { it.text }
-
-    internal fun KtStringTemplateExpression.asText() = entries.joinToString("") { it.text }
-
 }

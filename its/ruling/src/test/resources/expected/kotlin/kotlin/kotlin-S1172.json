@@ -38,17 +38,12 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/builtins.kt':[
 99,
-163,
-177,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/collections.kt':[
 133,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/concurrent.kt':[
 16,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/jsTypeOf.kt':[
-13,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/kotlin.kt':[
 16,
@@ -76,9 +71,6 @@
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/test/kotlin/cases/default/functions.kt':[
 4,
 6,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/test/kotlin/cases/private/privateMultifile2.kt':[
-11,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/buildCacheSimple/src/main/kotlin/foo.kt':[
 3,

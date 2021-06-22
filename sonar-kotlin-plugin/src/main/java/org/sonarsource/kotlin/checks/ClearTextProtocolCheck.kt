@@ -61,7 +61,7 @@ private class OkHttpArgumentFinder(
     private val bindingContext: BindingContext,
     private val issueReporter: (KtSimpleNameExpression) -> Unit,
 ) : KtTreeVisitor() {
-    override fun visitSimpleNameExpression(expression: KtSimpleNameExpression, data: Unit?) {
+    override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         if (bindingContext.get(REFERENCE_TARGET, expression)?.fqNameOrNull()?.asString() == CLEARTEXT_FQN) issueReporter(expression)
     }
 }

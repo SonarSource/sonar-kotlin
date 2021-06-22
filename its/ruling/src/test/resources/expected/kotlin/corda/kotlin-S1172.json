@@ -2,7 +2,4 @@
 'kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/keys/KMSUtils.kt':[
 34,
 ],
-'kotlin-corda-project:sources/kotlin/corda/samples/irs-demo/cordapp/src/main/kotlin/net/corda/irs/utilities/OracleUtils.kt':[
-17,
-],
 }

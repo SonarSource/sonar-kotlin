@@ -31,8 +31,11 @@ import java.util.function.Consumer
 internal class TestContext(
     private val verifier: SingleFileVerifier,
     check: AbstractCheck,
+    vararg furtherChecks: AbstractCheck,
 ) : InputFileContext(null, null) {
-    private val visitor: KtTestChecksVisitor = KtTestChecksVisitor(check)
+    private val visitor: KtTestChecksVisitor = KtTestChecksVisitor(listOf(check) + furtherChecks)
+    private var filteredRules: Map<String, Set<TextRange>> = emptyMap()
+
     fun scan(root: Tree?) {
         visitor.scan(this, root)
     }
@@ -44,6 +47,13 @@ internal class TestContext(
         secondaryLocations: List<SecondaryLocation>,
         gap: Double?,
     ) {
+        if (textRange != null &&
+            filteredRules.getOrDefault(ruleKey.toString(), emptySet()).any { other: TextRange? -> textRange.isInside(other) }
+        ) {
+            // Issue is filtered by one of the filter.
+            return
+        }
+
         val issue = textRange?.let {
             val start = textRange.start()
             val end = textRange.end()
@@ -61,4 +71,8 @@ internal class TestContext(
         })
     }
 
+    override fun setFilteredRules(filteredRules: Map<String, Set<TextRange>>) {
+        this.filteredRules = filteredRules
+        super.setFilteredRules(filteredRules)
+    }
 }

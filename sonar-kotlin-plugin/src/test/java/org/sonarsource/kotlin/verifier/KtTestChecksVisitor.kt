@@ -29,9 +29,9 @@ import org.sonarsource.slang.api.Tree
 import org.sonarsource.slang.plugin.InputFileContext
 import org.sonarsource.slang.visitors.TreeVisitor
 
-class KtTestChecksVisitor(private val check: AbstractCheck) : TreeVisitor<InputFileContext>() {
+class KtTestChecksVisitor(private val checks: List<AbstractCheck>) : TreeVisitor<InputFileContext>() {
     init {
-        check.initialize(RuleKey.of("Kotlin", "Dummy"))
+        checks.forEach { it.initialize(RuleKey.of("Kotlin", "Dummy")) }
     }
 
     override fun scan(fileContext: InputFileContext, root: Tree?) {
@@ -41,11 +41,11 @@ class KtTestChecksVisitor(private val check: AbstractCheck) : TreeVisitor<InputF
     }
 
     private fun visit(kotlinFileContext: KotlinFileContext) {
-        flattenNodes(listOf(kotlinFileContext.ktFile)).forEach {
+        flattenNodes(listOf(kotlinFileContext.ktFile)).forEach { psiElement ->
             // Note: we only visit KtElements. If we need to visit PsiElement, add a
             // visitPsiElement function in KotlinCheck and call it here in the else branch.
-            when (it) {
-                is KtElement -> it.accept(check, kotlinFileContext)
+            when (psiElement) {
+                is KtElement -> checks.forEach { check -> psiElement.accept(check, kotlinFileContext) }
             }
         }
     }

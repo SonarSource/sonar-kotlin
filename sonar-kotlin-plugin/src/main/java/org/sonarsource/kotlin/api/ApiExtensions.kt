@@ -105,6 +105,8 @@ internal fun KtCallExpression.predictReceiverExpression(
     return resolvedCall?.getImplicitReceiverValue()?.extractWithRunTargetExpression(this, bindingContext)
 }
 
+internal fun KtStringTemplateExpression.asString() = entries.joinToString("") { it.text }
+
 /**
  * Replacement for [org.sonarsource.slang.impl.TreeMetaDataProvider.TreeMetaDataImpl.computeLinesOfCode]
  */

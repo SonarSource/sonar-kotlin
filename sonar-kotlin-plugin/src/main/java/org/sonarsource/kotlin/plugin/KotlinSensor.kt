@@ -35,6 +35,7 @@ import org.sonarsource.slang.plugin.CpdVisitor
 import org.sonarsource.slang.plugin.InputFileContext
 import org.sonarsource.slang.plugin.SlangSensor
 import org.sonarsource.slang.visitors.TreeVisitor
+import org.sonarsource.slang.plugin.IssueSuppressionVisitor as SlangIssueSuppressionVisitor
 import org.sonarsource.slang.plugin.SyntaxHighlighter as SlangSyntaxHighlighter
 import org.sonarsource.slang.plugin.MetricVisitor as SlangMetricVisitor
 
@@ -60,7 +61,13 @@ class KotlinSensor(
             + getFilesFromProperty(sensorContext.config(), SONAR_JAVA_LIBRARIES))
 
     override fun languageSpecificVisitors(defaultVisitors: List<TreeVisitor<InputFileContext>>) =
-        defaultVisitors.filterNot { it is SlangSyntaxHighlighter || it is CpdVisitor || it is SlangMetricVisitor } +
+        defaultVisitors.filterNot {
+            it is SlangSyntaxHighlighter ||
+                it is CpdVisitor ||
+                it is SlangMetricVisitor ||
+                it is SlangIssueSuppressionVisitor
+        } +
+            IssueSuppressionVisitor() +
             SyntaxHighlighter() +
             CopyPasteDetector() +
             MetricVisitor(fileLinesContextFactory, noSonarFilter) +
