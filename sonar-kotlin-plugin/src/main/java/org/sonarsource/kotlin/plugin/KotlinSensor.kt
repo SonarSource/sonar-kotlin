@@ -36,8 +36,8 @@ import org.sonarsource.slang.plugin.InputFileContext
 import org.sonarsource.slang.plugin.SlangSensor
 import org.sonarsource.slang.visitors.TreeVisitor
 import org.sonarsource.slang.plugin.IssueSuppressionVisitor as SlangIssueSuppressionVisitor
-import org.sonarsource.slang.plugin.SyntaxHighlighter as SlangSyntaxHighlighter
 import org.sonarsource.slang.plugin.MetricVisitor as SlangMetricVisitor
+import org.sonarsource.slang.plugin.SyntaxHighlighter as SlangSyntaxHighlighter
 
 class KotlinSensor(
     checkFactory: CheckFactory,
@@ -61,17 +61,17 @@ class KotlinSensor(
             + getFilesFromProperty(sensorContext.config(), SONAR_JAVA_LIBRARIES))
 
     override fun languageSpecificVisitors(defaultVisitors: List<TreeVisitor<InputFileContext>>) =
-        defaultVisitors.filterNot {
-            it is SlangSyntaxHighlighter ||
-                it is CpdVisitor ||
-                it is SlangMetricVisitor ||
-                it is SlangIssueSuppressionVisitor
-        } +
-            IssueSuppressionVisitor() +
-            SyntaxHighlighter() +
-            CopyPasteDetector() +
-            MetricVisitor(fileLinesContextFactory, noSonarFilter) +
-            KtChecksVisitor(checks)
+        defaultVisitors.toMutableList().apply {
+            replaceAll {
+                when (it) {
+                    is SlangSyntaxHighlighter -> SyntaxHighlighter()
+                    is CpdVisitor -> CopyPasteDetector()
+                    is SlangMetricVisitor -> MetricVisitor(fileLinesContextFactory, noSonarFilter)
+                    is SlangIssueSuppressionVisitor -> IssueSuppressionVisitor()
+                    else -> it
+                }
+            }
+        } + KtChecksVisitor(checks)
 
     @Deprecated("Use native Kotlin API instead", replaceWith = ReplaceWith("legacyChecks"))
     override fun checks() = legacyChecks
