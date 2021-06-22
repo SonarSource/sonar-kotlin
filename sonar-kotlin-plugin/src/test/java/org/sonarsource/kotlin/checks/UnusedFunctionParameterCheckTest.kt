@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class UnusedFunctionParameterCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/UnusedFunctionParameterCheckSample.kt",
-            org.sonarsource.slang.checks.UnusedFunctionParameterCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(UnusedFunctionParameterCheck()) {
             fileName = "UnusedFunctionParameterCheckSample.kt"

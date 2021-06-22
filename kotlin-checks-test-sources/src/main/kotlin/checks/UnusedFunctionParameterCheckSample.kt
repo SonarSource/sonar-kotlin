@@ -15,13 +15,12 @@ abstract class UnusedFunctionParameterCheckSample {
 
     private external fun externalFun(unused: String)
 
-    // TODO false-negative
-    private fun String.extension(unused: String) {
+    private fun String.extension(unused: String) { // Noncompliant
     }
 
     // TODO false-negatives - use underscore for unused lambda parameters and anonymous functions
-    val lambda = { unused: Int -> }
-    val anonymousFunction = fun(unused: Int) = Unit
+    val lambda = { unused: Int, _: Int -> }
+    val anonymousFunction = fun(unused: Int, _: Int) = Unit
 }
 
 fun unusedParameterInTopLevelFun(unused: Int) {} // Noncompliant
@@ -31,7 +30,6 @@ fun usedParameterInTopLevelFun(used: Int) = used
 // TODO false-positive
 fun backticks(`i`: Int) = i // Noncompliant
 
-// TODO false-nagatives
-fun main(args: Array<String>) {}
-fun main(a: Int) {}
-fun Main(a: Int) {}
+fun main(args: Array<String>) {} // Noncompliant
+fun main(a: Int) {} // Noncompliant
+fun Main(a: Int) {} // Noncompliant

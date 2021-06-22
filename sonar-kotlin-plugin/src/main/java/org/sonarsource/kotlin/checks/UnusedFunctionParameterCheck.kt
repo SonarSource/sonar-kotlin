@@ -36,8 +36,6 @@ import org.sonarsource.slang.checks.api.SecondaryLocation
 class UnusedFunctionParameterCheck : AbstractCheck() {
 
     companion object {
-        private val IGNORED_PATTERN = Regex("main", RegexOption.IGNORE_CASE)
-
         private fun KtNamedFunction.getUnusedParameters(): List<KtParameter> =
             valueParameters.asSequence()
                 .filter { ktParameter ->
@@ -72,8 +70,5 @@ class UnusedFunctionParameterCheck : AbstractCheck() {
     private fun shouldBeChecked(function: KtNamedFunction) =
         function.hasBody()
             && (function.isTopLevel || function.isPrivate())
-            /** see [org.sonarsource.kotlin.converter.KotlinTreeVisitor.createFunctionDeclarationTree] */
-            && function.receiverTypeReference == null
-            && function.name?.let { !IGNORED_PATTERN.matches(it) } ?: true
 
 }
