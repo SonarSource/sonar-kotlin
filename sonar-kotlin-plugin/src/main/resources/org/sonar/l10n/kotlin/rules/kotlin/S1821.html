@@ -1,0 +1,34 @@
+<p>Nested <code>when</code> structures are difficult to understand because you can easily confuse the cases of an inner <code>when</code> as belonging
+to an outer statement. Therefore nested <code>when</code> statements should be avoided.</p>
+<p>Specifically, you should structure your code to avoid the need for nested <code>when</code> statements, but if you cannot, then consider moving the
+inner <code>when</code> to another function.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+fun foo(n: Int, m: Int) {
+  when (n) {
+    0 -&gt;
+      when (m) {  // Noncompliant; nested when
+        // ...
+      }
+    1 -&gt; print("1")
+    else -&gt; print("2")
+  }
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+fun foo(n: Int, m: Int) {
+  when (n) {
+    0 -&gt; bar(m)
+    1 -&gt; print("1")
+    else -&gt; print("2")
+  }
+}
+
+fun bar(m: Int){
+  when(m) {
+    // ...
+  }
+}
+</pre>
+

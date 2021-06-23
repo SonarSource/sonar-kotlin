@@ -1,0 +1,18 @@
+{
+  "treeMetaData": {
+    "comments": [
+      {"text": "// Noncompliant {{wrong message}}", "contentText": " Noncompliant {{wrong message}}", "range": "1:4:1:37", "contentRange": "1:6:1:37"}
+    ],
+    "tokens": [
+      {"textRange": "1:0:1:3", "text": "foo", "type": "OTHER"}
+    ]
+  },
+  "tree": {
+    "@type": "TopLevel",
+    "metaData": "1:0:1:37",
+    "declarations": [
+      {"@type": "Identifier", "metaData": "1:0:1:3", "name": "foo"}
+    ],
+    "firstCpdToken": "1:0:1:3"
+  }
+}

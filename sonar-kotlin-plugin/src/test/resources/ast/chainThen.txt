@@ -1,0 +1,177 @@
+AST node class                                                                                                             | first…last tokens | line:col     
+---------------------------------------------------------------------------------------------------------------------------|-------------------|--------------
+TopLevelTree {                                                                                                             | val … )           | 1:1 … 44:1   
+  ?KtProperty[v]? {                                                                                                        | val … )           | 1:1 … 43:2   
+    ?KtCallExpression? {                                                                                                   | thenChain … )     | 1:9 … 43:2   
+      IdentifierTree                                                                                                       | thenChain         | 1:9 … 1:18   
+      ?KtValueArgumentList? {                                                                                              | ( … )             | 1:18 … 43:2  
+        ?KtValueArgument? {                                                                                                | lower … a40       | 2:9 … 42:20  
+          ?KtValueArgumentName? {                                                                                          | lower             | 2:9 … 2:14   
+            IdentifierTree                                                                                                 | lower             | 2:9 … 2:14   
+          }                                                                                                                |                   |              
+          ?KtBinaryExpression[then]? {                                                                                     | a1 … a40          | 2:17 … 42:20 
+            ?KtBinaryExpression[then]? {                                                                                   | a1 … a39          | 2:17 … 41:20 
+              ?KtBinaryExpression[then]? {                                                                                 | a1 … a38          | 2:17 … 40:20 
+                ?KtBinaryExpression[then]? {                                                                               | a1 … a37          | 2:17 … 39:20 
+                  ?KtBinaryExpression[then]? {                                                                             | a1 … a36          | 2:17 … 38:20 
+                    ?KtBinaryExpression[then]? {                                                                           | a1 … a35          | 2:17 … 37:20 
+                      ?KtBinaryExpression[then]? {                                                                         | a1 … a34          | 2:17 … 36:20 
+                        ?KtBinaryExpression[then]? {                                                                       | a1 … a33          | 2:17 … 35:20 
+                          ?KtBinaryExpression[then]? {                                                                     | a1 … a32          | 2:17 … 34:20 
+                            ?KtBinaryExpression[then]? {                                                                   | a1 … a31          | 2:17 … 33:20 
+                              ?KtBinaryExpression[then]? {                                                                 | a1 … a30          | 2:17 … 32:20 
+                                ?KtBinaryExpression[then]? {                                                               | a1 … a29          | 2:17 … 31:20 
+                                  ?KtBinaryExpression[then]? {                                                             | a1 … a28          | 2:17 … 30:20 
+                                    ?KtBinaryExpression[then]? {                                                           | a1 … a27          | 2:17 … 29:20 
+                                      ?KtBinaryExpression[then]? {                                                         | a1 … a26          | 2:17 … 28:20 
+                                        ?KtBinaryExpression[then]? {                                                       | a1 … a25          | 2:17 … 27:20 
+                                          ?KtBinaryExpression[then]? {                                                     | a1 … a24          | 2:17 … 26:20 
+                                            ?KtBinaryExpression[then]? {                                                   | a1 … a23          | 2:17 … 25:20 
+                                              ?KtBinaryExpression[then]? {                                                 | a1 … a22          | 2:17 … 24:20 
+                                                ?KtBinaryExpression[then]? {                                               | a1 … a21          | 2:17 … 23:20 
+                                                  ?KtBinaryExpression[then]? {                                             | a1 … a20          | 2:17 … 22:20 
+                                                    ?KtBinaryExpression[then]? {                                           | a1 … a19          | 2:17 … 21:20 
+                                                      ?KtBinaryExpression[then]? {                                         | a1 … a18          | 2:17 … 20:20 
+                                                        ?KtBinaryExpression[then]? {                                       | a1 … a17          | 2:17 … 19:20 
+                                                          ?KtBinaryExpression[then]? {                                     | a1 … a16          | 2:17 … 18:20 
+                                                            ?KtBinaryExpression[then]? {                                   | a1 … a15          | 2:17 … 17:20 
+                                                              ?KtBinaryExpression[then]? {                                 | a1 … a14          | 2:17 … 16:20 
+                                                                ?KtBinaryExpression[then]? {                               | a1 … a13          | 2:17 … 15:20 
+                                                                  ?KtBinaryExpression[then]? {                             | a1 … a12          | 2:17 … 14:20 
+                                                                    ?KtBinaryExpression[then]? {                           | a1 … a11          | 2:17 … 13:20 
+                                                                      ?KtBinaryExpression[then]? {                         | a1 … a11          | 2:17 … 12:20 
+                                                                        ?KtBinaryExpression[then]? {                       | a1 … a10          | 2:17 … 11:20 
+                                                                          ?KtBinaryExpression[then]? {                     | a1 … a9           | 2:17 … 10:19 
+                                                                            ?KtBinaryExpression[then]? {                   | a1 … a8           | 2:17 … 9:19  
+                                                                              ?KtBinaryExpression[then]? {                 | a1 … a7           | 2:17 … 8:19  
+                                                                                ?KtBinaryExpression[then]? {               | a1 … a6           | 2:17 … 7:19  
+                                                                                  ?KtBinaryExpression[then]? {             | a1 … a5           | 2:17 … 6:19  
+                                                                                    ?KtBinaryExpression[then]? {           | a1 … a4           | 2:17 … 5:19  
+                                                                                      ?KtBinaryExpression[then]? {         | a1 … a3           | 2:17 … 4:19  
+                                                                                        ?KtBinaryExpression[then]? {       | a1 … a2           | 2:17 … 3:19  
+                                                                                          IdentifierTree                   | a1                | 2:17 … 2:19  
+                                                                                          ?KtOperationReferenceExpression? | then              | 2:20 … 2:24  
+                                                                                          IdentifierTree                   | a2                | 3:17 … 3:19  
+                                                                                        }                                  |                   |              
+                                                                                        ?KtOperationReferenceExpression?   | then              | 3:20 … 3:24  
+                                                                                        IdentifierTree                     | a3                | 4:17 … 4:19  
+                                                                                      }                                    |                   |              
+                                                                                      ?KtOperationReferenceExpression?     | then              | 4:20 … 4:24  
+                                                                                      IdentifierTree                       | a4                | 5:17 … 5:19  
+                                                                                    }                                      |                   |              
+                                                                                    ?KtOperationReferenceExpression?       | then              | 5:20 … 5:24  
+                                                                                    IdentifierTree                         | a5                | 6:17 … 6:19  
+                                                                                  }                                        |                   |              
+                                                                                  ?KtOperationReferenceExpression?         | then              | 6:20 … 6:24  
+                                                                                  IdentifierTree                           | a6                | 7:17 … 7:19  
+                                                                                }                                          |                   |              
+                                                                                ?KtOperationReferenceExpression?           | then              | 7:20 … 7:24  
+                                                                                IdentifierTree                             | a7                | 8:17 … 8:19  
+                                                                              }                                            |                   |              
+                                                                              ?KtOperationReferenceExpression?             | then              | 8:20 … 8:24  
+                                                                              IdentifierTree                               | a8                | 9:17 … 9:19  
+                                                                            }                                              |                   |              
+                                                                            ?KtOperationReferenceExpression?               | then              | 9:20 … 9:24  
+                                                                            IdentifierTree                                 | a9                | 10:17 … 10:19
+                                                                          }                                                |                   |              
+                                                                          ?KtOperationReferenceExpression?                 | then              | 10:20 … 10:24
+                                                                          IdentifierTree                                   | a10               | 11:17 … 11:20
+                                                                        }                                                  |                   |              
+                                                                        ?KtOperationReferenceExpression?                   | then              | 11:21 … 11:25
+                                                                        IdentifierTree                                     | a11               | 12:17 … 12:20
+                                                                      }                                                    |                   |              
+                                                                      ?KtOperationReferenceExpression?                     | then              | 12:21 … 12:25
+                                                                      IdentifierTree                                       | a11               | 13:17 … 13:20
+                                                                    }                                                      |                   |              
+                                                                    ?KtOperationReferenceExpression?                       | then              | 13:21 … 13:25
+                                                                    IdentifierTree                                         | a12               | 14:17 … 14:20
+                                                                  }                                                        |                   |              
+                                                                  ?KtOperationReferenceExpression?                         | then              | 14:21 … 14:25
+                                                                  IdentifierTree                                           | a13               | 15:17 … 15:20
+                                                                }                                                          |                   |              
+                                                                ?KtOperationReferenceExpression?                           | then              | 15:21 … 15:25
+                                                                IdentifierTree                                             | a14               | 16:17 … 16:20
+                                                              }                                                            |                   |              
+                                                              ?KtOperationReferenceExpression?                             | then              | 16:21 … 16:25
+                                                              IdentifierTree                                               | a15               | 17:17 … 17:20
+                                                            }                                                              |                   |              
+                                                            ?KtOperationReferenceExpression?                               | then              | 17:21 … 17:25
+                                                            IdentifierTree                                                 | a16               | 18:17 … 18:20
+                                                          }                                                                |                   |              
+                                                          ?KtOperationReferenceExpression?                                 | then              | 18:21 … 18:25
+                                                          IdentifierTree                                                   | a17               | 19:17 … 19:20
+                                                        }                                                                  |                   |              
+                                                        ?KtOperationReferenceExpression?                                   | then              | 19:21 … 19:25
+                                                        IdentifierTree                                                     | a18               | 20:17 … 20:20
+                                                      }                                                                    |                   |              
+                                                      ?KtOperationReferenceExpression?                                     | then              | 20:21 … 20:25
+                                                      IdentifierTree                                                       | a19               | 21:17 … 21:20
+                                                    }                                                                      |                   |              
+                                                    ?KtOperationReferenceExpression?                                       | then              | 21:21 … 21:25
+                                                    IdentifierTree                                                         | a20               | 22:17 … 22:20
+                                                  }                                                                        |                   |              
+                                                  ?KtOperationReferenceExpression?                                         | then              | 22:21 … 22:25
+                                                  IdentifierTree                                                           | a21               | 23:17 … 23:20
+                                                }                                                                          |                   |              
+                                                ?KtOperationReferenceExpression?                                           | then              | 23:21 … 23:25
+                                                IdentifierTree                                                             | a22               | 24:17 … 24:20
+                                              }                                                                            |                   |              
+                                              ?KtOperationReferenceExpression?                                             | then              | 24:21 … 24:25
+                                              IdentifierTree                                                               | a23               | 25:17 … 25:20
+                                            }                                                                              |                   |              
+                                            ?KtOperationReferenceExpression?                                               | then              | 25:21 … 25:25
+                                            IdentifierTree                                                                 | a24               | 26:17 … 26:20
+                                          }                                                                                |                   |              
+                                          ?KtOperationReferenceExpression?                                                 | then              | 26:21 … 26:25
+                                          IdentifierTree                                                                   | a25               | 27:17 … 27:20
+                                        }                                                                                  |                   |              
+                                        ?KtOperationReferenceExpression?                                                   | then              | 27:21 … 27:25
+                                        IdentifierTree                                                                     | a26               | 28:17 … 28:20
+                                      }                                                                                    |                   |              
+                                      ?KtOperationReferenceExpression?                                                     | then              | 28:21 … 28:25
+                                      IdentifierTree                                                                       | a27               | 29:17 … 29:20
+                                    }                                                                                      |                   |              
+                                    ?KtOperationReferenceExpression?                                                       | then              | 29:21 … 29:25
+                                    IdentifierTree                                                                         | a28               | 30:17 … 30:20
+                                  }                                                                                        |                   |              
+                                  ?KtOperationReferenceExpression?                                                         | then              | 30:21 … 30:25
+                                  IdentifierTree                                                                           | a29               | 31:17 … 31:20
+                                }                                                                                          |                   |              
+                                ?KtOperationReferenceExpression?                                                           | then              | 31:21 … 31:25
+                                IdentifierTree                                                                             | a30               | 32:17 … 32:20
+                              }                                                                                            |                   |              
+                              ?KtOperationReferenceExpression?                                                             | then              | 32:21 … 32:25
+                              IdentifierTree                                                                               | a31               | 33:17 … 33:20
+                            }                                                                                              |                   |              
+                            ?KtOperationReferenceExpression?                                                               | then              | 33:21 … 33:25
+                            IdentifierTree                                                                                 | a32               | 34:17 … 34:20
+                          }                                                                                                |                   |              
+                          ?KtOperationReferenceExpression?                                                                 | then              | 34:21 … 34:25
+                          IdentifierTree                                                                                   | a33               | 35:17 … 35:20
+                        }                                                                                                  |                   |              
+                        ?KtOperationReferenceExpression?                                                                   | then              | 35:21 … 35:25
+                        IdentifierTree                                                                                     | a34               | 36:17 … 36:20
+                      }                                                                                                    |                   |              
+                      ?KtOperationReferenceExpression?                                                                     | then              | 36:21 … 36:25
+                      IdentifierTree                                                                                       | a35               | 37:17 … 37:20
+                    }                                                                                                      |                   |              
+                    ?KtOperationReferenceExpression?                                                                       | then              | 37:21 … 37:25
+                    IdentifierTree                                                                                         | a36               | 38:17 … 38:20
+                  }                                                                                                        |                   |              
+                  ?KtOperationReferenceExpression?                                                                         | then              | 38:21 … 38:25
+                  IdentifierTree                                                                                           | a37               | 39:17 … 39:20
+                }                                                                                                          |                   |              
+                ?KtOperationReferenceExpression?                                                                           | then              | 39:21 … 39:25
+                IdentifierTree                                                                                             | a38               | 40:17 … 40:20
+              }                                                                                                            |                   |              
+              ?KtOperationReferenceExpression?                                                                             | then              | 40:21 … 40:25
+              IdentifierTree                                                                                               | a39               | 41:17 … 41:20
+            }                                                                                                              |                   |              
+            ?KtOperationReferenceExpression?                                                                               | then              | 41:21 … 41:25
+            IdentifierTree                                                                                                 | a40               | 42:17 … 42:20
+          }                                                                                                                |                   |              
+        }                                                                                                                  |                   |              
+      }                                                                                                                    |                   |              
+    }                                                                                                                      |                   |              
+  }                                                                                                                        |                   |              
+}                                                                                                                          |                   |              

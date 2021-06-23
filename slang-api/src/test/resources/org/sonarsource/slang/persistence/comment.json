@@ -1,0 +1,6 @@
+{
+  "text": "// hello",
+  "contentText": " hello",
+  "range": "3:7::15",
+  "contentRange": "3:9::15"
+}

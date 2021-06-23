@@ -1,0 +1,11 @@
+dependencies {
+    implementation 'com.google.code.findbugs:jsr305'
+    compileOnly 'org.sonarsource.sonarqube:sonar-plugin-api'
+    implementation 'org.sonarsource.analyzer-commons:sonar-analyzer-commons'
+    implementation 'org.sonarsource.analyzer-commons:sonar-xml-parsing'
+    testImplementation project(':slang-testing')
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+    testImplementation "org.junit.jupiter:junit-jupiter-migrationsupport"
+    testImplementation 'org.assertj:assertj-core'
+}

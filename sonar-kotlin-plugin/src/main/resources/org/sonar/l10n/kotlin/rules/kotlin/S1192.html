@@ -1,0 +1,37 @@
+<p>Duplicated string literals make the process of refactoring error-prone, since you must be sure to update all occurrences.</p>
+<p>On the other hand, constants can be referenced from many places, but only need to be updated in a single place.</p>
+<h2>Noncompliant Code Example</h2>
+<p>With the default threshold of 3:</p>
+<pre>
+class A {
+    fun run() {
+        prepare("string literal")    // Noncompliant - "string literal" is duplicated 3 times
+        execute("string literal")
+        release("string literal")
+    }
+
+    fun method() {
+        println("'")                 // Compliant - literal "'" has less than 5 characters and is excluded
+        println("'")
+        println("'")
+    }
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+class A {
+    companion object {
+        const val CONSTANT = "string literal"
+    }
+
+    fun run() {
+        prepare(CONSTANT)    // Compliant
+        execute(CONSTANT)
+        release(CONSTANT)
+    }
+}
+</pre>
+<h2>Exceptions</h2>
+<p>To prevent generating some false-positives, literals having 5 or less characters are excluded as well as literals containing only letters, digits
+and '_'.</p>
+

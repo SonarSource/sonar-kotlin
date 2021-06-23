@@ -1,0 +1,1 @@
+foo // Noncompliant {{wrong message}}

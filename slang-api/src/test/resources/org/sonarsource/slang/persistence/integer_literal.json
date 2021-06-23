@@ -1,0 +1,9 @@
+{
+  "treeMetaData": {
+    "comments": [],
+    "tokens": [
+      {"textRange": "1:0::4", "text": "0xFF"}
+    ]
+  },
+  "tree": {"@type": "IntegerLiteral", "metaData": "1:0::4", "value": "0xFF"}
+}

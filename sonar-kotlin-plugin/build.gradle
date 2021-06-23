@@ -1,0 +1,100 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+ext {
+    kotlinVersion = '1.4.10'
+}
+
+dependencies {
+    implementation project(':slang-api')
+    implementation project(':slang-checks')
+    implementation project(':slang-plugin')
+    implementation project(':checkstyle-import')
+    compileOnly 'org.sonarsource.sonarqube:sonar-plugin-api'
+    implementation 'org.sonarsource.analyzer-commons:sonar-analyzer-commons'
+    implementation 'org.sonarsource.analyzer-commons:sonar-xml-parsing'
+    implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:${kotlinVersion}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
+    implementation 'com.fasterxml.staxmate:staxmate:2.3.1'
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+    testImplementation "org.junit.jupiter:junit-jupiter-migrationsupport"
+    testImplementation 'org.assertj:assertj-core'
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'io.github.classgraph:classgraph'
+    testImplementation project(':slang-antlr')
+    testImplementation project(':slang-testing')
+}
+
+tasks.withType(JavaCompile) {
+    // Prevent warning: Gradle 5.0 will ignore annotation processors
+    options.compilerArgs += [ "-proc:none" ]
+}
+
+jar {
+    manifest {
+        def displayVersion = (project.buildNumber == null ? project.version : project.version.substring(0, project.version.lastIndexOf('.')) + " (build ${project.buildNumber})")
+        def buildDate = new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        attributes(
+                'Build-Time': buildDate,
+                'Implementation-Build': 'git rev-parse HEAD'.execute().text.trim(),
+                'Plugin-BuildDate': buildDate,
+                'Plugin-ChildFirstClassLoader': 'false',
+                'Plugin-Class': 'org.sonarsource.kotlin.plugin.KotlinPlugin',
+                'Plugin-Description': 'Code Analyzer for Kotlin',
+                'Plugin-Developers': 'SonarSource Team',
+                'Plugin-Display-Version': displayVersion,
+                'Plugin-Homepage': 'http://redirect.sonarsource.com/plugins/kotlin.html',
+                'Plugin-IssueTrackerUrl': 'https://jira.sonarsource.com/browse/SONARSLANG',
+                'Plugin-Key': 'kotlin',
+                'Plugin-License': 'GNU LGPL 3',
+                'Plugin-Name': 'Kotlin Code Quality and Security',
+                'Plugin-Organization': 'SonarSource',
+                'Plugin-OrganizationUrl': 'http://www.sonarsource.com',
+                'Plugin-SourcesUrl': 'https://github.com/SonarSource/slang',
+                'Plugin-Version': project.version,
+                'Sonar-Version': '6.7',
+                'SonarLint-Supported': 'true',
+                'Version': "${project.version}",
+        )
+    }
+}
+
+shadowJar {
+    minimize { }
+    exclude 'kotlin/comparisons/**'
+    exclude 'kotlin/scripts/**'
+    exclude 'org/jetbrains/kotlin/org/jdom/**'
+    exclude 'org/jetbrains/kotlin/com/intellij/icons/**'
+    exclude 'org/jetbrains/kotlin/com/intellij/lang/jvm/**'
+    exclude 'org/jetbrains/kotlin/com/intellij/ui/**'
+    exclude 'org/jetbrains/kotlin/com/intellij/util/ui/**'
+    exclude 'org/jetbrains/kotlin/com/intellij/util/xmlb/**'
+    exclude 'org/jetbrains/kotlin/builtins/**'
+    exclude 'org/jetbrains/kotlin/descriptors/**'
+    exclude 'org/jetbrains/kotlin/renderer/**'
+    exclude 'org/jetbrains/kotlin/resolve/**'
+    exclude 'org/jetbrains/kotlin/storage/**'
+    exclude 'org/jetbrains/kotlin/types/**'
+    exclude 'org/jetbrains/org/**'
+    doLast {
+        enforceJarSizeAndCheckContent(shadowJar.archiveFile.get().asFile, 8_000_000L, 8_500_000L)
+    }
+}
+
+artifacts {
+    archives shadowJar
+}
+
+artifactoryPublish.skip = false
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact source: shadowJar, classifier: null
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}

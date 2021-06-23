@@ -1,0 +1,79 @@
+AST node class                             | first…last tokens | line:col   
+-------------------------------------------|-------------------|------------
+TopLevelTree {                             | package … }       | 1:1 … 11:1 
+  PackageDeclarationTree {                 | package … ast     | 1:1 … 1:45 
+    ?KtPackageDirective? {                 | package … ast     | 1:1 … 1:45 
+      ?KtDotQualifiedExpression? {         | org … ast         | 1:9 … 1:45 
+        ?KtDotQualifiedExpression? {       | org … converter   | 1:9 … 1:41 
+          ?KtDotQualifiedExpression? {     | org … kotlin      | 1:9 … 1:31 
+            ?KtDotQualifiedExpression? {   | org … onarsource  | 1:9 … 1:24 
+              IdentifierTree               | org               | 1:9 … 1:12 
+              IdentifierTree               | sonarsource       | 1:13 … 1:24
+            }                              |                   |            
+            IdentifierTree                 | kotlin            | 1:25 … 1:31
+          }                                |                   |            
+          IdentifierTree                   | converter         | 1:32 … 1:41
+        }                                  |                   |            
+        IdentifierTree                     | ast               | 1:42 … 1:45
+      }                                    |                   |            
+    }                                      |                   |            
+  }                                        |                   |            
+  ClassDeclarationTree {                   | class … }         | 3:1 … 10:2 
+    ?KtClass? {                            | class … }         | 3:1 … 10:2 
+      FunctionDeclarationTree {            | ( … )             | 3:15 … 3:37
+        ParameterTree {                    | var … >           | 3:16 … 3:35
+          IdentifierTree                   | a                 | 3:20 … 3:21
+          ?KtTypeReference? {              | List … >          | 3:23 … 3:35
+            ?KtUserType? {                 | List … >          | 3:23 … 3:35
+              IdentifierTree               | List              | 3:23 … 3:27
+              ?KtTypeArgumentList? {       | < … >             | 3:27 … 3:35
+                ?KtTypeProjection? {       | String            | 3:28 … 3:34
+                  ?KtTypeReference? {      | String            | 3:28 … 3:34
+                    ?KtUserType? {         | String            | 3:28 … 3:34
+                      IdentifierTree       | String            | 3:28 … 3:34
+                    }                      |                   |            
+                  }                        |                   |            
+                }                          |                   |            
+              }                            |                   |            
+            }                              |                   |            
+          }                                |                   |            
+        }                                  |                   |            
+      }                                    |                   |            
+      ?KtClassBody? {                      | { … }             | 3:38 … 10:2
+        FunctionDeclarationTree {          | fun … }           | 4:5 … 9:6  
+          IdentifierTree                   | b                 | 4:9 … 4:10 
+          ParameterTree {                  | a … String        | 4:11 … 4:20
+            IdentifierTree                 | a                 | 4:11 … 4:12
+            ?KtTypeReference? {            | String            | 4:14 … 4:20
+              ?KtUserType? {               | String            | 4:14 … 4:20
+                IdentifierTree             | String            | 4:14 … 4:20
+              }                            |                   |            
+            }                              |                   |            
+          }                                |                   |            
+          BlockTree {                      | { … }             | 4:23 … 9:6 
+            AssignmentExpressionTree {     | this … )          | 5:9 … 8:10 
+              ?KtDotQualifiedExpression? { | this … a          | 5:9 … 5:15 
+                ?KtThisExpression? {       | this              | 5:9 … 5:13 
+                  IdentifierTree           | this              | 5:9 … 5:13 
+                }                          |                   |            
+                IdentifierTree             | a                 | 5:14 … 5:15
+              }                            |                   |            
+              ?KtCallExpression? {         | listOf … )        | 5:18 … 8:10
+                IdentifierTree             | listOf            | 5:18 … 5:24
+                ?KtValueArgumentList? {    | ( … )             | 5:24 … 8:10
+                  ?KtValueArgument? {      | a                 | 6:17 … 6:18
+                    IdentifierTree         | a                 | 6:17 … 6:18
+                  }                        |                   |            
+                  ?KtValueArgument? {      | " … "             | 7:17 … 7:19
+                    StringLiteralTree      | " … "             | 7:17 … 7:19
+                  }                        |                   |            
+                }                          |                   |            
+              }                            |                   |            
+            }                              |                   |            
+          }                                |                   |            
+        }                                  |                   |            
+      }                                    |                   |            
+      IdentifierTree                       | Trailing          | 3:7 … 3:15 
+    }                                      |                   |            
+  }                                        |                   |            
+}                                          |                   |            

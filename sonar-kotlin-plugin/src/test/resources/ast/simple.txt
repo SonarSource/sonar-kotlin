@@ -1,0 +1,43 @@
+AST node class                             | first…last tokens | line:col   
+-------------------------------------------|-------------------|------------
+TopLevelTree {                             | class … }         | 1:1 … 6:1  
+  ClassDeclarationTree {                   | class … }         | 1:1 … 5:2  
+    ?KtClass? {                            | class … }         | 1:1 … 5:2  
+      FunctionDeclarationTree {            | ( … )             | 1:13 … 1:28
+        ParameterTree {                    | var … String      | 1:14 … 1:27
+          IdentifierTree                   | a                 | 1:18 … 1:19
+          ?KtTypeReference? {              | String            | 1:21 … 1:27
+            ?KtUserType? {                 | String            | 1:21 … 1:27
+              IdentifierTree               | String            | 1:21 … 1:27
+            }                              |                   |            
+          }                                |                   |            
+        }                                  |                   |            
+      }                                    |                   |            
+      ?KtClassBody? {                      | { … }             | 1:29 … 5:2 
+        FunctionDeclarationTree {          | fun … }           | 2:5 … 4:6  
+          IdentifierTree                   | b                 | 2:9 … 2:10 
+          ParameterTree {                  | a … String        | 2:11 … 2:20
+            IdentifierTree                 | a                 | 2:11 … 2:12
+            ?KtTypeReference? {            | String            | 2:14 … 2:20
+              ?KtUserType? {               | String            | 2:14 … 2:20
+                IdentifierTree             | String            | 2:14 … 2:20
+              }                            |                   |            
+            }                              |                   |            
+          }                                |                   |            
+          BlockTree {                      | { … }             | 2:22 … 4:6 
+            AssignmentExpressionTree {     | this … "          | 3:9 … 3:20 
+              ?KtDotQualifiedExpression? { | this … a          | 3:9 … 3:15 
+                ?KtThisExpression? {       | this              | 3:9 … 3:13 
+                  IdentifierTree           | this              | 3:9 … 3:13 
+                }                          |                   |            
+                IdentifierTree             | a                 | 3:14 … 3:15
+              }                            |                   |            
+              StringLiteralTree            | " … "             | 3:18 … 3:20
+            }                              |                   |            
+          }                                |                   |            
+        }                                  |                   |            
+      }                                    |                   |            
+      IdentifierTree                       | Simple            | 1:7 … 1:13 
+    }                                      |                   |            
+  }                                        |                   |            
+}                                          |                   |            

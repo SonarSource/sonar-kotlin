@@ -1,0 +1,17 @@
+{
+  "treeMetaData": {
+    "comments": [],
+    "tokens": [
+      {"textRange": "1:0::1", "text": "x"},
+      {"textRange": "1:2::3", "text": "="},
+      {"textRange": "1:4::5", "text": "2"}
+    ]
+  },
+  "tree": {
+    "@type": "AssignmentExpression",
+    "metaData": "1:0::5",
+    "operator": "EQUAL",
+    "leftHandSide": {"@type": "Identifier", "metaData": "1:0::1", "name": "x"},
+    "statementOrExpression": {"@type": "IntegerLiteral", "metaData": "1:4::5", "value": "2"}
+  }
+}

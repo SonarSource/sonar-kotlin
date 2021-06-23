@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<checkstyle version="4.3">
+<file name="main.kt">
+	<error line="3" column="28" severity="info" message="This empty block of code can be removed." source="detekt.EmptyIfBlock" />
+	<error line="3" column="24" severity="warning" message="This expression contains a magic number. Consider defining it to a well named constant." source="detekt.MagicNumber" />
+</file>
+<file name="A.kt">
+	<error line="3" column="1" severity="error" message="A class should always override hashCode when overriding equals and the other way around." source="detekt.EqualsWithHashCodeExist" />
+</file>
+</checkstyle>

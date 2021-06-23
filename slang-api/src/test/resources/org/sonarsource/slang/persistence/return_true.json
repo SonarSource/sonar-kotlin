@@ -1,0 +1,16 @@
+{
+  "treeMetaData": {
+    "comments": [],
+    "tokens": [
+      {"textRange": "1:0::6", "text": "return", "type": "KEYWORD"},
+      {"textRange": "1:7::11", "text": "true"},
+      {"textRange": "1:11::12", "text": ";"}
+    ]
+  },
+  "tree": {
+    "@type": "Return",
+    "metaData": "1:0::12",
+    "body": {"@type": "Literal", "metaData": "1:7::11", "value": "true"},
+    "keyword": "1:0::6"
+  }
+}

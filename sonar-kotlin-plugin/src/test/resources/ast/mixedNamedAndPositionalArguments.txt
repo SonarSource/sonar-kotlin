@@ -1,0 +1,73 @@
+AST node class                           | first…last tokens | line:col     
+-----------------------------------------|-------------------|--------------
+TopLevelTree {                           | package … }       | 1:1 … 14:1   
+  PackageDeclarationTree {               | package … ast     | 1:1 … 1:45   
+    ?KtPackageDirective? {               | package … ast     | 1:1 … 1:45   
+      ?KtDotQualifiedExpression? {       | org … ast         | 1:9 … 1:45   
+        ?KtDotQualifiedExpression? {     | org … converter   | 1:9 … 1:41   
+          ?KtDotQualifiedExpression? {   | org … kotlin      | 1:9 … 1:31   
+            ?KtDotQualifiedExpression? { | org … onarsource  | 1:9 … 1:24   
+              IdentifierTree             | org               | 1:9 … 1:12   
+              IdentifierTree             | sonarsource       | 1:13 … 1:24  
+            }                            |                   |              
+            IdentifierTree               | kotlin            | 1:25 … 1:31  
+          }                              |                   |              
+          IdentifierTree                 | converter         | 1:32 … 1:41  
+        }                                |                   |              
+        IdentifierTree                   | ast               | 1:42 … 1:45  
+      }                                  |                   |              
+    }                                    |                   |              
+  }                                      |                   |              
+  FunctionDeclarationTree {              | fun … }           | 3:1 … 8:2    
+    IdentifierTree                       | function          | 3:5 … 3:13   
+    ParameterTree {                      | input … String    | 4:9 … 4:22   
+      IdentifierTree                     | input             | 4:9 … 4:14   
+      ?KtTypeReference? {                | String            | 4:16 … 4:22  
+        ?KtUserType? {                   | String            | 4:16 … 4:22  
+          IdentifierTree                 | String            | 4:16 … 4:22  
+        }                                |                   |              
+      }                                  |                   |              
+    }                                    |                   |              
+    ParameterTree {                      | isValid … true    | 5:9 … 5:32   
+      IdentifierTree                     | isValid           | 5:9 … 5:16   
+      ?KtTypeReference? {                | Boolean           | 5:18 … 5:25  
+        ?KtUserType? {                   | Boolean           | 5:18 … 5:25  
+          IdentifierTree                 | Boolean           | 5:18 … 5:25  
+        }                                |                   |              
+      }                                  |                   |              
+      LiteralTree                        | true              | 5:28 … 5:32  
+    }                                    |                   |              
+    ParameterTree {                      | times … 3         | 6:9 … 6:23   
+      IdentifierTree                     | times             | 6:9 … 6:14   
+      ?KtTypeReference? {                | Int               | 6:16 … 6:19  
+        ?KtUserType? {                   | Int               | 6:16 … 6:19  
+          IdentifierTree                 | Int               | 6:16 … 6:19  
+        }                                |                   |              
+      }                                  |                   |              
+      IntegerLiteralTree                 | 3                 | 6:22 … 6:23  
+    }                                    |                   |              
+    BlockTree                            | { … }             | 7:3 … 8:2    
+  }                                      |                   |              
+  FunctionDeclarationTree {              | fun … }           | 10:1 … 12:2  
+    IdentifierTree                       | main              | 10:5 … 10:9  
+    BlockTree {                          | { … }             | 10:12 … 12:2 
+      ?KtCallExpression? {               | function … )      | 11:5 … 11:54 
+        IdentifierTree                   | function          | 11:5 … 11:13 
+        ?KtValueArgumentList? {          | ( … )             | 11:13 … 11:54
+          ?KtValueArgument? {            | " … "             | 11:14 … 11:33
+            StringLiteralTree            | " … "             | 11:14 … 11:33
+          }                              |                   |              
+          ?KtValueArgument? {            | isValid … false   | 11:35 … 11:50
+            ?KtValueArgumentName? {      | isValid           | 11:35 … 11:42
+              IdentifierTree             | isValid           | 11:35 … 11:42
+            }                            |                   |              
+            LiteralTree                  | false             | 11:45 … 11:50
+          }                              |                   |              
+          ?KtValueArgument? {            | 5                 | 11:52 … 11:53
+            IntegerLiteralTree           | 5                 | 11:52 … 11:53
+          }                              |                   |              
+        }                                |                   |              
+      }                                  |                   |              
+    }                                    |                   |              
+  }                                      |                   |              
+}                                        |                   |              

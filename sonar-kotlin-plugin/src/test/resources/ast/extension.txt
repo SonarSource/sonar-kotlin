@@ -1,0 +1,55 @@
+AST node class                             | first…last tokens | line:col   
+-------------------------------------------|-------------------|------------
+TopLevelTree {                             | package … "       | 1:1 … 5:39 
+  PackageDeclarationTree {                 | package … ast     | 1:1 … 1:45 
+    ?KtPackageDirective? {                 | package … ast     | 1:1 … 1:45 
+      ?KtDotQualifiedExpression? {         | org … ast         | 1:9 … 1:45 
+        ?KtDotQualifiedExpression? {       | org … converter   | 1:9 … 1:41 
+          ?KtDotQualifiedExpression? {     | org … kotlin      | 1:9 … 1:31 
+            ?KtDotQualifiedExpression? {   | org … onarsource  | 1:9 … 1:24 
+              IdentifierTree               | org               | 1:9 … 1:12 
+              IdentifierTree               | sonarsource       | 1:13 … 1:24
+            }                              |                   |            
+            IdentifierTree                 | kotlin            | 1:25 … 1:31
+          }                                |                   |            
+          IdentifierTree                   | converter         | 1:32 … 1:41
+        }                                  |                   |            
+        IdentifierTree                     | ast               | 1:42 … 1:45
+      }                                    |                   |            
+    }                                      |                   |            
+  }                                        |                   |            
+  ImportDeclarationTree {                  | import … B        | 3:1 … 3:46 
+    ?KtImportDirective? {                  | import … B        | 3:1 … 3:46 
+      ?KtDotQualifiedExpression? {         | org … B           | 3:8 … 3:46 
+        ?KtDotQualifiedExpression? {       | org … ast         | 3:8 … 3:44 
+          ?KtDotQualifiedExpression? {     | org … converter   | 3:8 … 3:40 
+            ?KtDotQualifiedExpression? {   | org … kotlin      | 3:8 … 3:30 
+              ?KtDotQualifiedExpression? { | org … onarsource  | 3:8 … 3:23 
+                IdentifierTree             | org               | 3:8 … 3:11 
+                IdentifierTree             | sonarsource       | 3:12 … 3:23
+              }                            |                   |            
+              IdentifierTree               | kotlin            | 3:24 … 3:30
+            }                              |                   |            
+            IdentifierTree                 | converter         | 3:31 … 3:40
+          }                                |                   |            
+          IdentifierTree                   | ast               | 3:41 … 3:44
+        }                                  |                   |            
+        IdentifierTree                     | B                 | 3:45 … 3:46
+      }                                    |                   |            
+    }                                      |                   |            
+  }                                        |                   |            
+  ?KtNamedFunction? {                      | fun … "           | 5:1 … 5:39 
+    ?KtTypeReference? {                    | B                 | 5:5 … 5:6  
+      ?KtUserType? {                       | B                 | 5:5 … 5:6  
+        IdentifierTree                     | B                 | 5:5 … 5:6  
+      }                                    |                   |            
+    }                                      |                   |            
+    ?KtParameterList?                      | ( … )             | 5:24 … 5:26
+    ?KtTypeReference? {                    | String            | 5:28 … 5:34
+      ?KtUserType? {                       | String            | 5:28 … 5:34
+        IdentifierTree                     | String            | 5:28 … 5:34
+      }                                    |                   |            
+    }                                      |                   |            
+    StringLiteralTree                      | " … "             | 5:37 … 5:39
+  }                                        |                   |            
+}                                          |                   |            

@@ -1,0 +1,23 @@
+apply plugin: 'antlr'
+
+dependencies {
+    antlr "org.antlr:antlr4:4.7.1"
+    implementation project(':slang-api')
+    implementation 'org.sonarsource.analyzer-commons:sonar-analyzer-commons'
+    testImplementation project(':slang-testing')
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+    testImplementation "org.junit.jupiter:junit-jupiter-migrationsupport"
+    testImplementation 'org.assertj:assertj-core'
+}
+
+generateGrammarSource {
+    maxHeapSize = "64m"
+    arguments += ['-visitor', '-package', 'org.sonarsource.slang.parser']
+}
+
+sourceSets {
+    main {
+        antlr.srcDirs = [ "$projectDir/src/main/antlr4" ]
+    }
+}

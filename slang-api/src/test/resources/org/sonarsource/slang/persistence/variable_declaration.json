@@ -1,0 +1,18 @@
+{
+  "treeMetaData": {
+    "comments": [],
+    "tokens": [
+      {"textRange": "1:0::3", "text": "int"},
+      {"textRange": "1:4::5", "text": "x"},
+      {"textRange": "1:6::8", "text": "42"}
+    ]
+  },
+  "tree": {
+    "@type": "VariableDeclaration",
+    "metaData": "1:0::8",
+    "identifier": {"@type": "Identifier", "metaData": "1:4::5", "name": "x"},
+    "type": {"@type": "Identifier", "metaData": "1:0::3", "name": "int"},
+    "initializer": {"@type": "IntegerLiteral", "metaData": "1:6::8", "value": "42"},
+    "isVal": true
+  }
+}

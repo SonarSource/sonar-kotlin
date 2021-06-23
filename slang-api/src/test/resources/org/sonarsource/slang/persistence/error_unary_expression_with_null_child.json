@@ -1,0 +1,15 @@
+{
+  "treeMetaData": {
+    "comments": [],
+    "tokens": [
+      {"textRange": "1:0:1:1", "text": "-", "type": "OTHER"},
+      {"textRange": "1:1:1:2", "text": "x", "type": "OTHER"}
+    ]
+  },
+  "tree": {
+    "@type": "UnaryExpression",
+    "metaData": "1:0:1:2",
+    "operator": "MINUS",
+    "operand": null
+  }
+}

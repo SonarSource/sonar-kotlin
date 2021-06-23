@@ -1,0 +1,16 @@
+{
+  "treeMetaData": {
+    "comments": [],
+    "tokens": [
+      {"textRange": "1:0::5", "text": "catch", "type": "KEYWORD"},
+      {"textRange": "1:10::11", "text": "y"}
+    ]
+  },
+  "tree": {
+    "@type": "Catch",
+    "metaData": "1:0::11",
+    "catchParameter": null,
+    "catchBlock": {"@type": "Identifier", "metaData": "1:10::11", "name": "y"},
+    "keyword": "1:0::5"
+  }
+}

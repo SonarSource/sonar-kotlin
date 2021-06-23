@@ -1,0 +1,14 @@
+{
+  "treeMetaData": {
+    "comments": [],
+    "tokens": [
+      {"textRange": "1:0:1:5", "text": "break", "type": "KEYWORD"}
+    ]
+  },
+  "tree": {
+    "@type": "Jump",
+    "metaData": "1:0:1:5",
+    "keyword": "1:0:1:5",
+    "kind": "BREAK"
+  }
+}

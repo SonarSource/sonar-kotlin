@@ -1,0 +1,21 @@
+{
+  "treeMetaData": {
+    "comments": [
+      {"text": "// Noncompliant {{primary}}", "contentText": " Noncompliant {{primary}}", "range": "1:7:1:34", "contentRange": "1:9:1:34"},
+      {"text": "// ^ ^< {{secondary}}", "contentText": " ^ ^< {{secondary}}", "range": "2:0:2:21", "contentRange": "2:2:2:21"}
+    ],
+    "tokens": [
+      {"textRange": "1:3:1:4", "text": "a", "type": "OTHER"},
+      {"textRange": "1:5:1:6", "text": "b", "type": "OTHER"}
+    ]
+  },
+  "tree": {
+    "@type": "TopLevel",
+    "metaData": "1:0:2:21",
+    "declarations": [
+      {"@type": "Identifier", "metaData": "1:3:1:4", "name": "a"},
+      {"@type": "Identifier", "metaData": "1:5:1:6", "name": "b"}
+    ],
+    "firstCpdToken": "1:3:1:4"
+  }
+}

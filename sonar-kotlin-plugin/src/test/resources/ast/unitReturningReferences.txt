@@ -1,0 +1,75 @@
+AST node class                                | first…last tokens | line:col   
+----------------------------------------------|-------------------|------------
+TopLevelTree {                                | package … }       | 1:1 … 9:2  
+  PackageDeclarationTree {                    | package … ast     | 1:1 … 1:45 
+    ?KtPackageDirective? {                    | package … ast     | 1:1 … 1:45 
+      ?KtDotQualifiedExpression? {            | org … ast         | 1:9 … 1:45 
+        ?KtDotQualifiedExpression? {          | org … converter   | 1:9 … 1:41 
+          ?KtDotQualifiedExpression? {        | org … kotlin      | 1:9 … 1:31 
+            ?KtDotQualifiedExpression? {      | org … onarsource  | 1:9 … 1:24 
+              IdentifierTree                  | org               | 1:9 … 1:12 
+              IdentifierTree                  | sonarsource       | 1:13 … 1:24
+            }                                 |                   |            
+            IdentifierTree                    | kotlin            | 1:25 … 1:31
+          }                                   |                   |            
+          IdentifierTree                      | converter         | 1:32 … 1:41
+        }                                     |                   |            
+        IdentifierTree                        | ast               | 1:42 … 1:45
+      }                                       |                   |            
+    }                                         |                   |            
+  }                                           |                   |            
+  FunctionDeclarationTree {                   | fun … }           | 3:1 … 3:44 
+    IdentifierTree                            | highOrderFunction | 3:5 … 3:22 
+    ParameterTree {                           | func … Unit       | 3:23 … 3:39
+      IdentifierTree                          | func              | 3:23 … 3:27
+      ?KtTypeReference? {                     | ( … Unit          | 3:29 … 3:39
+        ?KtFunctionType? {                    | ( … Unit          | 3:29 … 3:39
+          ?KtParameterList?                   | ( … )             | 3:29 … 3:31
+          ?KtTypeReference? {                 | Unit              | 3:35 … 3:39
+            ?KtUserType? {                    | Unit              | 3:35 … 3:39
+              IdentifierTree                  | Unit              | 3:35 … 3:39
+            }                                 |                   |            
+          }                                   |                   |            
+        }                                     |                   |            
+      }                                       |                   |            
+    }                                         |                   |            
+    BlockTree                                 | { … }             | 3:41 … 3:44
+  }                                           |                   |            
+  FunctionDeclarationTree {                   | fun … "           | 4:1 … 4:44 
+    IdentifierTree                            | String            | 4:20 … 4:26
+    IdentifierTree                            | helloString       | 4:5 … 4:16 
+    BlockTree {                               | " … "             | 4:29 … 4:44
+      StringLiteralTree                       | " … "             | 4:29 … 4:44
+    }                                         |                   |            
+  }                                           |                   |            
+  FunctionDeclarationTree {                   | fun … }           | 6:1 … 9:2  
+    IdentifierTree                            | main              | 6:5 … 6:9  
+    BlockTree {                               | { … }             | 6:12 … 9:2 
+      ?KtCallExpression? {                    | highOrderF … }    | 7:5 … 7:40 
+        IdentifierTree                        | highOrderFunction | 7:5 … 7:22 
+        ?KtLambdaArgument? {                  | { … }             | 7:23 … 7:40
+          ?KtLambdaExpression? {              | { … }             | 7:23 … 7:40
+            FunctionDeclarationTree {         | { … }             | 7:23 … 7:40
+              BlockTree {                     | helloStrin … )    | 7:25 … 7:38
+                ?KtCallExpression? {          | helloStrin … )    | 7:25 … 7:38
+                  IdentifierTree              | helloString       | 7:25 … 7:36
+                  ?KtValueArgumentList?       | ( … )             | 7:36 … 7:38
+                }                             |                   |            
+              }                               |                   |            
+            }                                 |                   |            
+          }                                   |                   |            
+        }                                     |                   |            
+      }                                       |                   |            
+      ?KtCallExpression? {                    | highOrderF … )    | 8:5 … 8:37 
+        IdentifierTree                        | highOrderFunction | 8:5 … 8:22 
+        ?KtValueArgumentList? {               | ( … )             | 8:22 … 8:37
+          ?KtValueArgument? {                 | :: … elloString   | 8:23 … 8:36
+            ?KtCallableReferenceExpression? { | :: … elloString   | 8:23 … 8:36
+              IdentifierTree                  | helloString       | 8:25 … 8:36
+            }                                 |                   |            
+          }                                   |                   |            
+        }                                     |                   |            
+      }                                       |                   |            
+    }                                         |                   |            
+  }                                           |                   |            
+}                                             |                   |            

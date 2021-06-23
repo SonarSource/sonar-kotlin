@@ -1,0 +1,19 @@
+{
+  "treeMetaData": {
+    "comments": [
+      {
+        "text": "// Noncompliant@0 {{file-issue.code length 48}}",
+        "contentText": " Noncompliant@0 {{file-issue.code length 48}}",
+        "range": "1:0:1:47",
+        "contentRange": "1:2:1:47"
+      }
+    ],
+    "tokens": []
+  },
+  "tree": {
+    "@type": "TopLevel",
+    "metaData": "1:0:1:47",
+    "declarations": [],
+    "firstCpdToken": null
+  }
+}

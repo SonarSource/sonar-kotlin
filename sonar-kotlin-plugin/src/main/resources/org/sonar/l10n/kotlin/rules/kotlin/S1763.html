@@ -1,0 +1,25 @@
+<p>Jump statements (<code>return</code>, <code>break</code> and <code>continue</code>) move control flow out of the current code block. So any
+statements that come after a jump are dead code. </p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+fun foo(a: Int): Int {
+  var i = 10;
+  return a + i;       // Noncompliant
+  i++;                // dead code
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+fun foo(a: Int): Int {
+  var i = 10;
+  return a + i;
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="http://cwe.mitre.org/data/definitions/561.html">MITRE, CWE-561</a> - Dead Code </li>
+  <li> <a href="https://wiki.sei.cmu.edu/confluence/x/9DZGBQ">CERT, MSC56-J.</a> - Detect and remove superfluous code and values </li>
+  <li> <a href="https://wiki.sei.cmu.edu/confluence/x/5dUxBQ">CERT, MSC12-C.</a> - Detect and remove code that has no effect or is never executed
+  </li>
+</ul>
+

@@ -1,0 +1,19 @@
+{
+  "treeMetaData": {
+    "comments": [],
+    "tokens": [
+      {"textRange": "10:0::7", "text": "token10"},
+      {"textRange": "21:0::7", "text": "token21"},
+      {"textRange": "22:0::7", "text": "token22"}
+    ]
+  },
+  "tree": {
+    "@type": "Native",
+    "metaData": "10:0:22:7",
+    "nativeKind": "PARENT",
+    "children": [
+      {"@type": "Native", "metaData": "21:0::7", "nativeKind": "CHILD", "children": []},
+      {"@type": "Native", "metaData": "22:0::7", "nativeKind": "CHILD", "children": []}
+    ]
+  }
+}

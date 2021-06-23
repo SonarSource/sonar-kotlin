@@ -1,0 +1,24 @@
+{
+  "treeMetaData": {
+    "comments": [
+
+    ],
+    "tokens": [
+      {
+        "textRange": "1:0::1",
+        "text": "x"
+      }
+    ]
+  },
+  "tree": {
+    "@type": "Native",
+    "metaData": "1:0::1",
+    "children": [
+      {
+        "@type": "Identifier",
+        "metaData": "1:0::1",
+        "name": "MyClass"
+      }
+    ]
+  }
+}

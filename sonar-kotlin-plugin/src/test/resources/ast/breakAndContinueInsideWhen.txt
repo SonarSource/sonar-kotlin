@@ -1,0 +1,87 @@
+AST node class                                       | first…last tokens    | line:col   
+-----------------------------------------------------|----------------------|------------
+TopLevelTree {                                       | package … }          | 1:1 … 11:2 
+  PackageDeclarationTree {                           | package … ast        | 1:1 … 1:45 
+    ?KtPackageDirective? {                           | package … ast        | 1:1 … 1:45 
+      ?KtDotQualifiedExpression? {                   | org … ast            | 1:9 … 1:45 
+        ?KtDotQualifiedExpression? {                 | org … converter      | 1:9 … 1:41 
+          ?KtDotQualifiedExpression? {               | org … kotlin         | 1:9 … 1:31 
+            ?KtDotQualifiedExpression? {             | org … onarsource     | 1:9 … 1:24 
+              IdentifierTree                         | org                  | 1:9 … 1:12 
+              IdentifierTree                         | sonarsource          | 1:13 … 1:24
+            }                                        |                      |            
+            IdentifierTree                           | kotlin               | 1:25 … 1:31
+          }                                          |                      |            
+          IdentifierTree                             | converter            | 1:32 … 1:41
+        }                                            |                      |            
+        IdentifierTree                               | ast                  | 1:42 … 1:45
+      }                                              |                      |            
+    }                                                |                      |            
+  }                                                  |                      |            
+  FunctionDeclarationTree {                          | fun … }              | 3:1 … 11:2 
+    IdentifierTree                                   | testBreakAndContinue | 3:5 … 3:25 
+    ParameterTree {                                  | ints … >             | 3:26 … 3:41
+      IdentifierTree                                 | ints                 | 3:26 … 3:30
+      ?KtTypeReference? {                            | List … >             | 3:32 … 3:41
+        ?KtUserType? {                               | List … >             | 3:32 … 3:41
+          IdentifierTree                             | List                 | 3:32 … 3:36
+          ?KtTypeArgumentList? {                     | < … >                | 3:36 … 3:41
+            ?KtTypeProjection? {                     | Int                  | 3:37 … 3:40
+              ?KtTypeReference? {                    | Int                  | 3:37 … 3:40
+                ?KtUserType? {                       | Int                  | 3:37 … 3:40
+                  IdentifierTree                     | Int                  | 3:37 … 3:40
+                }                                    |                      |            
+              }                                      |                      |            
+            }                                        |                      |            
+          }                                          |                      |            
+        }                                            |                      |            
+      }                                              |                      |            
+    }                                                |                      |            
+    BlockTree {                                      | { … }                | 3:43 … 11:2
+      LoopTree {                                     | for … }              | 4:5 … 10:6 
+        ?KtForExpression? {                          | i … ints             | 4:10 … 4:19
+          ParameterTree {                            | i                    | 4:10 … 4:11
+            IdentifierTree                           | i                    | 4:10 … 4:11
+          }                                          |                      |            
+          IdentifierTree                             | ints                 | 4:15 … 4:19
+        }                                            |                      |            
+        BlockTree {                                  | { … }                | 4:21 … 10:6
+          MatchTree {                                | when … }             | 5:9 … 9:10 
+            IdentifierTree                           | i                    | 5:15 … 5:16
+            MatchCaseTree {                          | in … continue        | 6:13 … 6:32
+              ?KtWhenCondition? {                    | in … 5               | 6:13 … 6:20
+                ?KtWhenConditionInRange? {           | in … 5               | 6:13 … 6:20
+                  ?KtOperationReferenceExpression?   | in                   | 6:13 … 6:15
+                  ?KtBinaryExpression[..]? {         | 2 … 5                | 6:16 … 6:20
+                    IntegerLiteralTree               | 2                    | 6:16 … 6:17
+                    ?KtOperationReferenceExpression? | ..                   | 6:17 … 6:19
+                    IntegerLiteralTree               | 5                    | 6:19 … 6:20
+                  }                                  |                      |            
+                }                                    |                      |            
+              }                                      |                      |            
+              JumpTree                               | continue             | 6:24 … 6:32
+            }                                        |                      |            
+            MatchCaseTree {                          | 39 … break           | 7:13 … 7:24
+              ?KtWhenCondition? {                    | 39                   | 7:13 … 7:15
+                ?KtWhenConditionWithExpression? {    | 39                   | 7:13 … 7:15
+                  IntegerLiteralTree                 | 39                   | 7:13 … 7:15
+                }                                    |                      |            
+              }                                      |                      |            
+              JumpTree                               | break                | 7:19 … 7:24
+            }                                        |                      |            
+            MatchCaseTree {                          | else … )             | 8:13 … 8:31
+              ?KtCallExpression? {                   | println … )          | 8:21 … 8:31
+                IdentifierTree                       | println              | 8:21 … 8:28
+                ?KtValueArgumentList? {              | ( … )                | 8:28 … 8:31
+                  ?KtValueArgument? {                | i                    | 8:29 … 8:30
+                    IdentifierTree                   | i                    | 8:29 … 8:30
+                  }                                  |                      |            
+                }                                    |                      |            
+              }                                      |                      |            
+            }                                        |                      |            
+          }                                          |                      |            
+        }                                            |                      |            
+      }                                              |                      |            
+    }                                                |                      |            
+  }                                                  |                      |            
+}                                                    |                      |            

@@ -1,0 +1,19 @@
+{
+  "treeMetaData": {
+    "comments": [],
+    "tokens": [
+      {"textRange": "1:0:1:6", "text": "switch", "type": "KEYWORD"},
+      {"textRange": "1:9:1:16", "text": "default", "type": "KEYWORD"},
+      {"textRange": "1:17:1:19", "text": "42", "type": "OTHER"}
+    ]
+  },
+  "tree": {
+    "@type": "Match",
+    "metaData": "1:0:1:19",
+    "expression": null,
+    "cases": [
+      {"@type": "IntegerLiteral", "metaData": "1:17:1:19", "value": "42"}
+    ],
+    "keyword": "1:0:1:6"
+  }
+}

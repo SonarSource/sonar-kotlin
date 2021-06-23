@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="4" by="lint 3.1.3">
+
+    <issue
+        id="AllowBackup"
+        severity="Warning"
+        message="On SDK version 23 and up, your app data will be automatically backed up and restored on app install. Consider adding the attribute `android:fullBackupContent` to specify an `@xml` resource which configures which files to backup. More info: https://developer.android.com/training/backup/autosyncapi.html"
+        category="Security"
+        priority="3"
+        summary="AllowBackup/FullBackupContent Problems"
+        explanation="The `allowBackup` attribute determines if an application&apos;s data can be backed up and restored. It is documented at http://developer.android.com/reference/android/R.attr.html#allowBackup&#xA;&#xA;By default, this flag is set to `true`. When this flag is set to `true`, application data can be backed up and restored by the user using `adb backup` and `adb restore`.&#xA;&#xA;This may have security consequences for an application. `adb backup` allows users who have enabled USB debugging to copy application data off of the device. Once backed up, all application data can be read by the user. `adb restore` allows creation of application data from a source specified by the user. Following a restore, applications should not assume that the data, file permissions, and directory permissions were created by the application itself.&#xA;&#xA;Setting `allowBackup=&quot;false&quot;` opts an application out of both backup and restore.&#xA;&#xA;To fix this warning, decide whether your application should support backup, and explicitly set `android:allowBackup=(true|false)&quot;`.&#xA;&#xA;If not set to false, and if targeting API 23 or later, lint will also warn that you should set `android:fullBackupContent` to configure auto backup."
+        url="https://developer.android.com/training/backup/autosyncapi.html"
+        urls="https://developer.android.com/training/backup/autosyncapi.html,http://developer.android.com/reference/android/R.attr.html#allowBackup"
+        errorLine1="    &lt;application"
+        errorLine2="    ^"
+        quickfix="studio">
+        <location file="AndroidManifest.xml" line="2" column="5"/>
+    </issue>
+
+    <issue
+        id="GoogleAppIndexingWarning"
+        message="message ...">
+        <location file="A.java" line="1" column="5"/>
+    </issue>
+
+    <issue
+        id="GoogleAppIndexingWarning"
+        message="message ...">
+        <location file="B.kt" line="2" column="5"/>
+    </issue>
+
+    <issue
+            id="GradleDependency"
+            severity="Warning"
+            message="A newer version of com.android.support:recyclerview-v7 than 26.0.0 is available: 27.1.1"
+            category="Correctness"
+            priority="4"
+            summary="Obsolete Gradle Dependency"
+            explanation="This detector looks for usages of libraries where the version you are using is not the current stable release. Using older versions is fine, and there are cases wh
+ere you deliberately want to stick with an older version. However, you may simply not be aware that a more recent version is available, and that is what this lint check helps find."
+            errorLine1="    implementation &quot;com.android.support:recyclerview-v7:$android_support_version&quot;"
+            errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+            quickfix="studio">
+        <location
+                file="build.gradle"
+                line="3"
+                column="5"/>
+    </issue>
+
+</issues>

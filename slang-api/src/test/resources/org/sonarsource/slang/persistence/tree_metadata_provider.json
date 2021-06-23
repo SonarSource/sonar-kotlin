@@ -1,0 +1,8 @@
+{
+  "comments": [
+    {"text": "// hello", "contentText": " hello", "range": "1:0::8", "contentRange": "1:2::8"}
+  ],
+  "tokens": [
+    {"textRange": "2:0::3", "text": "fun", "type": "KEYWORD"}
+  ]
+}

@@ -1,0 +1,12 @@
+dependencies {
+    implementation project(':slang-api')
+    implementation 'com.google.code.findbugs:jsr305'
+    implementation 'org.sonarsource.analyzer-commons:sonar-analyzer-test-commons'
+    compileOnly 'org.sonarsource.sonarqube:sonar-plugin-api'
+    implementation "org.junit.jupiter:junit-jupiter-api"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+    implementation "org.junit.jupiter:junit-jupiter-migrationsupport"
+    compileOnly 'io.github.classgraph:classgraph'
+    compileOnly 'org.assertj:assertj-core'
+    compileOnly 'org.mockito:mockito-core'
+}

@@ -1,0 +1,24 @@
+<p>Redundant Boolean literals should be removed from expressions to improve readability.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+if (booleanMethod() || false) { /* ... */ }
+doSomething(!false);
+
+booleanVariable = if (booleanMethod()) true else false;
+booleanVariable = if (booleanMethod()) true else exp;
+booleanVariable = if (booleanMethod()) false else exp;
+booleanVariable = if (booleanMethod()) exp else true;
+booleanVariable = if (booleanMethod()) exp else false;
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+if (booleanMethod()) { /* ... */ }
+doSomething(true);
+
+booleanVariable = booleanMethod();
+booleanVariable = booleanMethod() || exp;
+booleanVariable = !booleanMethod() &amp;&amp; exp;
+booleanVariable = !booleanMethod() || exp;
+booleanVariable = booleanMethod() &amp;&amp; exp;
+</pre>
+

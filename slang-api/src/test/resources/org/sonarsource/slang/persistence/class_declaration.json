@@ -1,0 +1,24 @@
+{
+  "treeMetaData": {
+    "comments": [],
+    "tokens": [
+      {"textRange": "1:0::5", "text": "class", "type": "KEYWORD"},
+      {"textRange": "1:6::7", "text": "A"},
+      {"textRange": "1:8::9", "text": "{"},
+      {"textRange": "1:10::11", "text": "}"}
+    ]
+  },
+  "tree": {
+    "@type": "ClassDeclaration",
+    "metaData": "1:0::11",
+    "identifier": "1:6::7",
+    "classTree": {
+      "@type": "Native",
+      "metaData": "1:6::11",
+      "nativeKind": "CLASS",
+      "children": [
+        {"@type": "Identifier", "metaData": "1:6::7", "name": "A"}
+      ]
+    }
+  }
+}

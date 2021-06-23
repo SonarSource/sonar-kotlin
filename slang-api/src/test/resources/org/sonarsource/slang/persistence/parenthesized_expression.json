@@ -1,0 +1,17 @@
+{
+  "treeMetaData": {
+    "comments": [],
+    "tokens": [
+      {"textRange": "1:0::1", "text": "("},
+      {"textRange": "1:1::2", "text": "x"},
+      {"textRange": "1:2::3", "text": ")"}
+    ]
+  },
+  "tree": {
+    "@type": "ParenthesizedExpression",
+    "metaData": "1:0::3",
+    "expression": {"@type": "Identifier", "metaData": "1:1::2", "name": "x"},
+    "leftParenthesis": "1:0::1",
+    "rightParenthesis": "1:2::3"
+  }
+}

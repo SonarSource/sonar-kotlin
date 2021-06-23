@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="5.0">
+  <file name="TabCharacter.go">
+    <error column="6" line="4" message="`three` is unused" severity="error" source="deadcode"></error>
+  </file>
+</checkstyle>

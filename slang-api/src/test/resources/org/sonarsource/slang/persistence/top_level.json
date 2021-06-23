@@ -1,0 +1,18 @@
+{
+  "treeMetaData": {
+    "comments": [
+      {"text": "// hello", "contentText": " hello", "range": "1:0::8", "contentRange": "1:2::8"}
+    ],
+    "tokens": [
+      {"textRange": "2:0::4", "text": "true"}
+    ]
+  },
+  "tree": {
+    "@type": "TopLevel",
+    "metaData": "1:0:2:4",
+    "declarations": [
+      {"@type": "Literal", "metaData": "2:0::4", "value": "true"}
+    ],
+    "firstCpdToken": "2:0::4"
+  }
+}

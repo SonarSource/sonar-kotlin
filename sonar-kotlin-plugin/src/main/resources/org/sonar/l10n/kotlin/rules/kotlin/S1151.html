@@ -1,0 +1,35 @@
+<p>The <code>when</code> statement should be used only to clearly define some new branches in the control flow. As soon as a case clause contains too
+many statements this highly decreases the readability of the overall control flow statement. In such case, the content of the case clause should be
+extracted into a dedicated function.</p>
+<h2>Noncompliant Code Example</h2>
+<p>With the threshold set at 5:</p>
+<pre>
+when (myVariable) {
+  0 -&gt; {// Noncompliant: 6 lines till next case
+    methodCall1("");
+    methodCall2("");
+    methodCall3("");
+    methodCall4("");
+    }
+  1 -&gt; {
+    ...
+  }
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+when (myVariable) {
+  0 -&gt; doSomething()
+  1 -&gt; {
+    ...
+  }
+}
+...
+fun doSomething() {
+    methodCall1("");
+    methodCall2("");
+    methodCall3("");
+    methodCall4("");
+}
+</pre>
+

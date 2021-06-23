@@ -1,0 +1,28 @@
+<p>Having all branches in a <code>when</code> or <code>if</code> chain with the same implementation is an error. Either a copy-paste error was made
+and something different should be executed, or there shouldn't be a <code>when</code>/<code>if</code> chain at all.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+if (b == 0) {  // Noncompliant
+     doOneMoreThing()
+} else {
+     doOneMoreThing()
+}
+
+when (i) {  // Noncompliant
+    1 -&gt; doSomething()
+    2 -&gt; doSomething()
+    3 -&gt; doSomething()
+    else -&gt; doSomething()
+}
+</pre>
+<h2>Exceptions</h2>
+<p>This rule does not apply to <code>if</code> chains without <code>else</code>-s, or to <code>when</code>-es without <code>else</code> clauses.</p>
+<pre>
+if (b == 0) {
+    doOneMoreThing()
+} else if (b == 1) {
+    doOneMoreThing()
+}
+
+</pre>
+

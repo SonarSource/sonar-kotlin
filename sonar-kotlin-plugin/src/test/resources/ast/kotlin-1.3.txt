@@ -1,0 +1,455 @@
+AST node class                                         | first…last tokens    | line:col     
+-------------------------------------------------------|----------------------|--------------
+TopLevelTree {                                         | import … )           | 1:1 … 78:1   
+  ImportDeclarationTree {                              | import … *           | 1:1 … 1:28   
+    ?KtImportDirective? {                              | import … *           | 1:1 … 1:28   
+      ?KtDotQualifiedExpression? {                     | kotlinx … coroutines | 1:8 … 1:26   
+        IdentifierTree                                 | kotlinx              | 1:8 … 1:15   
+        IdentifierTree                                 | coroutines           | 1:16 … 1:26  
+      }                                                |                      |              
+    }                                                  |                      |              
+  }                                                    |                      |              
+  FunctionDeclarationTree {                            | suspend … }          | 3:1 … 12:2   
+    ?LeafPsiElement[suspend]?                          | suspend              | 3:1 … 3:8    
+    IdentifierTree                                     | main                 | 3:13 … 3:17  
+    BlockTree {                                        | { … }                | 3:20 … 12:2  
+      ?KtDotQualifiedExpression? {                     | GlobalScop … }       | 4:5 … 7:6    
+        IdentifierTree                                 | GlobalScope          | 4:5 … 4:16   
+        ?KtCallExpression? {                           | launch … }           | 4:17 … 7:6   
+          IdentifierTree                               | launch               | 4:17 … 4:23  
+          ?KtLambdaArgument? {                         | { … }                | 4:24 … 7:6   
+            ?KtLambdaExpression? {                     | { … }                | 4:24 … 7:6   
+              FunctionDeclarationTree {                | { … }                | 4:24 … 7:6   
+                BlockTree {                            | delay … )            | 4:26 … 6:26  
+                  ?KtCallExpression? {                 | delay … )            | 5:9 … 5:21   
+                    IdentifierTree                     | delay                | 5:9 … 5:14   
+                    ?KtValueArgumentList? {            | ( … )                | 5:14 … 5:21  
+                      ?KtValueArgument? {              | 1000L                | 5:15 … 5:20  
+                        IntegerLiteralTree             | 1000L                | 5:15 … 5:20  
+                      }                                |                      |              
+                    }                                  |                      |              
+                  }                                    |                      |              
+                  ?KtCallExpression? {                 | println … )          | 6:9 … 6:26   
+                    IdentifierTree                     | println              | 6:9 … 6:16   
+                    ?KtValueArgumentList? {            | ( … )                | 6:16 … 6:26  
+                      ?KtValueArgument? {              | " … "                | 6:17 … 6:25  
+                        StringLiteralTree              | " … "                | 6:17 … 6:25  
+                      }                                |                      |              
+                    }                                  |                      |              
+                  }                                    |                      |              
+                }                                      |                      |              
+              }                                        |                      |              
+            }                                          |                      |              
+          }                                            |                      |              
+        }                                              |                      |              
+      }                                                |                      |              
+      ?KtCallExpression? {                             | println … )          | 8:5 … 8:22   
+        IdentifierTree                                 | println              | 8:5 … 8:12   
+        ?KtValueArgumentList? {                        | ( … )                | 8:12 … 8:22  
+          ?KtValueArgument? {                          | " … "                | 8:13 … 8:21  
+            StringLiteralTree                          | " … "                | 8:13 … 8:21  
+          }                                            |                      |              
+        }                                              |                      |              
+      }                                                |                      |              
+      ?KtCallExpression? {                             | runBlockin … }       | 9:5 … 11:6   
+        IdentifierTree                                 | runBlocking          | 9:5 … 9:16   
+        ?KtLambdaArgument? {                           | { … }                | 9:17 … 11:6  
+          ?KtLambdaExpression? {                       | { … }                | 9:17 … 11:6  
+            FunctionDeclarationTree {                  | { … }                | 9:17 … 11:6  
+              BlockTree {                              | delay … )            | 9:23 … 10:76 
+                ?KtCallExpression? {                   | delay … )            | 10:9 … 10:21 
+                  IdentifierTree                       | delay                | 10:9 … 10:14 
+                  ?KtValueArgumentList? {              | ( … )                | 10:14 … 10:21
+                    ?KtValueArgument? {                | 2000L                | 10:15 … 10:20
+                      IntegerLiteralTree               | 2000L                | 10:15 … 10:20
+                    }                                  |                      |              
+                  }                                    |                      |              
+                }                                      |                      |              
+              }                                        |                      |              
+            }                                          |                      |              
+          }                                            |                      |              
+        }                                              |                      |              
+      }                                                |                      |              
+    }                                                  |                      |              
+  }                                                    |                      |              
+  FunctionDeclarationTree {                            | fun … }              | 14:1 … 21:2  
+    IdentifierTree                                     | main2                | 14:5 … 14:10 
+    BlockTree {                                        | runBlockin … }       | 14:15 … 21:2 
+      ?KtCallExpression? {                             | runBlockin … }       | 14:15 … 21:2 
+        IdentifierTree                                 | runBlocking          | 14:15 … 14:26
+        ?KtTypeArgumentList? {                         | < … >                | 14:26 … 14:32
+          ?KtTypeProjection? {                         | Unit                 | 14:27 … 14:31
+            ?KtTypeReference? {                        | Unit                 | 14:27 … 14:31
+              ?KtUserType? {                           | Unit                 | 14:27 … 14:31
+                IdentifierTree                         | Unit                 | 14:27 … 14:31
+              }                                        |                      |              
+            }                                          |                      |              
+          }                                            |                      |              
+        }                                              |                      |              
+        ?KtLambdaArgument? {                           | { … }                | 14:33 … 21:2 
+          ?KtLambdaExpression? {                       | { … }                | 14:33 … 21:2 
+            FunctionDeclarationTree {                  | { … }                | 14:33 … 21:2 
+              BlockTree {                              | GlobalScop … )       | 14:35 … 20:66
+                ?KtDotQualifiedExpression? {           | GlobalScop … }       | 15:5 … 18:6  
+                  IdentifierTree                       | GlobalScope          | 15:5 … 15:16 
+                  ?KtCallExpression? {                 | launch … }           | 15:17 … 18:6 
+                    IdentifierTree                     | launch               | 15:17 … 15:23
+                    ?KtLambdaArgument? {               | { … }                | 15:24 … 18:6 
+                      ?KtLambdaExpression? {           | { … }                | 15:24 … 18:6 
+                        FunctionDeclarationTree {      | { … }                | 15:24 … 18:6 
+                          BlockTree {                  | delay … )            | 15:26 … 17:26
+                            ?KtCallExpression? {       | delay … )            | 16:9 … 16:21 
+                              IdentifierTree           | delay                | 16:9 … 16:14 
+                              ?KtValueArgumentList? {  | ( … )                | 16:14 … 16:21
+                                ?KtValueArgument? {    | 1000L                | 16:15 … 16:20
+                                  IntegerLiteralTree   | 1000L                | 16:15 … 16:20
+                                }                      |                      |              
+                              }                        |                      |              
+                            }                          |                      |              
+                            ?KtCallExpression? {       | println … )          | 17:9 … 17:26 
+                              IdentifierTree           | println              | 17:9 … 17:16 
+                              ?KtValueArgumentList? {  | ( … )                | 17:16 … 17:26
+                                ?KtValueArgument? {    | " … "                | 17:17 … 17:25
+                                  StringLiteralTree    | " … "                | 17:17 … 17:25
+                                }                      |                      |              
+                              }                        |                      |              
+                            }                          |                      |              
+                          }                            |                      |              
+                        }                              |                      |              
+                      }                                |                      |              
+                    }                                  |                      |              
+                  }                                    |                      |              
+                }                                      |                      |              
+                ?KtCallExpression? {                   | println … )          | 19:5 … 19:22 
+                  IdentifierTree                       | println              | 19:5 … 19:12 
+                  ?KtValueArgumentList? {              | ( … )                | 19:12 … 19:22
+                    ?KtValueArgument? {                | " … "                | 19:13 … 19:21
+                      StringLiteralTree                | " … "                | 19:13 … 19:21
+                    }                                  |                      |              
+                  }                                    |                      |              
+                }                                      |                      |              
+                ?KtCallExpression? {                   | delay … )            | 20:5 … 20:17 
+                  IdentifierTree                       | delay                | 20:5 … 20:10 
+                  ?KtValueArgumentList? {              | ( … )                | 20:10 … 20:17
+                    ?KtValueArgument? {                | 2000L                | 20:11 … 20:16
+                      IntegerLiteralTree               | 2000L                | 20:11 … 20:16
+                    }                                  |                      |              
+                  }                                    |                      |              
+                }                                      |                      |              
+              }                                        |                      |              
+            }                                          |                      |              
+          }                                            |                      |              
+        }                                              |                      |              
+      }                                                |                      |              
+    }                                                  |                      |              
+  }                                                    |                      |              
+  FunctionDeclarationTree {                            | fun … }              | 23:1 … 26:2  
+    IdentifierTree                                     | main3                | 23:5 … 23:10 
+    BlockTree {                                        | runBlockin … }       | 23:15 … 26:2 
+      ?KtCallExpression? {                             | runBlockin … }       | 23:15 … 26:2 
+        IdentifierTree                                 | runBlocking          | 23:15 … 23:26
+        ?KtLambdaArgument? {                           | { … }                | 23:27 … 26:2 
+          ?KtLambdaExpression? {                       | { … }                | 23:27 … 26:2 
+            FunctionDeclarationTree {                  | { … }                | 23:27 … 26:2 
+              BlockTree {                              | launch … )           | 24:5 … 25:22 
+                ?KtCallExpression? {                   | launch … }           | 24:5 … 24:25 
+                  IdentifierTree                       | launch               | 24:5 … 24:11 
+                  ?KtLambdaArgument? {                 | { … }                | 24:12 … 24:25
+                    ?KtLambdaExpression? {             | { … }                | 24:12 … 24:25
+                      FunctionDeclarationTree {        | { … }                | 24:12 … 24:25
+                        BlockTree {                    | doWorld … )          | 24:14 … 24:23
+                          ?KtCallExpression? {         | doWorld … )          | 24:14 … 24:23
+                            IdentifierTree             | doWorld              | 24:14 … 24:21
+                            ?KtValueArgumentList?      | ( … )                | 24:21 … 24:23
+                          }                            |                      |              
+                        }                              |                      |              
+                      }                                |                      |              
+                    }                                  |                      |              
+                  }                                    |                      |              
+                }                                      |                      |              
+                ?KtCallExpression? {                   | println … )          | 25:5 … 25:22 
+                  IdentifierTree                       | println              | 25:5 … 25:12 
+                  ?KtValueArgumentList? {              | ( … )                | 25:12 … 25:22
+                    ?KtValueArgument? {                | " … "                | 25:13 … 25:21
+                      StringLiteralTree                | " … "                | 25:13 … 25:21
+                    }                                  |                      |              
+                  }                                    |                      |              
+                }                                      |                      |              
+              }                                        |                      |              
+            }                                          |                      |              
+          }                                            |                      |              
+        }                                              |                      |              
+      }                                                |                      |              
+    }                                                  |                      |              
+  }                                                    |                      |              
+  FunctionDeclarationTree {                            | suspend … }          | 28:1 … 32:2  
+    ?LeafPsiElement[suspend]?                          | suspend              | 29:1 … 29:8  
+    IdentifierTree                                     | doWorld              | 29:13 … 29:20
+    BlockTree {                                        | { … }                | 29:23 … 32:2 
+      ?KtCallExpression? {                             | delay … )            | 30:5 … 30:17 
+        IdentifierTree                                 | delay                | 30:5 … 30:10 
+        ?KtValueArgumentList? {                        | ( … )                | 30:10 … 30:17
+          ?KtValueArgument? {                          | 1000L                | 30:11 … 30:16
+            IntegerLiteralTree                         | 1000L                | 30:11 … 30:16
+          }                                            |                      |              
+        }                                              |                      |              
+      }                                                |                      |              
+      ?KtCallExpression? {                             | println … )          | 31:5 … 31:22 
+        IdentifierTree                                 | println              | 31:5 … 31:12 
+        ?KtValueArgumentList? {                        | ( … )                | 31:12 … 31:22
+          ?KtValueArgument? {                          | " … "                | 31:13 … 31:21
+            StringLiteralTree                          | " … "                | 31:13 … 31:21
+          }                                            |                      |              
+        }                                              |                      |              
+      }                                                |                      |              
+    }                                                  |                      |              
+  }                                                    |                      |              
+  ?KtNamedFunction? {                                  | fun … }              | 34:1 … 39:2  
+    ?KtTypeReference? {                                | String … ?           | 34:5 … 34:12 
+      ?KtNullableType? {                               | String … ?           | 34:5 … 34:12 
+        ?KtUserType? {                                 | String               | 34:5 … 34:11 
+          IdentifierTree                               | String               | 34:5 … 34:11 
+        }                                              |                      |              
+      }                                                |                      |              
+    }                                                  |                      |              
+    ?KtParameterList?                                  | ( … )                | 34:26 … 34:28
+    ?KtTypeReference? {                                | Boolean              | 34:30 … 34:37
+      ?KtUserType? {                                   | Boolean              | 34:30 … 34:37
+        IdentifierTree                                 | Boolean              | 34:30 … 34:37
+      }                                                |                      |              
+    }                                                  |                      |              
+    BlockTree {                                        | { … }                | 34:38 … 39:2 
+      ?KtCallExpression? {                             | contract … }         | 35:5 … 37:6  
+        IdentifierTree                                 | contract             | 35:5 … 35:13 
+        ?KtLambdaArgument? {                           | { … }                | 35:14 … 37:6 
+          ?KtLambdaExpression? {                       | { … }                | 35:14 … 37:6 
+            FunctionDeclarationTree {                  | { … }                | 35:14 … 37:6 
+              BlockTree {                              | returns … )          | 36:9 … 36:60 
+                ?KtBinaryExpression[implies]? {        | returns … )          | 36:9 … 36:60 
+                  ?KtCallExpression? {                 | returns … )          | 36:9 … 36:23 
+                    IdentifierTree                     | returns              | 36:9 … 36:16 
+                    ?KtValueArgumentList? {            | ( … )                | 36:16 … 36:23
+                      ?KtValueArgument? {              | false                | 36:17 … 36:22
+                        LiteralTree                    | false                | 36:17 … 36:22
+                      }                                |                      |              
+                    }                                  |                      |              
+                  }                                    |                      |              
+                  ?KtOperationReferenceExpression?     | implies              | 36:24 … 36:31
+                  ParenthesizedExpressionTree {        | ( … )                | 36:32 … 36:60
+                    BinaryExpressionTree {             | this … null          | 36:33 … 36:59
+                      ?KtThisExpression? {             | this … ullOrEmpty    | 36:33 … 36:51
+                        IdentifierTree                 | this                 | 36:33 … 36:37
+                        ?KtContainerNode? {            | @ … ullOrEmpty       | 36:37 … 36:51
+                          ?KtLabelReferenceExpression? | @ … ullOrEmpty       | 36:37 … 36:51
+                        }                              |                      |              
+                      }                                |                      |              
+                      LiteralTree                      | null                 | 36:55 … 36:59
+                    }                                  |                      |              
+                  }                                    |                      |              
+                }                                      |                      |              
+              }                                        |                      |              
+            }                                          |                      |              
+          }                                            |                      |              
+        }                                              |                      |              
+      }                                                |                      |              
+      ReturnTree {                                     | return … )           | 38:5 … 38:37 
+        BinaryExpressionTree {                         | this … )             | 38:12 … 38:37
+          BinaryExpressionTree {                       | this … null          | 38:12 … 38:24
+            ?KtThisExpression? {                       | this                 | 38:12 … 38:16
+              IdentifierTree                           | this                 | 38:12 … 38:16
+            }                                          |                      |              
+            LiteralTree                                | null                 | 38:20 … 38:24
+          }                                            |                      |              
+          ?KtCallExpression? {                         | isEmpty … )          | 38:28 … 38:37
+            IdentifierTree                             | isEmpty              | 38:28 … 38:35
+            ?KtValueArgumentList?                      | ( … )                | 38:35 … 38:37
+          }                                            |                      |              
+        }                                              |                      |              
+      }                                                |                      |              
+    }                                                  |                      |              
+  }                                                    |                      |              
+  ?KtNamedFunction? {                                  | fun … }              | 41:1 … 45:10 
+    ?KtTypeReference? {                                | Request              | 41:5 … 41:12 
+      ?KtUserType? {                                   | Request              | 41:5 … 41:12 
+        IdentifierTree                                 | Request              | 41:5 … 41:12 
+      }                                                |                      |              
+    }                                                  |                      |              
+    ?KtParameterList?                                  | ( … )                | 41:20 … 41:22
+    MatchTree {                                        | when … }             | 42:9 … 45:10 
+      VariableDeclarationTree {                        | val … )              | 42:15 … 42:46
+        IdentifierTree                                 | response             | 42:19 … 42:27
+        ?KtCallExpression? {                           | executeReq … )       | 42:30 … 42:46
+          IdentifierTree                               | executeRequest       | 42:30 … 42:44
+          ?KtValueArgumentList?                        | ( … )                | 42:44 … 42:46
+        }                                              |                      |              
+      }                                                |                      |              
+      MatchCaseTree {                                  | is … body            | 43:13 … 43:40
+        ?KtWhenCondition? {                            | is … Success         | 43:13 … 43:23
+          ?KtWhenConditionIsPattern? {                 | is … Success         | 43:13 … 43:23
+            ?KtTypeReference? {                        | Success              | 43:16 … 43:23
+              ?KtUserType? {                           | Success              | 43:16 … 43:23
+                IdentifierTree                         | Success              | 43:16 … 43:23
+              }                                        |                      |              
+            }                                          |                      |              
+          }                                            |                      |              
+        }                                              |                      |              
+        ?KtDotQualifiedExpression? {                   | response … body      | 43:27 … 43:40
+          IdentifierTree                               | response             | 43:27 … 43:35
+          IdentifierTree                               | body                 | 43:36 … 43:40
+        }                                              |                      |              
+      }                                                |                      |              
+      MatchCaseTree {                                  | is … )               | 44:13 … 44:65
+        ?KtWhenCondition? {                            | is … HttpError       | 44:13 … 44:25
+          ?KtWhenConditionIsPattern? {                 | is … HttpError       | 44:13 … 44:25
+            ?KtTypeReference? {                        | HttpError            | 44:16 … 44:25
+              ?KtUserType? {                           | HttpError            | 44:16 … 44:25
+                IdentifierTree                         | HttpError            | 44:16 … 44:25
+              }                                        |                      |              
+            }                                          |                      |              
+          }                                            |                      |              
+        }                                              |                      |              
+        ThrowTree {                                    | throw … )            | 44:29 … 44:65
+          ?KtCallExpression? {                         | HttpExcept … )       | 44:35 … 44:65
+            IdentifierTree                             | HttpException        | 44:35 … 44:48
+            ?KtValueArgumentList? {                    | ( … )                | 44:48 … 44:65
+              ?KtValueArgument? {                      | response … status    | 44:49 … 44:64
+                ?KtDotQualifiedExpression? {           | response … status    | 44:49 … 44:64
+                  IdentifierTree                       | response             | 44:49 … 44:57
+                  IdentifierTree                       | status               | 44:58 … 44:64
+                }                                      |                      |              
+              }                                        |                      |              
+            }                                          |                      |              
+          }                                            |                      |              
+        }                                              |                      |              
+      }                                                |                      |              
+    }                                                  |                      |              
+  }                                                    |                      |              
+  ClassDeclarationTree {                               | interface … }        | 47:1 … 57:2  
+    ?KtClass? {                                        | interface … }        | 47:1 … 57:2  
+      ?KtClassBody? {                                  | { … }                | 47:16 … 57:2 
+        ?KtObjectDeclaration? {                        | companion … }        | 48:5 … 56:6  
+          ?KtDeclarationModifierList?                  | companion            | 48:5 … 48:14 
+          ?KtClassBody? {                              | { … }                | 48:22 … 56:6 
+            ?KtProperty[answer]? {                     | @ … 42               | 49:9 … 50:29 
+              ?KtDeclarationModifierList? {            | @ … JvmField         | 49:9 … 49:18 
+                ?KtAnnotationEntry? {                  | @ … JvmField         | 49:9 … 49:18 
+                  ?KtConstructorCalleeExpression? {    | JvmField             | 49:10 … 49:18
+                    ?KtTypeReference? {                | JvmField             | 49:10 … 49:18
+                      ?KtUserType? {                   | JvmField             | 49:10 … 49:18
+                        IdentifierTree                 | JvmField             | 49:10 … 49:18
+                      }                                |                      |              
+                    }                                  |                      |              
+                  }                                    |                      |              
+                }                                      |                      |              
+              }                                        |                      |              
+              ?KtTypeReference? {                      | Int                  | 50:21 … 50:24
+                ?KtUserType? {                         | Int                  | 50:21 … 50:24
+                  IdentifierTree                       | Int                  | 50:21 … 50:24
+                }                                      |                      |              
+              }                                        |                      |              
+              IntegerLiteralTree                       | 42                   | 50:27 … 50:29
+            }                                          |                      |              
+            FunctionDeclarationTree {                  | @ … }                | 52:9 … 55:10 
+              IdentifierTree                           | sayHello             | 53:13 … 53:21
+              BlockTree {                              | { … }                | 53:24 … 55:10
+                ?KtCallExpression? {                   | println … )          | 54:13 … 54:37
+                  IdentifierTree                       | println              | 54:13 … 54:20
+                  ?KtValueArgumentList? {              | ( … )                | 54:20 … 54:37
+                    ?KtValueArgument? {                | " … "                | 54:21 … 54:36
+                      StringLiteralTree                | " … "                | 54:21 … 54:36
+                    }                                  |                      |              
+                  }                                    |                      |              
+                }                                      |                      |              
+              }                                        |                      |              
+            }                                          |                      |              
+          }                                            |                      |              
+        }                                              |                      |              
+      }                                                |                      |              
+      IdentifierTree                                   | Foo1                 | 47:11 … 47:15
+    }                                                  |                      |              
+  }                                                    |                      |              
+  ClassDeclarationTree {                               | annotation … }       | 59:1 … 68:2  
+    ?KtClass? {                                        | annotation … }       | 59:1 … 68:2  
+      ?KtDeclarationModifierList?                      | annotation           | 59:1 … 59:11 
+      ?KtClassBody? {                                  | { … }                | 59:23 … 68:2 
+        ClassDeclarationTree {                         | enum … }             | 60:5 … 60:51 
+          ?KtClass? {                                  | enum … }             | 60:5 … 60:51 
+            ?KtDeclarationModifierList?                | enum                 | 60:5 … 60:9  
+            ?KtClassBody? {                            | { … }                | 60:26 … 60:51
+              ?KtEnumEntry? {                          | UP … ,               | 60:28 … 60:31
+                IdentifierTree                         | UP                   | 60:28 … 60:30
+              }                                        |                      |              
+              ?KtEnumEntry? {                          | DOWN … ,             | 60:32 … 60:37
+                IdentifierTree                         | DOWN                 | 60:32 … 60:36
+              }                                        |                      |              
+              ?KtEnumEntry? {                          | LEFT … ,             | 60:38 … 60:43
+                IdentifierTree                         | LEFT                 | 60:38 … 60:42
+              }                                        |                      |              
+              ?KtEnumEntry? {                          | RIGHT                | 60:44 … 60:49
+                IdentifierTree                         | RIGHT                | 60:44 … 60:49
+              }                                        |                      |              
+            }                                          |                      |              
+            IdentifierTree                             | Direction            | 60:16 … 60:25
+          }                                            |                      |              
+        }                                              |                      |              
+        ClassDeclarationTree {                         | annotation … Bar     | 62:5 … 62:25 
+          ?KtClass? {                                  | annotation … Bar     | 62:5 … 62:25 
+            ?KtDeclarationModifierList?                | annotation           | 62:5 … 62:15 
+            IdentifierTree                             | Bar                  | 62:22 … 62:25
+          }                                            |                      |              
+        }                                              |                      |              
+        ?KtObjectDeclaration? {                        | companion … }        | 64:5 … 67:6  
+          ?KtDeclarationModifierList?                  | companion            | 64:5 … 64:14 
+          ?KtClassBody? {                              | { … }                | 64:22 … 67:6 
+            FunctionDeclarationTree {                  | fun … 42             | 65:9 … 65:28 
+              IdentifierTree                           | Int                  | 65:20 … 65:23
+              IdentifierTree                           | foo                  | 65:13 … 65:16
+              BlockTree {                              | 42                   | 65:26 … 65:28
+                IntegerLiteralTree                     | 42                   | 65:26 … 65:28
+              }                                        |                      |              
+            }                                          |                      |              
+            ?KtProperty[bar]? {                        | val … 42             | 66:9 … 66:26 
+              ?KtTypeReference? {                      | Int                  | 66:18 … 66:21
+                ?KtUserType? {                         | Int                  | 66:18 … 66:21
+                  IdentifierTree                       | Int                  | 66:18 … 66:21
+                }                                      |                      |              
+              }                                        |                      |              
+              IntegerLiteralTree                       | 42                   | 66:24 … 66:26
+            }                                          |                      |              
+          }                                            |                      |              
+        }                                              |                      |              
+      }                                                |                      |              
+      IdentifierTree                                   | Foo2                 | 59:18 … 59:22
+    }                                                  |                      |              
+  }                                                    |                      |              
+  ClassDeclarationTree {                               | interface … }        | 70:1 … 74:2  
+    ?KtClass? {                                        | interface … }        | 70:1 … 74:2  
+      ?KtClassBody? {                                  | { … }                | 70:16 … 74:2 
+        FunctionDeclarationTree {                      | @ … 42               | 71:5 … 73:24 
+          IdentifierTree                               | Int                  | 73:16 … 73:19
+          IdentifierTree                               | foo                  | 73:9 … 73:12 
+          BlockTree {                                  | 42                   | 73:22 … 73:24
+            IntegerLiteralTree                         | 42                   | 73:22 … 73:24
+          }                                            |                      |              
+        }                                              |                      |              
+      }                                                |                      |              
+      IdentifierTree                                   | Foo3                 | 70:11 … 70:15
+    }                                                  |                      |              
+  }                                                    |                      |              
+  ClassDeclarationTree {                               | inline … )           | 76:1 … 76:33 
+    ?KtClass? {                                        | inline … )           | 76:1 … 76:33 
+      ?KtDeclarationModifierList?                      | inline               | 76:1 … 76:7  
+      FunctionDeclarationTree {                        | ( … )                | 76:18 … 76:33
+        ParameterTree {                                | val … String         | 76:19 … 76:32
+          IdentifierTree                               | s                    | 76:23 … 76:24
+          ?KtTypeReference? {                          | String               | 76:26 … 76:32
+            ?KtUserType? {                             | String               | 76:26 … 76:32
+              IdentifierTree                           | String               | 76:26 … 76:32
+            }                                          |                      |              
+          }                                            |                      |              
+        }                                              |                      |              
+      }                                                |                      |              
+      IdentifierTree                                   | Name                 | 76:14 … 76:18
+    }                                                  |                      |              
+  }                                                    |                      |              
+}                                                      |                      |              

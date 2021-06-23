@@ -1,0 +1,20 @@
+pluginManagement {
+    repositories {
+        maven {
+            url 'https://repox.jfrog.io/repox/plugins.gradle.org/'
+        }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'slang'
+
+include 'slang-api'
+include 'slang-testing'
+include 'slang-antlr'
+include 'slang-checks'
+include 'slang-plugin'
+include 'sonar-kotlin-plugin'
+include 'checkstyle-import'
+include 'its:plugin'
+include 'its:ruling'
