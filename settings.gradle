@@ -11,7 +11,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'slang'
+rootProject.name = 'kotlin'
 
 include 'slang-api'
 include 'slang-testing'

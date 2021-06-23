@@ -1,8 +1,5 @@
 apply plugin: 'org.jetbrains.kotlin.jvm'
 
-group 'org.sonarsource.slang'
-version '1.9.0-SNAPSHOT'
-
 repositories {
     mavenCentral()
 }

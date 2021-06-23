@@ -87,7 +87,7 @@ public class SlangRulingTest {
         pluginLocation = FileLocation.byWildcardMavenFilename(new File("../../" + plugin + "/build/libs"), plugin + "-*-all.jar");
       } else {
         // QA environment downloads the plugin built by the CI job
-        pluginLocation = MavenLocation.of("org.sonarsource.slang", plugin, slangVersion);
+        pluginLocation = MavenLocation.of("org.sonarsource.kotlin", plugin, slangVersion);
       }
 
       builder.addPlugin(pluginLocation);
