@@ -36,7 +36,6 @@ allprojects {
         orchestratorVersion = '3.35.0.2707'
         sonarlintVersion = '4.2.0.2266'
         sonarLinksCi = 'https://travis-ci.org/SonarSource/slang'
-        sonarLinksScm = 'https://github.com/SonarSource/slang'
 
         artifactsToPublish = ''
         artifactsToDownload = ''
@@ -208,7 +207,7 @@ subprojects {
                         }
                     }
                     scm {
-                        url = 'https://github.com/SonarSource/slang'
+                        url = 'https://github.com/SonarSource/sonar-kotlin'
                     }
                     developers {
                         developer {
@@ -248,7 +247,7 @@ sonarqube {
     properties {
         property 'sonar.projectName', projectTitle
         property 'sonar.links.ci', "${sonarLinksCi}"
-        property 'sonar.links.scm', "${sonarLinksScm}"
+        property 'sonar.links.scm', "https://github.com/SonarSource/sonar-kotlin"
         property 'sonar.links.issue', 'https://jira.sonarsource.com/browse/SONARSLANG'
         property 'sonar.exclusions', '**/build/**/*'
     }
@@ -266,7 +265,7 @@ artifactory {
         }
         defaults {
             properties = [
-                'build.name': 'slang-enterprise',
+                'build.name': 'sonar-kotlin',
                 'build.number': System.getenv('BUILD_NUMBER'),
                 'pr.branch.target': System.getenv('PULL_REQUEST_BRANCH_TARGET'),
                 'pr.number': System.getenv('PULL_REQUEST_NUMBER'),
@@ -280,7 +279,7 @@ artifactory {
         }
     }
 
-    clientConfig.info.setBuildName('slang-enterprise')
+    clientConfig.info.setBuildName('sonar-kotlin')
     clientConfig.info.setBuildNumber(System.getenv('BUILD_NUMBER'))
     // Define the artifacts to be deployed to https://binaries.sonarsource.com on releases
     clientConfig.info.addEnvironmentProperty('ARTIFACTS_TO_PUBLISH', artifactsToPublish)

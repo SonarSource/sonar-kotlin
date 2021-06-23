@@ -60,7 +60,7 @@ jar {
                 'Plugin-Name': 'Kotlin Code Quality and Security',
                 'Plugin-Organization': 'SonarSource',
                 'Plugin-OrganizationUrl': 'http://www.sonarsource.com',
-                'Plugin-SourcesUrl': 'https://github.com/SonarSource/slang',
+                'Plugin-SourcesUrl': 'https://github.com/SonarSource/sonar-kotlin',
                 'Plugin-Version': project.version,
                 'Sonar-Version': '6.7',
                 'SonarLint-Supported': 'true',
