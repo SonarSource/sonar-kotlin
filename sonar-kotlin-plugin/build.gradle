@@ -54,7 +54,7 @@ jar {
                 'Plugin-Developers': 'SonarSource Team',
                 'Plugin-Display-Version': displayVersion,
                 'Plugin-Homepage': 'http://redirect.sonarsource.com/plugins/kotlin.html',
-                'Plugin-IssueTrackerUrl': 'https://jira.sonarsource.com/browse/SONARSLANG',
+                'Plugin-IssueTrackerUrl': 'https://jira.sonarsource.com/browse/SONARKT',
                 'Plugin-Key': 'kotlin',
                 'Plugin-License': 'GNU LGPL 3',
                 'Plugin-Name': 'Kotlin Code Quality and Security',

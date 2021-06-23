@@ -248,7 +248,7 @@ sonarqube {
         property 'sonar.projectName', projectTitle
         property 'sonar.links.ci', "${sonarLinksCi}"
         property 'sonar.links.scm', "https://github.com/SonarSource/sonar-kotlin"
-        property 'sonar.links.issue', 'https://jira.sonarsource.com/browse/SONARSLANG'
+        property 'sonar.links.issue', 'https://jira.sonarsource.com/browse/SONARKT'
         property 'sonar.exclusions', '**/build/**/*'
     }
 }
