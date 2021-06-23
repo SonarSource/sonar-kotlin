@@ -34,21 +34,6 @@ public class NoSonarTest extends TestBase {
     checkForLanguage("kotlinNoSonar", "kotlin");
   }
 
-  @Test
-  public void test_go_nosonar() {
-    checkForLanguage("goNoSonar", "go");
-  }
-
-  @Test
-  public void test_ruby_nosonar() {
-    checkForLanguage("rubyNoSonar", "ruby");
-  }
-
-  @Test
-  public void test_scala_nosonar() {
-    checkForLanguage("scalaNoSonar", "scala");
-  }
-
   private void checkForLanguage(String projectKey, String language) {
     ORCHESTRATOR.executeBuild(getSonarScanner(projectKey, BASE_DIRECTORY, language, NO_SONAR_PROFILE_NAME));
 

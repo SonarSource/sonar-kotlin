@@ -98,27 +98,6 @@ public class SonarLintTest {
   }
 
   @Test
-  public void test_ruby() throws Exception {
-    ClientInputFile inputFile = prepareInputFile("foo.rb",
-      "def fooBar() \n"
-        + "  if true \n"
-        + "    password = 'blabla' \n"
-        + "  end \n"
-        + "end \n",
-      false, "ruby");
-
-    List<Issue> issues = new ArrayList<>();
-    sonarlintEngine.analyze(
-      new StandaloneAnalysisConfiguration(baseDir.toPath(), temp.newFolder().toPath(), Collections.singletonList(inputFile), new HashMap<>()),
-      issues::add, null, null);
-
-    assertThat(issues).extracting("ruleKey", "startLine", "inputFile.path", "severity").containsOnly(
-      tuple("ruby:S100", 1, inputFile.getPath(), "MINOR"),
-      tuple("ruby:S1145", 2, inputFile.getPath(), "MAJOR"),
-      tuple("ruby:S1481", 3, inputFile.getPath(), "MINOR"));
-  }
-
-  @Test
   public void test_kotlin() throws Exception {
     ClientInputFile inputFile = prepareInputFile("foo.kt",
       "fun foo_bar() {\n" +
@@ -137,29 +116,6 @@ public class SonarLintTest {
       tuple("kotlin:S100", 1, inputFile.getPath(), "MINOR"),
       tuple("kotlin:S1145", 2, inputFile.getPath(), "MAJOR"),
       tuple("kotlin:S1481", 3, inputFile.getPath(), "MINOR"));
-  }
-
-  @Test
-  public void test_scala() throws Exception {
-    ClientInputFile inputFile = prepareInputFile("foo.scala",
-      "object Code {\n" +
-        "  def foo_bar() = {\n" + // scala:S100 (Method name)
-        "    if (true) { \n" + // scala:S1145 (Useless if(true))
-        "        val password = \"blabla\"\n" +  // scala:S181 (Unused variable)
-        "    } \n" +
-        "  }\n" +
-        "}",
-      false, "scala");
-
-    List<Issue> issues = new ArrayList<>();
-    sonarlintEngine.analyze(
-      new StandaloneAnalysisConfiguration(baseDir.toPath(), temp.newFolder().toPath(), Collections.singletonList(inputFile), new HashMap<>()),
-      issues::add, null, null);
-
-    assertThat(issues).extracting("ruleKey", "startLine", "inputFile.path", "severity").containsOnly(
-      tuple("scala:S100", 2, inputFile.getPath(), "MINOR"),
-      tuple("scala:S1145", 3, inputFile.getPath(), "MAJOR"),
-      tuple("scala:S1481", 4, inputFile.getPath(), "MINOR"));
   }
 
   private ClientInputFile prepareInputFile(String relativePath, String content, final boolean isTest, String language) throws IOException {

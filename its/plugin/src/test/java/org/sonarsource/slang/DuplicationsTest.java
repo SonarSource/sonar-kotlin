@@ -37,43 +37,4 @@ public class DuplicationsTest extends TestBase {
     assertThat(getMeasure(projectKey, "duplicated_lines_density").getValue()).isEqualTo("53.5");
   }
 
-  @Test
-  public void ruby_duplications() {
-    final String projectKey = "rubyDuplications";
-    ORCHESTRATOR.executeBuild(getSonarScanner(projectKey, BASE_DIRECTORY, "ruby"));
-
-    assertThat(getMeasureAsInt(projectKey, "duplicated_lines")).isEqualTo(95);
-    assertThat(getMeasureAsInt(projectKey, "duplicated_blocks")).isEqualTo(5);
-    assertThat(getMeasureAsInt(projectKey, "duplicated_files")).isEqualTo(2);
-    assertThat(getMeasure(projectKey, "duplicated_lines_density").getValue()).isEqualTo("57.9");
-  }
-
-  @Test
-  public void scala_duplications() {
-    final String projectKey = "scalaDuplications";
-    ORCHESTRATOR.executeBuild(getSonarScanner(projectKey, BASE_DIRECTORY, "scala"));
-
-    assertThat(getMeasureAsInt(projectKey, "duplicated_lines")).isEqualTo(79);
-    assertThat(getMeasureAsInt(projectKey, "duplicated_blocks")).isEqualTo(5);
-    assertThat(getMeasureAsInt(projectKey, "duplicated_files")).isEqualTo(2);
-    assertThat(getMeasure(projectKey, "duplicated_lines_density").getValue()).isEqualTo("64.2");
-  }
-
-  @Test
-  public void go_duplications() {
-    final String projectKey = "goDuplications";
-    ORCHESTRATOR.executeBuild(getSonarScanner(projectKey, BASE_DIRECTORY, "go"));
-
-    assertThat(getMeasureAsInt(projectKey, "duplicated_lines")).isEqualTo(135);
-    assertThat(getMeasureAsInt(projectKey, "duplicated_blocks")).isEqualTo(5);
-    assertThat(getMeasureAsInt(projectKey, "duplicated_files")).isEqualTo(3);
-    assertThat(getMeasure(projectKey, "duplicated_lines_density").getValue()).isEqualTo("97.8");
-
-    final String componentKey = projectKey + ":pivot.go";
-    assertThat(getMeasureAsInt(componentKey, "duplicated_lines")).isEqualTo(47);
-    assertThat(getMeasureAsInt(componentKey, "duplicated_blocks")).isEqualTo(2);
-    assertThat(getMeasureAsInt(componentKey, "duplicated_files")).isEqualTo(1);
-    assertThat(getMeasure(componentKey, "duplicated_lines_density").getValue()).isEqualTo("97.9");
-  }
-
 }
