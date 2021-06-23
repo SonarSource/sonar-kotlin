@@ -1,0 +1,204 @@
+gcp_credentials: ENCRYPTED[!17c59813193e86cc337bce848b358412b90f50bc5fe1b8b39d363cdf14a41ebe76cfba0482e7f81d076994b9f6dbfb4c!]
+
+env:
+  ARTIFACTORY_URL: ENCRYPTED[!2f8fa307d3289faa0aa6791f18b961627ae44f1ef46b136e1a1e63b0b4c86454dbb25520d49b339e2d50a1e1e5f95c88!]
+  ARTIFACTORY_PRIVATE_USERNAME: repox-private-reader
+  ARTIFACTORY_PRIVATE_PASSWORD: ENCRYPTED[!35ca4446564213d4fd2d1a96e42a871d5de6e6aac4e1dd3e89342892a60a2badf74a966bcc8e885e9c9d09a775ffe4c0!]
+  ARTIFACTORY_API_KEY: ENCRYPTED[!35ca4446564213d4fd2d1a96e42a871d5de6e6aac4e1dd3e89342892a60a2badf74a966bcc8e885e9c9d09a775ffe4c0!]
+
+  # Deploy public artifact to artifactory
+  ARTIFACTORY_DEPLOY_USERNAME: repox-qa-deployer
+  ARTIFACTORY_DEPLOY_PASSWORD: ENCRYPTED[!d484e19f33c9ce63b165f70e414a33b1ac6c215a126791aacbf8059626caf0fd8a78e999a20af5c1a4ba01c0b0247921!]
+  ARTIFACTORY_DEPLOY_REPO: sonarsource-public-qa
+
+  ORG_GRADLE_PROJECT_signingKey: ENCRYPTED[!cc216dfe592f79db8006f2a591f8f98b40aa2b078e92025623594976fd32f6864c1e6b6ba74b50647f608e2418e6c336!]
+  ORG_GRADLE_PROJECT_signingPassword: ENCRYPTED[!314a8fc344f45e462dd5e8dccd741d7562283a825e78ebca27d4ae9db8e65ce618e7f6aece386b2782a5abe5171467bd!]
+  ORG_GRADLE_PROJECT_signingKeyId: 0x7DCD4258
+
+  # burgr notification
+  BURGR_URL: ENCRYPTED[!c7e294da94762d7bac144abef6310c5db300c95979daed4454ca977776bfd5edeb557e1237e3aa8ed722336243af2d78!]
+  BURGR_USERNAME: ENCRYPTED[!b29ddc7610116de511e74bec9a93ad9b8a20ac217a0852e94a96d0066e6e822b95e7bc1fe152afb707f16b70605fddd3!]
+  BURGR_PASSWORD: ENCRYPTED[!83e130718e92b8c9de7c5226355f730e55fb46e45869149a9223e724bb99656878ef9684c5f8cfef434aa716e87f4cf2!]
+
+  GITHUB_TOKEN: ENCRYPTED[!f272985ea5b49b3cf9c414b98de6a8e9096be47bfcee52f33311ba3131a2af637c1b956f49585b7757dd84b7c030233a!]
+
+  # Use bash (instead of sh on linux or cmd.exe on windows)
+  CIRRUS_SHELL: bash
+
+  GIT_SUB_MODULE: ""
+  GRADLE_USER_HOME: ${CIRRUS_WORKING_DIR}/.gradle
+
+linux_image_template: &LINUX_IMAGE
+  image: gcr.io/language-team/base:latest
+  cluster_name: cirrus-ci-lt-cluster
+  zone: us-central1-a
+  namespace: default
+  use_in_memory_disk: true
+
+linux_1_cpu_1G_template: &LINUX_1_CPU_1G
+  gke_container:
+    <<: *LINUX_IMAGE
+    cpu: 1
+    memory: 1G
+
+linux_3_5_cpu_7G_template: &LINUX_3_5_CPU_7G
+  gke_container:
+    <<: *LINUX_IMAGE
+    cpu: 3.5
+    memory: 7G
+
+linux_6_cpu_12G_template: &LINUX_6_CPU_12G
+  gke_container:
+    <<: *LINUX_IMAGE
+    cpu: 6
+    memory: 24G
+
+windows_4_cpu_15G_template: &WINDOWS_4_CPU_15G
+  gce_instance:
+    image_project: language-team
+    image_family: lt-base-windows
+    platform: windows
+    zone: us-central1-a
+    preemptible: false
+    # Note a standard "n1-standard-4" (4 cpu, 15GB) is cheaper than a custom { cpu: 4, memory: 8G }
+    # see https://cloud.google.com/products/calculator/
+    type: n1-standard-4
+    # We don't need 128 GB but it's the only workaround we found to change disk performance
+    # 128 => read/write 61MB/s https://cloud.google.com/compute/docs/disks/performance
+    disk: 128
+    use_ssd: true
+
+setup_gradle_cache_template: &SETUP_GRADLE_CACHE
+  gradle_cache:
+     folder: .gradle/caches
+  create_gradle_directory_script:
+    - mkdir -p "${CIRRUS_WORKING_DIR}/.gradle"
+
+cleanup_gradle_cache_script_template: &CLEANUP_GRADLE_CACHE_SCRIPT
+  cleanup_gradle_script:
+    - /usr/bin/find "${CIRRUS_WORKING_DIR}/.gradle/caches/" -name "*.lock" -type f -delete
+    - rm -rf "${CIRRUS_WORKING_DIR}/.gradle/caches/4.10.2/"
+    - rm -rf "${CIRRUS_WORKING_DIR}/.gradle/caches/journal-1/"
+    - rm -rf "${CIRRUS_WORKING_DIR}/.gradle/caches/build-cache-1/"
+
+gradle_its_template: &GRADLE_ITS_TEMPLATE
+  <<: *SETUP_GRADLE_CACHE
+  run_its_script:
+    - |
+      if [ -n "${GIT_SUB_MODULE}" ]; then
+        init_git_submodules "${GIT_SUB_MODULE}"
+      fi
+    - source cirrus-env QA
+    - ./gradlew "${GRADLE_TASK}" "-P${ITS_PROJECT}"
+      "-Dsonar.runtimeVersion=${SQ_VERSION}"
+      "-Dorchestrator.artifactory.apiKey=${ARTIFACTORY_API_KEY}"
+      "-Dorchestrator.configUrl=https://repox.jfrog.io/repox/orchestrator.properties/orch-h2.properties"
+      "-Dorchestrator.artifactory.apiKey=${ARTIFACTORY_API_KEY}"
+      "-DbuildNumber=$BUILD_NUMBER"
+      -Pqa --info --console plain --no-daemon --build-cache
+  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+
+kotlin_its_template: &KOTLIN_ITS_TEMPLATE
+  <<: *SETUP_GRADLE_CACHE
+  run_its_script:
+    - |
+      if [ -n "${GIT_SUB_MODULE}" ]; then
+        init_git_submodules "${GIT_SUB_MODULE}"
+      fi
+    - source cirrus-env QA
+    - bash ./ktor-java8.sh
+    - ./gradlew "${GRADLE_TASK}" "-P${ITS_PROJECT}"
+      "-Dsonar.runtimeVersion=${SQ_VERSION}"
+      "-Dorchestrator.artifactory.apiKey=${ARTIFACTORY_API_KEY}"
+      "-Dorchestrator.configUrl=https://repox.jfrog.io/repox/orchestrator.properties/orch-h2.properties"
+      "-Dorchestrator.artifactory.apiKey=${ARTIFACTORY_API_KEY}"
+      "-DbuildNumber=$BUILD_NUMBER"
+      -Pqa --info --console plain --no-daemon --build-cache
+  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+  
+only_if_sonarsource_qa_template: &ONLY_IF_SONARSOURCE_QA
+  only_if: $CIRRUS_USER_COLLABORATOR == 'true' && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
+
+qa_task_filter_template: &QA_TASK_FILTER
+  depends_on:
+    - build
+  <<: *ONLY_IF_SONARSOURCE_QA
+
+build_task:
+  <<: *LINUX_3_5_CPU_7G
+  <<: *SETUP_GRADLE_CACHE
+  env:
+    # analysis on next
+    SONAR_TOKEN: ENCRYPTED[!b6fd814826c51e64ee61b0b6f3ae621551f6413383f7170f73580e2e141ac78c4b134b506f6288c74faa0dd564c05a29!]
+    SONAR_HOST_URL: https://next.sonarqube.com/sonarqube
+    #allow deployment of pull request artifacts to repox
+    DEPLOY_PULL_REQUEST: true
+  build_script:
+    - source cirrus-env BUILD-PRIVATE
+    - regular_gradle_build_deploy_analyze
+  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+
+# --- WARNING --- WARNING --- WARNING --- WARNING --- WARNING --- WARNING ---
+# The following task names should all be included in promote_task/depends_on
+# Burgr does not support task name length > 16, see:
+# https://github.com/SonarSource/burgr/blob/c7678264f198818ea12800e2457c6557075c51ca/core/src/main/java/com/sonarsource/burgr/jsoninterface/CirrusStage.java#L79
+# ---------------------------------------------------------------------------
+qa_plug_pub_lin_task:
+  <<: *QA_TASK_FILTER
+  env:
+    ITS_PROJECT: "plugin"
+    GRADLE_TASK: ":its:plugin:test"
+    matrix:
+      - SQ_VERSION: "DOGFOOD"
+      - SQ_VERSION: "LATEST_RELEASE[7.9]"
+      - SQ_VERSION: "LATEST_RELEASE"
+  <<: *LINUX_6_CPU_12G
+  <<: *GRADLE_ITS_TEMPLATE
+
+qa_plug_pub_win_task:
+  <<: *QA_TASK_FILTER
+  env:
+    SQ_VERSION: LATEST_RELEASE[7.9]
+    GRADLE_TASK: ":its:plugin:test"
+    ITS_PROJECT: "plugin"
+  <<: *WINDOWS_4_CPU_15G
+  <<: *GRADLE_ITS_TEMPLATE
+
+qa_ruling_kotlin_task:
+  <<: *QA_TASK_FILTER
+  env:
+    SQ_VERSION: "LATEST_RELEASE"
+    GRADLE_TASK: ":its:ruling:test"
+    ITS_PROJECT: "ruling-kotlin"
+    GIT_SUB_MODULE: "its/sources"
+  <<: *LINUX_6_CPU_12G
+  <<: *KOTLIN_ITS_TEMPLATE
+
+build_win_task:
+  <<: *QA_TASK_FILTER
+  <<: *WINDOWS_4_CPU_15G
+  <<: *SETUP_GRADLE_CACHE
+  build_script:
+    - ./gradlew build -Pqa --info --console plain --no-daemon --build-cache
+  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+
+promote_task:
+  depends_on:
+    - build
+    - qa_plug_pub_lin
+    - qa_plug_pub_win
+    - qa_ruling_kotlin
+    - build_win
+  <<: *ONLY_IF_SONARSOURCE_QA
+  <<: *LINUX_1_CPU_1G
+  env:
+    #promotion cloud function
+    GCF_ACCESS_TOKEN: ENCRYPTED[!1fb91961a5c01e06e38834e55755231d649dc62eca354593105af9f9d643d701ae4539ab6a8021278b8d9348ae2ce8be!]
+    PROMOTE_URL: ENCRYPTED[!e22ed2e34a8f7a1aea5cff653585429bbd3d5151e7201022140218f9c5d620069ec2388f14f83971e3fd726215bc0f5e!]
+    #artifacts that will have downloadable links in burgr
+    ARTIFACTS: "\
+      org.sonarsource.kotlin:sonar-kotlin-plugin:jar"
+  script:
+    - source cirrus-env PROMOTE
+    - curl -sfSL -H "Authorization: Bearer $GCF_ACCESS_TOKEN" "$PROMOTE_URL/$GITHUB_REPO/$GITHUB_BRANCH/$BUILD_NUMBER/$PULL_REQUEST?multi=true"
+    - burgr-notify-promotion
