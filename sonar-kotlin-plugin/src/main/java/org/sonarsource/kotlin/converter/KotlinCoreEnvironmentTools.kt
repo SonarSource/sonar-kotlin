@@ -51,6 +51,21 @@ class Environment(val classpath: List<String>) {
     val ktPsiFactory: KtPsiFactory = KtPsiFactory(env.project, false)
 }
 
+/** Without this declaration JAR minimization can't detect that these classes should not be removed. */
+@Suppress("unused")
+private val classesToKeepWhenMinimizingJar = arrayOf(
+    /** META-INF/services/org.jetbrains.kotlin.builtins.BuiltInsLoader */
+    org.jetbrains.kotlin.serialization.deserialization.builtins.BuiltInsLoaderImpl::class.java,
+    /** META-INF/services/org.jetbrains.kotlin.util.ModuleVisibilityHelper */
+    org.jetbrains.kotlin.cli.common.ModuleVisibilityHelperImpl::class.java,
+    /** META-INF/services/org.jetbrains.kotlin.resolve.ExternalOverridabilityCondition */
+    org.jetbrains.kotlin.load.java.FieldOverridabilityCondition::class.java,
+    org.jetbrains.kotlin.load.java.ErasedOverridabilityCondition::class.java,
+    org.jetbrains.kotlin.load.java.JavaIncompatibilityRulesOverridabilityCondition::class.java,
+    /** META-INF/services/org.jetbrains.kotlin.resolve.jvm.jvmSignature.KotlinToJvmSignatureMapper */
+    org.jetbrains.kotlin.codegen.signature.KotlinToJvmSignatureMapperImpl::class.java,
+)
+
 fun kotlinCoreEnvironment(
     configuration: CompilerConfiguration,
     disposable: Disposable,
