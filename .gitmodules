@@ -1,0 +1,3 @@
+[submodule "its/sources"]
+	path = its/sources
+	url = git@github.com:SonarSource/slang-test-sources.git
