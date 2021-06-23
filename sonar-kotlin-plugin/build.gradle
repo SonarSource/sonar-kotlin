@@ -70,24 +70,12 @@ jar {
 }
 
 shadowJar {
-    //minimize { }
-    //exclude 'kotlin/comparisons/**'
-    exclude 'kotlin/scripts/**'
-    //exclude 'org/jetbrains/kotlin/org/jdom/**'
-    exclude 'org/jetbrains/kotlin/com/intellij/icons/**'
-    //exclude 'org/jetbrains/kotlin/com/intellij/lang/jvm/**'
-    //exclude 'org/jetbrains/kotlin/com/intellij/ui/**'
-    //exclude 'org/jetbrains/kotlin/com/intellij/util/ui/**'
-    //exclude 'org/jetbrains/kotlin/com/intellij/util/xmlb/**'
-    //exclude 'org/jetbrains/kotlin/builtins/**'
-    //exclude 'org/jetbrains/kotlin/descriptors/**'
-    //exclude 'org/jetbrains/kotlin/renderer/**'
-    //exclude 'org/jetbrains/kotlin/resolve/**'
-    //exclude 'org/jetbrains/kotlin/storage/**'
-    //exclude 'org/jetbrains/kotlin/types/**'
-    //exclude 'org/jetbrains/org/**'
+    minimize { }
+    exclude 'META-INF/native/**/*jansi*'
+    exclude 'org/jetbrains/kotlin/org/jline/**'
+    exclude 'org/jetbrains/kotlin/net/jpountz/**'
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.archiveFile.get().asFile, 50_000_000L, 60_500_000L)
+        enforceJarSizeAndCheckContent(shadowJar.archiveFile.get().asFile, 32_000_000L, 33_000_000L)
     }
 }
 
