@@ -34,7 +34,7 @@ class KotlinRulesDefinition : RulesDefinition {
         context
             .createRepository(KotlinPlugin.KOTLIN_REPOSITORY_KEY, KotlinPlugin.KOTLIN_LANGUAGE_KEY)
             .setName(KotlinPlugin.REPOSITORY_NAME).let { repository ->
-                val checks = KotlinCheckList.checks()
+                val checks = KOTLIN_CHECKS
                 RuleMetadataLoader(RESOURCE_FOLDER, KotlinProfileDefinition.PATH_TO_JSON).addRulesByAnnotatedClass(repository, checks)
                 RulesDefinitionUtils.setDefaultValuesForParameters(repository, checks, Language.KOTLIN)
                 repository.done()

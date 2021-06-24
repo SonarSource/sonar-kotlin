@@ -2,7 +2,7 @@ package org.sonarsource.kotlin.checks
 
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.plugin.KotlinCheckList
+import org.sonarsource.kotlin.plugin.KOTLIN_CHECKS
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.isRegularFile
@@ -26,7 +26,7 @@ class CheckConfigurationIntegrityTest {
             it.fileName.toString().substringBefore(".kt")
         }
 
-        val actualChecks = KotlinCheckList.checks().map { it.simpleName }
+        val actualChecks = KOTLIN_CHECKS.map { it.simpleName }
 
         Assertions.assertThat(actualChecks).containsOnlyElementsOf(expectedChecks)
     }
