@@ -51,6 +51,7 @@ class AutomaticCheckTests {
                             && it != TooDeeplyNestedStatementsCheck::class.java
                             /** Tested in [FunctionCognitiveComplexityCheckTest] */
                             && it != FunctionCognitiveComplexityCheck::class.java
+                            && it != ParsingErrorCheck::class.java
                     }
                     .map { check -> TestConfiguration(check) }
                 ).map { Arguments.of(it, it.testName) }

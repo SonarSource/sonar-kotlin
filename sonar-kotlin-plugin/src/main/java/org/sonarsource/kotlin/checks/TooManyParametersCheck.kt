@@ -31,9 +31,6 @@ import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.kotlin.checks.TooManyParametersKotlinCheck]
- */
 @Rule(key = "S107")
 class TooManyParametersCheck : AbstractCheck() {
     companion object {
