@@ -20,12 +20,12 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtFile
+import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.fs.internal.DefaultTextPointer
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.impl.TextPointerImpl
-import org.sonarsource.slang.impl.TextRangeImpl
 
 /**
  * Replacement for [org.sonarsource.slang.checks.TooLongLineCheck]
@@ -48,15 +48,15 @@ class TooLongLineCheck : AbstractCheck() {
         file.text.splitToSequence("\n", "\r\n", "\r").forEachIndexed { lineNumber, line ->
             if (line.length > maximumLineLength) {
                 kotlinFileContext.reportIssue(
-                    getLineRange(lineNumber, line),
+                    getLineRange(kotlinFileContext.inputFileContext.inputFile, lineNumber, line),
                     "Split this ${line.length} characters long line (which is greater than $maximumLineLength authorized).",
                 )
             }
         }
     }
 
-    private fun getLineRange(lineNumber: Int, line: String) = TextRangeImpl(
-        TextPointerImpl(lineNumber + 1, 0),
-        TextPointerImpl(lineNumber + 1, line.length),
+    private fun getLineRange(inputFile: InputFile, lineNumber: Int, line: String) = inputFile.newRange(
+        DefaultTextPointer(lineNumber + 1, 0),
+        DefaultTextPointer(lineNumber + 1, line.length)
     )
 }

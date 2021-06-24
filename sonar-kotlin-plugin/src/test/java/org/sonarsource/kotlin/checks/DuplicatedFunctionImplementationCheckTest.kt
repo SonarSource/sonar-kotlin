@@ -25,14 +25,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class DuplicatedFunctionImplementationCheckTest {
     @Test
-    @Disabled("native implementation is more precise")
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/DuplicatedFunctionImplementationCheckSample.kt",
-            org.sonarsource.slang.checks.DuplicatedFunctionImplementationCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(DuplicatedFunctionImplementationCheck()) {
             fileName = "DuplicatedFunctionImplementationCheckSample.kt"

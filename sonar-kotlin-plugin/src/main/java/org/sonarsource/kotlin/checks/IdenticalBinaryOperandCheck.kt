@@ -23,9 +23,9 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.KotlinTextRanges
+import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.checks.api.SecondaryLocation
 
 /**
  * Replacement for [org.sonarsource.slang.checks.IdenticalBinaryOperandCheck]
@@ -55,11 +55,10 @@ class IdenticalBinaryOperandCheck : AbstractCheck() {
         val rightOperand = expression.right!!
         val leftOperand = expression.left!!
         if (OPERATORS.contains(token) && SyntacticEquivalence.areEquivalent(leftOperand, rightOperand)) {
-            val psiDocument = context.ktFile.viewProvider.document!!
             context.reportIssue(
                 rightOperand,
                 "Correct one of the identical sub-expressions on both sides this operator",
-                listOf(SecondaryLocation(KotlinTextRanges.textRange(psiDocument, leftOperand), "")),
+                listOf(SecondaryLocation(context.textRange(leftOperand), "")),
             )
         }
     }

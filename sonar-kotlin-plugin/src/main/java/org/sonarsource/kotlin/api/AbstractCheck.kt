@@ -41,13 +41,11 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getFunctionResolvedCallWithAssert
 import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperClassNotAny
 import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperInterfaces
+import org.sonar.api.batch.fs.TextRange
 import org.sonar.api.rule.RuleKey
-import org.sonarsource.kotlin.converter.KotlinTextRanges
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.checks.api.SecondaryLocation
 import java.util.BitSet
-import org.sonarsource.slang.api.TextRange as SonarTextRange
-
 
 abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>() {
 
@@ -66,27 +64,23 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
      * @param textRange `null` when on file
      */
     internal fun KotlinFileContext.reportIssue(
-        textRange: SonarTextRange? = null,
+        textRange: TextRange? = null,
         message: String,
         secondaryLocations: List<SecondaryLocation> = emptyList(),
         gap: Double? = null,
     ) = inputFileContext.reportIssue(ruleKey, textRange, message, secondaryLocations, gap)
 
     internal fun KotlinFileContext.locationListOf(vararg nodesForSecondaryLocations: Pair<PsiElement, String>) =
-        ktFile.viewProvider.document?.let { document ->
-            nodesForSecondaryLocations.map { (psiElement, msg) ->
-                SecondaryLocation(KotlinTextRanges.textRange(document, psiElement), msg)
-            }
-        } ?: emptyList()
+        nodesForSecondaryLocations.map { (psiElement, msg) ->
+            SecondaryLocation(textRange(psiElement), msg)
+        }
 
     internal fun KotlinFileContext.reportIssue(
         psiElement: PsiElement,
         message: String,
         secondaryLocations: List<SecondaryLocation> = emptyList(),
         gap: Double? = null,
-    ) = ktFile.viewProvider.document?.let { document ->
-        reportIssue(KotlinTextRanges.textRange(document, psiElement), message, secondaryLocations, gap)
-    }
+    ) = reportIssue(textRange(psiElement), message, secondaryLocations, gap)
 
     internal fun KtParameter.typeAsString(bindingContext: BindingContext) =
         bindingContext.get(BindingContext.VALUE_PARAMETER, this)?.type.toString()
@@ -118,9 +112,6 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
 
     private fun ClassDescriptor.superClassAsList(): List<ClassDescriptor> =
         getSuperClassNotAny()?.let { listOf(it) } ?: emptyList()
-
-    internal fun KotlinFileContext.textRange(element: PsiElement) =
-        KotlinTextRanges.textRange(ktFile.viewProvider.document!!, element)
 
     internal fun KtExpression.skipParentheses(): KtExpression {
         var expr = this

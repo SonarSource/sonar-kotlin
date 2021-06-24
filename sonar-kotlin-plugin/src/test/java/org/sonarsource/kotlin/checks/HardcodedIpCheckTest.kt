@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class HardcodedIpCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/HardcodedIpCheckSample.kt",
-            org.sonarsource.slang.checks.HardcodedIpCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(HardcodedIpCheck()) {
             fileName = "HardcodedIpCheckSample.kt"

@@ -35,10 +35,9 @@ import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
-import org.sonarsource.slang.api.CodeVerifier
-import org.sonarsource.slang.api.ParseException
+import org.sonarsource.kotlin.api.ParseException
 
-class KotlinCodeVerifier : CodeVerifier {
+class KotlinCodeVerifier {
 
     companion object {
         private val KDOC_TAGS = listOf(
@@ -92,7 +91,7 @@ class KotlinCodeVerifier : CodeVerifier {
             }
     }
 
-    override fun containsCode(content: String): Boolean {
+    fun containsCode(content: String): Boolean {
         // For now we keep the Java implementation of split, as the Kotlin one causes some different behaviour.
         // TODO: how does this method function? The logic (e.g. splitting at \\w+) seems a bit odd
         val words = (content.trim() as java.lang.String).split("\\w+").size

@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class EmptyCommentCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/EmptyCommentCheckSample.kt",
-            org.sonarsource.slang.checks.EmptyCommentCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(EmptyCommentCheck()) {
             fileName = "EmptyCommentCheckSample.kt"

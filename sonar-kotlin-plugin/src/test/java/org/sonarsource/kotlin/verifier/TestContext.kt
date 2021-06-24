@@ -19,24 +19,32 @@
  */
 package org.sonarsource.kotlin.verifier
 
+import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.fs.TextPointer
+import org.sonar.api.batch.fs.TextRange
+import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.rule.RuleKey
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
+import org.sonarsource.kotlin.DummyInputFile
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.slang.api.TextRange
-import org.sonarsource.slang.api.Tree
-import org.sonarsource.slang.checks.api.SecondaryLocation
-import org.sonarsource.slang.plugin.InputFileContext
+import org.sonarsource.kotlin.api.InputFileContext
+import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.converter.KotlinTextRanges.contains
+import org.sonarsource.kotlin.converter.KotlinTree
 import java.util.function.Consumer
 
 internal class TestContext(
     private val verifier: SingleFileVerifier,
     check: AbstractCheck,
     vararg furtherChecks: AbstractCheck,
-) : InputFileContext(null, null) {
+    override val inputFile: InputFile = DummyInputFile(),
+) : InputFileContext {
     private val visitor: KtTestChecksVisitor = KtTestChecksVisitor(listOf(check) + furtherChecks)
-    private var filteredRules: Map<String, Set<TextRange>> = emptyMap()
+    override var filteredRules: Map<String, Set<TextRange>> = emptyMap()
 
-    fun scan(root: Tree?) {
+    override val sensorContext: SensorContext by lazy { throw NotImplementedError() }
+
+    fun scan(root: KotlinTree) {
         visitor.scan(this, root)
     }
 
@@ -48,7 +56,7 @@ internal class TestContext(
         gap: Double?,
     ) {
         if (textRange != null &&
-            filteredRules.getOrDefault(ruleKey.toString(), emptySet()).any { other: TextRange? -> textRange.isInside(other) }
+            filteredRules.getOrDefault(ruleKey.toString(), emptySet()).any { other: TextRange -> textRange in other }
         ) {
             // Issue is filtered by one of the filter.
             return
@@ -71,8 +79,11 @@ internal class TestContext(
         })
     }
 
-    override fun setFilteredRules(filteredRules: Map<String, Set<TextRange>>) {
-        this.filteredRules = filteredRules
-        super.setFilteredRules(filteredRules)
+    override fun reportAnalysisParseError(repositoryKey: String?, inputFile: InputFile, location: TextPointer?) {
+        throw NotImplementedError()
+    }
+
+    override fun reportAnalysisError(message: String?, location: TextPointer?) {
+        throw NotImplementedError()
     }
 }

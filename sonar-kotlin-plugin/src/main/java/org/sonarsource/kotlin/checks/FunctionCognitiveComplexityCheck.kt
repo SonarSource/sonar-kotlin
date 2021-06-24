@@ -19,16 +19,14 @@
  */
 package org.sonarsource.kotlin.checks
 
-import java.util.stream.Collectors
-import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.KotlinTextRanges
+import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.checks.api.SecondaryLocation
+import java.util.stream.Collectors
 
 /**
  * Replacement for [org.sonarsource.slang.checks.FunctionCognitiveComplexityCheck]
@@ -58,20 +56,20 @@ class FunctionCognitiveComplexityCheck : AbstractCheck() {
                 nameIdentifier,
                 "Refactor this method to reduce its Cognitive Complexity from $value to the $threshold allowed.",
                 secondaryLocations = complexity.increments().stream()
-                    .map { increment: CognitiveComplexity.Increment -> secondaryLocation(increment, document) }
+                    .map { increment: CognitiveComplexity.Increment -> secondaryLocation(increment, context) }
                     .collect(Collectors.toList()),
                 gap = value.toDouble() - threshold,
             )
         }
     }
 
-    private fun secondaryLocation(increment: CognitiveComplexity.Increment, document: Document): SecondaryLocation {
+    private fun secondaryLocation(increment: CognitiveComplexity.Increment, context: KotlinFileContext): SecondaryLocation {
         val nestingLevel = increment.nestingLevel
         var message = "+" + (nestingLevel + 1)
         if (nestingLevel > 0) {
             message += " (incl $nestingLevel for nesting)"
         }
-        val textRange = KotlinTextRanges.textRange(document, increment.token)
+        val textRange = context.textRange(increment.token)
         return SecondaryLocation(textRange, message)
     }
 }

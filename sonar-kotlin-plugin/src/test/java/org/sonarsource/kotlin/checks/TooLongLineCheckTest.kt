@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class TooLongLineCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/TooLongLineCheckSample.kt",
-            org.sonarsource.slang.checks.TooLongLineCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(TooLongLineCheck()) {
             fileName = "TooLongLineCheckSample.kt"

@@ -28,8 +28,9 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.getContent
 import org.sonarsource.kotlin.converter.KotlinCodeVerifier
+import org.sonarsource.kotlin.converter.KotlinTextRanges.merge
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.impl.TextRanges
 
 /**
  * Replacement for [org.sonarsource.slang.checks.CommentedCodeCheck]
@@ -60,7 +61,7 @@ class CommentedCodeCheck : AbstractCheck() {
             val content = comments.joinToString("\n") { it.getContent() }
             if (codeVerifier.containsCode(content)) {
                 val textRanges = comments.map { kotlinFileContext.textRange(it) }
-                kotlinFileContext.reportIssue(TextRanges.merge(textRanges), "Remove this commented out code.")
+                kotlinFileContext.reportIssue(kotlinFileContext.merge(textRanges), "Remove this commented out code.")
             }
         }
     }

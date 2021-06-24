@@ -23,9 +23,9 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.KotlinTextRanges
+import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.checks.api.SecondaryLocation
 
 /**
  * Replacement for [org.sonarsource.slang.checks.TooManyCasesCheck]
@@ -50,7 +50,7 @@ class TooManyCasesCheck : AbstractCheck() {
                 expression.whenKeyword,
                 "Reduce the number of ${expression.whenKeyword.text} branches from $actual to at most $maximum.",
                 secondaryLocations = expression.entries
-                    .map { SecondaryLocation(KotlinTextRanges.textRange(document, it.arrow!!), null) }
+                    .map { SecondaryLocation(kotlinFileContext.textRange(it.arrow!!), null) }
                     .toList(),
             )
         }

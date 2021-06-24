@@ -30,7 +30,6 @@ import org.sonar.api.batch.sensor.cpd.internal.TokensLine
 import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
-import org.sonarsource.slang.plugin.InputFileContext
 
 @EnableRuleMigrationSupport
 class CopyPasteDetectorTest {
@@ -62,7 +61,7 @@ class CopyPasteDetectorTest {
             .build()
 
         val root = KotlinTree.of(content, Environment(emptyList()))
-        val ctx = InputFileContext(sensorContext, inputFile)
+        val ctx = InputFileContextImpl(sensorContext, inputFile)
         CopyPasteDetector().scan(ctx, root)
 
         val cpdTokenLines = sensorContext.cpdTokens(inputFile.key())!!

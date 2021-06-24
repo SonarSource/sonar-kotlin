@@ -24,16 +24,6 @@ import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class TooManyCasesCheckTest {
-    @Disabled("different highlighting")
-    @Test
-    fun slang() {
-        val check = org.sonarsource.slang.checks.TooManyCasesCheck()
-        check.maximum = 2
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/TooManyCasesCheckSample.kt",
-            check)
-    }
-
     @Test
     fun test() {
         val check = TooManyCasesCheck()

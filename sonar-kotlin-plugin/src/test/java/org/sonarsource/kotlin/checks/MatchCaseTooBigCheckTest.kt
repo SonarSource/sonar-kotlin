@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class MatchCaseTooBigCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/MatchCaseTooBigCheckSample.kt",
-            org.sonarsource.slang.checks.MatchCaseTooBigCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(MatchCaseTooBigCheck()) {
             fileName = "MatchCaseTooBigCheckSample.kt"

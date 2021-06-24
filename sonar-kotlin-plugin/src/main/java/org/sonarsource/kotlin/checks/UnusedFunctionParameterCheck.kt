@@ -26,8 +26,9 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.checks.api.SecondaryLocation
 
 /**
  * Replacement for [org.sonarsource.slang.checks.UnusedFunctionParameterCheck]

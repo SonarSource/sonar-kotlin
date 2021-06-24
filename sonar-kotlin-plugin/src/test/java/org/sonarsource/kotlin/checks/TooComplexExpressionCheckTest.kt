@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class TooComplexExpressionCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/TooComplexExpressionCheckSample.kt",
-            org.sonarsource.slang.checks.TooComplexExpressionCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(TooComplexExpressionCheck()) {
             fileName = "TooComplexExpressionCheckSample.kt"

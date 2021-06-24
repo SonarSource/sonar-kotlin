@@ -20,22 +20,21 @@
 package org.sonarsource.kotlin.converter
 
 import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
+import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.sonarsource.slang.api.ParseException
-import org.sonarsource.slang.api.TopLevelTree
-import org.sonarsource.slang.impl.TreeMetaDataProvider
+import org.sonarsource.kotlin.api.ParseException
 
-class KotlinTree(
+class KotlinTree private constructor(
     val psiFile: KtFile,
     val document: Document,
-    val metaDataProvider: TreeMetaDataProvider,
     val bindingContext: BindingContext,
-    private val slangAst: TopLevelTree,
-) : TopLevelTree by slangAst {
+    private val environment: Environment,
+) {
     companion object {
         @JvmStatic
         fun of(content: String, environment: Environment): KotlinTree {
@@ -47,40 +46,35 @@ class KotlinTree(
                 throw ParseException("Cannot correctly map AST with a null Document object")
             }
 
-            val metaDataProvider = CommentAnnotationsAndTokenVisitor(document).let { commentsAndTokens ->
-                psiFile.accept(commentsAndTokens)
-                TreeMetaDataProvider(commentsAndTokens.allComments, commentsAndTokens.tokens, commentsAndTokens.allAnnotations)
-            }
-
-            checkParsingErrors(psiFile, document, metaDataProvider)
+            checkParsingErrors(psiFile, document)
             val bindingContext = bindingContext(
                 environment.env,
                 environment.classpath,
                 listOf(psiFile),
             )
-            val slangAst = KotlinTreeVisitor(psiFile, metaDataProvider).sLangAST as TopLevelTree
 
-            return KotlinTree(psiFile, document, metaDataProvider, bindingContext, slangAst)
+            return KotlinTree(psiFile, document, bindingContext, environment)
         }
 
         private fun descendants(element: PsiElement): Sequence<PsiElement> {
             return element.children.asSequence().flatMap { tree: PsiElement -> sequenceOf(tree) + descendants(tree) }
         }
 
-        private fun checkParsingErrors(psiFile: PsiFile, document: Document?, metaDataProvider: TreeMetaDataProvider) {
+        private fun checkParsingErrors(psiFile: PsiFile, document: Document) {
             descendants(psiFile)
                 .firstOrNull { it is PsiErrorElement }
                 ?.let { element: PsiElement ->
                     throw ParseException(
                         "Cannot convert file due to syntactic errors",
-                        getErrorLocation(document, metaDataProvider, element)
+                        KotlinTextRanges.textPointerAtOffset(document, element.startOffset)
                     )
                 }
         }
 
-        private fun getErrorLocation(document: Document?, metaDataProvider: TreeMetaDataProvider, element: PsiElement) =
-            metaDataProvider.metaData(KotlinTextRanges.textRange(document!!, element)).textRange().start()
-
         private fun normalizeEol(content: String) = content.replace("""\r\n?""".toRegex(), "\n")
+    }
+
+    fun terminate() {
+        Disposer.dispose(environment.disposable)
     }
 }

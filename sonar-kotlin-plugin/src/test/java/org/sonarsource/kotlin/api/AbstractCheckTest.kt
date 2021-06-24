@@ -29,11 +29,9 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
 import org.junit.jupiter.params.provider.ArgumentsSource
 import org.sonar.api.rule.RuleKey
-import org.sonarsource.kotlin.converter.KotlinTextRanges
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.kotlin.verifier.KotlinVerifier
-import org.sonarsource.slang.checks.api.SecondaryLocation
-import org.sonarsource.slang.impl.TextRangeImpl
 import java.util.stream.Stream
 
 class AbstractCheckTest {
@@ -48,7 +46,7 @@ class AbstractCheckTest {
             Arguments.of({ check: DummyCheck, kotlinFileContext: KotlinFileContext, node: PsiElement ->
                 check.apply {
                     kotlinFileContext.reportIssue(
-                        KotlinTextRanges.textRange(kotlinFileContext.ktFile.viewProvider.document!!, node),
+                        kotlinFileContext.textRange(node),
                         "Hello World!"
                     )
                 }
@@ -61,7 +59,7 @@ class AbstractCheckTest {
                     kotlinFileContext.reportIssue(
                         node,
                         "Hello World!",
-                        listOf(SecondaryLocation(TextRangeImpl(21, 22, 23, 24), "secondary 2")),
+                        listOf(SecondaryLocation(kotlinFileContext.textRange(21, 22, 23, 24), "secondary 2")),
                         2.2
                     )
                 }

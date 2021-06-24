@@ -38,9 +38,6 @@ private val IGNORED_METHODS: Set<String> = setOf(
     "readResolve",
     "readObjectNoData")
 
-/**
- * Replacement for [org.sonarsource.kotlin.checks.UnusedPrivateMethodKotlinCheck]
- */
 @Rule(key = "S1144")
 class UnusedPrivateMethodCheck : AbstractCheck() {
 

@@ -24,16 +24,6 @@ import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class TooManyLinesOfCodeFileCheckTest {
-    @Disabled("missing filename in the message")
-    @Test
-    fun slang() {
-        val check = org.sonarsource.slang.checks.TooManyLinesOfCodeFileCheck()
-        check.max = 1
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/TooManyLinesOfCodeFileCheckSample.kt",
-            check)
-    }
-
     @Test
     fun test() {
         val check = TooManyLinesOfCodeFileCheck()

@@ -32,9 +32,9 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.converter.KotlinTextRanges
+import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.checks.api.SecondaryLocation
 
 @Rule(key = "S4423")
 class WeakSSLContextCheck : AbstractCheck() {
@@ -121,7 +121,7 @@ class WeakSSLContextCheck : AbstractCheck() {
                 message = "Change this code to use a stronger protocol.",
                 secondaryLocations = document?.let {
                     secondaries.map {
-                        SecondaryLocation(KotlinTextRanges.textRange(document, it), "Other weak protocol.")
+                        SecondaryLocation(kotlinFileContext.textRange(it), "Other weak protocol.")
                     }
                 } ?: emptyList()
             )

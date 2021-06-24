@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting
 import org.sonar.api.batch.sensor.highlighting.TypeOfText
-import org.sonarsource.kotlin.converter.KotlinTextRanges.commonTextRange
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 
 class SyntaxHighlighter : KotlinFileVisitor() {
@@ -29,7 +29,7 @@ class SyntaxHighlighter : KotlinFileVisitor() {
     private fun highlightElementsRec(node: PsiElement, newHighlighting: NewHighlighting, context: KotlinFileContext) {
         val typeOfText = determineTypeOfText(node)
         if (typeOfText != null) {
-            newHighlighting.highlight(context.commonTextRange(node), typeOfText)
+            newHighlighting.highlight(context.textRange(node), typeOfText)
         } else {
             node.allChildren.forEach { highlightElementsRec(it, newHighlighting, context) }
         }
