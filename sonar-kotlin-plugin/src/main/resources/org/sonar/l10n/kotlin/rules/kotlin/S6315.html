@@ -3,16 +3,20 @@ necessary, as callers do not wait for the result of an operation when it is laun
 other tasks can be completed while waiting for the asynchronous operation’s result to become available. Hence, to avoid blocking the caller, functions
 can trigger a task to be run and then immediately return a <code>Deferred</code> instance, which will contain the result once the background task is
 complete.</p>
-<pre>
-`Deferred` (aka Future, Promise, etc) provides an `await()` function, which suspends the caller coroutine until the asynchronous task is complete and returns the result of the execution. By not using the `Deferred` return value, the result of the corresponding asynchronously launched task is lost. This could point to an issue in the code, where data is not passed along as intended.
-</pre>
+<p><code>Deferred</code> (aka Future, Promise, etc) provides an <code>await()</code> function, which suspends the caller coroutine until the
+asynchronous task is complete and returns the result of the execution. By not using the <code>Deferred</code> return value, the result of the
+corresponding asynchronously launched task is lost. This could point to an issue in the code, where data is not passed along as intended.</p>
 <p>For instance, the Kotlin coroutines API provides both the functions <code>async</code> and <code>launch</code> as ways to launch asynchronous work.
 The key difference here is their return type. <code>launch</code> starts a new coroutine without blocking the current thread and returns a reference
 to the coroutine as a Job. This function is not designed to return a result, i.e. follows the idea of "fire and forget". <code>async</code> creates a
 coroutine and returns its future result as an implementation of <code>Deferred</code>.</p>
-<p>Ask yourself whether: - You really need whatever result is calculated by the asynchronous operation. If not, you may be better off using a function
-that does not return <code>Deferred</code>. - You should be using the <code>Deferred</code> return value and fetching some data from it later on, for
-instance by calling <code>await()</code> on it.</p>
+<p>Ask yourself whether:</p>
+<ul>
+  <li> You really need whatever result is calculated by the asynchronous operation. If not, you may be better off using a function that does not
+  return <code>Deferred</code>. </li>
+  <li> You should be using the <code>Deferred</code> return value and fetching some data from it later on, for instance by calling
+  <code>await()</code> on it. </li>
+</ul>
 <p>This rule raises an issue when a function returning the type <code>kotlinx.coroutines.Deferred</code> is used without the result of the operation
 being retrieved.</p>
 <h2>Noncompliant Code Example</h2>
