@@ -25,11 +25,10 @@ import org.sonar.api.config.Configuration
 import org.sonar.api.notifications.AnalysisWarnings
 import org.sonar.api.utils.log.Loggers
 import org.sonarsource.kotlin.externalreport.ExternalReporting
+import org.sonarsource.kotlin.plugin.AbstractPropertyHandlerSensor
 import org.sonarsource.kotlin.plugin.KotlinPlugin
-import org.sonarsource.slang.plugin.AbstractPropertyHandlerSensor
 import java.io.File
 import java.io.FileInputStream
-import java.util.function.Consumer
 
 private val LOG = Loggers.get(AndroidLintSensor::class.java)
 const val NO_ISSUES_ERROR_MESSAGE = "No issues information will be saved as the report file '{}' can't be read."
@@ -46,13 +45,14 @@ class AndroidLintSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHa
         const val LINTER_NAME = "Android Lint"
         const val REPORT_PROPERTY_KEY = "sonar.androidLint.reportPaths"
     }
+
     override fun describe(descriptor: SensorDescriptor) {
         descriptor // potentially covers multiple languages, not only kotlin
             .onlyWhenConfiguration { conf: Configuration -> conf.hasKey(REPORT_PROPERTY_KEY) }
             .name("Import of $LINTER_NAME issues")
     }
 
-    override fun reportConsumer(context: SensorContext) = Consumer { file: File -> importReport(file, context) }
+    override fun reportConsumer(context: SensorContext) = { file: File -> importReport(file, context) }
 }
 
 private fun importReport(reportPath: File, context: SensorContext) {

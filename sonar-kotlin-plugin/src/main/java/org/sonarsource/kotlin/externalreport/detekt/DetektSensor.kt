@@ -24,11 +24,10 @@ import org.sonar.api.notifications.AnalysisWarnings
 import org.sonar.api.rule.RuleKey
 import org.sonar.api.utils.log.Loggers
 import org.sonarsource.kotlin.externalreport.ExternalReporting
+import org.sonarsource.kotlin.plugin.AbstractPropertyHandlerSensor
 import org.sonarsource.kotlin.plugin.KotlinPlugin
 import org.sonarsource.slang.externalreport.CheckstyleFormatImporterWithRuleLoader
-import org.sonarsource.slang.plugin.AbstractPropertyHandlerSensor
 import java.io.File
-import java.util.function.Consumer
 
 class DetektSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandlerSensor(
     analysisWarnings,
@@ -66,7 +65,5 @@ class DetektSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandler
         }
     }
 
-    override fun reportConsumer(context: SensorContext): Consumer<File> {
-        return Consumer { reportPath: File -> ReportImporter(context).importFile(reportPath) }
-    }
+    override fun reportConsumer(context: SensorContext) = { reportPath: File -> ReportImporter(context).importFile(reportPath) }
 }
