@@ -22,9 +22,9 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.KotlinTextRanges
+import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.checks.api.SecondaryLocation
 
 /**
  * Replacement for [org.sonarsource.slang.checks.OneStatementPerLineCheck]
@@ -44,7 +44,7 @@ class OneStatementPerLineCheck : AbstractCheck() {
                         secondaryLocations = statements
                             .asSequence()
                             .drop(2)
-                            .map { SecondaryLocation(KotlinTextRanges.textRange(document, it), null) }
+                            .map { SecondaryLocation(kotlinFileContext.textRange(it), null) }
                             .toList(),
                     )
                 }

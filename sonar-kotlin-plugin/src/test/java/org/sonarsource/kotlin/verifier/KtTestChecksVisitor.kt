@@ -23,24 +23,15 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtElement
 import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.api.Tree
-import org.sonarsource.slang.plugin.InputFileContext
-import org.sonarsource.slang.visitors.TreeVisitor
+import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 
-class KtTestChecksVisitor(private val checks: List<AbstractCheck>) : TreeVisitor<InputFileContext>() {
+class KtTestChecksVisitor(private val checks: List<AbstractCheck>) : KotlinFileVisitor() {
     init {
         checks.forEach { it.initialize(RuleKey.of("Kotlin", "Dummy")) }
     }
 
-    override fun scan(fileContext: InputFileContext, root: Tree?) {
-        if (root is KotlinTree) {
-            visit(KotlinFileContext(fileContext, root.psiFile, root.bindingContext))
-        }
-    }
-
-    private fun visit(kotlinFileContext: KotlinFileContext) {
+    override fun visit(kotlinFileContext: KotlinFileContext) {
         flattenNodes(listOf(kotlinFileContext.ktFile)).forEach { psiElement ->
             // Note: we only visit KtElements. If we need to visit PsiElement, add a
             // visitPsiElement function in KotlinCheck and call it here in the else branch.

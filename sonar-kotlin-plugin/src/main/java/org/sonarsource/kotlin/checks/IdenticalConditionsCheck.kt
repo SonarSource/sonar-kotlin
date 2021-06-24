@@ -27,9 +27,9 @@ import org.jetbrains.kotlin.psi.KtWhenConditionWithExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.KotlinTextRanges
+import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.checks.api.SecondaryLocation
 
 /**
  * Replacement for [org.sonarsource.slang.checks.IdenticalConditionsCheck]
@@ -52,12 +52,11 @@ class IdenticalConditionsCheck : AbstractCheck() {
     }
 
     private fun checkConditions(ctx: KotlinFileContext, conditions: List<KtElement>) {
-        val document = ctx.ktFile.viewProvider.document!!
         for (group in SyntacticEquivalence.findDuplicatedGroups(conditions)) {
             val original = group[0]
             group.stream().skip(1)
                 .forEach { duplicated ->
-                    val originalRange = KotlinTextRanges.textRange(document, original)
+                    val originalRange = ctx.textRange(original)
                     ctx.reportIssue(
                         duplicated,
                         "This condition duplicates the one on line ${originalRange.start().line()}.",

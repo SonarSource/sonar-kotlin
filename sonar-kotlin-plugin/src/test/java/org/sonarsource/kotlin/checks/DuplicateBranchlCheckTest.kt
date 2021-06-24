@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class DuplicateBranchCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/DuplicateBranchCheckSample.kt",
-            org.sonarsource.slang.checks.DuplicateBranchCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(DuplicateBranchCheck()) {
             fileName = "DuplicateBranchCheckSample.kt"

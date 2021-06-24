@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class EmptyBlockCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/EmptyBlockCheckSample.kt",
-            org.sonarsource.slang.checks.EmptyBlockCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(EmptyBlockCheck()) {
             fileName = "EmptyBlockCheckSample.kt"

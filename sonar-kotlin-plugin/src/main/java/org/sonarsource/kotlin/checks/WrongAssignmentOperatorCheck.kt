@@ -22,12 +22,12 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
+import org.sonar.api.batch.fs.TextRange
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.KotlinTextRanges
+import org.sonarsource.kotlin.converter.KotlinTextRanges.merge
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.api.TextRange
-import org.sonarsource.slang.impl.TextRanges
 
 /**
  * Replacement for [org.sonarsource.slang.checks.WrongAssignmentOperatorCheck]
@@ -60,14 +60,13 @@ class WrongAssignmentOperatorCheck : AbstractCheck() {
         if (rightExpression !is KtUnaryExpression || !SUSPICIOUS_UNARY_OPERATORS.contains(rightExpression.operationToken)) return
 
         val unaryOperation = rightExpression.operationReference
-        val psiDocument = context.ktFile.viewProvider.document!!
 
-        val leftTextRange = KotlinTextRanges.textRange(psiDocument, expression.left!!)
-        val rightTextRange = KotlinTextRanges.textRange(psiDocument, unaryOperation)
-        val opTextRange = KotlinTextRanges.textRange(psiDocument, expression.operationReference)
+        val leftTextRange = context.textRange(expression.left!!)
+        val rightTextRange = context.textRange(unaryOperation)
+        val opTextRange = context.textRange(expression.operationReference)
 
         if (!hasSpacingBetween(opTextRange, rightTextRange) && hasSpacingBetween(leftTextRange, opTextRange)) {
-            val range = TextRanges.merge(listOf(opTextRange, rightTextRange))
+            val range = context.merge(listOf(opTextRange, rightTextRange))
             context.reportIssue(range, getMessage(rightExpression))
         }
     }

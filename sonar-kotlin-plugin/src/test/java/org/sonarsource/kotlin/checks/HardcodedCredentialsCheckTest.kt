@@ -25,14 +25,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class HardcodedCredentialsCheckTest {
     @Test
-    @Disabled("native implementation is more precise")
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/HardcodedCredentialsCheckSample.kt",
-            org.sonarsource.slang.checks.HardcodedCredentialsCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(HardcodedCredentialsCheck()) {
             fileName = "HardcodedCredentialsCheckSample.kt"

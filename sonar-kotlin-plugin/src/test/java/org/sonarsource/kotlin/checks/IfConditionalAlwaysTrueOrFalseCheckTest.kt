@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class IfConditionalAlwaysTrueOrFalseCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/IfConditionalAlwaysTrueOrFalseCheckSample.kt",
-            org.sonarsource.slang.checks.IfConditionalAlwaysTrueOrFalseCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(IfConditionalAlwaysTrueOrFalseCheck()) {
             fileName = "IfConditionalAlwaysTrueOrFalseCheckSample.kt"

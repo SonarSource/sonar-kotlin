@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class AllBranchesIdenticalCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/AllBranchesIdenticalCheckSample.kt",
-            org.sonarsource.slang.checks.AllBranchesIdenticalCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(AllBranchesIdenticalCheck()) {
             fileName = "AllBranchesIdenticalCheckSample.kt"

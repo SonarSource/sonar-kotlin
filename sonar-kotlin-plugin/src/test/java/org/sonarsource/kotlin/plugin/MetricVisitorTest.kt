@@ -34,13 +34,13 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContext
 import org.sonar.api.measures.FileLinesContextFactory
-import org.sonarsource.kotlin.converter.KotlinConverter
-import org.sonarsource.slang.plugin.InputFileContext
+import org.sonarsource.kotlin.converter.Environment
+import org.sonarsource.kotlin.converter.KotlinTree
 import java.nio.charset.StandardCharsets
 
 @EnableRuleMigrationSupport
 internal class MetricVisitorTest {
-    private val parser = KotlinConverter(emptyList())
+    private val environment = Environment(emptyList())
     private lateinit var mockNoSonarFilter: NoSonarFilter
     private lateinit var visitor: MetricVisitor
     private lateinit var sensorContext: SensorContextTester
@@ -194,7 +194,7 @@ internal class MetricVisitorTest {
         inputFile = TestInputFileBuilder("moduleKey", tempFolder.newFile().name)
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(code).build()
-        val ctx = InputFileContext(sensorContext, inputFile)
-        visitor.scan(ctx, parser.parse(code))
+        val ctx = InputFileContextImpl(sensorContext, inputFile)
+        visitor.scan(ctx, KotlinTree.of(code, environment))
     }
 }

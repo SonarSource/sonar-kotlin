@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class FixMeCommentCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/FixMeCommentCheckSample.kt",
-            org.sonarsource.slang.checks.FixMeCommentCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(FixMeCommentCheck()) {
             fileName = "FixMeCommentCheckSample.kt"

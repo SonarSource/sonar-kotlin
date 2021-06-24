@@ -25,14 +25,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class IdenticalBinaryOperandCheckTest {
     @Test
-    @Disabled("slang implementation doesn't support parentheses")
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/IdenticalBinaryOperandCheckSample.kt",
-            org.sonarsource.slang.checks.IdenticalBinaryOperandCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(IdenticalBinaryOperandCheck()) {
             fileName = "IdenticalBinaryOperandCheckSample.kt"

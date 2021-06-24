@@ -29,19 +29,16 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtValueArgument
-import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
-import org.sonarsource.slang.api.Annotation
-import org.sonarsource.slang.api.Comment
-import org.sonarsource.slang.api.TextPointer
-import org.sonarsource.slang.api.TextRange
-import org.sonarsource.slang.api.Token
-import org.sonarsource.slang.impl.AnnotationImpl
-import org.sonarsource.slang.impl.CommentImpl
-import org.sonarsource.slang.impl.TextPointerImpl
-import org.sonarsource.slang.impl.TextRangeImpl
-import org.sonarsource.slang.impl.TokenImpl
+import org.jetbrains.kotlin.psi.psiUtil.endOffset
+import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import org.sonar.api.batch.fs.TextPointer
+import org.sonar.api.batch.fs.TextRange
+import org.sonar.api.batch.fs.internal.DefaultTextPointer
+import org.sonar.api.batch.fs.internal.DefaultTextRange
 
-class CommentAnnotationsAndTokenVisitor(private val psiDocument: Document) : KtTreeVisitorVoid() {
+class CommentAnnotationsAndTokenVisitor(
+    private val psiDocument: Document,
+) : KtTreeVisitorVoid() {
 
     companion object {
         private const val MIN_BLOCK_COMMENT_LENGTH = 4
@@ -67,15 +64,14 @@ class CommentAnnotationsAndTokenVisitor(private val psiDocument: Document) : KtT
                 element.elementType === KtTokens.REGULAR_STRING_PART -> Token.Type.STRING_LITERAL
                 else -> Token.Type.OTHER
             }.let { type ->
-                tokens.add(TokenImpl(textRange(psiDocument, element), element.text, type))
+                tokens.add(Token(range(element), element.text, type))
             }
         } else if (element is KtAnnotationEntry) {
             element.shortName?.let { shortName ->
                 val argumentsText = element.valueArguments
                     .filterIsInstance<KtValueArgument>()
                     .map { obj: KtValueArgument -> obj.text }
-                val range = textRange(psiDocument, element)
-                allAnnotations.add(AnnotationImpl(shortName.asString(), argumentsText, range))
+                allAnnotations.add(Annotation(shortName.asString(), argumentsText, range(element)))
             }
         }
         super.visitElement(element)
@@ -97,10 +93,25 @@ class CommentAnnotationsAndTokenVisitor(private val psiDocument: Document) : KtT
                 0 to 0
             }
         val contentText = text.substring(prefixLength, length - suffixLength)
-        val range = textRange(psiDocument, element)
-        val contentStart: TextPointer = TextPointerImpl(range.start().line(), range.start().lineOffset() + prefixLength)
-        val contentEnd: TextPointer = TextPointerImpl(range.end().line(), range.end().lineOffset() - suffixLength)
-        val contentRange: TextRange = TextRangeImpl(contentStart, contentEnd)
-        return CommentImpl(text, contentText, range, contentRange)
+        val range = range(element)
+        val contentStart: TextPointer = DefaultTextPointer(range.start().line(), range.start().lineOffset() + prefixLength)
+        val contentEnd: TextPointer = DefaultTextPointer(range.end().line(), range.end().lineOffset() - suffixLength)
+        val contentRange: TextRange = DefaultTextRange(contentStart, contentEnd)
+        return Comment(text, contentText, range, contentRange)
+    }
+
+    private fun range(element: PsiElement): TextRange {
+        val start = KotlinTextRanges.textPointerAtOffset(psiDocument, element.startOffset)
+        val end = KotlinTextRanges.textPointerAtOffset(psiDocument, element.endOffset)
+        return DefaultTextRange(start, end)
     }
 }
+
+data class Comment(val text: String, val contentText: String, val range: TextRange, val contentRange: TextRange)
+data class Token(var textRange: TextRange, val text: String, val type: Type) {
+    enum class Type {
+        KEYWORD, STRING_LITERAL, OTHER
+    }
+}
+
+data class Annotation(val shortName: String, val argumentsText: List<String>, val range: TextRange)

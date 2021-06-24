@@ -27,16 +27,6 @@ import java.lang.IllegalArgumentException
 
 class FileHeaderCheckTest {
     @Test
-    fun slang_regex() {
-        val check = org.sonarsource.slang.checks.FileHeaderCheck()
-        check.isRegularExpression = true
-        check.headerFormat = "// copyright 20\\d\\d"
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/FileHeaderCheckSample.kt",
-            check)
-    }
-
-    @Test
     fun regex() {
         val check = FileHeaderCheck()
         check.isRegularExpression = true
@@ -60,15 +50,6 @@ class FileHeaderCheckTest {
             }.verify()
         }
         assertEquals("[FileHeaderCheck] Unable to compile the regular expression: [", e.message)
-    }
-
-    @Test
-    fun slang_text() {
-        val check = org.sonarsource.slang.checks.FileHeaderCheck()
-        check.headerFormat = "// copyright 2021"
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/FileHeaderCheckSample.kt",
-            check)
     }
 
     @Test

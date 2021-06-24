@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class SelfAssignmentCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/SelfAssignmentCheckSample.kt",
-            org.sonarsource.slang.checks.SelfAssignmentCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(SelfAssignmentCheck()) {
             fileName = "SelfAssignmentCheckSample.kt"

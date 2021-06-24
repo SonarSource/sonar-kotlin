@@ -20,14 +20,14 @@
 package org.sonarsource.kotlin.verifier
 
 import io.mockk.InternalPlatformDsl.toStr
+import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
+import org.sonarsource.kotlin.DummyInputFile
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.KotlinConverter
-import org.sonarsource.slang.api.ASTConverter
-import org.sonarsource.slang.api.Comment
-import org.sonarsource.slang.api.TopLevelTree
-import org.sonarsource.slang.checks.api.SlangCheck
-import org.sonarsource.slang.testing.Verifier
+import org.sonarsource.kotlin.converter.Comment
+import org.sonarsource.kotlin.converter.CommentAnnotationsAndTokenVisitor
+import org.sonarsource.kotlin.converter.Environment
+import org.sonarsource.kotlin.converter.KotlinTree
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.nio.file.FileVisitResult
@@ -39,54 +39,52 @@ import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 
 class KotlinVerifier(private val check: AbstractCheck) {
+
+    companion object {
+        val KOTLIN_BASE_DIR = Paths.get("..", "kotlin-checks-test-sources", "src", "main", "kotlin", "checks")
+        private val KOTLIN_CLASSPATH = "../kotlin-checks-test-sources/build/classes"
+        private val DEFAULT_TEST_JARS_DIRECTORY = "../kotlin-checks-test-sources/build/test-jars"
+    }
+
     var fileName: String = ""
     var classpath: List<String> = System.getProperty("java.class.path").split(":") + listOf(KOTLIN_CLASSPATH)
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
 
     fun verify() {
-        val converter = KotlinConverter(classpath + deps)
+        val environment = Environment(classpath + deps)
+        val converter = { content: String -> KotlinTree.of(content, environment) }
         createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check)
             .assertOneOrMoreIssues()
-        converter.terminate()
+        Disposer.dispose(environment.disposable)
     }
 
     fun verifyNoIssue() {
-        val converter = KotlinConverter(classpath + deps)
+        val environment = Environment(classpath + deps)
+        val converter = { content: String -> KotlinTree.of(content, environment) }
         createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check)
             .assertNoIssues()
-        converter.terminate()
+        Disposer.dispose(environment.disposable)
     }
 
     private fun createVerifier(
-        converter: ASTConverter,
+        converter: (String) -> KotlinTree,
         path: Path,
         check: AbstractCheck,
     ): SingleFileVerifier {
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
+
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
-        val root = converter.parse(testFileContent, null)
-        (root as TopLevelTree).allComments()
+        val root = converter(testFileContent)
+        val inputFile = DummyInputFile(path)
+
+        CommentAnnotationsAndTokenVisitor(root.document).apply { visitElement(root.psiFile) }.allComments
             .forEach { comment: Comment ->
-                val start = comment.textRange().start()
-                verifier.addComment(start.line(), start.lineOffset() + 1, comment.text(), 2, 0)
+                val start = comment.range.start()
+                verifier.addComment(start.line(), start.lineOffset() + 1, comment.text, 2, 0)
             }
-        val ctx = TestContext(verifier, check)
+        val ctx = TestContext(verifier, check, inputFile = DummyInputFile(path))
         ctx.scan(root)
         return verifier
-    }
-
-    companion object {
-        private val BASE_DIR = Paths.get("src", "test", "resources", "checks")
-        val KOTLIN_BASE_DIR = Paths.get("..", "kotlin-checks-test-sources", "src", "main", "kotlin", "checks")
-        private val KOTLIN_CLASSPATH = "../kotlin-checks-test-sources/build/classes"
-        private val DEFAULT_TEST_JARS_DIRECTORY = "../kotlin-checks-test-sources/build/test-jars"
-        private val CONVERTER: ASTConverter = KotlinConverter(emptyList())
-
-        @JvmStatic
-        @Deprecated("Use KotlinVerifier#verify for testing KotlinChecks instead.")
-        fun verify(fileName: String, check: SlangCheck) {
-            Verifier.verify(CONVERTER, BASE_DIR.resolve(fileName), check)
-        }
     }
 
     private fun getClassPath(jarsDirectory: String): List<String> {

@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class CollapsibleIfStatementsCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/CollapsibleIfStatementsCheckSample.kt",
-            org.sonarsource.slang.checks.CollapsibleIfStatementsCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(CollapsibleIfStatementsCheck()) {
             fileName = "CollapsibleIfStatementsCheckSample.kt"

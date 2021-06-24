@@ -1,9 +1,16 @@
 package org.sonarsource.kotlin.dev
 
+import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
+import org.jetbrains.kotlin.psi.psiUtil.endOffset
+import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import org.sonar.api.batch.fs.TextRange
+import org.sonar.api.batch.fs.internal.DefaultTextRange
+import org.sonarsource.kotlin.converter.KotlinTextRanges
+import org.sonarsource.kotlin.converter.KotlinTree
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.writeText
@@ -11,20 +18,20 @@ import kotlin.io.path.writeText
 object AstPrinter {
     private const val INDENT = "  ";
 
-    fun dotPrint(node: PsiElement): String = dotPrint(DotNode.of(node))
-    fun dotPrint(node: PsiElement, outputFile: Path) = dotPrint(DotNode.of(node), outputFile)
+    fun dotPrint(node: PsiElement): String = dotPrint(DotNode.of(node, null))
+    fun dotPrint(node: PsiElement, outputFile: Path) = dotPrint(DotNode.of(node, null), outputFile)
 
     fun dotPrint(node: DotNode) = toDotString(node)
     fun dotPrint(node: DotNode, outputFile: Path) = outputFile.writeText(dotPrint(node))
 
-    fun txtPrint(node: PsiElement): String = txtPrint(DotNode.of(node))
-    fun txtPrint(node: PsiElement, outputFile: Path) = txtPrint(DotNode.of(node), outputFile)
+    fun txtPrint(node: PsiElement, document: Document? = null): String = txtPrint(DotNode.of(node, document))
+    fun txtPrint(node: PsiElement, outputFile: Path, document: Document? = null) = txtPrint(DotNode.of(node, document), outputFile)
 
     fun txtPrint(node: DotNode) = toTxtString(node)
     fun txtPrint(node: DotNode, outputFile: Path) = outputFile.writeText(txtPrint(node))
 
     private fun toTxtString(node: DotNode, indentLevel: Int = 0): String =
-        "${INDENT.repeat(indentLevel)}${node.type}: ${node.txtLabel()}\n" +
+        "${INDENT.repeat(indentLevel)}${node.type} ${node.range.prettyString()}: ${node.txtLabel()}\n" +
             node.children.joinToString("") { toTxtString(it, indentLevel + 1) }
 
     private fun toDotString(node: DotNode): String {
@@ -52,11 +59,11 @@ object AstPrinter {
 
 }
 
-data class DotNode(val title: String, val text: String, val type: String, val children: List<DotNode>) {
+data class DotNode(val title: String, val text: String, val type: String, val children: List<DotNode>, val range: TextRange?) {
     companion object {
         var nextId = 0
 
-        fun of(original: PsiElement): DotNode {
+        fun of(original: PsiElement, document: Document?): DotNode {
             val title = when (original) {
                 is KtFile -> original.name.substringAfterLast(File.separatorChar)
                 is LeafPsiElement -> original.elementType.toString()
@@ -64,11 +71,17 @@ data class DotNode(val title: String, val text: String, val type: String, val ch
             }
 
             val text = with(original.text.trim()) {
-                if (length <= 50) this
-                else "${substring(0, 20)}...${substring(length - 20)}"
+                if (length <= 65) this
+                else "${substring(0, 30)} … ${substring(length - 30)}"
             }.replace("\n", "")
 
-            return DotNode(title, text, original::class.java.simpleName, original.allChildren.map { of(it) }.toList())
+            val range = document?.let {
+                val start = KotlinTextRanges.textPointerAtOffset(it, original.startOffset)
+                val end = KotlinTextRanges.textPointerAtOffset(it, original.endOffset)
+                DefaultTextRange(start, end)
+            }
+
+            return DotNode(title, text, original::class.java.simpleName, original.allChildren.map { of(it, document) }.toList(), range)
         }
     }
 
@@ -82,3 +95,7 @@ data class DotNode(val title: String, val text: String, val type: String, val ch
 private fun String.escapeHtml() = this
     .replace("<", "&lt;")
     .replace(">", "&gt;")
+
+private fun TextRange?.prettyString() = this?.run {
+    "${start().line()}:${start().lineOffset()} … ${end().line()}:${end().lineOffset()}"
+} ?: "?-?"

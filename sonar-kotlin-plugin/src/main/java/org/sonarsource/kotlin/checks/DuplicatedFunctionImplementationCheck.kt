@@ -26,9 +26,9 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.KotlinTextRanges
+import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.checks.api.SecondaryLocation
 
 /**
  * Replacement for [org.sonarsource.slang.checks.DuplicatedFunctionImplementationCheck]
@@ -80,10 +80,7 @@ class DuplicatedFunctionImplementationCheck : AbstractCheck() {
         original: KtNamedFunction,
         duplicate: KtNamedFunction,
     ) {
-        val textRange = KotlinTextRanges.textRange(
-            ctx.ktFile.viewProvider.document!!,
-            original.nameIdentifier ?: original,
-        )
+        val textRange = ctx.textRange(original.nameIdentifier ?: original)
         val line = textRange.start().line()
         val message = original.name?.let { "$BASE_MESSAGE \"$it\" on line $line." }
             ?: "$BASE_MESSAGE the one on line $line."

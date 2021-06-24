@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class BooleanLiteralCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/BooleanLiteralCheckSample.kt",
-            org.sonarsource.slang.checks.BooleanLiteralCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(BooleanLiteralCheck()) {
             fileName = "BooleanLiteralCheckSample.kt"

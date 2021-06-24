@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
-import org.sonarsource.kotlin.converter.KotlinTextRanges.commonTextRange
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 
 class CopyPasteDetector : KotlinFileVisitor() {
@@ -40,7 +40,7 @@ class CopyPasteDetector : KotlinFileVisitor() {
 
         collectCpdRelevantNodes(kotlinFileContext.ktFile).forEach { node ->
             val text = if (node is KtStringTemplateEntry) "LITERAL" else node.text
-            cpdTokens.addToken(kotlinFileContext.commonTextRange(node), text)
+            cpdTokens.addToken(kotlinFileContext.textRange(node), text)
         }
 
         cpdTokens.save()

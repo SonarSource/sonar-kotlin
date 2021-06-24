@@ -19,13 +19,12 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.converter.KotlinTextRanges
+import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.checks.api.SecondaryLocation
 
 /**
  * Replacement for [org.sonarsource.slang.checks.DuplicateBranchCheck]
@@ -34,14 +33,13 @@ import org.sonarsource.slang.checks.api.SecondaryLocation
 class DuplicateBranchCheck : AbstractBranchDuplication() {
 
     override fun checkDuplicatedBranches(ctx: KotlinFileContext, tree: KtElement, branches: List<KtElement>) {
-        val document = ctx.ktFile.viewProvider.document!!
         for (group in SyntacticEquivalence.findDuplicatedGroups(branches)) {
             val original = group[0]
             group.asSequence()
                 .drop(1)
-                .filter { spansMultipleLines(it, document) }
+                .filter { spansMultipleLines(it, ctx) }
                 .forEach { duplicated ->
-                    val originalRange = KotlinTextRanges.textRange(document, original)
+                    val originalRange = ctx.textRange(original)
                     ctx.reportIssue(
                         duplicated,
                         "This branch's code block is the same as the block for the branch on line ${originalRange.start().line()}.",
@@ -59,7 +57,7 @@ class DuplicateBranchCheck : AbstractBranchDuplication() {
 /**
  * Replacement for [org.sonarsource.slang.checks.DuplicateBranchCheck.spansMultipleLines]
  */
-private fun spansMultipleLines(tree: KtElement, document: Document): Boolean {
+private fun spansMultipleLines(tree: KtElement, ctx: KotlinFileContext): Boolean {
     if (tree is KtBlockExpression) {
         val statements = tree.statements
         if (statements.isNullOrEmpty()) {
@@ -68,11 +66,11 @@ private fun spansMultipleLines(tree: KtElement, document: Document): Boolean {
         val firstStatement = statements[0]
         val lastStatement = statements[statements.size - 1]
 
-        val firstTextRange = KotlinTextRanges.textRange(document, firstStatement)
-        val lastTextRange = KotlinTextRanges.textRange(document, lastStatement)
+        val firstTextRange = ctx.textRange(firstStatement)
+        val lastTextRange = ctx.textRange(lastStatement)
 
         return firstTextRange.start().line() != lastTextRange.end().line()
     }
-    val range = KotlinTextRanges.textRange(document, tree)
+    val range = ctx.textRange(tree)
     return range.start().line() < range.end().line()
 }

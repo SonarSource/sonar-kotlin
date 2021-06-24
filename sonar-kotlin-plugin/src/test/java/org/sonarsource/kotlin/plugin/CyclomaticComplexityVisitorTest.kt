@@ -1,6 +1,7 @@
 package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.Assertions
+import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -8,7 +9,8 @@ import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.converter.KotlinConverter
+import org.sonarsource.kotlin.converter.Environment
+import org.sonarsource.kotlin.converter.KotlinTree
 
 internal class CyclomaticComplexityVisitorTest {
 
@@ -122,7 +124,8 @@ internal class CyclomaticComplexityVisitorTest {
     }
 
     private fun getComplexityTrees(content: String): List<PsiElement> {
-        val root = KotlinConverter(emptyList()).parse(content)
+        val env = Environment(emptyList())
+        val root = KotlinTree.of(content, env)
         val cyclomaticComplexityVisitor = CyclomaticComplexityVisitor()
         root.psiFile.accept(cyclomaticComplexityVisitor)
         return cyclomaticComplexityVisitor.complexityTrees()

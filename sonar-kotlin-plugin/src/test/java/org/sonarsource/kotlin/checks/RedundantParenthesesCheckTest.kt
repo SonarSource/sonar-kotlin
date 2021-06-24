@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class RedundantParenthesesCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/RedundantParenthesesCheckSample.kt",
-            org.sonarsource.slang.checks.RedundantParenthesesCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(RedundantParenthesesCheck()) {
             fileName = "RedundantParenthesesCheckSample.kt"

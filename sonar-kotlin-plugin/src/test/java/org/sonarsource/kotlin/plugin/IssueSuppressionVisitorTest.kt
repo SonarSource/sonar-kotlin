@@ -7,11 +7,12 @@ import org.sonarsource.kotlin.checks.BadClassNameCheck
 import org.sonarsource.kotlin.checks.BadFunctionNameCheck
 import org.sonarsource.kotlin.checks.UnusedLocalVariableCheck
 import org.sonarsource.kotlin.checks.VariableAndParameterNameCheck
-import org.sonarsource.kotlin.converter.KotlinConverter
+import org.sonarsource.kotlin.converter.Comment
+import org.sonarsource.kotlin.converter.CommentAnnotationsAndTokenVisitor
+import org.sonarsource.kotlin.converter.Environment
+import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 import org.sonarsource.kotlin.verifier.TestContext
-import org.sonarsource.slang.api.Comment
-import org.sonarsource.slang.api.TopLevelTree
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
@@ -34,14 +35,15 @@ class IssueSuppressionVisitorTest {
         scanFile(path, false, BadClassNameCheck(), BadFunctionNameCheck(), VariableAndParameterNameCheck(), UnusedLocalVariableCheck())
 
     private fun scanFile(path: Path, suppress: Boolean, check: AbstractCheck, vararg checks: AbstractCheck): SingleFileVerifier {
-        val converter = KotlinConverter(emptyList())
+        val env = Environment(emptyList())
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
-        val root = converter.parse(testFileContent, null)
-        (root as TopLevelTree).allComments()
+        val root = KotlinTree.of(testFileContent, env)
+
+        CommentAnnotationsAndTokenVisitor(root.document).apply { visitElement(root.psiFile) }.allComments
             .forEach { comment: Comment ->
-                val start = comment.textRange().start()
-                verifier.addComment(start.line(), start.lineOffset() + 1, comment.text(), 2, 0)
+                val start = comment.range.start()
+                verifier.addComment(start.line(), start.lineOffset() + 1, comment.text, 2, 0)
             }
         val ctx = TestContext(verifier, check, *checks)
 

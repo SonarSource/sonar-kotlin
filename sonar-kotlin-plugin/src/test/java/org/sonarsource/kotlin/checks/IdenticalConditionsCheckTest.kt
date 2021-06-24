@@ -25,14 +25,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class IdenticalConditionsCheckTest {
     @Test
-    @Disabled("slang implementation does not handle parenthesised conditions inside when")
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/IdenticalConditionsCheckSample.kt",
-            org.sonarsource.slang.checks.IdenticalConditionsCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(IdenticalConditionsCheck()) {
             fileName = "IdenticalConditionsCheckSample.kt"

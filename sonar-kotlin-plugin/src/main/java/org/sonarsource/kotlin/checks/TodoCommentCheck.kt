@@ -27,7 +27,6 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.converter.KotlinTextRanges
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.impl.TextRangeImpl
 
 val todoPattern = Regex("(?i)(^|[[^\\p{L}]&&\\D])(todo)($|[[^\\p{L}]&&\\D])")
 
@@ -48,7 +47,7 @@ class TodoCommentCheck : AbstractCheck() {
                 todoPattern.find(element.text)?.let { matchResult ->
                     val todoOffset = element.textOffset + matchResult.groups[2]!!.range.first
                     val document = kotlinFileContext.ktFile.viewProvider.document!!
-                    val todoRange = TextRangeImpl(
+                    val todoRange = kotlinFileContext.inputFileContext.inputFile.newRange(
                         KotlinTextRanges.textPointerAtOffset(document, todoOffset),
                         KotlinTextRanges.textPointerAtOffset(document, todoOffset + 4)
                     )

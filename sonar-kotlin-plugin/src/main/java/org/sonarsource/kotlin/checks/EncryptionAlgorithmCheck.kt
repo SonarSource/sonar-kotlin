@@ -23,10 +23,10 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.api.predictRuntimeStringValueWithSecondaries
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.checks.api.SecondaryLocation
 
 private val ALGORITHM_PATTERN = Regex("([^/]+)/([^/]+)/([^/]+)")
 private const val MESSAGE = "Use secure mode and padding scheme."

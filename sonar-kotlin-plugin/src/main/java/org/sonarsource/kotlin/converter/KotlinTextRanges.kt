@@ -21,28 +21,40 @@ package org.sonarsource.kotlin.converter
 
 import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.fs.TextPointer
+import org.sonar.api.batch.fs.TextRange
+import org.sonar.api.batch.fs.internal.DefaultTextPointer
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.api.TextPointer
-import org.sonarsource.slang.api.TextRange
-import org.sonarsource.slang.impl.TextPointerImpl
-import org.sonarsource.slang.impl.TextRangeImpl
 
 object KotlinTextRanges {
-    @JvmStatic
-    fun textRange(psiDocument: Document, element: PsiElement): TextRange {
+    fun InputFile.textRange(psiDocument: Document, element: PsiElement): TextRange {
         val startPointer = textPointerAtOffset(psiDocument, element.textRange.startOffset)
         val endPointer = textPointerAtOffset(psiDocument, element.textRange.endOffset)
-        return TextRangeImpl(startPointer, endPointer)
+        return newRange(startPointer.line(), startPointer.lineOffset(), endPointer.line(), endPointer.lineOffset())
     }
 
     fun textPointerAtOffset(psiDocument: Document, startOffset: Int): TextPointer {
         val startLineNumber = psiDocument.getLineNumber(startOffset)
         val startLineNumberOffset = psiDocument.getLineStartOffset(startLineNumber)
         val startLineOffset = startOffset - startLineNumberOffset
-        return TextPointerImpl(startLineNumber + 1, startLineOffset)
+
+        return DefaultTextPointer(startLineNumber + 1, startLineOffset)
     }
 
-    fun KotlinFileContext.textRange(psiElement: PsiElement) = textRange(ktFile.viewProvider.document!!, psiElement)
+    fun KotlinFileContext.textRange(psiElement: PsiElement) =
+        inputFileContext.inputFile.textRange(ktFile.viewProvider.document!!, psiElement)
 
-    fun KotlinFileContext.commonTextRange(psiElement: PsiElement) = inputFileContext.textRange(textRange(psiElement))
+    fun KotlinFileContext.textRange(startLine: Int, startOffset: Int, endLine: Int, endOffset: Int) =
+        inputFileContext.inputFile.newRange(startLine, startOffset, endLine, endOffset)
+
+    operator fun TextRange.contains(other: TextRange) = this.start() <= other.start() && this.end() >= other.end()
+
+    fun InputFile.merge(ranges: Iterable<TextRange>) =
+        newRange(
+            ranges.map { it.start() }.minOrNull() ?: throw IllegalArgumentException("Can't merge 0 ranges"),
+            ranges.map { it.end() }.maxOrNull() ?: throw IllegalArgumentException("Can't merge 0 ranges")
+        )
+
+    fun KotlinFileContext.merge(ranges: Iterable<TextRange>) = inputFileContext.inputFile.merge(ranges)
 }

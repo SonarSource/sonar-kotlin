@@ -23,14 +23,6 @@ import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class BadClassNameCheckTest {
-
-    @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/BadClassNameCheckSample.kt",
-            org.sonarsource.slang.checks.BadClassNameCheck())
-    }
-
     @Test
     fun test() {
         KotlinVerifier(BadClassNameCheck()) {

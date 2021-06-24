@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class NestedMatchCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/NestedMatchCheckSample.kt",
-            org.sonarsource.slang.checks.NestedMatchCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(NestedMatchCheck()) {
             fileName = "NestedMatchCheckSample.kt"

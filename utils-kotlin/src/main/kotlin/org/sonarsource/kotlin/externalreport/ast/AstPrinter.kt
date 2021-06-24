@@ -1,6 +1,6 @@
 package org.sonarsource.kotlin.externalreport.ast
 
-import org.sonarsource.kotlin.converter.KotlinConverter
+import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.dev.AstPrinter
 import java.nio.file.Path
@@ -13,18 +13,17 @@ fun main(vararg args: String) {
 
     val mode = args[0].lowercase()
     val inputFile = Path.of(args[1])
+    val environment = Environment(emptyList())
 
-    val converter = KotlinConverter(emptyList())
-    val inputFileName = inputFile.fileName
-    val kotlinTree by lazy { converter.parse(inputFile.readText(), inputFileName.toString()) as KotlinTree }
+    val kotlinTree by lazy { KotlinTree.of(inputFile.readText(), environment) }
 
     when (mode) {
         "dot" ->
             if (args.size > 2) AstPrinter.dotPrint(kotlinTree.psiFile, Path.of(args[2]))
             else println(AstPrinter.dotPrint(kotlinTree.psiFile))
         "txt" ->
-            if (args.size > 2) AstPrinter.txtPrint(kotlinTree.psiFile, Path.of(args[2]))
-            else println(AstPrinter.txtPrint(kotlinTree.psiFile))
+            if (args.size > 2) AstPrinter.txtPrint(kotlinTree.psiFile, Path.of(args[2]), kotlinTree.document)
+            else println(AstPrinter.txtPrint(kotlinTree.psiFile, kotlinTree.document))
         else -> exitWithUsageInfoAndError()
     }
 }

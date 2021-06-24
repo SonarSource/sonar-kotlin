@@ -9,11 +9,11 @@ import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.ValueArgument
+import org.sonar.api.batch.fs.TextRange
 import org.sonarsource.kotlin.api.asString
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.visiting.KtTreeVisitor
-import org.sonarsource.slang.api.TextRange
 
 private val SUPPRESSION_ANNOTATION_NAMES = listOf("Suppress", "SuppressWarnings")
 
@@ -29,7 +29,7 @@ class IssueSuppressionVisitor : KotlinFileVisitor() {
     override fun visit(kotlinFileContext: KotlinFileContext) {
         with(IssueSuppressionTreeVisitor(kotlinFileContext, mutableMapOf())) {
             visitTree(kotlinFileContext.ktFile)
-            kotlinFileContext.inputFileContext.setFilteredRules(acc)
+            kotlinFileContext.inputFileContext.filteredRules = acc
         }
     }
 }

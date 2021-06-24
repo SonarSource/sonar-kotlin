@@ -35,10 +35,10 @@ import org.sonar.api.batch.measure.Metric
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.measures.FileLinesContextFactory
+import org.sonarsource.kotlin.api.InputFileContext
 import org.sonarsource.kotlin.api.getContent
 import org.sonarsource.kotlin.api.linesOfCode
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
-import org.sonarsource.slang.plugin.InputFileContext
 
 const val NOSONAR_PREFIX = "NOSONAR"
 

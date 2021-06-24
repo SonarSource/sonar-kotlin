@@ -27,8 +27,6 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.converter.KotlinTextRanges
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.slang.impl.TextRangeImpl
-import java.util.regex.Pattern
 
 val fixMePattern = Regex("(?i)(^|[[^\\p{L}]&&\\D])(fixme)($|[[^\\p{L}]&&\\D])")
 
@@ -49,7 +47,7 @@ class FixMeCommentCheck : AbstractCheck() {
                 fixMePattern.find(element.text)?.let { matchResult ->
                     val fixmeOffset = element.textOffset + matchResult.groups[2]!!.range.first
                     val document = kotlinFileContext.ktFile.viewProvider.document!!
-                    val fixmeRange = TextRangeImpl(
+                    val fixmeRange = kotlinFileContext.inputFileContext.inputFile.newRange(
                         KotlinTextRanges.textPointerAtOffset(document, fixmeOffset),
                         KotlinTextRanges.textPointerAtOffset(document, fixmeOffset + 5)
                     )

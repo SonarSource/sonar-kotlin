@@ -24,13 +24,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class CodeAfterJumpCheckTest {
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/CodeAfterJumpCheckSample.kt",
-            org.sonarsource.slang.checks.CodeAfterJumpCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(CodeAfterJumpCheck()) {
             fileName = "CodeAfterJumpCheckSample.kt"

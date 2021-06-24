@@ -25,13 +25,6 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 class StringLiteralDuplicatedCheckTest {
 
     @Test
-    fun slang() {
-        KotlinVerifier.verify(
-            "../../../../../kotlin-checks-test-sources/src/main/kotlin/checks/StringLiteralDuplicatedCheckSample.kt",
-            org.sonarsource.slang.checks.StringLiteralDuplicatedCheck())
-    }
-
-    @Test
     fun test() {
         KotlinVerifier(StringLiteralDuplicatedCheck()) {
             fileName = "StringLiteralDuplicatedCheckSample.kt"
