@@ -5,7 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.plugin.KotlinCheckList
+import org.sonarsource.kotlin.plugin.KOTLIN_CHECKS
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 import java.nio.file.Files
 import java.nio.file.Path
@@ -34,7 +34,7 @@ class AutomaticCheckTests {
             val checksWithOverriddenTestsConfig = OVERRIDDEN_CONFIG.map { it.check }
 
             return (OVERRIDDEN_CONFIG +
-                KotlinCheckList.checks()
+                KOTLIN_CHECKS
                     .filter { it !in checksWithOverriddenTestsConfig }
                     .filter {
                         /** Tested in [TooManyLinesOfCodeFileCheckTest] */
@@ -65,7 +65,7 @@ class AutomaticCheckTests {
                 .map { it.fileName.toString().substringBefore(NO_SEMANTICS_TEST_FILE_POSTFIX) }
                 .toList()
 
-            val checksWithSamples = KotlinCheckList.checks().filter {
+            val checksWithSamples = KOTLIN_CHECKS.filter {
                 it.simpleName in checkNamesWithAvailableSampleTestFiles
             }
 

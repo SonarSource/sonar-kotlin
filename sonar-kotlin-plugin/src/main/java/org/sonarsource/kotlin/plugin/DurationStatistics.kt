@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
 
 private val LOG = Loggers.get(DurationStatistics::class.java)
-private const val PROPERTY_KEY = "sonar.slang.duration.statistics"
+private const val PROPERTY_KEY = "sonar.kotlin.duration.statistics"
 
 internal class DurationStatistics(config: Configuration) {
 

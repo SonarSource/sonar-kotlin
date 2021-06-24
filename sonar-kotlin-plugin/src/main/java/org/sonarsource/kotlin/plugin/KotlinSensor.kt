@@ -57,7 +57,7 @@ class KotlinSensor(
 ) : Sensor {
 
     val checks: Checks<AbstractCheck> = checkFactory.create<AbstractCheck>(KOTLIN_REPOSITORY_KEY).apply {
-        addAnnotatedChecks(KotlinCheckList.checks() as Iterable<*>)
+        addAnnotatedChecks(KOTLIN_CHECKS as Iterable<*>)
         all().forEach { it.initialize(ruleKey(it)!!) }
     }
 
