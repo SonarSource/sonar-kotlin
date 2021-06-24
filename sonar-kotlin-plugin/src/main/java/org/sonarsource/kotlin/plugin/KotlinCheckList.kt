@@ -48,6 +48,7 @@ import org.sonarsource.kotlin.checks.IfConditionalAlwaysTrueOrFalseCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
 import org.sonarsource.kotlin.checks.NestedMatchCheck
 import org.sonarsource.kotlin.checks.OneStatementPerLineCheck
+import org.sonarsource.kotlin.checks.ParsingErrorCheck
 import org.sonarsource.kotlin.checks.PseudoRandomCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RobustCryptographicKeysCheck
@@ -157,6 +158,7 @@ object KotlinCheckList {
         NestedMatchCheck::class.java,
         OneStatementPerLineCheck::class.java,
         RedundantParenthesesCheck::class.java,
+        ParsingErrorCheck::class.java,
         PseudoRandomCheck::class.java,
         RobustCryptographicKeysCheck::class.java,
         SelfAssignmentCheck::class.java,
@@ -180,9 +182,6 @@ object KotlinCheckList {
         WrongAssignmentOperatorCheck::class.java,
         VerifiedServerHostnamesCheck::class.java,
     )
-
-    @Deprecated("Use Kotlin-native checks instead")
-    fun legacyChecks() = CheckList.excludeChecks(SLANG_EXCLUDED_CHECKS)
 
     fun checks() = KOTLIN_CHECKS
 }
