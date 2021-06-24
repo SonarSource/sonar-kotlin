@@ -5,9 +5,6 @@ plugins {
 apply plugin: 'org.jetbrains.kotlin.jvm'
 
 dependencies {
-    implementation project(':slang-api')
-    implementation project(':slang-checks')
-    implementation project(':slang-plugin')
     implementation project(':checkstyle-import')
     compileOnly 'org.sonarsource.sonarqube:sonar-plugin-api'
     implementation 'org.sonarsource.analyzer-commons:sonar-analyzer-commons'

@@ -29,7 +29,7 @@ import java.util.function.Consumer
 
 internal val LOG = Loggers.get(ReportImporter::class.java)
 
-internal class ReportImporter(val analysisWarnings: AnalysisWarnings, val context: SensorContext) : Consumer<File> {
+internal class ReportImporter(val analysisWarnings: AnalysisWarnings, val context: SensorContext) {
     fun importFile(reportFile: File) {
         when (reportFile.extension) {
             "json" -> importJsonFile(reportFile)
@@ -41,8 +41,6 @@ internal class ReportImporter(val analysisWarnings: AnalysisWarnings, val contex
             }
         }
     }
-
-    override fun accept(reportFile: File) = importFile(reportFile)
 
     fun importJsonFile(reportFile: File) {
         val parser = try {

@@ -21,8 +21,6 @@ package org.sonarsource.kotlin.plugin
 
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonarsource.analyzer.commons.RuleMetadataLoader
-import org.sonarsource.slang.checks.utils.Language
-import org.sonarsource.slang.plugin.RulesDefinitionUtils
 
 class KotlinRulesDefinition : RulesDefinition {
 
@@ -36,7 +34,6 @@ class KotlinRulesDefinition : RulesDefinition {
             .setName(KotlinPlugin.REPOSITORY_NAME).let { repository ->
                 val checks = KOTLIN_CHECKS
                 RuleMetadataLoader(RESOURCE_FOLDER, KotlinProfileDefinition.PATH_TO_JSON).addRulesByAnnotatedClass(repository, checks)
-                RulesDefinitionUtils.setDefaultValuesForParameters(repository, checks, Language.KOTLIN)
                 repository.done()
             }
     }

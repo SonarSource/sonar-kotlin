@@ -21,10 +21,8 @@ package org.sonarsource.kotlin.externalreport.ktlint
 
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.notifications.AnalysisWarnings
+import org.sonarsource.kotlin.plugin.AbstractPropertyHandlerSensor
 import org.sonarsource.kotlin.plugin.KotlinPlugin
-import org.sonarsource.slang.plugin.AbstractPropertyHandlerSensor
-import java.io.File
-import java.util.function.Consumer
 
 class KtlintSensor(val analysisWarnings: AnalysisWarnings) : AbstractPropertyHandlerSensor(
     analysisWarnings,
@@ -39,5 +37,5 @@ class KtlintSensor(val analysisWarnings: AnalysisWarnings) : AbstractPropertyHan
         const val REPORT_PROPERTY_KEY = "sonar.kotlin.ktlint.reportPaths"
     }
 
-    override fun reportConsumer(context: SensorContext): Consumer<File> = ReportImporter(analysisWarnings, context)
+    override fun reportConsumer(context: SensorContext) = ReportImporter(analysisWarnings, context)::importFile
 }

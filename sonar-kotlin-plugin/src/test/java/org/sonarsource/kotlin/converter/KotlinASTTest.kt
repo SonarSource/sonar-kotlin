@@ -22,8 +22,7 @@ package org.sonarsource.kotlin.converter
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.dev.AstPrinter
-import org.sonarsource.slang.api.ParseException
-import org.sonarsource.slang.visitors.TreePrinter
+import org.sonarsource.kotlin.api.ParseException
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path

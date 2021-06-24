@@ -34,9 +34,9 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonarsource.kotlin.api.ParseException;
 import org.sonarsource.kotlin.plugin.surefire.data.UnitTestClassReport;
 import org.sonarsource.kotlin.plugin.surefire.data.UnitTestIndex;
-import org.sonarsource.slang.api.ParseException;
 
 @ScannerSide
 public class KotlinSurefireParser {
@@ -63,7 +63,7 @@ public class KotlinSurefireParser {
 
   private static File[] getReports(File dir, boolean reportDirSetByUser) {
     if (!dir.isDirectory()) {
-      if(reportDirSetByUser) {
+      if (reportDirSetByUser) {
         LOGGER.error("Reports path not found or is not a directory: " + dir.getAbsolutePath());
       }
       return new File[0];
@@ -73,8 +73,8 @@ public class KotlinSurefireParser {
       // maybe there's only a test suite result file
       unitTestResultFiles = findXMLFilesStartingWith(dir, "TESTS-");
     }
-    if(unitTestResultFiles.length == 0) {
-      LOGGER.warn("Reports path contains no files matching TEST-.*.xml : "+dir.getAbsolutePath());
+    if (unitTestResultFiles.length == 0) {
+      LOGGER.warn("Reports path contains no files matching TEST-.*.xml : " + dir.getAbsolutePath());
     }
     return unitTestResultFiles;
   }
@@ -110,7 +110,7 @@ public class KotlinSurefireParser {
       }
     }
   }
-    
+
   private void save(UnitTestIndex index, SensorContext context) {
     long negativeTimeTestNumber = 0;
     for (Map.Entry<String, UnitTestClassReport> entry : index.getIndexByClassname().entrySet()) {
