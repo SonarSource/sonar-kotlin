@@ -38,7 +38,7 @@ import java.nio.file.Paths
 internal class DetektSensorTest {
 
     companion object {
-        private val PROJECT_DIR = Paths.get("src", "test", "resources", "externalreport", "detekt")
+        private val PROJECT_DIR = Paths.get("src", "test", "resources", "org/sonarsource/slang/externalreport", "detekt")
     }
 
     private val analysisWarnings: MutableList<String> = ArrayList()

@@ -1,9 +1,0 @@
-dependencies {
-    implementation 'com.google.code.findbugs:jsr305'
-    implementation 'com.eclipsesource.minimal-json:minimal-json'
-    testImplementation "org.junit.jupiter:junit-jupiter-api"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
-    testImplementation "org.junit.jupiter:junit-jupiter-migrationsupport"
-    testImplementation 'org.assertj:assertj-core'
-    testImplementation 'org.mockito:mockito-core'
-}

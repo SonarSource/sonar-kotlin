@@ -35,7 +35,7 @@ import org.sonar.api.utils.log.ThreadLocalLogTester
 import org.sonarsource.kotlin.externalreport.ExternalReportTestUtils
 import java.nio.file.Paths
 
-private val PROJECT_DIR = Paths.get("src", "test", "resources", "externalreport", "ktlint")
+private val PROJECT_DIR = Paths.get("src", "test", "resources", "org/sonarsource/slang/externalreport", "ktlint")
 
 @EnableRuleMigrationSupport
 class KtlintSensorTest {

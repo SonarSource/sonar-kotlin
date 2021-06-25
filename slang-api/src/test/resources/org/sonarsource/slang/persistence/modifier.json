@@ -1,9 +1,0 @@
-{
-  "treeMetaData": {
-    "comments": [],
-    "tokens": [
-      {"textRange": "1:0::6", "text": "public", "type": "KEYWORD"}
-    ]
-  },
-  "tree": {"@type": "Modifier", "metaData": "1:0::6", "kind": "PUBLIC"}
-}

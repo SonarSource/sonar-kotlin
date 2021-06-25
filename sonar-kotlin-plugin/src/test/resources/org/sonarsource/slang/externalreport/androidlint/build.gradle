@@ -1,0 +1,7 @@
+package org.sonarsource.slang.externalreport.androidlint
+
+task hello {
+    doLast {
+        println 'Hello world!'
+    }
+}

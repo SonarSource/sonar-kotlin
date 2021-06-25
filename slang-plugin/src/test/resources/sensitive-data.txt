@@ -1,1 +1,0 @@
-president-password=123456
