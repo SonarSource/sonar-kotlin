@@ -26,8 +26,9 @@ import org.sonar.api.batch.sensor.highlighting.TypeOfText
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.CoreMetrics
-import org.sonarsource.slang.testing.AbstractSensorTest
-import org.sonarsource.slang.testing.TextRangeAssert
+import org.sonarsource.kotlin.testing.AbstractSensorTest
+import org.sonarsource.kotlin.testing.TextRangeAssert
+import org.sonarsource.kotlin.testing.assertTextRange
 
 internal class KotlinSensorTest : AbstractSensorTest() {
 
@@ -48,7 +49,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         Assertions.assertThat(location.inputComponent()).isEqualTo(inputFile)
         Assertions.assertThat(location.message())
             .isEqualTo("Correct one of the identical sub-expressions on both sides this operator")
-        TextRangeAssert.assertTextRange(location.textRange()).hasRange(2, 12, 2, 13)
+        assertTextRange(location.textRange()).hasRange(2, 12, 2, 13)
     }
 
     @Test
