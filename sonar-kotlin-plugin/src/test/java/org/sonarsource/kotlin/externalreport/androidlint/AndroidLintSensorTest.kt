@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.externalreport.androidlint
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.jupiter.api.BeforeEach
@@ -37,7 +36,7 @@ import org.sonarsource.kotlin.externalreport.ExternalReporting
 import java.io.IOException
 import java.nio.file.Paths
 
-private val PROJECT_DIR = Paths.get("src", "test", "resources", "externalreport", "androidlint")
+private val PROJECT_DIR = Paths.get("src", "test", "resources", "org/sonarsource/slang/externalreport", "androidlint")
 
 @EnableRuleMigrationSupport
 internal class AndroidLintSensorTest {
