@@ -27,7 +27,7 @@ import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.slang.testing.AbstractSensorTest
+import org.sonarsource.kotlin.testing.AbstractSensorTest
 
 class CheckRegistrationTest : AbstractSensorTest() {
 
