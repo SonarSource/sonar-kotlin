@@ -21,8 +21,6 @@ dependencies {
     testImplementation 'io.mockk:mockk:1.10.6'
     testImplementation 'io.github.classgraph:classgraph'
     testImplementation 'org.sonarsource.analyzer-commons:sonar-analyzer-test-commons'
-    testImplementation project(':slang-antlr')
-    testImplementation project(':slang-testing')
 }
 
 tasks.withType(JavaCompile) {
