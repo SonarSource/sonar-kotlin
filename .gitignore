@@ -3,7 +3,8 @@
 build/
 
 # ---- Maven / orchestrator 
-target/
+its/ruling/target/
+its/plugin/target/
 
 # ---- SonarQube analysis
 .scannerwork/
@@ -38,4 +39,3 @@ Thumbs.db
 Desktop.ini
 
 .java-version
-
