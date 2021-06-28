@@ -19,8 +19,6 @@ import java.nio.file.Path
 import kotlin.io.path.readText
 
 class SyntaxHighlighterTest : AbstractSensorTest() {
-    override fun repositoryKey() = KotlinPlugin.KOTLIN_REPOSITORY_KEY
-    override fun language(): KotlinLanguage = KotlinLanguage(MapSettings().asConfig())
 
     @Test
     fun `file with class`() {

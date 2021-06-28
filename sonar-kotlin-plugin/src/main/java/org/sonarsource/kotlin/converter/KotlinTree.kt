@@ -73,8 +73,4 @@ class KotlinTree private constructor(
 
         private fun normalizeEol(content: String) = content.replace("""\r\n?""".toRegex(), "\n")
     }
-
-    fun terminate() {
-        Disposer.dispose(environment.disposable)
-    }
 }

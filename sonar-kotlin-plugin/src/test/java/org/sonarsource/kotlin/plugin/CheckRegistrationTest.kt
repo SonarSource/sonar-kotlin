@@ -53,12 +53,4 @@ class CheckRegistrationTest : AbstractSensorTest() {
 
         verify(exactly = 1) { dummyCheck.visitNamedFunction(any(), any()) }
     }
-
-    override fun repositoryKey(): String {
-        return KotlinPlugin.KOTLIN_REPOSITORY_KEY
-    }
-
-    override fun language(): KotlinLanguage {
-        return KotlinLanguage(MapSettings().asConfig())
-    }
 }
