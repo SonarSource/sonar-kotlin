@@ -13,13 +13,7 @@ pluginManagement {
 
 rootProject.name = 'kotlin'
 
-include 'slang-api'
-include 'slang-testing'
-include 'slang-antlr'
-include 'slang-checks'
-include 'slang-plugin'
 include 'sonar-kotlin-plugin'
-include 'checkstyle-import'
 include 'its:plugin'
 include 'its:ruling'
 include 'kotlin-checks-test-sources'
