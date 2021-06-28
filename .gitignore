@@ -2,7 +2,7 @@
 .gradle/
 build/
 
-# ---- Maven / orchestrator 
+# ---- Orchestrator
 its/ruling/target/
 its/plugin/target/
 
