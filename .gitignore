@@ -2,6 +2,10 @@
 .gradle/
 build/
 
+# ---- Orchestrator
+its/ruling/target/
+its/plugin/target/
+
 # ---- SonarQube analysis
 .scannerwork/
 .sonar/
@@ -35,4 +39,3 @@ Thumbs.db
 Desktop.ini
 
 .java-version
-
