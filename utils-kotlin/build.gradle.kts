@@ -22,7 +22,6 @@ dependencies {
     implementation("com.beust:jcommander:1.81")
     implementation("org.apache.commons:commons-text:1.9")
     implementation(project(":sonar-kotlin-plugin"))
-    implementation(project(":slang-api"))
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
