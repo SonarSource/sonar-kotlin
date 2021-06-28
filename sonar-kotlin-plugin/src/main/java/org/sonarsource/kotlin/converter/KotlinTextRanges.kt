@@ -45,12 +45,12 @@ object KotlinTextRanges {
     fun KotlinFileContext.textRange(psiElement: PsiElement) =
         inputFileContext.inputFile.textRange(ktFile.viewProvider.document!!, psiElement)
 
-    fun KotlinFileContext.textRange(startLine: Int, startOffset: Int, endLine: Int, endOffset: Int) =
+    fun KotlinFileContext.textRange(startLine: Int, startOffset: Int, endLine: Int, endOffset: Int): TextRange =
         inputFileContext.inputFile.newRange(startLine, startOffset, endLine, endOffset)
 
     operator fun TextRange.contains(other: TextRange) = this.start() <= other.start() && this.end() >= other.end()
 
-    fun InputFile.merge(ranges: Iterable<TextRange>) =
+    fun InputFile.merge(ranges: Iterable<TextRange>): TextRange =
         newRange(
             ranges.map { it.start() }.minOrNull() ?: throw IllegalArgumentException("Can't merge 0 ranges"),
             ranges.map { it.end() }.maxOrNull() ?: throw IllegalArgumentException("Can't merge 0 ranges")

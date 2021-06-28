@@ -30,12 +30,14 @@ import org.sonar.api.batch.rule.CheckFactory
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder
 import org.sonar.api.batch.rule.internal.NewActiveRule
 import org.sonar.api.batch.sensor.internal.SensorContextTester
+import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.FileLinesContext
 import org.sonar.api.measures.FileLinesContextFactory
-import org.sonar.api.resources.Language
 import org.sonar.api.rule.RuleKey
 import org.sonar.api.utils.internal.JUnitTempFolder
 import org.sonar.api.utils.log.ThreadLocalLogTester
+import org.sonarsource.kotlin.plugin.KotlinLanguage
+import org.sonarsource.kotlin.plugin.KotlinPlugin
 import java.io.File
 import java.nio.charset.StandardCharsets
 
@@ -64,7 +66,7 @@ abstract class AbstractSensorTest {
         val builder = ActiveRulesBuilder()
         for (ruleKey in ruleKeys) {
             val newRule = NewActiveRule.Builder()
-                .setRuleKey(RuleKey.of(repositoryKey(), ruleKey))
+                .setRuleKey(RuleKey.of(KotlinPlugin.KOTLIN_REPOSITORY_KEY, ruleKey))
                 .setName(ruleKey)
                 .build()
             builder.addRule(newRule)
@@ -83,6 +85,5 @@ abstract class AbstractSensorTest {
             .build()
     }
 
-    protected abstract fun repositoryKey(): String
-    protected abstract fun language(): Language
+    fun language(): KotlinLanguage = KotlinLanguage(MapSettings().asConfig())
 }

@@ -126,9 +126,7 @@ class KotlinSensor(
         val inputFile = inputFileContext.inputFile
         val content = try {
             inputFile.contents()
-        } catch (e: IOException) {
-            throw toParseException("read", inputFile, e)
-        } catch (e: RuntimeException) {
+        } catch (e: Exception) {
             throw toParseException("read", inputFile, e)
         }
 

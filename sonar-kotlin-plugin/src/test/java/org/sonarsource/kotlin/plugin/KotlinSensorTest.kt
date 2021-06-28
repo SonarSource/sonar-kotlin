@@ -183,14 +183,6 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         Assertions.assertThat(analysisErrors).isEmpty()
     }
 
-    override fun repositoryKey(): String {
-        return KotlinPlugin.KOTLIN_REPOSITORY_KEY
-    }
-
-    override fun language(): KotlinLanguage {
-        return KotlinLanguage(MapSettings().asConfig())
-    }
-
     private fun sensor(checkFactory: CheckFactory): KotlinSensor {
         return KotlinSensor(checkFactory, fileLinesContextFactory, NoSonarFilter(), language())
     }
