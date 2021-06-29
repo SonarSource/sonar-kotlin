@@ -28,9 +28,6 @@ import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import java.util.stream.Collectors
 
-/**
- * Replacement for [org.sonarsource.slang.checks.FunctionCognitiveComplexityCheck]
- */
 @Rule(key = "S3776")
 class FunctionCognitiveComplexityCheck : AbstractCheck() {
     companion object {

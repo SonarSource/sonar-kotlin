@@ -107,9 +107,6 @@ internal fun KtCallExpression.predictReceiverExpression(
 
 internal fun KtStringTemplateExpression.asString() = entries.joinToString("") { it.text }
 
-/**
- * Replacement for [org.sonarsource.slang.impl.TreeMetaDataProvider.TreeMetaDataImpl.computeLinesOfCode]
- */
 internal fun PsiElement.linesOfCode(): Set<Int> {
     val lines = mutableSetOf<Int>()
     val document = this.containingFile.viewProvider.document!!

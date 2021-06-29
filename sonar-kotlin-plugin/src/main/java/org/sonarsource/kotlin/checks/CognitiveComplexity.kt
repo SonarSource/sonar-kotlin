@@ -38,9 +38,6 @@ import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.KtWhileExpression
 
-/**
- * Replacement for [org.sonarsource.slang.checks.complexity.CognitiveComplexity]
- */
 class CognitiveComplexity(val root: KtElement) {
     private val increments: MutableList<Increment> = ArrayList()
 

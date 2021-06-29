@@ -35,9 +35,6 @@ import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.HardcodedCredentialsCheck]
- */
 @Rule(key = "S2068")
 class HardcodedCredentialsCheck : AbstractCheck() {
     @RuleProperty(key = "credentialWords",

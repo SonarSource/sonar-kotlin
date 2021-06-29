@@ -28,9 +28,6 @@ import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.TooLongFunctionCheck]
- */
 @Rule(key = "S138")
 class TooLongFunctionCheck : AbstractCheck() {
     companion object {

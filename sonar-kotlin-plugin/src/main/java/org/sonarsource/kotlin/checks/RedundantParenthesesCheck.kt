@@ -24,9 +24,6 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.RedundantParenthesesCheck]
- */
 @Rule(key = "S1110")
 class RedundantParenthesesCheck : AbstractCheck() {
 

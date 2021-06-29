@@ -30,9 +30,6 @@ import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.UnusedFunctionParameterCheck]
- */
 @Rule(key = "S1172")
 class UnusedFunctionParameterCheck : AbstractCheck() {
 

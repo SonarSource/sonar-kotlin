@@ -26,9 +26,6 @@ import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.FileHeaderCheck]
- */
 @Rule(key = "S1451")
 class FileHeaderCheck : AbstractCheck() {
     @RuleProperty(

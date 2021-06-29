@@ -33,9 +33,6 @@ import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.VariableAndParameterNameCheck]
- */
 @Rule(key = "S117")
 class VariableAndParameterNameCheck : AbstractCheck() {
     companion object {

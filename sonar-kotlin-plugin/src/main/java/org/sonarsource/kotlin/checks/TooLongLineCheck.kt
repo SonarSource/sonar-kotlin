@@ -27,9 +27,6 @@ import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.TooLongLineCheck]
- */
 @Rule(key = "S103")
 class TooLongLineCheck : AbstractCheck() {
 
