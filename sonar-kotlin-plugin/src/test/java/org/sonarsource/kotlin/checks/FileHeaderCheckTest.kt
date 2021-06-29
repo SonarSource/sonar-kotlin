@@ -17,14 +17,12 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.checks.advanced
+package org.sonarsource.kotlin.checks
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.sonarsource.kotlin.checks.FileHeaderCheck
 import org.sonarsource.kotlin.verifier.KotlinVerifier
-import java.lang.IllegalArgumentException
 
 class FileHeaderCheckTest {
     @Test

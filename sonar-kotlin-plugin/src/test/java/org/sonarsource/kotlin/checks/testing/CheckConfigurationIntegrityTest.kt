@@ -1,4 +1,4 @@
-package org.sonarsource.kotlin.checks
+package org.sonarsource.kotlin.checks.testing
 
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test

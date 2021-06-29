@@ -19,22 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-internal class DummyKotlinCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(DummyKotlinCheck()) {
-            fileName = "Dummy.kt"
-            classpath = emptyList()
-        }.verify()
-    }
-
-    @Test
-    fun testNoIssues() {
-        KotlinVerifier(DummyKotlinCheck()) {
-            fileName = "DummyNoIssues.kt"
-        }.verifyNoIssue()
-    }
-}
+class ServerCertificateCheckTest : CheckTest(ServerCertificateCheck())

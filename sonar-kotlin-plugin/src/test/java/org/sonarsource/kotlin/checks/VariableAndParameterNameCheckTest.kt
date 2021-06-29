@@ -17,22 +17,6 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.checks.advanced
+package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.checks.TooManyLinesOfCodeFileCheck
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class TooManyLinesOfCodeFileCheckTest {
-    @Test
-    fun test() {
-        val check = TooManyLinesOfCodeFileCheck()
-        check.max = 1
-        KotlinVerifier(check) {
-            fileName = "TooManyLinesOfCodeFileCheckSample.kt"
-        }.verify()
-        KotlinVerifier(check) {
-            fileName = "TooManyLinesOfCodeFileCheckSampleCompliant.kt"
-        }.verifyNoIssue()
-    }
-}
+class VariableAndParameterNameCheckTest : CheckTest(VariableAndParameterNameCheck().apply { format = "^[_a-z][a-zA-Z0-9]*$" })

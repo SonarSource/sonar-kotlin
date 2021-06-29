@@ -17,7 +17,7 @@ private val checkNamesWithAvailableSampleTestFiles by lazy {
 }
 private const val NO_SEMANTICS_TEST_FILE_POSTFIX = "SampleNoSemantics.kt"
 
-abstract class SimpleCheckTest(
+abstract class CheckTest(
     val check: AbstractCheck,
     val sampleFileSemantics: String? = null,
     val sampleFileNoSemantics: String? = null,
@@ -31,8 +31,8 @@ abstract class SimpleCheckTest(
     fun `with semantics`() {
         KotlinVerifier(check) {
             this.fileName = sampleFileSemantics ?: "${checkName}Sample.kt"
-            this@SimpleCheckTest.classpath?.let { this.classpath = it }
-            this@SimpleCheckTest.dependencies?.let { this.deps = it }
+            this@CheckTest.classpath?.let { this.classpath = it }
+            this@CheckTest.dependencies?.let { this.deps = it }
         }.verify()
     }
 
@@ -42,8 +42,8 @@ abstract class SimpleCheckTest(
 
         KotlinVerifier(check) {
             this.fileName = sampleFileNoSemantics ?: "${checkName}SampleNoSemantics.kt"
-            this.classpath = this@SimpleCheckTest.classpath ?: emptyList()
-            this.deps = this@SimpleCheckTest.dependencies ?: emptyList()
+            this.classpath = this@CheckTest.classpath ?: emptyList()
+            this.deps = this@CheckTest.dependencies ?: emptyList()
         }.verifyNoIssue()
     }
 
