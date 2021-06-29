@@ -152,4 +152,4 @@ class FunMatcher(
 fun ConstructorMatcher(typeName: String? = null, arguments: List<List<ArgumentMatcher>> = emptyList(), block: FunMatcher.() -> Unit = {}) =
     FunMatcher(qualifier = typeName, arguments = arguments, matchConstructor = true, block = block)
 
-infix fun ResolvedCall<*>.matches(funMatcher: FunMatcher): Boolean = funMatcher.matches(this)
+infix fun ResolvedCall<*>?.matches(funMatcher: FunMatcher): Boolean = funMatcher.matches(this)
