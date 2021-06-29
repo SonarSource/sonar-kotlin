@@ -135,9 +135,6 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
         return result
     }
 
-    /**
-     * Replacement for [org.sonarsource.slang.impl.TreeMetaDataProvider.TreeMetaDataImpl.computeLinesOfCode]
-     */
     internal fun PsiElement.numberOfLinesOfCode(): Int {
         val lines = BitSet()
         val document = this.containingFile.viewProvider.document!!

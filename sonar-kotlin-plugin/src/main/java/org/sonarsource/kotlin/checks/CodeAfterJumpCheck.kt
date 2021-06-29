@@ -29,9 +29,6 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.CodeAfterJumpCheck]
- */
 @Rule(key = "S1763")
 class CodeAfterJumpCheck : AbstractCheck() {
 

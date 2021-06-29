@@ -29,9 +29,6 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.EmptyCommentCheck]
- */
 @Rule(key = "S4663")
 class EmptyCommentCheck : AbstractCheck() {
 

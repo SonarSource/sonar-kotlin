@@ -23,9 +23,6 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.AllBranchesIdenticalCheck]
- */
 @Rule(key = "S3923")
 class AllBranchesIdenticalCheck : AbstractBranchDuplication() {
     override fun checkDuplicatedBranches(ctx: KotlinFileContext, tree: KtElement, branches: List<KtElement>) {

@@ -26,9 +26,6 @@ import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.DuplicateBranchCheck]
- */
 @Rule(key = "S1871")
 class DuplicateBranchCheck : AbstractBranchDuplication() {
 
@@ -54,9 +51,6 @@ class DuplicateBranchCheck : AbstractBranchDuplication() {
     }
 }
 
-/**
- * Replacement for [org.sonarsource.slang.checks.DuplicateBranchCheck.spansMultipleLines]
- */
 private fun spansMultipleLines(tree: KtElement, ctx: KotlinFileContext): Boolean {
     if (tree is KtBlockExpression) {
         val statements = tree.statements

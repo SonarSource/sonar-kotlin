@@ -26,9 +26,6 @@ import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.BadFunctionNameCheck]
- */
 @Rule(key = "S100")
 class BadFunctionNameCheck : AbstractCheck() {
 

@@ -33,9 +33,6 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.UnusedLocalVariableCheck]
- */
 @Rule(key = "S1481")
 class UnusedLocalVariableCheck : AbstractCheck() {
 
@@ -57,8 +54,8 @@ class UnusedLocalVariableCheck : AbstractCheck() {
     private fun KtElement.checkUnusedVariables(context: KotlinFileContext) {
         forEachDescendantOfType<KtProperty> { property ->
             val nameIdentifier = property.nameIdentifier!!
-            if (property.isLocal && !anyDescendantOfType<KtNameReferenceExpression> { 
-                        reference -> reference.text == nameIdentifier.text 
+            if (property.isLocal && !anyDescendantOfType<KtNameReferenceExpression> {
+                        reference -> reference.text == nameIdentifier.text
             }) {
                 context.reportIssue(nameIdentifier,
                     "Remove this unused \"${nameIdentifier.text}\" local variable.")

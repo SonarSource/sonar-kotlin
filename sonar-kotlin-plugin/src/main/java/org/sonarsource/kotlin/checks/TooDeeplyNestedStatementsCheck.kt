@@ -35,9 +35,6 @@ import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.TooDeeplyNestedStatementsCheck]
- */
 @Rule(key = "S134")
 class TooDeeplyNestedStatementsCheck : AbstractCheck() {
     companion object {

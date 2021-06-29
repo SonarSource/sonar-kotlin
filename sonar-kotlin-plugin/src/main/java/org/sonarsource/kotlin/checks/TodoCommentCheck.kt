@@ -30,9 +30,6 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 val todoPattern = Regex("(?i)(^|[[^\\p{L}]&&\\D])(todo)($|[[^\\p{L}]&&\\D])")
 
-/**
- * Replacement for [org.sonarsource.slang.checks.TodoCommentCheck]
- */
 @Rule(key = "S1135")
 class TodoCommentCheck : AbstractCheck() {
 

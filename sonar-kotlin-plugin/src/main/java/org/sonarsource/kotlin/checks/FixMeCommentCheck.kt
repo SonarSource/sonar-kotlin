@@ -30,9 +30,6 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 val fixMePattern = Regex("(?i)(^|[[^\\p{L}]&&\\D])(fixme)($|[[^\\p{L}]&&\\D])")
 
-/**
- * Replacement for [org.sonarsource.slang.checks.FixMeCommentCheck]
- */
 @Rule(key = "S1134")
 class FixMeCommentCheck : AbstractCheck() {
 

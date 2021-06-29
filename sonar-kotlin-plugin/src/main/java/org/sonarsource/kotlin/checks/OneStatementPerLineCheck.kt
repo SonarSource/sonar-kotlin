@@ -26,9 +26,6 @@ import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.OneStatementPerLineCheck]
- */
 @Rule(key = "S122")
 class OneStatementPerLineCheck : AbstractCheck() {
 

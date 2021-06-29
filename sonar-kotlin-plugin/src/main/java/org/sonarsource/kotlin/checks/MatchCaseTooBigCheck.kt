@@ -25,9 +25,6 @@ import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.MatchCaseTooBigCheck]
- */
 @Rule(key = "S1151")
 class MatchCaseTooBigCheck : AbstractCheck() {
     companion object {

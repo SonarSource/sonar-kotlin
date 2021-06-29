@@ -29,9 +29,6 @@ import org.sonarsource.kotlin.converter.KotlinTextRanges.merge
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.WrongAssignmentOperatorCheck]
- */
 @Rule(key = "S2757")
 class WrongAssignmentOperatorCheck : AbstractCheck() {
     companion object {

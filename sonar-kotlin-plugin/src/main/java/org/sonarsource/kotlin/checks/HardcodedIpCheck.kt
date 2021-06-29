@@ -38,9 +38,6 @@ private val IPV6_SPLIT_REGEX = Regex("::?")
 
 private const val MESSAGE = "Make sure using this hardcoded IP address is safe here."
 
-/**
- * Replacement for [org.sonarsource.slang.checks.HardcodedIpCheck]
- */
 @Rule(key = "S1313")
 class HardcodedIpCheck : AbstractCheck() {
 

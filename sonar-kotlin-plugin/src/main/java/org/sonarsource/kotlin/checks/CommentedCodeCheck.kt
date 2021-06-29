@@ -32,9 +32,6 @@ import org.sonarsource.kotlin.converter.KotlinTextRanges.merge
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.CommentedCodeCheck]
- */
 @Rule(key = "S125")
 class CommentedCodeCheck : AbstractCheck() {
 
@@ -66,9 +63,6 @@ class CommentedCodeCheck : AbstractCheck() {
         }
     }
 
-    /**
-     * Replacement for [org.sonarsource.slang.checks.CommentedCodeCheck.areAdjacent]
-     */
     private fun areAdjacent(c1: PsiComment, c2: PsiComment): Boolean {
         val document = c1.containingFile.viewProvider.document!!
         return document.getLineNumber(c1.textRange.startOffset) + 1 == document.getLineNumber(c2.textRange.startOffset)

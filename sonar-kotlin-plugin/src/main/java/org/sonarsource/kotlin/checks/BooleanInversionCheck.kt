@@ -27,9 +27,6 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-/**
- * Replacement for [org.sonarsource.slang.checks.BooleanInversionCheck]
- */
 @Rule(key = "S1940")
 class BooleanInversionCheck : AbstractCheck() {
     companion object {
