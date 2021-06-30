@@ -19,8 +19,6 @@
  */
 package org.sonarsource.kotlin.api
 
-import java.nio.file.Files
-import java.nio.file.Paths
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -30,6 +28,8 @@ import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class FunMatcherTest {
     val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"))
@@ -81,11 +81,28 @@ class FunMatcherTest {
             name = "sayBye"
         }
 
+        val wrongNameMethodMatcherModified = FunMatcher().apply {
+            qualifier = "sample.SampleClass"
+            name = "sayBye"
+        }
+
+        val wrongNameMethodMatcherModified2 = FunMatcher().apply {
+            qualifier = "sample.SampleClass"
+            name = "sayBye"
+            name = null
+        }
+
         assertThat(wrongTypeMethodMatcher.matches(ktCallExpression1, tree.bindingContext)).isFalse
         assertThat(wrongTypeMethodMatcher.matches(ktCallExpression2, tree.bindingContext)).isFalse
 
         assertThat(wrongNameMethodMatcher.matches(ktCallExpression1, tree.bindingContext)).isFalse
         assertThat(wrongNameMethodMatcher.matches(ktCallExpression2, tree.bindingContext)).isFalse
+
+        assertThat(wrongNameMethodMatcherModified.matches(ktCallExpression1, tree.bindingContext)).isFalse
+        assertThat(wrongNameMethodMatcherModified.matches(ktCallExpression2, tree.bindingContext)).isFalse
+
+        assertThat(wrongNameMethodMatcherModified2.matches(ktCallExpression1, tree.bindingContext)).isFalse
+        assertThat(wrongNameMethodMatcherModified2.matches(ktCallExpression2, tree.bindingContext)).isFalse
     }
 
     @Test
@@ -303,7 +320,6 @@ class FunMatcherTest {
 
         assertThat(funMatcher.matches(callExpression, BindingContext.EMPTY)).isFalse
     }
-
 
 
     @Test

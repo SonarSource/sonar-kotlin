@@ -36,7 +36,7 @@ class FunMatcher(
     // In case of Top Level function there is no type there,
     // so you just need to specify the package
     var qualifier: String? = null,
-    var name: String? = null,
+    name: String? = null,
     arguments: List<List<ArgumentMatcher>> = mutableListOf(),
     var supertype: String? = null,
     private val matchConstructor: Boolean = false,
@@ -45,6 +45,13 @@ class FunMatcher(
 ) {
     private val arguments = arguments.toMutableList()
     private val names = mutableSetOf<String>()
+
+    var name: String? = name
+        set(value) {
+            value?.let { names += it }
+            field = value
+        }
+
     init {
         block()
         name?.let { names += it }
