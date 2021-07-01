@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class NestedMatchCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(NestedMatchCheck()) {
-            fileName = "NestedMatchCheckSample.kt"
-        }.verify()
-    }
-}
+class NestedMatchCheckTest : CheckTest(NestedMatchCheck())

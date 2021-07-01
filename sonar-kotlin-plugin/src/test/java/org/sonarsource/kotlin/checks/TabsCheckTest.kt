@@ -22,20 +22,11 @@ package org.sonarsource.kotlin.checks
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 
-class TabsCheckTest {
-
-    @Test
-    fun test() {
-        KotlinVerifier(TabsCheck()) {
-            fileName = "TabsCheckSample.kt"
-        }.verify()
-    }
-
+class TabsCheckTest : CheckTest(TabsCheck()) {
     @Test
     fun `no issues`() {
         KotlinVerifier(TabsCheck()) {
             fileName = "DummyNoIssues.kt"
         }.verifyNoIssue()
     }
-
 }

@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class EmptyBlockCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(EmptyBlockCheck()) {
-            fileName = "EmptyBlockCheckSample.kt"
-        }.verify()
-    }
-}
+class EmptyBlockCheckTest : CheckTest(EmptyBlockCheck())

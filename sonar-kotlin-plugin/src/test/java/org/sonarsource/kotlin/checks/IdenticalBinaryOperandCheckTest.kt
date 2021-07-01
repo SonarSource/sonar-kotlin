@@ -19,15 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class IdenticalBinaryOperandCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(IdenticalBinaryOperandCheck()) {
-            fileName = "IdenticalBinaryOperandCheckSample.kt"
-        }.verify()
-    }
-}
+class IdenticalBinaryOperandCheckTest : CheckTest(IdenticalBinaryOperandCheck())

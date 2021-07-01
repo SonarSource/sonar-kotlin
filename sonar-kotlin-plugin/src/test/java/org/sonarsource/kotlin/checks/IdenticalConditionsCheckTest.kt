@@ -19,15 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class IdenticalConditionsCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(IdenticalConditionsCheck()) {
-            fileName = "IdenticalConditionsCheckSample.kt"
-        }.verify()
-    }
-}
+class IdenticalConditionsCheckTest : CheckTest(IdenticalConditionsCheck())

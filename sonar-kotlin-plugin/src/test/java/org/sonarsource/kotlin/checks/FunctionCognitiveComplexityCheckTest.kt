@@ -19,16 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class FunctionCognitiveComplexityCheckTest {
-    @Test
-    fun test() {
-        val check = FunctionCognitiveComplexityCheck()
-        check.threshold = 4
-        KotlinVerifier(check) {
-            fileName = "FunctionCognitiveComplexityCheckSample.kt"
-        }.verify()
-    }
-}
+class FunctionCognitiveComplexityCheckTest : CheckTest(FunctionCognitiveComplexityCheck().apply { threshold = 4 })

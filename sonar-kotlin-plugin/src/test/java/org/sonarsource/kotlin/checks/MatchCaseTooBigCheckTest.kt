@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class MatchCaseTooBigCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(MatchCaseTooBigCheck()) {
-            fileName = "MatchCaseTooBigCheckSample.kt"
-        }.verify()
-    }
-}
+class MatchCaseTooBigCheckTest : CheckTest(MatchCaseTooBigCheck())

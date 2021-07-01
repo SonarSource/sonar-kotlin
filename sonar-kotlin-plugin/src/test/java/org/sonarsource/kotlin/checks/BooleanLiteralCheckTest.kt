@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class BooleanLiteralCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(BooleanLiteralCheck()) {
-            fileName = "BooleanLiteralCheckSample.kt"
-        }.verify()
-    }
-}
+class BooleanLiteralCheckTest : CheckTest(BooleanLiteralCheck())

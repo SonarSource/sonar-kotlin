@@ -19,16 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class StringLiteralDuplicatedCheckTest {
-
-    @Test
-    fun test() {
-        KotlinVerifier(StringLiteralDuplicatedCheck()) {
-            fileName = "StringLiteralDuplicatedCheckSample.kt"
-        }.verify()
-    }
-
-}
+class StringLiteralDuplicatedCheckTest : CheckTest(StringLiteralDuplicatedCheck())

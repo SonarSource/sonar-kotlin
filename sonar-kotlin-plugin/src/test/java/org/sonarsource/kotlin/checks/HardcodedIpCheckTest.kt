@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class HardcodedIpCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(HardcodedIpCheck()) {
-            fileName = "HardcodedIpCheckSample.kt"
-        }.verify()
-    }
-}
+class HardcodedIpCheckTest : CheckTest(HardcodedIpCheck())

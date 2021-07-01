@@ -19,4 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-class VariableAndParameterNameCheckTest : CheckTest(VariableAndParameterNameCheck().apply { format = "^[_a-z][a-zA-Z0-9]*$" })
+class ClearTextProtocolCheckTest : CheckTest(ClearTextProtocolCheck())

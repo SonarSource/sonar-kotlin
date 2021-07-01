@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class AllBranchesIdenticalCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(AllBranchesIdenticalCheck()) {
-            fileName = "AllBranchesIdenticalCheckSample.kt"
-        }.verify()
-    }
-}
+class AllBranchesIdenticalCheckTest : CheckTest(AllBranchesIdenticalCheck())

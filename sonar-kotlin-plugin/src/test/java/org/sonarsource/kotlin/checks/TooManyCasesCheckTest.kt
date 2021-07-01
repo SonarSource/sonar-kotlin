@@ -19,17 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class TooManyCasesCheckTest {
-    @Test
-    fun test() {
-        val check = TooManyCasesCheck()
-        check.maximum = 2
-        KotlinVerifier(check) {
-            fileName = "TooManyCasesCheckSample.kt"
-        }.verify()
-    }
-}
+class TooManyCasesCheckTest : CheckTest(TooManyCasesCheck().apply { maximum = 2 })

@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class BooleanInversionCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(BooleanInversionCheck()) {
-            fileName = "BooleanInversionCheckSample.kt"
-        }.verify()
-    }
-}
+class BooleanInversionCheckTest : CheckTest(BooleanInversionCheck())

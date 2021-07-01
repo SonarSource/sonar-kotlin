@@ -19,16 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class TooDeeplyNestedStatementsCheckTest {
-    @Test
-    fun test() {
-        val check = TooDeeplyNestedStatementsCheck()
-        check.max = 1
-        KotlinVerifier(check) {
-            fileName = "TooDeeplyNestedStatementsCheckSample.kt"
-        }.verify()
-    }
-}
+class TooDeeplyNestedStatementsCheckTest : CheckTest(TooDeeplyNestedStatementsCheck().apply { max = 1 })

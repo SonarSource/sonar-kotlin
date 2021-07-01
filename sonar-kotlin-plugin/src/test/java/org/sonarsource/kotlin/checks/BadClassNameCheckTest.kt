@@ -19,15 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class BadClassNameCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(BadClassNameCheck()) {
-            fileName = "BadClassNameCheckSample.kt"
-        }.verify()
-    }
-
-}
+class BadClassNameCheckTest : CheckTest(BadClassNameCheck())

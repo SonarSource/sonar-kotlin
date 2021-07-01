@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class UnusedLocalVariableCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(UnusedLocalVariableCheck()) {
-            fileName = "UnusedLocalVariableCheckSample.kt"
-        }.verify()
-    }
-}
+class UnusedLocalVariableCheckTest : CheckTest(UnusedLocalVariableCheck())

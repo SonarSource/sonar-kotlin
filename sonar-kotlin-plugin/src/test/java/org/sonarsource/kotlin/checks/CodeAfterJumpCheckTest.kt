@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class CodeAfterJumpCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(CodeAfterJumpCheck()) {
-            fileName = "CodeAfterJumpCheckSample.kt"
-        }.verify()
-    }
-}
+class CodeAfterJumpCheckTest : CheckTest(CodeAfterJumpCheck())

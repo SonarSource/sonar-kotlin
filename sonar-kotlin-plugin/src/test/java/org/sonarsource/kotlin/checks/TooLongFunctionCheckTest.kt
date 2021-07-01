@@ -19,16 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class TooLongFunctionCheckTest {
-    @Test
-    fun test() {
-        val check = TooLongFunctionCheck()
-        check.max = 3
-        KotlinVerifier(check) {
-            fileName = "TooLongFunctionCheckSample.kt"
-        }.verify()
-    }
-}
+class TooLongFunctionCheckTest : CheckTest(TooLongFunctionCheck().apply { max = 3 })

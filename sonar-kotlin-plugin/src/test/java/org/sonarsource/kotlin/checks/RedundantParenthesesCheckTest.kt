@@ -17,16 +17,6 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.checks;
+package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class RedundantParenthesesCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(RedundantParenthesesCheck()) {
-            fileName = "RedundantParenthesesCheckSample.kt"
-        }.verify()
-    }
-}
+class RedundantParenthesesCheckTest : CheckTest(RedundantParenthesesCheck())

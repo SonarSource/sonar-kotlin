@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class BadFunctionNameCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(BadFunctionNameCheck()) {
-            fileName = "BadFunctionNameCheckSample.kt"
-        }.verify()
-    }
-}
+class BadFunctionNameCheckTest : CheckTest(BadFunctionNameCheck())
