@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class SelfAssignmentCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(SelfAssignmentCheck()) {
-            fileName = "SelfAssignmentCheckSample.kt"
-        }.verify()
-    }
-}
+class SelfAssignmentCheckTest : CheckTest(SelfAssignmentCheck())

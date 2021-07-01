@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class DuplicateBranchCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(DuplicateBranchCheck()) {
-            fileName = "DuplicateBranchCheckSample.kt"
-        }.verify()
-    }
-}
+class EncryptionAlgorithmCheckTest : CheckTest(EncryptionAlgorithmCheck())

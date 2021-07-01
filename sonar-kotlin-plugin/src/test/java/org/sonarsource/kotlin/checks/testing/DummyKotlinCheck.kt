@@ -17,6 +17,14 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.checks
+package org.sonarsource.kotlin.checks.testing
 
-class VariableAndParameterNameCheckTest : CheckTest(VariableAndParameterNameCheck().apply { format = "^[_a-z][a-zA-Z0-9]*$" })
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.plugin.KotlinFileContext
+
+class DummyKotlinCheck : AbstractCheck() {
+    override fun visitNamedFunction(node: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
+        kotlinFileContext.reportIssue(psiElement = node, message = "Hello World!")
+    }
+}

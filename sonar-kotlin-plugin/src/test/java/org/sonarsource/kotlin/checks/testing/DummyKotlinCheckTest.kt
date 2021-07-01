@@ -17,6 +17,24 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.checks
+package org.sonarsource.kotlin.checks.testing
 
-class VariableAndParameterNameCheckTest : CheckTest(VariableAndParameterNameCheck().apply { format = "^[_a-z][a-zA-Z0-9]*$" })
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.verifier.KotlinVerifier
+
+internal class DummyKotlinCheckTest {
+    @Test
+    fun test() {
+        KotlinVerifier(DummyKotlinCheck()) {
+            fileName = "Dummy.kt"
+            classpath = emptyList()
+        }.verify()
+    }
+
+    @Test
+    fun testNoIssues() {
+        KotlinVerifier(DummyKotlinCheck()) {
+            fileName = "DummyNoIssues.kt"
+        }.verifyNoIssue()
+    }
+}

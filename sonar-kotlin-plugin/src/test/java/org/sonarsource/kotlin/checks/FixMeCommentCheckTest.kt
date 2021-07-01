@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class FixMeCommentCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(FixMeCommentCheck()) {
-            fileName = "FixMeCommentCheckSample.kt"
-        }.verify()
-    }
-}
+class FixMeCommentCheckTest : CheckTest(FixMeCommentCheck())

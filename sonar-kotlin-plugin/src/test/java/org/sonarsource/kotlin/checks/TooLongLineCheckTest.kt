@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class TooLongLineCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(TooLongLineCheck()) {
-            fileName = "TooLongLineCheckSample.kt"
-        }.verify()
-    }
-}
+class TooLongLineCheckTest : CheckTest(TooLongLineCheck())

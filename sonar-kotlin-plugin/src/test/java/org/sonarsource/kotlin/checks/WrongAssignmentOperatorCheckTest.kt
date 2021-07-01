@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class WrongAssignmentOperatorCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(WrongAssignmentOperatorCheck()) {
-            fileName = "WrongAssignmentOperatorCheckSample.kt"
-        }.verify()
-    }
-}
+class WrongAssignmentOperatorCheckTest : CheckTest(WrongAssignmentOperatorCheck())

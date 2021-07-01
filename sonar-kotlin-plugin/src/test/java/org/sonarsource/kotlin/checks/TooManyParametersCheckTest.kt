@@ -19,16 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class TooManyParametersCheckTest {
-    @Test
-    fun test() {
-        val check = TooManyParametersCheck()
-        check.max = 2
-        KotlinVerifier(check) {
-            fileName = "TooManyParametersCheckSample.kt"
-        }.verify()
-    }
-}
+class TooManyParametersCheckTest : CheckTest(TooManyParametersCheck().apply { max = 2 })

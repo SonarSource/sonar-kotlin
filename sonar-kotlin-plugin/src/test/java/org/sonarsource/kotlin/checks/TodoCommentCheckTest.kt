@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class TodoCommentCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(TodoCommentCheck()) {
-            fileName = "TodoCommentCheckSample.kt"
-        }.verify()
-    }
-}
+class TodoCommentCheckTest : CheckTest(TodoCommentCheck())

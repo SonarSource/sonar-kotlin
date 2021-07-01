@@ -19,15 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.converter.KotlinCodeVerifier
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class CommentedCodeCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(CommentedCodeCheck()) {
-            fileName = "CommentedCodeCheckSample.kt"
-        }.verify()
-    }
-}
+class CommentedCodeCheckTest : CheckTest(CommentedCodeCheck())

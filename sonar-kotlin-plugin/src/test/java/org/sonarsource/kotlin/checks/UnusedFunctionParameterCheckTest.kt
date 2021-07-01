@@ -19,14 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class UnusedFunctionParameterCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(UnusedFunctionParameterCheck()) {
-            fileName = "UnusedFunctionParameterCheckSample.kt"
-        }.verify()
-    }
-}
+class UnusedFunctionParameterCheckTest : CheckTest(UnusedFunctionParameterCheck())

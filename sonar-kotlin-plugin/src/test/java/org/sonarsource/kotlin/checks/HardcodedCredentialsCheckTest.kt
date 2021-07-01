@@ -19,15 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
-
-class HardcodedCredentialsCheckTest {
-    @Test
-    fun test() {
-        KotlinVerifier(HardcodedCredentialsCheck()) {
-            fileName = "HardcodedCredentialsCheckSample.kt"
-        }.verify()
-    }
-}
+class HardcodedCredentialsCheckTest : CheckTest(HardcodedCredentialsCheck())
