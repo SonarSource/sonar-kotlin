@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import java.util.concurrent.TimeUnit
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.sonar.api.SonarProduct
 import org.sonar.api.batch.fs.FileSystem
@@ -43,8 +44,6 @@ import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
-import java.io.IOException
-import java.util.concurrent.TimeUnit
 
 private val LOG = Loggers.get(KotlinSensor::class.java)
 private val EMPTY_FILE_CONTENT_PATTERN = Regex("""\s*+""")
@@ -102,23 +101,28 @@ class KotlinSensor(
         visitors: List<KotlinFileVisitor>,
         statistics: DurationStatistics,
     ): Boolean {
-        for (inputFile in inputFiles) {
-            if (sensorContext.isCancelled) return false
+        val environment = environment(sensorContext)
+        try {
+            for (inputFile in inputFiles) {
+                if (sensorContext.isCancelled) return false
 
-            val inputFileContext = InputFileContextImpl(sensorContext, inputFile)
-            try {
-                analyseFile(sensorContext, inputFileContext, visitors, statistics)
-            } catch (e: ParseException) {
-                logParsingError(inputFile, e)
-                inputFileContext.reportAnalysisParseError(KOTLIN_REPOSITORY_KEY, inputFile, e.position)
+                val inputFileContext = InputFileContextImpl(sensorContext, inputFile)
+                try {
+                    analyseFile(environment, inputFileContext, visitors, statistics)
+                } catch (e: ParseException) {
+                    logParsingError(inputFile, e)
+                    inputFileContext.reportAnalysisParseError(KOTLIN_REPOSITORY_KEY, inputFile, e.position)
+                }
+                progressReport.nextFile()
             }
-            progressReport.nextFile()
+        } finally {
+            Disposer.dispose(environment.disposable)
         }
         return true
     }
 
     private fun analyseFile(
-        sensorContext: SensorContext,
+        environment: Environment,
         inputFileContext: InputFileContext,
         visitors: List<KotlinFileVisitor>,
         statistics: DurationStatistics,
@@ -133,13 +137,7 @@ class KotlinSensor(
         if (EMPTY_FILE_CONTENT_PATTERN.matches(content)) {
             return
         }
-
-        val environment = environment(sensorContext)
-        try {
-            parseAndVisitFile(content, environment, inputFileContext, visitors, statistics)
-        } finally {
-            Disposer.dispose(environment.disposable)
-        }
+        parseAndVisitFile(content, environment, inputFileContext, visitors, statistics)
     }
 
     private fun parseAndVisitFile(

@@ -20,8 +20,10 @@
 package org.sonarsource.kotlin.plugin
 
 import org.sonarsource.kotlin.checks.AllBranchesIdenticalCheck
+import org.sonarsource.kotlin.checks.AuthorisingNonAuthenticatedUsersCheck
 import org.sonarsource.kotlin.checks.BadClassNameCheck
 import org.sonarsource.kotlin.checks.BadFunctionNameCheck
+import org.sonarsource.kotlin.checks.BiometricAuthWithoutCryptoCheck
 import org.sonarsource.kotlin.checks.BooleanInversionCheck
 import org.sonarsource.kotlin.checks.BooleanLiteralCheck
 import org.sonarsource.kotlin.checks.CipherBlockChainingCheck
@@ -75,8 +77,10 @@ import org.sonarsource.kotlin.checks.WrongAssignmentOperatorCheck
 
 val KOTLIN_CHECKS = listOf(
     AllBranchesIdenticalCheck::class.java,
+    AuthorisingNonAuthenticatedUsersCheck::class.java,
     BadClassNameCheck::class.java,
     BadFunctionNameCheck::class.java,
+    BiometricAuthWithoutCryptoCheck::class.java,
     BooleanInversionCheck::class.java,
     BooleanLiteralCheck::class.java,
     CipherBlockChainingCheck::class.java,
