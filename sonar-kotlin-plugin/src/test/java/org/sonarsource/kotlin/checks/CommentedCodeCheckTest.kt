@@ -24,6 +24,7 @@ import org.sonarsource.kotlin.converter.KotlinCodeVerifier
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class CommentedCodeCheckTest {
+    @org.junit.jupiter.api.Disabled
     @Test
     fun test() {
         KotlinVerifier(CommentedCodeCheck()) {

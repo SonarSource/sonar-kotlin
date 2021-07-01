@@ -37,6 +37,7 @@ import org.sonarsource.slang.impl.TextRanges
 @Rule(key = "S125")
 class CommentedCodeCheck : AbstractCheck() {
 
+/*
     override fun visitKtFile(file: KtFile, kotlinFileContext: KotlinFileContext) {
         val groupedComments = mutableListOf<MutableList<PsiComment>>()
         var currentGroup = mutableListOf<PsiComment>()
@@ -72,5 +73,6 @@ class CommentedCodeCheck : AbstractCheck() {
         val document = c1.containingFile.viewProvider.document!!
         return document.getLineNumber(c1.textRange.startOffset) + 1 == document.getLineNumber(c2.textRange.startOffset)
     }
+*/
 
 }
