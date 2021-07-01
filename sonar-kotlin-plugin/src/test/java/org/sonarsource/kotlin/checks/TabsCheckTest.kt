@@ -19,4 +19,14 @@
  */
 package org.sonarsource.kotlin.checks
 
-class TabsCheckTest : CheckTestWithNoSemantics(TabsCheck(), sampleFileNoSemantics = "DummyNoIssues.kt")
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.verifier.KotlinVerifier
+
+class TabsCheckTest : CheckTest(TabsCheck()) {
+    @Test
+    fun `no issues`() {
+        KotlinVerifier(TabsCheck()) {
+            fileName = "DummyNoIssues.kt"
+        }.verifyNoIssue()
+    }
+}
