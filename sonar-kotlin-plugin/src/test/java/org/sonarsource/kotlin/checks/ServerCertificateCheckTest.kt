@@ -19,4 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-class ServerCertificateCheckTest : CheckTest(ServerCertificateCheck())
+class ServerCertificateCheckTest : CheckTestWithNoSemantics(ServerCertificateCheck())

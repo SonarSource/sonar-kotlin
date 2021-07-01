@@ -19,4 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-class TabsCheckTest : CheckTest(TabsCheck(), sampleFileNoSemantics = "DummyNoIssues.kt")
+class TabsCheckTest : CheckTestWithNoSemantics(TabsCheck(), sampleFileNoSemantics = "DummyNoIssues.kt")
