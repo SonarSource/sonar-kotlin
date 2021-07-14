@@ -51,6 +51,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.resolvedCallUtil.getImplicitReceiverValue
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
@@ -231,3 +232,5 @@ fun KtNamedFunction.suspendModifier() = modifierList?.getModifier(KtTokens.SUSPE
 
 fun KtQualifiedExpression.resolveReferenceTarget(bindingContext: BindingContext) =
     this.selectorExpression?.referenceExpression()?.let { bindingContext.get(BindingContext.REFERENCE_TARGET, it) }
+
+fun DeclarationDescriptor.scope() = fqNameSafe.asString().substringBeforeLast(".")

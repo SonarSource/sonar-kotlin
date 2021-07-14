@@ -1,0 +1,33 @@
+<p>Dispatchers should not be hardcoded when using <code>withContext</code> or creating new coroutines using <code>launch</code> or <code>async</code>.
+Injectable dispatchers ease testing by allowing tests to inject more deterministic dispatchers.</p>
+<p>You can use default values for the dispatcher constructor arguments to eliminate the need to specify them explicitly in the production caller
+contexts.</p>
+<p>This rule raises an issue when it finds a hard-coded dispatcher being used in <code>withContext</code> or when starting new coroutines.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+class ExampleClass {
+    suspend fun doSomething() {
+        withContext(Dispatchers.Default) { // Noncompliant: hard-coded dispatcher
+            ...
+        }
+    }
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+class ExampleClass(
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Default
+) {
+    suspend fun doSomething() {
+        withContext(dispatcher) {
+            ...
+        }
+    }
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://developer.android.com/kotlin/coroutines/coroutines-best-practices#inject-dispatchers">Inject dispatchers</a> (Android
+  coroutines best practices) </li>
+</ul>
+
