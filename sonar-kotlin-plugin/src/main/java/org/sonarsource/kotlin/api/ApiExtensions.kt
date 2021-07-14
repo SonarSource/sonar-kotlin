@@ -35,9 +35,11 @@ import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
+import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
@@ -142,8 +144,7 @@ private fun KtExpression.stringValue(
 ): String? = when (this) {
     is KtStringTemplateExpression -> {
         val entries = entries.map {
-            if (it.expression != null) it.expression!!.stringValue(bindingContext,
-                declarations) else it.text
+            if (it.expression != null) it.expression!!.stringValue(bindingContext, declarations) else it.text
         }
         if (entries.all { it != null }) entries.joinToString("") else null
     }
@@ -227,3 +228,6 @@ private fun DeclarationDescriptor.findFunctionLiteral(
 fun KtNamedFunction.overrides() = modifierList?.hasModifier(KtTokens.OVERRIDE_KEYWORD) ?: false
 
 fun KtNamedFunction.suspendModifier() = modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD)
+
+fun KtQualifiedExpression.resolveReferenceTarget(bindingContext: BindingContext) =
+    this.selectorExpression?.referenceExpression()?.let { bindingContext.get(BindingContext.REFERENCE_TARGET, it) }
