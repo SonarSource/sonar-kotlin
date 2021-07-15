@@ -3,7 +3,7 @@ import java.util.jar.JarInputStream
 plugins {
     id 'java'
     id 'jacoco'
-    id 'com.github.hierynomus.license' version "0.15.0"
+    id 'com.github.hierynomus.license' version "0.16.1"
     id 'com.jfrog.artifactory' version '4.21.0'
     id 'io.spring.dependency-management' version '1.0.6.RELEASE' apply false
     id 'org.sonarqube' version '2.7.1'
