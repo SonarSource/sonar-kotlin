@@ -1,5 +1,5 @@
 {
-  "rules-metadata-path": "./src/main/resources/org/sonar/l10n/kotlin/rules/kotlin",
+  "rules-metadata-path": "./sonar-kotlin-plugin/src/main/resources/org/sonar/l10n/kotlin/rules/kotlin",
   "languages": [
     "KOTLIN"
   ],
