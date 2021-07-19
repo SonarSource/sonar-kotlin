@@ -41,6 +41,7 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
+import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
@@ -251,4 +252,10 @@ private fun KtParameter.determineType(bindingContext: BindingContext) =
     bindingContext.get(BindingContext.TYPE, typeReference)
 
 fun KtParameter.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
+    determineType(bindingContext)?.getJetTypeFqName(printTypeArguments)
+
+private fun KtTypeReference.determineType(bindingContext: BindingContext) =
+    bindingContext.get(BindingContext.TYPE, this)
+
+fun KtTypeReference.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getJetTypeFqName(printTypeArguments)

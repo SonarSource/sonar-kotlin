@@ -61,6 +61,7 @@ import org.sonarsource.kotlin.checks.SelfAssignmentCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
 import org.sonarsource.kotlin.checks.StringLiteralDuplicatedCheck
 import org.sonarsource.kotlin.checks.StrongCipherAlgorithmCheck
+import org.sonarsource.kotlin.checks.StructuredConcurrencyPrinciplesCheck
 import org.sonarsource.kotlin.checks.TabsCheck
 import org.sonarsource.kotlin.checks.TodoCommentCheck
 import org.sonarsource.kotlin.checks.TooComplexExpressionCheck
@@ -122,6 +123,7 @@ val KOTLIN_CHECKS = listOf(
     ServerCertificateCheck::class.java,
     StringLiteralDuplicatedCheck::class.java,
     StrongCipherAlgorithmCheck::class.java,
+    StructuredConcurrencyPrinciplesCheck::class.java,
     TabsCheck::class.java,
     TodoCommentCheck::class.java,
     TooComplexExpressionCheck::class.java,
