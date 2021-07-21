@@ -57,6 +57,7 @@ import org.jetbrains.kotlin.resolve.calls.resolvedCallUtil.getImplicitReceiverVa
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
+import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
 
 private val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
@@ -259,3 +260,9 @@ private fun KtTypeReference.determineType(bindingContext: BindingContext) =
 
 fun KtTypeReference.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getJetTypeFqName(printTypeArguments)
+
+fun KtNamedFunction.returnTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
+    returnType(bindingContext)?.getJetTypeFqName(printTypeArguments)
+
+fun KtNamedFunction.returnType(bindingContext: BindingContext) =
+    createTypeBindingForReturnType(bindingContext)?.type
