@@ -1,0 +1,17 @@
+{
+  "title": "\"MutableStateFlow\" and \"MutableSharedFlow\" should not be exposed",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "coroutines",
+    "bad-practice"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6305",
+  "sqKey": "S6305",
+  "scope": "All"
+}

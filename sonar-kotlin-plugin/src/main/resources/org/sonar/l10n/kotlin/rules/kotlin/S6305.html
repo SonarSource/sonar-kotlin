@@ -1,0 +1,32 @@
+<p><code>MutableStateFlow</code> and <code>MutableSharedFlow</code> are very convenient for storing and adding updates of some data structures in
+event-driven paradigm. This is widely used in Android Views for handling updates. While it’s extremely useful to manage such objects inside some
+class, it’s not recommended to expose them outside of the class.</p>
+<p>When properties of the types <code>MutableStateFlow</code> or <code>MutableSharedFlow</code> are accessible from outside of a class, data updates
+cannot be verified properly anymore. It is generally recommended to have only one class responsible for updating these flows, otherwise inconsistency
+issues and problems with maintainability, as well as increased error-proneness may be introduced.</p>
+<p>To restrict write access, <code>StateFlow</code> or <code>SharedFlow</code> should be used together with private <code>MutableStateFlow</code> or
+<code>MutableSharedFlow</code> fields.</p>
+<p>This rule raises an issue when encountering a public or internal property of the type <code>MutableStateFlow</code> or
+<code>MutableSharedFlow</code>.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+class MyView : ViewModel() {
+
+    val state = MutableStateFlow(State.New)
+
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+class MyView : ViewModel() {
+
+    private val _state = MutableStateFlow(State.New)
+    val state: StateFlow&lt;LatestNewsUiState&gt; = _uiState
+
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://developer.android.com/kotlin/coroutines/coroutines-best-practices#mutable-types">Android Coroutines Best Practices</a> </li>
+</ul>
+
