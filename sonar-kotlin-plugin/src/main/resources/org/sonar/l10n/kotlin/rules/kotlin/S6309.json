@@ -1,0 +1,17 @@
+{
+  "title": "Functions returning Flow\/Channel should not be suspending",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "20min"
+  },
+  "tags": [
+    "coroutines",
+    "bad-practice"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6309",
+  "sqKey": "S6309",
+  "scope": "All"
+}
