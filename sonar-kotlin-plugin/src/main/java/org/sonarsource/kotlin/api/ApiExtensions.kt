@@ -240,14 +240,14 @@ fun DeclarationDescriptor.scope() = fqNameSafe.asString().substringBeforeLast(".
 fun KtCallExpression.expressionTypeFqn(bindingContext: BindingContext) =
     bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, this)?.type?.getJetTypeFqName(false)
 
-fun KtProperty.determineType(bindingContext: BindingContext) =
+private fun KtProperty.determineType(bindingContext: BindingContext) =
     (typeReference?.let { bindingContext.get(BindingContext.TYPE, it) }
         ?: bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, initializer)?.type)
 
 fun KtProperty.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getJetTypeFqName(printTypeArguments)
 
-fun KtParameter.determineType(bindingContext: BindingContext) =
+private fun KtParameter.determineType(bindingContext: BindingContext) =
     bindingContext.get(BindingContext.TYPE, typeReference)
 
 fun KtParameter.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
