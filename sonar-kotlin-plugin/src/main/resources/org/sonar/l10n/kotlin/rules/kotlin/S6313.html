@@ -1,0 +1,27 @@
+<p>Views should not be responsible for directly triggering coroutines. Hence, <code>ViewModel</code> classes should prefer creating coroutines instead
+of exposing suspending functions to perform some piece of business logic. This allows for easier testing of your application, as
+<code>ViewModel</code> classes can be unit tested, whereas views require instrumentation tests.</p>
+<p>Please refer to the <a href="https://developer.android.com/kotlin/coroutines/coroutines-best-practices#viewmodel-coroutines">Android docs</a> for
+more advanced examples and mechanisms of updating the views with data generated asynchronously.</p>
+<p>This rule raises an issue when suspending functions are exposed by classes inheriting from <code>ViewModel</code>.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+class MyViewModel : ViewModel() {
+    suspend fun performAction() = suspendingWorker()
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+class MyViewModel : ViewModel() {
+    fun performAction() =
+        viewModelScope.launch {
+            suspendingWorker()
+        }
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://developer.android.com/kotlin/coroutines/coroutines-best-practices#viewmodel-coroutines">The ViewModel should create
+  coroutines</a> (Android coroutines best practices) </li>
+</ul>
+

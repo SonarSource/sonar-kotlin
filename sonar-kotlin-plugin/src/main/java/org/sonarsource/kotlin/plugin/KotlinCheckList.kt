@@ -77,6 +77,7 @@ import org.sonarsource.kotlin.checks.UnusedLocalVariableCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodCheck
 import org.sonarsource.kotlin.checks.VariableAndParameterNameCheck
 import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
+import org.sonarsource.kotlin.checks.ViewModelSuspendingFunctionsCheck
 import org.sonarsource.kotlin.checks.WeakSSLContextCheck
 import org.sonarsource.kotlin.checks.WrongAssignmentOperatorCheck
 
@@ -114,9 +115,9 @@ val KOTLIN_CHECKS = listOf(
     MatchCaseTooBigCheck::class.java,
     NestedMatchCheck::class.java,
     OneStatementPerLineCheck::class.java,
-    RedundantParenthesesCheck::class.java,
     ParsingErrorCheck::class.java,
     PseudoRandomCheck::class.java,
+    RedundantParenthesesCheck::class.java,
     RedundantSuspendModifierCheck::class.java,
     RobustCryptographicKeysCheck::class.java,
     SelfAssignmentCheck::class.java,
@@ -138,7 +139,8 @@ val KOTLIN_CHECKS = listOf(
     UnusedLocalVariableCheck::class.java,
     UnusedPrivateMethodCheck::class.java,
     VariableAndParameterNameCheck::class.java,
+    VerifiedServerHostnamesCheck::class.java,
+    ViewModelSuspendingFunctionsCheck::class.java,
     WeakSSLContextCheck::class.java,
     WrongAssignmentOperatorCheck::class.java,
-    VerifiedServerHostnamesCheck::class.java,
 )
