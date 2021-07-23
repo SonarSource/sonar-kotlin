@@ -1,10 +1,11 @@
 package sample
 
-fun main() {
+suspend fun main() {
     val sampleClass = SampleClass()
     sampleClass.sayHello("Kotlin")
     sampleClass.sayHello("Java")
     sampleClass.sayHelloNullable("nothingness")
+    "".suspendExtFun()
 
     val mySampleClass = MySampleClass()
 }
