@@ -85,8 +85,8 @@ class FunMatcher(
             checkIsSuspending(functionDescriptor) &&
             checkName(functionDescriptor) &&
             checkTypeOrSupertype(functionDescriptor) &&
-            checkCallParameters(functionDescriptor) &&
-            checkReturnType(functionDescriptor)
+            checkReturnType(functionDescriptor) &&
+            checkCallParameters(functionDescriptor)
 
     private fun checkTypeOrSupertype(functionDescriptor: CallableDescriptor) =
         qualifier.isNullOrEmpty() && supertype.isNullOrEmpty() ||
