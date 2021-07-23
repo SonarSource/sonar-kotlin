@@ -19,9 +19,11 @@
  */
 package org.sonarsource.kotlin.api
 
+import org.jetbrains.kotlin.backend.common.descriptors.isSuspend
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -31,6 +33,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.tasks.isDynamic
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
+import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
 
 class FunMatcher(
     // In case of Top Level function there is no type there,
@@ -41,6 +44,9 @@ class FunMatcher(
     var supertype: String? = null,
     private val matchConstructor: Boolean = false,
     var dynamic: Boolean? = null,
+    var extensionFunction: Boolean? = null,
+    var suspending: Boolean? = null,
+    var returnType: String? = null,
     block: FunMatcher.() -> Unit = {},
 ) {
     private val arguments = arguments.toMutableList()
@@ -75,9 +81,12 @@ class FunMatcher(
     private fun checkFunctionDescriptor(functionDescriptor: CallableDescriptor?) =
         functionDescriptor != null &&
             checkIsDynamic(functionDescriptor) &&
+            checkIsExtensionFunction(functionDescriptor) &&
+            checkIsSuspending(functionDescriptor) &&
             checkName(functionDescriptor) &&
             checkTypeOrSupertype(functionDescriptor) &&
-            checkCallParameters(functionDescriptor)
+            checkCallParameters(functionDescriptor) &&
+            checkReturnType(functionDescriptor)
 
     private fun checkTypeOrSupertype(functionDescriptor: CallableDescriptor) =
         qualifier.isNullOrEmpty() && supertype.isNullOrEmpty() ||
@@ -125,6 +134,15 @@ class FunMatcher(
 
     private fun checkIsDynamic(descriptor: CallableDescriptor): Boolean =
         dynamic?.let { it == descriptor.isDynamic() } ?: true
+
+    private fun checkIsExtensionFunction(descriptor: CallableDescriptor): Boolean =
+        extensionFunction?.let { it == descriptor.isExtension } ?: true
+
+    private fun checkReturnType(descriptor: CallableDescriptor) =
+        returnType?.let { it == descriptor.returnType?.getJetTypeFqName(false) } ?: true
+
+    private fun checkIsSuspending(descriptor: CallableDescriptor) =
+        suspending?.let { it == descriptor.isSuspend } ?: true
 
     fun withNames(vararg args: String) {
         names += listOf(*args)

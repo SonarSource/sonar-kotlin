@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.api
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.types.typeUtil.TypeNullability
@@ -32,19 +33,26 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 class FunMatcherTest {
+
     val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"))
     val path = Paths.get("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
     val tree = KotlinTree.of(content, environment)
+    private val allCallExpressions = tree.psiFile.collectDescendantsOfType<KtCallExpression>()
 
     // sampleClass.sayHello("Kotlin")
-    val ktCallExpression1 = tree.psiFile.children[3].children[1].children[1].children[1] as KtCallExpression
+    val ktCallExpression1 = allCallExpressions[1]
 
     // sampleClass.sayHello("Java")
-    val ktCallExpression2 = tree.psiFile.children[3].children[1].children[2].children[1] as KtCallExpression
+    val ktCallExpression2 = allCallExpressions[2]
 
     // sampleClass.sayHelloNullable("nothingness")
-    val ktCallExpression3 = tree.psiFile.children[3].children[1].children[3].children[1] as KtCallExpression
+    val ktCallExpression3 = allCallExpressions[3]
+
+    // "".suspendExtFun()
+    val ktCallExpression4 = allCallExpressions[4]
+
+    private val testFunCalls = allCallExpressions.subList(1, 5)
 
 
     @Test
@@ -304,7 +312,7 @@ class FunMatcherTest {
             withNoArguments()
         }
 
-        val callExpression = tree.psiFile.children[3].children[1].children[0].children[0] as KtCallExpression
+        val callExpression = allCallExpressions[0]
 
         assertThat(funMatcher.matches(callExpression, tree.bindingContext)).isTrue
     }
@@ -316,7 +324,7 @@ class FunMatcherTest {
             withNoArguments()
         }
 
-        val callExpression = tree.psiFile.children[3].children[1].children[0].children[0] as KtCallExpression
+        val callExpression = allCallExpressions[0]
 
         assertThat(funMatcher.matches(callExpression, BindingContext.EMPTY)).isFalse
     }
@@ -329,7 +337,7 @@ class FunMatcherTest {
             withArguments("kotlin.String")
         }
 
-        val callExpression = tree.psiFile.children[3].children[1].children[0].children[0] as KtCallExpression
+        val callExpression = allCallExpressions[0]
 
         assertThat(funMatcher.matches(callExpression, tree.bindingContext)).isFalse
     }
@@ -341,52 +349,82 @@ class FunMatcherTest {
             withNoArguments()
         }
 
-        val callExpression = tree.psiFile.children[3].children[1].children[4].children[0] as KtCallExpression
+        val callExpression = allCallExpressions[5]
 
         assertThat(funMatcher.matches(callExpression, tree.bindingContext)).isFalse
     }
 
     @Test
     fun `Match only methods with non-nullable paramter`() {
-        val funMatcher = FunMatcher {
+        check(FunMatcher {
             withArguments(ArgumentMatcher(nullability = TypeNullability.NOT_NULL))
-        }
-
-        assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
-        assertThat(funMatcher.matches(ktCallExpression2, tree.bindingContext)).isTrue
-        assertThat(funMatcher.matches(ktCallExpression3, tree.bindingContext)).isFalse
+        }, true, true, false, false)
     }
 
     @Test
     fun `Match only methods with nullable parameter`() {
-        val funMatcher = FunMatcher {
+        check(FunMatcher {
             withArguments(ArgumentMatcher(nullability = TypeNullability.NULLABLE))
-        }
-
-        assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isFalse
-        assertThat(funMatcher.matches(ktCallExpression2, tree.bindingContext)).isFalse
-        assertThat(funMatcher.matches(ktCallExpression3, tree.bindingContext)).isTrue
+        }, false, false, true, false)
     }
 
     @Test
     fun `Match methods with a parameter with any nullability`() {
-        val funMatcher = FunMatcher {
+        check(FunMatcher {
             withArguments(ArgumentMatcher(nullability = null))
-        }
-
-        assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
-        assertThat(funMatcher.matches(ktCallExpression2, tree.bindingContext)).isTrue
-        assertThat(funMatcher.matches(ktCallExpression3, tree.bindingContext)).isTrue
+        }, true, true, true, false)
     }
 
     @Test
     fun `Don't match methods without flexible nullability parameter`() {
-        val funMatcher = FunMatcher {
+        check(FunMatcher {
             withArguments(ArgumentMatcher(nullability = TypeNullability.FLEXIBLE))
-        }
+        }, false, false, false, false)
+    }
 
-        assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isFalse
-        assertThat(funMatcher.matches(ktCallExpression2, tree.bindingContext)).isFalse
-        assertThat(funMatcher.matches(ktCallExpression3, tree.bindingContext)).isFalse
+    @Test
+    fun `Match only suspending methods`() {
+        check(FunMatcher(suspending = true), false, false, false, true)
+    }
+
+    @Test
+    fun `Match only non-suspending methods`() {
+        check(FunMatcher(suspending = false), true, true, true, false)
+    }
+
+    @Test
+    fun `Match only extension methods`() {
+        check(FunMatcher(extensionFunction = true), false, false, false, true)
+    }
+
+    @Test
+    fun `Match only non-extension methods`() {
+        check(FunMatcher(extensionFunction = false), true, true, true, false)
+    }
+
+    @Test
+    fun `Match only methods returning String`() {
+        check(FunMatcher(returnType = "kotlin.String"), false, false, false, true)
+    }
+
+    @Test
+    fun `Match only methods returning int`() {
+        check(FunMatcher(returnType = "kotlin.Int"), false, false, true, false)
+    }
+
+    @Test
+    fun `Match only methods returning Unit`() {
+        check(FunMatcher(returnType = "kotlin.Unit"), true, true, false, false)
+    }
+
+    private fun check(funMatcher: FunMatcher, vararg expected: Boolean?) {
+        assertThat(expected).hasSameSizeAs(testFunCalls)
+        testFunCalls.forEachIndexed { index, callExpression ->
+            if (expected[index] != null) {
+                assertThat(funMatcher.matches(callExpression, tree.bindingContext))
+                    .withFailMessage("Unexpected (mis)match on call expression #$index (expected ${expected[index]})")
+                    .isEqualTo(expected[index])
+            }
+        }
     }
 }
