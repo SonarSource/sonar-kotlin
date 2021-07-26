@@ -248,9 +248,21 @@ class FunMatcherTest {
     }
 
     @Test
-    fun `Don't match method declaration with wrong supertype`() {
+    fun `Match method declaration with type of supertype`() {
         val funMatcher = FunMatcher {
             supertype = "sample.MySampleClass"
+            name = "sayHello"
+            withArguments("kotlin.String")
+        }
+        val ktNamedFunction = tree.psiFile.children[5].children[1].children[0] as KtNamedFunction
+
+        assertThat(funMatcher.matches(ktNamedFunction, tree.bindingContext)).isTrue
+    }
+
+    @Test
+    fun `Don't match method declaration with wrong supertype`() {
+        val funMatcher = FunMatcher {
+            supertype = "NonexistentClass"
             name = "sayHello"
             withArguments("kotlin.String")
         }
