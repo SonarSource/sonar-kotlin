@@ -5,12 +5,9 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.ASYNC
 import org.sonarsource.kotlin.api.CallAbstractCheck
-import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.FUNS_ACCEPTING_DISPATCHERS
 import org.sonarsource.kotlin.api.KOTLINX_COROUTINES_PACKAGE
-import org.sonarsource.kotlin.api.LAUNCH
-import org.sonarsource.kotlin.api.WITH_CONTEXT
 import org.sonarsource.kotlin.api.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.resolveReferenceTarget
 import org.sonarsource.kotlin.api.scope
@@ -19,13 +16,6 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private const val MESSAGE = "Avoid hardcoded dispatchers"
 private const val DISPATCHERS_OBJECT = "$KOTLINX_COROUTINES_PACKAGE.Dispatchers"
-private const val COROUTINES_PACKAGE = KOTLINX_COROUTINES_PACKAGE
-
-private val FUNS_ACCEPTING_DISPATCHERS = listOf(
-    FunMatcher(qualifier = COROUTINES_PACKAGE, name = WITH_CONTEXT),
-    FunMatcher(qualifier = COROUTINES_PACKAGE, name = ASYNC),
-    FunMatcher(qualifier = COROUTINES_PACKAGE, name = LAUNCH),
-)
 
 @Rule(key = "S6310")
 class InjectableDispatchersCheck : CallAbstractCheck() {

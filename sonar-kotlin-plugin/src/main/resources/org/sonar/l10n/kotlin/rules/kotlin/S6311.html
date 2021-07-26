@@ -1,0 +1,44 @@
+<p>By convention, calls to suspending functions should not block the thread, eliminating the requirement of calling suspending functions on background
+threads. Any long-running blocking operations should be moved to background threads within the suspending function that performs these operations. If
+suspending functions do block, this is breaking the Kotlin coroutines conventions (also see <a
+href="https://github.com/SonarSource/rspec/pull/173">{rule:kotlin:S6307}</a>).</p>
+<p>As suspending functions can generally be called directly within other suspending functions, there is no need to move such a call to a background
+thread. This does not bring much benefit while adding complexity and making the code harder to understand.</p>
+<p>In fact, various libraries explicitly provide suspending APIs for otherwise long-running blocking operations. The complexity of moving the
+appropriate tasks to background threads is already taken care of within the library and does not have to be considered when calling the library’s
+suspending API.</p>
+<p>Note also, however, that suspending functions do not block by convention. This behavior is not enforced on a technical level, leaving it to the
+developer to ensure the conventions are actually followed. If a suspending library function not under the control of a developer is actually blocking,
+then calling it in a different thread can work around the issues caused by the poorly written suspending function. It should be preferred to fix the
+callee, however, and not make such workarounds common practice.</p>
+<p>This rule raises an issue when a suspending function is called in a way that executes the call in a new thread.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+suspend fun caller() = coroutineScope {
+    async(Dispatchers.IO) {
+        callee()
+    }
+}
+
+suspend fun callee() {
+    // Do some work
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+suspend fun caller() = coroutineScope {
+    async {
+        callee()
+    }
+}
+
+suspend fun callee() {
+    // Do some work
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/composing-suspending-functions.html">Composing suspending functions</a> in the Kotlin docs </li>
+  <li> <a href="https://github.com/SonarSource/rspec/pull/173">{rule:kotlin:S6307}: Suspending functions should be main-safe</a> </li>
+</ul>
+
