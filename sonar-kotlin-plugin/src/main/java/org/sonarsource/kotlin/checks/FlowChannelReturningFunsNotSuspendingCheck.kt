@@ -20,8 +20,7 @@ class FlowChannelReturningFunsNotSuspendingCheck : AbstractCheck() {
         val suspendModifier = function.suspendModifier()
         if (suspendModifier != null && function.returnTypeAsString(kotlinFileContext.bindingContext) in FORBIDDEN_RETURN_TYPES) {
             val secondaries = function.typeReference
-                ?.let { SecondaryLocation(kotlinFileContext.textRange(it)) }
-                ?.let { listOf(it) }
+                ?.let { listOf(SecondaryLocation(kotlinFileContext.textRange(it))) }
                 ?: emptyList()
             kotlinFileContext.reportIssue(suspendModifier, MESSAGE, secondaries)
         }
