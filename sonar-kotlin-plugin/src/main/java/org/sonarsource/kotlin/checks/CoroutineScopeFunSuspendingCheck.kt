@@ -18,9 +18,7 @@ private const val MESSAGE = "Extension functions on CoroutineScope should not be
 @Rule(key = "S6312")
 class CoroutineScopeFunSuspendingCheck : AbstractCheck() {
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        // Only applicable for extension functions
-        if (!function.isExtensionDeclaration()) return
-
+        // Only applicable for suspending extension functions
         val suspendModifier = function.suspendModifier() ?: return
         val receiverType = function.receiverTypeReference ?: return
         val resolvedReceiverType = kotlinFileContext.bindingContext.get(BindingContext.TYPE, receiverType) ?: return
