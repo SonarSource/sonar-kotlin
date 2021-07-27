@@ -16,13 +16,15 @@ private const val MESSAGE = """Functions returning "Flow" or "Channel" should no
 
 @Rule(key = "S6309")
 class FlowChannelReturningFunsNotSuspendingCheck : AbstractCheck() {
+
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        val suspendModifier = function.suspendModifier()
-        if (suspendModifier != null && function.returnTypeAsString(kotlinFileContext.bindingContext) in FORBIDDEN_RETURN_TYPES) {
-            val secondaries = function.typeReference
-                ?.let { listOf(SecondaryLocation(kotlinFileContext.textRange(it))) }
-                ?: emptyList()
-            kotlinFileContext.reportIssue(suspendModifier, MESSAGE, secondaries)
+        function.suspendModifier()?.let { suspendModifier ->
+            if (function.returnTypeAsString(kotlinFileContext.bindingContext) in FORBIDDEN_RETURN_TYPES) {
+                val secondaries = function.typeReference
+                    ?.let { listOf(SecondaryLocation(kotlinFileContext.textRange(it))) }
+                    ?: emptyList()
+                kotlinFileContext.reportIssue(suspendModifier, MESSAGE, secondaries)
+            }
         }
     }
 }
