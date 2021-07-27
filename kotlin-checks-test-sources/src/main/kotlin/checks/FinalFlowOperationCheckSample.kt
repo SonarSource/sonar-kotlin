@@ -23,4 +23,22 @@ class FinalFlowOperationCheckSample {
         flow.filter { true }
             .count() // Compliant
     }
+
+    suspend fun foo2(flowGen: () -> Flow<String>) {
+        flowGen().filter { true }
+            .map {  } // Noncompliant
+
+        val x = flowGen()
+            .map { it } // Compliant, as it is used later
+        foo(x) // Compliant
+
+        val lambda = {
+            flowGen().filter { true }
+        }
+
+        lambda // Compliant
+        lambda() // Noncompliant
+        lambda()
+            .map { } // Noncompliant
+    }
 }
