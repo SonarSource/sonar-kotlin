@@ -8,7 +8,9 @@ import kotlinx.coroutines.flow.map
 
 class FinalFlowOperationCheckSample {
     suspend fun foo(flow: Flow<String>) {
-        flow.filter { true } // Noncompliant
+        // Noncompliant@+1 {{Unused coroutines Flow}}
+        flow.filter { true }
+//           ^^^^^^
 
         flow.filter { true }
             .map {  } // Noncompliant
@@ -17,8 +19,9 @@ class FinalFlowOperationCheckSample {
             .map {  }
             .map {  }
             .map {  }
+            .map {  } // Noncompliant@+1
             .map {  }
-            .map {  } // Noncompliant
+//           ^^^
 
         flow.filter { true }
             .count() // Compliant
