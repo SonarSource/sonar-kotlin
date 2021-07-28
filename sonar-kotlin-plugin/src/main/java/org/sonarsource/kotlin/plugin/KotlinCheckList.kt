@@ -44,6 +44,7 @@ import org.sonarsource.kotlin.checks.ExposedMutableFlowCheck
 import org.sonarsource.kotlin.checks.FileHeaderCheck
 import org.sonarsource.kotlin.checks.FinalFlowOperationCheck
 import org.sonarsource.kotlin.checks.FixMeCommentCheck
+import org.sonarsource.kotlin.checks.FlowChannelReturningFunsNotSuspendingCheck
 import org.sonarsource.kotlin.checks.FunctionCognitiveComplexityCheck
 import org.sonarsource.kotlin.checks.HardcodedCredentialsCheck
 import org.sonarsource.kotlin.checks.HardcodedIpCheck
@@ -109,6 +110,7 @@ val KOTLIN_CHECKS = listOf(
     FileHeaderCheck::class.java,
     FinalFlowOperationCheck::class.java,
     FixMeCommentCheck::class.java,
+    FlowChannelReturningFunsNotSuspendingCheck::class.java,
     FunctionCognitiveComplexityCheck::class.java,
     HardcodedCredentialsCheck::class.java,
     HardcodedIpCheck::class.java,

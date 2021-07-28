@@ -1,0 +1,50 @@
+<p>There are two ways to define asynchronous functions in Kotlin:</p>
+<ul>
+  <li> using the modifier <code>suspend</code> in the function declaration </li>
+  <li> creating an extension function on <code>CoroutineScope</code> </li>
+</ul>
+<p>The <code>suspend</code> modifier is generally used for functions that might take some time to complete. The caller coroutine might potentially be
+suspended.</p>
+<p>Functions that start a coroutine in the background and return before said coroutine has completed running should be extension functions on
+<code>CoroutineScope</code>. This helps to clarify the intention of such a function. Further, such functions should not be suspending, as suspending
+functions should only return once all the work they are designed to perform is complete.</p>
+<p>Functions returning <code>Flow</code> or <code>Channel</code> should return the result immediately and may start a new coroutine in the background.
+As a consequence, such functions should not be suspending and if they launch a coroutine in the background, they should be declared as extension
+functions on <code>CoroutineScope</code>.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+suspend fun f(): Flow&lt;Int&gt; {
+    val flow = flow {
+        emit(1)
+    }
+    delay(500L)
+    return flow
+}
+</pre>
+<pre>
+suspend fun f(): Channel&lt;Int&gt; {
+    val ch = Channel&lt;Int&gt;()
+    ch.send(1)
+    return ch
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+fun f(): Flow&lt;Int&gt; = flow {
+    emit(1)
+}
+</pre>
+<pre>
+fun CoroutineScope.f(): Channel&lt;Int&gt; {
+    val ch = Channel&lt;Int&gt;()
+    launch {
+        ch.send(1)
+    }
+    return ch
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://elizarov.medium.com/coroutine-context-and-scope-c8b255d59055">Coroutine Context and Scope</a> </li>
+</ul>
+
