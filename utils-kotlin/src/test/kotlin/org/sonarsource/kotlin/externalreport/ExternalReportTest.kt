@@ -1,6 +1,5 @@
 package org.sonarsource.kotlin.externalreport
 
-import java.nio.file.Path
 import org.assertj.core.api.Assertions
 import kotlin.io.path.createFile
 import kotlin.io.path.createTempDirectory

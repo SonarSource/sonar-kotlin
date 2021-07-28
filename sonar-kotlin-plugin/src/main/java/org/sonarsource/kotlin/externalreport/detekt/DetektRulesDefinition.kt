@@ -22,7 +22,6 @@ package org.sonarsource.kotlin.externalreport.detekt
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonarsource.analyzer.commons.ExternalRuleLoader
 import org.sonarsource.kotlin.plugin.KotlinPlugin
-import java.nio.file.Path
 
 class DetektRulesDefinition : RulesDefinition {
 
