@@ -1,0 +1,86 @@
+<p>Kotlin coroutines follow the principle of structured concurrency. This helps in preventing resource leaks and ensures that scopes are only exited
+once all child coroutines have exited. Hence, structured concurrency enables developers to build concurrent applications while having to worry less
+about cleaning up concurrent tasks manually.</p>
+<p>It is possible to break this concept of structured concurrency in various ways. Generally, this is not advised, as it can open the door to
+coroutines being leaked or lost. Ask yourself if breaking structured concurrency here is really necessary for the application’s business logic, or if
+it could be avoided by refactoring parts of the code.</p>
+<p>This rule raises an issue when it detects that the structured concurrency principles are violated. It avoids reporting on valid use cases and in
+situations where developers have consciously opted into using delicate APIs (e.g. by using the <code>@OptIn</code> annotation) and hence should be
+aware of the possible pitfalls.</p>
+<h2>Noncompliant Code Example</h2>
+<p><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-global-scope/index.html">GlobalScope</a>:</p>
+<pre>
+fun main() {
+  GlobalScope.launch { // Noncompliant: no explicit opt-in to DelicateCoroutinesApi
+    // Do some work
+  }.join()
+}
+</pre>
+<p>Manual job instantiation:</p>
+<pre>
+fun startLongRunningBackgroundJob(job: Job) {
+    val coroutineScope = CoroutineScope(job)
+    coroutineScope.launch(Job()) { // Noncompliant: new job instance passed to launch()
+        // Do some work
+    }
+}
+</pre>
+<p>Manual supervisor instantiation:</p>
+<pre>
+    coroutineScope {
+        launch(SupervisorJob()) { // Noncompliant: new supervisor instance passed to launch()
+            // Do some work
+        }
+    }
+</pre>
+<h2>Compliant Solution</h2>
+<p>In many situations, a good pattern is to use <code>coroutineScope</code> as provided in suspending functions:</p>
+<pre>
+suspend fun main() {
+    worker()
+}
+
+suspend fun worker() {
+    coroutineScope {
+        launch { // Compliant: no manually created job/supervisor instance passed to launch()
+            // Do some work
+        }
+    }
+}
+</pre>
+<p><a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-global-scope/index.html">GlobalScope</a>:</p>
+<pre>
+@OptIn(DelicateCoroutinesApi::class)
+fun main() {
+    GlobalScope.launch { // Compliant: explicit opt-in to DelicateCoroutinesApi via method annotation
+        // Do some work
+    }.join()
+}
+</pre>
+<p>No manual job instantiation:</p>
+<pre>
+fun startLongRunningBackgroundJob(job: Job) {
+    val coroutineScope = CoroutineScope(job)
+    coroutineScope.launch { // Compliant: no manually created job/supervisor instance passed to launch()
+        // Do some work
+    }
+}
+</pre>
+<p>Using a supervisor scope instead of manually instantiating a supervisor:</p>
+<pre>
+  supervisorScope {
+    launch {
+      // Do some work
+    }
+  }
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/coroutines-basics.html#structured-concurrency">Structured concurrency</a> in the Kotlin docs </li>
+  <li> <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-global-scope/index.html">GlobalScope
+  documentation</a> </li>
+  <li> <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-scope/index.html">coroutineScope
+  documentation</a> </li>
+  <li> <a href="https://developer.android.com/kotlin/coroutines/coroutines-best-practices">Android coroutines best practices</a> </li>
+</ul>
+

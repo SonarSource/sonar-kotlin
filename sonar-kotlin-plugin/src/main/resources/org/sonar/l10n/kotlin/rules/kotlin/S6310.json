@@ -1,0 +1,17 @@
+{
+  "title": "Dispatchers should be injectable",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "10min"
+  },
+  "tags": [
+    "coroutines",
+    "design"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6310",
+  "sqKey": "S6310",
+  "scope": "All"
+}

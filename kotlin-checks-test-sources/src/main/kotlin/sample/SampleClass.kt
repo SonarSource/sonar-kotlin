@@ -5,7 +5,10 @@ class SampleClass {
         println("Hello, $name!")
     }
 
-    fun sayHelloNullable(name: String?) {
+    fun sayHelloNullable(name: String?): Int {
         println("Hello, ${name ?: "empty void"}!")
+        return 0
     }
 }
+
+suspend fun String.suspendExtFun(): String = ""

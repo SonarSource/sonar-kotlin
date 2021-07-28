@@ -1,0 +1,16 @@
+{
+  "title": "Extension functions on CoroutineScopes should not be declared as \"suspend\"",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "20min"
+  },
+  "tags": [
+    "coroutines"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6312",
+  "sqKey": "S6312",
+  "scope": "All"
+}

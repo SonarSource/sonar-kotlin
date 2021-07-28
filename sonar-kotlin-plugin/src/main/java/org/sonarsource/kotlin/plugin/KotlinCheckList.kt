@@ -31,6 +31,7 @@ import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.CodeAfterJumpCheck
 import org.sonarsource.kotlin.checks.CollapsibleIfStatementsCheck
 import org.sonarsource.kotlin.checks.CommentedCodeCheck
+import org.sonarsource.kotlin.checks.CoroutineScopeFunSuspendingCheck
 import org.sonarsource.kotlin.checks.DataHashingCheck
 import org.sonarsource.kotlin.checks.DuplicateBranchCheck
 import org.sonarsource.kotlin.checks.DuplicatedFunctionImplementationCheck
@@ -39,6 +40,7 @@ import org.sonarsource.kotlin.checks.EmptyBlockCheck
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
 import org.sonarsource.kotlin.checks.EmptyFunctionCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
+import org.sonarsource.kotlin.checks.ExposedMutableFlowCheck
 import org.sonarsource.kotlin.checks.FileHeaderCheck
 import org.sonarsource.kotlin.checks.FixMeCommentCheck
 import org.sonarsource.kotlin.checks.FunctionCognitiveComplexityCheck
@@ -47,6 +49,7 @@ import org.sonarsource.kotlin.checks.HardcodedIpCheck
 import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
 import org.sonarsource.kotlin.checks.IfConditionalAlwaysTrueOrFalseCheck
+import org.sonarsource.kotlin.checks.InjectableDispatchersCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
 import org.sonarsource.kotlin.checks.NestedMatchCheck
 import org.sonarsource.kotlin.checks.OneStatementPerLineCheck
@@ -59,6 +62,7 @@ import org.sonarsource.kotlin.checks.SelfAssignmentCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
 import org.sonarsource.kotlin.checks.StringLiteralDuplicatedCheck
 import org.sonarsource.kotlin.checks.StrongCipherAlgorithmCheck
+import org.sonarsource.kotlin.checks.StructuredConcurrencyPrinciplesCheck
 import org.sonarsource.kotlin.checks.TabsCheck
 import org.sonarsource.kotlin.checks.TodoCommentCheck
 import org.sonarsource.kotlin.checks.TooComplexExpressionCheck
@@ -68,11 +72,13 @@ import org.sonarsource.kotlin.checks.TooLongLineCheck
 import org.sonarsource.kotlin.checks.TooManyCasesCheck
 import org.sonarsource.kotlin.checks.TooManyLinesOfCodeFileCheck
 import org.sonarsource.kotlin.checks.TooManyParametersCheck
+import org.sonarsource.kotlin.checks.UnusedDeferredResultCheck
 import org.sonarsource.kotlin.checks.UnusedFunctionParameterCheck
 import org.sonarsource.kotlin.checks.UnusedLocalVariableCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodCheck
 import org.sonarsource.kotlin.checks.VariableAndParameterNameCheck
 import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
+import org.sonarsource.kotlin.checks.ViewModelSuspendingFunctionsCheck
 import org.sonarsource.kotlin.checks.WeakSSLContextCheck
 import org.sonarsource.kotlin.checks.WrongAssignmentOperatorCheck
 
@@ -88,6 +94,7 @@ val KOTLIN_CHECKS = listOf(
     ClearTextProtocolCheck::class.java,
     CodeAfterJumpCheck::class.java,
     CollapsibleIfStatementsCheck::class.java,
+    CoroutineScopeFunSuspendingCheck::class.java,
     CommentedCodeCheck::class.java,
     DataHashingCheck::class.java,
     DuplicateBranchCheck::class.java,
@@ -96,6 +103,7 @@ val KOTLIN_CHECKS = listOf(
     EmptyBlockCheck::class.java,
     EmptyCommentCheck::class.java,
     EmptyFunctionCheck::class.java,
+    ExposedMutableFlowCheck::class.java,
     EncryptionAlgorithmCheck::class.java,
     FileHeaderCheck::class.java,
     FixMeCommentCheck::class.java,
@@ -105,18 +113,20 @@ val KOTLIN_CHECKS = listOf(
     IdenticalBinaryOperandCheck::class.java,
     IdenticalConditionsCheck::class.java,
     IfConditionalAlwaysTrueOrFalseCheck::class.java,
+    InjectableDispatchersCheck::class.java,
     MatchCaseTooBigCheck::class.java,
     NestedMatchCheck::class.java,
     OneStatementPerLineCheck::class.java,
-    RedundantParenthesesCheck::class.java,
     ParsingErrorCheck::class.java,
     PseudoRandomCheck::class.java,
+    RedundantParenthesesCheck::class.java,
     RedundantSuspendModifierCheck::class.java,
     RobustCryptographicKeysCheck::class.java,
     SelfAssignmentCheck::class.java,
     ServerCertificateCheck::class.java,
     StringLiteralDuplicatedCheck::class.java,
     StrongCipherAlgorithmCheck::class.java,
+    StructuredConcurrencyPrinciplesCheck::class.java,
     TabsCheck::class.java,
     TodoCommentCheck::class.java,
     TooComplexExpressionCheck::class.java,
@@ -126,11 +136,13 @@ val KOTLIN_CHECKS = listOf(
     TooManyCasesCheck::class.java,
     TooManyLinesOfCodeFileCheck::class.java,
     TooManyParametersCheck::class.java,
+    UnusedDeferredResultCheck::class.java,
     UnusedFunctionParameterCheck::class.java,
     UnusedLocalVariableCheck::class.java,
     UnusedPrivateMethodCheck::class.java,
     VariableAndParameterNameCheck::class.java,
+    VerifiedServerHostnamesCheck::class.java,
+    ViewModelSuspendingFunctionsCheck::class.java,
     WeakSSLContextCheck::class.java,
     WrongAssignmentOperatorCheck::class.java,
-    VerifiedServerHostnamesCheck::class.java,
 )

@@ -36,8 +36,6 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.BindingContext.RESOLVED_CALL
-import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getFunctionResolvedCallWithAssert
 import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperClassNotAny
 import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperInterfaces
@@ -46,6 +44,7 @@ import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import java.util.BitSet
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall as getResolvedCallNative
 
 abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>() {
 
@@ -101,8 +100,8 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
     internal fun KtNamedFunction.listStatements(): List<KtExpression> =
         bodyBlockExpression?.statements ?: (bodyExpression?.let { listOf(it) } ?: emptyList())
 
-    internal fun KtCallExpression.getResolvedCall(bindingContext: BindingContext) =
-        getCall(bindingContext)?.let { bindingContext.get(RESOLVED_CALL, it) }
+    @Deprecated("use native API instead", replaceWith = ReplaceWith("org.jetbrains.kotlin.resolve.calls.callUtil#getResolvedCall"))
+    internal fun KtCallExpression.getResolvedCall(bindingContext: BindingContext) = getResolvedCallNative(bindingContext)
 
     internal fun ClassDescriptor?.getAllSuperTypesInterfaces() =
         this?.let { getAllSuperTypesInterfaces(getSuperInterfaces() + superClassAsList()) } ?: emptyList()

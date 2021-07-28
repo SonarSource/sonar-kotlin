@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -34,10 +35,14 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
+import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
@@ -49,6 +54,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.resolvedCallUtil.getImplicitReceiverValue
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
@@ -142,8 +148,7 @@ private fun KtExpression.stringValue(
 ): String? = when (this) {
     is KtStringTemplateExpression -> {
         val entries = entries.map {
-            if (it.expression != null) it.expression!!.stringValue(bindingContext,
-                declarations) else it.text
+            if (it.expression != null) it.expression!!.stringValue(bindingContext, declarations) else it.text
         }
         if (entries.all { it != null }) entries.joinToString("") else null
     }
@@ -227,3 +232,30 @@ private fun DeclarationDescriptor.findFunctionLiteral(
 fun KtNamedFunction.overrides() = modifierList?.hasModifier(KtTokens.OVERRIDE_KEYWORD) ?: false
 
 fun KtNamedFunction.suspendModifier() = modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD)
+
+fun KtQualifiedExpression.resolveReferenceTarget(bindingContext: BindingContext) =
+    this.selectorExpression?.referenceExpression()?.let { bindingContext.get(BindingContext.REFERENCE_TARGET, it) }
+
+fun DeclarationDescriptor.scope() = fqNameSafe.asString().substringBeforeLast(".")
+
+fun KtCallExpression.expressionTypeFqn(bindingContext: BindingContext) =
+    bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, this)?.type?.getJetTypeFqName(false)
+
+private fun KtProperty.determineType(bindingContext: BindingContext) =
+    (typeReference?.let { bindingContext.get(BindingContext.TYPE, it) }
+        ?: bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, initializer)?.type)
+
+fun KtProperty.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
+    determineType(bindingContext)?.getJetTypeFqName(printTypeArguments)
+
+private fun KtParameter.determineType(bindingContext: BindingContext) =
+    bindingContext.get(BindingContext.TYPE, typeReference)
+
+fun KtParameter.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
+    determineType(bindingContext)?.getJetTypeFqName(printTypeArguments)
+
+private fun KtTypeReference.determineType(bindingContext: BindingContext) =
+    bindingContext.get(BindingContext.TYPE, this)
+
+fun KtTypeReference.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
+    determineType(bindingContext)?.getJetTypeFqName(printTypeArguments)

@@ -1,0 +1,19 @@
+{
+  "title": "Coroutine usage should adhere to structured concurrency principles",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "1h"
+  },
+  "tags": [
+    "coroutines",
+    "leak",
+    "pitfall",
+    "bad-practice"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6306",
+  "sqKey": "S6306",
+  "scope": "All"
+}
