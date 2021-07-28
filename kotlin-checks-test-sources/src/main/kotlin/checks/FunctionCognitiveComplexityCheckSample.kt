@@ -151,8 +151,7 @@ class FunctionCognitiveComplexityCheckSample {
         }
     }
 
-    // TODO false-negative
-    fun String.extension() {
+    fun String.extension() { // Noncompliant
         fun() {
             x && y || x && y || x && y
         }

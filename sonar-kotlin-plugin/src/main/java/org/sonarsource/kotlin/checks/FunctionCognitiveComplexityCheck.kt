@@ -40,10 +40,6 @@ class FunctionCognitiveComplexityCheck : AbstractCheck() {
     var threshold = DEFAULT_THRESHOLD
 
     override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext) {
-        if (function.receiverTypeReference != null) {
-            /** see [org.sonarsource.kotlin.converter.KotlinTreeVisitor.createFunctionDeclarationTree] */
-            return
-        }
         val nameIdentifier = function.nameIdentifier ?: return
         val complexity = CognitiveComplexity(function)
         val value = complexity.value()

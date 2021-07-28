@@ -22,4 +22,7 @@
 'kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/RealBufferedSource.kt':[
 414,
 ],
+'kotlin-okio-project:sources/kotlin/okio/okio/src/main/kotlin/okio/Base64.kt':[
+28,
+],
 }

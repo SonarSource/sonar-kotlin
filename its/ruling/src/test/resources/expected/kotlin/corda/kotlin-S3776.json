@@ -65,6 +65,9 @@
 'kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/FingerPrinter.kt':[
 90,
 ],
+'kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/SerializationHelper.kt':[
+124,
+],
 'kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/SerializerFactory.kt':[
 318,
 ],
@@ -73,6 +76,9 @@
 ],
 'kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/performance/Injectors.kt':[
 19,
+],
+'kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/core/Expect.kt':[
+141,
 ],
 'kotlin-corda-project:sources/kotlin/corda/tools/explorer/src/main/kotlin/net/corda/explorer/views/LoginView.kt':[
 34,
