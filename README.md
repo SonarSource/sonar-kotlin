@@ -20,7 +20,7 @@ Useful links
 * [Project homepage](https://redirect.sonarsource.com/plugins/kotlin.html)
 * [Issue tracking](https://jira.sonarsource.com/browse/SONARKT/)
 * [Available rules](https://rules.sonarsource.com/kotlin)
-* [SonarQube Community Forum](https://community.sonarsource.com/)
+* [Community Forum](https://community.sonarsource.com/)
 
 
 ### Build
