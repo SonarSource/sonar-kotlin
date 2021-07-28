@@ -163,8 +163,6 @@ class FunMatcher(
     fun withNoArguments() {
         arguments.add(emptyList())
     }
-
-    private fun ValueParameterDescriptor.typeAsString() = this.type.toString()
 }
 
 fun ConstructorMatcher(typeName: String? = null, arguments: List<List<ArgumentMatcher>> = emptyList(), block: FunMatcher.() -> Unit = {}) =

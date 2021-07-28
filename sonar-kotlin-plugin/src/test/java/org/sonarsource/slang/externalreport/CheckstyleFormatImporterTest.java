@@ -28,6 +28,8 @@ import java.util.List;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.Severity;
@@ -98,32 +100,19 @@ class CheckstyleFormatImporterTest {
 
     assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
   }
-
-  @Test
-  void no_issues_with_invalid_report_path() throws IOException {
-    List<ExternalIssue> externalIssues = importIssues("invalid-path.txt");
+  
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "invalid-path.txt",
+    "not-checkstyle-file.xml",
+    "invalid-file.xml"
+  })
+  void no_issues_for_file_with_path(String file) throws IOException {
+    List<ExternalIssue> externalIssues = importIssues(file);
     assertThat(externalIssues).isEmpty();
     assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
       .startsWith("No issue information will be saved as the report file '")
-      .endsWith("invalid-path.txt' can't be read.");
-  }
-
-  @Test
-  void no_issues_with_invalid_checkstyle_file() throws IOException {
-    List<ExternalIssue> externalIssues = importIssues("not-checkstyle-file.xml");
-    assertThat(externalIssues).isEmpty();
-    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
-      .startsWith("No issue information will be saved as the report file '")
-      .endsWith("not-checkstyle-file.xml' can't be read.");
-  }
-
-  @Test
-  void no_issues_with_invalid_xml_report() throws IOException {
-    List<ExternalIssue> externalIssues = importIssues("invalid-file.xml");
-    assertThat(externalIssues).isEmpty();
-    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
-      .startsWith("No issue information will be saved as the report file '")
-      .endsWith("invalid-file.xml' can't be read.");
+      .endsWith(file + "' can't be read.");
   }
 
   @Test
