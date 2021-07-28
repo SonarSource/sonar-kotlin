@@ -12,7 +12,6 @@ import org.sonar.api.batch.sensor.highlighting.TypeOfText.KEYWORD
 import org.sonar.api.batch.sensor.highlighting.TypeOfText.STRING
 import org.sonar.api.batch.sensor.highlighting.TypeOfText.STRUCTURED_COMMENT
 import org.sonar.api.batch.sensor.internal.SensorContextTester
-import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.issue.NoSonarFilter
 import org.sonarsource.kotlin.testing.AbstractSensorTest
 import java.nio.file.Path

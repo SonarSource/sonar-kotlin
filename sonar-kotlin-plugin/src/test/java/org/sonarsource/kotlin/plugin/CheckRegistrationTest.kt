@@ -23,7 +23,6 @@ import io.mockk.spyk
 import io.mockk.verify
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.junit.jupiter.api.Test
-import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck

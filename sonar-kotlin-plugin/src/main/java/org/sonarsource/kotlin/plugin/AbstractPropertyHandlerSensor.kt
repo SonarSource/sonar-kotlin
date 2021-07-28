@@ -27,7 +27,6 @@ import org.sonar.api.notifications.AnalysisWarnings
 import org.sonar.api.utils.log.Loggers
 import org.sonarsource.analyzer.commons.ExternalReportProvider
 import java.io.File
-import java.util.function.Consumer
 
 private val LOG = Loggers.get(AbstractPropertyHandlerSensor::class.java)
 

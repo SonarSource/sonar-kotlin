@@ -1,8 +1,6 @@
 package checks
 
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 suspend fun redundant() {
     println("Hello!")

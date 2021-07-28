@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.sonar.api.batch.fs.TextRange
 import org.sonar.api.batch.fs.internal.DefaultTextRange
 import org.sonarsource.kotlin.converter.KotlinTextRanges
-import org.sonarsource.kotlin.converter.KotlinTree
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.writeText

@@ -2,8 +2,6 @@ package checks
 
 import okhttp3.ConnectionSpec
 import okhttp3.TlsVersion
-import java.security.NoSuchAlgorithmException
-import java.security.NoSuchProviderException
 import javax.net.ssl.SSLContext
 
 class WeakSSLContextCheckSample {

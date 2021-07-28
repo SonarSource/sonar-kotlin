@@ -22,7 +22,6 @@ package org.sonarsource.kotlin.externalreport.ktlint
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonarsource.analyzer.commons.ExternalRuleLoader
 import org.sonarsource.kotlin.plugin.KotlinPlugin
-import java.nio.file.Path
 
 class KtlintRulesDefinition : RulesDefinition {
     companion object {

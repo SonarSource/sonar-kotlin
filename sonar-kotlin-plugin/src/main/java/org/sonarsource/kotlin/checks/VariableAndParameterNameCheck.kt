@@ -19,8 +19,6 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.cfg.pseudocode.containingDeclarationForPseudocode
-import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
