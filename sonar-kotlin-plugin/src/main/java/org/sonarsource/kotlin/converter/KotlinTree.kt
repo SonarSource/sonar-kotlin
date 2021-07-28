@@ -20,7 +20,6 @@
 package org.sonarsource.kotlin.converter
 
 import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
-import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile

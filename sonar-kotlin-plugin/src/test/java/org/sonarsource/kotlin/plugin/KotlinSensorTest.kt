@@ -27,7 +27,6 @@ import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.CoreMetrics
 import org.sonarsource.kotlin.testing.AbstractSensorTest
-import org.sonarsource.kotlin.testing.TextRangeAssert
 import org.sonarsource.kotlin.testing.assertTextRange
 
 internal class KotlinSensorTest : AbstractSensorTest() {

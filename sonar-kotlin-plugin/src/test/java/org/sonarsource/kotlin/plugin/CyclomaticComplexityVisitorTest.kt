@@ -1,7 +1,6 @@
 package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.Assertions
-import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.psi.KtBinaryExpression

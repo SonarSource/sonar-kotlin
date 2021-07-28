@@ -1,6 +1,5 @@
 package org.sonarsource.kotlin.checks
 
-import java.util.Locale
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.resolve.BindingContext
