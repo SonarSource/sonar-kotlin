@@ -42,6 +42,7 @@ import org.sonarsource.kotlin.checks.EmptyFunctionCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
 import org.sonarsource.kotlin.checks.ExposedMutableFlowCheck
 import org.sonarsource.kotlin.checks.FileHeaderCheck
+import org.sonarsource.kotlin.checks.FinalFlowOperationCheck
 import org.sonarsource.kotlin.checks.FixMeCommentCheck
 import org.sonarsource.kotlin.checks.FunctionCognitiveComplexityCheck
 import org.sonarsource.kotlin.checks.HardcodedCredentialsCheck
@@ -106,6 +107,7 @@ val KOTLIN_CHECKS = listOf(
     ExposedMutableFlowCheck::class.java,
     EncryptionAlgorithmCheck::class.java,
     FileHeaderCheck::class.java,
+    FinalFlowOperationCheck::class.java,
     FixMeCommentCheck::class.java,
     FunctionCognitiveComplexityCheck::class.java,
     HardcodedCredentialsCheck::class.java,
