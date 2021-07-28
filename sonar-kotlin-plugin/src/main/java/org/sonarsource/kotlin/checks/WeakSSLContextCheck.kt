@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -69,19 +68,18 @@ class WeakSSLContextCheck : AbstractCheck() {
     }
 
     override fun visitCallExpression(node: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        val (_, ktFile, bindingContext) = kotlinFileContext
+        val bindingContext = kotlinFileContext.bindingContext
         when {
             SSL_CONTEXT_MATCHER.matches(node, bindingContext) ->
-                handleSSL(node, bindingContext, ktFile, kotlinFileContext)
+                handleSSL(node, bindingContext, kotlinFileContext)
             OKHTTP_MATCHER.matches(node, bindingContext) ->
-                handleOkHttp(node, bindingContext, ktFile, kotlinFileContext)
+                handleOkHttp(node, bindingContext, kotlinFileContext)
         }
     }
 
     private fun handleSSL(
         node: KtCallExpression,
         bindingContext: BindingContext,
-        ktFile: KtFile,
         kotlinFileContext: KotlinFileContext,
     ) {
         node.valueArguments
@@ -89,14 +87,13 @@ class WeakSSLContextCheck : AbstractCheck() {
             ?.getArgumentExpression()
             ?.let {
                 if (WEAK_FOR_SSL.contains(it.value(bindingContext)))
-                    reportUnsecureSSLContext(listOf(it), ktFile, kotlinFileContext)
+                    reportUnsecureSSLContext(listOf(it), kotlinFileContext)
             }
     }
 
     private fun handleOkHttp(
         node: KtCallExpression,
         bindingContext: BindingContext,
-        ktFile: KtFile,
         kotlinFileContext: KotlinFileContext,
     ) {
         val unsecureVersions = node.valueArguments
@@ -105,12 +102,11 @@ class WeakSSLContextCheck : AbstractCheck() {
                 WEAK_FOR_OK_HTTP.contains(it.value(bindingContext))
             }
 
-        reportUnsecureSSLContext(unsecureVersions, ktFile, kotlinFileContext)
+        reportUnsecureSSLContext(unsecureVersions, kotlinFileContext)
     }
 
     private fun reportUnsecureSSLContext(
         unsecureVersions: List<KtExpression>,
-        ktFile: KtFile,
         kotlinFileContext: KotlinFileContext,
     ) {
         if (unsecureVersions.isNotEmpty()) {
