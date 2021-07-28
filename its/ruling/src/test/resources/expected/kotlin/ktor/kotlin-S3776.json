@@ -2,6 +2,9 @@
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-apache/src/io/ktor/client/engine/apache/ApacheRequestProducer.kt':[
 89,
 ],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-cio/src/io/ktor/client/engine/cio/utils.kt':[
+11,
+],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-features/ktor-auth/test/io/ktor/tests/auth/OAuth1a.kt':[
 58,
 313,
@@ -33,8 +36,14 @@
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-http-cio/src/io/ktor/http/cio/websocket/PingPong.kt':[
 40,
 ],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-http-cio/src/io/ktor/http/cio/websocket/WebSocketWriter.kt':[
+61,
+],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-http/src/io/ktor/http/Codecs.kt':[
 37,
+],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-network-tls/src/io/ktor/network/tls/Cipher.kt':[
+138,
 ],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-network-tls/src/io/ktor/network/tls/TLSClientHandshake.kt':[
 188,
@@ -85,5 +94,8 @@
 ],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-test-host/src/io/ktor/server/testing/EngineTestSuite.kt':[
 1274,
+],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-utils/src/io/ktor/cio/FileChannels.kt':[
+12,
 ],
 }
