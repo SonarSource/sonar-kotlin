@@ -37,7 +37,7 @@ tasks {
     task<JavaExec>("updateDetektRules") {
         group = "Application"
         classpath = sourceSets.main.get().runtimeClasspath
-        main = "org.sonarsource.kotlin.externalreport.detekt.DetektRuleDefinitionGeneratorKt"
+        mainClass.set("org.sonarsource.kotlin.externalreport.detekt.DetektRuleDefinitionGeneratorKt")
 
         doFirst {
             println("Updating rules for Detekt version $detektVersion...")
@@ -47,7 +47,7 @@ tasks {
     task<JavaExec>("updateKtlintRules") {
         group = "Application"
         classpath = sourceSets.main.get().runtimeClasspath
-        main = "org.sonarsource.kotlin.externalreport.ktlint.KtlintRuleDefinitionGeneratorKt"
+        mainClass.set("org.sonarsource.kotlin.externalreport.ktlint.KtlintRuleDefinitionGeneratorKt")
 
         doFirst {
             println("Updating rules for ktlint version $detektVersion...")
@@ -57,7 +57,7 @@ tasks {
     task<JavaExec>("updateAndroidLintRules") {
         group = "Application"
         classpath = sourceSets.main.get().runtimeClasspath
-        main = "org.sonarsource.kotlin.externalreport.androidlint.AndroidLintRuleDefinitionKt"
+        mainClass.set("org.sonarsource.kotlin.externalreport.androidlint.AndroidLintRuleDefinitionKt")
 
         doFirst {
             println("Updating rules for Android Lint")
@@ -67,6 +67,6 @@ tasks {
     task<JavaExec>("printAst") {
         group = "Application"
         classpath = sourceSets.main.get().runtimeClasspath
-        main = "org.sonarsource.kotlin.ast.AstPrinterKt"
+        mainClass.set("org.sonarsource.kotlin.ast.AstPrinterKt")
     }
 }

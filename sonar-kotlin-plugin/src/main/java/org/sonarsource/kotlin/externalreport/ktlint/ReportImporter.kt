@@ -25,7 +25,6 @@ import org.sonar.api.utils.log.Loggers
 import org.sonarsource.kotlin.externalreport.ExternalReporting
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintRulesDefinition.Companion.EXPERIMENTAL_RULE_PREFIX
 import java.io.File
-import java.util.function.Consumer
 
 internal val LOG = Loggers.get(ReportImporter::class.java)
 

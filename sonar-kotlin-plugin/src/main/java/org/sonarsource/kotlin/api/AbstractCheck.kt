@@ -103,6 +103,7 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
     @Deprecated("use native API instead", replaceWith = ReplaceWith("org.jetbrains.kotlin.resolve.calls.callUtil#getResolvedCall"))
     internal fun KtCallExpression.getResolvedCall(bindingContext: BindingContext) = getResolvedCallNative(bindingContext)
 
+    @Deprecated("use native API instead", replaceWith = ReplaceWith("getAllSuperClassifiers"))
     internal fun ClassDescriptor?.getAllSuperTypesInterfaces() =
         this?.let { getAllSuperTypesInterfaces(getSuperInterfaces() + superClassAsList()) } ?: emptyList()
 

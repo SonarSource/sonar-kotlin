@@ -4,7 +4,6 @@ import org.sonar.api.config.Configuration
 import org.sonar.api.utils.log.Loggers
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.text.NumberFormat
 import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong

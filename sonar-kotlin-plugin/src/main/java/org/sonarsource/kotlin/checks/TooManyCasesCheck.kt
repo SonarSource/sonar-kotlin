@@ -42,7 +42,6 @@ class TooManyCasesCheck : AbstractCheck() {
     override fun visitWhenExpression(expression: KtWhenExpression, kotlinFileContext: KotlinFileContext) {
         val actual = expression.entries.size
         if (actual > maximum) {
-            val document = expression.containingKtFile.viewProvider.document!!
             kotlinFileContext.reportIssue(
                 expression.whenKeyword,
                 "Reduce the number of ${expression.whenKeyword.text} branches from $actual to at most $maximum.",

@@ -1,0 +1,35 @@
+<p>In Kotlin, <code>Flow</code> represents a cold stream concept. Similar to <code>Stream</code> in Java or <code>Sequence</code> in Kotlin, we can
+manipulate the data inside the flow (filter, transform, collect, etc). The <code>Flow</code> API, just like <code>Stream</code> and
+<code>Sequence</code>, offers two types of operations: intermediate and terminal. Intermediate operations again return a <code>Flow</code> instance,
+all other operations are considered terminal. As flows are naturally lazy, no operations will actually be started until a terminal operation is
+called.</p>
+<p>This rule reports an issue when the result of an intermediate operation on <code>Flow</code> is left unused.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+suspend fun main() {
+    val flow = flow {
+        emit(1)
+        emit(2)
+        emit(3)
+    }
+
+    flow.take(2) // Noncompliant, the result of this operation is never used
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+suspend fun main() {
+    val flow = flow {
+        emit(1)
+        emit(2)
+        emit(3)
+    }
+
+    flow.take(2).collect { println(it) } // Compliant, collect is a terminal operation
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/flow.html">Flow documentation</a> </li>
+</ul>
+
