@@ -115,15 +115,12 @@ class WeakSSLContextCheck : AbstractCheck() {
     ) {
         if (unsecureVersions.isNotEmpty()) {
             val secondaries = unsecureVersions - unsecureVersions[0]
-            val document = ktFile.viewProvider.document
             kotlinFileContext.reportIssue(
                 psiElement = unsecureVersions[0],
                 message = "Change this code to use a stronger protocol.",
-                secondaryLocations = document?.let {
-                    secondaries.map {
-                        SecondaryLocation(kotlinFileContext.textRange(it), "Other weak protocol.")
-                    }
-                } ?: emptyList()
+                secondaryLocations = secondaries.map {
+                    SecondaryLocation(kotlinFileContext.textRange(it), "Other weak protocol.")
+                }
             )
         }
     }
