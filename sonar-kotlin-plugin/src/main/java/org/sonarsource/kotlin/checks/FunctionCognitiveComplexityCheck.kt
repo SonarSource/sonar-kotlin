@@ -44,7 +44,6 @@ class FunctionCognitiveComplexityCheck : AbstractCheck() {
         val complexity = CognitiveComplexity(function)
         val value = complexity.value()
         if (value > threshold) {
-            val document = context.ktFile.viewProvider.document!!
             context.reportIssue(
                 nameIdentifier,
                 "Refactor this method to reduce its Cognitive Complexity from $value to the $threshold allowed.",
