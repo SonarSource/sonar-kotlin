@@ -23,8 +23,9 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.GET_INSTANCE
@@ -47,19 +48,21 @@ private val GET_BYTES_MATCHER = FunMatcher(qualifier = "kotlin.text", name = "to
 private val IV_PARAMETER_SPEC_MATCHER = ConstructorMatcher("javax.crypto.spec.IvParameterSpec")
 
 @Rule(key = "S3329")
-class CipherBlockChainingCheck : AbstractCheck() {
+class CipherBlockChainingCheck : CallAbstractCheck() {
+    override fun functionsToVisit() = listOf(CIPHER_INIT_MATCHER)
 
-    override fun visitCallExpression(expression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
+    override fun visitFunctionCall(
+        callExpression: KtCallExpression,
+        resolvedCall: ResolvedCall<*>,
+        kotlinFileContext: KotlinFileContext,
+    ) {
         val bindingContext = kotlinFileContext.bindingContext
-        if (CIPHER_INIT_MATCHER.matches(expression, bindingContext)) {
+        val calleeExpression = callExpression.calleeExpression ?: return
+        val receiverExpression = callExpression.predictReceiverExpression(bindingContext) ?: return
+        val thirdArgument = callExpression.valueArguments[2].getArgumentExpression() ?: return
 
-            val calleeExpression = expression.calleeExpression ?: return
-            val receiverExpression = expression.predictReceiverExpression(bindingContext) ?: return
-            val thirdArgument = expression.valueArguments[2].getArgumentExpression() ?: return
-
-            if (receiverExpression.isCBC(bindingContext) && thirdArgument.isInitializedWithToByteArray(bindingContext)) {
-                kotlinFileContext.reportIssue(calleeExpression, "Use a dynamically-generated, random IV.")
-            }
+        if (receiverExpression.isCBC(bindingContext) && thirdArgument.isInitializedWithToByteArray(bindingContext)) {
+            kotlinFileContext.reportIssue(calleeExpression, "Use a dynamically-generated, random IV.")
         }
     }
 }
