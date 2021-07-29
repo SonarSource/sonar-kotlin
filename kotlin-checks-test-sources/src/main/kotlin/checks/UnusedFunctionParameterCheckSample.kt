@@ -1,5 +1,11 @@
 package checks
 
+fun List<String>.print() = this.forEach { println(it) }
+
+fun Map<String, String>.print() = this.forEach { (k, v) -> println() }  // Noncompliant {{Use "_" instead of these unused lambda parameters.}}
+//                                                ^  ^<  {{Use "_" instead of this unused lambda parameter "v".}}
+//                                                ^@-1<      {{Use "_" instead of this unused lambda parameter "k".}}
+
 abstract class UnusedFunctionParameterCheckSample {
 
     constructor(unused: String)
@@ -8,8 +14,8 @@ abstract class UnusedFunctionParameterCheckSample {
 //                            ^^^^^^
 
     private fun unusedParameters(unused1: Int, used: Int, unused2: Int) = used // Noncompliant {{Remove these unused function parameters.}}
-//                               ^^^^^^^                  ^^^^^^^<  {{Remove this unused method parameter unused2".}}
-//                               ^^^^^^^@-1<      {{Remove this unused method parameter unused1".}}
+//                               ^^^^^^^                  ^^^^^^^<  {{Remove this unused function parameter "unused2".}}
+//                               ^^^^^^^@-1<      {{Remove this unused function parameter "unused1".}}
 
     fun publicFun(unused: String) = Unit
 
@@ -18,9 +24,12 @@ abstract class UnusedFunctionParameterCheckSample {
     private fun String.extension(unused: String) { // Noncompliant
     }
 
-    // TODO false-negatives - use underscore for unused lambda parameters and anonymous functions
-    val lambda = { unused: Int, _: Int -> }
-    val anonymousFunction = fun(unused: Int, _: Int) = Unit
+    val lambda = { unused: Int, _: Int -> }   // Noncompliant {{Use "_" instead of this unused lambda parameter "unused".}}
+//                 ^^^^^^
+
+
+    val anonymousFunction = fun(unused: Int, _: Int) = Unit  // Noncompliant {{Use "_" instead of this unused function parameter "unused".}}
+//                              ^^^^^^
 }
 
 fun backticks(`i`: Int) = i
@@ -34,7 +43,6 @@ fun backticks4(`i 1`: Int) = Unit // Noncompliant {{Remove this unused function 
 fun unusedParameterInTopLevelFun(unused: Int) {} // Noncompliant
 
 fun usedParameterInTopLevelFun(used: Int) = used
-
 
 fun main(args: Array<String>) {} // Noncompliant
 fun main(a: Int) {} // Noncompliant
