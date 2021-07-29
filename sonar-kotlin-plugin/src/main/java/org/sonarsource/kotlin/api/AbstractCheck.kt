@@ -44,7 +44,6 @@ import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import java.util.BitSet
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall as getResolvedCallNative
 
 abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>() {
 
@@ -95,9 +94,6 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
 
     internal fun KtNamedFunction.listStatements(): List<KtExpression> =
         bodyBlockExpression?.statements ?: (bodyExpression?.let { listOf(it) } ?: emptyList())
-
-    @Deprecated("use native API instead", replaceWith = ReplaceWith("org.jetbrains.kotlin.resolve.calls.callUtil#getResolvedCall"))
-    internal fun KtCallExpression.getResolvedCall(bindingContext: BindingContext) = getResolvedCallNative(bindingContext)
 
     @Deprecated("use native API instead", replaceWith = ReplaceWith("getAllSuperClassifiers"))
     internal fun ClassDescriptor?.getAllSuperTypesInterfaces() =

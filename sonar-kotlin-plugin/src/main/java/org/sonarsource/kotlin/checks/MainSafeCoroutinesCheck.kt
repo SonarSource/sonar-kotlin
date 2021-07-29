@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getParentCall
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.DefaultValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
@@ -25,7 +26,6 @@ import org.sonarsource.kotlin.api.resolveReferenceTarget
 import org.sonarsource.kotlin.api.suspendModifier
 import org.sonarsource.kotlin.api.throwsExceptions
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall as getResolvedCallNative
 
 val THREAD_SLEEP_MATCHER = FunMatcher(qualifier = "java.lang.Thread", name = "sleep")
 
@@ -69,7 +69,7 @@ class MainSafeCoroutinesCheck : AbstractCheck() {
     private fun KtElement.reportBlockingFunctionCalls(context: KotlinFileContext) {
         val bindingContext = context.bindingContext
         forEachDescendantOfType<KtCallExpression> { call ->
-            val resolvedCall = call.getResolvedCallNative(bindingContext)
+            val resolvedCall = call.getResolvedCall(bindingContext)
             if (resolvedCall matches THREAD_SLEEP_MATCHER) {
                 context.reportIssue(call.calleeExpression!!, """Replace this "Thread.sleep()" call with "delay()"""")
             } else {
@@ -91,12 +91,12 @@ private fun isInsideNonSafeDispatcher(
     bindingContext: BindingContext,
 ): Boolean {
     var parentCall: Call? = callExpr.getParentCall(bindingContext) ?: return true
-    var resolvedCall = parentCall.getResolvedCallNative(bindingContext) ?: return false
+    var resolvedCall = parentCall.getResolvedCall(bindingContext) ?: return false
 
     while (!FUNS_ACCEPTING_DISPATCHERS.any { resolvedCall matches it }) {
         parentCall = parentCall?.callElement?.getParentCall(bindingContext)
         if (parentCall == null) return true
-        val newResolvedCall = parentCall.getResolvedCallNative(bindingContext)
+        val newResolvedCall = parentCall.getResolvedCall(bindingContext)
         if (newResolvedCall === resolvedCall || newResolvedCall == null) return false
         resolvedCall = newResolvedCall
     }
