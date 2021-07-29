@@ -48,10 +48,6 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall as getResolve
 
 abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>() {
 
-    companion object {
-        private const val THROWS_FQN = "kotlin.jvm.Throws"
-    }
-
     lateinit var ruleKey: RuleKey
         private set
 

@@ -1,0 +1,66 @@
+<p>Generally speaking, main threads should be available to allow user-facing parts of an application to remain responsive. Long-running blocking
+operations can significantly reduce threads' availability and are best executed on a designated thread pool.</p>
+<p>As a consequence, suspending functions should not block main threads and instead move any long-running blocking tasks off the main thread. This can
+be done conveniently by using <code>withContext</code> with an appropriate dispatcher. Alternatively, coroutine builders such as <code>launch</code>
+and <code>async</code> accept an optional <code>CoroutineContext</code>. An appropriate dispatcher could be <code>Dispatchers.IO</code> for
+long-running blocking IO operations, which can create and shutdown threads on demand.</p>
+<p>For some blocking tasks and APIs there may already be suspending alternatives available. When available, these alternatives should be used instead
+of their blocking counterparts.</p>
+<p>This rule raises an issue when the call of a long-running blocking function is detected within a suspending function without the use of an
+appropriate dispatcher. If non-blocking alternatives to the called function are known, they may be suggested (e.g. use <code>delay(…​)</code> instead
+of <code>Thread.sleep(…​)</code>).</p>
+<h2>Noncompliant Code Example</h2>
+<p>Executing long-running blocking IO operations on the main thread pool:</p>
+<pre>
+class workerClass {
+    suspend fun worker(): String {
+        val client = HttpClient.newHttpClient()
+        val request = HttpRequest.newBuilder(URI("https://example.com")).build()
+        return coroutineScope {
+            client.send(request, HttpResponse.BodyHandlers.ofString()).body() // Noncompliant
+        }
+    }
+}
+</pre>
+<p>Using inappropriate blocking APIs:</p>
+<pre>
+suspend fun example() {
+    ...
+    Thread.sleep(1000) // Noncompliant
+    ...
+}
+</pre>
+<h2>Compliant Solution</h2>
+<p>Executing long-running blocking IO operations in an appropriate thread pool using <code>Dispatcher.IO</code>:</p>
+<pre>
+class workerClass(
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) {
+    suspend fun worker(): String {
+        val client = HttpClient.newHttpClient()
+        val request = HttpRequest.newBuilder(URI("https://example.com")).build()
+        return withContext(ioDispatcher) {
+            client.send(request, HttpResponse.BodyHandlers.ofString()).body() // Compliant
+        }
+    }
+}
+</pre>
+<p>Using appropriate non-blocking APIs:</p>
+<pre>
+suspend fun example() {
+    ...
+    delay(1000) // Compliant
+    ...
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html">Coroutine context and dispatchers</a> </li>
+  <li> <a href="https://developer.android.com/kotlin/coroutines/coroutines-best-practices#main-safe">Suspend functions should be safe to call from the
+  main thread</a> (Android coroutines best practices) </li>
+  <li> <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/-i-o.html">IO
+  CoroutineDispatcher</a> </li>
+  <li> <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/-default.html">Default
+  CoroutineDispatcher</a> </li>
+</ul>
+

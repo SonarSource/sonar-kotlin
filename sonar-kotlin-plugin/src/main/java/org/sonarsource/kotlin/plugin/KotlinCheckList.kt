@@ -44,6 +44,7 @@ import org.sonarsource.kotlin.checks.ExposedMutableFlowCheck
 import org.sonarsource.kotlin.checks.FileHeaderCheck
 import org.sonarsource.kotlin.checks.FinalFlowOperationCheck
 import org.sonarsource.kotlin.checks.FixMeCommentCheck
+import org.sonarsource.kotlin.checks.FlowChannelReturningFunsNotSuspendingCheck
 import org.sonarsource.kotlin.checks.FunctionCognitiveComplexityCheck
 import org.sonarsource.kotlin.checks.HardcodedCredentialsCheck
 import org.sonarsource.kotlin.checks.HardcodedIpCheck
@@ -51,6 +52,7 @@ import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
 import org.sonarsource.kotlin.checks.IfConditionalAlwaysTrueOrFalseCheck
 import org.sonarsource.kotlin.checks.InjectableDispatchersCheck
+import org.sonarsource.kotlin.checks.MainSafeCoroutinesCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
 import org.sonarsource.kotlin.checks.NestedMatchCheck
 import org.sonarsource.kotlin.checks.OneStatementPerLineCheck
@@ -64,6 +66,7 @@ import org.sonarsource.kotlin.checks.ServerCertificateCheck
 import org.sonarsource.kotlin.checks.StringLiteralDuplicatedCheck
 import org.sonarsource.kotlin.checks.StrongCipherAlgorithmCheck
 import org.sonarsource.kotlin.checks.StructuredConcurrencyPrinciplesCheck
+import org.sonarsource.kotlin.checks.SuspendingFunCallerDispatcherCheck
 import org.sonarsource.kotlin.checks.TabsCheck
 import org.sonarsource.kotlin.checks.TodoCommentCheck
 import org.sonarsource.kotlin.checks.TooComplexExpressionCheck
@@ -109,6 +112,7 @@ val KOTLIN_CHECKS = listOf(
     FileHeaderCheck::class.java,
     FinalFlowOperationCheck::class.java,
     FixMeCommentCheck::class.java,
+    FlowChannelReturningFunsNotSuspendingCheck::class.java,
     FunctionCognitiveComplexityCheck::class.java,
     HardcodedCredentialsCheck::class.java,
     HardcodedIpCheck::class.java,
@@ -116,6 +120,7 @@ val KOTLIN_CHECKS = listOf(
     IdenticalConditionsCheck::class.java,
     IfConditionalAlwaysTrueOrFalseCheck::class.java,
     InjectableDispatchersCheck::class.java,
+    MainSafeCoroutinesCheck::class.java,
     MatchCaseTooBigCheck::class.java,
     NestedMatchCheck::class.java,
     OneStatementPerLineCheck::class.java,
@@ -129,6 +134,7 @@ val KOTLIN_CHECKS = listOf(
     StringLiteralDuplicatedCheck::class.java,
     StrongCipherAlgorithmCheck::class.java,
     StructuredConcurrencyPrinciplesCheck::class.java,
+    SuspendingFunCallerDispatcherCheck::class.java,
     TabsCheck::class.java,
     TodoCommentCheck::class.java,
     TooComplexExpressionCheck::class.java,

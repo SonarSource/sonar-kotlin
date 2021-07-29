@@ -9,3 +9,11 @@ const val LAUNCH = "launch"
 const val KOTLINX_COROUTINES_PACKAGE = "kotlinx.coroutines"
 const val DEFERRED_FQN = "kotlinx.coroutines.Deferred"
 const val COROUTINES_FLOW = "kotlinx.coroutines.flow.Flow"
+const val COROUTINES_CHANNEL = "kotlinx.coroutines.channels.Channel"
+const val THROWS_FQN = "kotlin.jvm.Throws"
+
+val FUNS_ACCEPTING_DISPATCHERS = listOf(
+    FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = WITH_CONTEXT),
+    FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = ASYNC),
+    FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = LAUNCH),
+)

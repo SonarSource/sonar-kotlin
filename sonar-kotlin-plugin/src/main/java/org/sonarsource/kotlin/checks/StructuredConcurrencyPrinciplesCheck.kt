@@ -13,12 +13,10 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.ASYNC
 import org.sonarsource.kotlin.api.CallAbstractCheck
+import org.sonarsource.kotlin.api.FUNS_ACCEPTING_DISPATCHERS
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.KOTLINX_COROUTINES_PACKAGE
-import org.sonarsource.kotlin.api.LAUNCH
-import org.sonarsource.kotlin.api.WITH_CONTEXT
 import org.sonarsource.kotlin.api.determineTypeAsString
 import org.sonarsource.kotlin.api.predictReceiverExpression
 import org.sonarsource.kotlin.plugin.KotlinFileContext
@@ -31,11 +29,7 @@ private const val DELICATE_API_CLASS_TYPE = "kotlin.reflect.KClass<kotlinx.corou
 @Rule(key = "S6306")
 class StructuredConcurrencyPrinciplesCheck : CallAbstractCheck() {
 
-    override fun functionsToVisit() = listOf(
-        FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = ASYNC),
-        FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = LAUNCH),
-        FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = WITH_CONTEXT),
-    )
+    override fun functionsToVisit() = FUNS_ACCEPTING_DISPATCHERS
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         val bindingContext = kotlinFileContext.bindingContext

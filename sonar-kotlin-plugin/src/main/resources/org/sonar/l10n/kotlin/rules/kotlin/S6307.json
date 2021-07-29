@@ -1,0 +1,19 @@
+{
+  "title": "Suspending functions should be main-safe",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "10min"
+  },
+  "tags": [
+    "coroutines",
+    "performance",
+    "bad-practice",
+    "pitfall"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6307",
+  "sqKey": "S6307",
+  "scope": "All"
+}
