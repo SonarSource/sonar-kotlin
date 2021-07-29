@@ -20,8 +20,9 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.api.predictRuntimeStringValueWithSecondaries
@@ -37,35 +38,40 @@ val CIPHER_GET_INSTANCE_MATCHER = FunMatcher {
 }
 
 @Rule(key = "S5542")
-class EncryptionAlgorithmCheck : AbstractCheck() {
+class EncryptionAlgorithmCheck : CallAbstractCheck() {
 
-    override fun visitCallExpression(expression: KtCallExpression, context: KotlinFileContext) {
-        val bindingContext = context.bindingContext
-        if (!CIPHER_GET_INSTANCE_MATCHER.matches(expression, bindingContext)) return
-        expression.valueArguments.firstOrNull()?.let { argument ->
+    override fun functionsToVisit() = listOf(CIPHER_GET_INSTANCE_MATCHER)
+
+    override fun visitFunctionCall(
+        callExpression: KtCallExpression,
+        resolvedCall: ResolvedCall<*>,
+        kotlinFileContext: KotlinFileContext,
+    ) {
+        val bindingContext = kotlinFileContext.bindingContext
+        callExpression.valueArguments.firstOrNull()?.let { argument ->
             argument.getArgumentExpression()!!
                 .predictRuntimeStringValueWithSecondaries(bindingContext).let { (algorithm, secondaries) ->
                     if (algorithm.isInsecure()) {
                         val locations = secondaries.map {
-                            SecondaryLocation(context.textRange(it), "Transformation definition")
+                            SecondaryLocation(kotlinFileContext.textRange(it), "Transformation definition")
                         }
-                        context.reportIssue(argument, MESSAGE, locations)
+                        kotlinFileContext.reportIssue(argument, MESSAGE, locations)
                     }
                 }
         }
     }
+}
 
-    private fun String?.isInsecure(): Boolean {
-        if (this == null) return false
-        val matcher: MatchResult? = ALGORITHM_PATTERN.matchEntire(this)
-        // First element is a full match
-        matcher?.groupValues?.let { (_, algorithm, mode, padding) ->
-            val isRSA = "RSA".equals(algorithm, ignoreCase = true)
-            return if ("ECB".equals(mode, ignoreCase = true) && !isRSA) true
-            else if ("CBC".equals(mode, ignoreCase = true)) false
-            else isRSA && !padding.uppercase().startsWith("OAEP")
-        }
-        // By default, ECB is used.
-            ?: return true
+private fun String?.isInsecure(): Boolean {
+    if (this == null) return false
+    val matcher: MatchResult? = ALGORITHM_PATTERN.matchEntire(this)
+    // First element is a full match
+    matcher?.groupValues?.let { (_, algorithm, mode, padding) ->
+        val isRSA = "RSA".equals(algorithm, ignoreCase = true)
+        return if ("ECB".equals(mode, ignoreCase = true) && !isRSA) true
+        else if ("CBC".equals(mode, ignoreCase = true)) false
+        else isRSA && !padding.uppercase().startsWith("OAEP")
     }
+    // By default, ECB is used.
+        ?: return true
 }
