@@ -23,6 +23,8 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
+import org.jetbrains.kotlin.coroutines.hasSuspendFunctionType
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
@@ -33,6 +35,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
+import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
@@ -54,6 +57,8 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.resolvedCallUtil.getImplicitReceiverValue
+import org.jetbrains.kotlin.resolve.constants.ArrayValue
+import org.jetbrains.kotlin.resolve.constants.KClassValue
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
@@ -266,3 +271,26 @@ fun KtNamedFunction.returnTypeAsString(bindingContext: BindingContext, printType
 
 fun KtNamedFunction.returnType(bindingContext: BindingContext) =
     createTypeBindingForReturnType(bindingContext)?.type
+
+fun KtLambdaArgument.isSuspending(
+    bindingContext: BindingContext,
+) = (parent as? KtCallExpression)
+    ?.getResolvedCall(bindingContext)
+    ?.resultingDescriptor
+    ?.valueParameters
+    ?.last()
+    ?.hasSuspendFunctionType
+    ?: false
+
+fun CallableDescriptor.throwsExceptions(exceptions: Collection<String>) =
+    annotations.any {
+        it.fqName?.asString() == THROWS_FQN &&
+            (it.allValueArguments.asSequence()
+                .find { (k, _) -> k.asString() == "exceptionClasses" }
+                ?.value as? ArrayValue)
+                ?.value
+                ?.mapNotNull { it.value as? KClassValue.Value.NormalClass }
+                ?.map { it.value.toString().replace("/", ".") }
+                ?.any(exceptions::contains)
+            ?: false
+    }

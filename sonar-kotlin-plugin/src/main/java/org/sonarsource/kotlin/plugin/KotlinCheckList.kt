@@ -52,6 +52,7 @@ import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
 import org.sonarsource.kotlin.checks.IfConditionalAlwaysTrueOrFalseCheck
 import org.sonarsource.kotlin.checks.InjectableDispatchersCheck
+import org.sonarsource.kotlin.checks.MainSafeCoroutinesCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
 import org.sonarsource.kotlin.checks.NestedMatchCheck
 import org.sonarsource.kotlin.checks.OneStatementPerLineCheck
@@ -119,6 +120,7 @@ val KOTLIN_CHECKS = listOf(
     IdenticalConditionsCheck::class.java,
     IfConditionalAlwaysTrueOrFalseCheck::class.java,
     InjectableDispatchersCheck::class.java,
+    MainSafeCoroutinesCheck::class.java,
     MatchCaseTooBigCheck::class.java,
     NestedMatchCheck::class.java,
     OneStatementPerLineCheck::class.java,
