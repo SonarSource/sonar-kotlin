@@ -94,12 +94,12 @@ class FunMatcher(
             qualifier.isNullOrEmpty() && checkSubType(functionDescriptor)
 
     private fun checkType(functionDescriptor: CallableDescriptor): Boolean =
-        qualifier?.let {
+        (qualifier ?: supertype)?.let {
             when (functionDescriptor) {
                 is ConstructorDescriptor ->
-                    functionDescriptor.constructedClass.fqNameSafe.asString() == qualifier
+                    functionDescriptor.constructedClass.fqNameSafe.asString() == it
                 else ->
-                    functionDescriptor.fqNameSafe.asString().substringBeforeLast(".") == qualifier
+                    functionDescriptor.fqNameSafe.asString().substringBeforeLast(".") == it
             }
         } ?: false
 

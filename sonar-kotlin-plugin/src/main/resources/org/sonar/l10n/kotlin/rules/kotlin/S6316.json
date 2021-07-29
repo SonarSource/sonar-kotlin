@@ -1,0 +1,16 @@
+{
+  "title": "Kotlin coroutines API for timeouts should be used",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "coroutines"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6316",
+  "sqKey": "S6316",
+  "scope": "All"
+}

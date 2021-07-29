@@ -32,6 +32,7 @@ import org.sonarsource.kotlin.checks.CodeAfterJumpCheck
 import org.sonarsource.kotlin.checks.CollapsibleIfStatementsCheck
 import org.sonarsource.kotlin.checks.CommentedCodeCheck
 import org.sonarsource.kotlin.checks.CoroutineScopeFunSuspendingCheck
+import org.sonarsource.kotlin.checks.CoroutinesTimeoutApiUnusedCheck
 import org.sonarsource.kotlin.checks.DataHashingCheck
 import org.sonarsource.kotlin.checks.DuplicateBranchCheck
 import org.sonarsource.kotlin.checks.DuplicatedFunctionImplementationCheck
@@ -100,6 +101,7 @@ val KOTLIN_CHECKS = listOf(
     CollapsibleIfStatementsCheck::class.java,
     CoroutineScopeFunSuspendingCheck::class.java,
     CommentedCodeCheck::class.java,
+    CoroutinesTimeoutApiUnusedCheck::class.java,
     DataHashingCheck::class.java,
     DuplicateBranchCheck::class.java,
     DuplicatedFunctionImplementationCheck::class.java,
