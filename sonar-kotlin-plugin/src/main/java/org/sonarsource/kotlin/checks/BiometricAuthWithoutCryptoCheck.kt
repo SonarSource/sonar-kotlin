@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.isNull
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
