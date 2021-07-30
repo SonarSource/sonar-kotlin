@@ -38,7 +38,7 @@ class UnusedFunctionParameterCheck : AbstractCheck() {
             valueParameters.asSequence()
                 .filter { ktParameter ->
                     !anyDescendantOfType<KtNameReferenceExpression> {
-                        it.text == ktParameter.nameIdentifier?.text
+                        it.getReferencedName() == ktParameter.name
                     }
                 }.toList()
     }

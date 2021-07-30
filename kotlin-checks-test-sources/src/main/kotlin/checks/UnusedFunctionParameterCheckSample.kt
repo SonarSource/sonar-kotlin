@@ -23,12 +23,18 @@ abstract class UnusedFunctionParameterCheckSample {
     val anonymousFunction = fun(unused: Int, _: Int) = Unit
 }
 
+fun backticks(`i`: Int) = i
+
+fun backticks2(`i`: Int) = `i`
+
+fun backticks3(`i 1`: Int) = `i 1`
+
+fun backticks4(`i 1`: Int) = Unit // Noncompliant {{Remove this unused function parameter "i 1".}}
+
 fun unusedParameterInTopLevelFun(unused: Int) {} // Noncompliant
 
 fun usedParameterInTopLevelFun(used: Int) = used
 
-// TODO false-positive
-fun backticks(`i`: Int) = i // Noncompliant
 
 fun main(args: Array<String>) {} // Noncompliant
 fun main(a: Int) {} // Noncompliant
