@@ -47,12 +47,10 @@ class UnusedPrivateMethodCheck : AbstractCheck() {
         if (!klass.isTopLevel()) return
         klass.collectDescendantsOfType<KtNamedFunction> { it.shouldCheckForUsage() }
             .forEach {
-                // Anonymous functions can't be private, so nameIdentifier is always present
-                val nameIdentifier = it.nameIdentifier!!
-                val name = nameIdentifier.text
-                if (!IGNORED_METHODS.contains(name) && !it.isReferencedIn(klass, name)) {
-                    context.reportIssue(nameIdentifier,
-                        """Remove this unused private "$name" method.""")
+                val functionName = it.name!!
+                if (!IGNORED_METHODS.contains(functionName) && !it.isReferencedIn(klass, functionName)) {
+                    // Anonymous functions can't be private, so nameIdentifier is always present
+                    context.reportIssue(it.nameIdentifier!!, """Remove this unused private "$functionName" method.""")
                 }
             }
     }

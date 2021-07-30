@@ -55,7 +55,7 @@ class UnusedLocalVariableCheck : AbstractCheck() {
         forEachDescendantOfType<KtProperty> { property ->
             val nameIdentifier = property.nameIdentifier!!
             if (property.isLocal && !anyDescendantOfType<KtNameReferenceExpression> {
-                        reference -> reference.text == nameIdentifier.text
+                        reference -> reference.getReferencedName() == property.name
             }) {
                 context.reportIssue(nameIdentifier,
                     "Remove this unused \"${nameIdentifier.text}\" local variable.")
