@@ -95,10 +95,6 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
     internal fun KtNamedFunction.listStatements(): List<KtExpression> =
         bodyBlockExpression?.statements ?: (bodyExpression?.let { listOf(it) } ?: emptyList())
 
-    @Deprecated("use native API instead", replaceWith = ReplaceWith("getAllSuperClassifiers"))
-    internal fun ClassDescriptor?.getAllSuperTypesInterfaces() =
-        this?.let { getAllSuperTypesInterfaces(getSuperInterfaces() + superClassAsList()) } ?: emptyList()
-
     private fun getAllSuperTypesInterfaces(classes: List<ClassDescriptor>): List<ClassDescriptor> =
         classes + classes.flatMap { getAllSuperTypesInterfaces(it.getSuperInterfaces() + it.superClassAsList()) }
 
