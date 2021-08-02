@@ -33,18 +33,18 @@ class CoroutinesTimeoutApiUnusedCheck : CallAbstractCheck() {
     override fun functionsToVisit() = listOf(FunMatcher(supertype = "$KOTLINX_COROUTINES_PACKAGE.Job", name = "cancel"))
 
     override fun visitFunctionCall(
-        cancelCallExpr: KtCallExpression,
-        resolvedCancelCall: ResolvedCall<*>,
+        callExpression: KtCallExpression,
+        resolvedCall: ResolvedCall<*>,
         kotlinFileContext: KotlinFileContext
     ) {
         val bindingContext = kotlinFileContext.bindingContext
 
-        val cancelCallCalleeExpression = cancelCallExpr.calleeExpression ?: return
+        val cancelCallCalleeExpression = callExpression.calleeExpression ?: return
 
-        val jobDeclaration = (cancelCallExpr.context as? KtDotQualifiedExpression)
+        val jobDeclaration = (callExpression.context as? KtDotQualifiedExpression)
             ?.receiverExpression?.getReferenceTargets(bindingContext)?.toList()?.getOrNull(0) ?: return
 
-        val siblingIter = cancelCallExpr.parent.siblings(forward = false, withItself = false)
+        val siblingIter = callExpression.parent.siblings(forward = false, withItself = false)
             .filter { it is KtElement }
             .iterator()
 

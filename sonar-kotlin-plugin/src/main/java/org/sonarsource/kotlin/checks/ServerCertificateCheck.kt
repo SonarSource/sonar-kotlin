@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.CLASS
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
+import org.jetbrains.kotlin.resolve.descriptorUtil.getAllSuperClassifiers
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
@@ -39,9 +40,9 @@ class ServerCertificateCheck : AbstractCheck() {
     override fun visitClassOrObject(node: KtClassOrObject, kotlinFileContext: KotlinFileContext) {
         val (_, _, bindingContext) = kotlinFileContext
 
-        val extendsX509 = bindingContext.get(CLASS, node).getAllSuperTypesInterfaces().any {
+        val extendsX509 = bindingContext.get(CLASS, node)?.getAllSuperClassifiers()?.any {
             it.fqNameOrNull()?.asString() == "javax.net.ssl.X509TrustManager"
-        }
+        } ?: return
         if (extendsX509) {
             node.body?.functions?.forEach { f ->
                 if (methodNames.contains(f.name) 
