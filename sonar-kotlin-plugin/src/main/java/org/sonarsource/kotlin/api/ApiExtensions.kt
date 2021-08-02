@@ -294,3 +294,7 @@ fun CallableDescriptor.throwsExceptions(exceptions: Collection<String>) =
                 ?.any(exceptions::contains)
             ?: false
     }
+
+fun KtNamedFunction.isInfix() = hasModifier(KtTokens.INFIX_KEYWORD)
+
+fun KtNamedFunction.isAnonymous() = nameIdentifier == null

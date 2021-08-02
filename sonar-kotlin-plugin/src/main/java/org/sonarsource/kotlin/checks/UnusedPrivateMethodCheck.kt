@@ -23,11 +23,13 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.isInfix
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 // Serializable method should not raise any issue in Kotlin.
@@ -45,17 +47,22 @@ class UnusedPrivateMethodCheck : AbstractCheck() {
         if (!klass.isTopLevel()) return
         klass.collectDescendantsOfType<KtNamedFunction> { it.shouldCheckForUsage() }
             .forEach {
-                val nameIdentifier = it.nameIdentifier!!
-                val name = nameIdentifier.text
-                if (!IGNORED_METHODS.contains(name) && !klass.hasReferences(name)) {
-                    context.reportIssue(nameIdentifier,
-                        "Remove this unused private \"$name\" method.")
+                val functionName = it.name!!
+                if (!IGNORED_METHODS.contains(functionName) && !it.isReferencedIn(klass, functionName)) {
+                    // Anonymous functions can't be private, so nameIdentifier is always present
+                    context.reportIssue(it.nameIdentifier!!, """Remove this unused private "$functionName" method.""")
                 }
             }
     }
 
+    private fun KtNamedFunction.isReferencedIn(klass: KtClass, name: String) =
+        klass.hasReferences(name) || (isInfix() && klass.hasInfixReferences(name))
+
     private fun KtClass.hasReferences(name: String) =
         anyDescendantOfType<KtNameReferenceExpression> { it.getReferencedName() == name }
+
+    private fun KtClass.hasInfixReferences(name: String) =
+        anyDescendantOfType<KtOperationReferenceExpression> { it.getReferencedName() == name }
 
     private fun KtNamedFunction.shouldCheckForUsage() =
         isPrivate() && !hasModifier(KtTokens.OPERATOR_KEYWORD)

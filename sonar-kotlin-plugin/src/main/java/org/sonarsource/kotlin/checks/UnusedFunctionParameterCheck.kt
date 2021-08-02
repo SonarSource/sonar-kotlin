@@ -19,7 +19,10 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
@@ -27,46 +30,71 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.api.isAnonymous
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 @Rule(key = "S1172")
 class UnusedFunctionParameterCheck : AbstractCheck() {
 
-    companion object {
-        private fun KtNamedFunction.getUnusedParameters(): List<KtParameter> =
-            valueParameters.asSequence()
-                .filter { ktParameter ->
-                    !anyDescendantOfType<KtNameReferenceExpression> {
-                        it.text == ktParameter.nameIdentifier?.text
-                    }
-                }.toList()
-    }
-
     override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext) {
         if (!shouldBeChecked(function)) return
         val unusedParameters = function.getUnusedParameters()
-        if (unusedParameters.isNotEmpty()) reportUnusedParameters(context, unusedParameters)
+        val singleMessage =
+            if (function.isAnonymous()) """Use "_" instead of this unused function parameter"""
+            else "Remove this unused function parameter"
+        val pluralMessage =
+            if (function.isAnonymous()) """Use "_" instead of these unused function parameters."""
+            else "Remove these unused function parameters."
+        if (unusedParameters.isNotEmpty()) reportUnusedParameters(context, unusedParameters, singleMessage, pluralMessage)
     }
 
-    private fun reportUnusedParameters(context: KotlinFileContext, unusedParameters: List<KtParameter>) {
+    override fun visitLambdaExpression(expression: KtLambdaExpression, context: KotlinFileContext) {
+        val unusedParameters = expression.getUnusedParameters()
+        val singleMessage = """Use "_" instead of this unused lambda parameter"""
+        val pluralMessage = """Use "_" instead of these unused lambda parameters."""
+        if (unusedParameters.isNotEmpty()) reportUnusedParameters(context, unusedParameters, singleMessage, pluralMessage)
+    }
+
+    private fun reportUnusedParameters(
+        context: KotlinFileContext,
+        unusedParameters: List<KtNamedDeclaration>,
+        singleMessage: String,
+        pluralMessage: String,
+    ) {
+        val firstUnused = unusedParameters[0]
         val secondaryLocations = unusedParameters.asSequence()
-            .map { unusedParameter: KtParameter ->
+            .map { unusedParameter: KtNamedDeclaration ->
                 SecondaryLocation(context.textRange(unusedParameter.nameIdentifier!!),
-                    "Remove this unused method parameter ${unusedParameter.name}\".")
+                    """$singleMessage "${unusedParameter.name}".""")
             }
             .toList()
-        val firstUnused = unusedParameters[0]
-        val msg = if (unusedParameters.size > 1) {
-            "Remove these unused function parameters."
-        } else {
-            "Remove this unused function parameter \"${firstUnused.name}\"."
-        }
-        context.reportIssue(firstUnused.nameIdentifier!!, msg, secondaryLocations)
+        if (unusedParameters.size > 1) context.reportIssue(firstUnused.nameIdentifier!!, pluralMessage, secondaryLocations)
+        else  context.reportIssue(firstUnused.nameIdentifier!!, """$singleMessage "${firstUnused.name}".""")
     }
-
-    private fun shouldBeChecked(function: KtNamedFunction) =
-        function.hasBody()
-            && (function.isTopLevel || function.isPrivate())
-
 }
+
+private fun shouldBeChecked(function: KtNamedFunction) =
+    function.hasBody()
+        && (function.isTopLevel || function.isPrivate() || function.isAnonymous())
+
+private fun KtNamedFunction.getUnusedParameters(): List<KtParameter> =
+    valueParameters.asSequence()
+        .filter { it.notUsedIn(this) }
+        .toList()
+
+private fun KtLambdaExpression.getUnusedParameters(): List<KtNamedDeclaration> =
+    valueParameters.asSequence()
+        .flatMap { it.unusedParametersList(this) }
+        .toList()
+
+private fun KtNamedDeclaration.notUsedIn(ktElement: KtElement) =
+    name != "_"
+        && !ktElement.anyDescendantOfType<KtNameReferenceExpression> { it.getReferencedName() == name }
+
+private fun KtParameter.unusedParametersList(ktElement: KtElement) =
+    when {
+        destructuringDeclaration != null -> destructuringDeclaration!!.entries.filter { it.notUsedIn(ktElement) }
+        notUsedIn(ktElement) -> listOf(this)
+        else -> emptyList<KtNamedDeclaration>()
+    }

@@ -11,11 +11,11 @@ class UnusedPrivateMethodKotlinCheckTest {
     }
 
     private operator fun plus(p: Int) {
+        val x = fun () {} // Anonymous
     }
 
-    // TODO false-positive
-    private infix fun usedInfix(p: Int) = p // Noncompliant
-//                    ^^^^^^^^^
+
+    private infix fun usedInfix(p: Int) = p // Compliant, used as infix function
     init {
         this usedInfix 1
     }
