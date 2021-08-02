@@ -40,9 +40,6 @@ allprojects {
         set("orchestratorVersion", "3.35.0.2707")
         set("sonarlintVersion", "4.2.0.2266")
         set("sonarLinksCi", "https://travis-ci.org/SonarSource/slang")
-
-        set("artifactsToPublish", "")
-        set("artifactsToDownload", "")
     }
     // Replaces the version defined in sources, usually x.y-SNAPSHOT, by a version identifying the build.
     if (project.version.toString().endsWith("-SNAPSHOT") && ext["buildNumber"] != null) {
@@ -286,11 +283,9 @@ artifactory {
     clientConfig.envVarsExcludePatterns =
         "*password*,*PASSWORD*,*secret*,*MAVEN_CMD_LINE_ARGS*,sun.java.command,*token*,*TOKEN*,*LOGIN*,*login*,*key*,*KEY*,*PASSPHRASE*,*signing*"
 
-    val artifactsToPublish: String by project
-    val artifactsToDownload: String by project
     // Define the artifacts to be deployed to https://binaries.sonarsource.com on releases
-    clientConfig.info.addEnvironmentProperty("ARTIFACTS_TO_PUBLISH", artifactsToPublish)
-    clientConfig.info.addEnvironmentProperty("ARTIFACTS_TO_DOWNLOAD", artifactsToDownload)
+    clientConfig.info.addEnvironmentProperty("ARTIFACTS_TO_PUBLISH", "${project.group}:sonar-kotlin-plugin:jar")
+    clientConfig.info.addEnvironmentProperty("ARTIFACTS_TO_DOWNLOAD", "")
     // The name of this variable is important because it"s used by the delivery process when extracting version from Artifactory build info.
     clientConfig.info.addEnvironmentProperty("PROJECT_VERSION", version.toString())
 
