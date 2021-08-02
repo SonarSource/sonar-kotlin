@@ -31,13 +31,14 @@ import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.TextPointer
 import org.sonar.api.batch.fs.TextRange
-import org.sonar.api.batch.fs.internal.DefaultTextPointer
-import org.sonar.api.batch.fs.internal.DefaultTextRange
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textPointerAtOffset
 
 class CommentAnnotationsAndTokenVisitor(
     private val psiDocument: Document,
+    private val inputFile: InputFile,
 ) : KtTreeVisitorVoid() {
 
     companion object {
@@ -94,20 +95,17 @@ class CommentAnnotationsAndTokenVisitor(
             }
         val contentText = text.substring(prefixLength, length - suffixLength)
         val range = range(element)
-        val contentStart: TextPointer = DefaultTextPointer(range.start().line(), range.start().lineOffset() + prefixLength)
-        val contentEnd: TextPointer = DefaultTextPointer(range.end().line(), range.end().lineOffset() - suffixLength)
-        val contentRange: TextRange = DefaultTextRange(contentStart, contentEnd)
-        return Comment(text, contentText, range, contentRange)
+        return Comment(text, contentText, range)
     }
 
     private fun range(element: PsiElement): TextRange {
-        val start = KotlinTextRanges.textPointerAtOffset(psiDocument, element.startOffset)
-        val end = KotlinTextRanges.textPointerAtOffset(psiDocument, element.endOffset)
-        return DefaultTextRange(start, end)
+        val start = inputFile.textPointerAtOffset(psiDocument, element.startOffset)
+        val end = inputFile.textPointerAtOffset(psiDocument, element.endOffset)
+        return inputFile.newRange(start, end)
     }
 }
 
-data class Comment(val text: String, val contentText: String, val range: TextRange, val contentRange: TextRange)
+data class Comment(val text: String, val contentText: String, val range: TextRange)
 data class Token(var textRange: TextRange, val text: String, val type: Type) {
     enum class Type {
         KEYWORD, STRING_LITERAL, OTHER

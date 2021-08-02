@@ -21,7 +21,6 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtFile
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.DefaultTextPointer
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
@@ -53,7 +52,7 @@ class TooLongLineCheck : AbstractCheck() {
     }
 
     private fun getLineRange(inputFile: InputFile, lineNumber: Int, line: String) = inputFile.newRange(
-        DefaultTextPointer(lineNumber + 1, 0),
-        DefaultTextPointer(lineNumber + 1, line.length)
+        inputFile.newPointer(lineNumber + 1, 0),
+        inputFile.newPointer(lineNumber + 1, line.length)
     )
 }

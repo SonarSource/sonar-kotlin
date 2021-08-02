@@ -24,7 +24,6 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.TextPointer
 import org.sonar.api.batch.fs.TextRange
-import org.sonar.api.batch.fs.internal.DefaultTextPointer
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 object KotlinTextRanges {
@@ -34,14 +33,14 @@ object KotlinTextRanges {
         return newRange(startPointer.line(), startPointer.lineOffset(), endPointer.line(), endPointer.lineOffset())
     }
 
-    fun textPointerAtOffset(psiDocument: Document, startOffset: Int): TextPointer {
+    fun InputFile.textPointerAtOffset(psiDocument: Document, startOffset: Int): TextPointer {
         val startLineNumber = psiDocument.getLineNumber(startOffset)
         val startLineNumberOffset = psiDocument.getLineStartOffset(startLineNumber)
         val startLineOffset = startOffset - startLineNumberOffset
 
-        return DefaultTextPointer(startLineNumber + 1, startLineOffset)
+        return newPointer(startLineNumber + 1, startLineOffset)
     }
-
+    
     fun KotlinFileContext.textRange(psiElement: PsiElement) =
         inputFileContext.inputFile.textRange(ktFile.viewProvider.document!!, psiElement)
 

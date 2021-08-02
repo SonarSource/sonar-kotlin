@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.KotlinTextRanges
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textPointerAtOffset
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 val todoPattern = Regex("(?i)(^|[[^\\p{L}]&&\\D])(todo)($|[[^\\p{L}]&&\\D])")
@@ -44,9 +44,10 @@ class TodoCommentCheck : AbstractCheck() {
                 todoPattern.find(element.text)?.let { matchResult ->
                     val todoOffset = element.textOffset + matchResult.groups[2]!!.range.first
                     val document = kotlinFileContext.ktFile.viewProvider.document!!
-                    val todoRange = kotlinFileContext.inputFileContext.inputFile.newRange(
-                        KotlinTextRanges.textPointerAtOffset(document, todoOffset),
-                        KotlinTextRanges.textPointerAtOffset(document, todoOffset + 4)
+                    val inputFile = kotlinFileContext.inputFileContext.inputFile
+                    val todoRange = inputFile.newRange(
+                        inputFile.textPointerAtOffset(document, todoOffset),
+                        inputFile.textPointerAtOffset(document, todoOffset + 4)
                     )
                     kotlinFileContext.reportIssue(todoRange, "Complete the task associated to this TODO comment.")
                 }

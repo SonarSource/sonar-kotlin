@@ -25,6 +25,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder
+import java.nio.charset.StandardCharsets
 
 class KotlinTreeTest {
 
@@ -32,8 +34,13 @@ class KotlinTreeTest {
   fun testCreateKotlinTree() {
     val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"))
     val path = Path.of("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
-    val content = String(Files.readAllBytes(path))
-    val tree = KotlinTree.of(content, environment)
+    val content = String(Files.readAllBytes(path))   
+    val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin")
+      .setCharset(StandardCharsets.UTF_8)
+      .initMetadata(content)
+      .build()
+
+    val tree = KotlinTree.of(content, environment, inputFile)
     assertThat(tree.psiFile.children).hasSize(9)
 
     assertThat(tree.bindingContext.getSliceContents(BindingContext.RESOLVED_CALL)).hasSize(13)

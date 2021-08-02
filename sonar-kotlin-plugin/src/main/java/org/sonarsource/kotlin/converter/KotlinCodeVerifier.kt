@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.converter
 
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
@@ -35,7 +36,7 @@ import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
-import org.sonarsource.kotlin.api.ParseException
+import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 
 class KotlinCodeVerifier {
 
@@ -101,9 +102,11 @@ class KotlinCodeVerifier {
             val environment = Environment(emptyList())
             try {
                 val wrappedContent = "fun function () { $content }"
-                val kotlinTree = KotlinTree.of(wrappedContent, environment)
-                !isSimpleExpression(kotlinTree.psiFile)
-            } catch (e: ParseException) {
+
+                val ktFile = environment.ktPsiFactory.createFile(wrappedContent)
+                
+                ktFile.findDescendantOfType<PsiErrorElement>() == null && ! isSimpleExpression(ktFile)
+            } catch (e: Exception) {
                 false
             } finally {
                 Disposer.dispose(environment.disposable)

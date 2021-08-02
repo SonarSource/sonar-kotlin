@@ -26,17 +26,18 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.sonar.api.batch.fs.InputFile
 import org.sonarsource.kotlin.api.ParseException
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textPointerAtOffset
 
 class KotlinTree private constructor(
     val psiFile: KtFile,
     val document: Document,
     val bindingContext: BindingContext,
-    private val environment: Environment,
 ) {
     companion object {
         @JvmStatic
-        fun of(content: String, environment: Environment): KotlinTree {
+        fun of(content: String, environment: Environment, inputFile: InputFile): KotlinTree {
             val psiFile: KtFile = environment.ktPsiFactory.createFile(normalizeEol(content))
             val document = try {
                 psiFile.viewProvider.document ?: throw ParseException("Cannot extract document")
@@ -45,27 +46,27 @@ class KotlinTree private constructor(
                 throw ParseException("Cannot correctly map AST with a null Document object")
             }
 
-            checkParsingErrors(psiFile, document)
+            checkParsingErrors(psiFile, document, inputFile)
             val bindingContext = bindingContext(
                 environment.env,
                 environment.classpath,
                 listOf(psiFile),
             )
 
-            return KotlinTree(psiFile, document, bindingContext, environment)
+            return KotlinTree(psiFile, document, bindingContext)
         }
 
         private fun descendants(element: PsiElement): Sequence<PsiElement> {
             return element.children.asSequence().flatMap { tree: PsiElement -> sequenceOf(tree) + descendants(tree) }
         }
 
-        private fun checkParsingErrors(psiFile: PsiFile, document: Document) {
+        private fun checkParsingErrors(psiFile: PsiFile, document: Document, inputFile: InputFile) {
             descendants(psiFile)
                 .firstOrNull { it is PsiErrorElement }
                 ?.let { element: PsiElement ->
                     throw ParseException(
                         "Cannot convert file due to syntactic errors",
-                        KotlinTextRanges.textPointerAtOffset(document, element.startOffset)
+                        inputFile.textPointerAtOffset(document, element.startOffset)
                     )
                 }
         }

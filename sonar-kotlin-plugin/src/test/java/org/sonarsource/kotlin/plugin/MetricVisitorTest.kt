@@ -195,6 +195,6 @@ internal class MetricVisitorTest {
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(code).build()
         val ctx = InputFileContextImpl(sensorContext, inputFile)
-        visitor.scan(ctx, KotlinTree.of(code, environment))
+        visitor.scan(ctx, KotlinTree.of(code, environment, inputFile))
     }
 }

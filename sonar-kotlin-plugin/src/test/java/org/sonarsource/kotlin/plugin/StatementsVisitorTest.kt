@@ -22,7 +22,6 @@ package org.sonarsource.kotlin.plugin
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.KotlinTree
 
 internal class StatementsVisitorTest {
 
@@ -60,8 +59,8 @@ internal class StatementsVisitorTest {
 }
 
 private fun statements(content: String): Int {
-    val root = KotlinTree.of(content, Environment(emptyList()))
+    val ktFile = Environment(emptyList()).ktPsiFactory.createFile(content)
     val statementsVisitor = StatementsVisitor()
-    root.psiFile.accept(statementsVisitor)
+    ktFile.accept(statementsVisitor)
     return statementsVisitor.statements
 }
