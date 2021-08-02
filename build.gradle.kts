@@ -111,9 +111,9 @@ subprojects {
 
     tasks.jacocoTestReport {
         reports {
-            xml.setEnabled(true)
-            csv.setEnabled(false)
-            html.setEnabled(false)
+            xml.required.set(true)
+            csv.required.set(false)
+            html.required.set(false)
         }
     }
 
