@@ -1,6 +1,7 @@
 package org.sonarsource.kotlin.plugin
 
 import org.junit.jupiter.api.Test
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.checks.BadClassNameCheck
@@ -38,9 +39,15 @@ class IssueSuppressionVisitorTest {
         val env = Environment(emptyList())
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
-        val root = KotlinTree.of(testFileContent, env)
+        val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin")
+            .setCharset(StandardCharsets.UTF_8)
+            .initMetadata(testFileContent)
+            .build()
 
-        CommentAnnotationsAndTokenVisitor(root.document).apply { visitElement(root.psiFile) }.allComments
+        val root = KotlinTree.of(testFileContent, env, inputFile)
+
+        CommentAnnotationsAndTokenVisitor(root.document, inputFile)
+            .apply { visitElement(root.psiFile) }.allComments
             .forEach { comment: Comment ->
                 val start = comment.range.start()
                 verifier.addComment(start.line(), start.lineOffset() + 1, comment.text, 2, 0)

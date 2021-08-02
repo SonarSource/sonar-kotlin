@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.converter
 
 import org.assertj.core.api.Assertions
+import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.dev.AstPrinter
 import org.sonarsource.kotlin.api.ParseException
@@ -40,8 +41,8 @@ internal class KotlinASTTest {
     fun all_kotlin_files() {
         for (kotlinPath in kotlinSources()) {
             val astPath = Path.of(kotlinPath.toString().replaceFirst("\\.kts?$".toRegex(), ".txt"))
-            val kotlinTree = parse(kotlinPath)
-            val actualAst = AstPrinter.txtPrint(kotlinTree.psiFile, kotlinTree.document)
+            val ktFile = parse(kotlinPath)
+            val actualAst = AstPrinter.txtPrint(ktFile, ktFile.viewProvider.document)
             val expectingAst = if (astPath.toFile().exists()) astPath.readText() else ""
             Assertions.assertThat(actualAst.trim { it <= ' ' })
                 .describedAs("In the file: $astPath (run KotlinASTTest.main manually)")
@@ -53,7 +54,7 @@ internal class KotlinASTTest {
 private fun fix_all_cls_files_test_automatically() {
     for (kotlinPath in kotlinSources()) {
         val astPath = Path.of(kotlinPath.toString().replaceFirst("\\.kts?$".toRegex(), ".txt"))
-        val actualAst = AstPrinter.txtPrint(parse(kotlinPath).psiFile)
+        val actualAst = AstPrinter.txtPrint(parse(kotlinPath))
         Files.write(astPath, actualAst.toByteArray(StandardCharsets.UTF_8))
     }
 }
@@ -70,10 +71,10 @@ private fun kotlinSources(): List<Path> {
     }
 }
 
-private fun parse(path: Path): KotlinTree {
+private fun parse(path: Path): KtFile {
     val code = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
     return try {
-        KotlinTree.of(code, environment)
+        environment.ktPsiFactory.createFile(code.replace("""\r\n?""".toRegex(), "\n"))
     } catch (e: ParseException) {
         throw ParseException(e.message + " in file " + path, e.position, e)
     } catch (e: RuntimeException) {

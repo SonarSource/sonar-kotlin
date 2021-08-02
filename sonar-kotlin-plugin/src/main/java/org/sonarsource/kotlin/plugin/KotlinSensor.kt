@@ -150,7 +150,7 @@ class KotlinSensor(
         val inputFile = inputFileContext.inputFile
         val tree = statistics.time<KotlinTree>("Parse") {
             try {
-                KotlinTree.of(content, environment)
+                KotlinTree.of(content, environment, inputFile)
             } catch (e: RuntimeException) {
                 throw toParseException("parse", inputFile, e)
             }

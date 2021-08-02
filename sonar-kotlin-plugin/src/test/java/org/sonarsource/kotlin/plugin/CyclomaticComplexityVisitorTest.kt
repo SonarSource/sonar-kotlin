@@ -9,7 +9,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.KotlinTree
 
 internal class CyclomaticComplexityVisitorTest {
 
@@ -124,9 +123,9 @@ internal class CyclomaticComplexityVisitorTest {
 
     private fun getComplexityTrees(content: String): List<PsiElement> {
         val env = Environment(emptyList())
-        val root = KotlinTree.of(content, env)
+        val ktFile = env.ktPsiFactory.createFile(content)
         val cyclomaticComplexityVisitor = CyclomaticComplexityVisitor()
-        root.psiFile.accept(cyclomaticComplexityVisitor)
+        ktFile.accept(cyclomaticComplexityVisitor)
         return cyclomaticComplexityVisitor.complexityTrees()
     }
 }

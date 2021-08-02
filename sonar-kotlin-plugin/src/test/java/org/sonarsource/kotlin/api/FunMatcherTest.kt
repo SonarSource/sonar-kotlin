@@ -27,8 +27,10 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.junit.jupiter.api.Test
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
+import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -37,7 +39,12 @@ class FunMatcherTest {
     val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"))
     val path = Paths.get("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
-    val tree = KotlinTree.of(content, environment)
+    val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin")
+        .setCharset(StandardCharsets.UTF_8)
+        .initMetadata(content)
+        .build()
+
+    val tree = KotlinTree.of(content, environment, inputFile)
     private val allCallExpressions = tree.psiFile.collectDescendantsOfType<KtCallExpression>()
 
     // sampleClass.sayHello("Kotlin")

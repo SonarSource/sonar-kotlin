@@ -21,6 +21,8 @@ package org.sonarsource.kotlin.verifier
 
 import io.mockk.InternalPlatformDsl.toStr
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
 import org.sonarsource.kotlin.DummyInputFile
 import org.sonarsource.kotlin.api.AbstractCheck
@@ -52,7 +54,12 @@ class KotlinVerifier(private val check: AbstractCheck) {
 
     fun verify() {
         val environment = Environment(classpath + deps)
-        val converter = { content: String -> KotlinTree.of(content, environment) }
+        val converter = { content: String ->
+            val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin")
+                .setCharset(StandardCharsets.UTF_8)
+                .initMetadata(content).build()
+            KotlinTree.of(content, environment, inputFile) to inputFile
+        }
         createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check)
             .assertOneOrMoreIssues()
         Disposer.dispose(environment.disposable)
@@ -60,24 +67,28 @@ class KotlinVerifier(private val check: AbstractCheck) {
 
     fun verifyNoIssue() {
         val environment = Environment(classpath + deps)
-        val converter = { content: String -> KotlinTree.of(content, environment) }
+        val converter = { content: String ->
+            val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin")
+                .setCharset(StandardCharsets.UTF_8)
+                .initMetadata(content).build()
+            KotlinTree.of(content, environment, inputFile) to inputFile
+        }
         createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check)
             .assertNoIssues()
         Disposer.dispose(environment.disposable)
     }
 
     private fun createVerifier(
-        converter: (String) -> KotlinTree,
+        converter: (String) -> Pair<KotlinTree, InputFile>,
         path: Path,
         check: AbstractCheck,
     ): SingleFileVerifier {
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
 
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
-        val root = converter(testFileContent)
-        val inputFile = DummyInputFile(path)
+        val (root, inputFile) = converter(testFileContent)
 
-        CommentAnnotationsAndTokenVisitor(root.document).apply { visitElement(root.psiFile) }.allComments
+        CommentAnnotationsAndTokenVisitor(root.document, inputFile).apply { visitElement(root.psiFile) }.allComments
             .forEach { comment: Comment ->
                 val start = comment.range.start()
                 verifier.addComment(start.line(), start.lineOffset() + 1, comment.text, 2, 0)

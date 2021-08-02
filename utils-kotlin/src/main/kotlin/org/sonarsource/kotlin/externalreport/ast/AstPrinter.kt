@@ -1,7 +1,6 @@
 package org.sonarsource.kotlin.externalreport.ast
 
 import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.dev.AstPrinter
 import java.nio.file.Path
 import kotlin.io.path.readText
@@ -15,15 +14,15 @@ fun main(vararg args: String) {
     val inputFile = Path.of(args[1])
     val environment = Environment(emptyList())
 
-    val kotlinTree by lazy { KotlinTree.of(inputFile.readText(), environment) }
+    val ktFile by lazy { environment.ktPsiFactory.createFile(inputFile.readText()) }
 
     when (mode) {
         "dot" ->
-            if (args.size > 2) AstPrinter.dotPrint(kotlinTree.psiFile, Path.of(args[2]))
-            else println(AstPrinter.dotPrint(kotlinTree.psiFile))
+            if (args.size > 2) AstPrinter.dotPrint(ktFile, Path.of(args[2]))
+            else println(AstPrinter.dotPrint(ktFile))
         "txt" ->
-            if (args.size > 2) AstPrinter.txtPrint(kotlinTree.psiFile, Path.of(args[2]), kotlinTree.document)
-            else println(AstPrinter.txtPrint(kotlinTree.psiFile, kotlinTree.document))
+            if (args.size > 2) AstPrinter.txtPrint(ktFile, Path.of(args[2]), ktFile.viewProvider.document)
+            else println(AstPrinter.txtPrint(ktFile, ktFile.viewProvider.document))
         else -> exitWithUsageInfoAndError()
     }
 }
