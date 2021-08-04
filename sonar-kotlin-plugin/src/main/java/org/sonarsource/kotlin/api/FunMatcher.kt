@@ -66,19 +66,19 @@ class FunMatcher(
     fun matches(node: KtCallExpression, bindingContext: BindingContext): Boolean {
         val call = node.getCall(bindingContext)
         val functionDescriptor = bindingContext.get(BindingContext.RESOLVED_CALL, call)?.resultingDescriptor
-        return checkFunctionDescriptor(functionDescriptor)
+        return matches(functionDescriptor)
     }
 
     fun matches(node: KtNamedFunction, bindingContext: BindingContext): Boolean {
         val functionDescriptor = bindingContext.get(BindingContext.FUNCTION, node)
-        return checkFunctionDescriptor(functionDescriptor)
+        return matches(functionDescriptor)
     }
 
     fun matches(call: Call, bindingContext: BindingContext) = matches(bindingContext.get(RESOLVED_CALL, call))
 
-    fun matches(call: ResolvedCall<*>?) = checkFunctionDescriptor(call?.resultingDescriptor)
+    fun matches(call: ResolvedCall<*>?) = matches(call?.resultingDescriptor)
 
-    private fun checkFunctionDescriptor(functionDescriptor: CallableDescriptor?) =
+    fun matches(functionDescriptor: CallableDescriptor?) =
         functionDescriptor != null &&
             checkIsDynamic(functionDescriptor) &&
             checkIsExtensionFunction(functionDescriptor) &&

@@ -42,6 +42,7 @@ import org.sonarsource.kotlin.checks.EmptyCommentCheck
 import org.sonarsource.kotlin.checks.EmptyFunctionCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
 import org.sonarsource.kotlin.checks.ExposedMutableFlowCheck
+import org.sonarsource.kotlin.checks.ExternalAndroidStorageAccessCheck
 import org.sonarsource.kotlin.checks.FileHeaderCheck
 import org.sonarsource.kotlin.checks.FinalFlowOperationCheck
 import org.sonarsource.kotlin.checks.FixMeCommentCheck
@@ -109,8 +110,9 @@ val KOTLIN_CHECKS = listOf(
     EmptyBlockCheck::class.java,
     EmptyCommentCheck::class.java,
     EmptyFunctionCheck::class.java,
-    ExposedMutableFlowCheck::class.java,
     EncryptionAlgorithmCheck::class.java,
+    ExposedMutableFlowCheck::class.java,
+    ExternalAndroidStorageAccessCheck::class.java,
     FileHeaderCheck::class.java,
     FinalFlowOperationCheck::class.java,
     FixMeCommentCheck::class.java,
