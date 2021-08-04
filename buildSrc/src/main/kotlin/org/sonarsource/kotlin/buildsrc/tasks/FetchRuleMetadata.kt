@@ -8,6 +8,8 @@ import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.repositories
 import org.gradle.process.ExecResult
 
+const val ruleApiVersion = "2.0.0.1885"
+
 abstract class FetchRuleMetadata : DefaultTask() {
 
     @get:Input
@@ -31,7 +33,7 @@ abstract class FetchRuleMetadata : DefaultTask() {
 
         val ruleApi = project.configurations.create("ruleApi")
         project.dependencies {
-            ruleApi("com.sonarsource.rule-api:rule-api:2.0.0.1885")
+            ruleApi("com.sonarsource.rule-api:rule-api:$ruleApiVersion")
         }
 
         return project.javaexec {

@@ -4,9 +4,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.provideDelegate
-import org.gradle.kotlin.dsl.repositories
 import org.sonarsource.kotlin.buildsrc.tasks.Templates.checkListFile
 import org.sonarsource.kotlin.buildsrc.tasks.Templates.checksDir
 import org.sonarsource.kotlin.buildsrc.tasks.Templates.generateCheckClass
@@ -60,44 +58,29 @@ abstract class CreateRuleStubsTask : DefaultTask() {
         finishedTasks.forEach { logger.info("${it.first}: ${if (it.second) "successful" else "FAILED"}") }
     }
 
-    private fun createCheckClass(checkClassName: String): Boolean {
-        val checkFile = checksDir.resolve("${checkClassName}.kt")
-        val messageLine = message?.let { """private const val MESSAGE = "$it"""" }
-        return if (checkFile.notExists()) {
-            checkFile.createFile()
-            checkFile.writeText(generateCheckClass(ruleKey, checkClassName, messageLine))
-            true
-        } else {
-            logger.warn("WARNING: Check file '$checkFile' exists. Not creating a new one.")
-            false
-        }
-    }
+    private fun createCheckClass(checkClassName: String) =
+        createNewFile(
+            checksDir.resolve("${checkClassName}.kt"),
+            generateCheckClass(ruleKey, checkClassName, message?.let { """private const val MESSAGE = "$it"""" })
+        )
 
     private fun createTestClass(checkClassName: String): Boolean {
         val testClassName = "${checkClassName}Test"
-        val testFile = testsDir.resolve("${testClassName}.kt")
-        return if (testFile.notExists()) {
-            testFile.createFile()
-            testFile.writeText(generateTestClass(testClassName, checkClassName))
-            true
-        } else {
-            logger.warn("WARNING: Test file '$testFile' exists. Not creating a new one.")
-            false
-        }
+        return createNewFile(testsDir.resolve("${testClassName}.kt"), generateTestClass(testClassName, checkClassName))
     }
 
-    private fun createSampleFile(checkClassName: String): Boolean {
-        val sampleClassName = "${checkClassName}Sample"
-        val sampleFile = samplesDir.resolve("${sampleClassName}.kt")
-        return if (sampleFile.notExists()) {
-            sampleFile.createFile()
-            sampleFile.writeText(generateCheckFile(ruleKey))
+    private fun createSampleFile(checkClassName: String) =
+        createNewFile(samplesDir.resolve("${checkClassName}Sample.kt"), generateCheckFile(ruleKey))
+
+    private fun createNewFile(targetFile: Path, content: String) =
+        if (targetFile.notExists()) {
+            targetFile.createFile()
+            targetFile.writeText(content)
             true
         } else {
-            logger.warn("WARNING: Sample file '$sampleFile' exists. Not creating a new one.")
+            logger.warn("WARNING: File '$targetFile' exists. Not creating a new one.")
             false
         }
-    }
 
     private fun addRuleToChecksListFile(checkClassName: String): Boolean {
         val read = checkListFile.readLines()
