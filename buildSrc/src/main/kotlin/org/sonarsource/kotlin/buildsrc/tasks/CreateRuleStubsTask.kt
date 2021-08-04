@@ -35,10 +35,8 @@ abstract class CreateRuleStubsTask : DefaultTask() {
     @get:Optional
     val message: String? by project
 
-
     @TaskAction
     fun execute() {
-
         val checkClassName = if (className.endsWith("Check")) {
             className
         } else {
@@ -56,7 +54,6 @@ abstract class CreateRuleStubsTask : DefaultTask() {
             "Create Test Class" to createTestClass(checkClassName),
             "Create Sample File" to createSampleFile(checkClassName),
             "Add Rule to KotlinCheckList" to addRuleToChecksListFile(checkClassName),
-            "Download Metadata" to downloadMetadata(),
         )
 
         logger.info("--------- Done ---------")
@@ -150,36 +147,6 @@ abstract class CreateRuleStubsTask : DefaultTask() {
         checkListFile.writeLines(toWrite)
 
         return fileSegment == 4
-    }
-
-    private fun downloadMetadata(): Boolean {
-        project.repositories {
-            maven {
-                url = project.uri("https://repox.jfrog.io/repox/sonarsource-private-releases")
-                authentication {
-                    credentials {
-                        val artifactoryUsername: String by project
-                        val artifactoryPassword: String by project
-                        username = artifactoryUsername
-                        password = artifactoryPassword
-                    }
-                }
-            }
-        }
-
-        val ruleApi = project.configurations.create("ruleApi")
-        project.dependencies {
-            ruleApi("com.sonarsource.rule-api:rule-api:2.0.0.1885")
-        }
-
-        val exec = project.javaexec {
-            classpath = project.files(ruleApi.resolve())
-            args = listOf("generate", "-rule", ruleKey)
-            mainClass.set("com.sonarsource.ruleapi.Main")
-            workingDir = project.project(":sonar-kotlin-plugin").projectDir
-        }
-
-        return exec.exitValue == 0
     }
 }
 
