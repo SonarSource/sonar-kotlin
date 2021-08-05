@@ -32,10 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import javax.annotation.CheckForNull;
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -43,6 +40,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonarsource.sonarlint.core.StandaloneSonarLintEngineImpl;
+import org.sonarsource.sonarlint.core.client.api.common.Language;
 import org.sonarsource.sonarlint.core.client.api.common.analysis.ClientInputFile;
 import org.sonarsource.sonarlint.core.client.api.common.analysis.Issue;
 import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneAnalysisConfiguration;
@@ -83,6 +81,7 @@ public class SonarLintTest {
       }).forEach(sonarLintConfigBuilder::addPlugin);
 
     sonarLintConfigBuilder
+      .addEnabledLanguage(Language.KOTLIN)
       .setSonarLintUserHome(temp.newFolder().toPath())
       .setLogOutput((formattedMessage, level) -> {
         /* Don't pollute logs */
@@ -108,11 +107,13 @@ public class SonarLintTest {
       false, "kotlin");
 
     List<Issue> issues = new ArrayList<>();
-    sonarlintEngine.analyze(
-      new StandaloneAnalysisConfiguration(baseDir.toPath(), temp.newFolder().toPath(), Collections.singletonList(inputFile), new HashMap<>()),
-      issues::add, null, null);
+    StandaloneAnalysisConfiguration standaloneAnalysisConfiguration = StandaloneAnalysisConfiguration.builder()
+      .setBaseDir(baseDir.toPath())
+      .addInputFile(inputFile)
+      .build();
+    sonarlintEngine.analyze(standaloneAnalysisConfiguration, issues::add, null, null);
 
-    assertThat(issues).extracting("ruleKey", "startLine", "inputFile.path", "severity").containsOnly(
+    assertThat(issues).extracting(Issue::getRuleKey, Issue::getStartLine, issue -> issue.getInputFile().getPath(), Issue::getSeverity).containsOnly(
       tuple("kotlin:S100", 1, inputFile.getPath(), "MINOR"),
       tuple("kotlin:S1145", 2, inputFile.getPath(), "MAJOR"),
       tuple("kotlin:S1481", 3, inputFile.getPath(), "MINOR"));
@@ -168,11 +169,6 @@ public class SonarLintTest {
         return Files.newInputStream(path);
       }
 
-      @CheckForNull
-      @Override
-      public String language() {
-        return language;
-      }
     };
   }
 
