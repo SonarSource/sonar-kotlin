@@ -49,7 +49,7 @@ private val IV_PARAMETER_SPEC_MATCHER = ConstructorMatcher("javax.crypto.spec.Iv
 
 @Rule(key = "S3329")
 class CipherBlockChainingCheck : CallAbstractCheck() {
-    override fun functionsToVisit() = listOf(CIPHER_INIT_MATCHER)
+    override val functionsToVisit = listOf(CIPHER_INIT_MATCHER)
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,

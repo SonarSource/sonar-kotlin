@@ -44,7 +44,7 @@ private val HOTSPOT_PROPS = listOf(
 
 @Rule(key = "S5324")
 class ExternalAndroidStorageAccessCheck : CallAbstractCheck() {
-    override fun functionsToVisit() = HOTSPOT_FUNS
+    override val functionsToVisit = HOTSPOT_FUNS
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)

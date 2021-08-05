@@ -19,7 +19,7 @@ private const val DISPATCHERS_OBJECT = "$KOTLINX_COROUTINES_PACKAGE.Dispatchers"
 
 @Rule(key = "S6310")
 class InjectableDispatchersCheck : CallAbstractCheck() {
-    override fun functionsToVisit() = FUNS_ACCEPTING_DISPATCHERS
+    override val functionsToVisit = FUNS_ACCEPTING_DISPATCHERS
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         val bindingContext = kotlinFileContext.bindingContext

@@ -30,7 +30,7 @@ private val LAUNCH_ASYNC_MATCHER = FunMatcher(qualifier = KOTLINX_COROUTINES_PAC
 
 @Rule(key = "S6316")
 class CoroutinesTimeoutApiUnusedCheck : CallAbstractCheck() {
-    override fun functionsToVisit() = listOf(FunMatcher(supertype = "$KOTLINX_COROUTINES_PACKAGE.Job", name = "cancel"))
+    override val functionsToVisit = listOf(FunMatcher(supertype = "$KOTLINX_COROUTINES_PACKAGE.Job", name = "cancel"))
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,

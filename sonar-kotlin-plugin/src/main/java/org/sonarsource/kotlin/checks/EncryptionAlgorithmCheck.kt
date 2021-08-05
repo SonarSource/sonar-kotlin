@@ -40,7 +40,7 @@ val CIPHER_GET_INSTANCE_MATCHER = FunMatcher {
 @Rule(key = "S5542")
 class EncryptionAlgorithmCheck : CallAbstractCheck() {
 
-    override fun functionsToVisit() = listOf(CIPHER_GET_INSTANCE_MATCHER)
+    override val functionsToVisit = listOf(CIPHER_GET_INSTANCE_MATCHER)
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
