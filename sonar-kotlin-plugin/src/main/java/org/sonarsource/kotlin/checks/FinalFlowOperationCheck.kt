@@ -13,7 +13,7 @@ private const val MESSAGE = "Unused coroutines Flow"
 
 @Rule(key = "S6314")
 class FinalFlowOperationCheck : CallAbstractCheck() {
-    override fun functionsToVisit() = listOf(FunMatcher(returnType = COROUTINES_FLOW))
+    override val functionsToVisit = listOf(FunMatcher(returnType = COROUTINES_FLOW))
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         if (callExpression.isUsedAsStatement(kotlinFileContext.bindingContext)) {

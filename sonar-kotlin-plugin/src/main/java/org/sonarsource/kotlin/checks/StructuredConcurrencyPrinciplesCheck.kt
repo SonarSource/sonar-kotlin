@@ -29,7 +29,7 @@ private const val DELICATE_API_CLASS_TYPE = "kotlin.reflect.KClass<kotlinx.corou
 @Rule(key = "S6306")
 class StructuredConcurrencyPrinciplesCheck : CallAbstractCheck() {
 
-    override fun functionsToVisit() = FUNS_ACCEPTING_DISPATCHERS
+    override val functionsToVisit = FUNS_ACCEPTING_DISPATCHERS
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         val bindingContext = kotlinFileContext.bindingContext

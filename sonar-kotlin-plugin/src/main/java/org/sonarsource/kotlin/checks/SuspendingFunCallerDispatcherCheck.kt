@@ -13,7 +13,7 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 @Rule(key = "S6311")
 class SuspendingFunCallerDispatcherCheck : CallAbstractCheck() {
-    override fun functionsToVisit() = FUNS_ACCEPTING_DISPATCHERS
+    override val functionsToVisit = FUNS_ACCEPTING_DISPATCHERS
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
