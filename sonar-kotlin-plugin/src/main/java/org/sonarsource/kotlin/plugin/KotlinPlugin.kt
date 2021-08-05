@@ -19,10 +19,15 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtProperty
 import org.sonar.api.Plugin
 import org.sonar.api.SonarProduct
 import org.sonar.api.config.PropertyDefinition
 import org.sonar.api.resources.Qualifiers
+import org.sonarsource.kotlin.api.determineTypeAsString
+import org.sonarsource.kotlin.converter.Environment
+import org.sonarsource.kotlin.converter.bindingContext
 import org.sonarsource.kotlin.externalreport.androidlint.AndroidLintRulesDefinition
 import org.sonarsource.kotlin.externalreport.androidlint.AndroidLintSensor
 import org.sonarsource.kotlin.externalreport.detekt.DetektRulesDefinition
@@ -110,4 +115,23 @@ class KotlinPlugin : Plugin {
             )
         }
     }
+}
+
+fun isInAndroidContext(environment: Environment) : Boolean {
+    val content = """
+        |import android.app.Application
+        |
+        |val x: Application
+    """.trimMargin()
+
+    val psiFile: KtFile = environment.ktPsiFactory.createFile(content)
+
+    val bindingContext = bindingContext(
+        environment.env,
+        environment.classpath,
+        listOf(psiFile),
+    )
+
+    val ktProperty = psiFile.children[3] as KtProperty
+    return ktProperty.determineTypeAsString(bindingContext) == "android.app.Application"
 }

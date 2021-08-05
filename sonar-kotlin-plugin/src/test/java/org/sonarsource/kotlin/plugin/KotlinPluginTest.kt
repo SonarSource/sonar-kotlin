@@ -26,6 +26,7 @@ import org.sonar.api.SonarQubeSide
 import org.sonar.api.internal.PluginContextImpl
 import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
+import org.sonarsource.kotlin.converter.Environment
 
 internal class KotlinPluginTest {
     @Test
@@ -44,5 +45,19 @@ internal class KotlinPluginTest {
         val kotlinPlugin = KotlinPlugin()
         kotlinPlugin.define(context)
         Assertions.assertThat(context.extensions).hasSize(4)
+    }
+    
+    @Test
+    fun test_android_context() {
+        val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/java/main"))
+        
+        Assertions.assertThat(isInAndroidContext(environment)).isTrue
+    }
+    
+    @Test
+    fun test_non_android_context() {
+        val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"))
+        
+        Assertions.assertThat(isInAndroidContext(environment)).isFalse
     }
 }

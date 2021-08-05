@@ -194,7 +194,7 @@ internal class MetricVisitorTest {
         inputFile = TestInputFileBuilder("moduleKey", tempFolder.newFile().name)
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(code).build()
-        val ctx = InputFileContextImpl(sensorContext, inputFile)
+        val ctx = InputFileContextImpl(sensorContext, inputFile, false)
         visitor.scan(ctx, KotlinTree.of(code, environment, inputFile))
     }
 }

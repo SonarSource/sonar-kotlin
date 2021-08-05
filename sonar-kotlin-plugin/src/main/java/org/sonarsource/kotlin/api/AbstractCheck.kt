@@ -75,6 +75,8 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
         secondaryLocations: List<SecondaryLocation> = emptyList(),
         gap: Double? = null,
     ) = reportIssue(textRange(psiElement), message, secondaryLocations, gap)
+    
+    internal fun KotlinFileContext.isInAndroid() = inputFileContext.isAndroid
 
     internal fun KtParameter.typeAsString(bindingContext: BindingContext) =
         bindingContext.get(BindingContext.VALUE_PARAMETER, this)?.type.toString()

@@ -14,6 +14,7 @@ private const val PARSING_ERROR_RULE_KEY = "ParsingError"
 class InputFileContextImpl(
     override val sensorContext: SensorContext,
     override val inputFile: InputFile,
+    override val isAndroid: Boolean,
 ) : InputFileContext {
 
     override var filteredRules: Map<String, Set<TextRange>> = HashMap()

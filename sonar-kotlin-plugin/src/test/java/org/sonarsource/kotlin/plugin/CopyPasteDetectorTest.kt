@@ -61,7 +61,7 @@ class CopyPasteDetectorTest {
             .build()
 
         val root = KotlinTree.of(content, Environment(emptyList()), inputFile)
-        val ctx = InputFileContextImpl(sensorContext, inputFile)
+        val ctx = InputFileContextImpl(sensorContext, inputFile, false)
         CopyPasteDetector().scan(ctx, root)
 
         val cpdTokenLines = sensorContext.cpdTokens(inputFile.key())!!
