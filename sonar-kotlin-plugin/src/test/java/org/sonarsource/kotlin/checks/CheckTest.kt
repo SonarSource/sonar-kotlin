@@ -11,6 +11,7 @@ abstract class CheckTest(
     val sampleFileSemantics: String? = null,
     val classpath: List<String>? = null,
     val dependencies: List<String>? = null,
+    val isAndroid: Boolean = false
 ) {
     protected val checkName = check::class.java.simpleName
 
@@ -20,6 +21,7 @@ abstract class CheckTest(
             this.fileName = sampleFileSemantics ?: "$checkName$TEST_FILE_POSTFIX"
             this@CheckTest.classpath?.let { this.classpath = it }
             this@CheckTest.dependencies?.let { this.deps = it }
+            this.isAndroid = this@CheckTest.isAndroid
         }.verify()
     }
 }

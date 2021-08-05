@@ -10,6 +10,7 @@ interface InputFileContext {
     var filteredRules: Map<String, Set<TextRange>>
     val inputFile: InputFile
     val sensorContext: SensorContext
+    val isAndroid: Boolean
 
     fun reportIssue(
         ruleKey: RuleKey,
