@@ -1,0 +1,27 @@
+{
+  "title": "Accessing Android external storage is security-sensitive",
+  "type": "SECURITY_HOTSPOT",
+  "status": "ready",
+  "tags": [
+    "cwe",
+    "sans-top25-risky",
+    "android",
+    "sans-top25-porous",
+    "owasp-m2"
+  ],
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-5324",
+  "sqKey": "S5324",
+  "scope": "Main",
+  "securityStandards": {
+    "CWE": [
+      312
+    ],
+    "OWASP Mobile": [
+      "M2"
+    ],
+    "MASVS": [
+      "MSTG-STORAGE-1"
+    ]
+  }
+}
