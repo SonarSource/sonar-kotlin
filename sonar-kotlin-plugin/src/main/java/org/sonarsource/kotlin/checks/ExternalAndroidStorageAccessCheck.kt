@@ -47,8 +47,7 @@ class ExternalAndroidStorageAccessCheck : CallAbstractCheck() {
     override fun functionsToVisit() = HOTSPOT_FUNS
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
-        val calleeExpression = callExpression.calleeExpression ?: return
-        kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
+        kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
     }
 
     override fun visitReferenceExpression(expression: KtReferenceExpression, kotlinFileContext: KotlinFileContext) {
