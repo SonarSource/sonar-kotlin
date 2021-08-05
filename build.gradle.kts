@@ -1,6 +1,7 @@
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import java.util.Calendar
-import java.util.jar.JarInputStream
+import org.sonarsource.kotlin.buildsrc.tasks.CreateRuleStubsTask
+import org.sonarsource.kotlin.buildsrc.tasks.FetchRuleMetadata
 
 plugins {
     java
@@ -318,3 +319,8 @@ artifactory {
         })
     }
 }
+
+tasks.register<CreateRuleStubsTask>("setupRuleStubs") {
+    finalizedBy(tasks.findByPath(":generateRuleMetadata"))
+}
+tasks.register<FetchRuleMetadata>("generateRuleMetadata")
