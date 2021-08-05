@@ -56,6 +56,7 @@ import org.sonarsource.kotlin.checks.IfConditionalAlwaysTrueOrFalseCheck
 import org.sonarsource.kotlin.checks.InjectableDispatchersCheck
 import org.sonarsource.kotlin.checks.MainSafeCoroutinesCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
+import org.sonarsource.kotlin.checks.MobileDatabaseEncryptionKeysCheck
 import org.sonarsource.kotlin.checks.NestedMatchCheck
 import org.sonarsource.kotlin.checks.OneStatementPerLineCheck
 import org.sonarsource.kotlin.checks.ParsingErrorCheck
@@ -125,7 +126,8 @@ val KOTLIN_CHECKS = listOf(
     IfConditionalAlwaysTrueOrFalseCheck::class.java,
     InjectableDispatchersCheck::class.java,
     MainSafeCoroutinesCheck::class.java,
-    MatchCaseTooBigCheck::class.java,
+    MatchCaseTooBigCheck::class.java, 
+    MobileDatabaseEncryptionKeysCheck::class.java,
     NestedMatchCheck::class.java,
     OneStatementPerLineCheck::class.java,
     ParsingErrorCheck::class.java,
