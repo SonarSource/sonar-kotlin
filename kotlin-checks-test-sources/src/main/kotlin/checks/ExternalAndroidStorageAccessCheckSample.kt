@@ -5,7 +5,7 @@ import android.os.Environment;
 
 class ExternalAndroidStorageAccessCheckSample {
     fun environmentNoncompliant(env: Environment) {
-        env.getExternalStoragePublicDirectory("foo") // Noncompliant {{Accessing Android external storage is security-sensitive}}
+        env.getExternalStoragePublicDirectory("foo") // Noncompliant {{Make sure accessing the Android external storage is safe here}}
 //          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         env.getExternalStorageDirectory() // Noncompliant
     }
