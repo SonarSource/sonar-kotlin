@@ -16,7 +16,7 @@ class UnusedDeferredResultCheck : AbstractCheck() {
         if (expression.expressionTypeFqn(bindingContext) == DEFERRED_FQN
             && expression.isUsedAsStatement(bindingContext)
         ) {
-            context.reportIssue(expression.calleeExpression!!, """This function returns "Deferred", but its result is never used""")
+            context.reportIssue(expression.calleeExpression!!, """This function returns "Deferred", but its result is never used.""")
             return
         }
     }

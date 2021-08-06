@@ -51,7 +51,8 @@ class FixMeCommentCheck : AbstractCheck() {
                     )
                     kotlinFileContext.reportIssue(
                         fixmeRange,
-                        "Take the required action to fix the issue indicated by this \"FIXME\" comment.")
+                        """Take the required action to fix the issue indicated by this "FIXME" comment."""
+                    )
                 }
             }
         })

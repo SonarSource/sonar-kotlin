@@ -40,8 +40,7 @@ class CodeAfterJumpCheck : AbstractCheck() {
         for (i in 0 until statementsOrExpressions.size - 1) {
             val current = statementsOrExpressions[i]
             getJump(current)?.let {
-                context.reportIssue(current,
-                    "Refactor this piece of code to not have any dead code after this \"$it\".")
+                context.reportIssue(current, """Refactor this piece of code to not have any dead code after this "$it".""")
             }
         }
     }

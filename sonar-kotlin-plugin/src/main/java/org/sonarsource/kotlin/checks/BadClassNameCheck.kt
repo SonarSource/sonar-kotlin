@@ -51,7 +51,7 @@ class BadClassNameCheck : AbstractCheck() {
         if (ktClass !is KtEnumEntry && !name.matches(formatRegex)) {
             context.reportIssue(
                 ktClass.nameIdentifier!!,
-                "Rename class \"$name\" to match the regular expression $format.",
+                """Rename class "$name" to match the regular expression $format""",
             )
         }
     }

@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 
 suspend fun unused() {
     
-    coroutineScope { // Noncompliant {{This function returns "Deferred", but its result is never used}} 
+    coroutineScope { // Noncompliant {{This function returns "Deferred", but its result is never used.}}
 //  ^^^^^^^^^^^^^^
         async { 
             delay(500L)
@@ -17,20 +17,20 @@ suspend fun unused() {
         }
     }
     
-    MainScope().async { // Noncompliant {{This function returns "Deferred", but its result is never used}} 
+    MainScope().async { // Noncompliant
 //              ^^^^^
             delay(500L)
             1
         }
     
     coroutineScope { 
-        async { // Noncompliant {{This function returns "Deferred", but its result is never used}}
+        async { // Noncompliant
             delay(500L)
             1
         }
         123
     }
-    coroutineScope { // Noncompliant {{This function returns "Deferred", but its result is never used}}
+    coroutineScope { // Noncompliant
         coroutineScope {
             coroutineScope {
                 coroutineScope {
@@ -43,21 +43,21 @@ suspend fun unused() {
         }
     }
     val a = coroutineScope {
-        async { // Noncompliant {{This function returns "Deferred", but its result is never used}}
+        async { // Noncompliant
             delay(500L)
             1
         }
         123
     }
 
-    coroutineScope { // Noncompliant {{This function returns "Deferred", but its result is never used}}
+    coroutineScope { // Noncompliant
         async {
             delay(500L)
             1
         }.apply {  }
     }
 
-    coroutineScope { // Noncompliant {{This function returns "Deferred", but its result is never used}}
+    coroutineScope { // Noncompliant
         async {
             delay(500L)
             1

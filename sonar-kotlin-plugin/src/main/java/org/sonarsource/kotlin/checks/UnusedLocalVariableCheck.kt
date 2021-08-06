@@ -57,8 +57,7 @@ class UnusedLocalVariableCheck : AbstractCheck() {
             if (property.isLocal && !anyDescendantOfType<KtNameReferenceExpression> {
                         reference -> reference.getReferencedName() == property.name
             }) {
-                context.reportIssue(nameIdentifier,
-                    "Remove this unused \"${nameIdentifier.text}\" local variable.")
+                context.reportIssue(nameIdentifier, """Remove this unused "${nameIdentifier.text}" local variable.""")
             }
         }
     }

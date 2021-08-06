@@ -9,7 +9,7 @@ import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private const val MESSAGE = "Unused coroutines Flow"
+private const val MESSAGE = "Unused coroutines Flow."
 
 @Rule(key = "S6314")
 class FinalFlowOperationCheck : CallAbstractCheck() {

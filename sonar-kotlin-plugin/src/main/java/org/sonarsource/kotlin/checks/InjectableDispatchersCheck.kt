@@ -14,7 +14,7 @@ import org.sonarsource.kotlin.api.scope
 import org.sonarsource.kotlin.api.secondaryOf
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private const val MESSAGE = "Avoid hardcoded dispatchers"
+private const val MESSAGE = "Avoid hardcoded dispatchers."
 private const val DISPATCHERS_OBJECT = "$KOTLINX_COROUTINES_PACKAGE.Dispatchers"
 
 @Rule(key = "S6310")

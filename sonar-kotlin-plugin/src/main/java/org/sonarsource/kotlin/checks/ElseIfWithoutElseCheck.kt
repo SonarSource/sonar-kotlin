@@ -49,7 +49,7 @@ class ElseIfWithoutElseCheck : AbstractCheck() {
         //   - at least one branch does not finish with return/break/throw
         //   - no "else" is defined
         if (!allTerminate && lastIfExpression.`else` == null) {
-            kotlinFileContext.reportIssue(lastIfExpression.ifKeyword, "Add the missing \"else\" clause.")
+            kotlinFileContext.reportIssue(lastIfExpression.ifKeyword, """Add the missing "else" clause.""")
         }
     }
 

@@ -48,12 +48,12 @@ class BooleanInversionCheck : AbstractCheck() {
             is KtBinaryExpression -> {
                 val oppositeOperator = OPERATORS[innerExpression.operationToken]
                 if (oppositeOperator != null) {
-                    context.reportIssue(expression, "Use the opposite operator (\"$oppositeOperator\") instead.")
+                    context.reportIssue(expression, """Use the opposite operator ("$oppositeOperator") instead.""")
                 }
             }
             is KtIsExpression -> {
                 val oppositeOperator = if (innerExpression.isNegated) "is" else "!is"
-                context.reportIssue(expression, "Use the opposite operator (\"$oppositeOperator\") instead.")
+                context.reportIssue(expression, """Use the opposite operator ("$oppositeOperator") instead.""")
             }
         }
     }

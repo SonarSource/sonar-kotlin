@@ -35,7 +35,7 @@ class CollapsibleIfStatementsCheck : AbstractCheck() {
         if (collapsibleIfStatement != null) {
             kotlinFileContext.reportIssue(
                 expression.ifKeyword,
-                "Merge this \"if\" statement with the nested one.",
+                """Merge this "if" statement with the nested one.""",
                 secondaryLocations = kotlinFileContext.locationListOf(collapsibleIfStatement.ifKeyword to ""),
             )
         }

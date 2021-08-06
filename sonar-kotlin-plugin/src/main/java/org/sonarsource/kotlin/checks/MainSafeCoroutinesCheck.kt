@@ -71,14 +71,14 @@ class MainSafeCoroutinesCheck : AbstractCheck() {
         forEachDescendantOfType<KtCallExpression> { call ->
             val resolvedCall = call.getResolvedCall(bindingContext)
             if (resolvedCall matches THREAD_SLEEP_MATCHER) {
-                context.reportIssue(call.calleeExpression!!, """Replace this "Thread.sleep()" call with "delay()"""")
+                context.reportIssue(call.calleeExpression!!, """Replace this "Thread.sleep()" call with "delay()".""")
             } else {
                 resolvedCall?.resultingDescriptor?.let { descriptor ->
                     if (isInsideNonSafeDispatcher(call, bindingContext)
                         && descriptor.throwsExceptions(BLOCKING_ANNOTATIONS)
                     ) {
                         context.reportIssue(call.calleeExpression!!,
-                            """Use "Dispatchers.IO" to run this potentially blocking operation""")
+                            """Use "Dispatchers.IO" to run this potentially blocking operation.""")
                     }
                 }
             }

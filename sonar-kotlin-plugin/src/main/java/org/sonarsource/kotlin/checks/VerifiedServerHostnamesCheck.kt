@@ -45,7 +45,7 @@ class VerifiedServerHostnamesCheck : AbstractCheck() {
             name = "hostnameVerifier"
         }
         
-        const val MESSAGE = "Enable server hostname verification on this SSL/TLS connection"
+        const val MESSAGE = "Enable server hostname verification on this SSL/TLS connection."
     }
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {

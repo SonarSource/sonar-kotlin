@@ -104,7 +104,7 @@ class HardcodedCredentialsCheck : AbstractCheck() {
         && this.asConstant().isNotEmpty()
 
     private fun KotlinFileContext.report(tree: PsiElement, matchName: String) {
-        reportIssue(tree, "\"$matchName\" detected here, make sure this is not a hard-coded credential.")
+        reportIssue(tree, """"$matchName" detected here, make sure this is not a hard-coded credential.""")
     }
 
     private fun KotlinFileContext.checkAssignedValue(matchResult: MatchResult, regex: Regex, leftHand: PsiElement, value: String) {

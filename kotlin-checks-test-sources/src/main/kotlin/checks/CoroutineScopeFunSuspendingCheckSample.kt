@@ -5,7 +5,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlin.coroutines.CoroutineContext
 
 abstract class CoroutineScopeFunSuspendingCheckSample {
-    suspend fun CoroutineScope.noncompliant1() {} // Noncompliant {{Extension functions on CoroutineScope should not be suspending}}
+    suspend fun CoroutineScope.noncompliant1() {} // Noncompliant {{Extension functions on CoroutineScope should not be suspending.}}
 //  ^^^^^^^
 //             <^^^^^^^^^^^^^^
 
