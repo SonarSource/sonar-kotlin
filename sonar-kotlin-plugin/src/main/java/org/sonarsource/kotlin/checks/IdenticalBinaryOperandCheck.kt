@@ -54,7 +54,7 @@ class IdenticalBinaryOperandCheck : AbstractCheck() {
         if (OPERATORS.contains(token) && SyntacticEquivalence.areEquivalent(leftOperand, rightOperand)) {
             context.reportIssue(
                 rightOperand,
-                "Correct one of the identical sub-expressions on both sides this operator",
+                "Correct one of the identical sub-expressions on both sides this operator.",
                 listOf(SecondaryLocation(context.textRange(leftOperand), "")),
             )
         }

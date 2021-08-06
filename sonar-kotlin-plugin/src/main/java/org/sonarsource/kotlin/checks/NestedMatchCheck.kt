@@ -31,7 +31,7 @@ class NestedMatchCheck : AbstractCheck() {
 
     override fun visitWhenExpression(expression: KtWhenExpression, kotlinFileContext: KotlinFileContext) {
         expression.parents.firstIsInstanceOrNull<KtWhenExpression>()?.let {
-            kotlinFileContext.reportIssue(expression, "Refactor the code to eliminate this nested \"when\".")
+            kotlinFileContext.reportIssue(expression, """Refactor the code to eliminate this nested "when".""")
         }
     }
 

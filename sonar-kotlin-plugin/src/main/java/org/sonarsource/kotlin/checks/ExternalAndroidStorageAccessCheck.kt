@@ -12,7 +12,7 @@ import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private const val MESSAGE = "Make sure accessing the Android external storage is safe here"
+private const val MESSAGE = "Make sure accessing the Android external storage is safe here."
 
 private val HOTSPOT_FUNS = listOf(
     FunMatcher(qualifier = "android.os.Environment") {
