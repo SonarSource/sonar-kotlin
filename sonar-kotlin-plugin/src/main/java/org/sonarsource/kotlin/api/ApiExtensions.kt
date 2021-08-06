@@ -298,3 +298,14 @@ fun CallableDescriptor.throwsExceptions(exceptions: Collection<String>) =
 fun KtNamedFunction.isInfix() = hasModifier(KtTokens.INFIX_KEYWORD)
 
 fun KtNamedFunction.isAnonymous() = nameIdentifier == null
+
+fun Call.findCallInPrecedingCallChain(matcher: FunMatcher, bindingContext: BindingContext): Pair<Call, ResolvedCall<*>>? {
+    var receiver = this
+    var receiverResolved = receiver.getResolvedCall(bindingContext) ?: return null
+    while (!matcher.matches(receiverResolved)) {
+        val callElement = receiver.callElement as? KtCallExpression ?: return null
+        receiver = callElement.predictReceiverExpression(bindingContext)?.getCall(bindingContext) ?: return null
+        receiverResolved = receiver.getResolvedCall(bindingContext) ?: return null
+    }
+    return receiver to receiverResolved
+}
