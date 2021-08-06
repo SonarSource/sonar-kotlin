@@ -61,7 +61,7 @@ class MobileDatabaseEncryptionKeysCheck : CallAbstractCheck() {
             val parameter = if (functionName == ENCRYPTION_KEY) ENCRYPTION_KEY else "password"
 
             kotlinFileContext.reportIssue(
-                callExpression.calleeExpression!!,
+                argExpr,
                 """The "$parameter" parameter should not be hardcoded.""",
                 secondaries.map { SecondaryLocation(kotlinFileContext.textRange(it)) },
             )
