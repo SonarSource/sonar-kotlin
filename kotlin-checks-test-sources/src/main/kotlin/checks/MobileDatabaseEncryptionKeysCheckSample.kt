@@ -8,7 +8,7 @@ fun checkSecondary() {
     val x  = getKey333()
 //  ^^^^^^^^^^^^^^^^^^^^>    
     val database6 = SQLiteDatabase.openOrCreateDatabase("test.db", x, null)
-//                                 ^^^^^^^^^^^^^^^^^^^^    
+//                                                                 ^
 }
 
 private fun getKey333(): ByteArray {
@@ -75,17 +75,24 @@ class MobileDatabaseEncryptionKeysCheckSample(val k: Key) {
 
         val s2 = charArrayOf()
         val database4 = SQLiteDatabase.openOrCreateDatabase("test.db", s2, null) // Noncompliant {{The "password" parameter should not be hardcoded.}}
-    //                                 ^^^^^^^^^^^^^^^^^^^^
+//                                                                     ^^
 
         val database5 = SQLiteDatabase.openOrCreateDatabase("test.db", s.toCharArray(), null) // Noncompliant {{The "password" parameter should not be hardcoded.}}
-    //                                 ^^^^^^^^^^^^^^^^^^^^
+//                                                                     ^^^^^^^^^^^^^^^
 
         val database6 = SQLiteDatabase.openOrCreateDatabase("test.db", getKey(), null) // Noncompliant {{The "password" parameter should not be hardcoded.}}
-    //                                 ^^^^^^^^^^^^^^^^^^^^
+//                                                                     ^^^^^^^^
 
         val database7 = SQLiteDatabase.openOrCreateDatabase("test.db", k.key(), null)
 
         val database8 = SQLiteDatabase.openOrCreateDatabase("test.db", this.getKey(), null) // Noncompliant {{The "password" parameter should not be hardcoded.}}
+
+        val database9 = SQLiteDatabase.openOrCreateDatabase(
+            "test.db",
+            this.getKey(),  // Noncompliant {{The "password" parameter should not be hardcoded.}}
+//          ^^^^^^^^^^^^^
+            null
+        )
     }
 
     private fun getKey(): ByteArray {
