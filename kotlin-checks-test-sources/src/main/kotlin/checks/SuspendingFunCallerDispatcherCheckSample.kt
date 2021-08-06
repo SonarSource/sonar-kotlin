@@ -12,7 +12,7 @@ import kotlinx.coroutines.delay
 class SuspendingFunCallerDispatcherCheckSample(val injectable: CoroutineDispatcher = Dispatchers.IO) {
     suspend fun simple() {
         coroutineScope {
-            launch(Dispatchers.IO) { // Noncompliant {{Remove this dispatcher which is used for suspending functions only}}
+            launch(Dispatchers.IO) { // Noncompliant {{Remove this dispatcher. It is pointless when used with only suspending functions.}}
 //                 ^^^^^^^^^^^^^^
                 delay(100L)
             }
