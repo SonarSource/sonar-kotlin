@@ -257,7 +257,7 @@ class FunMatcherTest {
     @Test
     fun `Match method declaration with type of supertype`() {
         val funMatcher = FunMatcher {
-            supertype = "sample.MySampleClass"
+            definingSupertype = "sample.MySampleClass"
             name = "sayHello"
             withArguments("kotlin.String")
         }
@@ -269,7 +269,7 @@ class FunMatcherTest {
     @Test
     fun `Don't match method declaration with wrong supertype`() {
         val funMatcher = FunMatcher {
-            supertype = "NonexistentClass"
+            definingSupertype = "NonexistentClass"
             name = "sayHello"
             withArguments("kotlin.String")
         }
@@ -281,7 +281,7 @@ class FunMatcherTest {
     @Test
     fun `Match method declaration by supertype`() {
         val funMatcher = FunMatcher {
-            supertype = "sample.MyInterface"
+            definingSupertype = "sample.MyInterface"
             name = "sayHello"
             withArguments("kotlin.String")
         }
@@ -293,7 +293,7 @@ class FunMatcherTest {
     @Test
     fun `Don't match method declaration by supertype without binding context`() {
         val funMatcher = FunMatcher {
-            supertype = "sample.MyInterface"
+            definingSupertype = "sample.MyInterface"
             name = "sayHello"
             withArguments("kotlin.String")
         }
@@ -316,7 +316,7 @@ class FunMatcherTest {
     @Test
     fun `Don't match method call by supertype without binding context`() {
         val funMatcher = FunMatcher {
-            supertype = "sample.MyInterface"
+            definingSupertype = "sample.MyInterface"
             name = "sayHello"
             withArguments("kotlin.String")
         }
@@ -364,7 +364,7 @@ class FunMatcherTest {
     @Test
     fun `Don't match the constructor by supertype`() {
         val funMatcher = ConstructorMatcher {
-            supertype = "sample.MyInterface"
+            definingSupertype = "sample.MyInterface"
             withNoArguments()
         }
 
