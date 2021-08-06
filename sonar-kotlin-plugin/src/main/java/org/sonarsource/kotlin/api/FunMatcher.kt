@@ -34,6 +34,8 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.tasks.isDynamic
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
+import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequence
+import org.jetbrains.kotlin.resolve.findTopMostOverriddenDescriptors
 
 class FunMatcher(
     // In case of Top Level function there is no type there,
@@ -41,7 +43,7 @@ class FunMatcher(
     var qualifier: String? = null,
     name: String? = null,
     arguments: List<List<ArgumentMatcher>> = mutableListOf(),
-    var supertype: String? = null,
+    var definingSupertype: String? = null,
     private val matchConstructor: Boolean = false,
     var dynamic: Boolean? = null,
     var extensionFunction: Boolean? = null,
@@ -89,12 +91,12 @@ class FunMatcher(
             checkCallParameters(functionDescriptor)
 
     private fun checkTypeOrSupertype(functionDescriptor: CallableDescriptor) =
-        qualifier.isNullOrEmpty() && supertype.isNullOrEmpty() ||
+        qualifier.isNullOrEmpty() && definingSupertype.isNullOrEmpty() ||
             checkType(functionDescriptor) ||
             qualifier.isNullOrEmpty() && checkSubType(functionDescriptor)
 
     private fun checkType(functionDescriptor: CallableDescriptor): Boolean =
-        (qualifier ?: supertype)?.let {
+        (qualifier ?: definingSupertype)?.let {
             when (functionDescriptor) {
                 is ConstructorDescriptor ->
                     functionDescriptor.constructedClass.fqNameSafe.asString() == it
@@ -107,8 +109,15 @@ class FunMatcher(
         when (functionDescriptor) {
             is ConstructorDescriptor -> false
             else -> {
-                functionDescriptor.overriddenDescriptors.any {
-                    it?.fqNameSafe?.asString()?.substringBeforeLast(".") == supertype
+                // Note: `overriddenTreeUniqueAsSequence()` will return a sequence of all overridden descriptors, even if thery are not
+                // explicitly declared in the super types. In other words, if you have a class hierarchy of 10 levels, with a declaration
+                // in the top-most class/interface and an overriding method in the bottom-most, it will return a sequence of 10 elements,
+                // even if there are no overriding methods in the classes in-between. This can be desired but in most cases is somewhat
+                // inefficient, as we mostly look for the top-most declaration here. The top-most declaration is the last element in the
+                // sequence, however, so we need to iterate the entire sequence to get there. There are optimization possibilities if this
+                // turns out to be a performance problem in the long run.
+                functionDescriptor.overriddenTreeUniqueAsSequence(true).any {
+                    it.fqNameSafe.asString().substringBeforeLast(".") == definingSupertype
                 }
             }
         }
