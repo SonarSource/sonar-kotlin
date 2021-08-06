@@ -6,7 +6,7 @@ import kotlinx.coroutines.runBlocking
 
 class RedundantSuspendModifierCheckSample {
 
-    suspend fun redundant() { // Noncompliant {{Remove this redundant "suspend" modifier}}
+    suspend fun redundant() { // Noncompliant {{Remove this unnecessary "suspend" modifier}}
 //  ^^^^^^^
         println("Hello!")
     }

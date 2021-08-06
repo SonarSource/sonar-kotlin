@@ -39,7 +39,7 @@ class RedundantSuspendModifierCheck : AbstractCheck() {
             if (hasBody() && !overrides()) {
                 findDescendantOfType<KtNameReferenceExpression> {
                     it.getResolvedCall(context.bindingContext)?.resultingDescriptor?.isSuspend ?: true
-                } ?: context.reportIssue(suspendModifier, """Remove this redundant "suspend" modifier""")
+                } ?: context.reportIssue(suspendModifier, """Remove this unnecessary "suspend" modifier""")
             }
         }
     }
