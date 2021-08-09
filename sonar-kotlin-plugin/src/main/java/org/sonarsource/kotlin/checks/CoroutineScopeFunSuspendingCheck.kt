@@ -12,7 +12,7 @@ import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private const val COROUTINE_SCOPE = "kotlinx.coroutines.CoroutineScope"
-private const val MESSAGE = "Extension functions on CoroutineScope should not be suspending"
+private const val MESSAGE = "Extension functions on CoroutineScope should not be suspending."
 
 @Rule(key = "S6312")
 class CoroutineScopeFunSuspendingCheck : AbstractCheck() {

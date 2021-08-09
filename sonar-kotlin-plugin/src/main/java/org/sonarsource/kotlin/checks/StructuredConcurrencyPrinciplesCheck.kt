@@ -23,13 +23,13 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private val JOB_CONSTRUCTOR = FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = "Job")
 private val SUPERVISOR_JOB_CONSTRUCTOR = FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = "SupervisorJob")
-private const val MESSAGE_ENDING = " here leads to breaking of structured concurrency principles."
+private const val MESSAGE_ENDING = " here leads to the breaking of structured concurrency principles."
 private const val DELICATE_API_CLASS_TYPE = "kotlin.reflect.KClass<kotlinx.coroutines.DelicateCoroutinesApi>"
 
 @Rule(key = "S6306")
 class StructuredConcurrencyPrinciplesCheck : CallAbstractCheck() {
 
-    override fun functionsToVisit() = FUNS_ACCEPTING_DISPATCHERS
+    override val functionsToVisit = FUNS_ACCEPTING_DISPATCHERS
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         val bindingContext = kotlinFileContext.bindingContext

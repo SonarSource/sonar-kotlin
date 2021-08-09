@@ -54,7 +54,7 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
                 val first = occurrences[0]
                 context.reportIssue(
                     first,
-                    "Define a constant instead of duplicating this literal \"${first.asString()}\" $size times.",
+                    """Define a constant instead of duplicating this literal "${first.asString()}" $size times.""",
                     secondaryLocations = occurrences.asSequence()
                         .drop(1)
                         .map { SecondaryLocation(context.textRange(it), "Duplication") }

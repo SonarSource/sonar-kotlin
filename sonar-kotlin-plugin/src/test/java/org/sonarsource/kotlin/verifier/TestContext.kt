@@ -38,6 +38,7 @@ internal class TestContext(
     check: AbstractCheck,
     vararg furtherChecks: AbstractCheck,
     override val inputFile: InputFile = DummyInputFile(),
+    override val isAndroid: Boolean = false,
 ) : InputFileContext {
     private val visitor: KtTestChecksVisitor = KtTestChecksVisitor(listOf(check) + furtherChecks)
     override var filteredRules: Map<String, Set<TextRange>> = emptyMap()

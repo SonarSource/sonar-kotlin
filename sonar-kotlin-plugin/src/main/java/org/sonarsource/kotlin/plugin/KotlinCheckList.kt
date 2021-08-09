@@ -56,6 +56,7 @@ import org.sonarsource.kotlin.checks.IfConditionalAlwaysTrueOrFalseCheck
 import org.sonarsource.kotlin.checks.InjectableDispatchersCheck
 import org.sonarsource.kotlin.checks.MainSafeCoroutinesCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
+import org.sonarsource.kotlin.checks.MobileDatabaseEncryptionKeysCheck
 import org.sonarsource.kotlin.checks.NestedMatchCheck
 import org.sonarsource.kotlin.checks.OneStatementPerLineCheck
 import org.sonarsource.kotlin.checks.ParsingErrorCheck
@@ -78,6 +79,8 @@ import org.sonarsource.kotlin.checks.TooLongLineCheck
 import org.sonarsource.kotlin.checks.TooManyCasesCheck
 import org.sonarsource.kotlin.checks.TooManyLinesOfCodeFileCheck
 import org.sonarsource.kotlin.checks.TooManyParametersCheck
+import org.sonarsource.kotlin.checks.UnencryptedDatabaseOnMobileCheck
+import org.sonarsource.kotlin.checks.UnencryptedFilesInMobileApplicationsCheck
 import org.sonarsource.kotlin.checks.UnusedDeferredResultCheck
 import org.sonarsource.kotlin.checks.UnusedFunctionParameterCheck
 import org.sonarsource.kotlin.checks.UnusedLocalVariableCheck
@@ -126,6 +129,7 @@ val KOTLIN_CHECKS = listOf(
     InjectableDispatchersCheck::class.java,
     MainSafeCoroutinesCheck::class.java,
     MatchCaseTooBigCheck::class.java,
+    MobileDatabaseEncryptionKeysCheck::class.java,
     NestedMatchCheck::class.java,
     OneStatementPerLineCheck::class.java,
     ParsingErrorCheck::class.java,
@@ -148,6 +152,8 @@ val KOTLIN_CHECKS = listOf(
     TooManyCasesCheck::class.java,
     TooManyLinesOfCodeFileCheck::class.java,
     TooManyParametersCheck::class.java,
+    UnencryptedDatabaseOnMobileCheck::class.java,
+    UnencryptedFilesInMobileApplicationsCheck::class.java,
     UnusedDeferredResultCheck::class.java,
     UnusedFunctionParameterCheck::class.java,
     UnusedLocalVariableCheck::class.java,

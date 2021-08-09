@@ -47,7 +47,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val location = issue.primaryLocation()
         Assertions.assertThat(location.inputComponent()).isEqualTo(inputFile)
         Assertions.assertThat(location.message())
-            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator")
+            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
         assertTextRange(location.textRange()).hasRange(2, 12, 2, 13)
     }
 

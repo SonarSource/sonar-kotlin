@@ -103,10 +103,11 @@ class KotlinSensor(
     ): Boolean {
         val environment = environment(sensorContext)
         try {
+            val isInAndroidContext = isInAndroidContext(environment)
             for (inputFile in inputFiles) {
                 if (sensorContext.isCancelled) return false
 
-                val inputFileContext = InputFileContextImpl(sensorContext, inputFile)
+                val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
                 try {
                     analyseFile(environment, inputFileContext, visitors, statistics)
                 } catch (e: ParseException) {

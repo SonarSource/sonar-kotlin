@@ -36,7 +36,7 @@ private val AUTHENTICATE_FUN_MATCHERS = listOf(
     FunMatcher(qualifier = "androidx.biometric.BiometricPrompt", name = "authenticate")
 )
 
-private const val MESSAGE = "Make sure performing a biometric authentication without a CryptoObject is safe here"
+private const val MESSAGE = """Make sure performing a biometric authentication without a "CryptoObject" is safe here."""
 
 @Rule(key = "S6293")
 class BiometricAuthWithoutCryptoCheck : AbstractCheck() {

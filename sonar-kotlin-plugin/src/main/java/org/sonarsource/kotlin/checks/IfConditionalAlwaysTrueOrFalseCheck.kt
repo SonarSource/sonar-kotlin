@@ -38,9 +38,7 @@ class IfConditionalAlwaysTrueOrFalseCheck : AbstractCheck() {
     override fun visitIfExpression(expression: KtIfExpression, kotlinFileContext: KotlinFileContext) {
         if (isAlwaysTrueOrFalse(expression.condition!!)) {
             /** TODO try to use [org.jetbrains.kotlin.resolve.CompileTimeConstantUtils.canBeReducedToBooleanConstant] */
-            kotlinFileContext.reportIssue(
-                expression.condition!!,
-                "Remove this useless \"if\" statement.")
+            kotlinFileContext.reportIssue(expression.condition!!, """Remove this useless "if" statement.""")
         }
     }
 

@@ -12,7 +12,7 @@ import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private const val MESSAGE = "Make sure accessing the Android external storage is safe here"
+private const val MESSAGE = "Make sure accessing the Android external storage is safe here."
 
 private val HOTSPOT_FUNS = listOf(
     FunMatcher(qualifier = "android.os.Environment") {
@@ -44,7 +44,7 @@ private val HOTSPOT_PROPS = listOf(
 
 @Rule(key = "S5324")
 class ExternalAndroidStorageAccessCheck : CallAbstractCheck() {
-    override fun functionsToVisit() = HOTSPOT_FUNS
+    override val functionsToVisit = HOTSPOT_FUNS
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)

@@ -51,6 +51,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
     var fileName: String = ""
     var classpath: List<String> = System.getProperty("java.class.path").split(":") + KOTLIN_CLASSPATH
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
+    var isAndroid = false
 
     fun verify() {
         val environment = Environment(classpath + deps)
@@ -60,7 +61,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
                 .initMetadata(content).build()
             KotlinTree.of(content, environment, inputFile) to inputFile
         }
-        createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check)
+        createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check, isAndroid)
             .assertOneOrMoreIssues()
         Disposer.dispose(environment.disposable)
     }
@@ -73,7 +74,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
                 .initMetadata(content).build()
             KotlinTree.of(content, environment, inputFile) to inputFile
         }
-        createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check)
+        createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check, isAndroid)
             .assertNoIssues()
         Disposer.dispose(environment.disposable)
     }
@@ -82,6 +83,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
         converter: (String) -> Pair<KotlinTree, InputFile>,
         path: Path,
         check: AbstractCheck,
+        isAndroid: Boolean,
     ): SingleFileVerifier {
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
 
@@ -93,7 +95,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
                 val start = comment.range.start()
                 verifier.addComment(start.line(), start.lineOffset() + 1, comment.text, 2, 0)
             }
-        val ctx = TestContext(verifier, check, inputFile = DummyInputFile(path))
+        val ctx = TestContext(verifier, check, inputFile = DummyInputFile(path), isAndroid = isAndroid)
         ctx.scan(root)
         return verifier
     }

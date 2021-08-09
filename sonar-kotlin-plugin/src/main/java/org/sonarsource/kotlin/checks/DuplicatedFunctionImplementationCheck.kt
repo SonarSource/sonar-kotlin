@@ -79,7 +79,7 @@ class DuplicatedFunctionImplementationCheck : AbstractCheck() {
     ) {
         val textRange = ctx.textRange(original.nameIdentifier ?: original)
         val line = textRange.start().line()
-        val message = original.name?.let { "$BASE_MESSAGE \"$it\" on line $line." }
+        val message = original.name?.let { """$BASE_MESSAGE "$it" on line $line.""" }
             ?: "$BASE_MESSAGE the one on line $line."
         ctx.reportIssue(
             duplicate.nameIdentifier ?: duplicate,

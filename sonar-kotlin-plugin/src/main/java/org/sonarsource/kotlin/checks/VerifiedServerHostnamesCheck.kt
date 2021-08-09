@@ -36,7 +36,7 @@ class VerifiedServerHostnamesCheck : AbstractCheck() {
 
     companion object {
         val VERIFY_MATCHER = FunMatcher {
-            supertype = "javax.net.ssl.HostnameVerifier"
+            definingSupertype = "javax.net.ssl.HostnameVerifier"
             name = "verify"
         }
 
@@ -44,8 +44,8 @@ class VerifiedServerHostnamesCheck : AbstractCheck() {
             qualifier = "okhttp3.OkHttpClient.Builder"
             name = "hostnameVerifier"
         }
-        
-        const val MESSAGE = "Enable server hostname verification on this SSL/TLS connection"
+
+        const val MESSAGE = "Enable server hostname verification on this SSL/TLS connection."
     }
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
@@ -78,7 +78,7 @@ class VerifiedServerHostnamesCheck : AbstractCheck() {
             ktExpression.returnedExpression?.isTrueConstant(bindingContext) ?: false
         else -> false
     }
-    
+
     private fun KtExpression.isTrueConstant(
         bindingContext: BindingContext,
     ) = getType(bindingContext)?.let {

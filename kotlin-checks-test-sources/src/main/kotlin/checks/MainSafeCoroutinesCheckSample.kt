@@ -16,25 +16,25 @@ class MainSafeCoroutinesCheckSample {
 
     suspend fun throwsIO3() {
         GlobalScope.launch {
-            f() // Noncompliant {{Use "Dispatchers.IO" to run this potentially blocking operation}}
+            f() // Noncompliant {{Use "Dispatchers.IO" to run this potentially blocking operation.}}
         }
         delay(500L)
     }
 
     suspend fun throwsIO4() {
         withContext(Dispatchers.Default) {
-            f() // Noncompliant {{Use "Dispatchers.IO" to run this potentially blocking operation}}
+            f() // Noncompliant {{Use "Dispatchers.IO" to run this potentially blocking operation.}}
         }
         delay(500L)
     }
     suspend fun throwsIO() {
-        f() // Noncompliant {{Use "Dispatchers.IO" to run this potentially blocking operation}}
+        f() // Noncompliant {{Use "Dispatchers.IO" to run this potentially blocking operation.}}
         delay(500L)
     }
 
     suspend fun throwsIO5() {
         withContext(Dispatchers.Main) {
-            f() // Noncompliant {{Use "Dispatchers.IO" to run this potentially blocking operation}}
+            f() // Noncompliant {{Use "Dispatchers.IO" to run this potentially blocking operation.}}
         }
         delay(500L)
     }
@@ -73,7 +73,7 @@ class MainSafeCoroutinesCheckSample {
     }
 
     suspend fun suspendThreadSleep() {
-        Thread.sleep(500L) // Noncompliant {{Replace this "Thread.sleep()" call with "delay()"}}
+        Thread.sleep(500L) // Noncompliant {{Replace this "Thread.sleep()" call with "delay()".}}
     }
 
     fun threadSleep() {
@@ -82,13 +82,13 @@ class MainSafeCoroutinesCheckSample {
 
     fun inSuspendingLambda() {
         runBlocking {
-            Thread.sleep(500L) // Noncompliant {{Replace this "Thread.sleep()" call with "delay()"}}
+            Thread.sleep(500L) // Noncompliant {{Replace this "Thread.sleep()" call with "delay()".}}
         }
     }
 
     fun withGlobalScope() {
         GlobalScope.launch {
-            Thread.sleep(500L) // Noncompliant {{Replace this "Thread.sleep()" call with "delay()"}}
+            Thread.sleep(500L) // Noncompliant {{Replace this "Thread.sleep()" call with "delay()".}}
         }
     }
 

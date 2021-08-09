@@ -21,7 +21,7 @@ import org.sonarsource.kotlin.api.matches
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private const val MESSAGE = """Use "withTimeoutOrNull { }" instead of manual delayed cancellation"""
+private const val MESSAGE = """Use "withTimeoutOrNull { }" instead of manual delayed cancellation."""
 
 private val DELAY_MATCHER = FunMatcher(name = "delay", qualifier = KOTLINX_COROUTINES_PACKAGE)
 private val LAUNCH_ASYNC_MATCHER = FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE) {
@@ -30,7 +30,7 @@ private val LAUNCH_ASYNC_MATCHER = FunMatcher(qualifier = KOTLINX_COROUTINES_PAC
 
 @Rule(key = "S6316")
 class CoroutinesTimeoutApiUnusedCheck : CallAbstractCheck() {
-    override fun functionsToVisit() = listOf(FunMatcher(supertype = "$KOTLINX_COROUTINES_PACKAGE.Job", name = "cancel"))
+    override val functionsToVisit = listOf(FunMatcher(definingSupertype = "$KOTLINX_COROUTINES_PACKAGE.Job", name = "cancel"))
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,

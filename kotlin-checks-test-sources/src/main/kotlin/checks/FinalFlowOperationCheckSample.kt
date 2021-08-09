@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.map
 
 class FinalFlowOperationCheckSample {
     suspend fun foo(flow: Flow<String>) {
-        // Noncompliant@+1 {{Unused coroutines Flow}}
+        // Noncompliant@+1 {{Unused coroutines Flow.}}
         flow.filter { true }
 //           ^^^^^^
 

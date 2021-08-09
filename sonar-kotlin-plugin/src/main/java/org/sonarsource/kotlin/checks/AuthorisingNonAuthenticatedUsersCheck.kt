@@ -25,7 +25,7 @@ private val KEY_GEN_BUILDER_SET_AUTH_MATCHER = FunMatcher(qualifier = BUILDER, n
 
 @Rule(key = "S6288")
 class AuthorisingNonAuthenticatedUsersCheck : CallAbstractCheck() {
-    override fun functionsToVisit() = listOf(KEY_GEN_BUILDER_BUILD_MATCHER)
+    override val functionsToVisit = listOf(KEY_GEN_BUILDER_BUILD_MATCHER)
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,

@@ -13,7 +13,7 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 @Rule(key = "S6311")
 class SuspendingFunCallerDispatcherCheck : CallAbstractCheck() {
-    override fun functionsToVisit() = FUNS_ACCEPTING_DISPATCHERS
+    override val functionsToVisit = FUNS_ACCEPTING_DISPATCHERS
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
@@ -35,7 +35,7 @@ class SuspendingFunCallerDispatcherCheck : CallAbstractCheck() {
             && callExpressions.all { it.getResolvedCall(bindingContext)?.resultingDescriptor?.isSuspend == true }
         ) {
             val argExpr = (arguments[0] as ExpressionValueArgument).valueArgument?.asElement() ?: return
-            kotlinFileContext.reportIssue(argExpr, "Remove this dispatcher which is used for suspending functions only")
+            kotlinFileContext.reportIssue(argExpr, "Remove this dispatcher. It is pointless when used with only suspending functions.")
         }
     }
 }

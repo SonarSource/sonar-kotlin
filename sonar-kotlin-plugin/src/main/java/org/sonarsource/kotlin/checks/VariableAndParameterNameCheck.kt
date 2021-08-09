@@ -75,9 +75,7 @@ class VariableAndParameterNameCheck : AbstractCheck() {
     private fun check(kind: String, declaration: KtNamedDeclaration, kotlinFileContext: KotlinFileContext) {
         val name = declaration.nameIdentifier?.text ?: return
         if (!name.matches(formatRegex)) {
-            kotlinFileContext.reportIssue(
-                declaration.nameIdentifier!!,
-                "Rename this $kind to match the regular expression \"$format\".")
+            kotlinFileContext.reportIssue(declaration.nameIdentifier!!, """Rename this $kind to match the regular expression $format""")
         }
     }
 

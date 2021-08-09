@@ -9,7 +9,7 @@ val cipher = ""
 fun android() {
     val biometricPrompt = BiometricPromptAndroid()
 
-    biometricPrompt.authenticate(promptInfo) // Noncompliant {{Make sure performing a biometric authentication without a CryptoObject is safe here}}
+    biometricPrompt.authenticate(promptInfo) // Noncompliant {{Make sure performing a biometric authentication without a "CryptoObject" is safe here.}}
     // Noncompliant@+1
     biometricPrompt.authenticate(promptInfo, null)
 //                  ^^^^^^^^^^^^>            ^^^^

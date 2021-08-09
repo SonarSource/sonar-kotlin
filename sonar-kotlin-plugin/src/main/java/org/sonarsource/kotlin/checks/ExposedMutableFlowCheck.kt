@@ -17,7 +17,7 @@ private val DISALLOWED_TYPES = listOf(
     "kotlinx.coroutines.flow.MutableStateFlow",
 )
 
-private const val MESSAGE = "Don't expose mutable flow types"
+private const val MESSAGE = "Don't expose mutable flow types."
 
 @Rule(key = "S6305")
 class ExposedMutableFlowCheck : AbstractCheck() {
