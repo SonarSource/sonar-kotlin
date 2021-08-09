@@ -39,7 +39,7 @@ allprojects {
         set("analyzerCommonsVersion", "1.14.1.690")
         set("sonarqubeVersion", "7.9")
         set("orchestratorVersion", "3.35.0.2707")
-        set("sonarlintVersion", "4.2.0.2266")
+        set("sonarlintVersion", "6.2.0.34235")
         set("sonarLinksCi", "https://travis-ci.org/SonarSource/slang")
     }
     // Replaces the version defined in sources, usually x.y-SNAPSHOT, by a version identifying the build.
