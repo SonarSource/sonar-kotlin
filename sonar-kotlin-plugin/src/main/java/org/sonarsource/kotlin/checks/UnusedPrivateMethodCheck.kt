@@ -27,6 +27,7 @@ import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.isInfix
@@ -38,7 +39,15 @@ private val IGNORED_METHODS: Set<String> = setOf(
     "readObject",
     "writeReplace",
     "readResolve",
-    "readObjectNoData")
+    "readObjectNoData",
+)
+
+private val COMMON_ANNOTATIONS = listOf(
+    "OptIn", 
+    "Suppress",
+    "DelicateCoroutinesApi",
+    "Throws",
+)
 
 @Rule(key = "S1144")
 class UnusedPrivateMethodCheck : AbstractCheck() {
@@ -65,6 +74,11 @@ class UnusedPrivateMethodCheck : AbstractCheck() {
         anyDescendantOfType<KtOperationReferenceExpression> { it.getReferencedName() == name }
 
     private fun KtNamedFunction.shouldCheckForUsage() =
-        isPrivate() && !hasModifier(KtTokens.OPERATOR_KEYWORD)
+        isPrivate()
+            && !hasModifier(KtTokens.OPERATOR_KEYWORD)
+            && annotatedWithCommonAnnotations()
+
+    private fun KtNamedFunction.annotatedWithCommonAnnotations() =
+        annotationEntries.all { it.shortName?.asString() in COMMON_ANNOTATIONS }
 
 }

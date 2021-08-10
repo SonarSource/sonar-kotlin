@@ -3,7 +3,7 @@ package checks
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlin.jvm.Throws
 
-class UnusedPrivateMethodKotlinCheckTest {
+class UnusedPrivateMethodCheckSampleNoSemantics {
     
     @Suppress
     private fun withAnnotation1() { // Noncompliant 
@@ -25,12 +25,12 @@ class UnusedPrivateMethodKotlinCheckTest {
         
     }
     
-    @MyCustom
+    @Custom
     private fun withAnnotation5() { // Compliant 
         
     }
     
-    @MyCustom
+    @Custom
     @Throws
     private fun withAnnotation6() { // Compliant 
         
@@ -74,6 +74,6 @@ class UnusedPrivateMethodKotlinCheckTest {
 
 }
 
-annotation class MyCustom {
+annotation class Custom {
     
 }
