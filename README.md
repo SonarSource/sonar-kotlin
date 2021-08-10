@@ -34,7 +34,7 @@ By default, Integration Tests (ITs) are skipped during the build.
 If you want to run them, you need first to retrieve the related projects which are used as input:
 
     git submodule update --init its/sources
-    cd its/ruling/kotlin/ktor
+    cd its/sources/kotlin/ktor
     
 Then you need to switch to Java8 and run the command to generate binaries for Ktor project:
 
