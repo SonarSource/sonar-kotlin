@@ -60,6 +60,10 @@ For example, execute the following in the project root to fetch the metadata for
 
     ./gradlew generateRuleMetadata -PruleKey=S42
 
+If you want to update all rules' metadata, you can use:
+    
+    ./gradlew updateRuleMetadata
+
 ### Implementing a new rule
 The Gradle task `setupRuleStubs` will create the commonly required files for implementing a new rule, including usual boilerplate code. It will also put the rule into the list of checks and call `generateRuleMetadata` to download the rule's metadata.
 
