@@ -21,25 +21,26 @@ package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.ObjectAssert
-import org.junit.Rule
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport
-import org.junit.rules.TemporaryFolder
+import org.junit.jupiter.api.io.TempDir
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.cpd.internal.TokensLine
 import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
+import java.nio.file.Path
+import kotlin.io.path.createFile
+import kotlin.io.path.name
 
-@EnableRuleMigrationSupport
 class CopyPasteDetectorTest {
 
-    var tmpFolder = TemporaryFolder()
-        @Rule get
+    @JvmField
+    @TempDir
+    var tmpFolder: Path? = null
 
     @Test
     fun test() {
-        val tmpFile = tmpFolder.newFile("dummy.kt")
+        val tmpFile = tmpFolder!!.resolve("dummy.kt").createFile()
         val content = """
         /*
          * some licence header for example
@@ -55,7 +56,7 @@ class CopyPasteDetectorTest {
         }
         """.trimIndent()
 
-        val sensorContext: SensorContextTester = SensorContextTester.create(tmpFolder.root)
+        val sensorContext: SensorContextTester = SensorContextTester.create(tmpFolder!!.root)
         val inputFile = TestInputFileBuilder("moduleKey", tmpFile.name)
             .setContents(content)
             .build()

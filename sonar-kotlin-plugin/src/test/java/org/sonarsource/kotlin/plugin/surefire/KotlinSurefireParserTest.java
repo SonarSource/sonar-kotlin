@@ -25,17 +25,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import kotlin.jvm.JvmField;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.utils.log.LogTester;
+import org.sonar.api.utils.log.LogTesterJUnit5;
 import org.sonar.api.utils.log.LoggerLevel;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,15 +47,15 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@EnableRuleMigrationSupport
 class KotlinSurefireParserTest {
 
   private static final String PREFIX = "Resource not found:";
   private static final String WARNING = "while reading test reports. Please, make sure your \"sonar.junit.reportPaths\" property is configured properly";
   private KotlinSurefireParser parser;
 
-  @Rule
-  public LogTester logTester = new LogTester();
+  @JvmField
+  @RegisterExtension
+  public LogTesterJUnit5 logTester = new LogTesterJUnit5();
   private KotlinResourcesLocator kotlinResourcesLocator;
 
   @BeforeEach

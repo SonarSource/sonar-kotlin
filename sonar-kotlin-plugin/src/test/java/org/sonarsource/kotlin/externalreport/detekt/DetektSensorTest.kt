@@ -20,21 +20,19 @@
 package org.sonarsource.kotlin.externalreport.detekt
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Rule
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor
 import org.sonar.api.batch.sensor.issue.ExternalIssue
 import org.sonar.api.rules.RuleType
+import org.sonar.api.utils.log.LogTesterJUnit5
 import org.sonar.api.utils.log.LoggerLevel
-import org.sonar.api.utils.log.ThreadLocalLogTester
 import org.sonarsource.kotlin.externalreport.ExternalReportTestUtils
 import org.sonarsource.kotlin.externalreport.ExternalReporting
 import java.nio.file.Paths
 
-@EnableRuleMigrationSupport
 internal class DetektSensorTest {
 
     companion object {
@@ -43,8 +41,9 @@ internal class DetektSensorTest {
 
     private val analysisWarnings: MutableList<String> = ArrayList()
 
-    var logTester = ThreadLocalLogTester()
-        @Rule get
+    @JvmField
+    @RegisterExtension
+    var logTester = LogTesterJUnit5()
 
     @BeforeEach
     fun setup() {
@@ -185,10 +184,12 @@ internal class DetektSensorTest {
         assertThat(first.primaryLocation().textRange()).isNull()
         assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty()
         assertThat(logTester.logs(LoggerLevel.WARN)).containsExactlyInAnyOrder(
-            "No input file found for not-existing-file.kt. No detekt issues will be imported on this file.")
+            "No input file found for not-existing-file.kt. No detekt issues will be imported on this file."
+        )
         assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactlyInAnyOrder(
             "Unexpected error without any message for rule: 'detekt.EmptyIfBlock'",
-            "Unexpected rule key without 'detekt.' suffix: 'invalid-format'")
+            "Unexpected rule key without 'detekt.' suffix: 'invalid-format'"
+        )
     }
 
     private fun executeSensorImporting(fileName: String?): List<ExternalIssue> {

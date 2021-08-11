@@ -25,9 +25,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Rule;
+import kotlin.jvm.JvmField;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.sonar.api.batch.fs.InputFile;
@@ -36,21 +36,21 @@ import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.rules.RuleType;
+import org.sonar.api.utils.log.LogTesterJUnit5;
 import org.sonar.api.utils.log.LoggerLevel;
-import org.sonar.api.utils.log.ThreadLocalLogTester;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@EnableRuleMigrationSupport
 class CheckstyleFormatImporterTest {
 
   static final Path PROJECT_DIR = Paths.get("src", "test", "resources", "org/sonarsource/slang/externalreport");
 
   static final String LINTER_KEY = "test-linter";
 
-  @Rule
-  public ThreadLocalLogTester logTester = new ThreadLocalLogTester();
+  @JvmField
+  @RegisterExtension
+  public LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   @Test
   void import_detekt_issues() throws IOException {
@@ -100,7 +100,7 @@ class CheckstyleFormatImporterTest {
 
     assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
   }
-  
+
   @ParameterizedTest
   @ValueSource(strings = {
     "invalid-path.txt",

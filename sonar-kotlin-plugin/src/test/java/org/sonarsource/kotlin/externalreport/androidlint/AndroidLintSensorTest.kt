@@ -20,17 +20,16 @@
 package org.sonarsource.kotlin.externalreport.androidlint
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Rule
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor
 import org.sonar.api.batch.sensor.issue.ExternalIssue
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rules.RuleType
+import org.sonar.api.utils.log.LogTesterJUnit5
 import org.sonar.api.utils.log.LoggerLevel
-import org.sonar.api.utils.log.ThreadLocalLogTester
 import org.sonarsource.kotlin.externalreport.ExternalReportTestUtils
 import org.sonarsource.kotlin.externalreport.ExternalReporting
 import java.io.IOException
@@ -38,7 +37,6 @@ import java.nio.file.Paths
 
 private val PROJECT_DIR = Paths.get("src", "test", "resources", "org/sonarsource/slang/externalreport", "androidlint")
 
-@EnableRuleMigrationSupport
 internal class AndroidLintSensorTest {
 
     private val analysisWarnings: MutableList<String> = ArrayList()
@@ -48,8 +46,9 @@ internal class AndroidLintSensorTest {
         analysisWarnings.clear()
     }
 
-    val logTester = ThreadLocalLogTester()
-        @Rule get
+    @JvmField
+    @RegisterExtension
+    val logTester = LogTesterJUnit5()
 
     @Test
     fun test_descriptor() {
@@ -73,7 +72,8 @@ internal class AndroidLintSensorTest {
         assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(first.severity()).isEqualTo(Severity.MINOR)
         assertThat(first.primaryLocation().message()).isEqualTo(
-            "On SDK version 23 and up, your app data will be automatically backed up and restored on app install. Consider adding the attribute `android:fullBackupContent` to specify an `@xml` resource which configures which files to backup. More info: https://developer.android.com/training/backup/autosyncapi.html")
+            "On SDK version 23 and up, your app data will be automatically backed up and restored on app install. Consider adding the attribute `android:fullBackupContent` to specify an `@xml` resource which configures which files to backup. More info: https://developer.android.com/training/backup/autosyncapi.html"
+        )
         assertThat(first.primaryLocation().textRange()!!.start().line()).isEqualTo(2)
 
         val second = externalIssues[1]
@@ -158,13 +158,15 @@ internal class AndroidLintSensorTest {
         assertThat(first.primaryLocation().textRange()).isNull()
         assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty()
         assertThat(logTester.logs(LoggerLevel.WARN)).containsExactlyInAnyOrder(
-            "No input file found for unknown-file.xml. No android lint issues will be imported on this file.")
+            "No input file found for unknown-file.xml. No android lint issues will be imported on this file."
+        )
         assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactlyInAnyOrder(
             "Missing information or unsupported file type for id:'', file:'AndroidManifest.xml', message:'Missing rule key.'",
             "Missing information or unsupported file type for id:'UnusedAttribute', file:'binary-file.gif', message:'Valid rule key with binary file.'",
             "Missing information or unsupported file type for id:'UnusedAttribute', file:'', message:'Valid rule key without file path.'",
             "Missing information or unsupported file type for id:'UnusedAttribute', file:'', message:'Valid rule key with invalid location.'",
-            "Missing information or unsupported file type for id:'', file:'', message:''")
+            "Missing information or unsupported file type for id:'', file:'', message:''"
+        )
     }
 
     @Throws(IOException::class)
