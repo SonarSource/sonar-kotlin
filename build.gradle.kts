@@ -10,7 +10,6 @@ plugins {
     id("com.jfrog.artifactory") version "4.24.14"
     id("io.spring.dependency-management") version "1.0.6.RELEASE" apply false
     id("org.sonarqube") version "3.3"
-    id("de.thetaphi.forbiddenapis") version "3.0" apply false
     id("org.jetbrains.kotlin.jvm") apply false
     `maven-publish`
     signing
@@ -85,8 +84,6 @@ subprojects {
             dependency("com.eclipsesource.minimal-json:minimal-json:0.9.5")
             dependency("org.junit.jupiter:junit-jupiter-api:5.7.1")
             dependency("org.junit.jupiter:junit-jupiter-engine:5.7.1")
-            dependency("org.junit.jupiter:junit-jupiter-migrationsupport:5.7.1")
-            dependency("junit:junit:4.13.1")
             dependency("org.mockito:mockito-core:2.21.0")
             dependency("org.assertj:assertj-core:3.6.1")
             dependency("io.github.classgraph:classgraph:4.8.90")
@@ -131,25 +128,6 @@ subprojects {
     if (!project.path.startsWith(":its") && !project.path.startsWith(":private:its")) {
         tasks.test {
             useJUnitPlatform()
-        }
-        // Prevent accidental use of JUnit 4, which is still present in dependencies due to junit-jupiter-migrationsupport
-        apply(plugin = "de.thetaphi.forbiddenapis")
-
-        tasks.named<de.thetaphi.forbiddenapis.gradle.CheckForbiddenApis>("forbiddenApisMain") {
-            signatures = listOf("")
-        }
-
-        tasks.named<de.thetaphi.forbiddenapis.gradle.CheckForbiddenApis>("forbiddenApisTest") {
-            signatures = listOf(
-                "org.junit.Test @ use JUnit 5 org.junit.jupiter.api.Test instead",
-                "org.junit.Before @ use JUnit 5 org.junit.jupiter.api.BeforeEach instead",
-                "org.junit.After @ use JUnit 5 org.junit.jupiter.api.AfterEach instead",
-                "org.junit.BeforeClass @ use JUnit 5 org.junit.jupiter.api.BeforeAll instead",
-                "org.junit.AfterClass @ use JUnit 5 org.junit.jupiter.api.AfterAll instead",
-                "org.junit.Ignore @ use JUnit 5 org.junit.jupiter.api.Disabled instead",
-                "org.junit.Assert @ use JUnit 5 org.junit.jupiter.api.Assertions or org.assertj.core.api.Assertions instead",
-                "org.junit.Assume @ use JUnit 5 org.junit.jupiter.api.Assumptions instead"
-            )
         }
     }
 
