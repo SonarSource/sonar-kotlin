@@ -20,34 +20,32 @@
 package org.sonarsource.slang.externalreport;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Rule;
+import kotlin.jvm.JvmField;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.rules.RuleType;
+import org.sonar.api.utils.log.LogTesterJUnit5;
 import org.sonar.api.utils.log.LoggerLevel;
-import org.sonar.api.utils.log.ThreadLocalLogTester;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@EnableRuleMigrationSupport
 class CheckstyleFormatImporterWithRuleLoaderTest {
 
-  @Rule
-  public ThreadLocalLogTester logTester = new ThreadLocalLogTester();
+  @JvmField
+  @RegisterExtension
+  public LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   static final ExternalRuleLoader RULE_LOADER = new ExternalRuleLoader(
     CheckstyleFormatImporterTest.LINTER_KEY,
     CheckstyleFormatImporterTest.LINTER_KEY,
-    Paths.get("org", "sonarsource", "slang", "externalreport", "test-linter-rules.json").toString(),
-      "kt");
+    Paths.get("org", "sonarsource", "slang", "externalreport", "test-linter-rules.json").toString(), "kt");
 
   @Test
   void import_detekt_issues_with_rule_loader() throws IOException {

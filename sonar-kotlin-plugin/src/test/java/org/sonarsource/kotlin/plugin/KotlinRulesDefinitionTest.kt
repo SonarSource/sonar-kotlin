@@ -32,7 +32,7 @@ internal class KotlinRulesDefinitionTest {
         val context = RulesDefinition.Context()
         rulesDefinition.define(context)
         val repository = context.repository("kotlin")
-        Assertions.assertThat(repository!!.name()).isEqualTo("SonarAnalyzer")
+        Assertions.assertThat(repository!!.name()).isEqualTo("SonarQube")
         Assertions.assertThat(repository.language()).isEqualTo("kotlin")
         val rule = repository.rule("S1764")
         Assertions.assertThat(rule).isNotNull

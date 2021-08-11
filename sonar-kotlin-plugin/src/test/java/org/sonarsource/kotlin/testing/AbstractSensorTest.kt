@@ -19,9 +19,9 @@
  */
 package org.sonarsource.kotlin.testing
 
-import org.junit.Rule
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport
+import org.junit.jupiter.api.extension.RegisterExtension
+import org.junit.jupiter.api.io.TempDir
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.sonar.api.batch.fs.InputFile
@@ -34,32 +34,39 @@ import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.FileLinesContext
 import org.sonar.api.measures.FileLinesContextFactory
 import org.sonar.api.rule.RuleKey
-import org.sonar.api.utils.internal.JUnitTempFolder
-import org.sonar.api.utils.log.ThreadLocalLogTester
+import org.sonar.api.utils.log.LogTesterJUnit5
 import org.sonarsource.kotlin.plugin.KotlinLanguage
 import org.sonarsource.kotlin.plugin.KotlinPlugin
-import java.io.File
 import java.nio.charset.StandardCharsets
+import java.nio.file.Path
+import kotlin.io.path.createTempDirectory
 
-@EnableRuleMigrationSupport
 abstract class AbstractSensorTest {
 
-    var temp = JUnitTempFolder()
-        @Rule get
-    protected lateinit var baseDir: File
+    @JvmField
+    @TempDir
+    var temp: Path? = null
+
+    protected lateinit var baseDir: Path
     protected lateinit var context: SensorContextTester
     protected var fileLinesContextFactory: FileLinesContextFactory = Mockito.mock(FileLinesContextFactory::class.java)
 
-    var logTester = ThreadLocalLogTester()
-        @Rule get
+    @JvmField
+    @RegisterExtension
+    var logTester = LogTesterJUnit5()
 
     @BeforeEach
     fun setup() {
-        baseDir = temp.newDir()
+        baseDir = createTempDirectory(temp!!)
         context = SensorContextTester.create(baseDir)
         val fileLinesContext = Mockito.mock(FileLinesContext::class.java)
-        Mockito.`when`(fileLinesContextFactory.createFor(ArgumentMatchers.any(
-            InputFile::class.java))).thenReturn(fileLinesContext)
+        Mockito.`when`(
+            fileLinesContextFactory.createFor(
+                ArgumentMatchers.any(
+                    InputFile::class.java
+                )
+            )
+        ).thenReturn(fileLinesContext)
     }
 
     protected fun checkFactory(vararg ruleKeys: String): CheckFactory {
@@ -77,7 +84,7 @@ abstract class AbstractSensorTest {
 
     protected fun createInputFile(relativePath: String, content: String): InputFile {
         return TestInputFileBuilder("moduleKey", relativePath)
-            .setModuleBaseDir(baseDir.toPath())
+            .setModuleBaseDir(baseDir)
             .setType(InputFile.Type.MAIN)
             .setLanguage(language().key)
             .setCharset(StandardCharsets.UTF_8)
