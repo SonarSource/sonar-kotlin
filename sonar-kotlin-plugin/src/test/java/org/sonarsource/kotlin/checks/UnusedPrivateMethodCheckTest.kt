@@ -19,4 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-class UnusedPrivateMethodCheckTest : CheckTest(UnusedPrivateMethodCheck())
+class UnusedPrivateMethodCheckTest : CheckTestWithNoSemantics(UnusedPrivateMethodCheck(), shouldReport = true)
