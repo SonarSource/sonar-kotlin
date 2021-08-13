@@ -81,7 +81,7 @@ subprojects {
             dependency("org.sonarsource.sonarqube:sonar-plugin-api-impl:${extra["sonarqubeVersion"]}")
             dependency("org.sonarsource.sonarqube:sonar-ws:${extra["sonarqubeVersion"]}")
             dependency("com.google.code.findbugs:jsr305:1.3.9")
-            dependency("com.eclipsesource.minimal-json:minimal-json:0.9.5")
+            dependency("com.google.code.gson:gson:2.8.7")
             dependency("org.junit.jupiter:junit-jupiter-api:5.7.1")
             dependency("org.junit.jupiter:junit-jupiter-engine:5.7.1")
             dependency("org.mockito:mockito-core:2.21.0")

@@ -18,7 +18,7 @@ dependencies {
     implementation("org.sonarsource.analyzer-commons:sonar-xml-parsing")
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
     implementation("com.fasterxml.staxmate:staxmate:2.3.1")
-    implementation("com.eclipsesource.minimal-json:minimal-json:0.9.5")
+    implementation("com.google.code.gson:gson")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
@@ -85,7 +85,7 @@ tasks.shadowJar {
     exclude("org/jetbrains/kotlin/org/jline/**")
     exclude("org/jetbrains/kotlin/net/jpountz/**")
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 32_000_000L, 33_000_000L)
+        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 33_000_000L, 33_200_000L)
     }
 }
 

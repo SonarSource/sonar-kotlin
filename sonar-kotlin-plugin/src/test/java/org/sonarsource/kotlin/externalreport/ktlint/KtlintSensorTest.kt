@@ -171,22 +171,14 @@ class KtlintSensorTest {
             .endsWith("invalid-checkstyle-file.xml' can't be read.")
     }
 
-    @Test
-    fun `no issues with invalid JSON file`() {
-        val externalIssues = executeSensorImporting("invalid-json-file.json")
+    @ParameterizedTest
+    @CsvSource("invalid-json-file.json", "invalid-json-format.json", "foo-report-with-errors.json")
+    fun `no issues with invalid JSON file`(fileName: String) {
+        val externalIssues = executeSensorImporting(fileName)
         assertThat(externalIssues).isEmpty()
         assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
             .startsWith("No issue information will be saved as the report file '")
-            .endsWith("invalid-json-file.json' cannot be read. Could not parse list of files with reported errors. Expected JSON array.")
-    }
-
-    @Test
-    fun `no issues with invalid JSON format`() {
-        val externalIssues = executeSensorImporting("invalid-json-format.json")
-        assertThat(externalIssues).isEmpty()
-        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
-            .startsWith("No issue information will be saved as the report file '")
-            .endsWith("invalid-json-format.json' cannot be read. JSON parsing failed: ParseException (Expected 'a' at 1:2)")
+            .contains("$fileName' cannot be read. JSON parsing failed: JsonSyntaxException (java.lang.IllegalStateException:")
     }
 
     @Test
@@ -217,22 +209,6 @@ class KtlintSensorTest {
         assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactlyInAnyOrder(
             "Unexpected error without any message for rule: ''",
             "Unexpected error without any message for rule: 'some-rule-key'"
-        )
-    }
-
-    @Test
-    fun `issues when JSON report file has errors`() {
-        val externalIssues = executeSensorImporting("foo-report-with-errors.json")
-        assertThat(externalIssues).hasSize(4)
-        assertThat(logTester.logs(LoggerLevel.WARN)).containsExactlyInAnyOrder(
-            "Exception while trying to parse ktlint JSON report: Invalid entry for file name 0.",
-            "Exception while trying to parse ktlint JSON report: Could not parse valid list of errors for entry 1 (file Foo.kt)",
-            "Exception while trying to parse ktlint JSON report: Not all ktlint errors were parsed correctly for file 'Foo.kt'.",
-            "Invalid input file non-existent-file.kt",
-            "Exception while trying to parse ktlint JSON report: Could not parse entry 4. Expected JSON object."
-        )
-        assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactlyInAnyOrder(
-            "Could not parse error 4 of the entry of file 'Foo.kt'."
         )
     }
 
