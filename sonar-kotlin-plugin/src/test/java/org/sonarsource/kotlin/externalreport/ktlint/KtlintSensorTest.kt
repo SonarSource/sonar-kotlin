@@ -20,28 +20,27 @@
 package org.sonarsource.kotlin.externalreport.ktlint
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Rule
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor
 import org.sonar.api.batch.sensor.issue.ExternalIssue
 import org.sonar.api.rules.RuleType
+import org.sonar.api.utils.log.LogTesterJUnit5
 import org.sonar.api.utils.log.LoggerLevel
-import org.sonar.api.utils.log.ThreadLocalLogTester
 import org.sonarsource.kotlin.externalreport.ExternalReportTestUtils
 import java.nio.file.Paths
 
 private val PROJECT_DIR = Paths.get("src", "test", "resources", "org/sonarsource/slang/externalreport", "ktlint")
 
-@EnableRuleMigrationSupport
 class KtlintSensorTest {
 
-    val logTester = ThreadLocalLogTester()
-        @Rule get
+    @JvmField
+    @RegisterExtension
+    val logTester = LogTesterJUnit5()
 
     private val analysisWarnings = mutableListOf<String>()
 
@@ -205,7 +204,8 @@ class KtlintSensorTest {
         val externalIssues = executeSensorImporting("foo-report-with-errors.xml")
         assertThat(externalIssues).hasSize(4)
         assertThat(logTester.logs(LoggerLevel.WARN)).containsExactlyInAnyOrder(
-            "No input file found for non-existent-file.kt. No ktlint issues will be imported on this file.")
+            "No input file found for non-existent-file.kt. No ktlint issues will be imported on this file."
+        )
         assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactlyInAnyOrder(
             "Unexpected error without any message for rule: ''",
             "Unexpected error without any message for rule: 'some-rule-key'"

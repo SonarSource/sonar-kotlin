@@ -22,12 +22,12 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    testImplementation("org.junit.jupiter:junit-jupiter-migrationsupport")
     testImplementation("org.assertj:assertj-core")
     testImplementation("org.mockito:mockito-core")
     testImplementation("io.mockk:mockk:1.10.6")
     testImplementation("io.github.classgraph:classgraph")
     testImplementation("org.sonarsource.analyzer-commons:sonar-analyzer-test-commons")
+    testImplementation("org.sonarsource.sonarqube:sonar-plugin-api-impl")
 }
 
 tasks.withType<JavaCompile> {

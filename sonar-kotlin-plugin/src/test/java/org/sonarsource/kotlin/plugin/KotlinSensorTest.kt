@@ -23,8 +23,8 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.rule.CheckFactory
 import org.sonar.api.batch.sensor.highlighting.TypeOfText
+import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
 import org.sonar.api.config.internal.MapSettings
-import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.CoreMetrics
 import org.sonarsource.kotlin.testing.AbstractSensorTest
 import org.sonarsource.kotlin.testing.assertTextRange
@@ -139,8 +139,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun test_fail_parsing() {
-        val inputFile = createInputFile("file1.kt", "" +
-            "enum class A { <!REDECLARATION!>FOO<!>,<!REDECLARATION!>FOO<!> }")
+        val inputFile = createInputFile("file1.kt", "enum class A { <!REDECLARATION!>FOO<!>,<!REDECLARATION!>FOO<!> }")
         context.fileSystem().add(inputFile)
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
@@ -184,6 +183,6 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     private fun sensor(checkFactory: CheckFactory): KotlinSensor {
-        return KotlinSensor(checkFactory, fileLinesContextFactory, NoSonarFilter(), language())
+        return KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language())
     }
 }

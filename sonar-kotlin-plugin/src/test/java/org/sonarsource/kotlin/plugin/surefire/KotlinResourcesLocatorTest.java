@@ -26,9 +26,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultFilePredicates;
 import org.sonar.api.batch.fs.internal.DefaultIndexedFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.predicates.DefaultFilePredicates;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,19 +40,19 @@ class KotlinResourcesLocatorTest {
   private final FileSystem fileSystem = mock(FileSystem.class);
   private final KotlinResourcesLocator kotlinResourcesLocator = new KotlinResourcesLocator(fileSystem);
   private final InputFile expected = new DefaultInputFile(new DefaultIndexedFile("", new File("/").toPath(), "",""), (x) -> {});
-  
+
   @BeforeEach
   void setUp() {
     when(fileSystem.predicates()).thenReturn(new DefaultFilePredicates(new File("/").toPath()));
     when(fileSystem.inputFiles(any())).thenReturn(Collections.singletonList(expected));
   }
-  
+
   @Test
   void findResourceByClassName() {
     when(fileSystem.hasFiles(any())).thenReturn(true);
-    
+
     Optional<InputFile> inputFile = kotlinResourcesLocator.findResourceByClassName("MyClass");
-    
+
     assertEquals(Optional.of(expected), inputFile);
   }
 
