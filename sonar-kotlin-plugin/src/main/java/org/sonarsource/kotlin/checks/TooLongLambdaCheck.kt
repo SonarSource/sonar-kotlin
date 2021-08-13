@@ -19,32 +19,27 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtSecondaryConstructor
+import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private const val DEFAULT_MAX = 100
+private const val DEFAULT_MAX = 20
 
-@Rule(key = "S138")
-class TooLongFunctionCheck : AbstractTooLongFunctionRule() {
+@Rule(key = "S5612")
+class TooLongLambdaCheck : AbstractTooLongFunctionRule() {
 
     @RuleProperty(
         key = "max",
-        description = "Maximum authorized lines of code in a function",
+        description = "Maximum authorized lines of code in a lambda expression",
         defaultValue = "" + DEFAULT_MAX,
     )
     override var max: Int = DEFAULT_MAX
 
-    override val elementName = "function"
+    override val elementName = "lambda"
 
-    override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor, kotlinFileContext: KotlinFileContext) {
-        check(constructor, kotlinFileContext)
-    }
-
-    override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        check(function, kotlinFileContext)
+    override fun visitLambdaExpression(expression: KtLambdaExpression, kotlinFileContext: KotlinFileContext) {
+        check(expression.functionLiteral, kotlinFileContext)
     }
 
 }

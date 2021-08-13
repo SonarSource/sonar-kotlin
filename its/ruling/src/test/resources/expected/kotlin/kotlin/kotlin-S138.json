@@ -4,7 +4,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/buildSrc/src/main/kotlin/plugins/PublishedKotlinModule.kt':[
 27,
-29,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/AnonymousObjectTransformer.kt':[
 49,
@@ -37,11 +36,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/generators/tests/GenerateCompilerTests.kt':[
 59,
-62,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors.jvm/src/org/jetbrains/kotlin/load/java/typeEnhancement/predefinedEnhancementInfo.kt':[
-40,
-51,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/eval4j/src/org/jetbrains/eval4j/interpreterLoop.kt':[
 74,
@@ -54,17 +48,12 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/generators/tests/org/jetbrains/kotlin/generators/tests/GenerateTests.kt':[
 165,
-168,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/KotlinCommonBlock.kt':[
 466,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/kotlinSpacingRules.kt':[
 46,
-49,
-62,
-191,
-362,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/decompiler/textBuilder/buildDecompiledText.kt':[
 45,
@@ -122,7 +111,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/kdoc/KDocRenderer.kt':[
 192,
-198,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/quickfix/QuickFixFactoryForTypeMismatchError.kt':[
 58,
@@ -132,7 +120,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/quickfix/createFromUsage/callableBuilder/CallableBuilder.kt':[
 438,
-439,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/KotlinChangeInfo.kt':[
 349,
@@ -200,7 +187,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/generators/tests/generateTestDataForReservedWords.kt':[
 48,
-49,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/BasicBoxTest.kt':[
 98,

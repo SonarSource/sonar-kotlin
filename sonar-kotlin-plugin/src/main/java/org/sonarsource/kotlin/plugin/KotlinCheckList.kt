@@ -75,6 +75,7 @@ import org.sonarsource.kotlin.checks.TodoCommentCheck
 import org.sonarsource.kotlin.checks.TooComplexExpressionCheck
 import org.sonarsource.kotlin.checks.TooDeeplyNestedStatementsCheck
 import org.sonarsource.kotlin.checks.TooLongFunctionCheck
+import org.sonarsource.kotlin.checks.TooLongLambdaCheck
 import org.sonarsource.kotlin.checks.TooLongLineCheck
 import org.sonarsource.kotlin.checks.TooManyCasesCheck
 import org.sonarsource.kotlin.checks.TooManyLinesOfCodeFileCheck
@@ -148,6 +149,7 @@ val KOTLIN_CHECKS = listOf(
     TooComplexExpressionCheck::class.java,
     TooDeeplyNestedStatementsCheck::class.java,
     TooLongFunctionCheck::class.java,
+    TooLongLambdaCheck::class.java,
     TooLongLineCheck::class.java,
     TooManyCasesCheck::class.java,
     TooManyLinesOfCodeFileCheck::class.java,
