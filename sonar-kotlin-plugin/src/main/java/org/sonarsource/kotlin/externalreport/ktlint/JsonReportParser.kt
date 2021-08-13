@@ -19,9 +19,9 @@
  */
 package org.sonarsource.kotlin.externalreport.ktlint
 
+import com.google.gson.Gson
 import java.nio.file.Path
 import kotlin.io.path.reader
-import org.sonar.api.internal.google.gson.Gson
 
 internal class JsonReportParser(private val reportFile: Path) {
 
