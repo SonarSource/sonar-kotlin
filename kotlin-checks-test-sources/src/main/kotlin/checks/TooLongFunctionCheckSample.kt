@@ -24,8 +24,7 @@ abstract class TooLongFunctionCheckSample {
     }
 
     fun lambda() { // Noncompliant {{This function has 8 lines of code, which is greater than the 3 authorized. Split it into smaller functions.}}
-        { // Noncompliant {{This function has 4 lines of code, which is greater than the 3 authorized. Split it into smaller functions.}}
-//      ^
+        {
             println()
             println()
             println()
@@ -42,6 +41,15 @@ abstract class TooLongFunctionCheckSample {
 
     fun String.extension() { // Noncompliant {{This function has 4 lines of code, which is greater than the 3 authorized. Split it into smaller functions.}}
 //             ^^^^^^^^^
+        println()
+        println()
+    }
+
+    val anonFun = fun(x: Int) { // Noncompliant {{This function has 7 lines of code, which is greater than the 3 authorized. Split it into smaller functions.}}
+//                ^^^
+        x * x
+        println()
+        println()
         println()
         println()
     }
