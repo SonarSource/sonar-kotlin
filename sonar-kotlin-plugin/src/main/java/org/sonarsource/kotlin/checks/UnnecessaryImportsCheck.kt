@@ -54,44 +54,18 @@ class UnnecessaryImportsCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
 
-        val (references, arrayAccesses, kDocLinks) = DataCollector(file, context).run {
-            val relevantTopLevelChildren = file.children.asSequence()
-                .filter { it !is KtPackageDirective && it !is KtImportList }
-
-            relevantTopLevelChildren.flattenNodes()
-                .filterIsInstance<KtElement>()
-                .forEach { ktElement ->
-                    ktElement.accept(this)
-                }
-
-            collectFromKDocComments(relevantTopLevelChildren.flatMap { it.collectDescendantsOfType<KDocLink>().asSequence() })
-
-            this.result
-        }
-
+        val (references, arrayAccesses, kDocLinks) = collectData(file)
         val bindingContext = context.bindingContext
-
         val groupedReferences = references.groupBy { reference ->
             reference.importableSimpleName()
         }
 
         val arrayAccessesImportsFilter by lazy {
-            if (bindingContext == BindingContext.EMPTY) {
-                return@lazy { imp: KtImportDirective ->
-                    imp.importedName?.asString().let { it != "get" && it != "set" }
-                }
-            } else {
-                val resolvedArrayAccesses = arrayAccesses.map {
-                    it.getResolvedCall(context.bindingContext)?.resultingDescriptor?.fqNameOrNull()
-                }
-
-                return@lazy { imp: KtImportDirective ->
-                    imp.importedFqName !in resolvedArrayAccesses
-                }
-            }
+            getArrayAccessImportsFilter(arrayAccesses, bindingContext)
         }
 
         file.importDirectives.filter { imp ->
+            // 1. Filter out & report all imports that import from kotlin.* or the same package as our file
             if (imp.isImportedImplicitlyAlready(file.packageDirective?.name)) {
                 imp.importedReference?.let { context.reportIssue(it, MESSAGE_REDUNDANT) }
                 false
@@ -99,27 +73,62 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         }.groupBy {
             it.importedName?.asString()
         }.filterKeys { simpleName ->
+            // 2. Discard all imports that could be relevant for KDocs. This is done a bit fuzzy.
             simpleName != null && simpleName !in kDocLinks
         }.flatMap { (simpleName, importsWithSameName) ->
+            // 3. Discard all imports that are used in references throughout the code. With binding context if possible,
+            // otherwise we over-estimate
             groupedReferences[simpleName]?.let { relevantReferences ->
                 var relevantImports = importsWithSameName
                 for (ref in relevantReferences) {
                     val refName = bindingContext.get(BindingContext.REFERENCE_TARGET, ref)?.getImportableDescriptor()?.fqNameOrNull()
-                        ?: return@flatMap emptyList()
+                        ?: return@flatMap emptyList() // Discard all: over-estimate, resulting in less FPs and more FNs without binding ctx
                     relevantImports = relevantImports.filter { it.importedFqName != refName }
                     if (relevantImports.isEmpty()) break
                 }
                 relevantImports
             } ?: importsWithSameName
         }.filter {
+            // 4. Filter 'get' and 'set' imports
             arrayAccessesImportsFilter(it)
         }.forEach {
+            // We could not find any usages for anything remaining at this point. Hence, report!
             context.reportIssue(it, MESSAGE_UNUSED)
         }
     }
+
+    private fun collectData(file: KtFile) =
+        file.children.asSequence().filter {
+            it !is KtPackageDirective && it !is KtImportList
+        }.let { relevantTopLevelChildren ->
+            DataCollector(file).apply {
+                relevantTopLevelChildren.flattenNodes()
+                    .filterIsInstance<KtElement>()
+                    .forEach { ktElement ->
+                        ktElement.accept(this)
+                    }
+
+                collectFromKDocComments(relevantTopLevelChildren.flatMap { it.collectDescendantsOfType<KDocLink>().asSequence() })
+            }
+        }.result
+
+    private fun getArrayAccessImportsFilter(arrayAccesses: Collection<KtArrayAccessExpression>, bindingContext: BindingContext) =
+        if (bindingContext == BindingContext.EMPTY) {
+            { imp: KtImportDirective ->
+                imp.importedName?.asString().let { it != "get" && it != "set" }
+            }
+        } else {
+            arrayAccesses.map {
+                it.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull()
+            }.let { resolvedArrayAccesses ->
+                { imp: KtImportDirective ->
+                    imp.importedFqName !in resolvedArrayAccesses
+                }
+            }
+        }
 }
 
-private class DataCollector(val file: KtFile, val context: KotlinFileContext) : KtVisitorVoid() {
+private class DataCollector(val file: KtFile) : KtVisitorVoid() {
 
     data class DataCollectionResult(
         val references: Collection<KtReferenceExpression>,
