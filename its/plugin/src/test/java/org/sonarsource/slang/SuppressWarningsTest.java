@@ -23,21 +23,22 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NoSonarTest extends TestBase {
+public class SuppressWarningsTest extends TestBase {
 
-  private static final String BASE_DIRECTORY = "projects/nosonar/";
-  private static final String NO_SONAR_PROFILE_NAME = "nosonar-profile";
+  private static final String BASE_DIRECTORY = "projects/suppress-warnings/";
+  private static final String SUPPRESS_WARNINGS_PROFILE = "suppress-warnings-profile";
   private static final String RULE_KEY = "S1145";
+  private static final String COGNITIVE_COMPLEXITY_RULE_KEY = "S3776";
+  private static final String PROJECT_KEY = "issueSuppression";
+  private static final String LANGUAGE = "kotlin";
+  
 
   @Test
-  public void test_kotlin_nosonar() {
-    checkForLanguage("kotlinNoSonar", "kotlin");
-  }
+  public void test_kotlin_issue_suppression() {
+    ORCHESTRATOR.executeBuild(getSonarScanner(PROJECT_KEY, BASE_DIRECTORY, LANGUAGE, SUPPRESS_WARNINGS_PROFILE));
 
-  private void checkForLanguage(String projectKey, String language) {
-    ORCHESTRATOR.executeBuild(getSonarScanner(projectKey, BASE_DIRECTORY, language, NO_SONAR_PROFILE_NAME));
-
-    assertThat(getMeasureAsInt(projectKey, "files")).isEqualTo(1);
-    assertThat(getIssuesForRule(projectKey, language + ":" + RULE_KEY)).hasSize(1);
+    assertThat(getMeasureAsInt(PROJECT_KEY, "files")).isEqualTo(2);
+    assertThat(getIssuesForRule(PROJECT_KEY, LANGUAGE + ":" + RULE_KEY)).hasSize(7);
+    assertThat(getIssuesForRule(PROJECT_KEY, LANGUAGE + ":" + COGNITIVE_COMPLEXITY_RULE_KEY)).hasSize(1);
   }
 }
