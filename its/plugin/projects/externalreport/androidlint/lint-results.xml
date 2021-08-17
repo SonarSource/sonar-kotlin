@@ -34,5 +34,22 @@
                 line="3"
                 column="5"/>
     </issue>
+    
+    <issue
+            id="UnknownIssue"
+            severity="Warning"
+            message="My custom issue"
+            category="Correctness"
+            priority="4"
+            summary="My custom issue"
+            explanation=""
+            errorLine1="    My custom issue"
+            errorLine2="    ~~~~~~~~~~~~~~~"
+            quickfix="studio">
+        <location
+                file="main.kt"
+                line="2"
+                column="5"/>
+    </issue>
 
 </issues>
