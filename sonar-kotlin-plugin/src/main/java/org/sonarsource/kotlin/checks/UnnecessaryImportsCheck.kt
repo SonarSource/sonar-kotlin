@@ -1,0 +1,164 @@
+/*
+ * SonarSource SLang
+ * Copyright (C) 2018-2021 SonarSource SA
+ * mailto:info AT sonarsource DOT com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+package org.sonarsource.kotlin.checks
+
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.fir.builder.toBinaryName
+import org.jetbrains.kotlin.kdoc.psi.impl.KDocLink
+import org.jetbrains.kotlin.psi.KtArrayAccessExpression
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtImportDirective
+import org.jetbrains.kotlin.psi.KtImportList
+import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
+import org.jetbrains.kotlin.psi.KtPackageDirective
+import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.psi.KtSimpleNameExpression
+import org.jetbrains.kotlin.psi.KtUserType
+import org.jetbrains.kotlin.psi.KtVisitorVoid
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.isDotSelector
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
+import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
+import org.sonar.check.Rule
+import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.plugin.KotlinFileContext
+
+private const val MESSAGE_UNUSED = "Remove unused import."
+private const val MESSAGE_REDUNDANT = "Remove redundant import."
+
+@Rule(key = "S1128")
+class UnnecessaryImportsCheck : AbstractCheck() {
+
+    private fun Sequence<PsiElement>.flattenNodes(): Sequence<PsiElement> =
+        this + this.flatMap { it.children.asSequence().flattenNodes() }
+
+    override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
+
+        val (references, arrayAccesses, kDocLinks) = DataCollector(file, context).run {
+            val relevantTopLevelChildren = file.children.asSequence()
+                .filter { it !is KtPackageDirective && it !is KtImportList }
+
+            relevantTopLevelChildren.flattenNodes()
+                .filterIsInstance<KtElement>()
+                .forEach { ktElement ->
+                    ktElement.accept(this)
+                }
+
+            collectFromKDocComments(relevantTopLevelChildren.flatMap { it.collectDescendantsOfType<KDocLink>().asSequence() })
+
+            this.result
+        }
+
+        val bindingContext = context.bindingContext
+
+        val groupedReferences = references.groupBy { reference ->
+            reference.importableSimpleName()
+        }
+
+        val arrayAccessesImportsFilter by lazy {
+            if (bindingContext == BindingContext.EMPTY) {
+                return@lazy { imp: KtImportDirective ->
+                    imp.importedName?.asString().let { it != "get" && it != "set" }
+                }
+            } else {
+                val resolvedArrayAccesses = arrayAccesses.map {
+                    it.getResolvedCall(context.bindingContext)?.resultingDescriptor?.fqNameOrNull()
+                }
+
+                return@lazy { imp: KtImportDirective ->
+                    imp.importedFqName !in resolvedArrayAccesses
+                }
+            }
+        }
+
+        file.importDirectives.filter { imp ->
+            if (imp.isImportedImplicitlyAlready(file.packageDirective?.name)) {
+                imp.importedReference?.let { context.reportIssue(it, MESSAGE_REDUNDANT) }
+                false
+            } else true
+        }.groupBy {
+            it.importedName?.asString()
+        }.filterKeys { simpleName ->
+            simpleName != null && simpleName !in kDocLinks
+        }.flatMap { (simpleName, importsWithSameName) ->
+            groupedReferences[simpleName]?.let { relevantReferences ->
+                var relevantImports = importsWithSameName
+                for (ref in relevantReferences) {
+                    val refName = bindingContext.get(BindingContext.REFERENCE_TARGET, ref)?.getImportableDescriptor()?.fqNameOrNull()
+                        ?: break
+                    relevantImports = relevantImports.filter { it.importedFqName != refName }
+                    if (relevantImports.isEmpty()) break
+                }
+                relevantImports
+            } ?: importsWithSameName
+        }.filter {
+            arrayAccessesImportsFilter(it)
+        }.forEach {
+            context.reportIssue(it, MESSAGE_UNUSED)
+        }
+    }
+}
+
+private class DataCollector(val file: KtFile, val context: KotlinFileContext) : KtVisitorVoid() {
+
+    data class DataCollectionResult(
+        val references: Collection<KtReferenceExpression>,
+        val arrayAccesses: Collection<KtArrayAccessExpression>,
+        val kDocLinks: Collection<String>
+    )
+
+    private val references = mutableListOf<KtReferenceExpression>()
+    private val arrayAccesses = mutableListOf<KtArrayAccessExpression>()
+    private val kDocLinks = mutableSetOf<String>()
+
+    val result: DataCollectionResult
+        get() = DataCollectionResult(references, arrayAccesses, kDocLinks)
+
+    override fun visitReferenceExpression(expression: KtReferenceExpression) {
+        expression.takeUnless {
+            it.isDotSelector() || it.children.isNotEmpty() || it.isQualifiedUserType()
+        }?.let {
+            references.add(it)
+        }
+    }
+
+    override fun visitArrayAccessExpression(expression: KtArrayAccessExpression) {
+        arrayAccesses.add(expression)
+    }
+
+    fun collectFromKDocComments(comments: Sequence<KDocLink>) {
+        comments.forEach { kDocLinks.add(it.getLinkText().substringBefore('.')) }
+    }
+}
+
+private fun KtReferenceExpression.isQualifiedUserType() = (this.context as? KtUserType)?.qualifier != null
+
+private fun KtImportDirective.isImportedImplicitlyAlready(containingPackage: String?) =
+    this.importedFqName?.parent()?.asString()?.let { it == "kotlin" || it == containingPackage } ?: false
+
+private fun KtReferenceExpression.importableSimpleName() =
+    when (this) {
+        is KtOperationReferenceExpression -> operationSignTokenType?.toBinaryName()?.asString() ?: getReferencedName()
+        is KtSimpleNameExpression -> getReferencedName()
+        else -> null
+    }
