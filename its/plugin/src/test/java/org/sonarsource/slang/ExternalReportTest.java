@@ -45,14 +45,21 @@ public class ExternalReportTest extends TestBase {
     sonarScanner.setProperty("sonar.kotlin.detekt.reportPaths", "detekt-checkstyle.xml");
     ORCHESTRATOR.executeBuild(sonarScanner);
     List<Issue> issues = getExternalIssues(projectKey);
-    assertThat(issues).hasSize(1);
-    Issue issue = issues.get(0);
-    assertThat(issue.getComponent()).isEqualTo(projectKey + ":main.kt");
-    assertThat(issue.getRule()).isEqualTo("external_detekt:ForEachOnRange");
-    assertThat(issue.getLine()).isEqualTo(2);
-    assertThat(issue.getMessage()).isEqualTo("Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.");
-    assertThat(issue.getSeverity().name()).isEqualTo("CRITICAL");
-    assertThat(issue.getDebt()).isEqualTo("5min");
+    assertThat(issues).hasSize(2);
+    
+    Issue first = issues.stream().filter(issue -> issue.getRule().equals("external_detekt:ForEachOnRange")).findFirst().orElse(null);
+    assertThat(first.getComponent()).isEqualTo(projectKey + ":main.kt");
+    assertThat(first.getLine()).isEqualTo(2);
+    assertThat(first.getMessage()).isEqualTo("Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.");
+    assertThat(first.getSeverity().name()).isEqualTo("CRITICAL");
+    assertThat(first.getDebt()).isEqualTo("5min");
+
+    Issue second = issues.stream().filter(issue -> issue.getRule().equals("external_detekt:external.catchall")).findFirst().orElse(null);
+    assertThat(second.getComponent()).isEqualTo(projectKey + ":main.kt");
+    assertThat(second.getLine()).isEqualTo(2);
+    assertThat(second.getMessage()).isEqualTo("My custom issue.");
+    assertThat(second.getSeverity().name()).isEqualTo("MAJOR");
+    assertThat(second.getDebt()).isEqualTo("0min");
   }
 
   @Test
@@ -62,20 +69,25 @@ public class ExternalReportTest extends TestBase {
     sonarScanner.setProperty("sonar.androidLint.reportPaths", "lint-results.xml");
     ORCHESTRATOR.executeBuild(sonarScanner);
     List<Issue> issues = getExternalIssues(projectKey);
-    assertThat(issues).hasSize(2);
-    Issue first = issues.stream().filter(issue -> (projectKey + ":main.kt").equals(issue.getComponent())).findFirst().orElse(null);
-    assertThat(first.getRule()).isEqualTo("external_android-lint:UnusedAttribute");
-    assertThat(first.getLine()).isEqualTo(2);
-    assertThat(first.getMessage()).isEqualTo("Attribute `required` is only used in API level 5 and higher (current min is 1)");
+    assertThat(issues).hasSize(3);
+
+    Issue first = issues.stream().filter(issue -> issue.getRule().equals("external_android-lint:GradleDependency")).findFirst().orElse(null);
+    assertThat(first.getLine()).isEqualTo(3);
+    assertThat(first.getMessage()).isEqualTo("A newer version of com.android.support:recyclerview-v7 than 26.0.0 is available: 27.1.1");
     assertThat(first.getSeverity().name()).isEqualTo("MINOR");
     assertThat(first.getDebt()).isEqualTo("5min");
+      
+    Issue secondIssue = issues.stream().filter(issue -> issue.getRule().equals("external_android-lint:UnusedAttribute")).findFirst().orElse(null);
+    assertThat(secondIssue.getLine()).isEqualTo(2);
+    assertThat(secondIssue.getMessage()).isEqualTo("Attribute `required` is only used in API level 5 and higher (current min is 1)");
+    assertThat(secondIssue.getSeverity().name()).isEqualTo("MINOR");
+    assertThat(secondIssue.getDebt()).isEqualTo("5min");
 
-    Issue second = issues.stream().filter(issue -> (projectKey + ":build.gradle").equals(issue.getComponent())).findFirst().orElse(null);
-    assertThat(second.getRule()).isEqualTo("external_android-lint:GradleDependency");
-    assertThat(second.getLine()).isEqualTo(3);
-    assertThat(second.getMessage()).isEqualTo("A newer version of com.android.support:recyclerview-v7 than 26.0.0 is available: 27.1.1");
-    assertThat(second.getSeverity().name()).isEqualTo("MINOR");
-    assertThat(second.getDebt()).isEqualTo("5min");
+    Issue third = issues.stream().filter(issue -> issue.getRule().equals("external_android-lint:external.catchall")).findFirst().orElse(null);
+    assertThat(third.getLine()).isEqualTo(2);
+    assertThat(third.getMessage()).isEqualTo("My custom issue");
+    assertThat(third.getSeverity().name()).isEqualTo("MAJOR");
+    assertThat(third.getDebt()).isEqualTo("0min");
   }
 
   private List<Issue> getExternalIssues(String componentKey) {
