@@ -1,7 +1,7 @@
 package checks
 
 // same package/file
-import checks.ClassInSameFileA // Noncompliant {{Remove redundant import.}}
+import checks.ClassInSameFileB // Noncompliant {{Remove redundant import.}}
 // same package
 import checks.DelicateCoroutinesApi // Noncompliant {{Remove redundant import.}}
 // unused
@@ -17,7 +17,7 @@ import okhttp3.TlsVersion
 import org.apache.commons.lang.StringUtils
 import otherpackage.get
 // not used, defaults to String.plus
-import otherpackage.plus // Noncompliant {{Remove unused import.}}
+import otherpackage.plus // FN due to missing binding context
 import otherpackage.OtherClass.minus
 import otherpackage.OtherClass.plus // Non|compliant FN (it is used below in OtherClass + OtherClass but doesn't need to be imported)
 import otherpackage.OtherClass.get
@@ -41,8 +41,8 @@ import okhttp3.TlsVersion.TLS_1_1
 import okhttp3.TlsVersion.TLS_1_2 // Noncompliant {{Remove unused import.}}
 import otherpackage.OtherClass
 import otherpackage.OtherClass2.plus
-import otherpackage.OtherClass2.get // Noncompliant {{Remove unused import.}}
-import otherpackage.OtherClass2.set // Noncompliant {{Remove unused import.}}
+import otherpackage.OtherClass2.get // FN due to missing binding context
+import otherpackage.OtherClass2.set // FN due to missing binding context
 import otherpackage.someInfixFun
 import otherpackage.stringExtFun1
 import otherpackage.stringExtFun2
@@ -50,7 +50,7 @@ import java.io.InputStream
 import okhttp3.TlsVersion.SSL_3_0 as TLS3 // Noncompliant {{Remove unused import.}}
 import okhttp3.TlsVersion.TLS_1_3 as TLS13
 
-class UnnecessaryImportsCheckSampleNoSemantics {
+class UnnecessaryImportsCheckSample {
     fun foo() {
         StringBuilder()
         StringUtils.EMPTY
@@ -86,7 +86,7 @@ class UnnecessaryImportsCheckSampleNoSemantics {
      */
     fun File.extensionFun() {}
 
-    lateinit var b : ClassInSameFileA
+    lateinit var b : ClassInSameFileB
 
     @DelicateCoroutinesApi
     fun bar() {
@@ -94,6 +94,6 @@ class UnnecessaryImportsCheckSampleNoSemantics {
     }
 }
 
-class ChildClass1A: java.util.Date()
-class ChildClass2A: Timer()
-class ClassInSameFileA
+class ChildClass1B: java.util.Date()
+class ChildClass2B: Timer()
+class ClassInSameFileB

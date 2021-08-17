@@ -19,4 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-class UnnecessaryImportsCheckTest : CheckTest(UnnecessaryImportsCheck())
+class UnnecessaryImportsCheckTest : CheckTestWithNoSemantics(UnnecessaryImportsCheck(), shouldReport = true)

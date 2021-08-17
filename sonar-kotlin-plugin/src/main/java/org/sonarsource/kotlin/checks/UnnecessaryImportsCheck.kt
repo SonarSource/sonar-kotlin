@@ -105,7 +105,7 @@ class UnnecessaryImportsCheck : AbstractCheck() {
                 var relevantImports = importsWithSameName
                 for (ref in relevantReferences) {
                     val refName = bindingContext.get(BindingContext.REFERENCE_TARGET, ref)?.getImportableDescriptor()?.fqNameOrNull()
-                        ?: break
+                        ?: return@flatMap emptyList()
                     relevantImports = relevantImports.filter { it.importedFqName != refName }
                     if (relevantImports.isEmpty()) break
                 }
