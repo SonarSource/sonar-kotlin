@@ -90,6 +90,30 @@ public class ExternalReportTest extends TestBase {
     assertThat(third.getDebt()).isEqualTo("0min");
   }
 
+  @Test
+  public void ktlint() {
+    final String projectKey = "ktlint";
+    SonarScanner sonarScanner = getSonarScanner(projectKey, BASE_DIRECTORY, "ktlint");
+    sonarScanner.setProperty("sonar.kotlin.ktlint.reportPaths", "ktlint-checkstyle.xml");
+    ORCHESTRATOR.executeBuild(sonarScanner);
+    List<Issue> issues = getExternalIssues(projectKey);
+    assertThat(issues).hasSize(2);
+
+    Issue first = issues.stream().filter(issue -> issue.getRule().equals("external_ktlint:no-wildcard-imports")).findFirst().orElse(null);
+    assertThat(first.getComponent()).isEqualTo(projectKey + ":main.kt");
+    assertThat(first.getLine()).isEqualTo(1);
+    assertThat(first.getMessage()).isEqualTo("Wildcard import (cannot be auto-corrected)");
+    assertThat(first.getSeverity().name()).isEqualTo("MAJOR");
+    assertThat(first.getDebt()).isEqualTo("0min");
+
+    Issue second = issues.stream().filter(issue -> issue.getRule().equals("external_ktlint:external.catchall")).findFirst().orElse(null);
+    assertThat(second.getComponent()).isEqualTo(projectKey + ":main.kt");
+    assertThat(second.getLine()).isEqualTo(2);
+    assertThat(second.getMessage()).isEqualTo("My custom issue.");
+    assertThat(second.getSeverity().name()).isEqualTo("MAJOR");
+    assertThat(second.getDebt()).isEqualTo("0min");
+  }
+
   private List<Issue> getExternalIssues(String componentKey) {
     return newWsClient().issues().search(new SearchRequest().setComponentKeys(Collections.singletonList(componentKey)))
       .getIssuesList().stream()
