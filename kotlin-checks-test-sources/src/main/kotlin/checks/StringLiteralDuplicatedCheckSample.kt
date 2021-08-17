@@ -61,4 +61,16 @@ class StringLiteralDuplicatedCheckSample {
         )
 //@-2             ^^^^^^^^^^^^^^^^<
     }
+
+    @Deprecated("Conversion of Char to Number is deprecated. Use Char.code property instead.", ReplaceWith("this.code.toShort()"))
+    fun d1() {
+    }
+
+    @Deprecated("Conversion of Char to Number is deprecated. Use Char.code property instead.", ReplaceWith("this.code.toShort()"))
+    fun d2() {
+    }
+
+    @Deprecated("Conversion of Char to Number is deprecated. Use Char.code property instead.", ReplaceWith("this.code.toShort()"))
+    fun d3() {
+    }
 }

@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.psi.KtAnnotatedExpression
+import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.sonar.check.Rule
@@ -79,7 +79,7 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
     private fun collectStringTemplatesNotInAnnotations(node: PsiElement): Sequence<KtStringTemplateExpression> =
         when {
             node is KtStringTemplateExpression && !node.hasInterpolation() -> sequenceOf(node)
-            node is KtAnnotatedExpression -> node.baseExpression?.let { collectStringTemplatesNotInAnnotations(it) } ?: emptySequence()
+            node is KtAnnotationEntry -> emptySequence()
             else -> node.children.asSequence().flatMap { collectStringTemplatesNotInAnnotations(it) }
         }
 }
