@@ -56,7 +56,7 @@ import kotlin.test.* // Non|compliant FN (we currently ignore all wildcard impor
 // Except for this one
 import kotlin.* // Noncompliant {{Remove redundant import.}}
 
-class UnnecessaryImportsCheckSampleNoSemantics {
+class UnnecessaryImportsCheckSample {
     fun foo() {
         StringBuilder()
         StringUtils.EMPTY
