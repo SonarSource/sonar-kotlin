@@ -11,7 +11,7 @@ class UnusedLocalVariableCheckSample {
     val hcek = 0 // Compliant, is not local
 
     init {
-        var i: Int // Compliant
+        var i: Int // Noncompliant
     }
 
     constructor() {
@@ -63,4 +63,11 @@ class HappyPath {
         val i = 90
         print(i)
     }
+}
+
+data class D(val p: Int)
+
+fun duplicatedNameInInitializer(d: D) {
+    val p = d.p // Noncompliant {{Remove this unused "p" local variable.}}
+//      ^
 }

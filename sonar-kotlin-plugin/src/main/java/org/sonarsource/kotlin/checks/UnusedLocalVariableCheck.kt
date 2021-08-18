@@ -19,16 +19,9 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtFunction
-import org.jetbrains.kotlin.psi.KtLambdaExpression
-import org.jetbrains.kotlin.psi.KtNameReferenceExpression
-import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtSecondaryConstructor
-import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
-import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
-import org.jetbrains.kotlin.util.containingNonLocalDeclaration
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
@@ -36,29 +29,13 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 @Rule(key = "S1481")
 class UnusedLocalVariableCheck : AbstractCheck() {
 
-    override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext) {
-        if (function.isLocal) return
-        function.checkUnusedVariables(context)
-    }
-
-    override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor, context: KotlinFileContext) {
-        constructor.checkUnusedVariables(context)
-    }
-
-    override fun visitLambdaExpression(expression: KtLambdaExpression, context: KotlinFileContext) {
-        if (expression.containingNonLocalDeclaration() !is KtFunction) {
-            expression.checkUnusedVariables(context)
-        }
-    }
-
-    private fun KtElement.checkUnusedVariables(context: KotlinFileContext) {
-        forEachDescendantOfType<KtProperty> { property ->
-            val nameIdentifier = property.nameIdentifier!!
-            if (property.isLocal && !anyDescendantOfType<KtNameReferenceExpression> {
-                        reference -> reference.getReferencedName() == property.name
-            }) {
-                context.reportIssue(nameIdentifier, """Remove this unused "${nameIdentifier.text}" local variable.""")
+    override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
+        context.bindingContext.diagnostics.noSuppression()
+            .filter { it.factory == Errors.UNUSED_VARIABLE }
+            .mapNotNull { (it.psiElement as? KtProperty) }
+            .forEach {
+                it.nameIdentifier ?: return
+                context.reportIssue(it.nameIdentifier!!, """Remove this unused "${it.name}" local variable.""")
             }
-        }
     }
 }
