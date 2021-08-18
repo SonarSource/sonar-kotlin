@@ -47,6 +47,8 @@ import otherpackage.someInfixFun
 import otherpackage.stringExtFun1
 import otherpackage.stringExtFun2
 import java.io.InputStream
+import java.lang.reflect.Method
+import kotlin.reflect.jvm.kotlinFunction
 import okhttp3.TlsVersion.SSL_3_0 as TLS3 // Noncompliant {{Remove unused import.}}
 import okhttp3.TlsVersion.TLS_1_3 as TLS13
 
@@ -77,6 +79,8 @@ class UnnecessaryImportsCheckSampleNoSemantics {
         TLS13
         `immutable_set_of`("")
         "" someInfixFun ""
+        val method: Method? = null
+        val kf = method!!.kotlinFunction
     }
 
     /**

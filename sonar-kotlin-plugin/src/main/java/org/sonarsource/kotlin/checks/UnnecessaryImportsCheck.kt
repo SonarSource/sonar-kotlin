@@ -145,7 +145,7 @@ private class DataCollector(val file: KtFile) : KtVisitorVoid() {
 
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
         expression.takeUnless {
-            it.isDotSelector() || it.children.isNotEmpty() || it.isQualifiedUserType()
+            it.children.isNotEmpty() || it.isQualifiedUserType()
         }?.let {
             references.add(it)
         }

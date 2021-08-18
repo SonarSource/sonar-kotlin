@@ -9,6 +9,7 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.21")
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
     implementation("commons-net:commons-net:3.8.0")
     implementation("org.springframework.security:spring-security-crypto:5.0.6.RELEASE")
