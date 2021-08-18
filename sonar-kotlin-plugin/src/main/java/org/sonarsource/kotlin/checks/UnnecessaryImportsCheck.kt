@@ -91,9 +91,9 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         }.filter {
             // 4. Filter 'get' and 'set' imports
             arrayAccessesImportsFilter(it)
-        }.forEach {
+        }.forEach { importDirective ->
             // We could not find any usages for anything remaining at this point. Hence, report!
-            context.reportIssue(it, MESSAGE_UNUSED)
+            importDirective.importedReference?.let{ context.reportIssue(it, MESSAGE_UNUSED) }
         }
     }
 

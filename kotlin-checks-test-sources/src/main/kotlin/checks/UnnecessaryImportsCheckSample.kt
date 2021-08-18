@@ -2,12 +2,14 @@ package checks
 
 // same package/file
 import checks.ClassInSameFileA // Noncompliant {{Remove redundant import.}}
+//     ^^^^^^^^^^^^^^^^^^^^^^^
 // same package
 import checks.DelicateCoroutinesApi // Noncompliant {{Remove redundant import.}}
 // unused
 import com.google.common.collect.ImmutableList // Noncompliant {{Remove unused import.}}
 // unused
 import com.google.common.collect.ImmutableList.copyOf // Noncompliant {{Remove unused import.}}
+//     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 import com.google.common.collect.ImmutableList.of
 import com.google.common.collect.ImmutableSet.of as immutable_set_of
 // unused
