@@ -51,6 +51,10 @@ import java.lang.reflect.Method
 import kotlin.reflect.jvm.kotlinFunction
 import okhttp3.TlsVersion.SSL_3_0 as TLS3 // Noncompliant {{Remove unused import.}}
 import okhttp3.TlsVersion.TLS_1_3 as TLS13
+import java.beans.* // Non|compliant FN (we currently ignore all wildcard imports)
+import kotlin.test.* // Non|compliant FN (we currently ignore all wildcard imports)
+// Except for this one
+import kotlin.* // Noncompliant {{Remove redundant import.}}
 
 class UnnecessaryImportsCheckSample {
     fun foo() {

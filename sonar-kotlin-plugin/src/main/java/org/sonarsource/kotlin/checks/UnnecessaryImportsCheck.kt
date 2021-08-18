@@ -163,7 +163,8 @@ private class DataCollector(val file: KtFile) : KtVisitorVoid() {
 private fun KtReferenceExpression.isQualifiedUserType() = (this.context as? KtUserType)?.qualifier != null
 
 private fun KtImportDirective.isImportedImplicitlyAlready(containingPackage: String?) =
-    this.importedFqName?.parent()?.asString()?.let { it == "kotlin" || it == containingPackage } ?: false
+    (this.importedName != null && this.importedFqName?.parent()?.asString()?.let { it == "kotlin" || it == containingPackage } ?: false) ||
+        (this.importedName == null && this.importedFqName?.asString() == "kotlin")
 
 private fun KtReferenceExpression.importableSimpleName() =
     when (this) {
