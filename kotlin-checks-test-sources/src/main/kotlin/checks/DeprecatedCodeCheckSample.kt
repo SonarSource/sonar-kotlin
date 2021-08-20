@@ -1,30 +1,30 @@
 package checks
 
-@Deprecated("") 
+@Deprecated("")
 class DeprecatedCodeCheckSample { // Noncompliant {{Do not forget to remove this deprecated code someday.}}
 //    ^^^^^^^^^^^^^^^^^^^^^^^^^
-  
+
   @Deprecated("")
   constructor(s: String) { // Noncompliant
-//^^^^^^^^^^^    
+//^^^^^^^^^^^
   }
-  
+
   @Deprecated("")
   val prop: String = "" // Noncompliant
 //    ^^^^
-  
+
   var prop2: String = ""
-  @Deprecated("") set // Noncompliant
-//                ^^^    
-  @Deprecated("") get // Noncompliant
-//                ^^^    
+    @Deprecated("") set // Noncompliant
+//                  ^^^
+  var prop3: String = ""
+    @Deprecated("") get // Noncompliant
+//                  ^^^
 
 }
 
 @Deprecated("")
 fun deprecated() { // Noncompliant
-//  ^^^^^^^^^^  
-  
+//  ^^^^^^^^^^
 }
 
 @Deprecated("")
@@ -36,3 +36,5 @@ class OK
 typealias KtString = String // Noncompliant
 //        ^^^^^^^^
 
+@Deprecated("")
+operator fun KtString.minus(s: String) = this + s // Noncompliant

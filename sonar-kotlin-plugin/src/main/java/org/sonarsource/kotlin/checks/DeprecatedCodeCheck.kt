@@ -21,7 +21,6 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtPropertyAccessor
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
@@ -36,16 +35,18 @@ class DeprecatedCodeCheck : AbstractCheck() {
     override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry, context: KotlinFileContext) {
         val descriptor = context.bindingContext.get(BindingContext.ANNOTATION, annotationEntry)
         if ("kotlin.Deprecated" == descriptor?.fqName?.asString()) {
-            context.reportIssue(annotationEntry.elementToReport() ?: annotationEntry, "Do not forget to remove this deprecated code someday.")
+            context.reportIssue(annotationEntry.elementToReport(), "Do not forget to remove this deprecated code someday.")
         }
     }
 }
 
-private fun PsiElement.elementToReport(): PsiElement? =
-    when (val parent = parent) {
-        is KtFile -> null
+private fun KtAnnotationEntry.elementToReport(): PsiElement =
+    // The first parent is always a KtDeclarationModifierList and the second parent is always an annotated entity.
+    // If for some reason this assumption is broken, we report on the annotation itself.
+    when (val parent = parent.parent) {
         is KtSecondaryConstructor -> parent.getConstructorKeyword()
         is KtPropertyAccessor -> parent.namePlaceholder
-        is KtNamedDeclaration -> parent.nameIdentifier
-        else -> parent.elementToReport()
+        // Cannot deprecate entity without a name
+        is KtNamedDeclaration -> parent.nameIdentifier!!
+        else -> this
     }
