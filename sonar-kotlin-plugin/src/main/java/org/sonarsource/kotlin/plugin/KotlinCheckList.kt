@@ -35,6 +35,7 @@ import org.sonarsource.kotlin.checks.CoroutineScopeFunSuspendingCheck
 import org.sonarsource.kotlin.checks.CoroutinesTimeoutApiUnusedCheck
 import org.sonarsource.kotlin.checks.DataHashingCheck
 import org.sonarsource.kotlin.checks.DeprecatedCodeCheck
+import org.sonarsource.kotlin.checks.DeprecatedCodeUsedCheck
 import org.sonarsource.kotlin.checks.DuplicateBranchCheck
 import org.sonarsource.kotlin.checks.DuplicatedFunctionImplementationCheck
 import org.sonarsource.kotlin.checks.ElseIfWithoutElseCheck
@@ -111,6 +112,7 @@ val KOTLIN_CHECKS = listOf(
     CoroutinesTimeoutApiUnusedCheck::class.java,
     DataHashingCheck::class.java,
     DeprecatedCodeCheck::class.java,
+    DeprecatedCodeUsedCheck::class.java,
     DuplicateBranchCheck::class.java,
     DuplicatedFunctionImplementationCheck::class.java,
     ElseIfWithoutElseCheck::class.java,
