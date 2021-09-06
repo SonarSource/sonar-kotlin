@@ -37,4 +37,4 @@ typealias KtString = String // Noncompliant
 //        ^^^^^^^^
 
 @Deprecated("")
-operator fun KtString.minus(s: String) = this + s // Noncompliant
+private operator fun KtString.minus(s: String) = this + s // Noncompliant

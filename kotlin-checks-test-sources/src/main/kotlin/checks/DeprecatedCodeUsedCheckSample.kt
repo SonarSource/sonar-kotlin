@@ -62,6 +62,5 @@ annotation class DeprecatedAnnotation
 @Deprecated("")
 typealias DeprecatedString = String
 
-
 @Deprecated("")
-operator fun DeprecatedString.minus(s: String) = this + s // Noncompliant
+private operator fun DeprecatedString.minus(s: String) = this + s // Noncompliant
