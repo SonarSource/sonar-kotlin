@@ -15,13 +15,13 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 private const val MESSAGE = "Make sure accessing the Android external storage is safe here."
 
 private val HOTSPOT_FUNS = listOf(
-    FunMatcher(qualifier = "android.os.Environment") {
+    FunMatcher(definingSupertype = "android.os.Environment") {
         withNames(
             "getExternalStorageDirectory",
             "getExternalStoragePublicDirectory"
         )
     },
-    FunMatcher(qualifier = "android.content.Context") {
+    FunMatcher(definingSupertype = "android.content.Context") {
         withNames(
             "getExternalFilesDir",
             "getExternalFilesDirs",
