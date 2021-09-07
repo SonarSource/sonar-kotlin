@@ -34,6 +34,8 @@ import org.sonarsource.kotlin.checks.CommentedCodeCheck
 import org.sonarsource.kotlin.checks.CoroutineScopeFunSuspendingCheck
 import org.sonarsource.kotlin.checks.CoroutinesTimeoutApiUnusedCheck
 import org.sonarsource.kotlin.checks.DataHashingCheck
+import org.sonarsource.kotlin.checks.DeprecatedCodeCheck
+import org.sonarsource.kotlin.checks.DeprecatedCodeUsedCheck
 import org.sonarsource.kotlin.checks.DuplicateBranchCheck
 import org.sonarsource.kotlin.checks.DuplicatedFunctionImplementationCheck
 import org.sonarsource.kotlin.checks.ElseIfWithoutElseCheck
@@ -82,6 +84,7 @@ import org.sonarsource.kotlin.checks.TooManyLinesOfCodeFileCheck
 import org.sonarsource.kotlin.checks.TooManyParametersCheck
 import org.sonarsource.kotlin.checks.UnencryptedDatabaseOnMobileCheck
 import org.sonarsource.kotlin.checks.UnencryptedFilesInMobileApplicationsCheck
+import org.sonarsource.kotlin.checks.UnnecessaryImportsCheck
 import org.sonarsource.kotlin.checks.UnusedDeferredResultCheck
 import org.sonarsource.kotlin.checks.UnusedFunctionParameterCheck
 import org.sonarsource.kotlin.checks.UnusedLocalVariableCheck
@@ -108,6 +111,8 @@ val KOTLIN_CHECKS = listOf(
     CommentedCodeCheck::class.java,
     CoroutinesTimeoutApiUnusedCheck::class.java,
     DataHashingCheck::class.java,
+    DeprecatedCodeCheck::class.java,
+    DeprecatedCodeUsedCheck::class.java,
     DuplicateBranchCheck::class.java,
     DuplicatedFunctionImplementationCheck::class.java,
     ElseIfWithoutElseCheck::class.java,
@@ -156,6 +161,7 @@ val KOTLIN_CHECKS = listOf(
     TooManyParametersCheck::class.java,
     UnencryptedDatabaseOnMobileCheck::class.java,
     UnencryptedFilesInMobileApplicationsCheck::class.java,
+    UnnecessaryImportsCheck::class.java,
     UnusedDeferredResultCheck::class.java,
     UnusedFunctionParameterCheck::class.java,
     UnusedLocalVariableCheck::class.java,

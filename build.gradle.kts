@@ -302,4 +302,5 @@ artifactory {
 tasks.register<CreateRuleStubsTask>("setupRuleStubs") {
     finalizedBy(tasks.findByPath(":generateRuleMetadata"))
 }
-tasks.register<FetchRuleMetadata>("generateRuleMetadata")
+tasks.register<FetchRuleMetadata.FetchSpecificRulesMetadata>("generateRuleMetadata")
+tasks.register<FetchRuleMetadata.FetchAllRulesMetadata>("updateRuleMetadata")

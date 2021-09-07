@@ -143,12 +143,12 @@ public class SlangRulingTest {
       "ktor-server/ktor-server-servlet/",
       "ktor-server/ktor-server-test-host/",
       "ktor-server/ktor-server-tomcat/");
-    
+
     String binaries = ktorDirs.stream().map(dir -> FileLocation.of("../sources/kotlin/ktor/" + dir + "build/classes"))
       .map(SlangRulingTest::getFileLocationAbsolutePath)
       .collect(Collectors.joining(","));
     properties.put("sonar.java.binaries", binaries);
-    
+
     run_ruling_test("kotlin/ktor", properties);
   }
 
@@ -238,6 +238,12 @@ public class SlangRulingTest {
       .setProperty("sonar.scm.disabled", "true")
       .setProperty("sonar.project", project)
       .setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx1024m");
+
+    String debugPort = System.getProperty("sonar.rulingDebugPort");
+    if (debugPort != null) {
+      build.setEnvironmentVariable(
+        "SONAR_SCANNER_DEBUG_OPTS", "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" + debugPort);
+    }
 
     orchestrator.executeBuild(build);
 

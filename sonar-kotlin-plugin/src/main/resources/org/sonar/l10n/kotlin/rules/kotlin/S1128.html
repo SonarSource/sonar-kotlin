@@ -1,0 +1,38 @@
+<p>The imports part of a file should be handled by the Integrated Development Environment (IDE), not manually by the developer.</p>
+<p>Unused and useless imports should not occur if that is the case.</p>
+<p>Leaving them in reduces the code’s readability, since their presence can be confusing.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+package my.company
+
+import kotlin.String            // Noncompliant; "kotlin" classes are always implicitly imported
+import my.company.SomeClass     // Noncompliant; same-package files are always implicitly imported
+import java.io.File             // Noncompliant; "File" is not used
+
+import my.company2.SomeType
+
+class ExampleClass {
+
+  val someString = ""
+  val something = SomeType()
+
+}
+</pre>
+<h2>Compliant Code Example</h2>
+<pre>
+package my.company
+
+import java.io.File
+import my.company2.SomeType
+
+class ExampleClass {
+
+  val someString = ""
+  val something = SomeType()
+  lateinit var fileUsage: File
+
+}
+</pre>
+<h2>Exceptions</h2>
+<p>Imports for types mentioned in KDoc comments are ignored.</p>
+

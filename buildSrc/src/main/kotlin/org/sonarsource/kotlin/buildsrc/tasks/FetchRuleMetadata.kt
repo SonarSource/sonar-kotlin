@@ -1,6 +1,7 @@
 package org.sonarsource.kotlin.buildsrc.tasks
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.artifacts.Configuration
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.dependencies
@@ -12,11 +13,7 @@ const val ruleApiVersion = "2.0.0.1885"
 
 abstract class FetchRuleMetadata : DefaultTask() {
 
-    @get:Input
-    val ruleKey: String by project
-
-    @TaskAction
-    fun downloadMetadata(): ExecResult {
+    private fun addRuleApiToProjectConfig(): Configuration {
         project.repositories {
             maven {
                 url = project.uri("https://repox.jfrog.io/repox/sonarsource-private-releases")
@@ -36,11 +33,29 @@ abstract class FetchRuleMetadata : DefaultTask() {
             ruleApi("com.sonarsource.rule-api:rule-api:$ruleApiVersion")
         }
 
+        return ruleApi
+    }
+
+    internal fun executeRuleApi(arguments: List<String>): ExecResult {
+        val ruleApi = addRuleApiToProjectConfig()
         return project.javaexec {
             classpath = project.files(ruleApi.resolve())
-            args = listOf("generate", "-rule", ruleKey)
+            args = arguments
             mainClass.set("com.sonarsource.ruleapi.Main")
             workingDir = project.project(":sonar-kotlin-plugin").projectDir
         }
+    }
+
+    abstract class FetchSpecificRulesMetadata : FetchRuleMetadata() {
+        @get:Input
+        val ruleKey: String by project
+
+        @TaskAction
+        fun downloadMetadata() = executeRuleApi(listOf("generate", "-rule", ruleKey))
+    }
+
+    abstract class FetchAllRulesMetadata : FetchRuleMetadata() {
+        @TaskAction
+        fun downloadMetadata() = executeRuleApi(listOf("update"))
     }
 }
