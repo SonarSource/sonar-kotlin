@@ -71,3 +71,8 @@ fun duplicatedNameInInitializer(d: D) {
     val p = d.p // Noncompliant {{Remove this unused "p" local variable.}}
 //      ^
 }
+
+// FIXME false-negative
+fun destructuringDeclaration(d: D) {
+    val (p) = d
+}
