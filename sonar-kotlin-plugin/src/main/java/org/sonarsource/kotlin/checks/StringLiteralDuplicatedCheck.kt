@@ -19,14 +19,15 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.api.asString
 import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.api.asString
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
@@ -39,9 +40,11 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
         private val NO_SEPARATOR_REGEXP = Regex("\\w++")
     }
 
-    @RuleProperty(key = "threshold",
+    @RuleProperty(
+        key = "threshold",
         description = "Number of times a literal must be duplicated to trigger an issue",
-        defaultValue = "" + DEFAULT_THRESHOLD)
+        defaultValue = "" + DEFAULT_THRESHOLD
+    )
     var threshold = DEFAULT_THRESHOLD
 
     private fun check(
@@ -66,10 +69,17 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
     }
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
-        val occurrences = file.collectDescendantsOfType<KtStringTemplateExpression> { !it.hasInterpolation() }
+        val occurrences = collectStringTemplatesNotInAnnotations(file)
             .map { it to it.asString() }
             .filter { (_, text) -> text.length > MINIMAL_LITERAL_LENGTH && !NO_SEPARATOR_REGEXP.matches(text) }
             .groupBy({ (_, text) -> text }) { it.first }
         check(context, occurrences)
     }
+
+    private fun collectStringTemplatesNotInAnnotations(node: PsiElement): Sequence<KtStringTemplateExpression> =
+        when {
+            node is KtStringTemplateExpression && !node.hasInterpolation() -> sequenceOf(node)
+            node is KtAnnotationEntry -> emptySequence()
+            else -> node.children.asSequence().flatMap { collectStringTemplatesNotInAnnotations(it) }
+        }
 }

@@ -7,16 +7,12 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
-import org.sonar.api.batch.fs.TextPointer
-import org.sonar.api.batch.fs.TextRange
-import org.sonar.api.batch.fs.internal.DefaultTextPointer
-import org.sonar.api.batch.fs.internal.DefaultTextRange
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.writeText
 
 object AstPrinter {
-    private const val INDENT = "  ";
+    private const val INDENT = "  "
 
     fun dotPrint(node: PsiElement): String = dotPrint(DotNode.of(node, null))
     fun dotPrint(node: PsiElement, outputFile: Path) = dotPrint(DotNode.of(node, null), outputFile)
@@ -78,7 +74,7 @@ data class DotNode(val title: String, val text: String, val type: String, val ch
             val range = document?.let {
                 val start = textPointerAtOffset(it, original.startOffset)
                 val end = textPointerAtOffset(it, original.endOffset)
-                DefaultTextRange(start, end)
+                TextRange(start, end)
             }
 
             return DotNode(title, text, original::class.java.simpleName, original.allChildren.map { of(it, document) }.toList(), range)
@@ -97,7 +93,7 @@ private fun String.escapeHtml() = this
     .replace(">", "&gt;")
 
 private fun TextRange?.prettyString() = this?.run {
-    "${start().line()}:${start().lineOffset()} … ${end().line()}:${end().lineOffset()}"
+    "${start.line}:${start.lineOffset} … ${end.line}:${end.lineOffset}"
 } ?: "?-?"
 
 fun textPointerAtOffset(psiDocument: Document, startOffset: Int): TextPointer {
@@ -105,5 +101,8 @@ fun textPointerAtOffset(psiDocument: Document, startOffset: Int): TextPointer {
     val startLineNumberOffset = psiDocument.getLineStartOffset(startLineNumber)
     val startLineOffset = startOffset - startLineNumberOffset
 
-    return DefaultTextPointer(startLineNumber + 1, startLineOffset)
+    return TextPointer(startLineNumber + 1, startLineOffset)
 }
+
+data class TextPointer(val line: Int, val lineOffset: Int)
+data class TextRange(val start: TextPointer, val end: TextPointer)

@@ -27,10 +27,6 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testImplementation("org.assertj:assertj-core")
     testImplementation("org.sonarsource.sonarqube:sonar-plugin-api")
-
-    // JUnit4 is only included because forbiddenApisTest forbids using it and hence (?!) depends on it. So the check will fail, if
-    // we don't depend on it. We probably want to clean this up eventually.
-    testImplementation("junit:junit")
 }
 
 tasks {

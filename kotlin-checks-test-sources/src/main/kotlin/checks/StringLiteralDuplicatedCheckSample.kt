@@ -31,12 +31,46 @@ class StringLiteralDuplicatedCheckSample {
         "with interpolation $x"
         "with interpolation $x" // Compliant - contains interpolation
 
-        // Noncompliant@+1
-        @Suppress("""kotlin:S1192""")
-        println()
-        @Suppress("""kotlin:S1192""")
-        println()
-        @Suppress("""kotlin:S1192""")
-        println()
+        @Suppress("some other rule")
+        println("this is a duplicate print") // Noncompliant
+        @Suppress("some other rule")
+        println("this is a duplicate print")
+        @Suppress("some other rule")
+        println("this is a duplicate print")
+
+        // Noncompliant@+4
+        println(
+            """
+                not this is the one
+                ${"but this here!"}
+        """.trimIndent()
+        )
+//@-2             ^^^^^^^^^^^^^^^^
+        println(
+            """
+                not this is the one
+                ${"but this here!"}
+        """.trimIndent()
+        )
+//@-2             ^^^^^^^^^^^^^^^^<
+        println(
+            """
+                not this is the one
+                ${"but this here!"}
+        """.trimIndent()
+        )
+//@-2             ^^^^^^^^^^^^^^^^<
+    }
+
+    @Deprecated("Conversion of Char to Number is deprecated. Use Char.code property instead.", ReplaceWith("this.code.toShort()"))
+    fun d1() {
+    }
+
+    @Deprecated("Conversion of Char to Number is deprecated. Use Char.code property instead.", ReplaceWith("this.code.toShort()"))
+    fun d2() {
+    }
+
+    @Deprecated("Conversion of Char to Number is deprecated. Use Char.code property instead.", ReplaceWith("this.code.toShort()"))
+    fun d3() {
     }
 }

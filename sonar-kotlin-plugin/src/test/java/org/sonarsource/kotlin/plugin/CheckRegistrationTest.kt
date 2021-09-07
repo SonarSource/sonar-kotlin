@@ -23,6 +23,7 @@ import io.mockk.spyk
 import io.mockk.verify
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.junit.jupiter.api.Test
+import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
@@ -45,7 +46,7 @@ class CheckRegistrationTest : AbstractSensorTest() {
              """.trimIndent())
         context.fileSystem().add(inputFile)
         val dummyCheck = spyk(DummyCheck())
-        KotlinSensor(checkFactory("S99999"), fileLinesContextFactory, NoSonarFilter(), language()).also { sensor ->
+        KotlinSensor(checkFactory("S99999"), fileLinesContextFactory, DefaultNoSonarFilter(), language()).also { sensor ->
             sensor.checks.addAnnotatedChecks(dummyCheck)
             sensor.execute(context)
         }

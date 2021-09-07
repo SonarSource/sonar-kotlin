@@ -14,9 +14,6 @@
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-features/ktor-auth-ldap/test/io/ktor/tests/auth/ldap/LdapAuthTest.kt':[
 63,
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-features/ktor-auth/src/io/ktor/auth/Deprecations.kt':[
-8,
-],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-features/ktor-auth/test/io/ktor/tests/auth/AuthBuildersTest.kt':[
 81,
 90,
@@ -62,9 +59,8 @@
 ],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-features/ktor-locations/test/io/ktor/tests/locations/LocationsTest.kt':[
 32,
-115,
 133,
-137,
+173,
 174,
 ],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-features/ktor-velocity/test/io/ktor/tests/velocity/VelocityTest.kt':[
@@ -82,9 +78,6 @@
 ],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-http-cio/src/io/ktor/http/cio/Multipart.kt':[
 43,
-],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-http/src/io/ktor/content/IncomingContent.kt':[
-11,
 ],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-http/src/io/ktor/http/Cookie.kt':[
 24,
@@ -131,9 +124,6 @@
 622,
 941,
 950,
-],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-test-host/src/io/ktor/server/testing/TestApplicationRequest.kt':[
-45,
 ],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-tests/test/io/ktor/tests/server/application/ApplicationRequestHeaderTest.kt':[
 37,

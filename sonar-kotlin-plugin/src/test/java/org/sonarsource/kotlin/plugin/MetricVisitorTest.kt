@@ -20,11 +20,9 @@
 package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.Assertions
-import org.junit.Rule
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport
-import org.junit.rules.TemporaryFolder
+import org.junit.jupiter.api.io.TempDir
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.sonar.api.batch.fs.InputFile
@@ -37,8 +35,10 @@ import org.sonar.api.measures.FileLinesContextFactory
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
 import java.nio.charset.StandardCharsets
+import java.nio.file.Path
+import kotlin.io.path.createTempFile
+import kotlin.io.path.name
 
-@EnableRuleMigrationSupport
 internal class MetricVisitorTest {
     private val environment = Environment(emptyList())
     private lateinit var mockNoSonarFilter: NoSonarFilter
@@ -46,13 +46,13 @@ internal class MetricVisitorTest {
     private lateinit var sensorContext: SensorContextTester
     private lateinit var inputFile: DefaultInputFile
 
-
-    val tempFolder = TemporaryFolder()
-        @Rule get
+    @JvmField
+    @TempDir
+    var tempFolder: Path? = null
 
     @BeforeEach
     fun setUp() {
-        sensorContext = SensorContextTester.create(tempFolder.root)
+        sensorContext = SensorContextTester.create(tempFolder!!.root)
         val mockFileLinesContext = Mockito.mock(FileLinesContext::class.java)
         val mockFileLinesContextFactory = Mockito.mock(
             FileLinesContextFactory::class.java)
@@ -191,7 +191,7 @@ internal class MetricVisitorTest {
     }
 
     private fun scan(code: String) {
-        inputFile = TestInputFileBuilder("moduleKey", tempFolder.newFile().name)
+        inputFile = TestInputFileBuilder("moduleKey", createTempFile(tempFolder).name)
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(code).build()
         val ctx = InputFileContextImpl(sensorContext, inputFile, false)

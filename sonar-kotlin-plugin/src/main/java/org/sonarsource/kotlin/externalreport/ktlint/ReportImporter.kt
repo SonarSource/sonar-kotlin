@@ -48,19 +48,7 @@ internal class ReportImporter(val analysisWarnings: AnalysisWarnings, val contex
             LOG.error("No issue information will be saved as the report file '$reportFile' cannot be read. ${e.message}")
             return
         }
-
-        if (parser.parsingExceptions.isNotEmpty()) {
-            parser.parsingExceptions.forEach { exception ->
-                LOG.warn("Exception while trying to parse ktlint JSON report: ${exception.message}")
-            }
-            analysisWarnings.addUnique(
-                "There were problems reading the ktlint JSON report, the saved issue information may be " +
-                    "incomplete. See the logs for more details.")
-        }
-
-        parser.report.forEach { (filePath, linterFindings) ->
-            importExternalIssues(filePath, linterFindings)
-        }
+        parser.report.forEach { (filePath, linterFindings) -> importExternalIssues(filePath, linterFindings) }
     }
 
     private fun importExternalIssues(filePath: String, linterFindings: List<Finding>) {

@@ -23,8 +23,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.SensorContextTester
+import org.sonar.api.utils.log.LogTesterJUnit5
 import org.sonar.api.utils.log.LoggerLevel
-import org.sonar.api.utils.log.ThreadLocalLogTester
 import org.sonarsource.kotlin.plugin.KotlinPlugin
 import java.io.IOException
 import java.nio.charset.StandardCharsets
@@ -42,7 +42,7 @@ object ExternalReportTestUtils {
         return context
     }
 
-    fun assertNoErrorWarnDebugLogs(logTester: ThreadLocalLogTester) {
+    fun assertNoErrorWarnDebugLogs(logTester: LogTesterJUnit5) {
         assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty()
         assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
         assertThat(logTester.logs(LoggerLevel.DEBUG)).isEmpty()
@@ -56,12 +56,14 @@ object ExternalReportTestUtils {
     private fun addFileToContext(context: SensorContextTester, projectDir: Path, file: Path) {
         try {
             val projectId = projectDir.fileName.toString() + "-project"
-            context.fileSystem().add(TestInputFileBuilder.create(projectId, projectDir.toFile(), file.toFile())
-                .setCharset(StandardCharsets.UTF_8)
-                .setLanguage(language(file))
-                .setContents(String(Files.readAllBytes(file), StandardCharsets.UTF_8))
-                .setType(InputFile.Type.MAIN)
-                .build())
+            context.fileSystem().add(
+                TestInputFileBuilder.create(projectId, projectDir.toFile(), file.toFile())
+                    .setCharset(StandardCharsets.UTF_8)
+                    .setLanguage(language(file))
+                    .setContents(String(Files.readAllBytes(file), StandardCharsets.UTF_8))
+                    .setType(InputFile.Type.MAIN)
+                    .build()
+            )
         } catch (e: IOException) {
             throw IllegalStateException(e)
         }

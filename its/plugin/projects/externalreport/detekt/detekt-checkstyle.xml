@@ -2,5 +2,6 @@
 <checkstyle version="4.3">
 <file name="main.kt">
 	<error line="2" column="13" severity="warning" message="Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops." source="detekt.ForEachOnRange" />
+	<error line="2" column="5" severity="warning" message="My custom issue." source="detekt.CustomIssue" />
 </file>
 </checkstyle>

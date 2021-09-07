@@ -19,27 +19,25 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.psi.KtFunction
-import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
-import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
+private const val DEFAULT_MAX = 100
+
 @Rule(key = "S138")
-class TooLongFunctionCheck : AbstractCheck() {
-    companion object {
-        const val DEFAULT_MAX = 100
-    }
+class TooLongFunctionCheck : AbstractTooLongFunctionRule() {
 
     @RuleProperty(
         key = "max",
         description = "Maximum authorized lines of code in a function",
         defaultValue = "" + DEFAULT_MAX,
     )
-    var max: Int = DEFAULT_MAX
+    override var max: Int = DEFAULT_MAX
+
+    override val elementName = "function"
 
     override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor, kotlinFileContext: KotlinFileContext) {
         check(constructor, kotlinFileContext)
@@ -47,22 +45,6 @@ class TooLongFunctionCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         check(function, kotlinFileContext)
-    }
-
-    override fun visitLambdaExpression(expression: KtLambdaExpression, kotlinFileContext: KotlinFileContext) {
-        // TODO Slang has no notion of lambda expressions, they are treated as functions
-        check(expression.functionLiteral, kotlinFileContext)
-    }
-
-    private fun check(function: KtFunction, kotlinFileContext: KotlinFileContext) {
-        val expression = function.bodyBlockExpression ?: function.bodyExpression ?: return
-        val numberOfLinesOfCode = expression.numberOfLinesOfCode()
-        if (numberOfLinesOfCode > max) {
-            kotlinFileContext.reportIssue(
-                /** see [org.sonarsource.slang.impl.FunctionDeclarationTreeImpl.rangeToHighlight] */
-                function.nameIdentifier ?: function.firstChild,
-                "This function has $numberOfLinesOfCode lines of code, which is greater than the $max authorized. Split it into smaller functions.")
-        }
     }
 
 }
