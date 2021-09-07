@@ -14,7 +14,7 @@ class ExternalAndroidStorageAccessCheckSample {
         env.getDownloadCacheDirectory() // ok
     }
 
-    fun contextNoncompliant(ctx: Context) {
+    fun contextNoncompliant(ctx: Context, cc: ContextChild) {
         ctx.getExternalFilesDir("") // Noncompliant
         ctx.getExternalFilesDirs("") // Noncompliant
         ctx.externalCacheDir // Noncompliant
@@ -28,6 +28,19 @@ class ExternalAndroidStorageAccessCheckSample {
         ctx.getObbDir() // Noncompliant
         ctx.obbDirs // Noncompliant
         ctx.getObbDirs() // Noncompliant
+
+        cc.getExternalFilesDir("") // Noncompliant
+        cc.getExternalFilesDirs("") // Noncompliant
+        cc.externalCacheDir // Noncompliant
+        cc.getExternalCacheDir() // Noncompliant
+        cc.externalCacheDirs // Noncompliant
+        cc.getExternalCacheDirs() // Noncompliant
+        cc.externalMediaDirs // Noncompliant
+        cc.getExternalMediaDirs() // Noncompliant
+        cc.obbDir // Noncompliant
+        cc.getObbDir() // Noncompliant
+        cc.obbDirs // Noncompliant
+        cc.getObbDirs() // Noncompliant
     }
 
     fun contextCompliant(ctx: Context) {
@@ -35,3 +48,5 @@ class ExternalAndroidStorageAccessCheckSample {
         ctx.getCompliantDir()
     }
 }
+
+class ContextChild: Context()
