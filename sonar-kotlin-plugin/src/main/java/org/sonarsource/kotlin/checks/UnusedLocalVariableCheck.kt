@@ -34,7 +34,6 @@ class UnusedLocalVariableCheck : AbstractCheck() {
             .filter { it.factory == Errors.UNUSED_VARIABLE }
             .map { it.psiElement as KtNamedDeclaration }
             .forEach {
-                it.nameIdentifier ?: return
                 context.reportIssue(it.nameIdentifier!!, """Remove this unused "${it.name}" local variable.""")
             }
     }
