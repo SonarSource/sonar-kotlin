@@ -17,13 +17,15 @@ import org.sonarsource.kotlin.verifier.TestContext
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
+import org.sonarsource.kotlin.verifier.DEFAULT_KOTLIN_CLASSPATH
+import org.sonarsource.kotlin.verifier.KOTLIN_BASE_DIR
 
 class IssueSuppressionVisitorTest {
     @Test
     fun `verify we actually suppress issues on various AST nodes`() {
-        val withSuppressionTestFile = KotlinVerifier.KOTLIN_BASE_DIR.resolve("../sample/IssueSuppressionSample.kt")
-        val forNoSuppressionTestFile = KotlinVerifier.KOTLIN_BASE_DIR.resolve("../sample/IssueNonSuppressionSample.kt")
-        val withoutSuppressionTestFile = KotlinVerifier.KOTLIN_BASE_DIR.resolve("../sample/IssueWithoutSuppressionSample.kt")
+        val withSuppressionTestFile = KOTLIN_BASE_DIR.resolve("../sample/IssueSuppressionSample.kt")
+        val forNoSuppressionTestFile = KOTLIN_BASE_DIR.resolve("../sample/IssueNonSuppressionSample.kt")
+        val withoutSuppressionTestFile = KOTLIN_BASE_DIR.resolve("../sample/IssueWithoutSuppressionSample.kt")
         scanWithSuppression(withSuppressionTestFile).assertOneOrMoreIssues()
         scanWithSuppression(withoutSuppressionTestFile).assertOneOrMoreIssues()
         scanWithoutSuppression(forNoSuppressionTestFile).assertOneOrMoreIssues()
@@ -36,7 +38,7 @@ class IssueSuppressionVisitorTest {
         scanFile(path, false, BadClassNameCheck(), BadFunctionNameCheck(), VariableAndParameterNameCheck(), UnusedLocalVariableCheck())
 
     private fun scanFile(path: Path, suppress: Boolean, check: AbstractCheck, vararg checks: AbstractCheck): SingleFileVerifier {
-        val env = Environment(emptyList())
+        val env = Environment(DEFAULT_KOTLIN_CLASSPATH)
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
         val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin")

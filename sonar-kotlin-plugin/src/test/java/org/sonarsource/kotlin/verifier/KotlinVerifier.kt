@@ -39,17 +39,14 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
+val KOTLIN_BASE_DIR = Paths.get("..", "kotlin-checks-test-sources", "src", "main", "kotlin", "checks")
+val DEFAULT_KOTLIN_CLASSPATH = listOf("../kotlin-checks-test-sources/build/classes/kotlin/main", "../kotlin-checks-test-sources/build/classes/java/main")
+private val DEFAULT_TEST_JARS_DIRECTORY = "../kotlin-checks-test-sources/build/test-jars"
 
 class KotlinVerifier(private val check: AbstractCheck) {
 
-    companion object {
-        val KOTLIN_BASE_DIR = Paths.get("..", "kotlin-checks-test-sources", "src", "main", "kotlin", "checks")
-        private val KOTLIN_CLASSPATH = listOf("../kotlin-checks-test-sources/build/classes/kotlin/main", "../kotlin-checks-test-sources/build/classes/java/main")
-        private val DEFAULT_TEST_JARS_DIRECTORY = "../kotlin-checks-test-sources/build/test-jars"
-    }
-
     var fileName: String = ""
-    var classpath: List<String> = System.getProperty("java.class.path").split(":") + KOTLIN_CLASSPATH
+    var classpath: List<String> = System.getProperty("java.class.path").split(":") + DEFAULT_KOTLIN_CLASSPATH
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
     var isAndroid = false
 

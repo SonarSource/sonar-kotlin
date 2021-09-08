@@ -115,8 +115,7 @@ public class SonarLintTest {
 
     assertThat(issues).extracting(Issue::getRuleKey, Issue::getStartLine, issue -> issue.getInputFile().getPath(), Issue::getSeverity).containsOnly(
       tuple("kotlin:S100", 1, inputFile.getPath(), "MINOR"),
-      tuple("kotlin:S1145", 2, inputFile.getPath(), "MAJOR"),
-      tuple("kotlin:S1481", 3, inputFile.getPath(), "MINOR"));
+      tuple("kotlin:S1145", 2, inputFile.getPath(), "MAJOR"));
   }
 
   private ClientInputFile prepareInputFile(String relativePath, String content, final boolean isTest, String language) throws IOException {
