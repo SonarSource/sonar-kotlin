@@ -115,7 +115,7 @@ kotlin_its_template: &KOTLIN_ITS_TEMPLATE
       "-DbuildNumber=$BUILD_NUMBER"
       -Pqa --info --console plain --no-daemon --build-cache
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
-  
+
 only_if_sonarsource_qa_template: &ONLY_IF_SONARSOURCE_QA
   only_if: $CIRRUS_USER_COLLABORATOR == 'true' && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
 

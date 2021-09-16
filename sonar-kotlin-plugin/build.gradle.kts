@@ -1,13 +1,48 @@
-import org.apache.groovy.dateutil.extensions.DateUtilExtensions
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.jar.JarInputStream
-import java.time.format.DateTimeFormatter
-import java.time.ZoneId
 
 
 plugins {
     id("com.github.johnrengelman.shadow") version "7.0.0"
     kotlin("jvm")
+    id("com.diffplug.spotless") version "5.15.0"
+}
+
+configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+
+    lineEndings = com.diffplug.spotless.LineEnding.UNIX
+
+    fun SourceSet.findSourceFilesToTarget() = allJava.srcDirs.flatMap { srcDir ->
+        project.fileTree(srcDir).filter { file ->
+            file.name.endsWith(".kt") || (file.name.endsWith(".java") && file.name != "package-info.java")
+        }
+    }
+
+    kotlin {
+        // ktlint()
+        licenseHeaderFile(rootProject.file("LICENSE_HEADER")).updateYearWithLatest(true)
+
+        target(
+            project.sourceSets.main.get().findSourceFilesToTarget(),
+            project.sourceSets.test.get().findSourceFilesToTarget()
+        )
+    }
+    kotlinGradle {
+        target("*.gradle.kts")
+        ktlint()
+    }
+
+    format("misc") {
+        // define the files to apply `misc` to
+        target("*.gradle", "*.md", ".gitignore")
+
+        // define the steps to apply to those files
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+    }
 }
 
 val kotlinVersion: String by extra
@@ -47,31 +82,34 @@ tasks.jar {
         val displayVersion = if (project.property("buildNumber") == null) project.version else project.version.toString()
             .substring(0, project.version.toString().lastIndexOf(".")) + " (build ${project.property("buildNumber")})"
         val buildDate = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ").withZone(ZoneId.systemDefault()).format(Date().toInstant())
-        attributes(mapOf(
-            "Build-Time" to buildDate,
-            "Implementation-Build" to ProcessBuilder().also { it.command("git", "rev-parse", "HEAD") }.start().inputStream.bufferedReader().use {
-                it.readText().trim()
-            },
-            "Plugin-BuildDate" to buildDate,
-            // Note that use of ChildFirstClassLoader is deprecated since SonarQube 7.9
-            "Plugin-ChildFirstClassLoader" to "false",
-            "Plugin-Class" to "org.sonarsource.kotlin.plugin.KotlinPlugin",
-            "Plugin-Description" to "Code Analyzer for Kotlin",
-            "Plugin-Developers" to "SonarSource Team",
-            "Plugin-Display-Version" to displayVersion,
-            "Plugin-Homepage" to "http to//redirect.sonarsource.com/plugins/kotlin.html",
-            "Plugin-IssueTrackerUrl" to "https to//jira.sonarsource.com/browse/SONARKT",
-            "Plugin-Key" to "kotlin",
-            "Plugin-License" to "GNU LGPL 3",
-            "Plugin-Name" to "Kotlin Code Quality and Security",
-            "Plugin-Organization" to "SonarSource",
-            "Plugin-OrganizationUrl" to "http to//www.sonarsource.com",
-            "Plugin-SourcesUrl" to "https to//github.com/SonarSource/sonar-kotlin",
-            "Plugin-Version" to project.version,
-            "Sonar-Version" to "6.7",
-            "SonarLint-Supported" to "true",
-            "Version" to project.version.toString()
-        ))
+        attributes(
+            mapOf(
+                "Build-Time" to buildDate,
+                "Implementation-Build" to ProcessBuilder().also { it.command("git", "rev-parse", "HEAD") }
+                    .start().inputStream.bufferedReader().use {
+                        it.readText().trim()
+                    },
+                "Plugin-BuildDate" to buildDate,
+                // Note that use of ChildFirstClassLoader is deprecated since SonarQube 7.9
+                "Plugin-ChildFirstClassLoader" to "false",
+                "Plugin-Class" to "org.sonarsource.kotlin.plugin.KotlinPlugin",
+                "Plugin-Description" to "Code Analyzer for Kotlin",
+                "Plugin-Developers" to "SonarSource Team",
+                "Plugin-Display-Version" to displayVersion,
+                "Plugin-Homepage" to "http to//redirect.sonarsource.com/plugins/kotlin.html",
+                "Plugin-IssueTrackerUrl" to "https to//jira.sonarsource.com/browse/SONARKT",
+                "Plugin-Key" to "kotlin",
+                "Plugin-License" to "GNU LGPL 3",
+                "Plugin-Name" to "Kotlin Code Quality and Security",
+                "Plugin-Organization" to "SonarSource",
+                "Plugin-OrganizationUrl" to "http to//www.sonarsource.com",
+                "Plugin-SourcesUrl" to "https to//github.com/SonarSource/sonar-kotlin",
+                "Plugin-Version" to project.version,
+                "Sonar-Version" to "6.7",
+                "SonarLint-Supported" to "true",
+                "Version" to project.version.toString()
+            )
+        )
     }
 }
 
@@ -104,7 +142,6 @@ publishing {
     }
 }
 
-
 fun enforceJarSizeAndCheckContent(file: File, minSize: Long, maxSize: Long) {
     val size = file.length()
     if (size < minSize) {
@@ -114,7 +151,6 @@ fun enforceJarSizeAndCheckContent(file: File, minSize: Long, maxSize: Long) {
     }
     checkJarEntriesPathUniqueness(file)
 }
-
 
 // A jar should not contain 2 entries with the same path, furthermore Pack200 will fail to unpack it
 fun checkJarEntriesPathUniqueness(file: File) {
