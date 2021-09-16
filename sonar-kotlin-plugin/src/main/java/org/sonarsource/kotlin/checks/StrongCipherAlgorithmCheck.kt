@@ -1,5 +1,5 @@
 /*
- * SonarSource SLang
+ * SonarSource Kotlin
  * Copyright (C) 2018-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
