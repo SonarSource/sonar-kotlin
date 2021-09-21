@@ -14,6 +14,65 @@
 <p>Restrict the access to broadcasted intents. See <a
 href="https://developer.android.com/guide/components/broadcasts.html#restricting_broadcasts_with_permissions">Android documentation</a> for more
 information.</p>
+<h2>Sensitive Code Example</h2>
+<pre>
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.os.Handler
+import android.os.UserHandle
+
+public class MyIntentBroadcast {
+    fun broadcast(intent: Intent,
+                  context: Context,
+                  user: UserHandle,
+                  resultReceiver: BroadcastReceiver,
+                  scheduler: Handler,
+                  initialCode: Int,
+                  initialData: String,
+                  initialExtras: Bundle,
+                  broadcastPermission: String) {
+        context.sendBroadcast(intent) // Sensitive
+        context.sendBroadcastAsUser(intent, user) // Sensitive
+
+        // Broadcasting intent with "null" for receiverPermission
+        context.sendBroadcast(intent, null) // Sensitive
+        context.sendBroadcastAsUser(intent, user, null) // Sensitive
+        context.sendOrderedBroadcast(intent, null) // Sensitive
+        context.sendOrderedBroadcastAsUser(intent, user, null, resultReceiver,
+            scheduler, initialCode, initialData, initialExtras) // Sensitive
+    }
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.os.Handler
+import android.os.UserHandle
+
+public class MyIntentBroadcast {
+    fun broadcast(intent: Intent,
+                  context: Context,
+                  user: UserHandle,
+                  resultReceiver: BroadcastReceiver,
+                  scheduler: Handler,
+                  initialCode: Int,
+                  initialData: String,
+                  initialExtras: Bundle,
+                  broadcastPermission: String) {
+
+        context.sendBroadcast(intent, broadcastPermission)
+        context.sendBroadcastAsUser(intent, user, broadcastPermission)
+        context.sendOrderedBroadcast(intent, broadcastPermission)
+        context.sendOrderedBroadcastAsUser(intent, user,broadcastPermission, resultReceiver,
+            scheduler, initialCode, initialData, initialExtras)
+    }
+}
+</pre>
 <h2>See</h2>
 <ul>
   <li> <a href="https://mobile-security.gitbook.io/masvs/security-requirements/0x11-v6-interaction_with_the_environment">Mobile AppSec Verification
