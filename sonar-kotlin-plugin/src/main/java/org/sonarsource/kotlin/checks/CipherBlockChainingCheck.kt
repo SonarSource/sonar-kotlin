@@ -59,6 +59,8 @@ class CipherBlockChainingCheck : CallAbstractCheck() {
         val bindingContext = kotlinFileContext.bindingContext
         val calleeExpression = callExpression.calleeExpression ?: return
         val receiverExpression = callExpression.predictReceiverExpression(bindingContext) ?: return
+        // We can rely on callExpression's arguments list, because the method is written in Java
+        // and named arguments are not allowed. So the order is correct
         val thirdArgument = callExpression.valueArguments[2].getArgumentExpression() ?: return
 
         if (receiverExpression.isCBC(bindingContext) && thirdArgument.isInitializedWithToByteArray(bindingContext)) {
