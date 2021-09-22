@@ -55,6 +55,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getParentCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getReceiverExpression
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
+import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.resolvedCallUtil.getImplicitReceiverValue
 import org.jetbrains.kotlin.resolve.constants.ArrayValue
@@ -309,3 +310,8 @@ fun Call.findCallInPrecedingCallChain(matcher: FunMatcher, bindingContext: Bindi
     }
     return receiver to receiverResolved
 }
+
+fun ResolvedCall<*>.argumentExpressionByIndex(index: Int) : KtExpression? =
+    (valueArgumentsByIndex?.get(index) as? ExpressionValueArgument)
+        ?.valueArgument
+        ?.getArgumentExpression()

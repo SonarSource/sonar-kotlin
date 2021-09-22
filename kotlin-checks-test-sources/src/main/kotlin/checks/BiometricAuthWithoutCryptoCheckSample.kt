@@ -14,6 +14,10 @@ fun android() {
     biometricPrompt.authenticate(promptInfo, null)
 //                  ^^^^^^^^^^^^>            ^^^^
 
+    // Noncompliant@+1
+    biometricPrompt.authenticate(arg2 = null, arg1 = promptInfo)
+//                  ^^^^^^^^^^^^>       ^^^^
+
     biometricPrompt.authenticate(promptInfo, BiometricPromptAndroid.CryptoObject(cipher)) // Compliant
 }
 

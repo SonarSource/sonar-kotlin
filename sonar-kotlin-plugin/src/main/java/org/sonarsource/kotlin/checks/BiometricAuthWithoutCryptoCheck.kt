@@ -22,12 +22,12 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.isNull
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.SecondaryLocation
-import org.sonarsource.kotlin.api.matches
+import org.sonarsource.kotlin.api.argumentExpressionByIndex
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
@@ -39,31 +39,32 @@ private val AUTHENTICATE_FUN_MATCHERS = listOf(
 private const val MESSAGE = """Make sure performing a biometric authentication without a "CryptoObject" is safe here."""
 
 @Rule(key = "S6293")
-class BiometricAuthWithoutCryptoCheck : AbstractCheck() {
+class BiometricAuthWithoutCryptoCheck : CallAbstractCheck() {
+    override val functionsToVisit = AUTHENTICATE_FUN_MATCHERS
 
-    override fun visitCallExpression(callExpression: KtCallExpression, ctx: KotlinFileContext) {
-        if (functionCallMatches(callExpression, ctx)) {
-            if (callExpression.valueArguments.size < 2) {
+    override fun visitFunctionCall(
+        callExpression: KtCallExpression,
+        resolvedCall: ResolvedCall<*>,
+        kotlinFileContext: KotlinFileContext
+    ) {
+        if (callExpression.valueArguments.size < 2) {
 
-                // No second argument -> automatically insecure.
-                ctx.reportIssue(callExpression, MESSAGE)
+            // No second argument -> automatically insecure.
+            kotlinFileContext.reportIssue(callExpression, MESSAGE)
 
-            } else {
+        } else {
 
-                // Second argument is null? Also insecure.
-                callExpression.valueArguments[1].getArgumentExpression()?.let { relevantArg ->
-                    if (relevantArg.isNull()) {
-                        val secondaryExpression = callExpression.getCallNameExpression() ?: callExpression
-                        ctx.reportIssue(relevantArg, MESSAGE, listOf(SecondaryLocation(ctx.textRange(secondaryExpression))))
-                    }
+            // Second argument is null? Also insecure.
+            resolvedCall.argumentExpressionByIndex(1)?.let { relevantArg ->
+                if (relevantArg.isNull()) {
+                    val secondaryExpression = callExpression.getCallNameExpression() ?: callExpression
+                    kotlinFileContext.reportIssue(
+                        relevantArg, MESSAGE,
+                        listOf(SecondaryLocation(kotlinFileContext.textRange(secondaryExpression)))
+                    )
                 }
-
             }
+
         }
     }
-
-    private fun functionCallMatches(callExpression: KtCallExpression, ctx: KotlinFileContext) =
-        callExpression.getResolvedCall(ctx.bindingContext)?.let { resolvedCall ->
-            AUTHENTICATE_FUN_MATCHERS.any { resolvedCall matches it }
-        } ?: false
 }
