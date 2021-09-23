@@ -25,11 +25,20 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 abstract class CallAbstractCheck : AbstractCheck() {
-    abstract val functionsToVisit: List<FunMatcher>
-    abstract fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext)
+    abstract val functionsToVisit: Iterable<FunMatcher>
+
+    open fun visitFunctionCall(
+        callExpression: KtCallExpression,
+        resolvedCall: ResolvedCall<*>,
+        matchedFun: FunMatcher,
+        kotlinFileContext: KotlinFileContext
+    ) = visitFunctionCall(callExpression, resolvedCall, kotlinFileContext)
+
+    open fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) = Unit
 
     final override fun visitCallExpression(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
         val resolvedCall = callExpression.getResolvedCall(kotlinFileContext.bindingContext) ?: return
-        if (functionsToVisit.any { resolvedCall matches it }) visitFunctionCall(callExpression, resolvedCall, kotlinFileContext)
+        functionsToVisit.firstOrNull { resolvedCall matches it }
+            ?.let { visitFunctionCall(callExpression, resolvedCall, it, kotlinFileContext) }
     }
 }
