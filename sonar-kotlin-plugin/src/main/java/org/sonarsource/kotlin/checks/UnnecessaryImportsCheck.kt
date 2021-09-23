@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocLink
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
@@ -100,11 +101,15 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         for (ref in relevantReferences) {
             val refName = context.bindingContext.get(BindingContext.REFERENCE_TARGET, ref)?.getImportableDescriptor()?.fqNameOrNull()
                 ?: return emptyList() // Discard all: over-estimate, resulting in less FPs and more FNs without binding ctx
-            relevantImports = relevantImports.filter { it.importedFqName != refName }
+            relevantImports = relevantImports.filter { it.importedFqName != refName && !it.isCompanionObjectImport(refName) }
             if (relevantImports.isEmpty()) break
         }
         return relevantImports
     }
+
+    private fun KtImportDirective.isCompanionObjectImport(
+        refName: FqName,
+    ) = refName.shortName().asString() == "Companion" && importedFqName == refName.parent()
 
     private fun collectReferences(file: KtFile) =
         file.children.asSequence().filter {
