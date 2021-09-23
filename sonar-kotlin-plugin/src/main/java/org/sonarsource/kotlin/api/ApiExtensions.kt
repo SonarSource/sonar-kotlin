@@ -26,11 +26,13 @@ import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.coroutines.hasSuspendFunctionType
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -39,6 +41,7 @@ import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
@@ -47,6 +50,7 @@ import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
+import org.jetbrains.kotlin.psi2ir.unwrappedGetMethod
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
@@ -97,13 +101,16 @@ internal fun KtExpression.predictRuntimeValueExpression(
     bindingContext: BindingContext,
     declarations: MutableList<PsiElement> = mutableListOf(),
 ): KtExpression =
-    if (this is KtReferenceExpression) {
-        val referenceTarget = extractLetAlsoTargetExpression(bindingContext)
-            ?: extractFromInitializer(bindingContext, declarations)
+    when (this) {
+        is KtReferenceExpression -> run {
+            val referenceTarget = extractLetAlsoTargetExpression(bindingContext)
+                ?: extractFromInitializer(bindingContext, declarations)
 
-        referenceTarget?.predictRuntimeValueExpression(bindingContext, declarations)
-    } else {
-        getCall(bindingContext)?.predictValueExpression(bindingContext)
+            referenceTarget?.predictRuntimeValueExpression(bindingContext, declarations)
+        }
+        is KtParenthesizedExpression -> this.expression?.predictRuntimeValueExpression(bindingContext, declarations)
+        is KtBinaryExpressionWithTypeRHS -> this.left.predictRuntimeValueExpression(bindingContext, declarations)
+        else -> getCall(bindingContext)?.predictValueExpression(bindingContext)
     } ?: this
 
 internal fun KtCallExpression.predictReceiverExpression(
@@ -319,3 +326,10 @@ fun ResolvedValueArgument.isNull(bindingContext: BindingContext) = (
         ?.getArgumentExpression()
         ?.predictRuntimeValueExpression(bindingContext)
     )?.isNull() ?: false
+
+fun KtExpression.getCalleeOrUnwrappedGetMethod(bindingContext: BindingContext) =
+    (this as? KtDotQualifiedExpression)?.let { dotQualifiedExpression ->
+        (dotQualifiedExpression.selectorExpression as? KtNameReferenceExpression)?.let { nameSelector ->
+            (bindingContext.get(BindingContext.REFERENCE_TARGET, nameSelector) as? PropertyDescriptor)?.unwrappedGetMethod
+        }
+    } ?: this.getResolvedCall(bindingContext)?.resultingDescriptor
