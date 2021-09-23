@@ -1,0 +1,36 @@
+<p>In cryptography, a "salt" is an extra piece of data which is included when hashing a password. This makes <code>rainbow-table attacks</code> more
+difficult. Using a cryptographic hash function without an unpredictable salt increases the likelihood that an attacker could successfully find the
+hash value in databases of precomputed hashes (called <code>rainbow-tables</code>).</p>
+<p>This rule raises an issue when a hashing function which has been specifically designed for hashing passwords, such as <code>PBKDF2</code>, is used
+with a non-random, reused or too short salt value. It does not raise an issue on base hashing algorithms such as <code>sha1</code> or <code>md5</code>
+as they should not be used to hash passwords.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<ul>
+  <li> Use hashing functions generating their own secure salt or generate a secure random value of at least 16 bytes. </li>
+  <li> The salt should be unique by user password. </li>
+</ul>
+<h2>Noncompliant Code Example</h2>
+<pre>
+val salt = "notrandom".toByteArray()
+
+val cipherSpec = PBEParameterSpec(salt, 10000) // Noncompliant, predictable salt
+val spec = PBEKeySpec(password, salt, 10000, 256) // Noncompliant, predictable salt
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+val random = SecureRandom()
+val salt = ByteArray(16)
+random.nextBytes(salt)
+
+val cipherSpec = PBEParameterSpec(salt, 10000) // Compliant
+val spec = PBEKeySpec(password, salt, 10000, 256) // Compliant
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
+  </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/759.html">MITRE, CWE-759</a> - Use of a One-Way Hash without a Salt </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/760.html">MITRE, CWE-760</a> - Use of a One-Way Hash with a Predictable Salt </li>
+  <li> <a href="https://www.sans.org/top25-software-errors/#cat3">SANS Top 25</a> - Porous Defenses </li>
+</ul>
+
