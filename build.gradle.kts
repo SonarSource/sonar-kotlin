@@ -6,7 +6,6 @@ import org.sonarsource.kotlin.buildsrc.tasks.FetchRuleMetadata
 plugins {
     java
     id("jacoco")
-    id("com.github.hierynomus.license") version "0.16.1"
     id("com.jfrog.artifactory") version "4.24.14"
     id("io.spring.dependency-management") version "1.0.6.RELEASE" apply false
     id("org.sonarqube") version "3.3"
@@ -72,7 +71,6 @@ subprojects {
         skip = true
     }
 
-    apply(plugin = "com.github.hierynomus.license")
     apply(plugin = "io.spring.dependency-management")
 
     configure<DependencyManagementExtension> {
@@ -158,36 +156,6 @@ subprojects {
         dependsOn(javadoc)
         classifier = "javadoc"
         from(tasks["javadoc"])
-    }
-
-    license {
-        header = rootDir.absoluteFile.resolve("LICENSE_HEADER")
-        ext["name"] = "SonarSource SLang"
-        ext["inceptionYear"] = "2009" // TODO replace by 2021
-        ext["year"] = Calendar.getInstance().get(Calendar.YEAR)
-        isStrictCheck = true
-        mapping(
-            mapOf(
-                "java" to "SLASHSTAR_STYLE",
-                "js" to "SLASHSTAR_STYLE",
-                "ts" to "SLASHSTAR_STYLE",
-                "tsx" to "SLASHSTAR_STYLE",
-                "css" to "SLASHSTAR_STYLE",
-                "less" to "SLASHSTAR_STYLE"
-                //"kt" to "SLASHSTAR_STYLE" // TODO: enable, add .kt to includes
-            )
-        )
-        includes(listOf("**/src/**/*.java", "**/*.js", "**/*.ts", "**/*.tsx", "**/*.css"))
-        excludes(
-            listOf(
-                "**/src/test/resources/**",
-                "**/build/**",
-                "its/sources/**",
-                "its/plugin/projects/**",
-                "private/its/sources/**",
-                "private/its/plugin/projects/**"
-            )
-        )
     }
 
     publishing {

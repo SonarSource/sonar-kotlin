@@ -13,10 +13,12 @@ import org.sonarsource.kotlin.buildsrc.tasks.Templates.generateTestClass
 import org.sonarsource.kotlin.buildsrc.tasks.Templates.samplesDir
 import org.sonarsource.kotlin.buildsrc.tasks.Templates.testsDir
 import java.nio.file.Path
+import java.util.Calendar
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.createFile
 import kotlin.io.path.notExists
 import kotlin.io.path.readLines
+import kotlin.io.path.readText
 import kotlin.io.path.writeLines
 import kotlin.io.path.writeText
 
@@ -140,28 +142,13 @@ private object Templates {
     val checkListFile =
         Path.of("sonar-kotlin-plugin", "src", "main", "java", "org", "sonarsource", "kotlin", "plugin", "KotlinCheckList.kt")
 
-    val HEADER = """/*
-         * SonarSource SLang
-         * Copyright (C) 2018-2021 SonarSource SA
-         * mailto:info AT sonarsource DOT com
-         *
-         * This program is free software; you can redistribute it and/or
-         * modify it under the terms of the GNU Lesser General Public
-         * License as published by the Free Software Foundation; either
-         * version 3 of the License, or (at your option) any later version.
-         *
-         * This program is distributed in the hope that it will be useful,
-         * but WITHOUT ANY WARRANTY; without even the implied warranty of
-         * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-         * Lesser General Public License for more details.
-         *
-         * You should have received a copy of the GNU Lesser General Public License
-         * along with this program; if not, write to the Free Software Foundation,
-         * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-         */"""
+    @OptIn(ExperimentalPathApi::class)
+    val LICENSE_HEADER by lazy {
+        Path.of("LICENSE_HEADER").readText()
+            .replace("${"$"}YEAR", Calendar.getInstance().get(Calendar.YEAR).toString())
+    }
 
-    fun generateCheckClass(ruleKey: String, checkClassName: String, messageLine: String?) = """
-        $HEADER
+    fun generateCheckClass(ruleKey: String, checkClassName: String, messageLine: String?) = LICENSE_HEADER + """
         package org.sonarsource.kotlin.checks
 
         import org.sonar.check.Rule
@@ -173,8 +160,7 @@ private object Templates {
         }
     """.trimIndent()
 
-    fun generateTestClass(testClassName: String, checkClassName: String) = """
-        $HEADER
+    fun generateTestClass(testClassName: String, checkClassName: String) = LICENSE_HEADER + """
         package org.sonarsource.kotlin.checks
 
         class $testClassName : CheckTest($checkClassName())

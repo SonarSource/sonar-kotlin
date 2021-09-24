@@ -1,5 +1,5 @@
 /*
- * SonarSource SLang
+ * SonarSource Kotlin
  * Copyright (C) 2018-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
@@ -75,7 +75,7 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
         secondaryLocations: List<SecondaryLocation> = emptyList(),
         gap: Double? = null,
     ) = reportIssue(textRange(psiElement), message, secondaryLocations, gap)
-    
+
     internal fun KotlinFileContext.isInAndroid() = inputFileContext.isAndroid
 
     internal fun KtParameter.typeAsString(bindingContext: BindingContext) =
