@@ -64,6 +64,7 @@ import org.sonarsource.kotlin.checks.NestedMatchCheck
 import org.sonarsource.kotlin.checks.OneStatementPerLineCheck
 import org.sonarsource.kotlin.checks.ParsingErrorCheck
 import org.sonarsource.kotlin.checks.PseudoRandomCheck
+import org.sonarsource.kotlin.checks.ReceivingIntentsCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RedundantSuspendModifierCheck
 import org.sonarsource.kotlin.checks.RobustCryptographicKeysCheck
@@ -142,6 +143,7 @@ val KOTLIN_CHECKS = listOf(
     OneStatementPerLineCheck::class.java,
     ParsingErrorCheck::class.java,
     PseudoRandomCheck::class.java,
+    ReceivingIntentsCheck::class.java,
     RedundantParenthesesCheck::class.java,
     RedundantSuspendModifierCheck::class.java,
     RobustCryptographicKeysCheck::class.java,

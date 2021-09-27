@@ -8,7 +8,6 @@ import android.os.UserHandle;
 import net.sqlcipher.database.CursorFactory;
 import net.sqlcipher.database.DatabaseErrorHandler;
 import net.sqlcipher.database.SQLiteDatabase;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Context {
@@ -97,6 +96,22 @@ public class Context {
   }
 
   public void sendStickyOrderedBroadcast(@Nullable Intent intent, @Nullable BroadcastReceiver resultReceiver, @Nullable Handler scheduler, int initialCode, @Nullable String initialData, @Nullable Bundle initialExtras) {
+
+  }
+
+  public void registerReceiver(@Nullable BroadcastReceiver receiver, @Nullable IntentFilter filter) {
+
+  }
+
+  public void registerReceiver(@Nullable BroadcastReceiver receiver, @Nullable IntentFilter filter, int flags) {
+
+  }
+
+  public void registerReceiver(@Nullable BroadcastReceiver receiver, @Nullable IntentFilter filter, @Nullable String permissions, @Nullable Handler scheduler) {
+
+  }
+
+  public void registerReceiver(@Nullable BroadcastReceiver receiver, @Nullable IntentFilter filter, @Nullable String permissions, @Nullable Handler scheduler, int flags) {
 
   }
 }
