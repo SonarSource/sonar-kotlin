@@ -96,12 +96,12 @@ class FunMatcherTest {
             name = "sayBye"
         }
 
-        val wrongNameMethodMatcherModified = FunMatcher().apply {
+        val wrongNameMethodMatcherModified = FunMatcher {
             qualifier = "sample.SampleClass"
             name = "sayBye"
         }
 
-        val wrongNameMethodMatcherModified2 = FunMatcher().apply {
+        val wrongNameMethodMatcherModified2 = FunMatcher {
             qualifier = "sample.SampleClass"
             name = "sayBye"
             name = null
@@ -116,8 +116,8 @@ class FunMatcherTest {
         assertThat(wrongNameMethodMatcherModified.matches(ktCallExpression1, tree.bindingContext)).isFalse
         assertThat(wrongNameMethodMatcherModified.matches(ktCallExpression2, tree.bindingContext)).isFalse
 
-        assertThat(wrongNameMethodMatcherModified2.matches(ktCallExpression1, tree.bindingContext)).isFalse
-        assertThat(wrongNameMethodMatcherModified2.matches(ktCallExpression2, tree.bindingContext)).isFalse
+        assertThat(wrongNameMethodMatcherModified2.matches(ktCallExpression1, tree.bindingContext)).isTrue
+        assertThat(wrongNameMethodMatcherModified2.matches(ktCallExpression2, tree.bindingContext)).isTrue
     }
 
     @Test
@@ -436,7 +436,7 @@ class FunMatcherTest {
         check(FunMatcher(returnType = "kotlin.Unit"), true, true, false, false)
     }
 
-    private fun check(funMatcher: FunMatcher, vararg expected: Boolean?) {
+    private fun check(funMatcher: FunMatcherImpl, vararg expected: Boolean?) {
         assertThat(expected).hasSameSizeAs(testFunCalls)
         testFunCalls.forEachIndexed { index, callExpression ->
             if (expected[index] != null) {

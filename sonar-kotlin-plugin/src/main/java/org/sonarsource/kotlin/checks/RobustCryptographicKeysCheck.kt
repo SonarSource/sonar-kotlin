@@ -28,6 +28,7 @@ import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.ArgumentMatcher
 import org.sonarsource.kotlin.api.ConstructorMatcher
 import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.FunMatcherImpl
 import org.sonarsource.kotlin.api.INT_TYPE
 import org.sonarsource.kotlin.api.matches
 import org.sonarsource.kotlin.api.predictReceiverExpression
@@ -86,14 +87,16 @@ class RobustCryptographicKeysCheck : AbstractCheck() {
                     ASYMMETRIC_MIN_KEY_SIZE,
                     ASYMMETRIC_ALGORITHMS,
                     ASYMMETRIC_GENERATOR_GET_INSTANCE_MATCHER,
-                    context)
+                    context
+                )
                 resolvedCall matches SYMMETRIC_INIT_MATCHER -> handleKeyGeneratorAndKeyPairGenerator(
                     callExpr,
                     resolvedCall,
                     SYMMETRIC_MIN_KEY_SIZE,
                     SYMMETRIC_ALGORITHMS,
                     SYMMETRIC_GENERATOR_GET_INSTANCE_MATCHER,
-                    context)
+                    context
+                )
                 resolvedCall matches EC_GEN_PARAMETER_SPEC_MATCHER -> handleECGenParameterSpec(callExpr, context)
             }
         }
@@ -112,7 +115,7 @@ class RobustCryptographicKeysCheck : AbstractCheck() {
         resolvedCall: ResolvedCall<*>,
         minKeySize: Int,
         unsafeAlgorithms: Collection<String>,
-        getInstanceMatcher: FunMatcher,
+        getInstanceMatcher: FunMatcherImpl,
         context: KotlinFileContext,
     ) {
         val bindingContext = context.bindingContext
