@@ -61,6 +61,7 @@ tasks {
     }
 
     task<JavaExec>("printAst") {
+        dependsOn(":sonar-kotlin-plugin:compileJava")
         group = "Application"
         classpath = sourceSets.main.get().runtimeClasspath
         mainClass.set("org.sonarsource.kotlin.ast.AstPrinterKt")
