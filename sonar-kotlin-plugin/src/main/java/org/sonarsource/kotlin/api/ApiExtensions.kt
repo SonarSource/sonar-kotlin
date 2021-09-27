@@ -33,6 +33,7 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -48,6 +49,8 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 import org.jetbrains.kotlin.psi2ir.unwrappedGetMethod
@@ -80,6 +83,11 @@ private val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
 
 private val KOTLIN_CHAIN_CALL_CONSTRUCTS = listOf("let", "also", "run", "apply")
 private const val MAX_AST_PARENT_TRAVERSALS = 25
+
+private val STRING_TO_BYTE_FUNS = listOf(
+    FunMatcher(qualifier = "kotlin.text", name = "toByteArray"),
+    FunMatcher(qualifier = "java.lang.String", name = "getBytes")
+)
 
 internal fun KtExpression.predictRuntimeStringValue(bindingContext: BindingContext) =
     predictRuntimeValueExpression(bindingContext).stringValue(bindingContext)
@@ -333,3 +341,48 @@ fun KtExpression.getCalleeOrUnwrappedGetMethod(bindingContext: BindingContext) =
             (bindingContext.get(BindingContext.REFERENCE_TARGET, nameSelector) as? PropertyDescriptor)?.unwrappedGetMethod
         }
     } ?: this.getResolvedCall(bindingContext)?.resultingDescriptor
+
+/**
+ * Checks whether the expression is a call, matches the FunMatchers in [STRING_TO_BYTE_FUNS] and is called on a constant string value.
+ */
+fun KtExpression.isBytesInitializedFromString(bindingContext: BindingContext) =
+    getCalleeOrUnwrappedGetMethod(bindingContext)?.let { callee ->
+        STRING_TO_BYTE_FUNS.any { it.matches(callee) } &&
+            (getCall(bindingContext)?.explicitReceiver as? ExpressionReceiver)?.expression?.predictRuntimeStringValue(bindingContext) != null
+    } ?: false
+
+fun ResolvedCall<*>.simpleArgExpressionOrNull(index: Int) =
+    this.valueArgumentsByIndex
+        ?.getOrNull(index)
+        ?.arguments?.firstOrNull()
+        ?.getArgumentExpression()
+
+/**
+ * Will try to find any previous usages of this reference. You can provide a searchStartNode to define the scope of the search (will
+ * use the closest block statement going up the AST). You can also provide a predicate to filter findings.
+ */
+fun KtNameReferenceExpression.findPreviousUsages(
+    searchStartNode: KtExpression = this,
+    predicate: (KtNameReferenceExpression) -> Boolean = { _ -> true }
+) =
+    mutableListOf<KtNameReferenceExpression>().also { acc ->
+        searchStartNode.getParentOfType<KtBlockExpression>(false)
+            ?.collectDescendantsOfType<KtNameReferenceExpression> { it.getReferencedName() == this.getReferencedName() }
+            ?.let { usages ->
+                for (usage in usages) {
+                    if (usage === this) break
+                    else if (predicate(usage)) {
+                        acc.add(usage)
+                    }
+                }
+            }
+    }
+
+/**
+ * Checks whether the variable has been initialized with the help of a secure random function
+ */
+fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression, bindingContext: BindingContext): Boolean {
+    return this !is KtNameReferenceExpression || this.findPreviousUsages(searchStartNode) {
+        it.getParentOfType<KtCallExpression>(false).getResolvedCall(bindingContext) matches SECURE_RANDOM_FUNS
+    }.isEmpty()
+}
