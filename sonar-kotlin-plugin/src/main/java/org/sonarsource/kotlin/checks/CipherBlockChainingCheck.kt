@@ -28,6 +28,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
 import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.FunMatcherImpl
 import org.sonarsource.kotlin.api.GET_INSTANCE
 import org.sonarsource.kotlin.api.INT_TYPE
 import org.sonarsource.kotlin.api.STRING_TYPE
@@ -80,7 +81,7 @@ private fun KtExpression.isCBC(bindingContext: BindingContext) =
         ?.contains("CBC", ignoreCase = true)
         ?: false
 
-private fun KtExpression.firstArgumentOfInitializer(bindingContext: BindingContext, matcher: FunMatcher) =
+private fun KtExpression.firstArgumentOfInitializer(bindingContext: BindingContext, matcher: FunMatcherImpl) =
     predictRuntimeValueExpression(bindingContext)
         .getCall(bindingContext)?.let {
             if (matcher.matches(it, bindingContext)) it.valueArguments[0].getArgumentExpression()

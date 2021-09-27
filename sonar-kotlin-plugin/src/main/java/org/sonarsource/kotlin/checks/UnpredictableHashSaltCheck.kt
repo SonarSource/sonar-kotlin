@@ -28,7 +28,7 @@ import org.sonarsource.kotlin.api.BYTE_ARRAY_CONSTRUCTOR
 import org.sonarsource.kotlin.api.BYTE_ARRAY_CONSTRUCTOR_SIZE_ARG_ONLY
 import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
-import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.FunMatcherImpl
 import org.sonarsource.kotlin.api.isBytesInitializedFromString
 import org.sonarsource.kotlin.api.isInitializedPredictably
 import org.sonarsource.kotlin.api.matches
@@ -59,7 +59,7 @@ class UnpredictableHashSaltCheck : CallAbstractCheck() {
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
         resolvedCall: ResolvedCall<*>,
-        matchedFun: FunMatcher,
+        matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext
     ) {
         val saltArgIndex = matcherSaltIndexMap[matchedFun]!!

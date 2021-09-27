@@ -35,39 +35,24 @@ import org.jetbrains.kotlin.resolve.calls.tasks.isDynamic
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
 import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequence
-import org.jetbrains.kotlin.resolve.findTopMostOverriddenDescriptors
 
-class FunMatcher(
+class FunMatcherImpl(
     // In case of Top Level function there is no type there,
     // so you just need to specify the package
-    var qualifier: String? = null,
-    name: String? = null,
-    arguments: List<List<ArgumentMatcher>> = mutableListOf(),
-    var definingSupertype: String? = null,
+    val qualifier: String? = null,
+    val names: Set<String> = emptySet(),
+    val arguments: List<List<ArgumentMatcher>> = emptyList(),
+    val definingSupertype: String? = null,
     private val matchConstructor: Boolean = false,
-    var dynamic: Boolean? = null,
-    var extensionFunction: Boolean? = null,
-    var suspending: Boolean? = null,
-    var returnType: String? = null,
-    block: FunMatcher.() -> Unit = {},
+    val dynamic: Boolean? = null,
+    val extensionFunction: Boolean? = null,
+    val suspending: Boolean? = null,
+    val returnType: String? = null,
 ) {
-    private val arguments = arguments.toMutableList()
-    private val names = mutableSetOf<String>()
-
-    var name: String? = name
-        set(value) {
-            value?.let { names += it }
-            field = value
-        }
-
-    init {
-        block()
-        name?.let { names += it }
-    }
 
     fun matches(node: KtCallExpression, bindingContext: BindingContext): Boolean {
         val call = node.getCall(bindingContext)
-        val functionDescriptor = bindingContext.get(BindingContext.RESOLVED_CALL, call)?.resultingDescriptor
+        val functionDescriptor = bindingContext.get(RESOLVED_CALL, call)?.resultingDescriptor
         return matches(functionDescriptor)
     }
 
@@ -152,6 +137,20 @@ class FunMatcher(
 
     private fun checkIsSuspending(descriptor: CallableDescriptor) =
         suspending?.let { it == descriptor.isSuspend } ?: true
+}
+
+class FunMatcherBuilderContext(
+    var qualifier: String? = null,
+    var name: String? = null,
+    var names: Set<String> = mutableSetOf(),
+    var arguments: MutableList<List<ArgumentMatcher>> = mutableListOf(),
+    var definingSupertype: String? = null,
+    var matchConstructor: Boolean = false,
+    var dynamic: Boolean? = null,
+    var extensionFunction: Boolean? = null,
+    var suspending: Boolean? = null,
+    var returnType: String? = null,
+) {
 
     fun withNames(vararg args: String) {
         names += listOf(*args)
@@ -174,7 +173,47 @@ class FunMatcher(
     }
 }
 
-fun ConstructorMatcher(typeName: String? = null, arguments: List<List<ArgumentMatcher>> = emptyList(), block: FunMatcher.() -> Unit = {}) =
-    FunMatcher(qualifier = typeName, arguments = arguments, matchConstructor = true, block = block)
+fun FunMatcher(
+    qualifier: String? = null,
+    name: String? = null,
+    names: Set<String> = mutableSetOf(),
+    arguments: MutableList<List<ArgumentMatcher>> = mutableListOf(),
+    definingSupertype: String? = null,
+    matchConstructor: Boolean = false,
+    dynamic: Boolean? = null,
+    extensionFunction: Boolean? = null,
+    suspending: Boolean? = null,
+    returnType: String? = null,
+    block: FunMatcherBuilderContext.() -> Unit = {},
+) = FunMatcherBuilderContext(
+    qualifier,
+    name,
+    names,
+    arguments,
+    definingSupertype,
+    matchConstructor,
+    dynamic,
+    extensionFunction,
+    suspending,
+    returnType,
+).apply(block).run {
+    FunMatcherImpl(
+        this.qualifier,
+        this.name?.let { this.names + it } ?: this.names,
+        this.arguments,
+        this.definingSupertype,
+        this.matchConstructor,
+        this.dynamic,
+        this.extensionFunction,
+        this.suspending,
+        this.returnType,
+    )
+}
 
-infix fun ResolvedCall<*>?.matches(funMatcher: FunMatcher): Boolean = funMatcher.matches(this)
+fun ConstructorMatcher(
+    typeName: String? = null,
+    arguments: MutableList<List<ArgumentMatcher>> = mutableListOf(),
+    block: FunMatcherBuilderContext.() -> Unit = {}
+) = FunMatcher(qualifier = typeName, arguments = arguments, matchConstructor = true, block = block)
+
+infix fun ResolvedCall<*>?.matches(funMatcher: FunMatcherImpl): Boolean = funMatcher.matches(this)
