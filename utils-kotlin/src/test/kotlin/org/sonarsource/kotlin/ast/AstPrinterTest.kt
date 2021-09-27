@@ -1,4 +1,4 @@
-package org.sonarsource.kotlin.externalreport.ast
+package org.sonarsource.kotlin.ast
 
 import org.assertj.core.api.Assertions
 import org.assertj.core.util.Files
