@@ -1,1 +1,6 @@
-* text eol=lf
+*.kt text eol=lf
+*.kts text eol=lf
+*.java text eol=lf
+*.md text eol=lf
+*.properties text eol=lf
+
