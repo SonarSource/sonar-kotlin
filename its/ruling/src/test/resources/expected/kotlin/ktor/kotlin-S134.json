@@ -24,12 +24,6 @@
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-http-cio/src/io/ktor/http/cio/websocket/PingPong.kt':[
 71,
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-http-cio/src/io/ktor/http/cio/websocket/WebSocketReader.kt':[
-76,
-],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-http-cio/src/io/ktor/http/cio/websocket/WebSocketWriter.kt':[
-40,
-],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-http/src/io/ktor/http/Codecs.kt':[
 67,
 73,
