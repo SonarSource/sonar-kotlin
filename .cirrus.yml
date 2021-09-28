@@ -169,7 +169,7 @@ qa_ruling_kotlin_task:
   env:
     SQ_VERSION: "LATEST_RELEASE"
     GRADLE_TASK: ":its:ruling:test"
-    ITS_PROJECT: "ruling-kotlin"
+    ITS_PROJECT: "ruling"
     GIT_SUB_MODULE: "its/sources"
   <<: *LINUX_6_CPU_12G
   <<: *KOTLIN_ITS_TEMPLATE

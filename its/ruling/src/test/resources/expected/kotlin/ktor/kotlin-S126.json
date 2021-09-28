@@ -8,9 +8,6 @@
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-http-cio/src/io/ktor/http/cio/websocket/PingPong.kt':[
 103,
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-http-cio/src/io/ktor/http/cio/websocket/Serializer.kt':[
-58,
-],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/test/io/ktor/tests/http/HighLoadHttpGenerator.kt':[
 103,
 ],

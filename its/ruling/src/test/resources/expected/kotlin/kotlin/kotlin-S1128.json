@@ -612,9 +612,6 @@
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/move/moveDeclarations/MoveKotlinDeclarationsProcessor.kt':[
 28,
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/move/moveDeclarations/moveConflictUtils.kt':[
-55,
-],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/move/moveFilesOrDirectories/KotlinMoveDirectoryWithClassesHelper.kt':[
 36,
 ],
