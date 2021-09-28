@@ -143,7 +143,7 @@ class FunMatcherBuilderContext(
     var qualifier: String? = null,
     var name: String? = null,
     var names: Set<String> = mutableSetOf(),
-    var arguments: MutableList<List<ArgumentMatcher>> = mutableListOf(),
+    arguments: List<List<ArgumentMatcher>> = listOf(),
     var definingSupertype: String? = null,
     var matchConstructor: Boolean = false,
     var dynamic: Boolean? = null,
@@ -151,6 +151,7 @@ class FunMatcherBuilderContext(
     var suspending: Boolean? = null,
     var returnType: String? = null,
 ) {
+    var arguments: MutableList<List<ArgumentMatcher>> = arguments.toMutableList()
 
     fun withNames(vararg args: String) {
         names += listOf(*args)
@@ -177,7 +178,7 @@ fun FunMatcher(
     qualifier: String? = null,
     name: String? = null,
     names: Set<String> = mutableSetOf(),
-    arguments: MutableList<List<ArgumentMatcher>> = mutableListOf(),
+    arguments: List<List<ArgumentMatcher>> = listOf(),
     definingSupertype: String? = null,
     matchConstructor: Boolean = false,
     dynamic: Boolean? = null,
@@ -212,7 +213,7 @@ fun FunMatcher(
 
 fun ConstructorMatcher(
     typeName: String? = null,
-    arguments: MutableList<List<ArgumentMatcher>> = mutableListOf(),
+    arguments: List<List<ArgumentMatcher>> = listOf(),
     block: FunMatcherBuilderContext.() -> Unit = {}
 ) = FunMatcher(qualifier = typeName, arguments = arguments, matchConstructor = true, block = block)
 
