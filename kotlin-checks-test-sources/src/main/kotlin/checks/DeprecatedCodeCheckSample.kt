@@ -38,3 +38,17 @@ typealias KtString = String // Noncompliant
 
 @Deprecated("")
 private operator fun KtString.minus(s: String) = this + s // Noncompliant
+
+class DeprecatedPrimaryConstructor @Deprecated("") constructor() { // Noncompliant
+//                                                 ^^^^^^^^^^^  
+}
+
+var anonymousFunction = @Deprecated("") fun() { // Noncompliant
+//                      ^^^^^^^^^^^^^^^ 
+}
+
+
+var anonymousClass = @Deprecated("") object : Any() { // Noncompliant
+//                   ^^^^^^^^^^^^^^^ 
+
+}

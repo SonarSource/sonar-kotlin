@@ -20,8 +20,10 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
+import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtPropertyAccessor
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -40,13 +42,19 @@ class DeprecatedCodeCheck : AbstractCheck() {
     }
 }
 
-private fun KtAnnotationEntry.elementToReport(): PsiElement =
-    // The first parent is always a KtDeclarationModifierList and the second parent is always an annotated entity.
-    // If for some reason this assumption is broken, we report on the annotation itself.
-    when (val parent = parent.parent) {
-        is KtSecondaryConstructor -> parent.getConstructorKeyword()
-        is KtPropertyAccessor -> parent.namePlaceholder
-        // Cannot deprecate entity without a name
-        is KtNamedDeclaration -> parent.nameIdentifier!!
+private fun KtAnnotationEntry.elementToReport(): PsiElement = 
+    when (val annotated = annotatedElement()) {
+        // Deprecated Primary constructor should always have a "constructor" keyword 
+        is KtPrimaryConstructor -> annotated.getConstructorKeyword()!!
+        is KtSecondaryConstructor -> annotated.getConstructorKeyword()
+        is KtPropertyAccessor -> annotated.namePlaceholder
+        // Can deprecate anonymous functions and classes
+        is KtNamedDeclaration -> annotated.nameIdentifier ?: this
         else -> this
     }
+
+private fun KtAnnotationEntry.annotatedElement(): PsiElement {
+    var annotated = parent
+    while (annotated !is KtAnnotated) annotated = annotated.parent
+    return annotated
+}

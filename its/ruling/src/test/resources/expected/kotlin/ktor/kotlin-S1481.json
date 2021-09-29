@@ -80,6 +80,12 @@
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-http-cio/src/io/ktor/http/cio/internals/AsciiCharTree.kt':[
 31,
 ],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-http-cio/src/io/ktor/http/cio/websocket/Serializer.kt':[
+26,
+],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-http-cio/src/io/ktor/http/cio/websocket/WebSocketWriter.kt':[
+69,
+],
 'kotlin-ktor-project:sources/kotlin/ktor/ktor-http/src/io/ktor/http/FileContentType.kt':[
 58,
 ],
