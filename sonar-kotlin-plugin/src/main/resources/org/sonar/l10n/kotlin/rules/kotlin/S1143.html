@@ -1,0 +1,76 @@
+<p>Using <code>break</code>, <code>continue</code>, <code>return</code> and <code>throw</code> inside of a <code>finally</code> block suppresses the
+propagation of any unhandled <code>Throwable</code> thrown in the <code>try</code> or <code>catch</code> block.</p>
+<p>This rule raises an issue when a jump statement (<code>break</code>, <code>continue</code>, <code>return</code>, <code>throw</code>) would force
+control flow to leave a <code>finally</code> block.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+fun main() {
+    try {
+        doSomethingWhichThrowsException(5)
+        println("OK") // incorrect "OK" message is printed
+    } catch (e: RuntimeException) {
+        println("ERROR") // this message is not shown
+    }
+    try {
+        doSomethingThatAlsoThrowsException(5)
+        println("OK") // incorrect "OK" message is printed
+    } catch (e: RuntimeException) {
+        println("ERROR") // this message is not shown
+    }
+}
+
+fun doSomethingWhichThrowsException(q: Int) {
+    try {
+        throw RuntimeException()
+    } finally {
+        //...
+        if (someOtherCondition) {
+            return  // Noncompliant - prevents the RuntimeException from being propagated
+        }
+        if (aLastConditionIsVerified) {
+            throw IllegalStateException()  // Noncompliant - prevents the RuntimeException from being propagated
+        }
+    }
+}
+
+fun doSomethingThatAlsoThrowsException(q: Int) {
+    while (someConditionIsVerified) {
+        try {
+            throw RuntimeException()
+        } finally {
+            //...
+            if (someOtherCondition) {
+                continue  // Noncompliant - prevents the RuntimeException from being propagated
+            }
+            break  // Noncompliant - prevents the RuntimeException from being propagated
+        }
+    }
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+fun main() {
+    try {
+        doSomethingWhichThrowsException()
+        println("OK")
+    } catch (e: RuntimeException) {
+        println("ERROR") // prints "ERROR" as expected
+    }
+}
+
+fun doSomethingWhichThrowsException(q: Int) {
+    try {
+        throw RuntimeException()
+    } finally {
+        while (someConditionIsVerified) {
+            //...
+            if (someOtherCondition) {
+                continue  // Compliant - does not prevent the RuntimeException from being propagated
+
+            }
+            break  // compliant - does not prevent the RuntimeException from being propagated
+        }
+    }
+}
+</pre>
+
