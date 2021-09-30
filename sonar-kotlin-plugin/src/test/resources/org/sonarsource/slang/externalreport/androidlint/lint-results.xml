@@ -18,13 +18,13 @@
     </issue>
 
     <issue
-        id="GoogleAppIndexingWarning"
+        id="AppLinkUrlError"
         message="message ...">
         <location file="A.java" line="1" column="5"/>
     </issue>
 
     <issue
-        id="GoogleAppIndexingWarning"
+        id="AppLinkUrlError"
         message="message ...">
         <location file="B.kt" line="2" column="5"/>
     </issue>

@@ -10,6 +10,9 @@ Summary: AdapterView cannot have children in XML
 Priority: 10 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 An AdapterView such as a `ListView`s must be configured with data from Java
 code, such as a ListAdapter.
@@ -24,6 +27,9 @@ Summary: onClick method does not exist
 Priority: 10 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The onClick attribute value should be the name of a method in this View's
 context to invoke when the view is clicked. This name must correspond to a
@@ -40,6 +46,9 @@ Summary: Code contains STOPSHIP marker
 Priority: 10 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable StopShip
 
@@ -60,6 +69,9 @@ Summary: BottomAppBar Problems
 Priority: 9 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The BottomAppBar widget must be placed within a CoordinatorLayout.
 
@@ -71,6 +83,9 @@ Summary: Add Explicit Cast
 Priority: 9 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In Android O, the findViewById signature switched to using generics, which
 means that most of the time you can leave out explicit casts and just assign
@@ -82,19 +97,6 @@ scenarios and suggests casts to be added now such that the code will continue
 to compile if the language level is updated to 1.8.
 
 
-FontValidationWarning
----------------------
-Summary: Validation of font files
-
-Priority: 9 / 10
-Severity: Warning
-Category: Correctness
-
-Look for problems in various font files.
-
-More information: 
-https://developer.android.com/guide/topics/text/downloadable-fonts.html
-
 MissingPermission
 -----------------
 Summary: Missing Permissions
@@ -102,6 +104,9 @@ Summary: Missing Permissions
 Priority: 9 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check scans through your code and libraries and looks at the APIs being
 used, and checks this against the set of permissions required to access those
@@ -120,6 +125,9 @@ Summary: Missing Super Call
 Priority: 9 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Some methods, such as View#onDetachedFromWindow, require that you also call
 the super implementation as part of your method.
@@ -132,6 +140,9 @@ Summary: Hardcoded Package in Namespace
 Priority: 9 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In Gradle projects, the actual package used in the final APK can vary; for
 example,you can add a .debug package suffix in one version and not the other.
@@ -148,6 +159,9 @@ Summary: 'import android.R' statement
 Priority: 9 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Importing android.R is usually not intentional; it sometimes happens when you
 use an IDE and ask it to automatically add imports at a time when your
@@ -165,6 +179,9 @@ Summary: Minimum SDK and target SDK attributes not defined
 Priority: 9 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The manifest should contain a <uses-sdk> element which defines the minimum API
 Level required for the application to run, as well as the target version (the
@@ -180,6 +197,9 @@ Summary: Mismatched view type
 Priority: 9 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Keeps track of the view types associated with ids and if it finds a usage of
 the id in the Java code it ensures that it is treated as the same type.
@@ -192,6 +212,9 @@ Summary: Potential AAPT crash
 Priority: 8 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Defining a style which sets android:id to a dynamically generated id can cause
 many versions of aapt, the resource packaging tool, to crash. To work around
@@ -205,6 +228,9 @@ Summary: Duplicate Platform Classes
 Priority: 8 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 There are a number of libraries that duplicate not just functionality of the
 Android platform but using the exact same class names as the ones provided in
@@ -218,13 +244,16 @@ code to use different APIs (for example, for http code, consider using
 HttpUrlConnection or a library like okhttp).
 
 
-FontValidationError
--------------------
+FontValidation
+--------------
 Summary: Validation of font files
 
 Priority: 8 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Look for problems in various font files.
 
@@ -238,6 +267,9 @@ Summary: Incompatible Gradle Versions
 Priority: 8 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 There are some combinations of libraries, or tools and libraries, that are
 incompatible, or can lead to bugs. One such incompatibility is compiling with
@@ -252,6 +284,9 @@ Summary: Incompatible Android Gradle Plugin
 Priority: 8 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Not all versions of the Android Gradle plugin are compatible with all versions
 of the SDK. If you update your tools, or if you are trying to open a project
@@ -266,6 +301,9 @@ Summary: VersionCode too high
 Priority: 8 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The declared versionCode is an Integer. Ensure that the version number is not
 close to the limit. It is recommended to monotonically increase this number
@@ -282,6 +320,9 @@ Summary: Name and version must be integer or string, not resource
 Priority: 8 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 For the versionCode attribute, you have to specify an actual integer literal;
 you cannot use an indirection with a @dimen/name resource. Similarly, the
@@ -290,19 +331,18 @@ versionName attribute should be an actual string, not a string resource url.
 
 JcenterRepositoryObsolete
 -------------------------
-Summary: The JCenter Maven repository is obsolete from 1st May 2021
+Summary: JCenter Maven repository is read-only
 
 Priority: 8 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-JFrog announced that the JCenter Maven repository would reach end of service
-and would no longer be available from 1st May 2021; no new submissions would
-be accepted from 28th February 2021, and there might be accessibility problems
-due to maintenance windows before the end of service date.
-
-We recommend configuring Gradle to retrieve Java artifacts using mavenCentral
-instead.
+The JCenter Maven repository is no longer accepting submissions of Maven
+artifacts since 31st March 2021.  Ensure that the project is configured to
+search in repositories with the latest versions of its dependencies.
 
 More information: 
 https://developer.android.com/r/tools/jcenter-end-of-service
@@ -314,6 +354,9 @@ Summary: Code contains merge marker
 Priority: 8 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Many version control systems leave unmerged files with markers such as <<< in
 the source code. This check looks for these markers, which are sometimes
@@ -328,6 +371,9 @@ Summary: Missing registered class
 Priority: 8 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If a class is referenced in the manifest or in a layout file, it must also
 exist in the project (or in one of the libraries included by the project. This
@@ -345,6 +391,9 @@ Summary: Missing Leanback Launcher Intent Filter
 Priority: 8 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 An application intended to run on TV devices must declare a launcher activity
 for TV in its manifest using a android.intent.category.LEANBACK_LAUNCHER
@@ -360,6 +409,9 @@ Summary: Using mock location provider in production
 Priority: 8 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Using a mock location provider (by requiring the permission
 android.permission.ACCESS_MOCK_LOCATION) should only be done in debug builds
@@ -378,6 +430,9 @@ Summary: layoutDescription must specify a scene file
 Priority: 8 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 A motion scene file specifies the animations used in a MotionLayout. The
 layoutDescription is required to specify a valid motion scene file.
@@ -390,6 +445,9 @@ Summary: Validation errors in MotionScene files
 Priority: 8 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 A motion scene file specifies the animations used in a MotionLayout. This
 check performs various serious correctness checks in a motion scene file.
@@ -402,6 +460,9 @@ Summary: Misspelled namespace declaration
 Priority: 8 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Accidental misspellings in namespace declarations can lead to some very
 obscure error messages. This check looks for potential misspellings to help
@@ -415,6 +476,9 @@ Summary: Incorrect Interpolation
 Priority: 8 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 To insert the value of a variable, you can use ${variable} inside a string
 literal, but only if you are using double quotes!
@@ -429,6 +493,9 @@ Summary: Missing Pending Bindings
 Priority: 8 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When using a ViewDataBinding in a onBindViewHolder method, you must call
 executePendingBindings() before the method exits; otherwise the data binding
@@ -443,6 +510,9 @@ Summary: Using obsolete ProGuard configuration
 Priority: 8 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Using -keepclasseswithmembernames in a proguard config file is not correct; it
 can cause some symbols to be renamed which should not be.
@@ -462,6 +532,9 @@ Summary: RecyclerView Problems
 Priority: 8 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 RecyclerView will not call onBindViewHolder again when the position of the
 item changes in the data set unless the item itself is invalidated or the new
@@ -481,6 +554,9 @@ Summary: Incorrect reference types
 Priority: 8 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When you generate a resource alias, the resource you are pointing to must be
 of the same type as the alias
@@ -493,6 +569,9 @@ Summary: Cycle in resource definitions
 Priority: 8 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 There should be no cycles in resource definitions as this can lead to runtime
 exceptions.
@@ -505,6 +584,9 @@ Summary: Resource with Wrong Prefix
 Priority: 8 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In Gradle projects you can specify a resource prefix that all resources in the
 project must conform to. This makes it easier to ensure that you don't
@@ -519,6 +601,9 @@ Summary: Affected by scoped storage
 Priority: 8 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Scoped storage is enforced on Android 10+ (or Android 11+ if using
 requestLegacyExternalStorage). In particular, WRITE_EXTERNAL_STORAGE will no
@@ -529,11 +614,14 @@ The MANAGE_EXTERNAL_STORAGE permission can be used to manage all files, but it
 is rarely necessary and most apps on Google Play are not allowed to use it.
 Most apps should instead migrate to use scoped storage. To modify or delete
 files, apps should request write access from the user as described at
-https://developer.android.com/reference/android/provider/MediaStore#createWrit
-eRequest.
+https://goo.gle/android-mediastore-createwriterequest.
+
+To learn more, read these resources: Play policy:
+https://goo.gle/policy-storage-help Allowable use cases:
+https://goo.gle/policy-storage-usecases
 
 More information: 
-https://developer.android.com/preview/privacy/storage#scoped-storage
+https://goo.gle/android-storage-usecases
 
 ScrollViewCount
 ---------------
@@ -542,6 +630,9 @@ Summary: ScrollView can have only one child
 Priority: 8 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 A ScrollView can only have one child widget. If you want more children, wrap
 them in a container layout.
@@ -554,6 +645,9 @@ Summary: String should be int
 Priority: 8 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The properties compileSdkVersion, minSdkVersion and targetSdkVersion are
 usually numbers, but can be strings when you are using an add-on (in the case
@@ -570,6 +664,9 @@ Summary: Mixing screenOrientation and translucency
 Priority: 8 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Specifying a fixed screen orientation with a translucent theme isn't supported
 on apps with targetSdkVersion O or greater since there can be an another
@@ -591,6 +688,9 @@ Summary: Reference to an unknown id
 Priority: 8 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The @+id/ syntax refers to an existing id, or creates a new one if it has not
 already been defined elsewhere. However, this means that if you have a typo in
@@ -606,6 +706,9 @@ Summary: Resource file in the wrong res folder
 Priority: 8 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Resource files are sometimes placed in the wrong folder, and it can lead to
 subtle bugs that are hard to understand. This check looks for problems in this
@@ -620,6 +723,9 @@ Summary: Missing commit() calls
 Priority: 7 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 After creating a FragmentTransaction, you typically need to commit it as well
 
@@ -631,6 +737,9 @@ Summary: Method considered overridden by Dalvik
 Priority: 7 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable DalvikOverride
 
@@ -655,6 +764,9 @@ Summary: Malformed Device Admin
 Priority: 7 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If you register a broadcast receiver which acts as a device admin, you must
 also register an <intent-filter> for the action
@@ -675,6 +787,9 @@ Summary: Duplicate ids within a single layout
 Priority: 7 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Within a layout, id's should be unique since otherwise findViewById() can
 return an unexpected view.
@@ -687,6 +802,9 @@ Summary: Incorrect Half Float
 Priority: 7 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Half-precision floating point are stored in a short data type, and should be
 manipulated using the android.util.Half class. This check flags usages where
@@ -700,6 +818,9 @@ Summary: Inconsistencies in array element counts
 Priority: 7 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When an array is translated in a different locale, it should normally have the
 same number of elements as the original array. When adding or removing
@@ -709,7 +830,7 @@ lint warning finds inconsistencies like these.
 Note however that there may be cases where you really want to declare a
 different number of array items in each configuration (for example where the
 array represents available options, and those options differ for different
-layout orientations and so on), so use your own judgement to decide if this is
+layout orientations and so on), so use your own judgment to decide if this is
 really an error.
 
 You can suppress this error type if it finds false errors in your project.
@@ -722,6 +843,9 @@ Summary: TV Missing Banner
 Priority: 7 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 A TV application must provide a home screen banner for each localization if it
 includes a Leanback launcher intent filter. The banner is the app launch point
@@ -737,6 +861,9 @@ Summary: Nested scrolling widgets
 Priority: 7 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 A scrolling widget such as a ScrollView should not contain any nested
 scrolling widgets since this has various usability issues
@@ -749,6 +876,9 @@ Summary: Should pass resolved color instead of resource id
 Priority: 7 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Methods that take a color in the form of an integer should be passed an RGB
 triple, not the actual color resource id. You must call
@@ -765,6 +895,9 @@ Summary: Wrong Resource Type
 Priority: 7 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Ensures that resource id's passed to APIs are of the right type; for example,
 calling Resources.getColor(R.string.name) is wrong.
@@ -777,6 +910,9 @@ Summary: ScrollView size validation
 Priority: 7 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 ScrollView children must set their layout_width or layout_height attributes to
 wrap_content rather than fill_parent or match_parent in the scrolling
@@ -790,6 +926,9 @@ Summary: TextView should probably be an EditText instead
 Priority: 7 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Using a <TextView> to input text is generally an error, you should be using
 <EditText> instead.  EditText is a subclass of TextView, and some of the
@@ -810,6 +949,9 @@ Summary: WebView API Availability
 Priority: 7 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The androidx.webkit library is a static library you can add to your Android
 application allowing you to use new APIs on older platform versions, targeting
@@ -825,10 +967,31 @@ Summary: WebViews in wrap_content parents
 Priority: 7 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The WebView implementation has certain performance optimizations which will
 not work correctly if the parent view is using wrap_content rather than
 match_parent. This can lead to subtle UI bugs.
+
+
+AnnotateVersionCheck
+--------------------
+Summary: Annotate SDK_INT checks
+
+Priority: 6 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Methods which perform SDK_INT version checks (or field constants which reflect
+the result of a version check) in libraries should be annotated with
+@ChecksSdkIntAtLeast. This makes it possible for lint to correctly check calls
+into the library later to correctly understand that problematic code which is
+wrapped within a call into this library is safe after all.
 
 
 AppCompatMethod
@@ -838,6 +1001,9 @@ Summary: Using Wrong AppCompat Method
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When using the appcompat library, there are some methods you should be calling
 instead of the normal ones; for example, getSupportActionBar() instead of
@@ -853,44 +1019,13 @@ Summary: Use apply() on SharedPreferences
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Consider using apply() instead of commit on shared preferences. Whereas commit
 blocks and writes its data to persistent storage immediately, apply will
 handle it in the background.
-
-
-Assert
-------
-Summary: Ignored Assertions
-
-Priority: 6 / 10
-Severity: Warning
-Category: Correctness
-NOTE: This issue is disabled by default!
-You can enable it by adding --enable Assert
-
-Assertions will never be turned on in Android. (It was possible to enable it
-in Dalvik with adb shell setprop debug.assert 1, but it is not implemented in
-ART, the runtime for Android 5.0 and later.)
-
-This means that the assertion will never catch mistakes, and you should not
-use assertions from Java or Kotlin for debug build checking.
-
-Instead, perform conditional checking inside if (BuildConfig.DEBUG) { }
-blocks. That constant is a static final boolean which will be true only in
-debug builds, and false in release builds, and the compiler will completely
-remove all code inside the if-body from the app.
-
-For example, you can replace
-    assert(speed > 0, { "Message" })    // Kotlin
-    assert speed > 0 : "Message"        // Java
-with
-    if (BuildConfig.DEBUG && !(speed > 0)) {
-        throw new AssertionError("Message")
-    }
-(Note: This lint check does not flag assertions purely asserting nullness or
-non-nullness in Java code; these are typically more intended for tools usage
-than runtime checks.)
 
 
 BlockedPrivateApi
@@ -900,6 +1035,9 @@ Summary: Using Blocked Private API
 Priority: 6 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Usage of restricted non-SDK interface is forbidden for this targetSDK.
 Accessing non-SDK methods or fields through reflection has a high likelihood
@@ -916,6 +1054,9 @@ Summary: Broken Iterator
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 For LinkedHashMap:
 
@@ -949,6 +1090,9 @@ Summary: Wrong Canvas Size
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In a custom view's draw implementation, you should normally call getWidth and
 getHeight on the custom view itself, not on the canvas instance.
@@ -974,6 +1118,9 @@ Summary: Ignoring results
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Some methods have no side effects, and calling them without doing something
 without the result is suspicious.
@@ -986,6 +1133,9 @@ Summary: Missing commit() on SharedPreference editor
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 After calling edit() on a SharedPreference, you must call commit() or apply()
 on the editor to save the results.
@@ -998,6 +1148,9 @@ Summary: Mismatched Styleable/Custom View Name
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The convention for custom views is to use a declare-styleable whose name
 matches the custom view class name. The IDE relies on this convention such
@@ -1014,6 +1167,9 @@ Summary: Likely cut & paste mistakes
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This lint check looks for cases where you have cut & pasted calls to
 findViewById but have forgotten to update the R.id field. It's possible that
@@ -1030,6 +1186,9 @@ Summary: Implied default locale in case conversion
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Calling String#toLowerCase() or #toUpperCase() without specifying an explicit
 locale is a common source of bugs. The reason for that is that those methods
@@ -1053,6 +1212,9 @@ Summary: Using Discouraged Private API
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Usage of restricted non-SDK interface may throw an exception at runtime.
 Accessing non-SDK methods or fields through reflection has a high likelihood
@@ -1069,6 +1231,9 @@ Summary: Duplicate definitions of resources
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 You can define a resource multiple times in different resource folders; that's
 how string translations are done, for example. However, defining the same
@@ -1084,6 +1249,9 @@ Summary: Duplicate ids across layouts combined with include tags
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 It's okay for two independent layouts to use the same ids. However, if layouts
 are combined with include tags, then the id's need to be unique within any
@@ -1098,6 +1266,9 @@ Summary: WorkManager Enqueue
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 WorkContinuations cannot be enqueued automatically.  You must call enqueue()
 on a WorkContinuation to have it and its parent continuations enqueued inside
@@ -1111,6 +1282,9 @@ Summary: Using android.media.ExifInterface
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The android.media.ExifInterface implementation has some known security bugs in
 older versions of Android. There is a new implementation available of this
@@ -1124,6 +1298,9 @@ Summary: Locale crash
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check looks for usage of Lollipop-style locale folders (e.g. 3 letter
 language codes, or BCP 47 qualifiers) combined with an
@@ -1137,6 +1314,9 @@ Summary: Deprecated Gradle Construct
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This detector looks for deprecated Gradle constructs which currently work but
 will likely stop working in a future update.
@@ -1149,6 +1329,9 @@ Summary: Deprecated Gradle Configuration
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Some Gradle configurations have been deprecated since Android Gradle Plugin
 3.0.0 and will be removed in a future version of the Android Gradle Plugin.
@@ -1163,6 +1346,9 @@ Summary: Gradle Implicit Getter Call
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Gradle will let you replace specific constants in your build scripts with
 method calls, so you can for example dynamically compute a version string
@@ -1184,6 +1370,9 @@ Summary: Implicit SAM Instances
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable ImplicitSamInstance
 
@@ -1201,6 +1390,9 @@ Summary: Touchscreen not optional
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Apps require the android.hardware.touchscreen feature by default. If you want
 your app to be available on TV, you must also explicitly declare that a
@@ -1218,6 +1410,9 @@ Summary: Obsolete version of MediaBrowserServiceCompat
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 MediaBrowserServiceCompat from version 23.2.0 to 23.4.0 of the Support v4
 Library used private APIs and will not be compatible with future versions of
@@ -1232,6 +1427,9 @@ Summary: Inconsistent Layouts
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check ensures that a layout resource which is defined in multiple
 resource folders, specifies the same set of widgets.
@@ -1255,6 +1453,9 @@ Summary: Using inlined constants on older versions
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check scans through all the Android API field references in the
 application and flags certain constants, such as static final integers and
@@ -1284,6 +1485,9 @@ Summary: Registered class is not instantiatable
 Priority: 6 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Activities, services, broadcast receivers etc. registered in the manifest file
 (or for custom views, in a layout file) must be "instantiatable" by the
@@ -1299,6 +1503,9 @@ Summary: Suspicious mix of setType and setData
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Intent provides the following APIs: setData(Uri) and setType(String).
 Unfortunately, setting one clears the other. If you want to set both, you
@@ -1312,6 +1519,9 @@ Summary: Invalid Analytics Name
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Event names and parameters must follow the naming conventions defined in
 the`FirebaseAnalytics#logEvent()` documentation.
@@ -1326,6 +1536,9 @@ Summary: Invalid ID declaration
 Priority: 6 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 An id definition must be of the form @+id/yourname. The tools have not
 rejected strings of the form @+foo/bar in the past, but that was an error, and
@@ -1342,6 +1555,9 @@ Summary: Invalid imeActionId declaration
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 android:imeActionId should not be a resource ID such as @+id/resName. It must
 be an integer constant, or an integer resource reference, as defined in
@@ -1357,6 +1573,9 @@ Summary: Package not included in Android
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable InvalidPackage
 
@@ -1382,6 +1601,9 @@ Summary: Invalid Resource Folder
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This lint check looks for a folder name that is not a valid resource folder
 name; these will be ignored and not packaged by the Android Gradle build
@@ -1406,6 +1628,9 @@ Summary: Invalid name attribute for uses element
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The <uses> element in <automotiveApp> should contain a valid value for the
 name attribute.
@@ -1421,6 +1646,9 @@ Summary: Invalid Wake Lock Tag
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Wake Lock tags must follow the naming conventions defined in the`PowerManager`
 documentation.
@@ -1435,6 +1663,9 @@ Summary: Invalid attribute for Wear uses-feature
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 For the android.hardware.type.watch uses-feature, android:required="false" is
 disallowed. A single APK for Wear and non-Wear devices is not supported.
@@ -1449,6 +1680,9 @@ Summary: Custom views in libraries should use res-auto-namespace
 Priority: 6 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When using a custom view with custom attributes in a library project, the
 layout must use the special namespace http://schemas.android.com/apk/res-auto
@@ -1464,6 +1698,9 @@ Summary: Wrong locale name
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 From the java.util.Locale documentation:
 "Note that Java uses several deprecated two-letter codes. The Hebrew ("he")
@@ -1487,6 +1724,9 @@ Summary: Manifest Resource References
 Priority: 6 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Elements in the manifest can reference resources, but those resources cannot
 vary across configurations (except as a special case, by version, and except
@@ -1501,6 +1741,9 @@ Summary: Missing Backup Pin
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 It is highly recommended to declare a backup <pin> element. Not having a
 second pin defined can cause connection failures when the particular site
@@ -1516,6 +1759,9 @@ Summary: Missing Constraints in ConstraintLayout
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The layout editor allows you to place widgets anywhere on the canvas, and it
 records the current position with designtime attributes (such as
@@ -1532,6 +1778,9 @@ Summary: Missing Default
 Priority: 6 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If a resource is only defined in folders with qualifiers like -land or -en,
 and there is no default declaration in the base folder (layout or values etc),
@@ -1564,6 +1813,9 @@ Summary: Missing Firebase Messaging Callback
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Apps that use Firebase Cloud Messaging should implement the
 FirebaseMessagingService#onNewToken() callback in order to observe token
@@ -1579,6 +1831,9 @@ Summary: Missing MEDIA_PLAY_FROM_SEARCH intent-filter
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 To support voice searches on Android Auto, you should also register an
 intent-filter for the action android.media.action.MEDIA_PLAY_FROM_SEARCH.
@@ -1598,12 +1853,15 @@ Summary: Missing Leanback Support
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The manifest should declare the use of the Leanback user interface required by
 Android TV.
 To fix this, add
-`<uses-feature android:name="android.software.leanback"  
-android:required="false" />`
+`<uses-feature android:name="android.software.leanback"
+               android:required="false" />`
 to your manifest.
 
 More information: 
@@ -1616,6 +1874,9 @@ Summary: Missing MediaBrowserService intent-filter
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 An Automotive Media App requires an exported service that extends
 android.service.media.MediaBrowserService with an intent-filter for the action
@@ -1631,11 +1892,14 @@ https://developer.android.com/training/auto/audio/index.html#config_manifest
 
 MissingOnPlayFromSearch
 -----------------------
-Summary: Missing onPlayFromSearch.
+Summary: Missing onPlayFromSearch
 
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 To support voice searches on Android Auto, in addition to adding an
 intent-filter for the action onPlayFromSearch, you also need to override and
@@ -1651,6 +1915,9 @@ Summary: Missing Android XML namespace
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Most Android views have attributes in the Android namespace. When referencing
 these attributes you must include the namespace prefix, or your attribute will
@@ -1667,6 +1934,9 @@ Summary: Multiple <uses-sdk> elements in the manifest
 Priority: 6 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The <uses-sdk> element should appear just once; the tools will not merge the
 contents of all the elements so if you split up the attributes across multiple
@@ -1683,6 +1953,9 @@ Summary: Mutating an Immutable SharedPrefs Set
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 As stated in the docs for SharedPreferences.getStringSet, you must not modify
 the set returned by getStringSet:
@@ -1699,6 +1972,9 @@ Summary: Calling new methods on older versions
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check scans through all the Android API calls in the application and
 warns about any calls that are not available on all versions targeted by this
@@ -1730,6 +2006,9 @@ Summary: Invalid Constraints
 Priority: 6 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Layout constraints in a given ConstraintLayout or RelativeLayout should
 reference other views within the same relative layout (but not itself!)
@@ -1742,6 +2021,9 @@ Summary: Notification Icon Compatibility
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Notification icons should define a raster image to support Android versions
 below 5.0 (API 21). Note that the way Lint decides whether an icon is a
@@ -1757,6 +2039,9 @@ Summary: Target SDK attribute is not targeting latest version
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When your application runs on a version of Android that is more recent than
 your targetSdkVersion specifies that it has been tested with, various
@@ -1784,6 +2069,9 @@ Summary: Method conflicts with new inherited method
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Suppose you are building against Android API 8, and you've subclassed
 Activity. In your subclass you add a new method called isDestroyed(). At some
@@ -1810,6 +2098,9 @@ Summary: Not overriding abstract methods on older platforms
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 To improve the usability of some APIs, some methods that used to be abstract
 have been made concrete by adding default implementations. This means that
@@ -1829,6 +2120,9 @@ Summary: Validate <pin-set> expiration attribute
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Ensures that the expiration attribute of the <pin-set> element is valid and
 has not already expired or is expiring soon
@@ -1843,6 +2137,9 @@ Summary: Using Private APIs
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Using reflection to access hidden/private Android APIs is not safe; it will
 often not work on devices from other vendors, and it may suddenly stop working
@@ -1859,6 +2156,9 @@ Summary: Incorrect property escapes
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 All backslashes and colons in .property files must be escaped with a backslash
 (). This means that when writing a Windows path, you must escape the file
@@ -1872,6 +2172,9 @@ Summary: Outside Range
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Some parameters are required to in a particular numerical range; this check
 makes sure that arguments passed fall within the range. For arrays, Strings
@@ -1885,6 +2188,9 @@ Summary: Class is not registered in the manifest
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable Registered
 
@@ -1904,6 +2210,9 @@ Summary: Unsupported View in RemoteView
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In a RemoteView, only some layouts and views are allowed.
 
@@ -1917,6 +2226,9 @@ Summary: Requires Feature
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Some APIs require optional features to be present. This check makes sure that
 calls to these APIs are surrounded by a check which enforces this.
@@ -1929,6 +2241,9 @@ Summary: Hardcoded reference to /sdcard
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Your code should not reference the /sdcard path directly; instead use
 Environment.getExternalStorageDirectory().getPath().
@@ -1946,6 +2261,9 @@ Summary: Wrong system service casts
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When you call Context#getSystemService(), the result is typically cast to a
 specific interface. This lint check ensures that the cast is compatible with
@@ -1959,6 +2277,9 @@ Summary: Short or Frequent Alarm
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Frequent alarms are bad for battery life. As of API 22, the AlarmManager will
 override near-future and high-frequency alarm requests, delaying the alarm at
@@ -1976,6 +2297,9 @@ Summary: Toast created but not shown
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Toast.makeText() creates a Toast but does not show it. You must call show() on
 the resulting object to actually make the Toast appear.
@@ -1988,6 +2312,9 @@ Summary: Implied locale in date format
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Almost all callers should use getDateInstance(), getDateTimeInstance(), or
 getTimeInstance() to get a ready-made instance of SimpleDateFormat suitable
@@ -2010,6 +2337,9 @@ Summary: Slices
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check analyzes usages of the Slices API and offers suggestions based
 on best practices.
@@ -2022,6 +2352,9 @@ Summary: Using Soon-to-Be Blocked Private API
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Usage of restricted non-SDK interface will throw an exception at runtime.
 Accessing non-SDK methods or fields through reflection has a high likelihood
@@ -2038,6 +2371,9 @@ Summary: Suspicious 0dp dimension
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Using 0dp as the width in a horizontal LinearLayout with weights is a useful
 trick to ensure that only the weights (and not the intrinsic sizes) are used
@@ -2055,6 +2391,9 @@ Summary: Permission names are not unique
 Priority: 6 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The unqualified names or your permissions must be unique. The reason for this
 is that at build time, the aapt tool will generate a class named Manifest
@@ -2073,6 +2412,9 @@ Summary: Unsupported TV Hardware Feature
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The <uses-feature> element should not require this unsupported TV hardware
 feature. Any uses-feature not explicitly marked with required="false" is
@@ -2090,6 +2432,9 @@ Summary: Attribute unused on older versions
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check finds attributes set in XML files that were introduced in a version
 newer than the oldest version targeted by your application (with the
@@ -2113,6 +2458,9 @@ Summary: Using 3-letter Codes
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 For compatibility with earlier devices, you should only use 3-letter language
 and region codes when there is no corresponding 2 letter code.
@@ -2127,6 +2475,9 @@ Summary: Fragment not instantiatable
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 From the Fragment documentation:
 Every fragment must have an empty constructor, so it can be instantiated when
@@ -2150,6 +2501,9 @@ Summary: Invalid or missing Wear standalone app flag
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Wearable apps should specify whether they can work standalone, without a phone
 app. Add a valid meta-data entry for com.google.android.wearable.standalone to
@@ -2167,6 +2521,9 @@ Summary: WifiManager Leak
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 On versions prior to Android N (24), initializing the WifiManager via
 Context#getSystemService can cause a memory leak if the context is not the
@@ -2181,6 +2538,9 @@ Summary: WifiManager Potential Leak
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 On versions prior to Android N (24), initializing the WifiManager via
 Context#getSystemService can cause a memory leak if the context is not the
@@ -2201,6 +2561,9 @@ Summary: Using wrong draw/layout method
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Custom views typically need to call measure() on their children, not
 onMeasure. Ditto for onDraw, onLayout, etc.
@@ -2213,6 +2576,9 @@ Summary: Incorrect constant
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Ensures that when parameter in a method only allows a specific set of
 constants, calls obey those rules.
@@ -2225,6 +2591,9 @@ Summary: Wrong manifest parent
 Priority: 6 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The <uses-library> element should be defined as a direct child of the
 <application> tag, not the <manifest> tag or an <activity> tag. Similarly, a
@@ -2242,6 +2611,9 @@ Summary: Suspicious Language/Region Combination
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Android uses the letter codes ISO 639-1 for languages, and the letter codes
 ISO 3166-1 for the region codes. In many cases, the language code and the
@@ -2269,6 +2641,9 @@ Summary: Wrong Thread
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Ensures that a method which expects to be called on a specific thread, is
 actually called from that thread. For example, calls on methods in widgets
@@ -2284,6 +2659,9 @@ Summary: Wrong Thread (Interprocedural)
 Priority: 6 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable WrongThreadInterprocedural
 
@@ -2301,6 +2679,9 @@ Summary: Menu namespace
 Priority: 5 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When using the appcompat library, menu resources should refer to the
 showAsAction (or actionViewClass, or actionProviderClass) in the app:
@@ -2310,30 +2691,18 @@ Similarly, when not using the appcompat library, you should be using the
 android:showAsAction (or actionViewClass, or actionProviderClass) attribute.
 
 
-AppLinksAutoVerifyError
------------------------
+AppLinksAutoVerify
+------------------
 Summary: App Links Auto Verification Failure
 
 Priority: 5 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
-You can enable it by adding --enable AppLinksAutoVerifyError
-
-Ensures that app links are correctly set and associated with website.
-
-More information: 
-https://g.co/appindexing/applinks
-
-AppLinksAutoVerifyWarning
--------------------------
-Summary: Potential App Links Auto Verification Failure
-
-Priority: 5 / 10
-Severity: Warning
-Category: Correctness
-NOTE: This issue is disabled by default!
-You can enable it by adding --enable AppLinksAutoVerifyWarning
+You can enable it by adding --enable AppLinksAutoVerify
 
 Ensures that app links are correctly set and associated with website.
 
@@ -2347,6 +2716,9 @@ Summary: Battery Life Issues
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This issue flags code that either
 * negatively affects battery life, or
@@ -2361,6 +2733,39 @@ https://developer.android.com/topic/performance/background-optimization
 More information: 
 https://developer.android.com/topic/performance/background-optimization
 
+CoarseFineLocation
+------------------
+Summary: Cannot use ACCESS_FINE_LOCATION without ACCESS_COARSE_LOCATION
+
+Priority: 5 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+If your app requires access to FINE location, on Android 12 and higher you
+must now request both FINE and COARSE. Users will have the option to grant
+only COARSE location. Ensure your app can work with just COARSE location.
+
+
+CustomSplashScreen
+------------------
+Summary: Application-defined Launch Screen
+
+Priority: 5 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Starting in Android 12 (API 31+), the application's Launch Screen is provided
+by the system and the application should not create its own, otherwise the
+user will see two splashscreen. Please check the SplashScreen class to check
+how the Splash Screen can be controlled and customized.
+
+
 DuplicateActivity
 -----------------
 Summary: Activity registered more than once
@@ -2368,6 +2773,9 @@ Summary: Activity registered more than once
 Priority: 5 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 An activity should only be registered once in the manifest. If it is
 accidentally registered more than once, then subtle errors can occur, since
@@ -2382,6 +2790,9 @@ Summary: Feature declared more than once
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 A given feature should only be declared once in the manifest.
 
@@ -2393,12 +2804,33 @@ Summary: Valid Full Backup Content File
 Priority: 5 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Ensures that a <full-backup-content> file, which is pointed to by a
 android:fullBackupContent attribute in the manifest file, is valid
 
 More information: 
 https://android-developers.googleblog.com/2015/07/auto-backup-for-apps-made-simple.html
+
+HighSamplingRate
+----------------
+Summary: High sensor sampling rate
+
+Priority: 5 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Most apps don't need access to high sensor sampling rate. Double check your
+use case to ensure your app absolutely needs access to sensor sampling rate >
+200Hz. Be prepared for your app to be rejected from listing on Play Store
+until your use case for high sensor sampling rate has been reviewed and
+validated by the policy team.
+
 
 IncludeLayoutParam
 ------------------
@@ -2407,6 +2839,9 @@ Summary: Ignored layout params on include
 Priority: 5 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Layout parameters specified on an <include> tag will only be used if you also
 override layout_width and layout_height on the <include> tag; otherwise they
@@ -2422,6 +2857,9 @@ Summary: Layout Inflation without a Parent
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When inflating a layout, avoid passing in null as the parent view, since
 otherwise any layout parameters on the root of the inflated layout will be
@@ -2437,6 +2875,9 @@ Summary: Instant App Issues
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This issue flags code that will not work correctly in Instant Apps
 
@@ -2448,6 +2889,9 @@ Summary: Invalid vector paths
 Priority: 5 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check ensures that vector paths are valid. For example, it makes sure
 that the numbers are not using scientific notation (such as 1.0e3) which can
@@ -2465,6 +2909,9 @@ Summary: JobScheduler problems
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check looks for various common mistakes in using the JobScheduler API:
 the service class must extend JobService, the service must be registered in
@@ -2474,6 +2921,30 @@ android.permission.BIND_JOB_SERVICE.
 More information: 
 https://developer.android.com/topic/performance/scheduling.html
 
+LeanbackUsesWifi
+----------------
+Summary: Using android.hardware.wifi on TV
+
+Priority: 5 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+WiFi is not required for Android TV and many devices connect to the internet
+via alternative methods e.g. Ethernet.
+
+If your app is not focused specifically on WiFi functionality and only wishes
+to connect to the internet, please modify your Manifest to contain:
+<uses-feature android:name="android.hardware.wifi" android:required="false"
+/>
+
+Un-metered or non-roaming connections can be detected in software using
+NetworkCapabilities#NET_CAPABILITY_NOT_METERED and
+NetworkCapabilities#NET_CAPABILITY_NOT_ROAMING.
+
+
 LogTagMismatch
 --------------
 Summary: Mismatched Log Tags
@@ -2481,6 +2952,9 @@ Summary: Mismatched Log Tags
 Priority: 5 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When guarding a Log.v(tag, ...) call with Log.isLoggable(tag), the tag passed
 to both calls should be the same. Similarly, the level passed in to
@@ -2495,6 +2969,9 @@ Summary: Too Long Log Tags
 Priority: 5 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Log tags are only allowed to be at most 23 tag characters long.
 
@@ -2506,6 +2983,9 @@ Summary: Incorrect order of elements in manifest
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The <application> tag should appear after the elements which declare which
 version you need, which features you need, which libraries you need, and so
@@ -2522,9 +3002,28 @@ Summary: Typos in manifest tags
 Priority: 5 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check looks through the manifest, and if it finds any tags that look like
 likely misspellings, they are flagged.
+
+
+MediaCapabilities
+-----------------
+Summary: Media Capabilities property not specified
+
+Priority: 5 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+In Android 12 and higher, an app that opens media files should explicitly
+specify media formats that it doesn't support, so the OS can provide a
+transcoded file instead.
 
 
 MissingId
@@ -2534,6 +3033,9 @@ Summary: Fragments should specify an id or tag
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If you do not specify an android:id or an android:tag attribute on a
 <fragment> element, then if the activity is restarted (for example for an
@@ -2558,6 +3060,9 @@ Summary: Valid Network Security Config File
 Priority: 5 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Ensures that a <network-security-config> file, which is pointed to by an
 android:networkSecurityConfig attribute in the manifest file, is valid
@@ -2572,6 +3077,9 @@ Summary: Whitespace in NFC tech lists
 Priority: 5 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In a <tech-list>, there can be whitespace around the <tech> elements,but not
 inside them. This is because the code which reads in the tech list is
@@ -2584,11 +3092,14 @@ https://issuetracker.google.com/36988969
 
 NonConstantResourceId
 ---------------------
-Summary: Checks use of resource IDs in places requiring constants.
+Summary: Checks use of resource IDs in places requiring constants
 
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Avoid the usage of resource IDs where constant expressions are required.
 
@@ -2604,6 +3115,9 @@ Summary: Using system app permission
 Priority: 5 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Permissions with the protection level signature, privileged or
 signatureOrSystem are only granted to system apps. If an app is a regular
@@ -2617,6 +3131,9 @@ Summary: Using APIs affected by query permissions
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Apps that target Android 11 cannot query or interact with other installed apps
 by default. If you need to query or interact with other installed apps, you
@@ -2638,6 +3155,9 @@ Summary: Using STRING instead of TEXT
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In SQLite, any column can store any data type; the declared type for a column
 is more of a hint as to what the data should be cast to when stored.
@@ -2667,6 +3187,9 @@ Summary: Unreachable state in a <selector>
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In a selector, only the last child in the state list should omit a state
 qualifier. If not, all subsequent items in the list will be ignored since the
@@ -2680,6 +3203,9 @@ Summary: Unmatched URLs
 Priority: 5 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Using one or more tools:validation testUrl="some url"/> elements in your
 manifest allows the link attributes in your intent filter to be checked for
@@ -2693,6 +3219,9 @@ Summary: Reference to an id that is not in the current layout
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The @+id/ syntax refers to an existing id, or creates a new one if it has not
 already been defined elsewhere. However, this means that if you have a typo in
@@ -2712,6 +3241,9 @@ Summary: SMS phone number missing country code
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 SMS destination numbers must start with a country code or the application code
 must ensure that the SMS is only sent when the user is in the same country as
@@ -2725,6 +3257,9 @@ Summary: Invalid Action Descriptor
 Priority: 5 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable ValidActionsXml
 
@@ -2738,6 +3273,9 @@ Summary: Invalid Restrictions Descriptor
 Priority: 5 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Ensures that an applications restrictions XML file is properly formed
 
@@ -2751,6 +3289,11 @@ Summary: Using VectorDrawableCompat
 Priority: 5 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+NOTE: This issue is disabled by default!
+You can enable it by adding --enable VectorDrawableCompat
 
 To use VectorDrawableCompat, you need to make two modifications to your
 project. First, set android.defaultConfig.vectorDrawables.useSupportLibrary =
@@ -2768,6 +3311,9 @@ Summary: Vector Image Generation
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Vector icons require API 21 or API 24 depending on used features, but when
 minSdkVersion is less than 21 or 24 and Android Gradle plugin 1.4 or higher is
@@ -2781,6 +3327,23 @@ should manually check whether the generated output is acceptable for those
 older devices.
 
 
+WatchFaceEditor
+---------------
+Summary: Watch face editor must use launchMode="standard"
+
+Priority: 5 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Watch face editor activities must be able to launch in the Wear OS app
+activity task in order to work correctly. Thus only launchMode="standard" is
+allowed. The watch face will not be shown on the watch if it does not satisfy
+this requirement.
+
+
 XmlEscapeNeeded
 ---------------
 Summary: Missing XML Escape
@@ -2788,6 +3351,9 @@ Summary: Missing XML Escape
 Priority: 5 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When a string contains characters that have special usage in XML, you must
 escape the characters.
@@ -2800,6 +3366,9 @@ Summary: Obsolete Android Gradle Plugin Version
 Priority: 4 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This detector looks for usage of the Android Gradle Plugin where the version
 you are using is not the current stable release. Using older versions is fine,
@@ -2815,6 +3384,9 @@ Summary: Appcompat Custom Widgets
 Priority: 4 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In order to support features such as tinting, the appcompat library will
 automatically load special appcompat replacements for the builtin widgets.
@@ -2832,6 +3404,9 @@ Summary: App Indexing Background Services
 Priority: 4 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Apps targeting Android 8.0 or higher can no longer rely on background services
 while listening for updates to the on-device index. Use a BroadcastReceiver
@@ -2847,6 +3422,9 @@ Summary: Suspicious DiffUtil Equality
 Priority: 4 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 areContentsTheSame is used by DiffUtil to produce diffs. If the method is
 implemented incorrectly, such as using identity equals instead of equals, or
@@ -2863,6 +3441,9 @@ Summary: Combining Ellipsize and Maxlines
 Priority: 4 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Combining ellipsize and maxLines=1 can lead to crashes on some devices.
 Earlier versions of lint recommended replacing singleLine=true with maxLines=1
@@ -2878,6 +3459,9 @@ Summary: Obsolete Gradle Dependency
 Priority: 4 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This detector looks for usages of libraries where the version you are using is
 not the current stable release. Using older versions is fine, and there are
@@ -2893,6 +3477,9 @@ Summary: Gradle Dynamic Version
 Priority: 4 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Using + in dependencies lets you automatically pick up the latest available
 version rather than a specific, named version. However, this is not
@@ -2909,6 +3496,9 @@ Summary: Gradle IDE Support Issues
 Priority: 4 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Gradle is highly flexible, and there are things you can do in Gradle files
 which can make it hard or impossible for IDEs to properly handle the project.
@@ -2922,6 +3512,9 @@ Summary: Value overridden by Gradle build script
 Priority: 4 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The value of (for example) minSdkVersion is only used if it is not specified
 in the build.gradle build scripts. When specified in the Gradle build scripts,
@@ -2936,6 +3529,9 @@ Summary: Gradle Path Issues
 Priority: 4 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Gradle build scripts are meant to be cross platform, so file paths use
 Unix-style path separators (a forward slash) rather than Windows path
@@ -2952,6 +3548,9 @@ Summary: GridLayout validation
 Priority: 4 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Declaring a layout_row or layout_column that falls outside the declared size
 of a GridLayout's rowCount or columnCount is usually an unintentional error.
@@ -2964,6 +3563,9 @@ Summary: Using mm or in dimensions
 Priority: 4 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Avoid using mm (millimeters) or in (inches) as the unit for dimensions.
 
@@ -2979,6 +3581,9 @@ Summary: Incompatible screenOrientation value
 Priority: 4 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The <activity> element should not be locked to any orientation so that users
 can take advantage of the multi-window environments and larger screens
@@ -2996,6 +3601,9 @@ Summary: API Version Too Low
 Priority: 4 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable MinSdkTooLow
 
@@ -3010,6 +3618,9 @@ Summary: Newer Library Versions Available
 Priority: 4 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable NewerVersionAvailable
 
@@ -3028,6 +3639,9 @@ Summary: Activity is set to be non resizeable
 Priority: 4 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The <activity> element should be allowed to be resized to allow users to take
 advantage of the multi-window environments available on larger screen Android
@@ -3044,6 +3658,9 @@ Summary: Incorrect ObjectAnimator Property
 Priority: 4 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check cross references properties referenced by String from
 ObjectAnimator and PropertyValuesHolder method calls and ensures that the
@@ -3057,6 +3674,9 @@ Summary: Missing layout_width or layout_height attributes
 Priority: 4 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable RequiredSize
 
@@ -3075,6 +3695,9 @@ Summary: Restricted API
 Priority: 4 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This API has been flagged with a restriction that has not been met.
 
@@ -3094,6 +3717,9 @@ Summary: Incompatible setRequestedOrientation value
 Priority: 4 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The Activity should not be locked to a portrait orientation so that users
 can take advantage of the multi-window environments and larger landscape-first
@@ -3112,6 +3738,9 @@ Summary: Looking for Rear Camera only feature
 Priority: 4 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 You should look for the FEATURE_CAMERA_ANY features to include all
 possible cameras that may be on the device. Looking for FEATURE_CAMERA
@@ -3129,6 +3758,9 @@ Summary: Visible Only For Tests
 Priority: 4 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 With the @VisibleForTesting annotation you can specify an otherwise= attribute
 which specifies the intended visibility if the method had not been made more
@@ -3145,6 +3777,9 @@ Summary: Wrong case for view tag
 Priority: 4 / 10
 Severity: Fatal
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Most layout tags, such as <Button>, refer to actual view classes and are
 therefore capitalized. However, there are exceptions such as <fragment> and
@@ -3160,6 +3795,9 @@ Summary: Extraneous text in resource files
 Priority: 3 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Layout resource files should only contain elements and attributes. Any XML
 text content found in the file is likely accidental (and potentially dangerous
@@ -3174,6 +3812,9 @@ Summary: Inner classes should use $ rather than .
 Priority: 3 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When you reference an inner class in a manifest file, you must use '$' instead
 of '.' as the separator character, i.e. Outer$Inner instead of Outer.Inner.
@@ -3190,6 +3831,9 @@ Summary: No start destination specified
 Priority: 3 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 All <navigation> elements must have a start destination specified, and it must
 be a direct child of that <navigation>.
@@ -3202,6 +3846,9 @@ Summary: @SuppressLint on invalid element
 Priority: 3 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The @SuppressAnnotation is used to suppress Lint warnings in Java files.
 However, while many lint checks analyzes the Java source code, where they can
@@ -3220,6 +3867,9 @@ Summary: Default Parcel Class Loader
 Priority: 3 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The documentation for Parcel#readParcelable(ClassLoader) (and its variations)
 says that you can pass in null to pick up the default class loader. However,
@@ -3241,6 +3891,9 @@ Summary: Missing Parcelable CREATOR field
 Priority: 3 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 According to the Parcelable interface documentation, "Classes implementing the
 Parcelable interface must also have a static field called CREATOR, which is an
@@ -3256,6 +3909,9 @@ Summary: Permission Implies Unsupported Hardware
 Priority: 3 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The <uses-permission> element should not require a permission that implies an
 unsupported TV hardware feature. Google Play assumes that certain hardware
@@ -3273,6 +3929,9 @@ Summary: Using private resources
 Priority: 3 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Private resources should not be referenced; the may not be present everywhere,
 and even where they are they may disappear without notice.
@@ -3287,6 +3946,9 @@ Summary: Proguard.cfg file contains generic Android rules
 Priority: 3 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Earlier versions of the Android tools bundled a single proguard.cfg file
 containing a ProGuard configuration file suitable for Android shrinking and
@@ -3321,6 +3983,9 @@ Summary: Dangerous Flag Constant Declaration
 Priority: 3 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When defining multiple constants for use in flags, the recommended style is to
 use the form 1 << 2, 1 << 3, 1 << 4 and so on to ensure that the constants are
@@ -3334,6 +3999,9 @@ Summary: Using dp instead of sp for text sizes
 Priority: 3 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When setting text sizes, you should normally use sp, or "scale-independent
 pixels". This is like the dp unit, but it is also scaled by the user's font
@@ -3357,6 +4025,9 @@ Summary: Missing @IntDef in Switch
 Priority: 3 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check warns if a switch statement does not explicitly include all the
 values declared by the typedef @IntDef declaration.
@@ -3369,6 +4040,9 @@ Summary: Overlapping Enumeration Constants
 Priority: 3 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The @IntDef annotation allows you to create a light-weight "enum" or type
 definition. However, it's possible to accidentally specify the same value for
@@ -3388,6 +4062,9 @@ Summary: Accidental Octal
 Priority: 2 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In Groovy, an integer literal that starts with a leading 0 will be interpreted
 as an octal number. That is usually (always?) an accident and can lead to
@@ -3401,6 +4078,9 @@ Summary: Using deprecated resources
 Priority: 2 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Deprecated views, attributes and so on are deprecated because there is a
 better way to do something. Do it that new way. You've been warned.
@@ -3413,6 +4093,9 @@ Summary: Mangled file line endings
 Priority: 2 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable MangledCRLF
 
@@ -3434,8 +4117,12 @@ Summary: Missing application name/version
 Priority: 2 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 You should define the version information for your application.
+
 android:versionCode: An integer value that represents the version of the
 application code, relative to other versions.
 
@@ -3452,6 +4139,9 @@ Summary: Missing explicit orientation
 Priority: 2 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The default orientation of a LinearLayout is horizontal. It's pretty easy to
 believe that the layout is vertical, add multiple children to it, and wonder
@@ -3472,6 +4162,9 @@ Summary: Using 'px' dimension
 Priority: 2 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 For performance reasons and to keep the code simpler, the Android system uses
 pixels as the standard unit for expressing dimension or coordinate values.
@@ -3494,6 +4187,9 @@ Summary: Incorrect support annotation usage
 Priority: 2 / 10
 Severity: Error
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This lint check makes sure that the support annotations (such as @IntDef and
 @ColorInt) are used correctly. For example, it's an error to specify an
@@ -3507,9 +4203,12 @@ Summary: Data Binding without Annotation Processing
 Priority: 1 / 10
 Severity: Warning
 Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Apps that use Kotlin and data binding should also apply the kotlin-kapt
-plugin. 
+plugin.
 
 More information: 
 https://kotlinlang.org/docs/reference/kapt.html
@@ -3524,6 +4223,9 @@ Summary: Invalid string escapes
 Priority: 9 / 10
 Severity: Error
 Category: Correctness:Messages
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Apostrophes (') must always be escaped (with a \), unless they appear in a
 string which is itself escaped in double quotes (").
@@ -3536,6 +4238,9 @@ Summary: Invalid format string
 Priority: 9 / 10
 Severity: Error
 Category: Correctness:Messages
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If a string contains a '%' character, then the string may be a formatting
 string which will be passed to String.format from Java code to replace each
@@ -3561,6 +4266,9 @@ Summary: String.format string doesn't match the XML format string
 Priority: 9 / 10
 Severity: Error
 Category: Correctness:Messages
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This lint check ensures the following:
 (1) If there are multiple translations of the format string, then all
@@ -3577,6 +4285,9 @@ Summary: Missing quantity translation
 Priority: 8 / 10
 Severity: Error
 Category: Correctness:Messages
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Different languages have different rules for grammatical agreement with
 quantity. In English, for example, the quantity 1 is a special case. We write
@@ -3601,6 +4312,9 @@ Summary: Incomplete translation
 Priority: 8 / 10
 Severity: Error
 Category: Correctness:Messages
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If an application has more than one locale, then all the strings declared in
 one language should also be translated in all other languages.
@@ -3623,6 +4337,9 @@ Summary: Spelling error
 Priority: 7 / 10
 Severity: Warning
 Category: Correctness:Messages
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check looks through the string definitions, and if it finds any words
 that look like likely misspellings, they are flagged.
@@ -3635,6 +4352,9 @@ Summary: Extra translation
 Priority: 6 / 10
 Severity: Fatal
 Category: Correctness:Messages
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If a string appears in a specific language translation file, but there is no
 corresponding string in the default locale, then this string is probably
@@ -3652,6 +4372,9 @@ Summary: Translated Untranslatable
 Priority: 6 / 10
 Severity: Warning
 Category: Correctness:Messages
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Strings can be marked with translatable=false to indicate that they are not
 intended to be translated, but are present in the resource file for other
@@ -3669,6 +4392,9 @@ Summary: Implied Quantities
 Priority: 5 / 10
 Severity: Error
 Category: Correctness:Messages
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Plural strings should generally include a %s or %d formatting argument. In
 locales like English, the one quantity only applies to a single value, 1, but
@@ -3690,6 +4416,9 @@ Summary: Potential Plurals
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness:Messages
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This lint check looks for potential errors in internationalization where you
 have translated a message which involves a quantity and it looks like other
@@ -3719,6 +4448,9 @@ Summary: Formatting argument types incomplete or inconsistent
 Priority: 5 / 10
 Severity: Warning
 Category: Correctness:Messages
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When a formatted string takes arguments, it usually needs to reference the
 same arguments in all translations (or all arguments if there are no
@@ -3736,6 +4468,9 @@ Summary: Unused quantity translations
 Priority: 3 / 10
 Severity: Warning
 Category: Correctness:Messages
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Android defines a number of different quantity strings, such as zero, one, few
 and many. However, many languages do not distinguish grammatically between all
@@ -3762,6 +4497,9 @@ Summary: Unsupported Chrome OS Hardware Feature
 Priority: 6 / 10
 Severity: Error
 Category: Correctness:Chrome OS
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable UnsupportedChromeOsHardware
 
@@ -3781,6 +4519,9 @@ Summary: Permission Implies Unsupported Chrome OS Hardware
 Priority: 3 / 10
 Severity: Error
 Category: Correctness:Chrome OS
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable PermissionImpliesUnsupportedChromeOsHardware
 
@@ -3803,6 +4544,9 @@ Summary: addJavascriptInterface Called
 Priority: 9 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 For applications built for API levels below 17, WebView#addJavascriptInterface
 presents a security hazard as JavaScript on the target web page has the
@@ -3820,6 +4564,9 @@ Summary: Using Deleted Provider
 Priority: 9 / 10
 Severity: Error
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The Crypto provider has been completely removed in Android P (and was
 deprecated in an earlier release). This means that the code will throw a
@@ -3836,6 +4583,9 @@ Summary: Using BC Provider
 Priority: 9 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The BC provider has been deprecated and will not be provided when
 targetSdkVersion is P or higher.
@@ -3850,6 +4600,9 @@ Summary: Cipher.getInstance with ECB
 Priority: 9 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Cipher#getInstance should not be called with ECB as the cipher mode or without
 setting the cipher mode because the default mode on android is ECB, which is
@@ -3863,6 +4616,9 @@ Summary: Using a fixed seed with SecureRandom
 Priority: 9 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Specifying a fixed seed will cause the instance to return a predictable
 sequence of numbers. This may be useful for testing but it is not appropriate
@@ -3878,6 +4634,9 @@ Summary: Weak RNG
 Priority: 9 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Key generation, signing, encryption, and random number generation may not
 receive cryptographically strong values due to improper initialization of the
@@ -3903,6 +4662,11 @@ Summary: Vulnerable Cordova Version
 Priority: 9 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+NOTE: This issue is disabled by default!
+You can enable it by adding --enable VulnerableCordovaVersion
 
 The version of Cordova used in the app is vulnerable to security issues.
 Please update to the latest Apache Cordova version.
@@ -3917,6 +4681,9 @@ Summary: PreferenceActivity should not be exported
 Priority: 8 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Fragment injection gives anyone who can send your PreferenceActivity an intent
 the ability to load any fragment, with any arguments, in your process.
@@ -3931,6 +4698,9 @@ Summary: Missing @JavascriptInterface on methods
 Priority: 8 / 10
 Severity: Error
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 As of API 17, you must annotate methods in objects registered with the
 addJavascriptInterface method with a @JavascriptInterface annotation.
@@ -3945,6 +4715,9 @@ Summary: Potential Multiple Certificate Exploit
 Priority: 8 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Improper validation of app signatures could lead to issues where a malicious
 app submits itself to the Play Store with both its real certificate and a fake
@@ -3963,6 +4736,9 @@ Summary: Packaged private key
 Priority: 8 / 10
 Severity: Fatal
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In general, you should not package private key files inside your app.
 
@@ -3974,6 +4750,9 @@ Summary: Libraries with Privacy or Security Risks
 Priority: 8 / 10
 Severity: Error
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Your app is using a version of a library that has been identified by the
 library developer as a potential source of privacy and/or security risks. This
@@ -3995,6 +4774,9 @@ Summary: Using C2DM
 Priority: 8 / 10
 Severity: Error
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The C2DM library does not work on Android P or newer devices; you should
 migrate to Firebase Cloud Messaging to ensure reliable message delivery.
@@ -4009,6 +4791,9 @@ Summary: Content provider shares everything
 Priority: 7 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The <grant-uri-permission> element allows specific paths to be shared. This
 detector checks for a path URL of just '/' (everything), which is probably not
@@ -4022,6 +4807,9 @@ Summary: Insecure HostnameVerifier
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check looks for use of HostnameVerifier implementations whose verify
 method always returns true (thus trusting any hostname) which could result in
@@ -4036,6 +4824,9 @@ Summary: Code might contain an auth leak
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Strings in java apps can be discovered by decompiling apps, this lint check
 looks for code which looks like it may contain an url with a username and
@@ -4049,6 +4840,9 @@ Summary: Insecure HostnameVerifier
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check looks for implementations of HostnameVerifier whose verify method
 always returns true (thus trusting any hostname) which could result in
@@ -4063,6 +4857,9 @@ Summary: Code contains easter egg
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable EasterEgg
 
@@ -4078,6 +4875,9 @@ Summary: Hardware Id Usage
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Using these device identifiers is not recommended other than for high value
 fraud prevention and advanced telephony use-cases. For advertising use-cases,
@@ -4093,6 +4893,9 @@ Summary: Insecure call to SSLCertificateSocketFactory.createSocket()
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When SSLCertificateSocketFactory.createSocket() is called with an InetAddress
 as the first parameter, TLS/SSL hostname verification is not performed, which
@@ -4111,6 +4914,9 @@ Summary: Call to SSLCertificateSocketFactory.getInsecure()
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The SSLCertificateSocketFactory.getInsecure() method returns an
 SSLSocketFactory with all TLS/SSL security checks disabled, which could result
@@ -4127,6 +4933,9 @@ Summary: Using setJavaScriptEnabled
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Your code should not invoke setJavaScriptEnabled if you are not sure that your
 app really requires JavaScript support.
@@ -4141,6 +4950,9 @@ Summary: File.setReadable() used to make file world-readable
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Setting files world-readable is very dangerous, and likely to cause security
 holes in applications. It is strongly discouraged; instead, applications
@@ -4155,11 +4967,30 @@ Summary: File.setWritable() used to make file world-writable
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Setting files world-writable is very dangerous, and likely to cause security
 holes in applications. It is strongly discouraged; instead, applications
 should use more formal mechanisms for interactions such as ContentProvider,
 BroadcastReceiver, and Service.
+
+
+TileProviderPermissions
+-----------------------
+Summary: TileProvider does not set permission
+
+Priority: 6 / 10
+Severity: Warning
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+TileProviders should require the
+com.google.android.wearable.permission.BIND_TILE_PROVIDER permission to
+prevent arbitrary apps from binding to it.
 
 
 TrustAllX509TrustManager
@@ -4169,6 +5000,9 @@ Summary: Insecure TLS/SSL trust manager
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check looks for X509TrustManager implementations whose checkServerTrusted
 or checkClientTrusted methods do nothing (thus trusting any certificate chain)
@@ -4183,6 +5017,9 @@ Summary: Unprotected SMS BroadcastReceiver
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 BroadcastReceivers that declare an intent-filter for SMS_DELIVER or
 SMS_RECEIVED must ensure that the caller has the BROADCAST_SMS permission,
@@ -4196,6 +5033,9 @@ Summary: Unsafe Protected BroadcastReceiver
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 `BroadcastReceiver`s that declare an intent-filter for a protected-broadcast
 action string must check that the received intent's action string matches the
@@ -4210,6 +5050,9 @@ Summary: Using the result of check permission calls
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 You normally want to use the result of checking a permission; these methods
 return whether the permission is held; they do not throw an error if the
@@ -4226,6 +5069,9 @@ Summary: Using HTTP instead of HTTPS
 Priority: 6 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The Gradle Wrapper is available both via HTTP and HTTPS. HTTPS is more secure
 since it protects against man-in-the-middle attacks etc. Older projects
@@ -4240,6 +5086,9 @@ Summary: Allowing User Certificates
 Priority: 5 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Allowing user certificates could allow eavesdroppers to intercept data sent by
 your app, 'which could impact the privacy of your users. Consider nesting your
@@ -4249,6 +5098,20 @@ only available when android:debuggable is set to "true".
 More information: 
 https://developer.android.com/training/articles/security-config#TrustingDebugCa
 
+CustomX509TrustManager
+----------------------
+Summary: Implements custom TLS trust manager
+
+Priority: 5 / 10
+Severity: Warning
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+This check looks for custom X509TrustManager implementations.
+
+
 ExportedContentProvider
 -----------------------
 Summary: Content provider does not require permission
@@ -4256,6 +5119,9 @@ Summary: Content provider does not require permission
 Priority: 5 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Content providers are exported by default and any application on the system
 can potentially use them to read and write data. If the content provider
@@ -4271,6 +5137,9 @@ Summary: Receiver does not require permission
 Priority: 5 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Exported receivers (receivers which either set exported=true or contain an
 intent-filter and do not specify exported=false) should define a permission
@@ -4285,6 +5154,9 @@ Summary: Exported service does not require permission
 Priority: 5 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Exported services (services which either set exported=true or contain an
 intent-filter and do not specify exported=false) should define a permission
@@ -4299,6 +5171,9 @@ Summary: Hardcoded value of android:debuggable in the manifest
 Priority: 5 / 10
 Severity: Fatal
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 It's best to leave out the android:debuggable attribute from the manifest. If
 you do, then the tools will automatically insert android:debuggable=true when
@@ -4317,6 +5192,9 @@ Summary: Insecure Base Configuration
 Priority: 5 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Permitting cleartext traffic could allow eavesdroppers to intercept data sent
 by your app, which impacts the privacy of your users. Consider only allowing
@@ -4325,6 +5203,38 @@ encrypted traffic by setting the cleartextTrafficPermitted tag to "false".
 More information: 
 https://developer.android.com/preview/features/security-config.html
 
+IntentFilterExportedReceiver
+----------------------------
+Summary: Unspecified android:exported in manifest
+
+Priority: 5 / 10
+Severity: Warning
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Apps targeting Android 12 and higher are required to specify an explicit value
+for android:exported when the corresponding component has an intent filter
+defined. Otherwise, installation will fail.
+
+Previously, android:exported for components without any intent filters present
+used to default to false, and when intent filters were present, the default
+was true. Defaults which change value based on other values are confusing and
+lead to apps accidentally exporting components as a side-effect of adding
+intent filters. This is a security risk, and we have made this change to avoid
+introducing accidental vulnerabilities.
+
+While the default without intent filters remains unchanged, it is now required
+to explicitly specify a value when intent filters are present. Any app failing
+to meet this requirement will fail to install on any Android version after
+Android 11.
+
+We recommend setting android:exported to false (even on previous versions of
+Android prior to this requirement) unless you have a good reason to export a
+particular component.
+
+
 InvalidPermission
 -----------------
 Summary: Invalid Permission Attribute
@@ -4332,6 +5242,9 @@ Summary: Invalid Permission Attribute
 Priority: 5 / 10
 Severity: Error
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Not all elements support the permission attribute. If a permission is set on
 an invalid element, it is a no-op and ignored. Ensure that this permission
@@ -4345,12 +5258,30 @@ Summary: Declaring signatureOrSystem permissions
 Priority: 5 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The signature protection level should probably be sufficient for most needs
 and works regardless of where applications are installed. The
 signatureOrSystem level is used for certain situations where multiple vendors
 have applications built into a system image and need to share specific
 features explicitly because they are being built together.
+
+
+UnspecifiedImmutableFlag
+------------------------
+Summary: Missing PendingIntent mutability flag
+
+Priority: 5 / 10
+Severity: Warning
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Apps targeting Android 12 and higher must specify either FLAG_IMMUTABLE or
+FLAG_MUTABLE when constructing a PendingIntent.
 
 
 UnsafeDynamicallyLoadedCode
@@ -4360,6 +5291,9 @@ Summary: load used to dynamically load code
 Priority: 4 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Dynamically loading code from locations other than the application's library
 directory or the Android platform's built-in library directories is dangerous,
@@ -4378,6 +5312,9 @@ Summary: Native code outside library directory
 Priority: 4 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In general, application native code should only be placed in the application's
 library directory, not in other locations such as the res or assets
@@ -4396,6 +5333,9 @@ Summary: openFileOutput() with MODE_WORLD_READABLE
 Priority: 4 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 There are cases where it is appropriate for an application to write world
 readable files, but these should be reviewed carefully to ensure that they
@@ -4409,6 +5349,9 @@ Summary: openFileOutput() with MODE_WORLD_WRITEABLE
 Priority: 4 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 There are cases where it is appropriate for an application to write world
 writeable files, but these should be reviewed carefully to ensure that they
@@ -4423,6 +5366,9 @@ Summary: AllowBackup/FullBackupContent Problems
 Priority: 3 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The allowBackup attribute determines if an application's data can be backed up
 and restored. It is documented at
@@ -4445,10 +5391,11 @@ To fix this warning, decide whether your application should support backup,
 and explicitly set android:allowBackup=(true|false)".
 
 If not set to false, and if targeting API 23 or later, lint will also warn
-that you should set android:fullBackupContent to configure auto backup.
+that you should set android:fullBackupContent or android:fullBackupOnly to
+configure auto backup.
 
 More information: 
-https://developer.android.com/training/backup/autosyncapi.html
+https://developer.android.com/guide/topics/data/autobackup
 https://developer.android.com/reference/android/R.attr.html#allowBackup
 
 ProxyPassword
@@ -4458,6 +5405,9 @@ Summary: Proxy Password in Cleartext
 Priority: 2 / 10
 Severity: Warning
 Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Storing proxy server passwords in clear text is dangerous if this file is
 shared via version control. If this is deliberate or this is a truly private
@@ -4474,6 +5424,9 @@ Summary: TargetSdkVersion No Longer Supported
 Priority: 8 / 10
 Severity: Fatal
 Category: Compliance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 As of the second half of 2018, Google Play requires that new apps and app
 updates target API level 26 or higher.
@@ -4489,7 +5442,6 @@ l
 
 More information: 
 https://support.google.com/googleplay/android-developer/answer/113469#targetsdk
-https://support.google.com/googleplay/android-developer/answer/113469#targetsdk
 https://developer.android.com/distribute/best-practices/develop/target-sdk.html
 
 ExpiringTargetSdkVersion
@@ -4499,6 +5451,9 @@ Summary: TargetSdkVersion Soon Expiring
 Priority: 8 / 10
 Severity: Error
 Category: Compliance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In the second half of 2018, Google Play will require that new apps and app
 updates target API level 26 or higher. This will be required for new apps in
@@ -4529,6 +5484,9 @@ Summary: Outdated Library
 Priority: 8 / 10
 Severity: Error
 Category: Compliance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Your app is using an outdated version of a library. This may cause violations
 of Google Play policies (see
@@ -4546,6 +5504,9 @@ Summary: Using the QUERY_ALL_PACKAGES permission
 Priority: 8 / 10
 Severity: Error
 Category: Compliance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If you need to query or interact with other installed apps, you should be
 using a <queries> declaration in your manifest. Using the QUERY_ALL_PACKAGES
@@ -4565,6 +5526,9 @@ Summary: Memory allocations within drawing code
 Priority: 9 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 You should avoid allocating objects during a drawing or layout operation.
 These are called frequently, so a smooth UI can be interrupted by garbage
@@ -4584,6 +5548,9 @@ Summary: Incorrect WakeLock usage
 Priority: 9 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Failing to release a wakelock properly can keep the Android device in a high
 power mode, which reduces battery life. There are several causes of this, such
@@ -4605,6 +5572,9 @@ Summary: Using wakeLock without timeout
 Priority: 9 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Wakelocks have two acquire methods: one with a timeout, and one without. You
 should generally always use the one with a timeout. A typical timeout is 10
@@ -4621,11 +5591,31 @@ Summary: Annotation Processor on Compile Classpath
 Priority: 8 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This dependency is identified as an annotation processor. Consider adding it
 to the processor path using annotationProcessor instead of including it to
 the
 compile path.
+
+
+NotifyDataSetChanged
+--------------------
+Summary: Invalidating All RecyclerView Data
+
+Priority: 8 / 10
+Severity: Warning
+Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+The RecyclerView adapter's onNotifyDataSetChanged method does not specify what
+about the data set has changed, forcing any observers to assume that all
+existing items and structure may no longer be valid. `LayoutManager`s will be
+forced to fully rebind and relayout all visible views.
 
 
 Recycle
@@ -4635,6 +5625,9 @@ Summary: Missing recycle() calls
 Priority: 7 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Many resources, such as TypedArrays, VelocityTrackers, etc., should be
 recycled (with a recycle() call) after use. This lint check looks for missing
@@ -4648,6 +5641,9 @@ Summary: Expensive Assertions
 Priority: 6 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable ExpensiveAssertion
 
@@ -4690,6 +5686,9 @@ Summary: Lifecycle Annotation Processor with Java 8 Compile Option
 Priority: 6 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 For faster incremental build, switch to the Lifecycle Java 8 API with these
 steps:
@@ -4705,6 +5704,25 @@ them implement the DefaultLifecycleObserver interface.
 More information: 
 https://d.android.com/r/studio-ui/lifecycle-release-notes
 
+NotificationTrampoline
+----------------------
+Summary: Notification Trampolines
+
+Priority: 6 / 10
+Severity: Error
+Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Activities should not be launched indirectly from a notification via an
+intermediate BroadcastReceiver or Service. This can lead to significant lags
+in some scenarios, and is forbidden if targetSdkVersion is set to the API
+level for Android 12 or higher.
+
+To fix this, launch the Activity directly from the notification.
+
+
 ObsoleteLayoutParam
 -------------------
 Summary: Obsolete layout params
@@ -4712,6 +5730,9 @@ Summary: Obsolete layout params
 Priority: 6 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The given layout_param is not defined for the given layout, meaning it has no
 effect. This usually happens when you change the parent layout or move view
@@ -4727,6 +5748,9 @@ Summary: Obsolete SDK_INT Version Check
 Priority: 6 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check flags version checks that are not necessary, because the
 minSdkVersion (or surrounding known API level) is already at least as high as
@@ -4744,6 +5768,9 @@ Summary: Static Field Leaks
 Priority: 6 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 A static field will leak contexts.
 
@@ -4765,6 +5792,9 @@ Summary: Missing android:extractNativeLibs=false
 Priority: 6 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable UnpackedNativeCode
 
@@ -4783,6 +5813,9 @@ Summary: Node can be replaced by a TextView with compound drawables
 Priority: 6 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 A LinearLayout which contains an ImageView and a TextView can be more
 efficiently handled as a compound drawable (a single TextView, using the
@@ -4795,23 +5828,6 @@ replaced with a drawablePadding attribute.
 There's a lint quickfix to perform this conversion in the Eclipse plugin.
 
 
-ViewTag
--------
-Summary: Tagged object leaks
-
-Priority: 6 / 10
-Severity: Warning
-Category: Performance
-
-Prior to Android 4.0, the implementation of View.setTag(int, Object) would
-store the objects in a static map, where the values were strongly referenced.
-This means that if the object contains any references pointing back to the
-context, the context (which points to pretty much everything else) will leak.
-If you pass a view, the view provides a reference to the context that created
-it. Similarly, view holders typically contain a view, and cursors are
-sometimes also associated with views.
-
-
 WearableBindListener
 --------------------
 Summary: Usage of Android Wear BIND_LISTENER is deprecated
@@ -4819,12 +5835,15 @@ Summary: Usage of Android Wear BIND_LISTENER is deprecated
 Priority: 6 / 10
 Severity: Fatal
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 BIND_LISTENER receives all Android Wear events whether the application needs
 them or not. This can be inefficient and cause applications to wake up
 unnecessarily. With Google Play Services 8.2.0 or later it is recommended to
 use a more efficient combination of manifest listeners and api-based live
-listeners filtered by action, path and/or path prefix. 
+listeners filtered by action, path and/or path prefix.
 
 More information: 
 https://android-developers.googleblog.com/2016/04/deprecation-of-bindlistener.html
@@ -4836,6 +5855,9 @@ Summary: Unconditional Logging Calls
 Priority: 5 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable LogConditional
 
@@ -4857,6 +5879,9 @@ Summary: Long vector paths
 Priority: 5 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Using long vector paths is bad for performance. There are several ways to make
 the pathData shorter:
@@ -4873,6 +5898,9 @@ Summary: View Holder Candidates
 Priority: 5 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When implementing a view Adapter, you should avoid unconditionally inflating a
 new layout; if an available item is passed in for reuse, you should try to use
@@ -4889,6 +5917,9 @@ Summary: Missing @Keep for Animated Properties
 Priority: 4 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When you use property animators, properties can be accessed via reflection.
 Those methods should be annotated with @Keep to ensure that during release
@@ -4906,6 +5937,9 @@ Summary: Unnecessary Divider Copy
 Priority: 4 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Older versions of the RecyclerView library did not include a divider
 decorator, but one was provided as a sample in the support demos. This divider
@@ -4916,28 +5950,6 @@ included, so you can replace custom copies with the "built-in" version,
 android.support.v7.widget.DividerItemDecoration.
 
 
-FieldGetter
------------
-Summary: Using getter instead of field
-
-Priority: 4 / 10
-Severity: Warning
-Category: Performance
-NOTE: This issue is disabled by default!
-You can enable it by adding --enable FieldGetter
-
-Accessing a field within the class that defines a getter for that field is at
-least 3 times faster than calling the getter. For simple getters that do
-nothing other than return the field, you might want to just reference the
-local field directly instead.
-
-NOTE: As of Android 2.3 (Gingerbread), this optimization is performed
-automatically by Dalvik, so there is no need to change your code; this is only
-relevant if you are targeting older versions of Android.
-
-More information: 
-https://developer.android.com/training/articles/perf-tips#internal_get_set
-
 HandlerLeak
 -----------
 Summary: Handler reference leaks
@@ -4945,6 +5957,9 @@ Summary: Handler reference leaks
 Priority: 4 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Since this Handler is declared as an inner class, it may prevent the outer
 class from being garbage collected. If the Handler is using a Looper or
@@ -4964,6 +5979,9 @@ Summary: FrameLayout can be replaced with <merge> tag
 Priority: 4 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If a <FrameLayout> is the root of a layout and does not provide background or
 padding etc, it can often be replaced with a <merge> tag which is slightly
@@ -4980,6 +5998,9 @@ Summary: Use of bundled version of Google Play services
 Priority: 4 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Google Play services SDK's can be selectively included, which enables a
 smaller APK size. Consider declaring dependencies on individual Google Play
@@ -4998,6 +6019,9 @@ Summary: HashMap can be replaced with SparseArray
 Priority: 4 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 For maps where the keys are of type integer, it's typically more efficient to
 use the Android SparseArray API. This check identifies scenarios where you
@@ -5020,6 +6044,9 @@ Summary: Should use valueOf instead of new
 Priority: 4 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 You should not call the constructor for wrapper classes directly, such as`new
 Integer(42)`. Instead, call the valueOf factory method, such as
@@ -5034,6 +6061,9 @@ Summary: Missing baselineAligned attribute
 Priority: 3 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When a LinearLayout is used to distribute the space proportionally between
 nested layouts, the baseline alignment property should be turned off to make
@@ -5047,12 +6077,39 @@ Summary: Inefficient layout weight
 Priority: 3 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When only a single widget in a LinearLayout defines a weight, it is more
 efficient to assign a width/height of 0dp to it since it will absorb all the
 remaining space anyway. With a declared width/height of 0dp it does not have
 to measure its own size first.
 
+
+LaunchActivityFromNotification
+------------------------------
+Summary: Notification Launches Services or BroadcastReceivers
+
+Priority: 3 / 10
+Severity: Warning
+Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Notifications should only launch activities -- that's what users expect (and
+has been the guidance in both the Android SDK and Material Design
+documentation for a while).
+
+A Service or a BroadcastReceiver should not be used as an intermediate,
+because this can lead to significant performance problems, and as a result,
+this will not be allowed in Android 12.
+
+More information: 
+https://developer.android.com/guide/topics/ui/notifiers/notifications?hl=en#Actions
+https://material.io/design/platform-guidance/android-notifications.html#behavior
+https://developer.android.com/guide/topics/ui/notifiers/notifications?hl=en
 
 NestedWeights
 -------------
@@ -5061,6 +6118,9 @@ Summary: Nested layout weights
 Priority: 3 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Layout weights require a widget to be measured twice. When a LinearLayout with
 non-zero weights is nested inside another LinearLayout with non-zero weights,
@@ -5074,6 +6134,9 @@ Summary: Overdraw: Painting regions more than once
 Priority: 3 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If you set a background drawable on a root view, then you should use a custom
 theme where the theme background is null. Otherwise, the theme background will
@@ -5103,6 +6166,9 @@ Summary: Unused resources
 Priority: 3 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Unused resources make applications larger and slow down builds.
 
@@ -5123,6 +6189,9 @@ Summary: Using getUsableSpace()
 Priority: 3 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When you need to allocate disk space for large files, consider using the new
 allocateBytes(FileDescriptor, long) API, which will automatically clear cached
@@ -5148,6 +6217,9 @@ Summary: Dev Mode Obsolete
 Priority: 2 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In the past, our documentation recommended creating a dev product flavor with
 has a minSdkVersion of 21, in order to enable multidexing to speed up builds
@@ -5171,6 +6243,9 @@ Summary: Synthetic Accessor
 Priority: 2 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable SyntheticAccessor
 
@@ -5185,11 +6260,14 @@ limit.
 
 UselessLeaf
 -----------
-Summary: Useless leaf layout
+Summary: Unnecessary leaf layout
 
 Priority: 2 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 A layout that has no children or no background can often be removed (since it
 is invisible) for a flatter and more efficient layout hierarchy.
@@ -5197,11 +6275,14 @@ is invisible) for a flatter and more efficient layout hierarchy.
 
 UselessParent
 -------------
-Summary: Useless parent layout
+Summary: Unnecessary parent layout
 
 Priority: 2 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 A layout with children that has no siblings, is not a scrollview or a root
 layout, and does not have a background, can be removed and have its children
@@ -5216,6 +6297,9 @@ Summary: Redundant namespace
 Priority: 1 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In Android XML documents, only specify the namespace on the root/document
 element. Namespace declarations elsewhere in the document are typically
@@ -5229,6 +6313,9 @@ Summary: Layout hierarchy is too deep
 Priority: 1 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Layouts with too much nesting is bad for performance. Consider using a flatter
 layout (such as RelativeLayout or GridLayout).The default maximum depth is 10
@@ -5242,6 +6329,9 @@ Summary: Layout has too many views
 Priority: 1 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Using too many views in a single layout is bad for performance. Consider using
 compound drawables or other tricks for reducing the number of views in this
@@ -5258,6 +6348,9 @@ Summary: Unused id
 Priority: 1 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable UnusedIds
 
@@ -5283,6 +6376,9 @@ Summary: Unused namespace
 Priority: 1 / 10
 Severity: Warning
 Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Unused namespace declarations take up space and require processing that is not
 necessary
@@ -5298,6 +6394,9 @@ Summary: Duplicate Strings
 Priority: 2 / 10
 Severity: Warning
 Category: Performance:Application Size
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable DuplicateStrings
 
@@ -5320,6 +6419,9 @@ Summary: Combining textAllCaps and markup
 Priority: 8 / 10
 Severity: Warning
 Category: Usability:Typography
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The textAllCaps text transform will end up calling toString on the
 CharSequence, which has the net effect of removing any markup such as <b>.
@@ -5334,6 +6436,9 @@ Summary: Hyphen can be replaced with dash
 Priority: 5 / 10
 Severity: Warning
 Category: Usability:Typography
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The "n dash" (–, &#8211;) and the "m dash" (—, &#8212;) characters are used
 for ranges (n dash) and breaks (m dash). Using these instead of plain hyphens
@@ -5349,6 +6454,9 @@ Summary: Ellipsis string can be replaced with ellipsis character
 Priority: 5 / 10
 Severity: Warning
 Category: Usability:Typography
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 You can replace the string "..." with a dedicated ellipsis character, ellipsis
 character (…, &#8230;). This can help make the text more readable.
@@ -5363,6 +6471,9 @@ Summary: Fraction string can be replaced with fraction character
 Priority: 5 / 10
 Severity: Warning
 Category: Usability:Typography
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 You can replace certain strings, such as 1/2, and 1/4, with dedicated
 characters for these, such as ½ (&#189;) and ¼ (&#188;). This can help make
@@ -5378,6 +6489,9 @@ Summary: Straight quotes can be replaced with curvy quotes
 Priority: 5 / 10
 Severity: Warning
 Category: Usability:Typography
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable TypographyQuotes
 
@@ -5400,6 +6514,9 @@ Summary: Other typographical problems
 Priority: 3 / 10
 Severity: Warning
 Category: Usability:Typography
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check looks for miscellaneous typographical problems and offers
 replacement sequences that will make the text easier to read and your
@@ -5416,6 +6533,9 @@ Summary: Icon appears in both -nodpi and dpi folders
 Priority: 7 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Bitmaps that appear in drawable-nodpi folders will not be scaled by the
 Android framework. If a drawable resource of the same name appears both in a
@@ -5431,6 +6551,9 @@ Summary: Icon is specified both as .xml file and as a bitmap
 Priority: 7 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If a drawable resource appears as an .xml file in the drawable/ folder, it's
 usually not intentional for it to also appear as a bitmap using the same name;
@@ -5445,6 +6568,9 @@ Summary: Convert to WebP
 Priority: 6 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable ConvertToWebp
 
@@ -5452,7 +6578,8 @@ The WebP format is typically more compact than PNG and JPEG. As of Android
 4.2.1 it supports transparency and lossless conversion as well. Note that
 there is a quickfix in the IDE which lets you perform conversion.
 
-Launcher icons must be in the PNG format.
+Previously, launcher icons were required to be in the PNG format but that
+restriction is no longer there, so lint now flags these.
 
 
 IconColors
@@ -5462,6 +6589,9 @@ Summary: Icon colors do not follow the recommended visual style
 Priority: 6 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Notification icons and Action Bar icons should only white and shades of gray.
 See the Android Design Guide for more details. Note that the way Lint decides
@@ -5478,6 +6608,9 @@ Summary: The launcher icon shape should use a distinct silhouette
 Priority: 6 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 According to the Android Design Guide
 (https://material.io/design/iconography/) your launcher icons should "use a
@@ -5495,6 +6628,9 @@ Summary: WebP Unsupported
 Priority: 6 / 10
 Severity: Error
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The WebP format requires Android 4.0 (API 15). Certain features, such as
 lossless encoding and transparency, requires Android 4.2.1 (API 18; API 17 is
@@ -5508,6 +6644,9 @@ Summary: Using .gif format for bitmaps is discouraged
 Priority: 5 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The .gif file format is discouraged. Consider using .png (preferred) or .jpg
 (acceptable) instead.
@@ -5522,6 +6661,9 @@ Summary: Icon density-independent size validation
 Priority: 5 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Checks the all icons which are provided in multiple densities, all compute to
 roughly the same density-independent pixel (dip) size. This catches errors
@@ -5536,6 +6678,9 @@ Summary: Identical bitmaps across various configurations
 Priority: 5 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If an icon is provided under different configuration parameters such as
 drawable-hdpi or -v11, they should typically be different. This detector
@@ -5550,6 +6695,9 @@ Summary: Icon has incorrect size
 Priority: 5 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable IconExpectedSize
 
@@ -5567,6 +6715,9 @@ Summary: Image defined in density-independent drawable folder
 Priority: 5 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The res/drawable folder is intended for density-independent graphics such as
 shapes defined in XML. For bitmaps, move it to drawable-mdpi and consider
@@ -5584,6 +6735,9 @@ Summary: Clashing PNG and 9-PNG files
 Priority: 5 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If you accidentally name two separate resources file.png and file.9.png, the
 image file and the nine patch file will both map to the same drawable
@@ -5597,6 +6751,9 @@ Summary: Use Mipmap Launcher Icons
 Priority: 5 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Launcher icons should be provided in the mipmap resource directory. This is
 the same as the drawable resource directory, except resources in the mipmap
@@ -5609,6 +6766,7 @@ out, then the app shortcut could appear blurry.
 
 To fix this, move your launcher icons from `drawable-`dpi to `mipmap-`dpi and
 change references from @drawable/ and R.drawable to @mipmap/ and R.mipmap.
+
 In Android Studio this lint warning has a quickfix to perform this
 automatically.
 
@@ -5620,6 +6778,9 @@ Summary: Missing application icon
 Priority: 5 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 You should set an icon for the application as whole because there is no
 default. This attribute must be set as a reference to a drawable resource
@@ -5635,6 +6796,9 @@ Summary: Icon densities validation
 Priority: 4 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Icons will look best if a custom version is provided for each of the major
 screen density classes (low, medium, high, extra high). This lint check
@@ -5655,6 +6819,9 @@ Summary: Duplicated icons under different names
 Priority: 3 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If an icon is repeated under different names, you can consolidate and just use
 one of the icons and delete the others to make your application smaller.
@@ -5669,6 +6836,9 @@ Summary: Icon format does not match the file extension
 Priority: 3 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Ensures that icons have the correct file extension (e.g. a .png file is really
 in the PNG format and not for example a GIF file named .png).
@@ -5681,6 +6851,9 @@ Summary: Missing density folder
 Priority: 3 / 10
 Severity: Warning
 Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Icons will look best if a custom version is provided for each of the major
 screen density classes (low, medium, high, extra-high, extra-extra-high). This
@@ -5704,6 +6877,9 @@ Summary: Button order
 Priority: 8 / 10
 Severity: Warning
 Category: Usability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 According to the Android Design Guide,
 
@@ -5727,6 +6903,9 @@ Summary: Dynamic text should probably be selectable
 Priority: 7 / 10
 Severity: Warning
 Category: Usability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable SelectableText
 
@@ -5735,8 +6914,7 @@ and paste it elsewhere. To allow this, the <TextView> should specify
 android:textIsSelectable="true".
 
 This lint check looks for TextViews which are likely to be displaying data:
-views whose text is set dynamically. This value will be ignored on platforms
-older than API 11, so it is okay to set it regardless of your minSdkVersion.
+views whose text is set dynamically.
 
 
 BackButton
@@ -5746,6 +6924,9 @@ Summary: Back button
 Priority: 6 / 10
 Severity: Warning
 Category: Usability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable BackButton
 
@@ -5769,6 +6950,9 @@ Summary: URL not supported by app for Firebase App Indexing
 Priority: 5 / 10
 Severity: Error
 Category: Usability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Ensure the URL is supported by your app, to get installs and traffic to your
 app from Google Search.
@@ -5783,6 +6967,9 @@ Summary: Button should be borderless
 Priority: 5 / 10
 Severity: Warning
 Category: Usability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Button bars typically use a borderless style for the buttons. Set the
 style="?android:attr/buttonBarButtonStyle" attribute on each of the buttons,
@@ -5791,38 +6978,6 @@ and set style="?android:attr/buttonBarStyle" on the parent layout
 More information: 
 https://material.io/components/dialogs/
 
-GoogleAppIndexingApiWarning
----------------------------
-Summary: Missing support for Firebase App Indexing Api
-
-Priority: 5 / 10
-Severity: Warning
-Category: Usability
-NOTE: This issue is disabled by default!
-You can enable it by adding --enable GoogleAppIndexingApiWarning
-
-Adds URLs to get your app into the Google index, to get installs and traffic
-to your app from Google Search.
-
-More information: 
-https://g.co/AppIndexing/AndroidStudio
-
-GoogleAppIndexingWarning
-------------------------
-Summary: Missing support for Firebase App Indexing
-
-Priority: 5 / 10
-Severity: Warning
-Category: Usability
-NOTE: This issue is disabled by default!
-You can enable it by adding --enable GoogleAppIndexingWarning
-
-Adds URLs to get your app into the Google index, to get installs and traffic
-to your app from Google Search.
-
-More information: 
-https://g.co/AppIndexing/AndroidStudio
-
 MenuTitle
 ---------
 Summary: Missing menu title
@@ -5830,6 +6985,9 @@ Summary: Missing menu title
 Priority: 5 / 10
 Severity: Error
 Category: Usability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 From the action bar documentation:
 "It's important that you always define android:title for each menu item — even
@@ -5853,6 +7011,9 @@ Summary: Missing inputType
 Priority: 5 / 10
 Severity: Warning
 Category: Usability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Providing an inputType attribute on a text field improves usability because
 depending on the data to be input, optimized keyboards can be shown to the
@@ -5874,6 +7035,9 @@ Summary: Negative Margins
 Priority: 4 / 10
 Severity: Warning
 Category: Usability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable NegativeMargin
 
@@ -5893,8 +7057,11 @@ Summary: Text size is too small
 Priority: 4 / 10
 Severity: Warning
 Category: Usability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-Avoid using sizes smaller than 12sp.
+Avoid using sizes smaller than 11sp.
 
 
 AlwaysShowAction
@@ -5904,6 +7071,9 @@ Summary: Usage of showAsAction=always
 Priority: 3 / 10
 Severity: Warning
 Category: Usability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Using showAsAction="always" in menu XML, or MenuItem.SHOW_AS_ACTION_ALWAYS in
 Java code is usually a deviation from the user interface style guide.Use
@@ -5926,6 +7096,9 @@ Summary: Use Autofill
 Priority: 3 / 10
 Severity: Warning
 Category: Usability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Specify an autofillHints attribute when targeting SDK version 26 or higher or
 explicitly specify that the view is not important for autofill. Your app can
@@ -5954,6 +7127,9 @@ Summary: Missing View constructors for XML inflation
 Priority: 3 / 10
 Severity: Warning
 Category: Usability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Some layout tools (such as the Android layout editor) need to find a
 constructor with one of the following signatures:
@@ -5974,6 +7150,9 @@ Summary: Cancel/OK dialog button capitalization
 Priority: 2 / 10
 Severity: Warning
 Category: Usability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The standard capitalization for OK/Cancel dialogs is "OK" and "Cancel". To
 ensure that your dialogs use the standard strings, you can use the resource
@@ -5990,6 +7169,9 @@ Summary: KTX Extension Available
 Priority: 4 / 10
 Severity: Information
 Category: Productivity
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Android KTX extensions augment some libraries with support for modern Kotlin
 language features like extension functions, extension properties, lambdas,
@@ -6012,6 +7194,9 @@ Summary: Overriding getContentDescription() on a View
 Priority: 9 / 10
 Severity: Error
 Category: Accessibility
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Overriding getContentDescription() may prevent some accessibility services
 from properly navigating content exposed by your view. Instead, call
@@ -6025,6 +7210,9 @@ Summary: Accessibility in Custom Views
 Priority: 6 / 10
 Severity: Warning
 Category: Accessibility
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If a View that overrides onTouchEvent or uses an OnTouchListener does not also
 implement performClick and call it when clicks are detected, the View may not
@@ -6040,6 +7228,9 @@ Summary: Image without contentDescription
 Priority: 3 / 10
 Severity: Warning
 Category: Accessibility
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Non-textual widgets like ImageViews and ImageButtons should use the
 contentDescription attribute to specify a textual description of the widget
@@ -6065,6 +7256,9 @@ Summary: Keyboard inaccessible widget
 Priority: 3 / 10
 Severity: Warning
 Category: Accessibility
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 A widget that is declared to be clickable but not declared to be focusable is
 not accessible via the keyboard. Please add the focusable attribute as well.
@@ -6077,6 +7271,9 @@ Summary: Missing accessibility label
 Priority: 2 / 10
 Severity: Warning
 Category: Accessibility
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Editable text fields should provide an android:hint or, provided your
 minSdkVersion is at least 17, they may be referenced by a view with a
@@ -6099,6 +7296,9 @@ Summary: Byte order mark inside files
 Priority: 8 / 10
 Severity: Error
 Category: Internationalization
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Lint will flag any byte-order-mark (BOM) characters it finds in the middle of
 a file. Since we expect files to be encoded with UTF-8 (see the EnforceUTF8
@@ -6117,6 +7317,9 @@ Summary: Constant Locale
 Priority: 6 / 10
 Severity: Warning
 Category: Internationalization
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Assigning Locale.getDefault() to a constant is suspicious, because the locale
 can change while the app is running.
@@ -6129,6 +7332,9 @@ Summary: TextView Internationalization
 Priority: 6 / 10
 Severity: Warning
 Category: Internationalization
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 When calling TextView#setText
 * Never call Number#toString() to format numbers; it will not handle fraction
@@ -6150,6 +7356,9 @@ Summary: Week Based Year
 Priority: 6 / 10
 Severity: Warning
 Category: Internationalization
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The DateTimeFormatter pattern YYYY returns the week based year, not the
 era-based year. This means that 12/29/2019 will format to 2019, but 12/30/2019
@@ -6168,6 +7377,9 @@ Summary: Encoding used in resource files is not UTF-8
 Priority: 5 / 10
 Severity: Fatal
 Category: Internationalization
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 XML supports encoding in a wide variety of character sets. However, not all
 tools handle the XML encoding attribute correctly, and nearly all Android apps
@@ -6185,6 +7397,9 @@ Summary: Hardcoded text
 Priority: 5 / 10
 Severity: Warning
 Category: Internationalization
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Hardcoding text attributes directly in layout files is bad for several
 reasons:
@@ -6207,6 +7422,9 @@ Summary: Overlapping items in RelativeLayout
 Priority: 3 / 10
 Severity: Warning
 Category: Internationalization
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If relative layout has text or button items aligned to left and right sides
 they can overlap each other due to localized text expansion unless they have
@@ -6223,6 +7441,9 @@ Summary: Right-to-left text compatibility issues
 Priority: 6 / 10
 Severity: Error
 Category: Internationalization:Bidirectional Text
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 API 17 adds a textAlignment attribute to specify text alignment. However, if
 you are supporting older versions than API 17, you must also specify a gravity
@@ -6237,6 +7458,9 @@ Summary: Padding and margin symmetry
 Priority: 6 / 10
 Severity: Warning
 Category: Internationalization:Bidirectional Text
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 If you specify padding or margin on the left side of a layout, you should
 probably also specify padding on the right side (and vice versa) for
@@ -6250,6 +7474,9 @@ Summary: Using left/right instead of start/end attributes
 Priority: 5 / 10
 Severity: Warning
 Category: Internationalization:Bidirectional Text
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Using Gravity#LEFT and Gravity#RIGHT can lead to problems when a layout is
 rendered in locales where text flows from right to left. Use Gravity#START and
@@ -6276,6 +7503,9 @@ Summary: Using RTL attributes without enabling RTL support
 Priority: 3 / 10
 Severity: Warning
 Category: Internationalization:Bidirectional Text
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 To enable right-to-left support, when running on API 17 and higher, you must
 set the android:supportsRtl attribute in the manifest <application> element.
@@ -6294,6 +7524,9 @@ Summary: @Ignore without Reason
 Priority: 2 / 10
 Severity: Warning
 Category: Testing
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Ignoring a test without a reason makes it difficult to figure out the problem
 later.
@@ -6311,6 +7544,9 @@ Summary: No Explicit Java Language Level Given
 Priority: 6 / 10
 Severity: Warning
 Category: Interoperability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In modules using plugins deriving from the Gradle java plugin (e.g.
 java-library or application), the java source and target compatibility default
@@ -6332,14 +7568,17 @@ Summary: Kotlin Property Access
 Priority: 6 / 10
 Severity: Warning
 Category: Interoperability:Kotlin Interoperability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable KotlinPropertyAccess
 
 For a method to be represented as a property in Kotlin, strict “bean”-style
 prefixing must be used.
 
-Accessor methods require a ‘get’ prefix or for boolean-returning methods an
-‘is’ prefix can be used.
+Accessor methods require a get prefix or for boolean-returning methods an is
+prefix can be used.
 
 More information: 
 https://android.github.io/kotlin-guides/interop.html#property-prefixes
@@ -6351,6 +7590,9 @@ Summary: Lambda Parameters Last
 Priority: 6 / 10
 Severity: Warning
 Category: Interoperability:Kotlin Interoperability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable LambdaLast
 
@@ -6367,6 +7609,9 @@ Summary: No Hard Kotlin Keywords
 Priority: 6 / 10
 Severity: Warning
 Category: Interoperability:Kotlin Interoperability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable NoHardKeywords
 
@@ -6390,6 +7635,9 @@ Summary: Unknown nullness
 Priority: 6 / 10
 Severity: Warning
 Category: Interoperability:Kotlin Interoperability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable UnknownNullness
 
@@ -6397,7 +7645,7 @@ To improve referencing this code from Kotlin, consider adding
 explicit nullness information here with either @NonNull or @Nullable.
 
 You can set the environment variable
-    ANDROID_LINT_NULLNESS_IGNORE_DEPRECATED=true
+    `ANDROID_LINT_NULLNESS_IGNORE_DEPRECATED=true`
 if you want lint to ignore classes and members that have been annotated with
 @Deprecated.
 
@@ -6407,6 +7655,31 @@ https://android.github.io/kotlin-guides/interop.html#nullability-annotations
 Lint Implementation Issues
 ==========================
 
+LintDocExample
+--------------
+Summary: Missing Documentation Example
+
+Priority: 6 / 10
+Severity: Warning
+Category: Lint Implementation Issues
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+NOTE: This issue is disabled by default!
+You can enable it by adding --enable LintDocExample
+
+Lint's tool for generating documentation for each issue has special support
+for including a code example which shows how to trigger the report. It will
+pick the first unit test it can find and pick out the source file referenced
+from the error message, but you can instead designate a unit test to be the
+documentation example, and in that case, all the files are included.
+
+To designate a unit test as the documentation example for an issue, name the
+test testDocumentationExample, or if your detector reports multiple issues,
+testDocumentationExample<Id>, such as
+testDocumentationExampleMyId.
+
+
 LintImplBadUrl
 --------------
 Summary: Bad More Info Link
@@ -6414,6 +7687,9 @@ Summary: Bad More Info Link
 Priority: 6 / 10
 Severity: Error
 Category: Lint Implementation Issues
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 More Info URLs let a link check point to additional resources about the
 problem and solution it's checking for.
@@ -6430,6 +7706,9 @@ Summary: Lint ID Format
 Priority: 6 / 10
 Severity: Error
 Category: Lint Implementation Issues
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check looks at lint issue id registrations and makes sure the id follows
 the expected conventions: capitalized, camel case, no spaces, and not too
@@ -6441,13 +7720,13 @@ attributes, lint baselines, Gradle lintOptions blocks, lint.xml files, and so
 on. In these cases, just explicitly suppress this warning instead using
 something like
 
-    @JvmField
-    val ISSUE = Issue.create(
-        // ID string is too long, but we can't change this now since this
-        // id is already used in user suppress configurations
-        //noinspection LintImplIdFormat
-        id = "IncompatibleMediaBrowserServiceCompatVersion",
-        ...
+@JvmField
+val ISSUE = Issue.create(
+    // ID string is too long, but we can't change this now since
+    // this id is already used in user suppress configurations
+    //noinspection LintImplIdFormat
+    id = "IncompatibleMediaBrowserServiceCompatVersion",
+    ...
 
 
 LintImplTextFormat
@@ -6457,6 +7736,9 @@ Summary: Lint Text Format
 Priority: 6 / 10
 Severity: Warning
 Category: Lint Implementation Issues
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Lint supports various markdown like formatting directives in all of its
 strings (issue explanations, reported error messages, etc).
@@ -6479,6 +7761,9 @@ Summary: Unexpected URL Domain
 Priority: 6 / 10
 Severity: Error
 Category: Lint Implementation Issues
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable LintImplUnexpectedDomain
 
@@ -6493,6 +7778,9 @@ Summary: Using Dollar Escapes
 Priority: 4 / 10
 Severity: Error
 Category: Lint Implementation Issues
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Instead of putting ${"$"} in your Kotlin raw string literals you can simply
 use ＄. This looks like the dollar sign but is instead the full width dollar
@@ -6515,6 +7803,9 @@ Summary: Comparing PsiElements with Equals
 Priority: 4 / 10
 Severity: Error
 Category: Lint Implementation Issues
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable LintImplPsiEquals
 
@@ -6529,6 +7820,9 @@ Summary: Calling .trimIndent on Lint Strings
 Priority: 4 / 10
 Severity: Error
 Category: Lint Implementation Issues
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Lint implicitly calls .trimIndent() (lazily, at the last minute) in a number
 of places:
@@ -6555,6 +7849,9 @@ Summary: Non-Kotlin Lint Detectors
 Priority: 4 / 10
 Severity: Warning
 Category: Lint Implementation Issues
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 New lint checks should be written in Kotlin; the Lint API is written in Kotlin
 and uses a number of language features that makes it beneficial to also write
@@ -6571,6 +7868,9 @@ Summary: Using Wrong UAST Method
 Priority: 4 / 10
 Severity: Error
 Category: Lint Implementation Issues
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 UAST is a library that sits on top of PSI, and in many cases PSI is part of
 the UAST API; for example, UResolvable#resolve returns a PsiElement.

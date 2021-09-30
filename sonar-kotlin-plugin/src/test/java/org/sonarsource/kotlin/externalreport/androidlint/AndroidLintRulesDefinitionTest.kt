@@ -35,7 +35,7 @@ internal class AndroidLintRulesDefinitionTest {
         assertThat(repository!!.name()).isEqualTo("Android Lint")
         assertThat(repository.language()).isEqualTo("kotlin")
         assertThat(repository.isExternal).isTrue
-        assertThat(repository.rules().size).isEqualTo(388)
+        assertThat(repository.rules().size).isEqualTo(396)
         val rule = repository.rule("AaptCrash")
         assertThat(rule).isNotNull
         assertThat(rule!!.name()).isEqualTo("Potential AAPT crash")
@@ -43,6 +43,11 @@ internal class AndroidLintRulesDefinitionTest {
         assertThat(rule.severity()).isEqualTo("CRITICAL")
         assertThat(rule.htmlDescription()).isEqualTo(
             """
+                <p>
+                Vendor: Android Open Source Project
+                Contact: https://groups.google.com/g/lint-dev
+                Feedback: https://issuetracker.google.com/issues/new?component=192708
+                </p>
                 <p>
                 Defining a style which sets android:id to a dynamically generated id can cause
                 many versions of aapt, the resource packaging tool, to crash. To work around
