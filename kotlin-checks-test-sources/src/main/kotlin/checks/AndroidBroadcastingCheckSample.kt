@@ -1,5 +1,7 @@
 package checks
 
+import android.app.Activity
+import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -64,5 +66,25 @@ class MyIntentBroadcast {
             intent, user, broadcastPermission, resultReceiver,
             scheduler, initialCode, initialData, initialExtras
         ) // Ok
+    }
+}
+
+class MyActivity : Activity() {
+    fun doSomething() {
+        val KEY = "admin"
+        val SENSITIVE_DATA = ""
+        val intent = Intent("android.intent.action.sticky.broadcast")
+        intent.putExtra(KEY, SENSITIVE_DATA)
+        this.sendStickyBroadcast(intent) // Noncompliant
+    }
+}
+
+class SomeApplication : Application() {
+    fun doSomething() {
+        val KEY = "admin"
+        val SENSITIVE_DATA = ""
+        val intent = Intent("android.intent.action.sticky.broadcast")
+        intent.putExtra(KEY, SENSITIVE_DATA)
+        this.sendStickyBroadcast(intent) // Noncompliant
     }
 }
