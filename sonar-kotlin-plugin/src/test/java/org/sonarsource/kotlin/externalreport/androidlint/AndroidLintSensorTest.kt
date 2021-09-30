@@ -78,12 +78,12 @@ internal class AndroidLintSensorTest {
 
         val second = externalIssues[1]
         assertThat(second.primaryLocation().inputComponent().key()).isEqualTo("androidlint-project:A.java")
-        assertThat(second.ruleKey()).hasToString("external_android-lint:GoogleAppIndexingWarning")
+        assertThat(second.ruleKey()).hasToString("external_android-lint:AppLinkUrlError")
         assertThat(second.primaryLocation().textRange()!!.start().line()).isEqualTo(1)
 
         val third = externalIssues[2]
         assertThat(third.primaryLocation().inputComponent().key()).isEqualTo("androidlint-project:B.kt")
-        assertThat(third.ruleKey()).hasToString("external_android-lint:GoogleAppIndexingWarning")
+        assertThat(third.ruleKey()).hasToString("external_android-lint:AppLinkUrlError")
         assertThat(third.primaryLocation().textRange()!!.start().line()).isEqualTo(2)
 
         val fourth = externalIssues[3]
