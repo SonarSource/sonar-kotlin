@@ -1,11 +1,14 @@
 package checks
 
+import android.app.Activity
+import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Handler
 import android.support.annotation.RequiresApi
+
 
 class MyIntentReceiver {
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -28,4 +31,22 @@ class MyIntentReceiver {
         context.registerReceiver(receiver, filter, broadcastPermission, scheduler, flags)
 
     }
+}
+
+class MyActivity2 : Activity() {
+    fun bad(br: BroadcastReceiver?, filter: IntentFilter?) {
+        activity.registerReceiver(br, filter) // Noncompliant
+    }
+
+    val activity: Activity
+        get() = this
+}
+
+class SomeApplication2 : Application() {
+    fun bad(br: BroadcastReceiver?, filter: IntentFilter?) {
+        application.registerReceiver(br, filter) // Noncompliant
+    }
+
+    val application: Application
+        get() = this
 }
