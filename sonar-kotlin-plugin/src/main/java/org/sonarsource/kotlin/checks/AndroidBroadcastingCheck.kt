@@ -41,7 +41,7 @@ private val STICKY_BROADCAST_NAMES = setOf(
 @Rule(key = "S5320")
 class AndroidBroadcastingCheck : CallAbstractCheck() {
 
-    override val functionsToVisit = listOf(FunMatcher(qualifier = "android.content.Context") {
+    override val functionsToVisit = listOf(FunMatcher(definingSupertype = "android.content.Context") {
         withNames(
             "sendBroadcast",
             "sendBroadcastAsUser",
