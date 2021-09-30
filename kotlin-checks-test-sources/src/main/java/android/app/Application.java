@@ -1,4 +1,6 @@
 package android.app;
 
-public class Application {
+import android.content.ContextWrapper;
+
+public class Application extends ContextWrapper {
 }
