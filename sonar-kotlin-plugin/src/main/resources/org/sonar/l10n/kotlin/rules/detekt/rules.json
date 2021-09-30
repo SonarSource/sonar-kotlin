@@ -24,6 +24,30 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "AvoidReferentialEquality",
+    "name": "Avoid Referential Equality",
+    "description": "Avoid using referential equality checks",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#avoidreferentialequality",
+    "tags": [
+      "warning"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "BooleanPropertyNaming",
+    "name": "Boolean Property Naming",
+    "description": "Boolean property name should follow the naming convention set in the projects configuration",
+    "url": "https://detekt.github.io/detekt/naming.html#booleanpropertynaming",
+    "tags": [
+      "codesmell"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "CastToNullableType",
     "name": "Cast To Nullable Type",
     "description": "Disallow to cast to nullable types",
@@ -216,10 +240,10 @@
     "constantDebtMinutes": 10
   },
   {
-    "key": "DoubleMutabilityInCollection",
-    "name": "Double Mutability In Collection",
+    "key": "DoubleMutabilityForCollection",
+    "name": "Double Mutability For Collection",
     "description": "Using var with mutable collections leads to double mutability. Consider using val or immutable collection types.",
-    "url": "https://detekt.github.io/detekt/potential-bugs.html#doublemutabilityincollection",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#doublemutabilityforcollection",
     "tags": [
       "codesmell"
     ],
@@ -1069,7 +1093,7 @@
   {
     "key": "NamedArguments",
     "name": "Named Arguments",
-    "description": "Function invocation with more than 3 parameters must all be named",
+    "description": "Parameters of function invocation must all be named",
     "url": "https://detekt.github.io/detekt/complexity.html#namedarguments",
     "tags": [
       "maintainability"

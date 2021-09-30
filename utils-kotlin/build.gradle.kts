@@ -4,8 +4,8 @@ plugins {
     kotlin("jvm")
 }
 
-val detektVersion = "1.17.1"
-val ktlintVersion = "0.41.0"
+val detektVersion = "1.18.1"
+val ktlintVersion = "0.42.1"
 
 dependencies {
     implementation("io.gitlab.arturbosch.detekt", "detekt-cli", detektVersion)
