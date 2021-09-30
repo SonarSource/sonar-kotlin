@@ -30,7 +30,7 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 @Rule(key = "S5322")
 class ReceivingIntentsCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(
-        FunMatcher(qualifier = "android.content.Context", name = "registerReceiver")
+        FunMatcher(definingSupertype = "android.content.Context", name = "registerReceiver")
     )
 
     override fun visitFunctionCall(
