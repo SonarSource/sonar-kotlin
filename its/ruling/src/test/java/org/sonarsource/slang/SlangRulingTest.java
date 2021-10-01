@@ -155,7 +155,7 @@ public class SlangRulingTest {
   @Test
   public void test_kotlin_compiler() throws IOException {
     Map<String, String> properties = new HashMap<>();
-    properties.put("sonar.inclusions", "sources/kotlin/kotlin/**/*.kt, ruling/src/test/resources/sources/kotlin/**/*.kt");
+    properties.put("sonar.inclusions", "sources/kotlin/kotlin/**/*.kt");
     properties.put("sonar.exclusions", String.join(",",
             "**/testData/**/*"
             , "sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/CompileServiceImpl.kt"
@@ -165,6 +165,14 @@ public class SlangRulingTest {
     ));
 
     run_ruling_test("kotlin/kotlin", properties);
+  }
+
+  @Test
+  public void test_resources_sources() throws IOException {
+    Map<String, String> properties = new HashMap<>();
+    properties.put("sonar.inclusions", "ruling/src/test/resources/sources/kotlin/**/*.kt");
+    properties.put("sonar.java.libraries", System.getProperty("gradle.main.compile.classpath"));
+    run_ruling_test("kotlin/test-resources-sources", properties);
   }
 
   @Test
