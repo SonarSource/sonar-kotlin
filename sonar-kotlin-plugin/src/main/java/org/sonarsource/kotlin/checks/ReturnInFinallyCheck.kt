@@ -68,13 +68,12 @@ class ReturnInFinallyCheck : AbstractCheck() {
     }
 
     private class FinallyBlockVisitor(private val report: (KtElement) -> Unit) : KtTreeVisitorVoid() {
-        var loopDepthCounter = 0
-        var lambdaDepthCounter = 0
+        private var loopDepthCounter = 0
+        private var lambdaDepthCounter = 0
         val labelsInFinallyBlock = ArrayList<String>()
         val jumpsToLabel = ArrayList<KtExpressionWithLabel>()
 
         override fun visitLabeledExpression(expression: KtLabeledExpression) {
-            // Because we enter a labeled expression, we can assume there is a label qualifier
             expression.name?.let { labelsInFinallyBlock.add(it) }
             super.visitLabeledExpression(expression)
         }
