@@ -1,0 +1,44 @@
+<p>The <code>is</code> construction is a preferred way to check whether a variable can be cast to some type statically because a compile-time error
+will occur in case of incompatible types. The <code>isInstance()</code> functions from <a
+href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/is-instance.html"><code>kotlin.reflect.KClass</code></a> and <a
+href="https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#isInstance-java.lang.Object-"><code>java.lang.Class</code></a> work differently
+and type check at runtime only. Incompatible types will therefore not be detected as early during development, potentially resulting in dead code.
+<code>isInstance()</code> function calls should only be used in dynamic cases when the <code>is</code> operator can’t be used.</p>
+<p>This rule raises an issue when <code>isInstance()</code> is used and could be replaced with an <code>is</code> check.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+fun f(o: Any): Int {
+    if (String::class.isInstance(o)) {  // Noncompliant
+        return 42
+    }
+    return 0
+}
+
+fun f(n: Number): Int {
+    if (String::class.isInstance(n)) {  // Noncompliant
+        return 42
+    }
+    return 0
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+fun f(o: Any): Int {
+    if (o is String) {  // Compliant
+        return 42
+    }
+    return 0
+}
+
+fun f(n: Number): Int {
+    if (n is String) {  // Compile-time error
+        return 42
+    }
+    return 0
+}
+
+fun f(o: Any, c: String): Boolean {
+    return Class.forName(c).isInstance(o) // Compliant, can't use "is" operator here
+}
+</pre>
+
