@@ -19,10 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
-
-@Rule(key = "S6218")
-class EqualsOverridenWithArrayFieldCheck : AbstractCheck() {
-    // TODO: implement this rule
-}
+class EqualsOverriddenWithArrayFieldCheckTest : CheckTest(EqualsOverriddenWithArrayFieldCheck())
