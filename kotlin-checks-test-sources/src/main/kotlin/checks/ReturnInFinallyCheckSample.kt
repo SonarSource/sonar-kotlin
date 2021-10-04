@@ -12,6 +12,18 @@ class ReturnInFinallyCheckSample {
             }
         }
 
+        fun returnToOuter() {
+            (0..100).forEach outer@{
+                try {
+                    throw RuntimeException()
+                } finally {
+                    (0..it).forEach inner@{
+                        return@outer // Noncompliant {{Remove this return statement from this finally block.}}
+                    }
+                }
+            }
+        }
+
         fun throwInFinally() {
             try {
                 throw RuntimeException()
@@ -193,6 +205,18 @@ class ReturnInFinallyCheckSample {
                 } finally {
                     listOf(1, 2, 3).forEach {
                         if (it == 0) return // Compliant
+                    }
+                }
+            }
+        }
+
+        fun returnToInner() {
+            (0..100).forEach outer@{
+                try {
+                    throw RuntimeException()
+                } finally {
+                    (0..it).forEach inner@{
+                        return@inner  // Compliant
                     }
                 }
             }
