@@ -44,6 +44,7 @@ import org.sonarsource.kotlin.checks.EmptyBlockCheck
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
 import org.sonarsource.kotlin.checks.EmptyFunctionCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
+import org.sonarsource.kotlin.checks.EqualsOverridenWithArrayFieldCheck
 import org.sonarsource.kotlin.checks.ExposedMutableFlowCheck
 import org.sonarsource.kotlin.checks.ExternalAndroidStorageAccessCheck
 import org.sonarsource.kotlin.checks.FileHeaderCheck
@@ -130,6 +131,7 @@ val KOTLIN_CHECKS = listOf(
     EmptyCommentCheck::class.java,
     EmptyFunctionCheck::class.java,
     EncryptionAlgorithmCheck::class.java,
+    EqualsOverridenWithArrayFieldCheck::class.java,
     ExposedMutableFlowCheck::class.java,
     ExternalAndroidStorageAccessCheck::class.java,
     FileHeaderCheck::class.java,
