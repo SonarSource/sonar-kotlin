@@ -57,6 +57,7 @@ import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
 import org.sonarsource.kotlin.checks.IfConditionalAlwaysTrueOrFalseCheck
 import org.sonarsource.kotlin.checks.InjectableDispatchersCheck
+import org.sonarsource.kotlin.checks.IsInstanceMethodCheck
 import org.sonarsource.kotlin.checks.MainSafeCoroutinesCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
 import org.sonarsource.kotlin.checks.MobileDatabaseEncryptionKeysCheck
@@ -138,6 +139,7 @@ val KOTLIN_CHECKS = listOf(
     IdenticalConditionsCheck::class.java,
     IfConditionalAlwaysTrueOrFalseCheck::class.java,
     InjectableDispatchersCheck::class.java,
+    IsInstanceMethodCheck::class.java,
     MainSafeCoroutinesCheck::class.java,
     MatchCaseTooBigCheck::class.java,
     MobileDatabaseEncryptionKeysCheck::class.java,
