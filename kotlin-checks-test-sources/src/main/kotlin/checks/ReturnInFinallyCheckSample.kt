@@ -144,6 +144,36 @@ class ReturnInFinallyCheckSample {
             }
         }
 
+        fun continueInForInFinally() {
+            try {
+                throw RuntimeException()
+            } finally {
+                for (ignored in "Hello, World!".chars()) {
+                    continue // Compliant
+                }
+            }
+        }
+
+        fun continueInDoWhileInFinally() {
+            try {
+                throw RuntimeException()
+            } finally {
+                do {
+                    continue // Compliant
+                } while (true)
+            }
+        }
+
+        fun continueInWhileInFinally() {
+            try {
+                throw RuntimeException()
+            } finally {
+                while (true) {
+                    continue // Compliant
+                }
+            }
+        }
+
         fun continueToInnerLabelInFinally() {
             while (true) {
                 try {

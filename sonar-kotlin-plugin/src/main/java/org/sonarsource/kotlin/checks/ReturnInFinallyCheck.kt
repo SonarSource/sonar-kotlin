@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtContinueExpression
 import org.jetbrains.kotlin.psi.KtDoWhileExpression
@@ -27,7 +26,6 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 import org.jetbrains.kotlin.psi.KtFinallySection
 import org.jetbrains.kotlin.psi.KtForExpression
-import org.jetbrains.kotlin.psi.KtLabelReferenceExpression
 import org.jetbrains.kotlin.psi.KtLabeledExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
@@ -39,22 +37,11 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private fun extractLabelTextOrNull(label: PsiElement): String? {
-    when (label) {
-        is KtLabelReferenceExpression ->
-            return label.text.trim('@')
-    }
-    return null
-}
-
 /**
  * Checks if the label in the element points to an unexpected label
  */
 private fun isEscapingTheBlock(element: KtExpressionWithLabel, expectedLabels: List<String>): Boolean {
-    if (element.labelQualifier == null) {
-        return false
-    }
-    val label = extractLabelTextOrNull(element.labelQualifier!!.firstChild) ?: return false
+    val label = element.getLabelName() ?: return false
     return label !in expectedLabels
 }
 
@@ -87,9 +74,8 @@ class ReturnInFinallyCheck : AbstractCheck() {
         val jumpsToLabel = ArrayList<KtExpressionWithLabel>()
 
         override fun visitLabeledExpression(expression: KtLabeledExpression) {
-            if (expression.labelQualifier != null) {
-                extractLabelTextOrNull(expression.labelQualifier!!.firstChild)?.let { labelsInFinallyBlock.add(it) }
-            }
+            // Because we enter a labeled expression, we can assume there is a label qualifier
+            expression.name?.let { labelsInFinallyBlock.add(it) }
             super.visitLabeledExpression(expression)
         }
 
