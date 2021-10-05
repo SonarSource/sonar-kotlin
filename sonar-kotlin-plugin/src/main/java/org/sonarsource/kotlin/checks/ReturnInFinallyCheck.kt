@@ -113,8 +113,7 @@ private fun KtElement.buildReportMessage(): String {
         is KtReturnExpression -> "return"
         is KtBreakExpression -> "break"
         is KtContinueExpression -> "continue"
-        is KtThrowExpression -> "throw"
-        else -> this.text
+        else -> "throw"
     }
     return "Remove this $keyword statement from this finally block."
 }
