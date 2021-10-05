@@ -69,6 +69,7 @@ import org.sonarsource.kotlin.checks.ReceivingIntentsCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RedundantSuspendModifierCheck
 import org.sonarsource.kotlin.checks.RobustCryptographicKeysCheck
+import org.sonarsource.kotlin.checks.RunFinalizersCheck
 import org.sonarsource.kotlin.checks.SelfAssignmentCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
 import org.sonarsource.kotlin.checks.StringLiteralDuplicatedCheck
@@ -151,6 +152,7 @@ val KOTLIN_CHECKS = listOf(
     RedundantParenthesesCheck::class.java,
     RedundantSuspendModifierCheck::class.java,
     RobustCryptographicKeysCheck::class.java,
+    RunFinalizersCheck::class.java,
     SelfAssignmentCheck::class.java,
     ServerCertificateCheck::class.java,
     StringLiteralDuplicatedCheck::class.java,

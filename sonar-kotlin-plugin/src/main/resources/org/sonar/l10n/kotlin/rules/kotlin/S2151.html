@@ -1,0 +1,32 @@
+<p>Running finalizers on JVM exit is disabled by default. It can be enabled with <code>System.runFinalizersOnExit</code> and
+<code>Runtime.runFinalizersOnExit</code>, but both methods are deprecated because they are inherently unsafe.</p>
+<p>According to the Oracle Javadoc:</p>
+<blockquote>
+  <p>It may result in finalizers being called on live objects while other threads are concurrently manipulating those objects, resulting in erratic
+  behavior or deadlock.</p>
+</blockquote>
+<p>If you really want to execute something when the virtual machine begins its shutdown sequence, you should attach a shutdown hook.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+fun main() {
+  ...
+  System.runFinalizersOnExit(true)  // Noncompliant
+  ...
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+fun main() {
+    Runtime.getRuntime().addShutdownHook(object : Thread() {
+        override fun run() {
+            doSomething()
+        }
+    })
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://wiki.sei.cmu.edu/confluence/x/4jZGBQ">CERT, MET12-J.</a> - Do not use finalizers. Although this resource talks about Java, the
+  underlying information concerning the JVM are just as relevant for Kotlin. </li>
+</ul>
+

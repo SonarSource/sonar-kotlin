@@ -1,0 +1,14 @@
+{
+  "title": "\"runFinalizersOnExit\" should not be called",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "20min"
+  },
+  "tags": [],
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-2151",
+  "sqKey": "S2151",
+  "scope": "All"
+}
