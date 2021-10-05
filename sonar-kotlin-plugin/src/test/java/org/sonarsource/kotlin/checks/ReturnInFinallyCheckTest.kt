@@ -20,3 +20,4 @@
 package org.sonarsource.kotlin.checks
 
 class ReturnInFinallyCheckTest : CheckTest(ReturnInFinallyCheck())
+
