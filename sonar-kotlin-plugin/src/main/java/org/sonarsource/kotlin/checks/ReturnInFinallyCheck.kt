@@ -21,41 +21,59 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBreakExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtContinueExpression
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 import org.jetbrains.kotlin.psi.KtFinallySection
 import org.jetbrains.kotlin.psi.KtLabeledExpression
-import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
+import java.util.Stack
+
+@Rule(key = "S1143")
+class ReturnInFinallyCheck : AbstractCheck() {
+
+    override fun visitFinallySection(finallySection: KtFinallySection, kotlinFileContext: KotlinFileContext) {
+        finallySection.accept(FinallyBlockVisitor {
+            kotlinFileContext.reportIssue(it.firstChild, it.buildReportMessage())
+        })
+    }
+}
 
 private class FinallyBlockVisitor(private val report: (PsiElement) -> Unit) : KtTreeVisitorVoid() {
     private var loopDepthCounter = 0
-    private var lambdaDepthCounter = 0
-    private val labelsInFinallyBlock = ArrayList<String>()
-    private val jumpsToLabel = ArrayList<KtExpressionWithLabel>()
-
-    override fun visitFinallySection(finallySection: KtFinallySection) {
-        super.visitFinallySection(finallySection)
-        jumpsToLabel
-            .filter { isEscapingTheBlock(it, labelsInFinallyBlock) }
-            .forEach(report)
-    }
+    private var functionDepthCounter = 0
+    private val stackedLabels = Stack<String>()
+    private var alreadyEnteredFinallyBlock = false
 
     override fun visitLabeledExpression(expression: KtLabeledExpression) {
-        expression.name?.let { labelsInFinallyBlock.add(it) }
-        super.visitLabeledExpression(expression)
+        val name: String? = expression.name
+        if (name != null) {
+            stackedLabels.push(name)
+            super.visitLabeledExpression(expression)
+            stackedLabels.pop()
+        } else {
+            super.visitLabeledExpression(expression)
+        }
     }
 
-    override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
-        lambdaDepthCounter++
-        super.visitLambdaExpression(lambdaExpression)
-        lambdaDepthCounter--
+    override fun visitFinallySection(finallySection: KtFinallySection) {
+        if (!alreadyEnteredFinallyBlock) {
+            alreadyEnteredFinallyBlock = true
+            super.visitFinallySection(finallySection)
+        }
+    }
+
+    override fun visitCallExpression(expression: KtCallExpression) {
+        stackedLabels.push(expression.firstChild.text)
+        super.visitCallExpression(expression)
+        stackedLabels.pop()
     }
 
     override fun visitLoopExpression(loopExpression: KtLoopExpression) {
@@ -64,48 +82,39 @@ private class FinallyBlockVisitor(private val report: (PsiElement) -> Unit) : Kt
         loopDepthCounter--
     }
 
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        functionDepthCounter++
+        super.visitNamedFunction(function)
+        functionDepthCounter--
+    }
+
     override fun visitBreakExpression(expression: KtBreakExpression) {
-        visitAndCheck(loopDepthCounter, expression)
+        checkAndVisit(loopDepthCounter, expression)
     }
 
     override fun visitContinueExpression(expression: KtContinueExpression) {
-        visitAndCheck(loopDepthCounter, expression)
+        checkAndVisit(loopDepthCounter, expression)
     }
 
     override fun visitReturnExpression(expression: KtReturnExpression) {
-        visitAndCheck(lambdaDepthCounter, expression)
+        checkAndVisit(functionDepthCounter, expression)
     }
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
         report(expression)
     }
 
-    private fun visitAndCheck(depthCounter: Int, expression: KtExpressionWithLabel) {
-        if (depthCounter == 0) {
+    private fun checkAndVisit(depthCounter: Int, expression: KtExpressionWithLabel) {
+        if (expression.labelQualifier != null) {
+            // At this point we are certain to have a label
+            if (expression.getLabelName()!! !in stackedLabels) {
+                report(expression)
+            }
+        } else if (depthCounter == 0) {
             report(expression)
-        } else if (expression.labelQualifier != null) {
-            jumpsToLabel.add(expression)
         }
-        super.visitExpressionWithLabel(expression)
+        visitExpressionWithLabel(expression)
     }
-}
-
-@Rule(key = "S1143")
-class ReturnInFinallyCheck : AbstractCheck() {
-
-    override fun visitFinallySection(finallySection: KtFinallySection, kotlinFileContext: KotlinFileContext) {
-        val visitor = FinallyBlockVisitor { kotlinFileContext.reportIssue(it.firstChild, it.buildReportMessage()) }
-        finallySection.accept(visitor)
-    }
-}
-
-/**
- * Checks if the label in the element points to an unexpected label
- */
-private fun isEscapingTheBlock(element: KtExpressionWithLabel, expectedLabels: List<String>): Boolean {
-    // Because we only call this function on expressions that have a label, we can assume this is safe
-    val label = element.getLabelName()!!
-    return label !in expectedLabels
 }
 
 private fun PsiElement.buildReportMessage(): String {

@@ -13,6 +13,19 @@ class ReturnInFinallyCheckSample {
             }
         }
 
+        fun noDoubleReporting() {
+            try {
+                throw RuntimeException()
+            } finally {
+                try {
+                    println("Inside nested try-finally")
+                } finally {
+                    return  // Noncompliant {{Remove this return statement from this finally block.}}
+                //  ^^^^^^
+                }
+            }
+        }
+
         fun returnToOuter() {
             (0..100).forEach outer@{
                 try {
@@ -21,6 +34,19 @@ class ReturnInFinallyCheckSample {
                     (0..it).forEach inner@{
                         return@outer // Noncompliant {{Remove this return statement from this finally block.}}
                     //  ^^^^^^
+                    }
+                }
+            }
+        }
+
+        fun returnInLambdaInFinally() {
+            while (true) {
+                try {
+                    throw RuntimeException()
+                } finally {
+                    listOf(1, 2, 3).forEach {
+                        if (it == 0) return // Noncompliant {{Remove this return statement from this finally block.}}
+                    //               ^^^^^^
                     }
                 }
             }
@@ -54,8 +80,7 @@ class ReturnInFinallyCheckSample {
                 }
             } while (true)
 
-            val letters = "Hello, World!".chars()
-            for (ignored in letters) {
+            for (ignored in listOf(1, 2, 3)) {
                 try {
                     throw RuntimeException()
                 } finally {
@@ -99,8 +124,7 @@ class ReturnInFinallyCheckSample {
         }
 
         fun continueInFinallyInFor() {
-            val letters = "Hello, World!".chars()
-            for (ignored in letters) {
+            for (ignored in listOf(1, 2, 3)) {
                 try {
                     throw RuntimeException()
                 } finally {
@@ -129,7 +153,7 @@ class ReturnInFinallyCheckSample {
             try {
                 throw RuntimeException()
             } finally {
-                for (ignored in "Hello, World!".chars()) {
+                for (ignored in listOf(1, 2, 3)) {
                     break // Compliant
                 }
             }
@@ -171,7 +195,7 @@ class ReturnInFinallyCheckSample {
             try {
                 throw RuntimeException()
             } finally {
-                for (ignored in "Hello, World!".chars()) {
+                for (ignored in listOf(1, 2, 3)) {
                     continue // Compliant
                 }
             }
@@ -215,7 +239,15 @@ class ReturnInFinallyCheckSample {
                     throw RuntimeException()
                 } finally {
                     listOf(1, 2, 3).forEach {
-                        if (it == 0) return // Compliant
+                        return@forEach // Compliant
+                    }
+
+                    listOf(1, 2, 3).map {
+                        (0..it).filter { return@map }  // Compliant
+                    }
+
+                    listOf(1, 2, 3).map {
+                        (0..it).filter { return@filter true }  // Compliant
                     }
                 }
             }
