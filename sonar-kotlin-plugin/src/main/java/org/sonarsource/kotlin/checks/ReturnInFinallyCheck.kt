@@ -19,9 +19,9 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtContinueExpression
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 import org.jetbrains.kotlin.psi.KtFinallySection
 import org.jetbrains.kotlin.psi.KtLabeledExpression
@@ -34,7 +34,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private class FinallyBlockVisitor(private val report: (KtElement) -> Unit) : KtTreeVisitorVoid() {
+private class FinallyBlockVisitor(private val report: (PsiElement) -> Unit) : KtTreeVisitorVoid() {
     private var loopDepthCounter = 0
     private var lambdaDepthCounter = 0
     private val labelsInFinallyBlock = ArrayList<String>()
@@ -94,7 +94,7 @@ private class FinallyBlockVisitor(private val report: (KtElement) -> Unit) : KtT
 class ReturnInFinallyCheck : AbstractCheck() {
 
     override fun visitFinallySection(finallySection: KtFinallySection, kotlinFileContext: KotlinFileContext) {
-        val visitor = FinallyBlockVisitor { kotlinFileContext.reportIssue(it, it.buildReportMessage()) }
+        val visitor = FinallyBlockVisitor { kotlinFileContext.reportIssue(it.firstChild, it.buildReportMessage()) }
         finallySection.accept(visitor)
     }
 }
@@ -108,7 +108,7 @@ private fun isEscapingTheBlock(element: KtExpressionWithLabel, expectedLabels: L
     return label !in expectedLabels
 }
 
-private fun KtElement.buildReportMessage(): String {
+private fun PsiElement.buildReportMessage(): String {
     val keyword = when (this) {
         is KtReturnExpression -> "return"
         is KtBreakExpression -> "break"

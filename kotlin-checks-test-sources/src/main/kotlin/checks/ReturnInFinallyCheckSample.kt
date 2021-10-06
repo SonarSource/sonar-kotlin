@@ -9,6 +9,7 @@ class ReturnInFinallyCheckSample {
                 throw RuntimeException()
             } finally {
                 return  // Noncompliant {{Remove this return statement from this finally block.}}
+            //  ^^^^^^
             }
         }
 
@@ -19,6 +20,7 @@ class ReturnInFinallyCheckSample {
                 } finally {
                     (0..it).forEach inner@{
                         return@outer // Noncompliant {{Remove this return statement from this finally block.}}
+                    //  ^^^^^^
                     }
                 }
             }
@@ -29,6 +31,7 @@ class ReturnInFinallyCheckSample {
                 throw RuntimeException()
             } finally {
                 throw RuntimeException() // Noncompliant {{Remove this throw statement from this finally block.}}
+            //  ^^^^^
             }
         }
 
@@ -38,6 +41,7 @@ class ReturnInFinallyCheckSample {
                     throw RuntimeException()
                 } finally {
                     break // Noncompliant {{Remove this break statement from this finally block.}}
+                //  ^^^^^
                 }
             }
 
@@ -46,6 +50,7 @@ class ReturnInFinallyCheckSample {
                     throw RuntimeException()
                 } finally {
                     break // Noncompliant {{Remove this break statement from this finally block.}}
+                //  ^^^^^
                 }
             } while (true)
 
@@ -55,6 +60,7 @@ class ReturnInFinallyCheckSample {
                     throw RuntimeException()
                 } finally {
                     break // Noncompliant {{Remove this break statement from this finally block.}}
+                //  ^^^^^
                 }
             }
 
@@ -64,6 +70,7 @@ class ReturnInFinallyCheckSample {
                 } finally {
                     inner@ do {
                         break@outer // Noncompliant {{Remove this break statement from this finally block.}}
+                    //  ^^^^^
                     } while (true)
                 }
             }
@@ -75,6 +82,7 @@ class ReturnInFinallyCheckSample {
                     throw RuntimeException()
                 } finally {
                     continue // Noncompliant {{Remove this continue statement from this finally block.}}
+                //  ^^^^^^^^
                 }
             }
         }
@@ -85,6 +93,7 @@ class ReturnInFinallyCheckSample {
                     throw RuntimeException()
                 } finally {
                     continue // Noncompliant {{Remove this continue statement from this finally block.}}
+                //  ^^^^^^^^
                 }
             } while (true)
         }
@@ -96,6 +105,7 @@ class ReturnInFinallyCheckSample {
                     throw RuntimeException()
                 } finally {
                     continue // Noncompliant {{Remove this continue statement from this finally block.}}
+                //  ^^^^^^^^
                 }
             }
         }
@@ -107,6 +117,7 @@ class ReturnInFinallyCheckSample {
                 } finally {
                     inner@ do {
                         continue@outer // Noncompliant {{Remove this continue statement from this finally block.}}
+                    //  ^^^^^^^^
                     } while (true)
                 }
             }
