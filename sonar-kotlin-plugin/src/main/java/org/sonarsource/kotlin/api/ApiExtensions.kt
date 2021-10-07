@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.Call
@@ -386,3 +387,9 @@ fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression, binding
         it.getParentOfType<KtCallExpression>(false).getResolvedCall(bindingContext) matches SECURE_RANDOM_FUNS
     }.isEmpty()
 }
+
+/**
+ * Checks if an expression is a function local variable
+ */
+fun KtExpression?.isLocalVariable(bindingContext: BindingContext) =
+    (this is KtNameReferenceExpression) && (bindingContext.get(BindingContext.REFERENCE_TARGET, this) is LocalVariableDescriptor)
