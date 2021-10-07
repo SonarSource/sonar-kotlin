@@ -88,6 +88,7 @@ subprojects {
             dependency("org.sonarsource.analyzer-commons:sonar-analyzer-test-commons:${extra["analyzerCommonsVersion"]}")
             dependency("org.sonarsource.analyzer-commons:sonar-analyzer-commons:${extra["analyzerCommonsVersion"]}")
             dependency("org.sonarsource.analyzer-commons:sonar-xml-parsing:${extra["analyzerCommonsVersion"]}")
+            dependency("org.sonarsource.analyzer-commons:sonar-regex-parsing:${extra["analyzerCommonsVersion"]}")
             dependency("org.sonarsource.orchestrator:sonar-orchestrator:${extra["orchestratorVersion"]}")
             dependency("org.sonarsource.sonarlint.core:sonarlint-core:${extra["sonarlintVersion"]}")
         }

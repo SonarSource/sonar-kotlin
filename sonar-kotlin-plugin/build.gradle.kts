@@ -51,6 +51,7 @@ dependencies {
     compileOnly("org.sonarsource.sonarqube:sonar-plugin-api")
     implementation("org.sonarsource.analyzer-commons:sonar-analyzer-commons")
     implementation("org.sonarsource.analyzer-commons:sonar-xml-parsing")
+    implementation("org.sonarsource.analyzer-commons:sonar-regex-parsing")
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
     implementation("com.fasterxml.staxmate:staxmate:2.3.1")
     implementation("com.google.code.gson:gson")
