@@ -60,14 +60,10 @@ private class FinallyBlockVisitor(private val report: (KtExpression) -> Unit) : 
     private var alreadyEnteredFinallyBlock = false
 
     override fun visitLabeledExpression(expression: KtLabeledExpression) {
-        val name: String? = expression.name
-        if (name != null) {
-            stackedLabels.push(name)
-            super.visitLabeledExpression(expression)
-            stackedLabels.pop()
-        } else {
-            super.visitLabeledExpression(expression)
-        }
+        // Because we enter a labeled expression, we can assume a label is set
+        stackedLabels.push(expression.name)
+        super.visitLabeledExpression(expression)
+        stackedLabels.pop()
     }
 
     override fun visitFinallySection(finallySection: KtFinallySection) {
@@ -139,7 +135,7 @@ private fun KtExpression.getLabelAsSecondaries(kotlinFileContext: KotlinFileCont
     when (this) {
         is KtExpressionWithLabel -> {
             val element = this.labelQualifier ?: return null
-            return listOf(kotlinFileContext.secondaryOf(element.firstChild, msg="This label is out of the scope"))
+            return listOf(kotlinFileContext.secondaryOf(element.firstChild, "This label is out of the scope"))
         }
         else -> {
             return null
