@@ -264,5 +264,16 @@ class ReturnInFinallyCheckSample {
                 }
             }
         }
+
+        fun returnInNamedFunction() {
+            try {
+                throw RuntimeException()
+            } finally {
+                fun sayHelloAndReturn() {
+                    print("Hello, World!")
+                    return // Compliant
+                }
+            }
+        }
     }
 }
