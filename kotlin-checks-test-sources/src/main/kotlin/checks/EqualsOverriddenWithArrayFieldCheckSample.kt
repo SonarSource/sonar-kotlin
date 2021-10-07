@@ -61,6 +61,12 @@ class EqualsOverriddenWithArrayFieldCheckSample {
         }
     }
 
-    data class ArraylessClass(val age: Int) { // Compliant
+    data class NoArray(val age: Int) { // Compliant
     }
+
+    data class NoFunctionOverriding(val age: Int) { // Compliant
+        fun double() = age * 2
+    }
+
+    data class NoBody(val age: Int) // Compliant
 }

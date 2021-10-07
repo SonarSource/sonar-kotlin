@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
@@ -62,21 +63,19 @@ class EqualsOverriddenWithArrayFieldCheck : AbstractCheck() {
     }
 
     private fun KtClass.hasAnArrayProperty(bindingContext: BindingContext): Boolean {
-        val constructor = this.collectDescendantsOfType<KtPrimaryConstructor>().firstOrNull()
-        if (constructor != null) {
-            val oneParameterIsAnArray = constructor.valueParameters.any { it.isAnArray(bindingContext) }
-            if (oneParameterIsAnArray) {
-                return true
-            }
+        // Because we only call this function on data classes, we can assume they have constructor
+        val constructor = this.findDescendantOfType<KtPrimaryConstructor>()!!
+        val oneParameterIsAnArray = constructor.valueParameters.any { it.isAnArray(bindingContext) }
+        if (oneParameterIsAnArray) {
+            return true
         }
         val body = this.body ?: return false
         return body.properties.any { it.isAnArray(bindingContext) }
     }
 
     private fun KtClass.collectOverridingFunctions(): List<KtNamedFunction> =
-        this.collectDescendantsOfType<KtFunction>()
-            .filter { it is KtNamedFunction && it.overrides() }
-            .map { it as KtNamedFunction }
+        this.collectDescendantsOfType<KtNamedFunction>()
+            .filter { it.overrides() }
 
     private fun KtParameter.isAnArray(bindingContext: BindingContext): Boolean {
         val type = this.determineTypeAsString(bindingContext, printTypeArguments = false) ?: return false
