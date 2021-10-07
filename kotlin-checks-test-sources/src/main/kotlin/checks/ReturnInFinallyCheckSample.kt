@@ -34,7 +34,7 @@ class ReturnInFinallyCheckSample {
                     (0..it).forEach inner@{
                         return@outer // Noncompliant {{Remove this return statement from this finally block.}}
                     //  ^^^^^^
-                    //        ^^^^^^@-1< {{This label is out of the scope}}
+                    //        ^^^^^^@-1< {{This label points outside the finally block.}}
                     }
                 }
             }
@@ -97,7 +97,7 @@ class ReturnInFinallyCheckSample {
                     inner@ do {
                         break@outer // Noncompliant {{Remove this break statement from this finally block.}}
                     //  ^^^^^
-                    //       ^^^^^^@-1< {{This label is out of the scope}}
+                    //       ^^^^^^@-1< {{This label points outside the finally block.}}
                     } while (true)
                 }
             }
@@ -144,7 +144,7 @@ class ReturnInFinallyCheckSample {
                     inner@ do {
                         continue@outer // Noncompliant {{Remove this continue statement from this finally block.}}
                     //  ^^^^^^^^
-                    //          ^^^^^^@-1< {{This label is out of the scope}}
+                    //          ^^^^^^@-1< {{This label points outside the finally block.}}
                     } while (true)
                 }
             }

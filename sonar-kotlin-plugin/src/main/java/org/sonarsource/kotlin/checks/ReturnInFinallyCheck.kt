@@ -135,7 +135,7 @@ private fun KtExpression.getLabelAsSecondaries(kotlinFileContext: KotlinFileCont
     when (this) {
         is KtExpressionWithLabel -> {
             val element = this.labelQualifier ?: return null
-            return listOf(kotlinFileContext.secondaryOf(element.firstChild, "This label is out of the scope"))
+            return listOf(kotlinFileContext.secondaryOf(element.firstChild, "This label points outside the finally block."))
         }
         else -> {
             return null
