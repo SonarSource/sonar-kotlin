@@ -19,16 +19,15 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.isLocalVariable
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private val POSTFIX_INCREMENT_OPERATORS = listOf(KtTokens.PLUSPLUS, KtTokens.MINUSMINUS)
@@ -39,7 +38,7 @@ class UselessIncrementCheck : AbstractCheck() {
 
     override fun visitReturnExpression(returnExpression: KtReturnExpression, ctx: KotlinFileContext) {
         returnExpression.returnedExpression.asPostfixIncrement()?.let {
-            if (isLocalVariable(ctx, it.baseExpression)) {
+            if (it.baseExpression.isLocalVariable(ctx.bindingContext)) {
                 ctx.reportIssue(it, MESSAGE)
             }
         }
@@ -54,10 +53,6 @@ class UselessIncrementCheck : AbstractCheck() {
             }
         }
     }
-
-    private fun isLocalVariable(ctx: KotlinFileContext, expression: KtExpression?): Boolean =
-        (expression is KtNameReferenceExpression) &&
-            (ctx.bindingContext.get(BindingContext.REFERENCE_TARGET, expression) is LocalVariableDescriptor)
 
     private fun KtExpression?.asPostfixIncrement(): KtPostfixExpression? = when {
         (this is KtPostfixExpression) && (operationToken in POSTFIX_INCREMENT_OPERATORS) -> this
