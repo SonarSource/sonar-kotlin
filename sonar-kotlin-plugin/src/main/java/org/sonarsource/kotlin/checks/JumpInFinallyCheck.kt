@@ -39,7 +39,7 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 import java.util.Stack
 
 @Rule(key = "S1143")
-class ReturnInFinallyCheck : AbstractCheck() {
+class JumpInFinallyCheck : AbstractCheck() {
 
     override fun visitFinallySection(finallySection: KtFinallySection, kotlinFileContext: KotlinFileContext) {
         finallySection.accept(FinallyBlockVisitor {

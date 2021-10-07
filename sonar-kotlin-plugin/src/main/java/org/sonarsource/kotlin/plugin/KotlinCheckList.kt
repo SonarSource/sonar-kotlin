@@ -68,7 +68,7 @@ import org.sonarsource.kotlin.checks.PseudoRandomCheck
 import org.sonarsource.kotlin.checks.ReceivingIntentsCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RedundantSuspendModifierCheck
-import org.sonarsource.kotlin.checks.ReturnInFinallyCheck
+import org.sonarsource.kotlin.checks.JumpInFinallyCheck
 import org.sonarsource.kotlin.checks.RobustCryptographicKeysCheck
 import org.sonarsource.kotlin.checks.RunFinalizersCheck
 import org.sonarsource.kotlin.checks.ScheduledThreadPoolExecutorZeroCheck
@@ -154,7 +154,7 @@ val KOTLIN_CHECKS = listOf(
     ReceivingIntentsCheck::class.java,
     RedundantParenthesesCheck::class.java,
     RedundantSuspendModifierCheck::class.java,
-    ReturnInFinallyCheck::class.java,
+    JumpInFinallyCheck::class.java,
     RobustCryptographicKeysCheck::class.java,
     RunFinalizersCheck::class.java,
     ScheduledThreadPoolExecutorZeroCheck::class.java,

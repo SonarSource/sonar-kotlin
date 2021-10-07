@@ -19,5 +19,5 @@
  */
 package org.sonarsource.kotlin.checks
 
-class ReturnInFinallyCheckTest : CheckTest(ReturnInFinallyCheck())
+class JumpInFinallyCheckTest : CheckTest(JumpInFinallyCheck())
 

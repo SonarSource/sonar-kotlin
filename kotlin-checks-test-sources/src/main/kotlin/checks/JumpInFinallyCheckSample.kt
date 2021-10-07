@@ -1,6 +1,6 @@
 package checks
 
-class ReturnInFinallyCheckSample {
+class JumpInFinallyCheckSample {
 
     class NonCompliant {
 
