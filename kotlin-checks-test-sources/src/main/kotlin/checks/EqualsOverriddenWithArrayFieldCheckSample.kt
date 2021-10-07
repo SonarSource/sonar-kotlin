@@ -33,7 +33,19 @@ class EqualsOverriddenWithArrayFieldCheckSample {
         }
     }
 
+    data class WithInBodyProperty(val age: Int) { // Noncompliant {{Override equals and hashCode to consider array content in the method.}}
+        val names: Array<String> = arrayOf("Alice")
+        override fun toString(): String {
+            return "$names\n$age"
+        }
+    }
+
+    data class WithoutBody(val names: Array<String>) // Noncompliant {{Override equals and hashCode to consider array content in the method.}}
+
+
     data class Person(val names: Array<String>, val age: Int) { // Compliant
+        fun double() = age * 2
+
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
             if (javaClass != other?.javaClass) return false
@@ -54,19 +66,8 @@ class EqualsOverriddenWithArrayFieldCheckSample {
 
     }
 
-    data class WithInBodyProperty(val age: Int) { // Noncompliant {{Override equals and hashCode to consider array content in the method.}}
-        val names: Array<String> = arrayOf("Alice")
-        override fun toString(): String {
-            return "$names\n$age"
-        }
-    }
-
     data class NoArray(val age: Int) { // Compliant
     }
 
-    data class NoFunctionOverriding(val age: Int) { // Compliant
-        fun double() = age * 2
-    }
-
-    data class NoBody(val age: Int) // Compliant
+    data class NoArrayOrBody(val age: Int) // Compliant
 }

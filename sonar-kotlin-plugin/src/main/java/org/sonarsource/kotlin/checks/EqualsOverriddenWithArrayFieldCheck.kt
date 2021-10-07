@@ -20,7 +20,6 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
