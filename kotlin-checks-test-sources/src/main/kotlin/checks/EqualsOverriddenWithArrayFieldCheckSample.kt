@@ -56,6 +56,11 @@ class EqualsOverriddenWithArrayFieldCheckSample {
 
     data class WithInBodyProperty(val age: Int) { // Noncompliant {{Override equals and hashCode to consider array content in the method.}}
         val names: Array<String> = arrayOf("Alice")
+        override fun toString(): String {
+            return "$names\n$age"
+        }
     }
 
+    data class ArraylessClass(val age: Int) { // Compliant
+    }
 }

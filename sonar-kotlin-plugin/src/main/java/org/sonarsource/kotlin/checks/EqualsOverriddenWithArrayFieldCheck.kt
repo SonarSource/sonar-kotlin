@@ -42,18 +42,15 @@ private val HASH_CODE_MATCHER = FunMatcher(name = "hashCode", returnType = "kotl
 @Rule(key = "S6218")
 class EqualsOverriddenWithArrayFieldCheck : AbstractCheck() {
     override fun visitClass(klass: KtClass, context: KotlinFileContext) {
-        if (!klass.isData()) {
+        if (!klass.isData() || !klass.hasAnArrayProperty(context.bindingContext)) {
             return
         }
-        if (!klass.hasAnArrayProperty(context.bindingContext)) {
-            return
-        }
-        val functions = klass.collectFunctions()
+        val functions = klass.collectOverridingFunctions()
         val missingFunctionNames = mutableListOf<String>()
-        if (!functions.any { it.overrides() && EQUALS_MATCHER.matches(it, context.bindingContext) }) {
+        if (!functions.any { EQUALS_MATCHER.matches(it, context.bindingContext) }) {
             missingFunctionNames.add("equals")
         }
-        if (!functions.any { it.overrides() && HASH_CODE_MATCHER.matches(it, context.bindingContext) }) {
+        if (!functions.any { HASH_CODE_MATCHER.matches(it, context.bindingContext) }) {
             missingFunctionNames.add("hashCode")
         }
         val message = when (missingFunctionNames.size) {
@@ -76,9 +73,9 @@ class EqualsOverriddenWithArrayFieldCheck : AbstractCheck() {
         return body.properties.any { it.isAnArray(bindingContext) }
     }
 
-    private fun KtClass.collectFunctions(): List<KtNamedFunction> =
+    private fun KtClass.collectOverridingFunctions(): List<KtNamedFunction> =
         this.collectDescendantsOfType<KtFunction>()
-            .filter { it is KtNamedFunction }
+            .filter { it is KtNamedFunction && it.overrides() }
             .map { it as KtNamedFunction }
 
     private fun KtParameter.isAnArray(bindingContext: BindingContext): Boolean {
