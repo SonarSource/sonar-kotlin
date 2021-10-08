@@ -79,6 +79,55 @@ internal class ApiExtensionsKtTest {
             .containsExactlyInAnyOrder("h", "i", "j", "k", "m", "n", "o")
     }
 
+    @Test
+    fun `test getterMatches and setterMatches`() {
+        val tree = parse("""
+        fun foo(thread: Thread): Int {
+          thread.name = "1"
+          thread.isDaemon = false
+          var x = 0
+          x = 1
+          return thread.priority
+        }
+        """.trimIndent())
+
+        val referencesMap: MutableMap<String, KtReferenceExpression> = TreeMap()
+        walker(tree.psiFile) {
+            if (it is KtNameReferenceExpression) {
+                referencesMap[it.getReferencedName()] = it
+            }
+        }
+
+        val getNameMatcher = FunMatcher(qualifier = "java.lang.Thread", name = "getName")
+        val setNameMatcher = FunMatcher(qualifier = "java.lang.Thread", name = "setName") { withArguments("kotlin.String") }
+        val isDaemonMatcher = FunMatcher(qualifier = "java.lang.Thread", name = "isDaemon")
+        val setDaemonMatcher = FunMatcher(qualifier = "java.lang.Thread", name = "setDaemon") { withArguments("kotlin.Boolean") }
+
+        val ctx = tree.bindingContext
+        assertThat((null as KtExpression?).getterMatches(ctx, "name", getNameMatcher)).isFalse
+        assertThat((null as KtExpression?).setterMatches(ctx, "name", setNameMatcher)).isFalse
+
+        assertThat(referencesMap.keys).containsExactlyInAnyOrder("Int", "Thread", "isDaemon", "name", "priority", "thread", "x")
+        assertThat(referencesMap.filter { it.value.getterMatches(ctx, "name", getNameMatcher) }.map { it.key })
+            .containsExactlyInAnyOrder("name")
+        assertThat(referencesMap.filter { it.value.setterMatches(ctx, "name", setNameMatcher) }.map { it.key })
+            .containsExactlyInAnyOrder("name")
+        assertThat(referencesMap.filter { it.value.getterMatches(ctx, "isDaemon", isDaemonMatcher) }.map { it.key })
+            .containsExactlyInAnyOrder("isDaemon")
+        assertThat(referencesMap.filter { it.value.setterMatches(ctx, "isDaemon", setDaemonMatcher) }.map { it.key })
+            .containsExactlyInAnyOrder("isDaemon")
+
+        // should not match
+        assertThat(referencesMap.filter { it.value.getterMatches(ctx, "priority", getNameMatcher) }.map { it.key })
+            .isEmpty()
+        assertThat(referencesMap.filter { it.value.setterMatches(ctx, "priority", setNameMatcher) }.map { it.key })
+            .isEmpty()
+        assertThat(referencesMap.filter { it.value.getterMatches(ctx, "x", getNameMatcher) }.map { it.key })
+            .isEmpty()
+        assertThat(referencesMap.filter { it.value.setterMatches(ctx, "x", setNameMatcher) }.map { it.key })
+            .isEmpty()
+    }
+
     private fun walker(node: PsiElement, action: (PsiElement) -> Unit) {
         action(node)
         node.allChildren.forEach { walker(it, action) }

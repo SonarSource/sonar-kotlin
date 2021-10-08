@@ -55,6 +55,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 import org.jetbrains.kotlin.psi2ir.unwrappedGetMethod
+import org.jetbrains.kotlin.psi2ir.unwrappedSetMethod
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
@@ -393,3 +394,17 @@ fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression, binding
  */
 fun KtExpression?.isLocalVariable(bindingContext: BindingContext) =
     (this is KtNameReferenceExpression) && (bindingContext.get(BindingContext.REFERENCE_TARGET, this) is LocalVariableDescriptor)
+
+fun KtExpression?.setterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
+    is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
+        (matcher.matches((bindingContext.get(BindingContext.REFERENCE_TARGET, this) as? PropertyDescriptor)?.unwrappedSetMethod))
+    is KtQualifiedExpression -> selectorExpression.setterMatches(bindingContext, propertyName, matcher)
+    else -> false
+}
+
+fun KtExpression?.getterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
+    is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
+        (matcher.matches((bindingContext.get(BindingContext.REFERENCE_TARGET, this) as? PropertyDescriptor)?.unwrappedGetMethod))
+    is KtQualifiedExpression -> selectorExpression.getterMatches(bindingContext, propertyName, matcher)
+    else -> false
+}
