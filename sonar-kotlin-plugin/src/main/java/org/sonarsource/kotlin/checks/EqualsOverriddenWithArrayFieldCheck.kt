@@ -35,9 +35,11 @@ import org.sonarsource.kotlin.api.determineTypeAsString
 import org.sonarsource.kotlin.api.overrides
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private val EQUALS_MATCHER = FunMatcher(name = "equals", returnType = "kotlin.Boolean", arguments = listOf(listOf(ANY)))
-private val HASH_CODE_MATCHER = FunMatcher(name = "hashCode", returnType = "kotlin.Int")
-private val TO_STRING_MATCHER = FunMatcher(name = "toString", returnType = "kotlin.String")
+private val EXPECTED_OVERRIDES = listOf(
+    FunMatcher(name = "equals", returnType = "kotlin.Boolean", arguments = listOf(listOf(ANY))),
+    FunMatcher(name = "hashCode", returnType = "kotlin.Int"),
+    FunMatcher(name = "toString", returnType = "kotlin.String")
+)
 
 @Rule(key = "S6218")
 class EqualsOverriddenWithArrayFieldCheck : AbstractCheck() {
@@ -45,24 +47,7 @@ class EqualsOverriddenWithArrayFieldCheck : AbstractCheck() {
         if (!klass.isData() || !klass.hasAnArrayProperty(context.bindingContext)) {
             return
         }
-        val functions = klass.collectOverridingFunctions()
-        val missingFunctionNames = mutableListOf<String>()
-        if (!functions.any { EQUALS_MATCHER.matches(it, context.bindingContext) }) {
-            missingFunctionNames.add("equals")
-        }
-        if (!functions.any { HASH_CODE_MATCHER.matches(it, context.bindingContext) }) {
-            missingFunctionNames.add("hashCode")
-        }
-        if (!functions.any { TO_STRING_MATCHER.matches(it, context.bindingContext) }) {
-            missingFunctionNames.add("toString")
-        }
-        val message = when (missingFunctionNames.size) {
-            1 -> "Override ${missingFunctionNames[0]} to consider array content in the method."
-            2 -> "Override ${missingFunctionNames[0]} and ${missingFunctionNames[1]} to consider array content in the method."
-            3 -> "Override ${missingFunctionNames[0]}, ${missingFunctionNames[1]} and ${missingFunctionNames[2]} to consider array content in the method."
-            else -> return
-        }
-        context.reportIssue(klass.nameIdentifier!!, message)
+        klass.buildIssueMessage(context.bindingContext)?.let { context.reportIssue(klass.nameIdentifier!!, it) }
     }
 
     private fun KtClass.hasAnArrayProperty(bindingContext: BindingContext): Boolean {
@@ -74,6 +59,22 @@ class EqualsOverriddenWithArrayFieldCheck : AbstractCheck() {
         }
         val body = this.body ?: return false
         return body.properties.any { it.isAnArray(bindingContext) }
+    }
+
+    private fun KtClass.buildIssueMessage(bindingContext: BindingContext): String? {
+        val functions = this.collectOverridingFunctions()
+        val missingFunctionNames = mutableListOf<String>()
+        for (matcher in EXPECTED_OVERRIDES) {
+            if (!functions.any { matcher.matches(it, bindingContext) }) {
+                missingFunctionNames.add(matcher.names.first())
+            }
+        }
+        return when (missingFunctionNames.size) {
+            1 -> "Override ${missingFunctionNames[0]} to consider array content in the method."
+            2 -> "Override ${missingFunctionNames[0]} and ${missingFunctionNames[1]} to consider array content in the method."
+            3 -> "Override ${missingFunctionNames[0]}, ${missingFunctionNames[1]} and ${missingFunctionNames[2]} to consider array content in the method."
+            else -> null
+        }
     }
 
     private fun KtClass.collectOverridingFunctions(): List<KtNamedFunction> =
