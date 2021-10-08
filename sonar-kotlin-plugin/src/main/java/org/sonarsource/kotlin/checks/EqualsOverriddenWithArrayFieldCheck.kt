@@ -28,16 +28,16 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
+import org.sonarsource.kotlin.api.ANY
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.api.ArgumentMatcher
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.determineTypeAsString
 import org.sonarsource.kotlin.api.overrides
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private val EQUALS_MATCHER =
-    FunMatcher(name = "equals", returnType = "kotlin.Boolean", arguments = listOf(listOf(ArgumentMatcher.ANY)))
+private val EQUALS_MATCHER = FunMatcher(name = "equals", returnType = "kotlin.Boolean", arguments = listOf(listOf(ANY)))
 private val HASH_CODE_MATCHER = FunMatcher(name = "hashCode", returnType = "kotlin.Int")
+private val TO_STRING_MATCHER = FunMatcher(name = "toString", returnType = "kotlin.String")
 
 @Rule(key = "S6218")
 class EqualsOverriddenWithArrayFieldCheck : AbstractCheck() {
@@ -53,9 +53,13 @@ class EqualsOverriddenWithArrayFieldCheck : AbstractCheck() {
         if (!functions.any { HASH_CODE_MATCHER.matches(it, context.bindingContext) }) {
             missingFunctionNames.add("hashCode")
         }
+        if (!functions.any { TO_STRING_MATCHER.matches(it, context.bindingContext) }) {
+            missingFunctionNames.add("toString")
+        }
         val message = when (missingFunctionNames.size) {
             1 -> "Override ${missingFunctionNames[0]} to consider array content in the method."
             2 -> "Override ${missingFunctionNames[0]} and ${missingFunctionNames[1]} to consider array content in the method."
+            3 -> "Override ${missingFunctionNames[0]}, ${missingFunctionNames[1]} and ${missingFunctionNames[2]} to consider array content in the method."
             else -> return
         }
         context.reportIssue(klass.nameIdentifier!!, message)
