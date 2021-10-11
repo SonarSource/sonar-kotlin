@@ -33,8 +33,6 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.api.SecondaryLocation
-import org.sonarsource.kotlin.api.secondaryOf
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import java.util.Stack
 
@@ -43,12 +41,7 @@ class JumpInFinallyCheck : AbstractCheck() {
 
     override fun visitFinallySection(finallySection: KtFinallySection, kotlinFileContext: KotlinFileContext) {
         finallySection.accept(FinallyBlockVisitor {
-            val secondaries = it.getLabelAsSecondaries(kotlinFileContext)
-            if (secondaries != null) {
-                kotlinFileContext.reportIssue(it.firstChild, it.buildReportMessage(), secondaries)
-            } else {
-                kotlinFileContext.reportIssue(it.firstChild, it.buildReportMessage())
-            }
+            kotlinFileContext.reportIssue(it.firstChild, it.buildReportMessage())
         })
     }
 }
@@ -128,17 +121,4 @@ private fun KtExpression.buildReportMessage(): String {
         else -> "throw"
     }
     return "Remove this $keyword statement from this finally block."
-}
-
-
-private fun KtExpression.getLabelAsSecondaries(kotlinFileContext: KotlinFileContext): List<SecondaryLocation>? {
-    when (this) {
-        is KtExpressionWithLabel -> {
-            val element = this.labelQualifier ?: return null
-            return listOf(kotlinFileContext.secondaryOf(element.firstChild, "This label points outside the finally block."))
-        }
-        else -> {
-            return null
-        }
-    }
 }
