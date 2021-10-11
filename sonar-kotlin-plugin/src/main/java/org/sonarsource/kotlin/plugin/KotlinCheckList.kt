@@ -69,6 +69,7 @@ import org.sonarsource.kotlin.checks.ReceivingIntentsCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RedundantSuspendModifierCheck
 import org.sonarsource.kotlin.checks.JumpInFinallyCheck
+import org.sonarsource.kotlin.checks.ReplaceGuavaWithKotlinCheck
 import org.sonarsource.kotlin.checks.RobustCryptographicKeysCheck
 import org.sonarsource.kotlin.checks.RunFinalizersCheck
 import org.sonarsource.kotlin.checks.ScheduledThreadPoolExecutorZeroCheck
@@ -144,6 +145,7 @@ val KOTLIN_CHECKS = listOf(
     IfConditionalAlwaysTrueOrFalseCheck::class.java,
     InjectableDispatchersCheck::class.java,
     IsInstanceMethodCheck::class.java,
+    JumpInFinallyCheck::class.java,
     MainSafeCoroutinesCheck::class.java,
     MatchCaseTooBigCheck::class.java,
     MobileDatabaseEncryptionKeysCheck::class.java,
@@ -154,7 +156,7 @@ val KOTLIN_CHECKS = listOf(
     ReceivingIntentsCheck::class.java,
     RedundantParenthesesCheck::class.java,
     RedundantSuspendModifierCheck::class.java,
-    JumpInFinallyCheck::class.java,
+    ReplaceGuavaWithKotlinCheck::class.java,
     RobustCryptographicKeysCheck::class.java,
     RunFinalizersCheck::class.java,
     ScheduledThreadPoolExecutorZeroCheck::class.java,

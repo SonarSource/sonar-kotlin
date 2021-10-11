@@ -1,0 +1,92 @@
+<p>Some Guava features were really useful for Java 7 application because Guava was bringing APIs missing in the JDK. The introduction of Kotlin and
+Java 8+ fixed some of these limitations. When migrating an application to Kotlin and/or using a Java 8+ target, it is recommended to prefer the
+provided native APIs over Guava to ease maintenance: developers don’t need to learn how to use two APIs and can stick to the default one.</p>
+<p>This rule raises an issue when the Guava APIs listed below are used.</p>
+<table>
+  <colgroup>
+    <col style="width: 50%;">
+    <col style="width: 50%;">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Guava API</th>
+      <th>Kotlin API</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><p><code>com.google.common.base.Joiner.on</code></p></td>
+      <td><p><code>kotlin.collections.Iterable.joinToString</code> or <code>kotlin.Array.joinToString</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>com.google.common.base.Predicate</code></p></td>
+      <td><p>Use function with type <code>(T) → Boolean</code> as a replacement for <code>Predicate&lt;T&gt;</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>com.google.common.base.Function</code></p></td>
+      <td><p>Use function with type <code>(T) → R</code> as a replacement for <code>Function&lt;T, R&gt;</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>com.google.common.base.Supplier</code></p></td>
+      <td><p>Use function with type <code>() → T</code> as a replacement for <code>Supplier&lt;T&gt;</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>com.google.common.io.Files.createTempDir</code></p></td>
+      <td><p><code>kotlin.io.path.createTempDirectory</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>com.google.common.collect.ImmutableSet.of</code></p></td>
+      <td><p><code>kotlin.collections.setOf</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>com.google.common.collect.ImmutableList.of</code></p></td>
+      <td><p><code>kotlin.collections.listOf</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>com.google.common.collect.ImmutableMap.of</code></p></td>
+      <td><p><code>kotlin.collections.mapOf</code></p></td>
+    </tr>
+  </tbody>
+</table>
+<table>
+  <colgroup>
+    <col style="width: 50%;">
+    <col style="width: 50%;">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Guava API</th>
+      <th>Java 8 API</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><p><code>com.google.common.io.BaseEncoding.base64</code></p></td>
+      <td><p><code>java.util.Base64</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>com.google.common.io.BaseEncoding.base64Url</code></p></td>
+      <td><p><code>java.util.Base64</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>com.google.common.base.Optional</code></p></td>
+      <td><p><code>java.util.Optional</code>*</p></td>
+    </tr>
+    <tr>
+      <td><p><code>com.google.common.base.Optional.of</code></p></td>
+      <td><p><code>java.util.Optional.of</code>*</p></td>
+    </tr>
+    <tr>
+      <td><p><code>com.google.common.base.Optional.absent</code></p></td>
+      <td><p><code>java.util.Optional.empty</code>*</p></td>
+    </tr>
+    <tr>
+      <td><p><code>com.google.common.base.Optional.fromNullable</code></p></td>
+      <td><p><code>java.util.Optional.ofNullable</code>*</p></td>
+    </tr>
+  </tbody>
+</table>
+<p>*: Note that this rule will also raise issues for the use of Guava <code>Optional</code> and recommend using the Java 8+ equivalent instead. In
+most Kotlin-only cases, you will probably be better off using Kotlin’s null-safe type system directly, without wrapping <code>Optional</code>
+constructs. In some cases, such as those involving Java interoperability, it may be necessary to use <code>Optional</code> in Kotlin, however.</p>
+
