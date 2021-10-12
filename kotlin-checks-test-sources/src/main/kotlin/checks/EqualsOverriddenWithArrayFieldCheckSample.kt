@@ -102,8 +102,28 @@ class EqualsOverriddenWithArrayFieldCheckSample {
         }
     }
 
-    data class WithoutBody(val names: Array<String>) // Noncompliant {{Override equals, hashCode and toString to consider array content in the method.}}
+    abstract class AmbiguousParent {
+        abstract fun equals(other: String?): Boolean
 
+        abstract fun hashCode(ignored: Any?): Int
+
+        abstract fun toString(returned: String): String
+    }
+
+    data class AmbiguousOverrides(val names: Array<String>, val age: Int) : AmbiguousParent() { // Noncompliant {{Override equals, hashCode and toString to consider array content in the method.}}
+
+        override fun equals(other: String?): Boolean {
+            return true
+        }
+
+        override fun hashCode(ignored: Any?): Int {
+            return 42
+        }
+
+        override fun toString(returned: String): String {
+            return returned
+        }
+    }
 
     data class Person(val names: Array<String>, val age: Int) { // Compliant
         fun double() = age * 2
@@ -112,7 +132,7 @@ class EqualsOverriddenWithArrayFieldCheckSample {
             if (this === other) return true
             if (javaClass != other?.javaClass) return false
 
-            other as PersonWithoutHashCodeAndToString
+            other as Person
 
             if (!names.contentEquals(other.names)) return false
             if (age != other.age) return false
@@ -131,7 +151,20 @@ class EqualsOverriddenWithArrayFieldCheckSample {
         }
     }
 
+    data class WithoutBody(val names: Array<String>) // Noncompliant {{Override equals, hashCode and toString to consider array content in the method.}}
+
+    data class EmptyBody(val names: Array<String>) { // Noncompliant {{Override equals, hashCode and toString to consider array content in the method.}}
+    }
+
+    data class ArrayInBody(val age: Int) { // Noncompliant {{Override equals, hashCode and toString to consider array content in the method.}}
+        val employers = arrayOf("SonarSource")
+    }
+
     data class NoArray(val age: Int) { // Compliant
+        val employer = "SonarSource"
+    }
+
+    data class NoArrayEmptyBody(val age: Int) { // Compliant
     }
 
     data class NoArrayOrBody(val age: Int) // Compliant
