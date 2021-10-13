@@ -54,6 +54,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
+import org.jetbrains.kotlin.psi2ir.deparenthesize
 import org.jetbrains.kotlin.psi2ir.unwrappedGetMethod
 import org.jetbrains.kotlin.psi2ir.unwrappedSetMethod
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -110,18 +111,19 @@ internal fun KtExpression.predictRuntimeIntValue(bindingContext: BindingContext)
 internal fun KtExpression.predictRuntimeValueExpression(
     bindingContext: BindingContext,
     declarations: MutableList<PsiElement> = mutableListOf(),
-): KtExpression =
-    when (this) {
+): KtExpression = this.deparenthesize().let { deparenthesized ->
+    when (deparenthesized) {
         is KtReferenceExpression -> run {
-            val referenceTarget = extractLetAlsoTargetExpression(bindingContext)
-                ?: extractFromInitializer(bindingContext, declarations)
+            val referenceTarget = deparenthesized.extractLetAlsoTargetExpression(bindingContext)
+                ?: deparenthesized.extractFromInitializer(bindingContext, declarations)
 
             referenceTarget?.predictRuntimeValueExpression(bindingContext, declarations)
         }
-        is KtParenthesizedExpression -> this.expression?.predictRuntimeValueExpression(bindingContext, declarations)
-        is KtBinaryExpressionWithTypeRHS -> this.left.predictRuntimeValueExpression(bindingContext, declarations)
-        else -> getCall(bindingContext)?.predictValueExpression(bindingContext)
-    } ?: this
+        is KtParenthesizedExpression -> deparenthesized.expression?.predictRuntimeValueExpression(bindingContext, declarations)
+        is KtBinaryExpressionWithTypeRHS -> deparenthesized.left.predictRuntimeValueExpression(bindingContext, declarations)
+        else -> deparenthesized.getCall(bindingContext)?.predictValueExpression(bindingContext)
+    } ?: deparenthesized as? KtExpression
+} ?: this
 
 internal fun KtCallExpression.predictReceiverExpression(
     bindingContext: BindingContext,
