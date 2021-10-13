@@ -51,7 +51,7 @@ class UnpredictableSecureRandomSaltCheck : CallAbstractCheck() {
         val bindingContext = kotlinFileContext.bindingContext
 
         val saltArg = resolvedCall.simpleArgExpressionOrNull(0) ?: return
-        val predictedSaltValue = saltArg.predictRuntimeValueExpression(bindingContext) ?: return
+        val predictedSaltValue = saltArg.predictRuntimeValueExpression(bindingContext)
 
         if (predictedSaltValue is KtConstantExpression || predictedSaltValue.isBytesInitializedFromString(bindingContext)) {
             kotlinFileContext.reportIssue(saltArg, MESSAGE, listOf(kotlinFileContext.secondaryOf(predictedSaltValue)))
