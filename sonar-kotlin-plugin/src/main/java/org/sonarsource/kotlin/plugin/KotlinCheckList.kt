@@ -44,6 +44,7 @@ import org.sonarsource.kotlin.checks.EmptyBlockCheck
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
 import org.sonarsource.kotlin.checks.EmptyFunctionCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
+import org.sonarsource.kotlin.checks.EqualsOverriddenWithArrayFieldCheck
 import org.sonarsource.kotlin.checks.ExposedMutableFlowCheck
 import org.sonarsource.kotlin.checks.ExternalAndroidStorageAccessCheck
 import org.sonarsource.kotlin.checks.FileHeaderCheck
@@ -68,8 +69,11 @@ import org.sonarsource.kotlin.checks.PseudoRandomCheck
 import org.sonarsource.kotlin.checks.ReceivingIntentsCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RedundantSuspendModifierCheck
+import org.sonarsource.kotlin.checks.JumpInFinallyCheck
+import org.sonarsource.kotlin.checks.ReplaceGuavaWithKotlinCheck
 import org.sonarsource.kotlin.checks.RobustCryptographicKeysCheck
 import org.sonarsource.kotlin.checks.RunFinalizersCheck
+import org.sonarsource.kotlin.checks.ScheduledThreadPoolExecutorZeroCheck
 import org.sonarsource.kotlin.checks.SelfAssignmentCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
 import org.sonarsource.kotlin.checks.StringLiteralDuplicatedCheck
@@ -95,6 +99,7 @@ import org.sonarsource.kotlin.checks.UnusedDeferredResultCheck
 import org.sonarsource.kotlin.checks.UnusedFunctionParameterCheck
 import org.sonarsource.kotlin.checks.UnusedLocalVariableCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodCheck
+import org.sonarsource.kotlin.checks.UselessIncrementCheck
 import org.sonarsource.kotlin.checks.VariableAndParameterNameCheck
 import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
 import org.sonarsource.kotlin.checks.ViewModelSuspendingFunctionsCheck
@@ -127,6 +132,7 @@ val KOTLIN_CHECKS = listOf(
     EmptyCommentCheck::class.java,
     EmptyFunctionCheck::class.java,
     EncryptionAlgorithmCheck::class.java,
+    EqualsOverriddenWithArrayFieldCheck::class.java,
     ExposedMutableFlowCheck::class.java,
     ExternalAndroidStorageAccessCheck::class.java,
     FileHeaderCheck::class.java,
@@ -141,6 +147,7 @@ val KOTLIN_CHECKS = listOf(
     IfConditionalAlwaysTrueOrFalseCheck::class.java,
     InjectableDispatchersCheck::class.java,
     IsInstanceMethodCheck::class.java,
+    JumpInFinallyCheck::class.java,
     MainSafeCoroutinesCheck::class.java,
     MatchCaseTooBigCheck::class.java,
     MobileDatabaseEncryptionKeysCheck::class.java,
@@ -151,8 +158,10 @@ val KOTLIN_CHECKS = listOf(
     ReceivingIntentsCheck::class.java,
     RedundantParenthesesCheck::class.java,
     RedundantSuspendModifierCheck::class.java,
+    ReplaceGuavaWithKotlinCheck::class.java,
     RobustCryptographicKeysCheck::class.java,
     RunFinalizersCheck::class.java,
+    ScheduledThreadPoolExecutorZeroCheck::class.java,
     SelfAssignmentCheck::class.java,
     ServerCertificateCheck::class.java,
     StringLiteralDuplicatedCheck::class.java,
@@ -178,6 +187,7 @@ val KOTLIN_CHECKS = listOf(
     UnusedFunctionParameterCheck::class.java,
     UnusedLocalVariableCheck::class.java,
     UnusedPrivateMethodCheck::class.java,
+    UselessIncrementCheck::class.java,
     VariableAndParameterNameCheck::class.java,
     VerifiedServerHostnamesCheck::class.java,
     ViewModelSuspendingFunctionsCheck::class.java,

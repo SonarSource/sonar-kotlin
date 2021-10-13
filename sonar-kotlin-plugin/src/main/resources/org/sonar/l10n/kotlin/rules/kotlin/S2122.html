@@ -1,0 +1,15 @@
+<p><code>java.util.concurrent.ScheduledThreadPoolExecutor’s pool is sized with `corePoolSize</code>, so setting <code>corePoolSize</code> to zero
+means the executor will have no threads and run nothing.</p>
+<p>This rule detects instances where <code>corePoolSize</code> is set to zero, via either its setter or the object constructor.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+fun do() {
+
+    val stpe1 = ScheduledThreadPoolExecutor(0) // Noncompliant
+
+    val stpe2 = ScheduledThreadPoolExecutor(POOL_SIZE)
+    stpe2.corePoolSize = 0 // Noncompliant
+
+    ...
+</pre>
+
