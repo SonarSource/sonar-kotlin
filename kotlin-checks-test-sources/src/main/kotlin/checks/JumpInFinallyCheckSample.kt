@@ -275,5 +275,16 @@ class JumpInFinallyCheckSample {
                 }
             }
         }
+
+        fun throwInNamedFunction() {
+            try {
+                throw RuntimeException()
+            } finally {
+                fun sayHelloAndThrow() {
+                    print("Hello, World!")
+                    throw IllegalArgumentException() // Compliant
+                }
+            }
+        }
     }
 }

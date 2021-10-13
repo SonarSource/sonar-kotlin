@@ -97,7 +97,9 @@ private class FinallyBlockVisitor(private val report: (KtExpression) -> Unit) : 
     }
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
-        report(expression)
+        if (functionDepthCounter == 0) {
+            report(expression)
+        }
     }
 
     private fun checkAndVisit(depthCounter: Int, expression: KtExpressionWithLabel) {
