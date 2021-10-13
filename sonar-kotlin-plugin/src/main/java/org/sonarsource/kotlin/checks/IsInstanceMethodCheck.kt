@@ -46,10 +46,10 @@ class IsInstanceMethodCheck : CallAbstractCheck() {
         FunMatcher(qualifier = "java.lang.Class", name = "isInstance") { withArguments("kotlin.Any") },
     )
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, ctx: KotlinFileContext) {
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         callExpression.getQualifiedExpressionForSelector()?.receiverExpression
-            .qualifiedName(ctx, true)?.let { className ->
-                ctx.reportIssue(callExpression.calleeExpression!!, "Replace this usage of \"isInstance\" with \"is $className\".")
+            .qualifiedName(kotlinFileContext, true)?.let { className ->
+                kotlinFileContext.reportIssue(callExpression.calleeExpression!!, "Replace this usage of \"isInstance\" with \"is $className\".")
             }
     }
 
