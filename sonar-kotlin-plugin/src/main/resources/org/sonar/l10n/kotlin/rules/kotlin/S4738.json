@@ -1,0 +1,16 @@
+{
+  "title": "Native features should be preferred to Guava",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "10min"
+  },
+  "tags": [
+    "guava"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-4738",
+  "sqKey": "S4738",
+  "scope": "Main"
+}
