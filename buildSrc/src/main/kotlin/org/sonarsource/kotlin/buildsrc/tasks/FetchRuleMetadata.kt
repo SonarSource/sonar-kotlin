@@ -3,13 +3,14 @@ package org.sonarsource.kotlin.buildsrc.tasks
 import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.repositories
 import org.gradle.process.ExecResult
 
-const val ruleApiVersion = "2.0.0.1885"
+const val ruleApiVersion = "2.1.0.1948"
 
 abstract class FetchRuleMetadata : DefaultTask() {
 
@@ -50,8 +51,13 @@ abstract class FetchRuleMetadata : DefaultTask() {
         @get:Input
         val ruleKey: String by project
 
+        @get:Input
+        @get:Optional
+        val branch: String? by project
+
         @TaskAction
-        fun downloadMetadata() = executeRuleApi(listOf("generate", "-rule", ruleKey))
+        fun downloadMetadata() =
+            executeRuleApi(listOf("generate", "-rule", ruleKey) + (branch?.let { listOf("-branch", it) } ?: emptyList()))
     }
 
     abstract class FetchAllRulesMetadata : FetchRuleMetadata() {
