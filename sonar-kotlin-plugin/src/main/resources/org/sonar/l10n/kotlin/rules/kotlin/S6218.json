@@ -10,5 +10,6 @@
   "ruleSpecification": "RSPEC-6218",
   "sqKey": "S6218",
   "scope": "Main",
+  "quickfix": "unknown",
   "title": "Equals method should be overridden in data classes containing array fields"
 }

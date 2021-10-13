@@ -17,9 +17,9 @@ val db = SQLiteDatabase.openOrCreateDatabase("test.db", key, null) // Noncomplia
 </pre>
 <p><a href="https://github.com/realm/realm-kotlin/">Realm</a></p>
 <pre>
-val key = "gb09ym9ydoolp3w886d0tciczj6ve9kszqd65u7d126040gwy86xqimjpuuc788g" // Noncompliant
+val key = "gb09ym9ydoolp3w886d0tciczj6ve9kszqd65u7d126040gwy86xqimjpuuc788g"
 val config = RealmConfiguration.Builder()
-    .encryptionKey(key.toByteArray())
+    .encryptionKey(key.toByteArray()) // Noncompliant
     .build()
 val realm = Realm.getInstance(config)
 </pre>
