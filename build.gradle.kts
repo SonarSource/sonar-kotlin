@@ -34,7 +34,7 @@ allprojects {
 
     ext {
         set("buildNumber", System.getProperty("buildNumber"))
-        set("analyzerCommonsVersion", "1.14.1.690")
+        set("analyzerCommonsVersion", "1.19.0.786")
         set("sonarqubeVersion", "8.9.0.43852")
         set("orchestratorVersion", "3.35.0.2707")
         set("sonarlintVersion", "6.2.0.34235")
@@ -88,6 +88,7 @@ subprojects {
             dependency("org.sonarsource.analyzer-commons:sonar-analyzer-test-commons:${extra["analyzerCommonsVersion"]}")
             dependency("org.sonarsource.analyzer-commons:sonar-analyzer-commons:${extra["analyzerCommonsVersion"]}")
             dependency("org.sonarsource.analyzer-commons:sonar-xml-parsing:${extra["analyzerCommonsVersion"]}")
+            dependency("org.sonarsource.analyzer-commons:sonar-regex-parsing:${extra["analyzerCommonsVersion"]}")
             dependency("org.sonarsource.orchestrator:sonar-orchestrator:${extra["orchestratorVersion"]}")
             dependency("org.sonarsource.sonarlint.core:sonarlint-core:${extra["sonarlintVersion"]}")
         }
