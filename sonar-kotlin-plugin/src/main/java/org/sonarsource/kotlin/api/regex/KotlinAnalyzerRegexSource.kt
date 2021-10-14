@@ -37,7 +37,7 @@ import java.util.TreeMap
  */
 class KotlinAnalyzerRegexSource(
     sourceTemplates: Iterable<KtStringTemplateExpression>,
-    kotlinFileContext: KotlinFileContext,
+    val kotlinFileContext: KotlinFileContext,
 ) : JavaRegexSource(templatesAsString(sourceTemplates)) {
     val textRangeTracker = TextRangeTracker.of(sourceTemplates, kotlinFileContext)
 }
