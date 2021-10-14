@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.api
 
 const val INT_TYPE = "kotlin.Int"
 const val STRING_TYPE = "kotlin.String"
+const val ANY_TYPE = "kotlin.Any"
 const val GET_INSTANCE = "getInstance"
 const val WITH_CONTEXT = "withContext"
 const val ASYNC = "async"
@@ -30,6 +31,7 @@ const val DEFERRED_FQN = "kotlinx.coroutines.Deferred"
 const val COROUTINES_FLOW = "kotlinx.coroutines.flow.Flow"
 const val COROUTINES_CHANNEL = "kotlinx.coroutines.channels.Channel"
 const val THROWS_FQN = "kotlin.jvm.Throws"
+const val JAVA_STRING = "java.lang.String"
 
 val BYTE_ARRAY_CONSTRUCTOR = ConstructorMatcher("kotlin.ByteArray")
 val BYTE_ARRAY_CONSTRUCTOR_SIZE_ARG_ONLY = ConstructorMatcher("kotlin.ByteArray") { withArguments("kotlin.Int") }

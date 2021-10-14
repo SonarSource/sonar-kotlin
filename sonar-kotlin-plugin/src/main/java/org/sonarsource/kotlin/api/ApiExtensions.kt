@@ -76,6 +76,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
+import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
 
 private val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
@@ -410,3 +411,6 @@ fun KtExpression?.getterMatches(bindingContext: BindingContext, propertyName: St
     is KtQualifiedExpression -> selectorExpression.getterMatches(bindingContext, propertyName, matcher)
     else -> false
 }
+
+fun KtBinaryExpression.isPlus() =
+    this.operationReference.operationSignTokenType?.let { OperatorConventions.BINARY_OPERATION_NAMES[it] }?.asString() == "plus"
