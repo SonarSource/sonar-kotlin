@@ -17,17 +17,24 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.plugin
+package org.sonarsource.kotlin.api.regex
 
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.sonarsource.kotlin.api.InputFileContext
-import org.sonarsource.kotlin.api.regex.RegexCache
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.sonarsource.analyzer.commons.regex.RegexParseResult
+import org.sonarsource.analyzer.commons.regex.RegexParser
+import org.sonarsource.analyzer.commons.regex.ast.FlagSet
+import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-data class KotlinFileContext(
-    val inputFileContext: InputFileContext,
-    val ktFile: KtFile,
-    val bindingContext: BindingContext,
-) {
-     val regexCache by lazy { RegexCache(this) }
+class RegexCache(val kotlinFileContext: KotlinFileContext) {
+
+    companion object {
+        private val globalCache = mutableMapOf<List<KtStringTemplateExpression>, RegexParseResult>()
+    }
+
+    fun get(stringTemplates: List<KtStringTemplateExpression>) =
+        KotlinAnalyzerRegexSource(stringTemplates, kotlinFileContext).let { regexSource ->
+            globalCache.computeIfAbsent(stringTemplates) {
+                RegexParser(regexSource, FlagSet()).parse()
+            } to regexSource
+        }
 }
