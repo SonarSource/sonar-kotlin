@@ -47,10 +47,10 @@ class ScheduledThreadPoolExecutorZeroCheck : CallAbstractCheck() {
 
     override val functionsToVisit = listOf(THREAD_POOL_CONSTRUCTOR_MATCHER, POOL_SIZE_SETTER_MATCHER)
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, ctx: KotlinFileContext) {
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         val corePoolSizeExpression = resolvedCall.getFirstArgumentExpression() ?: return
-        if (isZero(ctx, deparenthesize(corePoolSizeExpression))) {
-            ctx.reportIssue(corePoolSizeExpression, MESSAGE)
+        if (isZero(kotlinFileContext, deparenthesize(corePoolSizeExpression))) {
+            kotlinFileContext.reportIssue(corePoolSizeExpression, MESSAGE)
         }
     }
 
