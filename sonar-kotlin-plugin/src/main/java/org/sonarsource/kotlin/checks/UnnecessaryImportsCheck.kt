@@ -20,7 +20,6 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocLink
-import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
@@ -37,6 +36,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
+import org.jetbrains.kotlin.resolve.descriptorUtil.isCompanionObject
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
@@ -99,17 +99,18 @@ class UnnecessaryImportsCheck : AbstractCheck() {
     ): List<KtImportDirective> {
         var relevantImports = importsWithSameName
         for (ref in relevantReferences) {
-            val refName = context.bindingContext.get(BindingContext.REFERENCE_TARGET, ref)?.getImportableDescriptor()?.fqNameOrNull()
+            val refDescriptor = context.bindingContext.get(BindingContext.REFERENCE_TARGET, ref)?.getImportableDescriptor()
                 ?: return emptyList() // Discard all: over-estimate, resulting in less FPs and more FNs without binding ctx
-            relevantImports = relevantImports.filter { it.importedFqName != refName && !it.isCompanionObjectImport(refName) }
+            val refName = refDescriptor.fqNameOrNull() ?: return emptyList()
+
+            relevantImports = relevantImports.filter {
+                it.importedFqName != refName && !(refDescriptor.isCompanionObject() && it.importedFqName == refName.parent())
+            }
+
             if (relevantImports.isEmpty()) break
         }
         return relevantImports
     }
-
-    private fun KtImportDirective.isCompanionObjectImport(
-        refName: FqName,
-    ) = refName.shortName().asString() == "Companion" && importedFqName == refName.parent()
 
     private fun collectReferences(file: KtFile) =
         file.children.asSequence().filter {

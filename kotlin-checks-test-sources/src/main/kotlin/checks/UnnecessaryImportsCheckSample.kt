@@ -16,6 +16,7 @@ import com.google.common.collect.ImmutableSet.of as immutable_set_of
 import com.google.common.io.Files // Noncompliant {{Remove unused import.}}
 import com.google.common.io.Files.isFile
 import imports.ClassWithCompanionObject
+import imports.ClassWithNamedCompanionObject
 import okhttp3.TlsVersion
 import org.apache.commons.lang.StringUtils
 import otherpackage.get
@@ -88,8 +89,10 @@ class UnnecessaryImportsCheckSample {
         "" someInfixFun ""
         val method: Method? = null
         val kf = method!!.kotlinFunction
-        
+
         val c = ClassWithCompanionObject.MY_CONSTANT // Compliant
+
+        ClassWithNamedCompanionObject.companionObjectFun()
     }
 
     /**
