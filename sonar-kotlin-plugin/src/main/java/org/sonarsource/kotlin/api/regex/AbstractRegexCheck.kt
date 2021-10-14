@@ -29,8 +29,6 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getReceiverExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.api.batch.fs.TextRange
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
-import org.sonarsource.analyzer.commons.regex.RegexParser
-import org.sonarsource.analyzer.commons.regex.ast.FlagSet
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement
 import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
@@ -81,11 +79,8 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
             // For now, we simply don't use any sequence that contains nulls (i.e. non-resolvable parts)
             .takeIf { null !in it }?.filterNotNull()
             ?.let { sourceTemplates ->
-                KotlinAnalyzerRegexSource(sourceTemplates.asIterable(), kotlinFileContext)
-            }?.let { regexSource ->
-                RegexParser(regexSource, FlagSet()).parse()?.let { regexParseResult ->
-                    visitRegex(regexParseResult, regexSource)
-                }
+                val (regexParseResult, regexSource) = kotlinFileContext.regexCache.get(sourceTemplates.toList())
+                visitRegex(regexParseResult, regexSource)
             }
     }
 
