@@ -1,5 +1,6 @@
 package checks
 
+import android.webkit.WebSettings
 import okhttp3.ConnectionSpec
 import okhttp3.ConnectionSpec.Companion.COMPATIBLE_TLS
 import okhttp3.ConnectionSpec.Companion.MODERN_TLS
@@ -71,4 +72,33 @@ class ClearTextProtocolCheckSample {
             .connectionSpecs(listOf(spec))
             .build()
     }
+
+    fun `android WebSettings noncompliant`(settings: WebSettings, value: Int) {
+        settings.mixedContentMode =
+            WebSettings.MIXED_CONTENT_ALWAYS_ALLOW // Noncompliant {{Using a relaxed mixed content policy is security-sensitive.}}
+        //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        settings.mixedContentMode = (0) // Noncompliant
+        //                           ^
+
+        settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW) // Noncompliant {{Using a relaxed mixed content policy is security-sensitive.}}
+        //                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        settings.setMixedContentMode((0)) // Noncompliant
+        //                            ^
+    }
+
+    fun `android WebSettings compliant`(settings: WebSettings, value: Int) {
+        settings.mixedContentMode = value // Compliant
+        settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW // Compliant
+        settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE // Compliant
+
+        settings.setMixedContentMode(value) // Compliant
+        settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW) // Compliant
+        settings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE) // Compliant
+
+        // coverage
+        settings.mixedContentMode += value // Compliant
+        var x = 1
+        x = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+    }
+
 }

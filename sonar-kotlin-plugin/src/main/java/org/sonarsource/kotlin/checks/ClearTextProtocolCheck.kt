@@ -19,55 +19,87 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtPsiUtil.deparenthesize
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.REFERENCE_TARGET
+import org.jetbrains.kotlin.resolve.calls.callUtil.getFirstArgumentExpression
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
 import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.FunMatcherImpl
+import org.sonarsource.kotlin.api.predictRuntimeIntValue
+import org.sonarsource.kotlin.api.setterMatches
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.kotlin.visiting.KtTreeVisitor
 
 private const val CLEARTEXT_FQN = "okhttp3.ConnectionSpec.Companion.CLEARTEXT"
 
+private const val MESSAGE_ANDROID_MIXED_CONTENT = "Using a relaxed mixed content policy is security-sensitive."
+private const val MIXED_CONTENT_ALWAYS_ALLOW = 0
+
+private val UNSAFE_CALLS_GENERAL = mapOf(
+    ConstructorMatcher("org.apache.commons.net.ftp.FTPClient") to msg("FTP", "SFTP, SCP or FTPS"),
+    ConstructorMatcher("org.apache.commons.net.smtp.SMTPClient")
+        to msg("clear-text SMTP", "SMTP over SSL/TLS or SMTP with STARTTLS"),
+    ConstructorMatcher("org.apache.commons.net.telnet.TelnetClient") to msg("Telnet", "SSH"),
+)
+
+private val UNSAFE_CALLS_OK_HTTP = listOf(
+    ConstructorMatcher("okhttp3.ConnectionSpec.Builder"),
+    FunMatcher(qualifier = "okhttp3.OkHttpClient.Builder", name = "connectionSpecs")
+)
+
+private val ANDROID_SET_MIXED_CONTENT_MODE = FunMatcher(definingSupertype = "android.webkit.WebSettings",
+    name = "setMixedContentMode") { withArguments("kotlin.Int") }
+
+private fun msg(insecure: String, replaceWith: String) = "Using $insecure is insecure. Use $replaceWith instead."
+
 @Rule(key = "S5332")
-class ClearTextProtocolCheck : AbstractCheck() {
+class ClearTextProtocolCheck : CallAbstractCheck() {
 
-    companion object {
-        private val UNSAFE_CALLS_GENERAL = listOf(
-            ConstructorMatcher("org.apache.commons.net.ftp.FTPClient") to msg("FTP", "SFTP, SCP or FTPS"),
-            ConstructorMatcher("org.apache.commons.net.smtp.SMTPClient")
-                to msg("clear-text SMTP", "SMTP over SSL/TLS or SMTP with STARTTLS"),
-            ConstructorMatcher("org.apache.commons.net.telnet.TelnetClient") to msg("Telnet", "SSH"),
-        )
+    override val functionsToVisit = UNSAFE_CALLS_GENERAL.keys + UNSAFE_CALLS_OK_HTTP + listOf(ANDROID_SET_MIXED_CONTENT_MODE)
 
-        private val UNSAFE_CALLS_OK_HTTP = listOf(
-            ConstructorMatcher("okhttp3.ConnectionSpec.Builder"),
-            FunMatcher(qualifier = "okhttp3.OkHttpClient.Builder", name = "connectionSpecs")
-        )
+    override fun visitFunctionCall(
+        callExpression: KtCallExpression,
+        resolvedCall: ResolvedCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext,
+    ) {
+        UNSAFE_CALLS_GENERAL[matchedFun]?.let { msg ->
+            kotlinFileContext.reportIssue(callExpression, msg)
+            return
+        }
 
-        private fun msg(insecure: String, replaceWith: String) = "Using $insecure is insecure. Use $replaceWith instead."
+        if (matchedFun in UNSAFE_CALLS_OK_HTTP) {
+            analyzeOkHttpCall(kotlinFileContext, callExpression)
+        } else if (matchedFun == ANDROID_SET_MIXED_CONTENT_MODE) {
+            checkAndroidMixedContentArgument(kotlinFileContext,
+                deparenthesize(callExpression.getResolvedCall(kotlinFileContext.bindingContext)?.getFirstArgumentExpression()))
+        }
     }
 
-    override fun visitCallExpression(callExpr: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        val (_, _, bindingContext) = kotlinFileContext
+    override fun visitBinaryExpression(expression: KtBinaryExpression, ctx: KotlinFileContext) {
+        val left = deparenthesize(expression.left) ?: return
+        if (expression.operationToken == KtTokens.EQ &&
+            left.setterMatches(ctx.bindingContext, "mixedContentMode", ANDROID_SET_MIXED_CONTENT_MODE)
+        ) {
+            checkAndroidMixedContentArgument(ctx, deparenthesize(expression.right))
+        }
+    }
 
-        UNSAFE_CALLS_GENERAL
-            .firstOrNull { (matcher, _) -> matcher.matches(callExpr, bindingContext) }
-            ?.let { (_, msg) ->
-                kotlinFileContext.reportIssue(callExpr, msg)
-                return
-            }
-
-        UNSAFE_CALLS_OK_HTTP
-            .firstOrNull { it.matches(callExpr, bindingContext) }
-            ?.run {
-                analyzeOkHttpCall(kotlinFileContext, callExpr)
-                return
-            }
+    private fun checkAndroidMixedContentArgument(ctx: KotlinFileContext, argument: KtExpression?) {
+        if (argument != null && argument.predictRuntimeIntValue(ctx.bindingContext) == MIXED_CONTENT_ALWAYS_ALLOW) {
+            ctx.reportIssue(argument, MESSAGE_ANDROID_MIXED_CONTENT)
+        }
     }
 
     private fun analyzeOkHttpCall(kotlinFileContext: KotlinFileContext, callExpr: KtCallExpression) =
