@@ -105,6 +105,7 @@ import org.sonarsource.kotlin.checks.VariableAndParameterNameCheck
 import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
 import org.sonarsource.kotlin.checks.ViewModelSuspendingFunctionsCheck
 import org.sonarsource.kotlin.checks.WeakSSLContextCheck
+import org.sonarsource.kotlin.checks.WebViewJavaScriptSupportCheck
 import org.sonarsource.kotlin.checks.WrongAssignmentOperatorCheck
 
 val KOTLIN_CHECKS = listOf(
@@ -194,5 +195,6 @@ val KOTLIN_CHECKS = listOf(
     VerifiedServerHostnamesCheck::class.java,
     ViewModelSuspendingFunctionsCheck::class.java,
     WeakSSLContextCheck::class.java,
+    WebViewJavaScriptSupportCheck::class.java,
     WrongAssignmentOperatorCheck::class.java,
 )
