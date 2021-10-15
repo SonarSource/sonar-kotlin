@@ -106,6 +106,7 @@ import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
 import org.sonarsource.kotlin.checks.ViewModelSuspendingFunctionsCheck
 import org.sonarsource.kotlin.checks.WeakSSLContextCheck
 import org.sonarsource.kotlin.checks.WebViewJavaScriptSupportCheck
+import org.sonarsource.kotlin.checks.WebViewsFileAccessCheck
 import org.sonarsource.kotlin.checks.WrongAssignmentOperatorCheck
 
 val KOTLIN_CHECKS = listOf(
@@ -196,5 +197,6 @@ val KOTLIN_CHECKS = listOf(
     ViewModelSuspendingFunctionsCheck::class.java,
     WeakSSLContextCheck::class.java,
     WebViewJavaScriptSupportCheck::class.java,
+    WebViewsFileAccessCheck::class.java,
     WrongAssignmentOperatorCheck::class.java,
 )
