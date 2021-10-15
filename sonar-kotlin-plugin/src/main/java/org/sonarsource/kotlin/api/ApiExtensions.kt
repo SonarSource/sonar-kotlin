@@ -109,6 +109,13 @@ internal fun KtExpression.predictRuntimeIntValue(bindingContext: BindingContext)
         }
     }
 
+internal fun KtExpression.predictRuntimeBooleanValue(bindingContext: BindingContext) =
+    predictRuntimeValueExpression(bindingContext).let { runtimeValueExpression ->
+        runtimeValueExpression.getType(bindingContext)?.let {
+            bindingContext.get(BindingContext.COMPILE_TIME_VALUE, runtimeValueExpression)?.getValue(it) as? Boolean
+        }
+    }
+
 internal fun KtExpression.predictRuntimeValueExpression(
     bindingContext: BindingContext,
     declarations: MutableList<PsiElement> = mutableListOf(),
