@@ -1,0 +1,42 @@
+<p>Delivering code in production with debug features activated is security-sensitive. It has led in the past to the following vulnerabilities:</p>
+<ul>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-1999007">CVE-2018-1999007</a> </li>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-5306">CVE-2015-5306</a> </li>
+  <li> <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-2006">CVE-2013-2006</a> </li>
+</ul>
+<p>An application’s debug features enable developers to find bugs more easily and thus facilitate also the work of attackers. It often gives access to
+detailed information on both the system running the application and users.</p>
+<h2>Ask Yourself Whether</h2>
+<ul>
+  <li> the code or configuration enabling the application debug features is deployed on production servers or distributed to end users. </li>
+  <li> the application runs by default with debug features activated. </li>
+</ul>
+<p>There is a risk if you answered yes to any of those questions.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<p>Do not enable debug features on production servers or applications distributed to end users.</p>
+<h2>Sensitive Code Example</h2>
+<p><a
+href="https://developer.android.com/reference/android/webkit/WebView#setWebContentsDebuggingEnabled(boolean)">WebView.setWebContentsDebuggingEnabled(true)</a>
+for Android enables debugging support:</p>
+<pre>
+import android.webkit.WebView
+
+WebView.setWebContentsDebuggingEnabled(true) // Sensitive
+</pre>
+<h2>Compliant Solution</h2>
+<p><a
+href="https://developer.android.com/reference/android/webkit/WebView#setWebContentsDebuggingEnabled(boolean)">WebView.setWebContentsDebuggingEnabled(false)</a>
+for Android disables debugging support:</p>
+<pre>
+import android.webkit.WebView
+
+WebView.setWebContentsDebuggingEnabled(false)
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
+  </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/489.html">MITRE, CWE-489</a> - Leftover Debug Code </li>
+  <li> <a href="http://cwe.mitre.org/data/definitions/215.html">MITRE, CWE-215</a> - Information Exposure Through Debug Information </li>
+</ul>
+
