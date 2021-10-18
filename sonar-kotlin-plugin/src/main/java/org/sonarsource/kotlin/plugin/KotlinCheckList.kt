@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.plugin
 
 import org.sonarsource.kotlin.checks.AllBranchesIdenticalCheck
+import org.sonarsource.kotlin.checks.AnchorPrecedenceCheck
 import org.sonarsource.kotlin.checks.AndroidBroadcastingCheck
 import org.sonarsource.kotlin.checks.AuthorisingNonAuthenticatedUsersCheck
 import org.sonarsource.kotlin.checks.BadClassNameCheck
@@ -114,6 +115,7 @@ import org.sonarsource.kotlin.checks.WrongAssignmentOperatorCheck
 
 val KOTLIN_CHECKS = listOf(
     AllBranchesIdenticalCheck::class.java,
+    AnchorPrecedenceCheck::class.java,
     AndroidBroadcastingCheck::class.java,
     AuthorisingNonAuthenticatedUsersCheck::class.java,
     BadClassNameCheck::class.java,
