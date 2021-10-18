@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.api.regex
 
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.RegexParser
@@ -28,13 +29,13 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 class RegexCache(val kotlinFileContext: KotlinFileContext) {
 
     companion object {
-        private val globalCache = mutableMapOf<List<KtStringTemplateExpression>, RegexParseResult>()
+        private val globalCache = mutableMapOf<Pair<List<KtStringTemplateExpression>, Int>, RegexParseResult>()
     }
 
-    fun get(stringTemplates: List<KtStringTemplateExpression>) =
-        KotlinAnalyzerRegexSource(stringTemplates, kotlinFileContext).let { regexSource ->
-            globalCache.computeIfAbsent(stringTemplates) {
-                RegexParser(regexSource, FlagSet()).parse()
+    fun get(stringTemplates: List<KtStringTemplateExpression>, flags: FlagSet, regexCallExpression: KtCallExpression?) =
+        KotlinAnalyzerRegexSource(stringTemplates, regexCallExpression, kotlinFileContext).let { regexSource ->
+            globalCache.computeIfAbsent(stringTemplates to flags.mask) {
+                RegexParser(regexSource, flags).parse()
             } to regexSource
         }
 }

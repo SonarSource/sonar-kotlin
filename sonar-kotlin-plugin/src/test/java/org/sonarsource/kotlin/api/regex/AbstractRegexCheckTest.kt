@@ -34,6 +34,6 @@ class AbstractRegexCheckTest {
 
 private class ReportEveryRegexDummyCheck : AbstractRegexCheck() {
     override fun visitRegex(regex: RegexParseResult, regexSource: KotlinAnalyzerRegexSource) {
-        regexSource.reportIssue(regex.result, "Hello Test")
+        regexSource.reportIssue(regex.result, "Flags: ${regex.result.activeFlags().mask}")
     }
 }
