@@ -19,23 +19,44 @@
  */
 package org.sonarsource.kotlin.api.regex
 
-import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.RegexParser
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet
+import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement
+import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-class RegexCache(val kotlinFileContext: KotlinFileContext) {
-
+class RegexContext(
+    private val stringTemplates: Iterable<KtStringTemplateExpression>,
+    kotlinFileContext: KotlinFileContext
+) {
     companion object {
         private val globalCache = mutableMapOf<Pair<List<KtStringTemplateExpression>, Int>, RegexParseResult>()
     }
 
-    fun get(stringTemplates: List<KtStringTemplateExpression>, flags: FlagSet, regexCallExpression: KtCallExpression?) =
-        KotlinAnalyzerRegexSource(stringTemplates, regexCallExpression, kotlinFileContext).let { regexSource ->
-            globalCache.computeIfAbsent(stringTemplates to flags.mask) {
-                RegexParser(regexSource, flags).parse()
-            } to regexSource
+    private val _reportedIssues = mutableListOf<ReportedIssue>()
+    val reportedIssues: List<ReportedIssue>
+        get() = _reportedIssues
+
+    val regexSource = KotlinAnalyzerRegexSource(stringTemplates, kotlinFileContext)
+
+    fun parseRegex(flags: FlagSet) =
+        globalCache.computeIfAbsent(stringTemplates.toList() to flags.mask) {
+            RegexParser(regexSource, flags).parse()
         }
+
+    fun reportIssue(
+        regexElement: RegexSyntaxElement,
+        message: String,
+        secondaryLocations: List<SecondaryLocation> = emptyList(),
+        gap: Double? = null
+    ) = _reportedIssues.add(ReportedIssue(regexElement, message, secondaryLocations, gap))
 }
+
+data class ReportedIssue(
+    val regexElement: RegexSyntaxElement,
+    val message: String,
+    val secondaryLocations: List<SecondaryLocation>,
+    val gap: Double?
+)

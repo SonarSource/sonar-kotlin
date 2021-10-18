@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.api.regex
 
-import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -38,8 +37,7 @@ import java.util.TreeMap
  */
 class KotlinAnalyzerRegexSource(
     sourceTemplates: Iterable<KtStringTemplateExpression>,
-    val regexCallExpression: KtCallExpression?,
-    val kotlinFileContext: KotlinFileContext,
+    kotlinFileContext: KotlinFileContext,
 ) : JavaRegexSource(templatesAsString(sourceTemplates)) {
     val textRangeTracker = TextRangeTracker.of(sourceTemplates, kotlinFileContext)
 }
@@ -69,7 +67,7 @@ class TextRangeTracker private constructor(
                     val textRange = kotlinFileContext.textRange(entry)
                     regexIndexToTextRange[endIndex] = textRange
 
-                    endIndex += if(isUnescapedEscapeChar(entry)) 2 else entry.textLength
+                    endIndex += if (isUnescapedEscapeChar(entry)) 2 else entry.textLength
                     textRange
                 }
             return TextRangeTracker(regexIndexToTextRange, textRangeToKtNode)
