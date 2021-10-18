@@ -71,10 +71,13 @@ private val REGEX_FUNCTIONS: Map<FunMatcherImpl, Pair<(ResolvedCall<*>) -> KtExp
 private val FLAGS = mapOf(
     "UNIX_LINES" to 1,
     "IGNORE_CASE" to 2,
+    "CASE_INSENSITIVE" to 2,
     "COMMENTS" to 4,
     "MULTILINE" to 8,
     "LITERAL" to 16,
     "DOT_MATCHES_ALL" to 32,
+    "DOTALL" to 32,
+    "UNICODE_CASE" to 64,
     "CANON_EQ" to 128,
 )
 
@@ -135,7 +138,8 @@ private fun KtExpression?.extractRegexFlags(bindingContext: BindingContext): Fla
         this?.collectDescendantsOfType<KtReferenceExpression>()
             ?.map { it.predictRuntimeValueExpression(bindingContext) }
             ?.flatMap { it.collectDescendantsOfType<KtNameReferenceExpression>() }
-            ?.mapNotNull { FLAGS[it.getIdentifier()?.text] }
+            ?.mapNotNull { bindingContext.get(BindingContext.REFERENCE_TARGET, it) }
+            ?.mapNotNull { FLAGS[it.name.asString()] }
             ?.fold(0, Int::or)
             ?: 0
     )

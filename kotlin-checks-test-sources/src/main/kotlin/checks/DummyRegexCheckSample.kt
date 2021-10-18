@@ -1,5 +1,8 @@
 package checks
 
+import java.util.regex.Pattern
+import kotlin.text.RegexOption.LITERAL as RENAMED_LITERAL
+
 val bar = Regex("foo" + "bar" + "\n" + """[a-z]""" + """test\nthis""") // Noncompliant {{Flags: 0}}
 //               ^^^     ^^^<    ^^<      ^^^^^<        ^^^^^^^^^^<
 
@@ -42,3 +45,10 @@ val someString = "foo"
 val bar9a = Regex(someString, singleFlag)
 //          ^^^^^
 val bar9b = Regex(someString, multipleFlags) // Noncompliant {{Flags: 17}}
+
+val p1 = Pattern.compile("regex", Pattern.UNICODE_CASE) // Noncompliant {{Flags: 64}}
+val p2 = Pattern.compile("regex", Pattern.UNICODE_CASE or Pattern.UNIX_LINES) // Noncompliant {{Flags: 65}}
+// The following is mis-detecting the flags, we don't actually analyze how the flags are combined for now
+val p3 = Pattern.compile("regex", Pattern.UNICODE_CASE and Pattern.UNIX_LINES) // Noncompliant {{Flags: 65}}
+
+val bar10 = Regex("foo", RENAMED_LITERAL) // Noncompliant {{Flags: 16}}
