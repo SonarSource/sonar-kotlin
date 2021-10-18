@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.sonar.api.batch.fs.TextRange
+import org.sonarsource.analyzer.commons.regex.ast.IndexRange
 import org.sonarsource.analyzer.commons.regex.java.JavaRegexSource
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
@@ -77,4 +78,6 @@ class TextRangeTracker private constructor(
     fun rangeAtIndex(index: Int) = regexIndexToTextRange.floorEntry(index)?.toPair()
 
     fun textRangesBetween(startIndex: Int, endIndex: Int): Collection<TextRange> = regexIndexToTextRange.subMap(startIndex, endIndex).values
+
+    fun textRangesBetween(range: IndexRange) = textRangesBetween(range.beginningOffset, range.endingOffset)
 }

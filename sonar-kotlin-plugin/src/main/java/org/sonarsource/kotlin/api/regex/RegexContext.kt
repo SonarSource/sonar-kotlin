@@ -20,11 +20,11 @@
 package org.sonarsource.kotlin.api.regex
 
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.sonarsource.analyzer.commons.regex.RegexIssueLocation
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.RegexParser
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement
-import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 class RegexContext(
@@ -49,7 +49,7 @@ class RegexContext(
     fun reportIssue(
         regexElement: RegexSyntaxElement,
         message: String,
-        secondaryLocations: List<SecondaryLocation> = emptyList(),
+        secondaryLocations: List<RegexIssueLocation> = emptyList(),
         gap: Double? = null
     ) = _reportedIssues.add(ReportedIssue(regexElement, message, secondaryLocations, gap))
 }
@@ -57,6 +57,6 @@ class RegexContext(
 data class ReportedIssue(
     val regexElement: RegexSyntaxElement,
     val message: String,
-    val secondaryLocations: List<SecondaryLocation>,
+    val secondaryLocations: List<RegexIssueLocation>,
     val gap: Double?
 )
