@@ -52,6 +52,13 @@ class RegexContext(
         secondaryLocations: List<RegexIssueLocation> = emptyList(),
         gap: Double? = null
     ) = _reportedIssues.add(ReportedIssue(regexElement, message, secondaryLocations, gap))
+
+    fun reportIssue(
+        regexElement: RegexSyntaxElement,
+        message: String,
+        gap: Int?,
+        secondaryLocations: List<RegexIssueLocation>
+    ) = reportIssue(regexElement, message, secondaryLocations, gap?.toDouble())
 }
 
 data class ReportedIssue(

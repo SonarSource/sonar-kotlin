@@ -29,6 +29,10 @@ class AbstractRegexCheckTest {
         KotlinVerifier(ReportEveryRegexDummyCheck()) {
             fileName = "DummyRegexCheckSample.kt"
         }.verify()
+
+        KotlinVerifier(ReportEveryRegexDummyCheck2()) {
+            fileName = "DummyRegexCheckSample.kt"
+        }.verify()
     }
 }
 
@@ -36,4 +40,19 @@ private class ReportEveryRegexDummyCheck : AbstractRegexCheck() {
     override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {
         regexContext.reportIssue(regex.result, "Flags: ${regex.result.activeFlags().mask}")
     }
+}
+
+private class ReportEveryRegexDummyCheck2 : AbstractRegexCheck() {
+    private var counter = 0
+
+    override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {
+        regexContext.reportIssue(
+            regex.result,
+            "Flags: ${regex.result.activeFlags().mask}",
+            if (counter == 0) null else counter,
+            emptyList()
+        )
+        counter++
+    }
+
 }
