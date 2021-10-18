@@ -84,7 +84,7 @@ private val FLAGS = mapOf(
 abstract class AbstractRegexCheck : CallAbstractCheck() {
     override val functionsToVisit = REGEX_FUNCTIONS.keys
 
-    abstract fun visitRegex(regex: RegexParseResult, regexSource: KotlinAnalyzerRegexSource)
+    abstract fun visitRegex(regex: RegexParseResult, regexContext: RegexContext)
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
@@ -98,37 +98,53 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
                 // For now, we simply don't use any sequence that contains nulls (i.e. non-resolvable parts)
                 .takeIf { null !in it }?.filterNotNull()
                 ?.let { sourceTemplates ->
-                    val (regexParseResult, regexSource) =
-                        kotlinFileContext.regexCache.get(
-                            sourceTemplates.toList(),
-                            flagsArgExtractor(resolvedCall).extractRegexFlags(kotlinFileContext.bindingContext),
-                            callExpression
-                        )
-                    visitRegex(regexParseResult, regexSource)
+                    RegexContext(sourceTemplates.asIterable(), kotlinFileContext)
+                }?.let { regexCtx ->
+
+                    val regexParseResult = regexCtx.parseRegex(
+                        flagsArgExtractor(resolvedCall).extractRegexFlags(kotlinFileContext.bindingContext)
+                    )
+
+                    visitRegex(regexParseResult, regexCtx)
+
+                    regexCtx.reportedIssues.forEach {
+                        with(it) {
+                            kotlinFileContext.reportIssue(
+                                regexElement,
+                                message,
+                                secondaryLocations,
+                                gap,
+                                regexCtx.regexSource.textRangeTracker,
+                                callExpression
+                            )
+                        }
+                    }
                 }
         }
     }
 
-    protected fun KotlinAnalyzerRegexSource.reportIssue(
+    private fun KotlinFileContext.reportIssue(
         regexElement: RegexSyntaxElement,
         message: String,
         secondaryLocations: List<SecondaryLocation> = emptyList(),
-        gap: Double? = null
+        gap: Double? = null,
+        textRangeTracker: TextRangeTracker,
+        regexCallExpression: KtCallExpression,
     ) {
         val range = regexElement.range
         val (mainLocation, additionalSecondaries) =
-            kotlinFileContext.mergeTextRanges(textRangeTracker.textRangesBetween(range.beginningOffset, range.endingOffset), message)
+            mergeTextRanges(textRangeTracker.textRangesBetween(range.beginningOffset, range.endingOffset), message)
                 ?: return
 
-        if (regexCallExpression != null && !kotlinFileContext.textRange(regexCallExpression).overlap(mainLocation)) {
-            kotlinFileContext.reportIssue(
+        if (!textRange(regexCallExpression).overlap(mainLocation)) {
+            reportIssue(
                 regexCallExpression.calleeExpression!!,
                 message,
                 listOf(SecondaryLocation(mainLocation, message)) + additionalSecondaries + secondaryLocations,
                 gap
             )
         } else {
-            kotlinFileContext.reportIssue(mainLocation, message, additionalSecondaries + secondaryLocations, gap)
+            reportIssue(mainLocation, message, additionalSecondaries + secondaryLocations, gap)
         }
     }
 }
@@ -146,34 +162,32 @@ private fun KtExpression?.extractRegexFlags(bindingContext: BindingContext): Fla
 
 private data class MutableOffsetRange(var start: Int, var end: Int)
 
-private fun KotlinFileContext.mergeTextRanges(ranges: Iterable<TextRange>, message: String) =
-    ktFile.viewProvider.document!!.let { doc ->
-        ranges.map {
-            MutableOffsetRange(
-                doc.getLineStartOffset(it.start().line() - 1) + it.start().lineOffset(),
-                doc.getLineStartOffset(it.end().line() - 1) + it.end().lineOffset()
-            )
-        }.fold(mutableListOf<MutableOffsetRange>()) { acc, curOffsets ->
-            acc.apply {
-                lastOrNull()?.takeIf { prevOffsets ->
-                    // Does current range overlap with previous one?
-                    curOffsets.end >= prevOffsets.start && curOffsets.start <= prevOffsets.end
-                }?.let { prevOffsets ->
-                    // This range overlaps with the previous one => merge
-                    prevOffsets.end = curOffsets.end
-                }
-                    ?: add(curOffsets) // This range does not overlap with the previous one (or there is no previous one) => add as separate range
-            }
-        }.map { (startOffset, endOffset) ->
-            with(inputFileContext.inputFile) {
-                newRange(textPointerAtOffset(doc, startOffset), textPointerAtOffset(doc, endOffset))
-            }
-        }.takeIf {
-            it.isNotEmpty()
-        }?.let { mergedRanges ->
-            mergedRanges.first() to mergedRanges.drop(1).map { SecondaryLocation(it, message) }
+private fun KotlinFileContext.mergeTextRanges(ranges: Iterable<TextRange>, message: String) = ktFile.viewProvider.document!!.let { doc ->
+    ranges.map {
+        MutableOffsetRange(
+            doc.getLineStartOffset(it.start().line() - 1) + it.start().lineOffset(),
+            doc.getLineStartOffset(it.end().line() - 1) + it.end().lineOffset()
+        )
+    }.fold(mutableListOf<MutableOffsetRange>()) { acc, curOffsets ->
+        acc.apply {
+            lastOrNull()?.takeIf { prevOffsets ->
+                // Does current range overlap with previous one?
+                curOffsets.end >= prevOffsets.start && curOffsets.start <= prevOffsets.end
+            }?.let { prevOffsets ->
+                // This range overlaps with the previous one => merge
+                prevOffsets.end = curOffsets.end
+            } ?: add(curOffsets) // This range does not overlap with the previous one (or there is no previous one) => add as separate range
         }
+    }.map { (startOffset, endOffset) ->
+        with(inputFileContext.inputFile) {
+            newRange(textPointerAtOffset(doc, startOffset), textPointerAtOffset(doc, endOffset))
+        }
+    }.takeIf {
+        it.isNotEmpty()
+    }?.let { mergedRanges ->
+        mergedRanges.first() to mergedRanges.drop(1).map { SecondaryLocation(it, message) }
     }
+}
 
 private fun KtExpression?.collectResolvedListOfStringTemplates(bindingContext: BindingContext): Sequence<KtStringTemplateExpression?> =
     this?.predictRuntimeValueExpression(bindingContext).let { predictedValue ->
