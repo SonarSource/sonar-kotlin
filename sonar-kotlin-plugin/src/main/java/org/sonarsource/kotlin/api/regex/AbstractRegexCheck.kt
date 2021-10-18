@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getReceiverExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.api.batch.fs.TextRange
+import org.sonarsource.analyzer.commons.regex.RegexIssueLocation
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement
@@ -93,33 +94,32 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
         kotlinFileContext: KotlinFileContext
     ) {
         REGEX_FUNCTIONS[matchedFun]!!.let { (regexStringArgExtractor, flagsArgExtractor) ->
-            regexStringArgExtractor(resolvedCall)
+            val regexCtx = regexStringArgExtractor(resolvedCall)
                 .collectResolvedListOfStringTemplates(kotlinFileContext.bindingContext)
                 // For now, we simply don't use any sequence that contains nulls (i.e. non-resolvable parts)
                 .takeIf { null !in it }?.filterNotNull()
                 ?.let { sourceTemplates ->
                     RegexContext(sourceTemplates.asIterable(), kotlinFileContext)
-                }?.let { regexCtx ->
+                } ?: return
 
-                    val regexParseResult = regexCtx.parseRegex(
-                        flagsArgExtractor(resolvedCall).extractRegexFlags(kotlinFileContext.bindingContext)
+            val regexParseResult = regexCtx.parseRegex(
+                flagsArgExtractor(resolvedCall).extractRegexFlags(kotlinFileContext.bindingContext)
+            )
+
+            visitRegex(regexParseResult, regexCtx)
+
+            regexCtx.reportedIssues.forEach { reportedIssue ->
+                with(reportedIssue) {
+                    kotlinFileContext.reportIssue(
+                        regexElement,
+                        message,
+                        secondaryLocations.flatMap { it.toSecondaries(regexCtx.regexSource.textRangeTracker, kotlinFileContext) },
+                        gap,
+                        regexCtx.regexSource.textRangeTracker,
+                        callExpression
                     )
-
-                    visitRegex(regexParseResult, regexCtx)
-
-                    regexCtx.reportedIssues.forEach {
-                        with(it) {
-                            kotlinFileContext.reportIssue(
-                                regexElement,
-                                message,
-                                secondaryLocations,
-                                gap,
-                                regexCtx.regexSource.textRangeTracker,
-                                callExpression
-                            )
-                        }
-                    }
                 }
+            }
         }
     }
 
@@ -133,8 +133,10 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
     ) {
         val range = regexElement.range
         val (mainLocation, additionalSecondaries) =
-            mergeTextRanges(textRangeTracker.textRangesBetween(range.beginningOffset, range.endingOffset), message)
-                ?: return
+            mergeTextRanges(textRangeTracker.textRangesBetween(range.beginningOffset, range.endingOffset))
+                ?.let { mergedRanges ->
+                    mergedRanges.first() to mergedRanges.drop(1).map { SecondaryLocation(it, message) }
+                } ?: return
 
         if (!textRange(regexCallExpression).overlap(mainLocation)) {
             reportIssue(
@@ -147,6 +149,12 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
             reportIssue(mainLocation, message, additionalSecondaries + secondaryLocations, gap)
         }
     }
+
+    private fun RegexIssueLocation.toSecondaries(textRangeTracker: TextRangeTracker, kotlinFileContext: KotlinFileContext) =
+        this.syntaxElements()
+            .mapNotNull { kotlinFileContext.mergeTextRanges(textRangeTracker.textRangesBetween(it.range)) }
+            .flatten()
+            .map { SecondaryLocation(it, message()) }
 }
 
 private fun KtExpression?.extractRegexFlags(bindingContext: BindingContext): FlagSet =
@@ -162,7 +170,7 @@ private fun KtExpression?.extractRegexFlags(bindingContext: BindingContext): Fla
 
 private data class MutableOffsetRange(var start: Int, var end: Int)
 
-private fun KotlinFileContext.mergeTextRanges(ranges: Iterable<TextRange>, message: String) = ktFile.viewProvider.document!!.let { doc ->
+private fun KotlinFileContext.mergeTextRanges(ranges: Iterable<TextRange>) = ktFile.viewProvider.document!!.let { doc ->
     ranges.map {
         MutableOffsetRange(
             doc.getLineStartOffset(it.start().line() - 1) + it.start().lineOffset(),
@@ -184,8 +192,6 @@ private fun KotlinFileContext.mergeTextRanges(ranges: Iterable<TextRange>, messa
         }
     }.takeIf {
         it.isNotEmpty()
-    }?.let { mergedRanges ->
-        mergedRanges.first() to mergedRanges.drop(1).map { SecondaryLocation(it, message) }
     }
 }
 
