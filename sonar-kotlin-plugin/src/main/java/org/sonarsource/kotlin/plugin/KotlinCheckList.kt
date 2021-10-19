@@ -55,6 +55,7 @@ import org.sonarsource.kotlin.checks.FinalFlowOperationCheck
 import org.sonarsource.kotlin.checks.FixMeCommentCheck
 import org.sonarsource.kotlin.checks.FlowChannelReturningFunsNotSuspendingCheck
 import org.sonarsource.kotlin.checks.FunctionCognitiveComplexityCheck
+import org.sonarsource.kotlin.checks.GraphemeClustersInClassesCheck
 import org.sonarsource.kotlin.checks.HardcodedCredentialsCheck
 import org.sonarsource.kotlin.checks.HardcodedIpCheck
 import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
@@ -150,6 +151,7 @@ val KOTLIN_CHECKS = listOf(
     FixMeCommentCheck::class.java,
     FlowChannelReturningFunsNotSuspendingCheck::class.java,
     FunctionCognitiveComplexityCheck::class.java,
+    GraphemeClustersInClassesCheck::class.java,
     HardcodedCredentialsCheck::class.java,
     HardcodedIpCheck::class.java,
     IdenticalBinaryOperandCheck::class.java,
