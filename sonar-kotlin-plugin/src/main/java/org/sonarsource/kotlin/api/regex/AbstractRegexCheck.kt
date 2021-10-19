@@ -71,7 +71,7 @@ private val REGEX_FUNCTIONS: Map<FunMatcherImpl, Pair<(ResolvedCall<*>) -> KtExp
 
 private val FLAGS = mapOf(
     "UNIX_LINES" to 1,
-    "IGNORE_CASE" to 2,
+    "IGNORE_CASE" to (2 or 64),
     "CASE_INSENSITIVE" to 2,
     "COMMENTS" to 4,
     "MULTILINE" to 8,

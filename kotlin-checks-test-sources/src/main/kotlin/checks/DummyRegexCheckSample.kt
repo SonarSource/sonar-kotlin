@@ -25,13 +25,13 @@ private const val constant2 = "foo\nbar"
 fun foo3(input: String) = Regex("foo" + constant2)
 //                               ^^^
 
-val bar5a = Regex("some regex", RegexOption.IGNORE_CASE) // Noncompliant {{Flags: 2}}
+val bar5a = Regex("some regex", RegexOption.IGNORE_CASE) // Noncompliant {{Flags: 66}}
 //                 ^^^^^^^^^^
-val bar5b = "some regex".toRegex(RegexOption.IGNORE_CASE) // Noncompliant {{Flags: 2}}
+val bar5b = "some regex".toRegex(RegexOption.IGNORE_CASE) // Noncompliant {{Flags: 66}}
 //           ^^^^^^^^^^> ^^^^^^^
 
-val bar6a = Regex("some regex", setOf(RegexOption.LITERAL, RegexOption.IGNORE_CASE, RegexOption.IGNORE_CASE, RegexOption.COMMENTS)) // Noncompliant {{Flags: 22}}
-val bar6b = "some regex".toRegex(setOf(RegexOption.LITERAL, RegexOption.IGNORE_CASE, RegexOption.IGNORE_CASE, RegexOption.COMMENTS)) // Noncompliant {{Flags: 22}}
+val bar6a = Regex("some regex", setOf(RegexOption.LITERAL, RegexOption.IGNORE_CASE, RegexOption.IGNORE_CASE, RegexOption.COMMENTS)) // Noncompliant {{Flags: 86}}
+val bar6b = "some regex".toRegex(setOf(RegexOption.LITERAL, RegexOption.IGNORE_CASE, RegexOption.IGNORE_CASE, RegexOption.COMMENTS)) // Noncompliant {{Flags: 86}}
 
 val singleFlag = RegexOption.UNIX_LINES
 val bar7 = Regex("regex", setOf(singleFlag)) // Noncompliant {{Flags: 1}}
