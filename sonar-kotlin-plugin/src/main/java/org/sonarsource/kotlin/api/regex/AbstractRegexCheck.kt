@@ -48,6 +48,8 @@ import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.kotlin.api.isPlus as isConcat
 
+val PATTERN_COMPILE_MATCHER = FunMatcher(qualifier = "java.util.regex.Pattern", name = "compile")
+
 private fun argGetter(argIndex: Int) = { resolvedCall: ResolvedCall<*> ->
     resolvedCall.valueArgumentsByIndex?.getOrNull(argIndex)?.arguments?.getOrNull(0)?.getArgumentExpression()
 }
@@ -60,7 +62,7 @@ private val referenceTargetGetter = { resolvedCall: ResolvedCall<*> ->
 private val REGEX_FUNCTIONS: Map<FunMatcherImpl, Pair<(ResolvedCall<*>) -> KtExpression?, (ResolvedCall<*>) -> KtExpression?>> = mapOf(
     ConstructorMatcher(typeName = "kotlin.text.Regex") to (argGetter(0) to argGetter(1)),
     FunMatcher(qualifier = "kotlin.text", name = "toRegex", extensionFunction = true) to (referenceTargetGetter to argGetter(0)),
-    FunMatcher(qualifier = "java.util.regex.Pattern", name = "compile") to (argGetter(0) to argGetter(1)),
+    PATTERN_COMPILE_MATCHER to (argGetter(0) to argGetter(1)),
     FunMatcher(qualifier = JAVA_STRING) {
         withNames("replaceAll", "replaceFirst", "split", "matches")
         withArguments(STRING_TYPE, STRING_TYPE)
@@ -80,12 +82,21 @@ private val FLAGS = mapOf(
     "DOTALL" to 32,
     "UNICODE_CASE" to 64,
     "CANON_EQ" to 128,
+    "UNICODE_CHARACTER_CLASS" to 256,
 )
 
 abstract class AbstractRegexCheck : CallAbstractCheck() {
     override val functionsToVisit = REGEX_FUNCTIONS.keys
 
-    abstract fun visitRegex(regex: RegexParseResult, regexContext: RegexContext)
+    open fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) = Unit
+
+    open fun visitRegex(
+        regex: RegexParseResult,
+        regexContext: RegexContext,
+        callExpression: KtCallExpression,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext
+    ) = visitRegex(regex, regexContext)
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
@@ -106,7 +117,7 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
                 flagsArgExtractor(resolvedCall).extractRegexFlags(kotlinFileContext.bindingContext)
             )
 
-            visitRegex(regexParseResult, regexCtx)
+            visitRegex(regexParseResult, regexCtx, callExpression, matchedFun, kotlinFileContext)
 
             regexCtx.reportedIssues.forEach { reportedIssue ->
                 with(reportedIssue) {
@@ -150,7 +161,7 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
         }
     }
 
-    private fun RegexIssueLocation.toSecondaries(textRangeTracker: TextRangeTracker, kotlinFileContext: KotlinFileContext) =
+    fun RegexIssueLocation.toSecondaries(textRangeTracker: TextRangeTracker, kotlinFileContext: KotlinFileContext) =
         this.syntaxElements()
             .mapNotNull { kotlinFileContext.mergeTextRanges(textRangeTracker.textRangesBetween(it.range)) }
             .flatten()
