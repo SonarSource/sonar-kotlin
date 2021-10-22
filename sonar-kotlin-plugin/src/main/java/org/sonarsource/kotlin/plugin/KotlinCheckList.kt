@@ -40,6 +40,7 @@ import org.sonarsource.kotlin.checks.DeprecatedCodeCheck
 import org.sonarsource.kotlin.checks.DeprecatedCodeUsedCheck
 import org.sonarsource.kotlin.checks.DuplicateBranchCheck
 import org.sonarsource.kotlin.checks.DuplicatedFunctionImplementationCheck
+import org.sonarsource.kotlin.checks.DuplicatesInCharacterClassCheck
 import org.sonarsource.kotlin.checks.ElseIfWithoutElseCheck
 import org.sonarsource.kotlin.checks.EmptyBlockCheck
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
@@ -131,6 +132,7 @@ val KOTLIN_CHECKS = listOf(
     DeprecatedCodeUsedCheck::class.java,
     DuplicateBranchCheck::class.java,
     DuplicatedFunctionImplementationCheck::class.java,
+    DuplicatesInCharacterClassCheck::class.java,
     ElseIfWithoutElseCheck::class.java,
     EmptyBlockCheck::class.java,
     EmptyCommentCheck::class.java,
