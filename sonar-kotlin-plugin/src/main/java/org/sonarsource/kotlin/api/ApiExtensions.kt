@@ -391,6 +391,43 @@ fun KtNameReferenceExpression.findPreviousUsages(
     }
 
 /**
+ * Will try to find all usages of this reference. You can provide a searchStartNode to define the scope of the search (will
+ * use the closest block statement going up the AST). You can also provide a predicate to filter findings.
+ */
+fun KtNameReferenceExpression.findAllUsages(
+    searchStartNode: KtExpression = this,
+    predicate: (KtNameReferenceExpression) -> Boolean = { _ -> true }
+) =
+    mutableListOf<KtNameReferenceExpression>().also { acc ->
+        searchStartNode.getParentOfType<KtBlockExpression>(false)
+            ?.collectDescendantsOfType<KtNameReferenceExpression> { it.getReferencedName() == this.getReferencedName() }
+            ?.let { usages ->
+                for (usage in usages) {
+                    if (usage === this) continue
+                    else if (predicate(usage)) {
+                        acc.add(usage)
+                    }
+                }
+            }
+    }
+
+fun KtProperty.usages(
+    searchStartNode: KtExpression = this,
+    predicate: (KtNameReferenceExpression) -> Boolean = { _ -> true }
+) =
+    mutableListOf<KtNameReferenceExpression>().also { acc ->
+        searchStartNode.getParentOfType<KtBlockExpression>(false)
+            ?.collectDescendantsOfType<KtNameReferenceExpression> { it.getReferencedName() == name }
+            ?.let { usages ->
+                for (usage in usages) {
+                    if (predicate(usage)) {
+                        acc.add(usage)
+                    }
+                }
+            }
+    }
+
+/**
  * Checks whether the variable has been initialized with the help of a secure random function
  */
 fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression, bindingContext: BindingContext): Boolean {
