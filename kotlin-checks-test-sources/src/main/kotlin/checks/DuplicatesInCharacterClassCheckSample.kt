@@ -3,31 +3,34 @@ package checks
 class DuplicatesInCharacterClassCheckSample {
     fun nonCompliant() {
 
-        Regex("""[\"12\".]""") // Noncompliant
-//                ^^  ^^< {{Additional duplicate}}
-        
+        Regex("""[\"12\".]""") // Noncompliant {{Remove duplicates in this character class.}}
+//      ^^^^^> {{Function call of which the argument is interpreted as regular expression.}}
+//                ^^@-1
+//                    ^^@-2< {{Additional duplicate}}
+
+
         Regex("[\\\"12\\\".]") // Noncompliant
-//              ^^^^  ^^^^< {{Additional duplicate}}
+//      ^^^^^>  ^^^^  ^^^^<
 
         Regex("""[0-9x9]""") // Noncompliant {{Remove duplicates in this character class.}}
-//                ^^^ ^< {{Additional duplicate}}
-     
- 
-        Regex("[9x0-9]") // Noncompliant 
-//              ^ ^^^< {{Additional duplicate}}
+//      ^^^^^>    ^^^ ^<
 
-        
-        Regex("[0-7x3-9]") // Noncompliant 
-//              ^^^ ^^^< {{Additional duplicate}}
+
+        Regex("[9x0-9]") // Noncompliant
+//      ^^^^^>  ^ ^^^<
+
+
+        Regex("[0-7x3-9]") // Noncompliant
+//      ^^^^^>  ^^^ ^^^<
 
 
         Regex("[0-93-57]") // Noncompliant
         Regex("[4-92-68]") // Noncompliant
-        Regex("[0-33-9]") // Noncompliant 
-        Regex("[0-70-9]") // Noncompliant 
-        Regex("[3-90-7]") // Noncompliant 
-        Regex("[3-50-9]") // Noncompliant 
-        Regex("[xxx]") // Noncompliant 
+        Regex("[0-33-9]") // Noncompliant
+        Regex("[0-70-9]") // Noncompliant
+        Regex("[3-90-7]") // Noncompliant
+        Regex("[3-50-9]") // Noncompliant
+        Regex("[xxx]") // Noncompliant
         Regex("[A-z_]") // Noncompliant
         Regex("(?i)[A-Za-z]") // Noncompliant
         Regex("(?i)[A-_d]") // Noncompliant
@@ -44,8 +47,8 @@ class DuplicatesInCharacterClassCheckSample {
         Regex("(?iu)[xX]") // Noncompliant
 
         Regex("[\\x{1F600}-\\x{1F637}x\\x{1F608}]") // Noncompliant
-//              ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^< {{Additional duplicate}}
-        
+//      ^^^^^>  ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^<
+
         Regex("[\\Qxx\\E]") // Noncompliant
         Regex("[[a][a]]") // Noncompliant
         Regex("[[abc][b]]") // Noncompliant
