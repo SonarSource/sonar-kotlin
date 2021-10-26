@@ -158,17 +158,20 @@ private object Templates {
         class $checkClassName : AbstractCheck() {
             // TODO: implement this rule
         }
+        
     """.trimIndent()
 
     fun generateTestClass(testClassName: String, checkClassName: String) = LICENSE_HEADER + """
         package org.sonarsource.kotlin.checks
 
         class $testClassName : CheckTest($checkClassName())
+        
     """.trimIndent()
 
     fun generateCheckFile(ruleKey: String) = """
         package checks
 
         // TODO: insert sample code to test rule $ruleKey here
+        
     """.trimIndent()
 }
