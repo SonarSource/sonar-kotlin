@@ -33,7 +33,6 @@ import org.sonar.api.batch.fs.TextRange
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet
-import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement
 import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
 import org.sonarsource.kotlin.api.FunMatcher
@@ -85,6 +84,8 @@ private val FLAGS = mapOf(
     "UNICODE_CHARACTER_CLASS" to 256,
 )
 
+private const val REGEX_CALL_LOC_MSG = "Function call of which the argument is interpreted as regular expression."
+
 abstract class AbstractRegexCheck : CallAbstractCheck() {
     override val functionsToVisit = REGEX_FUNCTIONS.keys
 
@@ -119,45 +120,11 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
 
             visitRegex(regexParseResult, regexCtx, callExpression, matchedFun, kotlinFileContext)
 
-            regexCtx.reportedIssues.forEach { reportedIssue ->
-                with(reportedIssue) {
-                    kotlinFileContext.reportIssue(
-                        regexElement,
-                        message,
-                        secondaryLocations.flatMap { it.toSecondaries(regexCtx.regexSource.textRangeTracker, kotlinFileContext) },
-                        gap,
-                        regexCtx.regexSource.textRangeTracker,
-                        callExpression
-                    )
-                }
+            regexCtx.reportedIssues.mapNotNull {
+                it.prepareForReporting(callExpression, regexCtx, kotlinFileContext)
+            }.forEach { (mainLocation, message, secondaries, gap) ->
+                kotlinFileContext.reportIssue(mainLocation, message, secondaries, gap)
             }
-        }
-    }
-
-    private fun KotlinFileContext.reportIssue(
-        regexElement: RegexSyntaxElement,
-        message: String,
-        secondaryLocations: List<SecondaryLocation> = emptyList(),
-        gap: Double? = null,
-        textRangeTracker: TextRangeTracker,
-        regexCallExpression: KtCallExpression,
-    ) {
-        val range = regexElement.range
-        val (mainLocation, additionalSecondaries) =
-            mergeTextRanges(textRangeTracker.textRangesBetween(range.beginningOffset, range.endingOffset))
-                ?.let { mergedRanges ->
-                    mergedRanges.first() to mergedRanges.drop(1).map { SecondaryLocation(it, message) }
-                } ?: return
-
-        if (!textRange(regexCallExpression).overlap(mainLocation)) {
-            reportIssue(
-                regexCallExpression.calleeExpression!!,
-                message,
-                listOf(SecondaryLocation(mainLocation, message)) + additionalSecondaries + secondaryLocations,
-                gap
-            )
-        } else {
-            reportIssue(mainLocation, message, additionalSecondaries + secondaryLocations, gap)
         }
     }
 
@@ -166,7 +133,37 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
             .mapNotNull { kotlinFileContext.mergeTextRanges(textRangeTracker.textRangesBetween(it.range)) }
             .flatten()
             .map { SecondaryLocation(it, message()) }
+
+    private fun ReportedIssue.prepareForReporting(
+        regexCallExpression: KtCallExpression,
+        regexCtx: RegexContext,
+        kotlinFileContext: KotlinFileContext
+    ): AnalyzerIssueReportInfo? {
+        val (mainLocation, additionalSecondaries) = kotlinFileContext.mergeTextRanges(
+            regexCtx.regexSource.textRangeTracker.textRangesBetween(regexElement.range.beginningOffset, regexElement.range.endingOffset)
+        )?.let { mergedRanges ->
+            mergedRanges.first() to mergedRanges.drop(1).map { SecondaryLocation(it, message) }
+        } ?: return null
+
+        // Add the method call as the last secondary to make sure it is always referenced (can sometimes be far away from the regex string)
+        val allSecondaries =
+            (additionalSecondaries + secondaryLocations.flatMap {
+                it.toSecondaries(regexCtx.regexSource.textRangeTracker, kotlinFileContext)
+            } + SecondaryLocation(kotlinFileContext.textRange(regexCallExpression.calleeExpression!!), REGEX_CALL_LOC_MSG))
+                .distinct()
+
+        return AnalyzerIssueReportInfo(mainLocation, message, allSecondaries, gap)
+    }
 }
+
+private data class MutableOffsetRange(var start: Int, var end: Int)
+
+private data class AnalyzerIssueReportInfo(
+    val mainLocation: TextRange,
+    val message: String,
+    val secondaryLocations: List<SecondaryLocation>,
+    val gap: Double?,
+)
 
 private fun KtExpression?.extractRegexFlags(bindingContext: BindingContext): FlagSet =
     FlagSet(
@@ -178,8 +175,6 @@ private fun KtExpression?.extractRegexFlags(bindingContext: BindingContext): Fla
             ?.fold(0, Int::or)
             ?: 0
     )
-
-private data class MutableOffsetRange(var start: Int, var end: Int)
 
 private fun KotlinFileContext.mergeTextRanges(ranges: Iterable<TextRange>) = ktFile.viewProvider.document!!.let { doc ->
     ranges.map {

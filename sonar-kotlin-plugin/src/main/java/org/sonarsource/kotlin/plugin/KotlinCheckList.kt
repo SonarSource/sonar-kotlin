@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.plugin
 
 import org.sonarsource.kotlin.checks.AllBranchesIdenticalCheck
+import org.sonarsource.kotlin.checks.AnchorPrecedenceCheck
 import org.sonarsource.kotlin.checks.AndroidBroadcastingCheck
 import org.sonarsource.kotlin.checks.AuthorisingNonAuthenticatedUsersCheck
 import org.sonarsource.kotlin.checks.BadClassNameCheck
@@ -72,6 +73,7 @@ import org.sonarsource.kotlin.checks.ReceivingIntentsCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RedundantSuspendModifierCheck
 import org.sonarsource.kotlin.checks.JumpInFinallyCheck
+import org.sonarsource.kotlin.checks.ReluctantQuantifierCheck
 import org.sonarsource.kotlin.checks.ReplaceGuavaWithKotlinCheck
 import org.sonarsource.kotlin.checks.RobustCryptographicKeysCheck
 import org.sonarsource.kotlin.checks.RunFinalizersCheck
@@ -113,6 +115,7 @@ import org.sonarsource.kotlin.checks.WrongAssignmentOperatorCheck
 
 val KOTLIN_CHECKS = listOf(
     AllBranchesIdenticalCheck::class.java,
+    AnchorPrecedenceCheck::class.java,
     AndroidBroadcastingCheck::class.java,
     AuthorisingNonAuthenticatedUsersCheck::class.java,
     BadClassNameCheck::class.java,
@@ -165,6 +168,7 @@ val KOTLIN_CHECKS = listOf(
     ReceivingIntentsCheck::class.java,
     RedundantParenthesesCheck::class.java,
     RedundantSuspendModifierCheck::class.java,
+    ReluctantQuantifierCheck::class.java,
     ReplaceGuavaWithKotlinCheck::class.java,
     RobustCryptographicKeysCheck::class.java,
     RunFinalizersCheck::class.java,
