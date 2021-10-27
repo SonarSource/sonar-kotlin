@@ -46,6 +46,7 @@ import org.sonarsource.kotlin.checks.ElseIfWithoutElseCheck
 import org.sonarsource.kotlin.checks.EmptyBlockCheck
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
 import org.sonarsource.kotlin.checks.EmptyFunctionCheck
+import org.sonarsource.kotlin.checks.EmptyStringRepetitionCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
 import org.sonarsource.kotlin.checks.EqualsOverriddenWithArrayFieldCheck
 import org.sonarsource.kotlin.checks.ExposedMutableFlowCheck
@@ -141,6 +142,7 @@ val KOTLIN_CHECKS = listOf(
     EmptyBlockCheck::class.java,
     EmptyCommentCheck::class.java,
     EmptyFunctionCheck::class.java,
+    EmptyStringRepetitionCheck::class.java,
     EncryptionAlgorithmCheck::class.java,
     EqualsOverriddenWithArrayFieldCheck::class.java,
     ExposedMutableFlowCheck::class.java,
