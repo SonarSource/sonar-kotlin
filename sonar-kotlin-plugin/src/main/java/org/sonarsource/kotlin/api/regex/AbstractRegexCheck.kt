@@ -44,6 +44,7 @@ import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.api.predictRuntimeValueExpression
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
+import java.util.regex.Pattern
 import org.sonarsource.kotlin.api.isPlus as isConcat
 
 val PATTERN_COMPILE_MATCHER = FunMatcher(qualifier = "java.util.regex.Pattern", name = "compile")
@@ -113,17 +114,18 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
                     RegexContext(sourceTemplates.asIterable(), kotlinFileContext)
                 } ?: return
 
-            val regexParseResult = regexCtx.parseRegex(
-                flagsArgExtractor(resolvedCall).extractRegexFlags(kotlinFileContext.bindingContext)
-            )
+            flagsArgExtractor(resolvedCall).extractRegexFlags(kotlinFileContext.bindingContext)
+                .takeIf { flags -> Pattern.LITERAL !in flags }
+                ?.let { flags ->
 
-            visitRegex(regexParseResult, regexCtx, callExpression, matchedFun, kotlinFileContext)
+                    visitRegex(regexCtx.parseRegex(flags), regexCtx, callExpression, matchedFun, kotlinFileContext)
 
-            regexCtx.reportedIssues.mapNotNull {
-                it.prepareForReporting(callExpression, regexCtx, kotlinFileContext)
-            }.forEach { (mainLocation, message, secondaries, gap) ->
-                kotlinFileContext.reportIssue(mainLocation, message, secondaries, gap)
-            }
+                    regexCtx.reportedIssues.mapNotNull {
+                        it.prepareForReporting(callExpression, regexCtx, kotlinFileContext)
+                    }.forEach { (mainLocation, message, secondaries, gap) ->
+                        kotlinFileContext.reportIssue(mainLocation, message, secondaries, gap)
+                    }
+                }
         }
     }
 
