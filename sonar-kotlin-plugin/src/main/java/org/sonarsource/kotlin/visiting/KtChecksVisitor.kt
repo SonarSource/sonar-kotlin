@@ -29,12 +29,12 @@ class KtChecksVisitor(val checks: Checks<out AbstractCheck>) : KotlinFileVisitor
 
     override fun visit(kotlinFileContext: KotlinFileContext) {
         flattenNodes(sequenceOf(kotlinFileContext.ktFile)).let { flatNodes ->
-            checks.all().forEach { check ->
-                flatNodes.forEach {
+            flatNodes.forEach { node ->
+                checks.all().forEach { check ->
                     // Note: we only visit KtElements. If we need to visit PsiElement, add a
                     // visitPsiElement function in KotlinCheck and call it here in the else branch.
-                    when (it) {
-                        is KtElement -> it.accept(check, kotlinFileContext)
+                    when (node) {
+                        is KtElement -> node.accept(check, kotlinFileContext)
                     }
                 }
             }
