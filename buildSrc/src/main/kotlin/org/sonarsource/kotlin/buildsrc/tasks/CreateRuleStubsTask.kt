@@ -72,7 +72,7 @@ abstract class CreateRuleStubsTask : DefaultTask() {
     }
 
     private fun createSampleFile(checkClassName: String) =
-        createNewFile(samplesDir.resolve("${checkClassName}Sample.kt"), generateCheckFile(ruleKey))
+        createNewFile(samplesDir.resolve("${checkClassName}Sample.kt"), generateCheckFile("${checkClassName}Sample", ruleKey))
 
     private fun createNewFile(targetFile: Path, content: String) =
         if (targetFile.notExists()) {
@@ -158,17 +158,22 @@ private object Templates {
         class $checkClassName : AbstractCheck() {
             // TODO: implement this rule
         }
+        
     """.trimIndent()
 
     fun generateTestClass(testClassName: String, checkClassName: String) = LICENSE_HEADER + """
         package org.sonarsource.kotlin.checks
 
-        class $testClassName : CheckTest($checkClassName())
+        internal class $testClassName : CheckTest($checkClassName())
+        
     """.trimIndent()
 
-    fun generateCheckFile(ruleKey: String) = """
+    fun generateCheckFile(checkSampleName: String, ruleKey: String) = """
         package checks
-
-        // TODO: insert sample code to test rule $ruleKey here
+        
+        class $checkSampleName {
+            // TODO: insert sample code to test rule $ruleKey here
+        }
+        
     """.trimIndent()
 }
