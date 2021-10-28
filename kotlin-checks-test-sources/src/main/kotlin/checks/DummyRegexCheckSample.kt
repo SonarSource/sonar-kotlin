@@ -1,7 +1,7 @@
 package checks
 
 import java.util.regex.Pattern
-import kotlin.text.RegexOption.LITERAL as RENAMED_LITERAL
+import kotlin.text.RegexOption.DOT_MATCHES_ALL as RENAMED_DOT_MATCHES_ALL
 
 val bar = Regex("foo" + "bar" + "\n" + """[a-z]""" + """test\nthis""") // Noncompliant {{Flags: 0}}
 //               ^^^ 5
@@ -36,14 +36,14 @@ val bar5a = Regex("some regex", RegexOption.IGNORE_CASE) // Noncompliant {{Flags
 val bar5b = "some regex".toRegex(RegexOption.IGNORE_CASE) // Noncompliant {{Flags: 66}}
 //           ^^^^^^^^^^ 1^^^^^^^<
 
-val bar6a = Regex("some regex", setOf(RegexOption.LITERAL, RegexOption.IGNORE_CASE, RegexOption.IGNORE_CASE, RegexOption.COMMENTS)) // Noncompliant {{Flags: 86}}
-val bar6b = "some regex".toRegex(setOf(RegexOption.LITERAL, RegexOption.IGNORE_CASE, RegexOption.IGNORE_CASE, RegexOption.COMMENTS)) // Noncompliant {{Flags: 86}}
+val bar6a = Regex("some regex", setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.IGNORE_CASE, RegexOption.IGNORE_CASE, RegexOption.COMMENTS)) // Noncompliant {{Flags: 102}}
+val bar6b = "some regex".toRegex(setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.IGNORE_CASE, RegexOption.IGNORE_CASE, RegexOption.COMMENTS)) // Noncompliant {{Flags: 102}}
 
 val singleFlag = RegexOption.UNIX_LINES
 val bar7 = Regex("regex", setOf(singleFlag)) // Noncompliant {{Flags: 1}}
 
-val multipleFlags = setOf(RegexOption.LITERAL, RegexOption.UNIX_LINES)
-val bar8 = Regex("regex", multipleFlags) // Noncompliant {{Flags: 17}}
+val multipleFlags = setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.UNIX_LINES)
+val bar8 = Regex("regex", multipleFlags) // Noncompliant {{Flags: 33}}
 
 // Noncompliant@+1 {{Flags: 1}}
 val someString = "foo"
@@ -53,7 +53,7 @@ val someString2 = "bar"
 val bar9a = Regex(someString, singleFlag)
 //          ^^^^^<
 
-// Noncompliant@-5 {{Flags: 17}}
+// Noncompliant@-5 {{Flags: 33}}
 val bar9b = Regex(someString2, multipleFlags)
 
 val p1 = Pattern.compile("regex", Pattern.UNICODE_CASE) // Noncompliant {{Flags: 64}}
@@ -61,4 +61,6 @@ val p2 = Pattern.compile("regex", Pattern.UNICODE_CASE or Pattern.UNIX_LINES) //
 // The following is mis-detecting the flags, we don't actually analyze how the flags are combined for now
 val p3 = Pattern.compile("regex", Pattern.UNICODE_CASE and Pattern.UNIX_LINES) // Noncompliant {{Flags: 65}}
 
-val bar10 = Regex("foo", RENAMED_LITERAL) // Noncompliant {{Flags: 16}}
+val bar10 = Regex("foo", RENAMED_DOT_MATCHES_ALL) // Noncompliant {{Flags: 32}}
+
+val bar11 = Regex("test", RegexOption.LITERAL) // Compliant - we don't trigger on regexes with a LITERAL flag
