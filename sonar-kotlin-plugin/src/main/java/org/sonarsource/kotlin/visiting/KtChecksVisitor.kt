@@ -28,19 +28,20 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 class KtChecksVisitor(val checks: Checks<out AbstractCheck>) : KotlinFileVisitor() {
 
     override fun visit(kotlinFileContext: KotlinFileContext) {
-        flattenNodes(listOf(kotlinFileContext.ktFile)).let { flatNodes ->
-            checks.all().forEach { check ->
-                flatNodes.forEach {
+        flattenNodes(sequenceOf(kotlinFileContext.ktFile)).let { flatNodes ->
+            flatNodes.forEach { node ->
+                checks.all().forEach { check ->
                     // Note: we only visit KtElements. If we need to visit PsiElement, add a
                     // visitPsiElement function in KotlinCheck and call it here in the else branch.
-                    when (it) {
-                        is KtElement -> it.accept(check, kotlinFileContext)
+                    when (node) {
+                        is KtElement -> node.accept(check, kotlinFileContext)
                     }
                 }
             }
         }
     }
 
-    private fun flattenNodes(root: List<PsiElement>): List<PsiElement> =
-        root + root.flatMap { flattenNodes(it.children.toList()) }
+    private tailrec fun flattenNodes(childNodes: Sequence<PsiElement>, acc: Sequence<PsiElement> = emptySequence()): Sequence<PsiElement> =
+        if (childNodes.none()) acc
+        else flattenNodes(childNodes = childNodes.flatMap { it.children.asSequence() }, acc = acc + childNodes)
 }
