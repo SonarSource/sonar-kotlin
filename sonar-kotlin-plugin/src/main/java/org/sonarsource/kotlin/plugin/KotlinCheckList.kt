@@ -63,6 +63,7 @@ import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
 import org.sonarsource.kotlin.checks.IfConditionalAlwaysTrueOrFalseCheck
 import org.sonarsource.kotlin.checks.InjectableDispatchersCheck
+import org.sonarsource.kotlin.checks.InvalidRegexCheck
 import org.sonarsource.kotlin.checks.IsInstanceMethodCheck
 import org.sonarsource.kotlin.checks.MainSafeCoroutinesCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
@@ -75,6 +76,7 @@ import org.sonarsource.kotlin.checks.ReceivingIntentsCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RedundantSuspendModifierCheck
 import org.sonarsource.kotlin.checks.JumpInFinallyCheck
+import org.sonarsource.kotlin.checks.RegexComplexityCheck
 import org.sonarsource.kotlin.checks.ReluctantQuantifierCheck
 import org.sonarsource.kotlin.checks.ReplaceGuavaWithKotlinCheck
 import org.sonarsource.kotlin.checks.RobustCryptographicKeysCheck
@@ -160,6 +162,7 @@ val KOTLIN_CHECKS = listOf(
     IdenticalConditionsCheck::class.java,
     IfConditionalAlwaysTrueOrFalseCheck::class.java,
     InjectableDispatchersCheck::class.java,
+    InvalidRegexCheck::class.java,
     IsInstanceMethodCheck::class.java,
     JumpInFinallyCheck::class.java,
     MainSafeCoroutinesCheck::class.java,
@@ -172,6 +175,7 @@ val KOTLIN_CHECKS = listOf(
     ReceivingIntentsCheck::class.java,
     RedundantParenthesesCheck::class.java,
     RedundantSuspendModifierCheck::class.java,
+    RegexComplexityCheck::class.java,
     ReluctantQuantifierCheck::class.java,
     ReplaceGuavaWithKotlinCheck::class.java,
     RobustCryptographicKeysCheck::class.java,

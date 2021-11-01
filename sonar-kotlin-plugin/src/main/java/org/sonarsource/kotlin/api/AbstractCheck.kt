@@ -41,6 +41,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperClassNotAny
 import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperInterfaces
 import org.sonar.api.batch.fs.TextRange
 import org.sonar.api.rule.RuleKey
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textPointerAtOffset
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import java.util.BitSet
@@ -140,4 +141,32 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
     }
 
     fun KtStringTemplateExpression.asConstant() = entries.joinToString { it.text }
+
+    fun KotlinFileContext.mergeTextRanges(ranges: Iterable<TextRange>) = ktFile.viewProvider.document!!.let { doc ->
+        ranges.map {
+            MutableOffsetRange(
+                doc.getLineStartOffset(it.start().line() - 1) + it.start().lineOffset(),
+                doc.getLineStartOffset(it.end().line() - 1) + it.end().lineOffset()
+            )
+        }.fold(mutableListOf<MutableOffsetRange>()) { acc, curOffsets ->
+            acc.apply {
+                lastOrNull()?.takeIf { prevOffsets ->
+                    // Does current range overlap with previous one?
+                    curOffsets.end >= prevOffsets.start && curOffsets.start <= prevOffsets.end
+                }?.let { prevOffsets ->
+                    // This range overlaps with the previous one => merge
+                    prevOffsets.end = curOffsets.end
+                }
+                    ?: add(curOffsets) // This range does not overlap with the previous one (or there is no previous one) => add as separate range
+            }
+        }.map { (startOffset, endOffset) ->
+            with(inputFileContext.inputFile) {
+                newRange(textPointerAtOffset(doc, startOffset), textPointerAtOffset(doc, endOffset))
+            }
+        }.takeIf {
+            it.isNotEmpty()
+        }
+    }
+
+    private data class MutableOffsetRange(var start: Int, var end: Int)
 }
