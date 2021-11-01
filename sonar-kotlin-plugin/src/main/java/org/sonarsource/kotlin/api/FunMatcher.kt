@@ -133,7 +133,11 @@ class FunMatcherImpl(
         extensionFunction?.let { it == descriptor.isExtension } ?: true
 
     private fun checkReturnType(descriptor: CallableDescriptor) =
-        returnType?.let { it == descriptor.returnType?.getJetTypeFqName(false) } ?: true
+        returnType?.let {
+            val kotlinType = descriptor.returnType
+            if (kotlinType?.constructor?.declarationDescriptor != null) it == kotlinType.getJetTypeFqName(false)
+            else null
+        } ?: true
 
     private fun checkIsSuspending(descriptor: CallableDescriptor) =
         suspending?.let { it == descriptor.isSuspend } ?: true
