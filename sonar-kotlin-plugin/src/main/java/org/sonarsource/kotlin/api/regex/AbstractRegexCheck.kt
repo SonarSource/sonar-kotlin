@@ -42,9 +42,9 @@ import org.sonarsource.kotlin.api.JAVA_STRING
 import org.sonarsource.kotlin.api.STRING_TYPE
 import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.api.predictRuntimeValueExpression
-import org.sonarsource.kotlin.converter.KotlinTextRanges.textPointerAtOffset
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
+import java.util.regex.Pattern
 import org.sonarsource.kotlin.api.isPlus as isConcat
 
 val PATTERN_COMPILE_MATCHER = FunMatcher(qualifier = "java.util.regex.Pattern", name = "compile")
@@ -114,17 +114,18 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
                     RegexContext(sourceTemplates.asIterable(), kotlinFileContext)
                 } ?: return
 
-            val regexParseResult = regexCtx.parseRegex(
-                flagsArgExtractor(resolvedCall).extractRegexFlags(kotlinFileContext.bindingContext)
-            )
+            flagsArgExtractor(resolvedCall).extractRegexFlags(kotlinFileContext.bindingContext)
+                .takeIf { flags -> Pattern.LITERAL !in flags }
+                ?.let { flags ->
 
-            visitRegex(regexParseResult, regexCtx, callExpression, matchedFun, kotlinFileContext)
+                    visitRegex(regexCtx.parseRegex(flags), regexCtx, callExpression, matchedFun, kotlinFileContext)
 
-            regexCtx.reportedIssues.mapNotNull {
-                it.prepareForReporting(callExpression, regexCtx, kotlinFileContext)
-            }.forEach { (mainLocation, message, secondaries, gap) ->
-                kotlinFileContext.reportIssue(mainLocation, message, secondaries, gap)
-            }
+                    regexCtx.reportedIssues.mapNotNull {
+                        it.prepareForReporting(callExpression, regexCtx, kotlinFileContext)
+                    }.forEach { (mainLocation, message, secondaries, gap) ->
+                        kotlinFileContext.reportIssue(mainLocation, message, secondaries, gap)
+                    }
+                }
         }
     }
 
@@ -156,8 +157,6 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
     }
 }
 
-private data class MutableOffsetRange(var start: Int, var end: Int)
-
 private data class AnalyzerIssueReportInfo(
     val mainLocation: TextRange,
     val message: String,
@@ -175,31 +174,6 @@ private fun KtExpression?.extractRegexFlags(bindingContext: BindingContext): Fla
             ?.fold(0, Int::or)
             ?: 0
     )
-
-private fun KotlinFileContext.mergeTextRanges(ranges: Iterable<TextRange>) = ktFile.viewProvider.document!!.let { doc ->
-    ranges.map {
-        MutableOffsetRange(
-            doc.getLineStartOffset(it.start().line() - 1) + it.start().lineOffset(),
-            doc.getLineStartOffset(it.end().line() - 1) + it.end().lineOffset()
-        )
-    }.fold(mutableListOf<MutableOffsetRange>()) { acc, curOffsets ->
-        acc.apply {
-            lastOrNull()?.takeIf { prevOffsets ->
-                // Does current range overlap with previous one?
-                curOffsets.end >= prevOffsets.start && curOffsets.start <= prevOffsets.end
-            }?.let { prevOffsets ->
-                // This range overlaps with the previous one => merge
-                prevOffsets.end = curOffsets.end
-            } ?: add(curOffsets) // This range does not overlap with the previous one (or there is no previous one) => add as separate range
-        }
-    }.map { (startOffset, endOffset) ->
-        with(inputFileContext.inputFile) {
-            newRange(textPointerAtOffset(doc, startOffset), textPointerAtOffset(doc, endOffset))
-        }
-    }.takeIf {
-        it.isNotEmpty()
-    }
-}
 
 private fun KtExpression?.collectResolvedListOfStringTemplates(bindingContext: BindingContext): Sequence<KtStringTemplateExpression?> =
     this?.predictRuntimeValueExpression(bindingContext).let { predictedValue ->

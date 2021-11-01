@@ -1,5 +1,11 @@
 package checks
 
+@Deprecated("Some text")
+enum class MyEnumClass(val value: String) {
+    ENTRY1(""), // Noncompliant
+//        ^
+}
+
 class Example : DeprecatedCode() // Noncompliant {{Deprecated code should not be used.}}
 //              ^^^^^^^^^^^^^^
 

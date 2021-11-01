@@ -22,7 +22,10 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtEnumEntrySuperclassReferenceExpression
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtSuperTypeCallEntry
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
@@ -38,4 +41,10 @@ class DeprecatedCodeUsedCheck : AbstractCheck() {
 
 }
 
-private fun PsiElement.elementToReport() = (this as? KtCallExpression)?.calleeExpression ?: this
+private fun PsiElement.elementToReport() = when (this) {
+    is KtCallExpression -> calleeExpression
+    is KtEnumEntrySuperclassReferenceExpression -> getParentOfType<KtSuperTypeCallEntry>(false)
+        ?.valueArgumentList
+        ?.leftParenthesis
+    else -> this
+} ?: this
