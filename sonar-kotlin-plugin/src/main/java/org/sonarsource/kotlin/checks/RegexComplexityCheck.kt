@@ -26,11 +26,10 @@ import org.sonarsource.analyzer.commons.regex.finders.ComplexRegexFinder
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.RegexContext
 
+private const val DEFAULT_MAX = 20
+
 @Rule(key = "S5843")
 class RegexComplexityCheck : AbstractRegexCheck() {
-    companion object {
-        private const val DEFAULT_MAX = 20
-    }
 
     @RuleProperty(
         key = "maxComplexity",
