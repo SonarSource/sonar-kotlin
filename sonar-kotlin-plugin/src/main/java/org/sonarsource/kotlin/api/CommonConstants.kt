@@ -32,6 +32,8 @@ const val COROUTINES_FLOW = "kotlinx.coroutines.flow.Flow"
 const val COROUTINES_CHANNEL = "kotlinx.coroutines.channels.Channel"
 const val THROWS_FQN = "kotlin.jvm.Throws"
 const val JAVA_STRING = "java.lang.String"
+const val KOTLIN_TEXT = "kotlin.text"
+const val JAVA_UTIL_PATTERN = "java.util.regex.Pattern"
 
 val BYTE_ARRAY_CONSTRUCTOR = ConstructorMatcher("kotlin.ByteArray")
 val BYTE_ARRAY_CONSTRUCTOR_SIZE_ARG_ONLY = ConstructorMatcher("kotlin.ByteArray") { withArguments("kotlin.Int") }

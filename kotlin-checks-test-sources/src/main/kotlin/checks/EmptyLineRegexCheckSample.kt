@@ -26,9 +26,13 @@ class EmptyLineRegexCheck {
 
     }
     
-    fun tested_for_emptiness(str: String) {
+    fun tested_for_emptiness(str: String, str2: String) {
         val p4 = Pattern.compile("(?m)^$") // Compliant, tested for emptiness
         val b4 = p4.matcher(str).find() || str.isEmpty()
+
+        val p5 = Regex("(?m)^$") // Compliant, tested for emptiness
+        val b5 = p5.find(str2) ?: (str2 != "")
+
     }
     
     fun non_compliant_pattern_assigned(str: String) {
