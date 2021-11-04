@@ -10,8 +10,12 @@ transported content. These protocols are not secure as they expose applications 
 </ul>
 <p>Even in the context of isolated networks like offline environments or segmented cloud environments, the insider threat exists. Thus, attacks
 involving communications being sniffed or tampered with can still happen.</p>
-<p>For example, attackers could successfully compromise prior security layers by: * Bypassing isolation mechanisms * Compromising a component of the
-network * Getting the credentials of an internal IAM account (either from a service account or an actual person)</p>
+<p>For example, attackers could successfully compromise prior security layers by:</p>
+<ul>
+  <li> Bypassing isolation mechanisms </li>
+  <li> Compromising a component of the network </li>
+  <li> Getting the credentials of an internal IAM account (either from a service account or an actual person) </li>
+</ul>
 <p>In such cases, encrypting communications would decrease the chances of attackers to successfully leak data or steal credentials from other network
 components. By layering various security practices (segmentation and encryption, for example), the application will follow the
 <em>defense-in-depth</em> principle.</p>
@@ -116,6 +120,7 @@ webView.getSettings().setMixedContentMode(MIXED_CONTENT_NEVER_ALLOW)
 </ul>
 <h2>See</h2>
 <ul>
+  <li> <a href="https://owasp.org/Top10/A02_2021-Cryptographic_Failures/">OWASP Top 10 2021 Category A2</a> - Cryptographic Failures </li>
   <li> <a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure">OWASP Top 10 2017 Category A3</a> - Sensitive Data Exposure
   </li>
   <li> <a href="https://mobile-security.gitbook.io/masvs/security-requirements/0x10-v5-network_communication_requirements">Mobile AppSec Verification
@@ -123,7 +128,7 @@ webView.getSettings().setMixedContentMode(MIXED_CONTENT_NEVER_ALLOW)
   <li> <a href="https://owasp.org/www-project-mobile-top-10/2016-risks/m3-insecure-communication">OWASP Mobile Top 10 2016 Category M3</a> - Insecure
   Communication </li>
   <li> <a href="https://cwe.mitre.org/data/definitions/200.html">MITRE, CWE-200</a> - Exposure of Sensitive Information to an Unauthorized Actor </li>
-  <li> <a href="https://cwe.mitre.org/data/definitions/319">MITRE, CWE-319</a> - Cleartext Transmission of Sensitive Information </li>
+  <li> <a href="https://cwe.mitre.org/data/definitions/319.html">MITRE, CWE-319</a> - Cleartext Transmission of Sensitive Information </li>
   <li> <a href="https://security.googleblog.com/2016/09/moving-towards-more-secure-web.html">Google, Moving towards more secure web</a> </li>
   <li> <a href="https://blog.mozilla.org/security/2015/04/30/deprecating-non-secure-http/">Mozilla, Deprecating non secure http</a> </li>
 </ul>
