@@ -396,6 +396,18 @@
     "constantDebtMinutes": 0
   },
   {
+    "key": "trailing-comma",
+    "name": "Trailing Comma",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
     "key": "package-name",
     "name": "Package Name",
     "url": "https://ktlint.github.io/#rules",

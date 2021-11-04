@@ -5,7 +5,7 @@ plugins {
 }
 
 val detektVersion = "1.19.0-RC1"
-val ktlintVersion = "0.42.1"
+val ktlintVersion = "0.43.0"
 
 dependencies {
     implementation("io.gitlab.arturbosch.detekt", "detekt-cli", detektVersion)
