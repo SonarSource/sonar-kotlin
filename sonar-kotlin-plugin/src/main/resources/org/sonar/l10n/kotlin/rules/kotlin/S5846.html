@@ -15,30 +15,42 @@ lead to completely missing empty lines, while it would be the initial reason for
 <code>isEmpty()</code> on the string.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-static final Pattern p = Pattern.compile("^$", Pattern.MULTILINE); // Noncompliant
+val p = Pattern.compile("^$", Pattern.MULTILINE) // Noncompliant
+val r = Regex("^$", RegexOption.MULTILINE) // Noncompliant
 
 // Alternatively
-static final Pattern p = Pattern.compile("(?m)^$"); // Noncompliant
+val p = Pattern.compile("(?m)^$") // Noncompliant
+val r = Regex("(?m)^$") // Noncompliant
 
-
-boolean containsEmptyLines(String str) {
-    return p.matcher(str).find();
+fun containsEmptyLines(str: String) : Boolean {
+    return p.matcher(str).find()
 }
 
+fun containsEmptyLinesKotlin(str: String) = r.find(str) != null
+
 // ...
-System.out.println(containsEmptyLines("a\n\nb")); // correctly prints 'true'
-System.out.println(containsEmptyLines("")); // incorrectly prints 'false'
+println(containsEmptyLines("a\n\nb")) // correctly prints 'true'
+println(containsEmptyLinesKotlin("a\n\nb")) // correctly prints 'true'
+
+println(containsEmptyLines("")) // incorrectly prints 'false'
+println(containsEmptyLinesKotlin("")) // incorrectly prints 'false'
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-static final Pattern p = Pattern.compile("^$", Pattern.MULTILINE);
+val p = Pattern.compile("^$", Pattern.MULTILINE) // Noncompliant
+val r = Regex("^$", RegexOption.MULTILINE) // Noncompliant
 
-boolean containsEmptyLines(String str) {
-    return p.matcher(str).find() || str.isEmpty();
+fun containsEmptyLines(str: String) : Boolean {
+    return p.matcher(str).find() || str.isEmpty()
 }
 
+fun containsEmptyLinesKotlin(str: String) = r.find(str) != null || str.isEmpty()
+
 // ...
-System.out.println(containsEmptyLines("a\n\nb")); // correctly prints 'true'
-System.out.println(containsEmptyLines("")); // also correctly prints 'true'
+println(containsEmptyLines("a\n\nb")) // correctly prints 'true'
+println(containsEmptyLinesKotlin("a\n\nb")) // correctly prints 'true'
+
+println(containsEmptyLines("")) // correctly prints 'true'
+println(containsEmptyLinesKotlin("")) // correctly prints 'true'
 </pre>
 

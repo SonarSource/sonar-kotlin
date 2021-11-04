@@ -21,19 +21,19 @@ expression. If a regular expression is split over multiple lines, each line is t
 comment or a comment within the regular expression), otherwise the regular expression is analyzed as a whole.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-if (dateString.matches("^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[13-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$")) {
-    handleDate(dateString);
+if (dateString.matches(Regex("^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[13-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(\\/|-|\\.)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(\\/|-|\\.)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$"))) {
+    handleDate(dateString)
 }
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
-    if (dateString.matches("^\\d{1,2}([-/.])\\d{1,2}\\1\\d{1,4}$")) {
-        String dateParts[] = dateString.split("[-/.]");
-        int day = Integer.parseInt(dateParts[0]);
-        int month = Integer.parseInt(dateParts[1]);
-        int year = Integer.parseInt(dateParts[2]);
-        // Put logic to validate and process the date based on its integer parts here
-    }
+if (dateString.matches(Regex("^\\d{1,2}([-/.])\\d{1,2}\\1\\d{1,4}$"))) {
+    val dateParts = dateString.split("[-/.]").toTypedArray()
+    val day = dateParts[0].toInt()
+    val month = dateParts[1].toInt()
+    val year = dateParts[2].toInt()
+    // Put logic to validate and process the date based on its integer parts here
+}
 </pre>
 <h2>Exceptions</h2>
 <p>Regular expressions are only analyzed if all parts of the regular expression are either string literals, effectively final local variables or
