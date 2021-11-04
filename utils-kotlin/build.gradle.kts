@@ -4,7 +4,7 @@ plugins {
     kotlin("jvm")
 }
 
-val detektVersion = "1.18.1"
+val detektVersion = "1.19.0-RC1"
 val ktlintVersion = "0.42.1"
 
 dependencies {

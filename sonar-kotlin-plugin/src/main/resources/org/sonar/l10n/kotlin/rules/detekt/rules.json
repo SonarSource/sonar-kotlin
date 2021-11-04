@@ -1055,6 +1055,18 @@
     "constantDebtMinutes": 20
   },
   {
+    "key": "MissingPackageDeclaration",
+    "name": "Missing Package Declaration",
+    "description": "Kotlin source files should define a package",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#missingpackagedeclaration",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "MissingWhenCase",
     "name": "Missing When Case",
     "description": "Check usage of `when` used as a statement and don\u0027t compare all enum or sealed class cases.",
@@ -1269,6 +1281,18 @@
     "type": "CODE_SMELL",
     "severity": "INFO",
     "constantDebtMinutes": 5
+  },
+  {
+    "key": "OutdatedDocumentation",
+    "name": "Outdated Documentation",
+    "description": "KDoc should match actual function or class signature",
+    "url": "https://detekt.github.io/detekt/comments.html#outdateddocumentation",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 10
   },
   {
     "key": "PackageNaming",
@@ -1654,7 +1678,7 @@
   {
     "key": "UnderscoresInNumericLiterals",
     "name": "Underscores In Numeric Literals",
-    "description": "Report missing or invalid underscores in decimal base 10 numeric literals. Numeric literals should be underscore separated to increase readability. Underscores that do not make groups of 3 digits are also reported.",
+    "description": "Report missing or invalid underscores in base 10 numbers. Numeric literals should be underscore separated to increase readability. Underscores that do not make groups of 3 digits are also reported.",
     "url": "https://detekt.github.io/detekt/style.html#underscoresinnumericliterals",
     "tags": [
       "style"
