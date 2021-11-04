@@ -48,6 +48,8 @@ import java.util.regex.Pattern
 import org.sonarsource.kotlin.api.isPlus as isConcat
 
 val PATTERN_COMPILE_MATCHER = FunMatcher(qualifier = "java.util.regex.Pattern", name = "compile")
+val REGEX_MATCHER = ConstructorMatcher(typeName = "kotlin.text.Regex")
+val TO_REGEX_MATCHER = FunMatcher(qualifier = "kotlin.text", name = "toRegex", extensionFunction = true)
 
 private fun argGetter(argIndex: Int) = { resolvedCall: ResolvedCall<*> ->
     resolvedCall.valueArgumentsByIndex?.getOrNull(argIndex)?.arguments?.getOrNull(0)?.getArgumentExpression()
@@ -59,8 +61,8 @@ private val referenceTargetGetter = { resolvedCall: ResolvedCall<*> ->
 
 // TODO: add org.apache.commons.lang3.RegExUtils
 private val REGEX_FUNCTIONS: Map<FunMatcherImpl, Pair<(ResolvedCall<*>) -> KtExpression?, (ResolvedCall<*>) -> KtExpression?>> = mapOf(
-    ConstructorMatcher(typeName = "kotlin.text.Regex") to (argGetter(0) to argGetter(1)),
-    FunMatcher(qualifier = "kotlin.text", name = "toRegex", extensionFunction = true) to (referenceTargetGetter to argGetter(0)),
+    REGEX_MATCHER to (argGetter(0) to argGetter(1)),
+    TO_REGEX_MATCHER to (referenceTargetGetter to argGetter(0)),
     PATTERN_COMPILE_MATCHER to (argGetter(0) to argGetter(1)),
     FunMatcher(qualifier = JAVA_STRING) {
         withNames("replaceAll", "replaceFirst", "split", "matches")
