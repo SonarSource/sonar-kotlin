@@ -29,6 +29,7 @@ import org.sonarsource.kotlin.DummyInputFileContext
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.util.TreeMap
 
 private const val TQ = "\"\"\""
@@ -88,7 +89,7 @@ internal class TextRangeTrackerTest {
     }
 
     private fun textRangeTrackerOf(regex: String): TextRangeTracker {
-        val tree = KotlinTree.of(
+        val tree = kotlinTreeOf(
             """
             val x = 
             $regex

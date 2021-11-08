@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.plugin
 
-import java.util.concurrent.TimeUnit
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.sonar.api.SonarProduct
 import org.sonar.api.batch.fs.FileSystem
@@ -38,16 +37,23 @@ import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.InputFileContext
 import org.sonarsource.kotlin.api.ParseException
 import org.sonarsource.kotlin.converter.Environment
+import org.sonarsource.kotlin.converter.KotlinSyntaxStructure
 import org.sonarsource.kotlin.converter.KotlinTree
+import org.sonarsource.kotlin.converter.bindingContext
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.KOTLIN_REPOSITORY_KEY
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
+import java.util.concurrent.TimeUnit
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTimedValue
 
+@ExperimentalTime
 private val LOG = Loggers.get(KotlinSensor::class.java)
 private val EMPTY_FILE_CONTENT_PATTERN = Regex("""\s*+""")
 
+@ExperimentalTime
 class KotlinSensor(
     checkFactory: CheckFactory,
     private val fileLinesContextFactory: FileLinesContextFactory,
@@ -79,11 +85,10 @@ class KotlinSensor(
 
         val progressReport = ProgressReport("Progress of the ${language.name} analysis", TimeUnit.SECONDS.toMillis(10))
 
-        progressReport.start(filenames)
         var success = false
 
         try {
-            success = analyseFiles(sensorContext, inputFiles, progressReport, visitors(sensorContext), statistics)
+            success = analyseFiles(sensorContext, inputFiles, progressReport, visitors(sensorContext), statistics, filenames)
         } finally {
             if (success) {
                 progressReport.stop()
@@ -100,20 +105,43 @@ class KotlinSensor(
         progressReport: ProgressReport,
         visitors: List<KotlinFileVisitor>,
         statistics: DurationStatistics,
+        filenames: List<String>,
     ): Boolean {
         val environment = environment(sensorContext)
         try {
             val isInAndroidContext = isInAndroidContext(environment)
-            for (inputFile in inputFiles) {
-                if (sensorContext.isCancelled) return false
-
-                val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
+            val kotlinFiles = inputFiles.mapNotNull {
+                val inputFileContext = InputFileContextImpl(sensorContext, it, isInAndroidContext)
                 try {
-                    analyseFile(environment, inputFileContext, visitors, statistics)
+                    KotlinSyntaxStructure.of(it.contents(), environment, it)
                 } catch (e: ParseException) {
-                    logParsingError(inputFile, e)
-                    inputFileContext.reportAnalysisParseError(KOTLIN_REPOSITORY_KEY, inputFile, e.position)
+                    logParsingError(it, toParseException("parse", it, e))
+                    inputFileContext.reportAnalysisParseError(KOTLIN_REPOSITORY_KEY, it, e.position)
+                    null
+                } catch (e: Exception) {
+                    val parseException = toParseException("read", it, e)
+                    logParsingError(it, parseException)
+                    inputFileContext.reportAnalysisParseError(KOTLIN_REPOSITORY_KEY, it, parseException.position)
+                    null
                 }
+            }
+            val (bindingContext, duration) = measureTimedValue {
+                bindingContext(
+                    environment.env,
+                    environment.classpath,
+                    kotlinFiles.map { it.ktFile },
+                )
+            }
+
+            LOG.info("Generating BindingContext for all files took: ${duration.inWholeMilliseconds} ms.")
+
+            progressReport.start(filenames)
+            for ((ktFile, doc, inputFile) in kotlinFiles) {
+                if (sensorContext.isCancelled) return false
+                val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
+
+                analyseFile(inputFileContext, visitors, statistics, KotlinTree(ktFile, doc, bindingContext))
+
                 progressReport.nextFile()
             }
         } finally {
@@ -123,47 +151,30 @@ class KotlinSensor(
     }
 
     private fun analyseFile(
-        environment: Environment,
         inputFileContext: InputFileContext,
         visitors: List<KotlinFileVisitor>,
         statistics: DurationStatistics,
+        tree: KotlinTree,
     ) {
-        val inputFile = inputFileContext.inputFile
-        val content = try {
-            inputFile.contents()
-        } catch (e: Exception) {
-            throw toParseException("read", inputFile, e)
-        }
-
-        if (EMPTY_FILE_CONTENT_PATTERN.matches(content)) {
+        if (EMPTY_FILE_CONTENT_PATTERN.matches(inputFileContext.inputFile.contents())) {
             return
         }
-        parseAndVisitFile(content, environment, inputFileContext, visitors, statistics)
+        visitFile(inputFileContext, visitors, statistics, tree)
     }
 
-    private fun parseAndVisitFile(
-        content: String,
-        environment: Environment,
+    private fun visitFile(
         inputFileContext: InputFileContext,
         visitors: List<KotlinFileVisitor>,
         statistics: DurationStatistics,
+        tree: KotlinTree,
     ) {
-        val inputFile = inputFileContext.inputFile
-        val tree = statistics.time<KotlinTree>("Parse") {
-            try {
-                KotlinTree.of(content, environment, inputFile)
-            } catch (e: RuntimeException) {
-                throw toParseException("parse", inputFile, e)
-            }
-        }
-
         for (visitor in visitors) {
             try {
                 val visitorId = visitor.javaClass.simpleName
                 statistics.time(visitorId) { visitor.scan(inputFileContext, tree) }
             } catch (e: RuntimeException) {
                 inputFileContext.reportAnalysisError(e.message, null)
-                LOG.error("Cannot analyse '" + inputFile + "': " + e.message, e)
+                LOG.error("Cannot analyse '${inputFileContext.inputFile}': ${e.message}", e)
             }
         }
     }
@@ -201,7 +212,7 @@ fun getFilesFromProperty(settings: Configuration, property: String): List<String
     }.orElse(emptyList())
 
 private fun toParseException(action: String, inputFile: InputFile, cause: Throwable) =
-    ParseException("Cannot " + action + " '" + inputFile + "': " + cause.message, (cause as? ParseException)?.position, cause)
+    ParseException("Cannot $action '$inputFile': ${cause.message}", (cause as? ParseException)?.position, cause)
 
 fun environment(sensorContext: SensorContext) = Environment(
     getFilesFromProperty(sensorContext.config(), SONAR_JAVA_BINARIES) +

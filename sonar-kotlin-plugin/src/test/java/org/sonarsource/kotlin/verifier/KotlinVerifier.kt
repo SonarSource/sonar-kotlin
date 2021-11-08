@@ -30,6 +30,7 @@ import org.sonarsource.kotlin.converter.Comment
 import org.sonarsource.kotlin.converter.CommentAnnotationsAndTokenVisitor
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
+import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.nio.file.FileVisitResult
@@ -56,7 +57,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
             val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin")
                 .setCharset(StandardCharsets.UTF_8)
                 .initMetadata(content).build()
-            KotlinTree.of(content, environment, inputFile) to inputFile
+            kotlinTreeOf(content, environment, inputFile) to inputFile
         }
         createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check, isAndroid)
             .assertOneOrMoreIssues()
@@ -69,7 +70,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
             val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin")
                 .setCharset(StandardCharsets.UTF_8)
                 .initMetadata(content).build()
-            KotlinTree.of(content, environment, inputFile) to inputFile
+            kotlinTreeOf(content, environment, inputFile) to inputFile
         }
         createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check, isAndroid)
             .assertNoIssues()

@@ -37,6 +37,7 @@ import org.sonarsource.kotlin.externalreport.ktlint.KtlintSensor
 import org.sonarsource.kotlin.plugin.surefire.KotlinResourcesLocator
 import org.sonarsource.kotlin.plugin.surefire.KotlinSurefireParser
 import org.sonarsource.kotlin.plugin.surefire.KotlinSurefireSensor
+import kotlin.time.ExperimentalTime
 
 class KotlinPlugin : Plugin {
 
@@ -60,6 +61,7 @@ class KotlinPlugin : Plugin {
         const val SONAR_JAVA_LIBRARIES = "sonar.java.libraries"
     }
 
+    @ExperimentalTime
     override fun define(context: Plugin.Context) {
         context.addExtensions(
             KotlinLanguage::class.java,

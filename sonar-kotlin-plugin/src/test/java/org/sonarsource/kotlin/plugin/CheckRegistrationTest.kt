@@ -28,6 +28,7 @@ import org.sonar.api.issue.NoSonarFilter
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.testing.AbstractSensorTest
+import kotlin.time.ExperimentalTime
 
 class CheckRegistrationTest : AbstractSensorTest() {
 
@@ -37,6 +38,7 @@ class CheckRegistrationTest : AbstractSensorTest() {
         }
     }
 
+    @ExperimentalTime
     @Test
     fun ensure_check_registration_works() {
         val inputFile = createInputFile("file1.kt", """

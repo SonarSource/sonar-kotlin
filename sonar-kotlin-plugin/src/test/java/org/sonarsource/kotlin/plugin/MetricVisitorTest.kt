@@ -34,6 +34,7 @@ import org.sonar.api.measures.FileLinesContext
 import org.sonar.api.measures.FileLinesContextFactory
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
+import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import kotlin.io.path.createTempFile
@@ -195,6 +196,6 @@ internal class MetricVisitorTest {
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(code).build()
         val ctx = InputFileContextImpl(sensorContext, inputFile, false)
-        visitor.scan(ctx, KotlinTree.of(code, environment, inputFile))
+        visitor.scan(ctx, kotlinTreeOf(code, environment, inputFile))
     }
 }

@@ -17,24 +17,23 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.checks
+package org.sonarsource.kotlin.utils
 
-import org.jetbrains.kotlin.diagnostics.Errors
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtNamedDeclaration
-import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonar.api.batch.fs.InputFile
+import org.sonarsource.kotlin.converter.Environment
+import org.sonarsource.kotlin.converter.KotlinSyntaxStructure
+import org.sonarsource.kotlin.converter.KotlinTree
+import org.sonarsource.kotlin.converter.bindingContext
 
-@Rule(key = "S1481")
-class UnusedLocalVariableCheck : AbstractCheck() {
 
-    override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
-        context.bindingContext.diagnostics.noSuppression()
-            .filter { it.psiFile ==  file && it.factory == Errors.UNUSED_VARIABLE }
-            .map { it.psiElement as KtNamedDeclaration }
-            .forEach {
-                context.reportIssue(it.nameIdentifier!!, """Remove this unused "${it.name}" local variable.""")
-            }
-    }
+fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile): KotlinTree {
+    val (ktFile, document) = KotlinSyntaxStructure.of(content, environment, inputFile)
+   
+    val bindingContext = bindingContext(
+        environment.env,
+        environment.classpath,
+        listOf(ktFile),
+    )
+
+    return KotlinTree(ktFile, document, bindingContext)
 }

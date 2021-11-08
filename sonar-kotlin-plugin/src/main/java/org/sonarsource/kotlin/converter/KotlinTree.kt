@@ -30,15 +30,14 @@ import org.sonar.api.batch.fs.InputFile
 import org.sonarsource.kotlin.api.ParseException
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textPointerAtOffset
 
-class KotlinTree private constructor(
-    val psiFile: KtFile,
-    val document: Document,
-    val bindingContext: BindingContext,
-) {
+class KotlinTree(val psiFile: KtFile, val document: Document, val bindingContext: BindingContext)
+
+data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val inputFile: InputFile) {
     companion object {
         @JvmStatic
-        fun of(content: String, environment: Environment, inputFile: InputFile): KotlinTree {
+        fun of(content: String, environment: Environment, inputFile: InputFile): KotlinSyntaxStructure {
             val psiFile: KtFile = environment.ktPsiFactory.createFile(normalizeEol(content))
+
             val document = try {
                 psiFile.viewProvider.document ?: throw ParseException("Cannot extract document")
             } catch (e: AssertionError) {
@@ -47,30 +46,25 @@ class KotlinTree private constructor(
             }
 
             checkParsingErrors(psiFile, document, inputFile)
-            val bindingContext = bindingContext(
-                environment.env,
-                environment.classpath,
-                listOf(psiFile),
-            )
 
-            return KotlinTree(psiFile, document, bindingContext)
+            return KotlinSyntaxStructure(psiFile, document, inputFile)
         }
-
-        private fun descendants(element: PsiElement): Sequence<PsiElement> {
-            return element.children.asSequence().flatMap { tree: PsiElement -> sequenceOf(tree) + descendants(tree) }
-        }
-
-        private fun checkParsingErrors(psiFile: PsiFile, document: Document, inputFile: InputFile) {
-            descendants(psiFile)
-                .firstOrNull { it is PsiErrorElement }
-                ?.let { element: PsiElement ->
-                    throw ParseException(
-                        "Cannot convert file due to syntactic errors",
-                        inputFile.textPointerAtOffset(document, element.startOffset)
-                    )
-                }
-        }
-
-        private fun normalizeEol(content: String) = content.replace("""\r\n?""".toRegex(), "\n")
     }
 }
+
+fun checkParsingErrors(psiFile: PsiFile, document: Document, inputFile: InputFile) {
+    descendants(psiFile)
+        .firstOrNull { it is PsiErrorElement }
+        ?.let { element: PsiElement ->
+            throw ParseException(
+                "Cannot convert file due to syntactic errors",
+                inputFile.textPointerAtOffset(document, element.startOffset)
+            )
+        }
+}
+
+private fun descendants(element: PsiElement): Sequence<PsiElement> {
+    return element.children.asSequence().flatMap { tree: PsiElement -> sequenceOf(tree) + descendants(tree) }
+}
+
+private fun normalizeEol(content: String) = content.replace("""\r\n?""".toRegex(), "\n")
