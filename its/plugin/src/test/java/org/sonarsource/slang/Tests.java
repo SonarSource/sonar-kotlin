@@ -62,17 +62,17 @@ public class Tests {
   }
 
   static void addLanguagePlugins(OrchestratorBuilder builder) {
-    String slangVersion = System.getProperty("slangVersion");
+    String pluginVersion = System.getProperty("pluginVersion");
 
     LANGUAGES.forEach(language -> {
       Location pluginLocation;
       String plugin = "sonar-" + language +"-plugin";
-      if (StringUtils.isEmpty(slangVersion)) {
+      if (StringUtils.isEmpty(pluginVersion)) {
         // use the plugin that was built on local machine
         pluginLocation = FileLocation.byWildcardMavenFilename(new File("../../" + plugin + "/build/libs"), plugin + "-*-all.jar");
       } else {
         // QA environment downloads the plugin built by the CI job
-        pluginLocation = MavenLocation.of("org.sonarsource.kotlin", plugin, slangVersion);
+        pluginLocation = MavenLocation.of("org.sonarsource.kotlin", plugin, pluginVersion);
       }
 
       builder.addPlugin(pluginLocation);

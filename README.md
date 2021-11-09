@@ -57,7 +57,7 @@ To run e.g. the ruling tests in the IDE, create a new Run/Debug Configuration wh
 
 You can also run single ruling tests, e.g.:
 
-    :its:ruling:test --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_corda" -Pruling -Dsonar.runtimeVersion=7.9
+    :its:ruling:test --tests "org.sonarsource.slang.RulingTest.test_kotlin_corda" -Pruling -Dsonar.runtimeVersion=7.9
 
 ### Debugging ruling tests
 
@@ -72,7 +72,7 @@ to `sonar.rulingDebugPort`. So, for instance, if you start the ruling tests from
 
 You can obviously do the same in the IDE and/or only run a particular test:
 
-    :its:ruling:test --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_corda" -Pruling -Dsonar.runtimeVersion=7.9 -Dsonar.rulingDebugPort=5005
+    :its:ruling:test --tests "org.sonarsource.slang.RulingTest.test_kotlin_corda" -Pruling -Dsonar.runtimeVersion=7.9 -Dsonar.rulingDebugPort=5005
 
 ## Utilities and Developing
 
