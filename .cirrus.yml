@@ -138,6 +138,28 @@ build_task:
     - regular_gradle_build_deploy_analyze
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
+ws_scan_task:
+  <<: *LINUX_3_5_CPU_7G
+  <<: *SETUP_GRADLE_CACHE
+  depends_on:
+    - build
+  # run only on master and long-term branches
+  only_if: $CIRRUS_USER_COLLABORATOR == 'true' && ($CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*")
+  env:
+    WS_APIKEY: ENCRYPTED[!3929c6148b9dfc751a2d17c590b15d755f82cd9c108f2de5f24a5b32f2a0c26144e921fab7e2c959fc2824d6d6d1550d!]
+  maven_cache:
+    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
+  whitesource_script:
+    - source cirrus-env QA
+    - ./gradlew clean build -x test
+    - ./export_ws_variables.sh sonar-kotlin-plugin > ws.env
+    - source ws.env
+    - source ws_scan.sh
+  allow_failures: "true"
+  always:
+    ws_artifacts:
+      path: "whitesource/**/*"
+
 # --- WARNING --- WARNING --- WARNING --- WARNING --- WARNING --- WARNING ---
 # The following task names should all be included in promote_task/depends_on
 # Burgr does not support task name length > 16, see:
@@ -189,6 +211,7 @@ promote_task:
     - qa_plug_pub_win
     - qa_ruling_kotlin
     - build_win
+    - ws_scan
   <<: *ONLY_IF_SONARSOURCE_QA
   <<: *LINUX_1_CPU_1G
   env:
