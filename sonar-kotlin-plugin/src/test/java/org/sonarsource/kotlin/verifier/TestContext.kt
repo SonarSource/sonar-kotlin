@@ -80,7 +80,7 @@ internal class TestContext(
         })
     }
 
-    override fun reportAnalysisParseError(repositoryKey: String?, inputFile: InputFile, location: TextPointer?) {
+    override fun reportAnalysisParseError(repositoryKey: String, inputFile: InputFile, location: TextPointer?) {
         throw NotImplementedError()
     }
 
