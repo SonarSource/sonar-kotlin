@@ -35,7 +35,7 @@ class DeprecatedCodeUsedCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
         context.bindingContext.diagnostics.noSuppression()
-            .filter { it.factory == Errors.DEPRECATION }
+            .filter { it.psiFile ==  file && it.factory == Errors.DEPRECATION }
             .forEach { context.reportIssue(it.psiElement.elementToReport(), "Deprecated code should not be used.") }
     }
 

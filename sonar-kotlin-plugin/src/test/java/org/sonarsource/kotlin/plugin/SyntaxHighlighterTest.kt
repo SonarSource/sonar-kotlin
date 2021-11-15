@@ -35,7 +35,9 @@ import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
 import org.sonarsource.kotlin.testing.AbstractSensorTest
 import java.nio.file.Path
 import kotlin.io.path.readText
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 class SyntaxHighlighterTest : AbstractSensorTest() {
 
     @Test

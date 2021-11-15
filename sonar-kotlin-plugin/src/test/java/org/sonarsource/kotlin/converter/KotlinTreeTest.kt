@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
+import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.nio.charset.StandardCharsets
 
 class KotlinTreeTest {
@@ -40,7 +41,7 @@ class KotlinTreeTest {
       .initMetadata(content)
       .build()
 
-    val tree = KotlinTree.of(content, environment, inputFile)
+    val tree = kotlinTreeOf(content, environment, inputFile)
     assertThat(tree.psiFile.children).hasSize(9)
 
     assertThat(tree.bindingContext.getSliceContents(BindingContext.RESOLVED_CALL)).hasSize(13)

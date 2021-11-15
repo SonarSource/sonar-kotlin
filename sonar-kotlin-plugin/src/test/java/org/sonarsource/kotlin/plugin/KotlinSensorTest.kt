@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.Assertions
+import org.junit.Ignore
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.rule.CheckFactory
 import org.sonar.api.batch.sensor.highlighting.TypeOfText
@@ -28,7 +29,9 @@ import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.CoreMetrics
 import org.sonarsource.kotlin.testing.AbstractSensorTest
 import org.sonarsource.kotlin.testing.assertTextRange
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test

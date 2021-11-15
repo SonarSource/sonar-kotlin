@@ -27,7 +27,9 @@ import org.sonar.api.internal.PluginContextImpl
 import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
 import org.sonarsource.kotlin.converter.Environment
+import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 internal class KotlinPluginTest {
     @Test
     fun test() {

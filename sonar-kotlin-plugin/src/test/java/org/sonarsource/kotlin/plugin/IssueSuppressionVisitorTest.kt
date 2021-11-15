@@ -31,6 +31,7 @@ import org.sonarsource.kotlin.converter.Comment
 import org.sonarsource.kotlin.converter.CommentAnnotationsAndTokenVisitor
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
+import org.sonarsource.kotlin.utils.kotlinTreeOf
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 import org.sonarsource.kotlin.verifier.TestContext
 import java.nio.charset.StandardCharsets
@@ -65,7 +66,7 @@ class IssueSuppressionVisitorTest {
             .initMetadata(testFileContent)
             .build()
 
-        val root = KotlinTree.of(testFileContent, env, inputFile)
+        val root = kotlinTreeOf(testFileContent, env, inputFile)
 
         CommentAnnotationsAndTokenVisitor(root.document, inputFile)
             .apply { visitElement(root.psiFile) }.allComments

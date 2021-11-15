@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
+import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.nio.charset.StandardCharsets
 import java.util.TreeMap
 
@@ -133,7 +134,7 @@ internal class ApiExtensionsKtTest {
         node.allChildren.forEach { walker(it, action) }
     }
 
-    private fun parse(code: String) = KotlinTree.of(
+    private fun parse(code: String) = kotlinTreeOf(
         code,
         Environment(listOf("build/classes/kotlin/main")),
         TestInputFileBuilder("moduleKey", "src/org/foo/kotlin")

@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinTree
+import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -44,7 +45,7 @@ class FunMatcherTest {
         .initMetadata(content)
         .build()
 
-    val tree = KotlinTree.of(content, environment, inputFile)
+    val tree = kotlinTreeOf(content, environment, inputFile)
     private val allCallExpressions = tree.psiFile.collectDescendantsOfType<KtCallExpression>()
 
     // sampleClass.sayHello("Kotlin")
