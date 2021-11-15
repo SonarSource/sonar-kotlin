@@ -308,7 +308,8 @@ fun KtLambdaArgument.isSuspending(
     ?.getResolvedCall(bindingContext)
     ?.resultingDescriptor
     ?.valueParameters
-    ?.last()
+    // using .lastOrNull() instead of .last() due to possible NoSuchElementException in case of incomplete semantic
+    ?.lastOrNull()
     ?.hasSuspendFunctionType
     ?: false
 
