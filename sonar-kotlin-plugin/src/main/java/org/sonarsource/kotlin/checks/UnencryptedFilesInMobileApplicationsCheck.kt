@@ -20,20 +20,28 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.CallAbstractCheck
+import org.sonarsource.kotlin.api.ConstructorMatcher
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private const val MESSAGE = "Make sure using unencrypted files is safe here."
-private val MATCHER = FunMatcher(qualifier = "kotlin.io") { withNames("writeText", "appendBytes") }
 
 @Rule(key = "S6300")
-class UnencryptedFilesInMobileApplicationsCheck : AbstractCheck() {
+class UnencryptedFilesInMobileApplicationsCheck : CallAbstractCheck() {
+    override val functionsToVisit = setOf(
+        FunMatcher(qualifier = "kotlin.io") { withNames("writeText", "appendBytes") },
+        ConstructorMatcher(typeName = "java.io.FileOutputStream"),
+        ConstructorMatcher(typeName = "java.io.FileWriter"),
+        FunMatcher(qualifier = "java.nio.file.Files", name = "write"),
+    )
 
-    override fun visitCallExpression(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        if (kotlinFileContext.isInAndroid() && MATCHER.matches(callExpression, kotlinFileContext.bindingContext)) {
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
+        if (kotlinFileContext.isInAndroid()) {
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
         }
-    } 
+    }
+    
 } 
