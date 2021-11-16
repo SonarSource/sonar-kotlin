@@ -45,7 +45,7 @@ class DummyInputFileContext : InputFileContext {
         issuesReported.add(ReportedIssue(ruleKey, textRange, message, secondaryLocations, gap))
     }
 
-    override fun reportAnalysisParseError(repositoryKey: String?, inputFile: InputFile, location: TextPointer?) {
+    override fun reportAnalysisParseError(repositoryKey: String, inputFile: InputFile, location: TextPointer?) {
         throw NotImplementedError()
     }
 

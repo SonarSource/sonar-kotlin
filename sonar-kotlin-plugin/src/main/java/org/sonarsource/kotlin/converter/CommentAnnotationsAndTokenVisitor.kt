@@ -32,7 +32,6 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.TextPointer
 import org.sonar.api.batch.fs.TextRange
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textPointerAtOffset
 

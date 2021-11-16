@@ -74,7 +74,7 @@ class InputFileContextImpl(
         }
     }
 
-    override fun reportAnalysisParseError(repositoryKey: String?, inputFile: InputFile, location: TextPointer?) {
+    override fun reportAnalysisParseError(repositoryKey: String, inputFile: InputFile, location: TextPointer?) {
         reportAnalysisError("Unable to parse file: $inputFile", location)
 
         val parsingErrorRuleKey = RuleKey.of(repositoryKey, PARSING_ERROR_RULE_KEY)
