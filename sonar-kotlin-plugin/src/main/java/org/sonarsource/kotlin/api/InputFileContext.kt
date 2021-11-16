@@ -39,7 +39,7 @@ interface InputFileContext {
         gap: Double?,
     )
 
-    fun reportAnalysisParseError(repositoryKey: String?, inputFile: InputFile, location: TextPointer?)
+    fun reportAnalysisParseError(repositoryKey: String, inputFile: InputFile, location: TextPointer?)
 
     fun reportAnalysisError(message: String?, location: TextPointer?)
 }
