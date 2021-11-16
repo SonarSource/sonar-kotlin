@@ -22,48 +22,48 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.isNull
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.FunMatcherImpl
 import org.sonarsource.kotlin.api.SecondaryLocation
-import org.sonarsource.kotlin.api.matches
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private val AUTHENTICATE_FUN_MATCHERS = listOf(
-    FunMatcher(qualifier = "android.hardware.biometrics.BiometricPrompt", name = "authenticate"),
-    FunMatcher(qualifier = "androidx.biometric.BiometricPrompt", name = "authenticate")
-)
+private val ANDROID_HARDWARE_AUTH = FunMatcher(qualifier = "android.hardware.biometrics.BiometricPrompt", name = "authenticate")
+private val ANDROIDX_AUTH = FunMatcher(qualifier = "androidx.biometric.BiometricPrompt", name = "authenticate")
 
 private const val MESSAGE = """Make sure performing a biometric authentication without a "CryptoObject" is safe here."""
 
 @Rule(key = "S6293")
-class BiometricAuthWithoutCryptoCheck : AbstractCheck() {
+class BiometricAuthWithoutCryptoCheck : CallAbstractCheck() {
+    override val functionsToVisit = setOf(ANDROID_HARDWARE_AUTH, ANDROIDX_AUTH)
 
-    override fun visitCallExpression(callExpression: KtCallExpression, ctx: KotlinFileContext) {
-        if (functionCallMatches(callExpression, ctx)) {
-            if (callExpression.valueArguments.size < 2) {
-
-                // No second argument -> automatically insecure.
-                ctx.reportIssue(callExpression, MESSAGE)
-
-            } else {
-
-                // Second argument is null? Also insecure.
-                callExpression.valueArguments[1].getArgumentExpression()?.let { relevantArg ->
-                    if (relevantArg.isNull()) {
-                        val secondaryExpression = callExpression.getCallNameExpression() ?: callExpression
-                        ctx.reportIssue(relevantArg, MESSAGE, listOf(SecondaryLocation(ctx.textRange(secondaryExpression))))
-                    }
-                }
-
-            }
+    override fun visitFunctionCall(
+        callExpression: KtCallExpression,
+        resolvedCall: ResolvedCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext,
+    ) {
+        when(matchedFun) {
+            ANDROID_HARDWARE_AUTH -> checkCall(callExpression, kotlinFileContext, 4, 0)
+            ANDROIDX_AUTH -> checkCall(callExpression, kotlinFileContext, 2, 1)
         }
     }
 
-    private fun functionCallMatches(callExpression: KtCallExpression, ctx: KotlinFileContext) =
-        callExpression.getResolvedCall(ctx.bindingContext)?.let { resolvedCall ->
-            AUTHENTICATE_FUN_MATCHERS.any { resolvedCall matches it }
-        } ?: false
+    private fun checkCall(callExpression: KtCallExpression, ctx: KotlinFileContext, numberOfSafeArgs: Int, argumentIndex: Int) {
+        if (callExpression.valueArguments.size < numberOfSafeArgs) {
+            // No CryptoObject -> automatically insecure.
+            ctx.reportIssue(callExpression, MESSAGE)
+        } else {
+            // CryptoObject is null -> also insecure.
+            callExpression.valueArguments[argumentIndex].getArgumentExpression()?.let { relevantArg ->
+                if (relevantArg.isNull()) {
+                    val secondaryExpression = callExpression.getCallNameExpression() ?: callExpression
+                    ctx.reportIssue(relevantArg, MESSAGE, listOf(SecondaryLocation(ctx.textRange(secondaryExpression))))
+                }
+            }
+        }
+    }
 }

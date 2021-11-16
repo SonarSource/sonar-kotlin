@@ -1,20 +1,21 @@
 package checks
 
+import android.os.CancellationSignal
 import android.hardware.biometrics.BiometricPrompt as BiometricPromptAndroid
 import androidx.biometric.BiometricPrompt as BiometricPromptAndroidX
 
-val promptInfo = ""
-val cipher = ""
+val promptInfo = androidx.biometric.BiometricPrompt.PromptInfo()
 
 fun android() {
     val biometricPrompt = BiometricPromptAndroid()
 
-    biometricPrompt.authenticate(promptInfo) // Noncompliant {{Make sure performing a biometric authentication without a "CryptoObject" is safe here.}}
+    biometricPrompt.authenticate(CancellationSignal(), {  }, BiometricPromptAndroid.AuthenticationCallback()) // Noncompliant {{Make sure performing a biometric authentication without a "CryptoObject" is safe here.}}
+    
     // Noncompliant@+1
-    biometricPrompt.authenticate(promptInfo, null)
-//                  ^^^^^^^^^^^^>            ^^^^
+    biometricPrompt.authenticate     (null, CancellationSignal(), {  }, BiometricPromptAndroid.AuthenticationCallback())
+//                  ^^^^^^^^^^^^>     ^^^^
 
-    biometricPrompt.authenticate(promptInfo, BiometricPromptAndroid.CryptoObject(cipher)) // Compliant
+    biometricPrompt.authenticate(BiometricPromptAndroid.CryptoObject(), CancellationSignal(), {  }, BiometricPromptAndroid.AuthenticationCallback()) // Compliant
 }
 
 fun androidx() {
@@ -25,5 +26,5 @@ fun androidx() {
     biometricPrompt.authenticate(promptInfo, null)
 //                  ^^^^^^^^^^^^>            ^^^^
 
-    biometricPrompt.authenticate(promptInfo, BiometricPromptAndroidX.CryptoObject(cipher))  // Compliant
+    biometricPrompt.authenticate(promptInfo, BiometricPromptAndroidX.CryptoObject())  // Compliant
 }
