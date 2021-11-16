@@ -19,16 +19,19 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import io.mockk.every
+import io.mockk.spyk
 import org.assertj.core.api.Assertions
-import org.junit.Ignore
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.rule.CheckFactory
 import org.sonar.api.batch.sensor.highlighting.TypeOfText
 import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.CoreMetrics
+import org.sonar.api.utils.log.LoggerLevel
 import org.sonarsource.kotlin.testing.AbstractSensorTest
 import org.sonarsource.kotlin.testing.assertTextRange
+import java.io.IOException
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -157,6 +160,26 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         Assertions.assertThat(textPointer.lineOffset()).isEqualTo(14)
         Assertions.assertThat(logTester.logs())
             .contains(String.format("Unable to parse file: %s. Parse error at position 1:14", inputFile.uri()))
+    }   
+    
+    @Test
+    fun test_fail_reading() {
+        val inputFile = spyk(createInputFile("file1.kt", "class A { fun f() = TODO() }"))
+        context.fileSystem().add(inputFile)
+        every { inputFile.contents() } throws IOException("Can't read")
+        every { inputFile.toString() } returns "file1.kt"
+
+        val checkFactory = checkFactory("S1764")
+        sensor(checkFactory).execute(context)
+        val analysisErrors = context.allAnalysisErrors()
+        Assertions.assertThat(analysisErrors).hasSize(1)
+        val analysisError = analysisErrors.iterator().next()
+        Assertions.assertThat(analysisError.inputFile()).isEqualTo(inputFile)
+        Assertions.assertThat(analysisError.message()).isEqualTo("Unable to parse file: file1.kt")
+        val textPointer = analysisError.location()
+        Assertions.assertThat(textPointer).isNull()
+        
+        Assertions.assertThat(logTester.logs(LoggerLevel.ERROR)).contains("Cannot read 'file1.kt': Can't read")
     }
 
     @Test
