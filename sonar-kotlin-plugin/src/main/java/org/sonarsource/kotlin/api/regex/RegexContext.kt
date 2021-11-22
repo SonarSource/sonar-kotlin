@@ -19,7 +19,7 @@
  */
 package org.sonarsource.kotlin.api.regex
 
-import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.RegexParser
@@ -28,21 +28,21 @@ import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 class RegexContext(
-    private val stringTemplates: Iterable<KtStringTemplateExpression>,
+    private val stringTemplateEntries: Iterable<KtStringTemplateEntry>,
     kotlinFileContext: KotlinFileContext
 ) {
     companion object {
-        private val globalCache = mutableMapOf<Pair<List<KtStringTemplateExpression>, Int>, RegexParseResult>()
+        private val globalCache = mutableMapOf<Pair<List<KtStringTemplateEntry>, Int>, RegexParseResult>()
     }
 
     private val _reportedIssues = mutableListOf<ReportedIssue>()
     val reportedIssues: List<ReportedIssue>
         get() = _reportedIssues
 
-    val regexSource = KotlinAnalyzerRegexSource(stringTemplates, kotlinFileContext)
+    val regexSource = KotlinAnalyzerRegexSource(stringTemplateEntries, kotlinFileContext)
 
     fun parseRegex(flags: FlagSet) =
-        globalCache.computeIfAbsent(stringTemplates.toList() to flags.mask) {
+        globalCache.computeIfAbsent(stringTemplateEntries.toList() to flags.mask) {
             RegexParser(regexSource, flags).parse()
         }
 
