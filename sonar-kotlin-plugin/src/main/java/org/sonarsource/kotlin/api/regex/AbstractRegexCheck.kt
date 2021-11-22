@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -113,6 +114,8 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
                 // For now, we simply don't use any sequence that contains nulls (i.e. non-resolvable parts)
                 .takeIf { null !in it }?.filterNotNull()
                 ?.flatMap { it.entries.asSequence() }
+                // We don't handle string interpolation for now. So we filter out all string templates with expressions
+                ?.takeIf { it.all { entry -> entry !is KtStringTemplateEntryWithExpression } }
                 ?.let { sourceTemplates ->
                     RegexContext(sourceTemplates.asIterable(), kotlinFileContext)
                 } ?: return
