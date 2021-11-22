@@ -21,7 +21,6 @@ package org.sonarsource.kotlin.api.regex
 
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
-import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.sonar.api.batch.fs.TextRange
 import org.sonarsource.analyzer.commons.regex.ast.IndexRange
 import org.sonarsource.analyzer.commons.regex.java.JavaRegexSource
@@ -37,16 +36,14 @@ import java.util.TreeMap
  * TODO: multi-line strings with trimMargin() and trimIndent() are currently not handled.
  */
 class KotlinAnalyzerRegexSource(
-    sourceTemplates: Iterable<KtStringTemplateExpression>,
+    sourceTemplateEntries: Iterable<KtStringTemplateEntry>,
     kotlinFileContext: KotlinFileContext,
-) : JavaRegexSource(templatesAsString(sourceTemplates)) {
-    val textRangeTracker = TextRangeTracker.of(sourceTemplates, kotlinFileContext)
+) : JavaRegexSource(templateEntriesAsString(sourceTemplateEntries)) {
+    val textRangeTracker = TextRangeTracker.of(sourceTemplateEntries, kotlinFileContext)
 }
 
-private fun templatesAsString(templates: Iterable<KtStringTemplateExpression>) = templates.joinToString("") { template ->
-    template.entries.joinToString("") {
-        if (isUnescapedEscapeChar(it)) """\\""" else it.text
-    }
+private fun templateEntriesAsString(entries: Iterable<KtStringTemplateEntry>) = entries.joinToString("") {
+    if (isUnescapedEscapeChar(it)) """\\""" else it.text
 }
 
 fun isUnescapedEscapeChar(entry: KtStringTemplateEntry) = entry is KtLiteralStringTemplateEntry && entry.text == """\"""
@@ -54,17 +51,16 @@ fun isUnescapedEscapeChar(entry: KtStringTemplateEntry) = entry is KtLiteralStri
 class TextRangeTracker private constructor(
     private val regexIndexToTextRange: NavigableMap<Int, TextRange>,
     private val textRangeToKtNode: Map<TextRange, KtStringTemplateEntry>,
-    private val textRange: (startLine: Int, startColumn: Int, endLine:Int, endColumn: Int) -> TextRange,
+    private val textRange: (startLine: Int, startColumn: Int, endLine: Int, endColumn: Int) -> TextRange,
 ) {
     companion object {
         fun of(
-            stringTemplates: Iterable<KtStringTemplateExpression>,
+            stringTemplateEntries: Iterable<KtStringTemplateEntry>,
             kotlinFileContext: KotlinFileContext,
         ): TextRangeTracker {
             var endIndex = 0
             val regexIndexToTextRange = TreeMap<Int, TextRange>()
-            val textRangeToKtNode = stringTemplates
-                .flatMap { it.entries.asSequence() }
+            val textRangeToKtNode = stringTemplateEntries
                 .associateBy { entry ->
                     val textRange = kotlinFileContext.textRange(entry)
                     regexIndexToTextRange[endIndex] = textRange
@@ -72,10 +68,10 @@ class TextRangeTracker private constructor(
                     endIndex += if (isUnescapedEscapeChar(entry)) 2 else entry.textLength
                     textRange
                 }
-            return TextRangeTracker(regexIndexToTextRange, textRangeToKtNode) { 
-                    startLine, startColumn, endLine, endColumn -> kotlinFileContext.textRange(startLine, startColumn, endLine, endColumn)
+            return TextRangeTracker(regexIndexToTextRange, textRangeToKtNode) { startLine, startColumn, endLine, endColumn ->
+                kotlinFileContext.textRange(startLine, startColumn, endLine, endColumn)
             }
-            
+
         }
     }
 
@@ -84,19 +80,24 @@ class TextRangeTracker private constructor(
     fun rangeBeforeIndex(index: Int) = regexIndexToTextRange.lowerEntry(index).toPair()
 
     fun textRangesBetween(range: IndexRange) = textRangesBetween(range.beginningOffset, range.endingOffset)
-    
+
     tailrec fun textRangesBetween(startIndex: Int, endIndex: Int, acc: MutableList<TextRange> = mutableListOf()): Collection<TextRange> {
         if (startIndex >= endIndex) return emptyList()
-        
+
         val (startRangeIndex, start) = rangeAtIndex(startIndex)
         val startOffset: Int = startIndex - startRangeIndex
         val (endRangeIndex, end) = if (endIndex > 0) rangeBeforeIndex(endIndex) else startRangeIndex to start
         val endOffset: Int = endIndex - endRangeIndex
-        
+
         return if (start == end) {
-            acc + textRange(start.start().line(), start.start().lineOffset() + startOffset, start.end().line(), start.start().lineOffset() + endOffset)
+            acc + textRange(
+                start.start().line(),
+                start.start().lineOffset() + startOffset,
+                start.end().line(),
+                start.start().lineOffset() + endOffset
+            )
         } else {
-            textRangesBetween(regexIndexToTextRange.higherKey(startRangeIndex), endIndex, acc.apply { 
+            textRangesBetween(regexIndexToTextRange.higherKey(startRangeIndex), endIndex, acc.apply {
                 add(textRange(start.start().line(), start.start().lineOffset() + startOffset, start.end().line(), start.end().lineOffset()))
             })
         }

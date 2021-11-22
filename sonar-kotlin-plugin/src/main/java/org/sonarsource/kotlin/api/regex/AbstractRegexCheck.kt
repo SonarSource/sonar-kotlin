@@ -112,6 +112,7 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
                 .collectResolvedListOfStringTemplates(kotlinFileContext.bindingContext)
                 // For now, we simply don't use any sequence that contains nulls (i.e. non-resolvable parts)
                 .takeIf { null !in it }?.filterNotNull()
+                ?.flatMap { it.entries.asSequence() }
                 ?.let { sourceTemplates ->
                     RegexContext(sourceTemplates.asIterable(), kotlinFileContext)
                 } ?: return
