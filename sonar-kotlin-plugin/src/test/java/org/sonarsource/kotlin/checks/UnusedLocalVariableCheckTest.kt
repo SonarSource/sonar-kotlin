@@ -19,4 +19,18 @@
  */
 package org.sonarsource.kotlin.checks
 
-class UnusedLocalVariableCheckTest : CheckTestWithNoSemantics(UnusedLocalVariableCheck())
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.verifier.DEFAULT_KOTLIN_CLASSPATH
+import org.sonarsource.kotlin.verifier.KotlinVerifier
+
+class UnusedLocalVariableCheckTest : CheckTestWithNoSemantics(UnusedLocalVariableCheck()) {
+
+    @Test
+    fun `with partial semantics`() {
+        KotlinVerifier(check) {
+            this.fileName = "${checkName}SamplePartialSemantics.kt"
+            this.classpath = DEFAULT_KOTLIN_CLASSPATH + System.getProperty("java.class.path").split(":")
+            this.deps = emptyList()
+        }.verifyNoIssue()
+    }
+}
