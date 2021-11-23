@@ -49,6 +49,8 @@ import java.util.concurrent.TimeUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
+private const val FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast"
+
 @ExperimentalTime
 private val LOG = Loggers.get(KotlinSensor::class.java)
 private val EMPTY_FILE_CONTENT_PATTERN = Regex("""\s*+""")
@@ -140,7 +142,7 @@ class KotlinSensor(
                 if (sensorContext.isCancelled) return false
                 val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
 
-                analyseFile(inputFileContext, visitors, statistics, KotlinTree(ktFile, doc, bindingContext))
+                analyseFile(sensorContext, inputFileContext, visitors, statistics, KotlinTree(ktFile, doc, bindingContext))
 
                 progressReport.nextFile()
             }
@@ -151,6 +153,7 @@ class KotlinSensor(
     }
 
     private fun analyseFile(
+        sensorContext: SensorContext,
         inputFileContext: InputFileContext,
         visitors: List<KotlinFileVisitor>,
         statistics: DurationStatistics,
@@ -159,22 +162,26 @@ class KotlinSensor(
         if (EMPTY_FILE_CONTENT_PATTERN.matches(inputFileContext.inputFile.contents())) {
             return
         }
-        visitFile(inputFileContext, visitors, statistics, tree)
+        visitFile(sensorContext, inputFileContext, visitors, statistics, tree)
     }
 
     private fun visitFile(
+        sensorContext: SensorContext,
         inputFileContext: InputFileContext,
         visitors: List<KotlinFileVisitor>,
         statistics: DurationStatistics,
         tree: KotlinTree,
     ) {
         for (visitor in visitors) {
+            val visitorId = visitor.javaClass.simpleName
             try {
-                val visitorId = visitor.javaClass.simpleName
                 statistics.time(visitorId) { visitor.scan(inputFileContext, tree) }
             } catch (e: RuntimeException) {
                 inputFileContext.reportAnalysisError(e.message, null)
-                LOG.error("Cannot analyse '${inputFileContext.inputFile}': ${e.message}", e)
+                LOG.error("Cannot analyse '${inputFileContext.inputFile}' with '$visitorId': ${e.message}", e)
+                if (sensorContext.config().getBoolean(FAIL_FAST_PROPERTY_NAME).orElse(false)) {
+                    throw IllegalStateException("Exception in '$visitorId' while analyzing '${inputFileContext.inputFile}'", e)
+                }
             }
         }
     }
