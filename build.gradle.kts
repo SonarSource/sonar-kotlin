@@ -138,11 +138,11 @@ subprojects {
 
         systemProperties = System.getProperties().filterKeys {
             it is String &&
-                (it.startsWith("orchestrator") || it.startsWith("sonar") || it == "buildNumber" || it == "slangVersion")
+                (it.startsWith("orchestrator") || it.startsWith("sonar") || it == "buildNumber" || it == "pluginVersion")
         }.mapKeys { it.key as String }
 
-        if (systemProperties.containsKey("buildNumber") && !systemProperties.containsKey("slangVersion")) {
-            systemProperties["slangVersion"] = version
+        if (systemProperties.containsKey("buildNumber") && !systemProperties.containsKey("pluginVersion")) {
+            systemProperties["pluginVersion"] = version
         }
     }
 

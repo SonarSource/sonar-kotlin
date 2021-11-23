@@ -1,5 +1,5 @@
 /*
- * SonarSource SLang
+ * SonarSource Kotlin
  * Copyright (C) 2018-2021 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.slang;
+package org.sonarsource.kotlin;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
@@ -46,7 +46,7 @@ import org.sonarsource.analyzer.commons.ProfileGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SlangRulingTest {
+public class RulingTest {
 
   private static final String SQ_VERSION_PROPERTY = "sonar.runtimeVersion";
   private static final String DEFAULT_SQ_VERSION = "LATEST_RELEASE";
@@ -71,23 +71,23 @@ public class SlangRulingTest {
     kotlinRulesConfiguration.add("S1451", "headerFormat", "/\\*\n \\* Copyright \\d{4}-\\d{4} JetBrains s\\.r\\.o\\.");
     kotlinRulesConfiguration.add("S1451", "isRegularExpression", "true");
 
-    File kotlinProfile = ProfileGenerator.generateProfile(SlangRulingTest.orchestrator.getServer().getUrl(), "kotlin", "kotlin", kotlinRulesConfiguration, Collections.emptySet());
+    File kotlinProfile = ProfileGenerator.generateProfile(RulingTest.orchestrator.getServer().getUrl(), "kotlin", "kotlin", kotlinRulesConfiguration, Collections.emptySet());
 
     orchestrator.getServer().restoreProfile(FileLocation.of(kotlinProfile));
   }
 
   private static void addLanguagePlugins(OrchestratorBuilder builder) {
-    String slangVersion = System.getProperty("slangVersion");
+    String pluginVersion = System.getProperty("pluginVersion");
 
     LANGUAGES.forEach(language -> {
       Location pluginLocation;
       String plugin = "sonar-" + language +"-plugin";
-      if (StringUtils.isEmpty(slangVersion)) {
+      if (StringUtils.isEmpty(pluginVersion)) {
         // use the plugin that was built on local machine
         pluginLocation = FileLocation.byWildcardMavenFilename(new File("../../" + plugin + "/build/libs"), plugin + "-*-all.jar");
       } else {
         // QA environment downloads the plugin built by the CI job
-        pluginLocation = MavenLocation.of("org.sonarsource.kotlin", plugin, slangVersion);
+        pluginLocation = MavenLocation.of("org.sonarsource.kotlin", plugin, pluginVersion);
       }
 
       builder.addPlugin(pluginLocation);
@@ -145,7 +145,7 @@ public class SlangRulingTest {
       "ktor-server/ktor-server-tomcat/");
 
     String binaries = ktorDirs.stream().map(dir -> FileLocation.of("../sources/kotlin/ktor/" + dir + "build/classes"))
-      .map(SlangRulingTest::getFileLocationAbsolutePath)
+      .map(RulingTest::getFileLocationAbsolutePath)
       .collect(Collectors.joining(","));
     properties.put("sonar.java.binaries", binaries);
 
@@ -220,10 +220,6 @@ public class SlangRulingTest {
   }
 
   private void run_ruling_test(String project, Map<String, String> projectProperties) throws IOException {
-    Map<String, String> properties = new HashMap<>(projectProperties);
-    properties.put("sonar.slang.converter.validation", "log");
-    properties.put("sonar.slang.duration.statistics", "true");
-
     String projectKey = project.replace("/", "-") + "-project";
     orchestrator.getServer().provisionProject(projectKey, projectKey);
     LANGUAGES.forEach(lang -> orchestrator.getServer().associateProjectToQualityProfile(projectKey, lang, "rules"));
@@ -238,7 +234,6 @@ public class SlangRulingTest {
       .setProjectVersion("1")
       .setSourceDirs("./")
       .setSourceEncoding("utf-8")
-      .setProperties(properties)
       .setProperty("dump.old", FileLocation.of("src/test/resources/expected/" + project).getFile().getAbsolutePath())
       .setProperty("dump.new", actualDirectory.getAbsolutePath())
       .setProperty("lits.differences", litsDifferencesFile.getAbsolutePath())
