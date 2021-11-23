@@ -176,7 +176,7 @@ class KotlinSensor(
             val visitorId = visitor.javaClass.simpleName
             try {
                 statistics.time(visitorId) { visitor.scan(inputFileContext, tree) }
-            } catch (e: RuntimeException) {
+            } catch (e: Exception) {
                 inputFileContext.reportAnalysisError(e.message, null)
                 LOG.error("Cannot analyse '${inputFileContext.inputFile}' with '$visitorId': ${e.message}", e)
                 if (sensorContext.config().getBoolean(FAIL_FAST_PROPERTY_NAME).orElse(false)) {
