@@ -19,7 +19,17 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.api.SonarProduct
 import org.sonar.api.batch.fs.FileSystem
 import org.sonar.api.batch.fs.InputFile
@@ -60,6 +70,7 @@ class KotlinSensor(
     private val noSonarFilter: NoSonarFilter,
     val language: KotlinLanguage,
 ) : Sensor {
+    private val analysisDispatcher: CoroutineDispatcher = Dispatchers.Default
 
     val checks: Checks<AbstractCheck> = checkFactory.create<AbstractCheck>(KOTLIN_REPOSITORY_KEY).apply {
         addAnnotatedChecks(KOTLIN_CHECKS as Iterable<*>)
@@ -78,7 +89,8 @@ class KotlinSensor(
         val fileSystem: FileSystem = sensorContext.fileSystem()
         val mainFilePredicate = fileSystem.predicates().and(
             fileSystem.predicates().hasLanguage(language.key),
-            fileSystem.predicates().hasType(InputFile.Type.MAIN))
+            fileSystem.predicates().hasType(InputFile.Type.MAIN)
+        )
 
         val inputFiles = fileSystem.inputFiles(mainFilePredicate)
         val filenames = inputFiles.map { it.toString() }
@@ -136,18 +148,67 @@ class KotlinSensor(
             LOG.info("Generating BindingContext for all files took: ${duration.inWholeMilliseconds} ms.")
 
             progressReport.start(filenames)
-            for ((ktFile, doc, inputFile) in kotlinFiles) {
-                if (sensorContext.isCancelled) return false
-                val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
 
-                analyseFile(inputFileContext, visitors, statistics, KotlinTree(ktFile, doc, bindingContext))
+            return analyseFilesConcurrently(
+                sensorContext,
+                kotlinFiles,
+                progressReport,
+                visitors,
+                statistics,
+                bindingContext,
+                isInAndroidContext
+            )
 
-                progressReport.nextFile()
-            }
         } finally {
             Disposer.dispose(environment.disposable)
         }
-        return true
+    }
+
+    private fun analyseFilesConcurrently(
+        sensorContext: SensorContext,
+        kotlinFiles: Iterable<KotlinSyntaxStructure>,
+        progressReport: ProgressReport,
+        visitors: List<KotlinFileVisitor>,
+        statistics: DurationStatistics,
+        bindingContext: BindingContext,
+        isInAndroidContext: Boolean,
+    ) = runBlocking {
+        val flow = MutableSharedFlow<AbstractCheck.IssueToReport>()
+
+        val issueReporterJob = launch {
+            flow.collect {
+                it.report()
+                AbstractCheck.reported.decrementAndGet()
+            }
+        }
+
+        withContext(analysisDispatcher) {
+            val workerJobs = mutableListOf<Job>()
+
+            for ((ktFile, doc, inputFile) in kotlinFiles) {
+                if (sensorContext.isCancelled) break
+
+                launch {
+                    val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext, flow)
+                    analyseFile(inputFileContext, visitors, statistics, KotlinTree(ktFile, doc, bindingContext))
+                    progressReport.nextFile()
+                }.let { workerJobs.add(it) }
+            }
+
+            // TODO: make a loop to actually cancel when all jobs have been started
+            if (sensorContext.isCancelled) {
+                workerJobs.forEach { it.cancel() }
+            } else {
+                workerJobs.forEach { it.join() }
+            }
+        }
+
+        while (AbstractCheck.reported.get() > 0) {
+            delay(10)
+        }
+        issueReporterJob.cancel()
+
+        sensorContext.isCancelled
     }
 
     private fun analyseFile(

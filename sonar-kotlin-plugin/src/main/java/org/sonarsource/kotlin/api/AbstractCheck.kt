@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.api
 
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
@@ -43,13 +44,34 @@ import org.sonar.api.batch.fs.TextRange
 import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textPointerAtOffset
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.plugin.InputFileContextImpl
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import java.util.BitSet
+import java.util.concurrent.atomic.AtomicInteger
 
 abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>() {
 
     lateinit var ruleKey: RuleKey
         private set
+
+    data class IssueToReport(
+        val inputFileContext: InputFileContext,
+        val ruleKey: RuleKey,
+        val textRange: TextRange?,
+        val message: String,
+        val secondaryLocations: List<SecondaryLocation>,
+        val gap: Double?,
+    ) {
+        fun report() = if (inputFileContext is InputFileContextImpl)
+            inputFileContext.reportIssueNow(ruleKey, textRange, message, secondaryLocations, gap)
+        else
+            inputFileContext.reportIssue(ruleKey, textRange, message, secondaryLocations, gap)
+    }
+
+    companion object {
+        var toReport: MutableSharedFlow<IssueToReport>? = null
+        var reported = AtomicInteger(0)
+    }
 
     override fun initialize(ruleKey: RuleKey) {
         this.ruleKey = ruleKey

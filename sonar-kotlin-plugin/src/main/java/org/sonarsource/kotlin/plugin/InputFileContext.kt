@@ -19,11 +19,14 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.runBlocking
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.TextPointer
 import org.sonar.api.batch.fs.TextRange
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.rule.RuleKey
+import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.InputFileContext
 import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.converter.KotlinTextRanges.contains
@@ -34,11 +37,27 @@ class InputFileContextImpl(
     override val sensorContext: SensorContext,
     override val inputFile: InputFile,
     override val isAndroid: Boolean,
+    private val toReport: MutableSharedFlow<AbstractCheck.IssueToReport>? = null,
 ) : InputFileContext {
 
     override var filteredRules: Map<String, Set<TextRange>> = HashMap()
 
     override fun reportIssue(
+        ruleKey: RuleKey,
+        textRange: TextRange?,
+        message: String,
+        secondaryLocations: List<SecondaryLocation>,
+        gap: Double?,
+    ) {
+        toReport?.let {
+            runBlocking {
+                AbstractCheck.reported.incrementAndGet()
+                it.emit(AbstractCheck.IssueToReport(this@InputFileContextImpl, ruleKey, textRange, message, secondaryLocations, gap))
+            }
+        } ?: reportIssueNow(ruleKey, textRange, message, secondaryLocations, gap)
+    }
+
+    fun reportIssueNow(
         ruleKey: RuleKey,
         textRange: TextRange?,
         message: String,
