@@ -1,0 +1,6 @@
+projectKey=org.sonarsource.it.projects:tests-surefire-suffix
+serverUrl=http://127.0.0.1:36205
+serverVersion=7.9.0.26994
+dashboardUrl=http://127.0.0.1:36205/dashboard?id=org.sonarsource.it.projects%3Atests-surefire-suffix
+ceTaskId=AX1RgFnr37nGlCmvAr7a
+ceTaskUrl=http://127.0.0.1:36205/api/ce/task?id=AX1RgFnr37nGlCmvAr7a

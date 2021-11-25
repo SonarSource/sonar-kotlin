@@ -34,16 +34,19 @@ import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 
 class CopyPasteDetector : KotlinFileVisitor() {
+
     override fun visit(kotlinFileContext: KotlinFileContext) {
-        val cpdTokens =
-            kotlinFileContext.inputFileContext.sensorContext.newCpdTokens().onFile(kotlinFileContext.inputFileContext.inputFile)
+        synchronized(kotlinFileContext.inputFileContext.sensorContext) {
+            val cpdTokens =
+                kotlinFileContext.inputFileContext.sensorContext.newCpdTokens().onFile(kotlinFileContext.inputFileContext.inputFile)
 
-        collectCpdRelevantNodes(kotlinFileContext.ktFile).forEach { node ->
-            val text = if (node is KtStringTemplateEntry) "LITERAL" else node.text
-            cpdTokens.addToken(kotlinFileContext.textRange(node), text)
+            collectCpdRelevantNodes(kotlinFileContext.ktFile).forEach { node ->
+                val text = if (node is KtStringTemplateEntry) "LITERAL" else node.text
+                cpdTokens.addToken(kotlinFileContext.textRange(node), text)
+            }
+
+            cpdTokens.save()
         }
-
-        cpdTokens.save()
     }
 
     private fun collectCpdRelevantNodes(node: PsiElement, acc: MutableList<PsiElement> = mutableListOf()): List<PsiElement> {
