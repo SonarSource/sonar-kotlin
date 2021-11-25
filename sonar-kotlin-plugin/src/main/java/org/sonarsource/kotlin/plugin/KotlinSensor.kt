@@ -191,7 +191,7 @@ class KotlinSensor(
                 launch {
                     val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext, flow)
                     analyseFile(inputFileContext, visitors, statistics, KotlinTree(ktFile, doc, bindingContext))
-                    progressReport.nextFile()
+                    synchronized(progressReport) { progressReport.nextFile() }
                 }.let { workerJobs.add(it) }
             }
 
