@@ -32,6 +32,7 @@ import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
@@ -52,22 +53,31 @@ class UnnecessaryImportsCheck : AbstractCheck() {
 
         val (references, arrayAccesses, kDocLinks) = collectReferences(file)
         val bindingContext = context.bindingContext
+
+        val unresolvedImports = bindingContext.diagnostics.noSuppression()
+            .filter { it.psiFile == file }
+            .mapNotNull { it.psiElement.getParentOfType<KtImportDirective>(false) }
+
         val groupedReferences = references.groupBy { reference ->
             reference.importableSimpleName()
         }
 
         val arrayAccessesImportsFilter by lazy { getArrayAccessImportsFilter(arrayAccesses, bindingContext) }
 
-        analyzeImports(file, groupedReferences, kDocLinks, arrayAccessesImportsFilter, context)
+        analyzeImports(file, groupedReferences, kDocLinks, unresolvedImports, arrayAccessesImportsFilter, context)
     }
 
     private fun analyzeImports(
         file: KtFile,
         groupedReferences: Map<String?, List<KtReferenceExpression>>,
         kDocLinks: Collection<String>,
+        unresolvedImports: List<KtImportDirective>,
         arrayAccessesImportsFilter: (KtImportDirective) -> Boolean,
         context: KotlinFileContext
-    ) = file.importDirectives.filter { imp ->
+    ) = file.importDirectives.filter {
+        // 0. Filter out unresolved imports, to avoid FPs in case of incomplete semantic
+        it !in unresolvedImports
+    }.filter { imp ->
         // 1. Filter out & report all imports that import from kotlin.* or the same package as our file
         if (imp.isImportedImplicitlyAlready(file.packageDirective?.name)) {
             imp.importedReference?.let { context.reportIssue(it, MESSAGE_REDUNDANT) }
