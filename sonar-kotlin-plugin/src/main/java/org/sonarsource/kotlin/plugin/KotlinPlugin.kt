@@ -61,7 +61,6 @@ class KotlinPlugin : Plugin {
         const val SONAR_JAVA_LIBRARIES = "sonar.java.libraries"
     }
 
-    @ExperimentalTime
     override fun define(context: Plugin.Context) {
         context.addExtensions(
             KotlinLanguage::class.java,
