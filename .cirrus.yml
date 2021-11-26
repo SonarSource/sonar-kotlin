@@ -152,8 +152,7 @@ ws_scan_task:
   whitesource_script:
     - source cirrus-env QA
     - ./gradlew clean build -x test
-    - ./export_ws_variables.sh sonar-kotlin-plugin > ws.env
-    - source ws.env
+    - source ./export_ws_variables.sh
     - source ws_scan.sh
   allow_failures: "true"
   always:

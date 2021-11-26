@@ -64,3 +64,8 @@ val p3 = Pattern.compile("regex", Pattern.UNICODE_CASE and Pattern.UNIX_LINES) /
 val bar10 = Regex("foo", RENAMED_DOT_MATCHES_ALL) // Noncompliant {{Flags: 32}}
 
 val bar11 = Regex("test", RegexOption.LITERAL) // Compliant - we don't trigger on regexes with a LITERAL flag
+
+val bar12a = Regex("${someString}") // Compliant - we don't currently handle string interpolation
+val bar12b = Regex("$someString") // Compliant - we don't currently handle string interpolation
+val bar13a = Regex("something[a-z${checks.someString}]foo") // Compliant - we don't currently handle string interpolation
+val bar13b = Regex("something[a-z$someString]foo") // Compliant - we don't currently handle string interpolation
