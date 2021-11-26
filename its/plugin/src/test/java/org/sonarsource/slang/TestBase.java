@@ -60,6 +60,7 @@ public abstract class TestBase {
       .setProjectKey(projectKey)
       .setProjectName(projectKey)
       .setProjectVersion("1")
+      .setProperty("sonar.internal.analysis.failFast", "true")
       .setSourceDirs(".");
   }
 
@@ -79,8 +80,8 @@ public abstract class TestBase {
       .setMetricKeys(singletonList(metricKey)));
     List<Measure> measures = response.getComponent().getMeasuresList();
     return measures.size() == 1 ? measures.get(0) : null;
-  }  
-  
+  }
+
   protected Map<String, Measure> getMeasures(String projectKey, String... metricKeys) {
     return newWsClient().measures().component(new ComponentRequest()
       .setComponent(projectKey)

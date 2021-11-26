@@ -245,6 +245,7 @@ public class SlangRulingTest {
       .setProperty("sonar.cpd.exclusions", "**/*")
       .setProperty("sonar.scm.disabled", "true")
       .setProperty("sonar.project", project)
+      .setProperty("sonar.internal.analysis.failFast", "true")
       .setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx1024m");
 
     String debugPort = System.getProperty("sonar.rulingDebugPort");
