@@ -261,7 +261,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     @Test
-    fun `ensure failFast is not triggering when not set`() {
+    fun `ensure failFast is not triggering when set to false`() {
         val sensor = failFastSensorWithEnvironmentSetup(false)
         assertDoesNotThrow { sensor.execute(context) }
         assertThat(logTester.logs(LoggerLevel.ERROR))
@@ -269,7 +269,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     @Test
-    fun `ensure failFast is not triggered when unset`() {
+    fun `ensure failFast is not triggered when not set at all`() {
         val sensor = failFastSensorWithEnvironmentSetup(null)
         assertDoesNotThrow { sensor.execute(context) }
         assertThat(logTester.logs(LoggerLevel.ERROR))
