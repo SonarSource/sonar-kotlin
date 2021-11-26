@@ -30,7 +30,8 @@ import org.sonarsource.kotlin.api.SecondaryLocation
 class DummyInputFileContext : InputFileContext {
     override var filteredRules: Map<String, Set<TextRange>> = emptyMap()
     override val inputFile: InputFile = DummyInputFile()
-    override val sensorContext: SensorContext by lazy { throw NotImplementedError() }
+    override val sensorContext: SensorContext
+        get() = throw NotImplementedError()
     override val isAndroid: Boolean = false
 
     val issuesReported = mutableListOf<ReportedIssue>()

@@ -26,10 +26,12 @@ import org.sonar.api.batch.fs.TextRange
 class TextRangeAssert(actual: TextRange?) : AbstractAssert<TextRangeAssert?, TextRange?>(actual, TextRangeAssert::class.java) {
     fun hasRange(startLine: Int, startLineOffset: Int, endLine: Int, endLineOffset: Int): TextRangeAssert {
         isNotNull
-        assertThat(actual!!.start().line()).isEqualTo(startLine)
-        assertThat(actual.start().lineOffset()).isEqualTo(startLineOffset)
-        assertThat(actual.end().line()).isEqualTo(endLine)
-        assertThat(actual.end().lineOffset()).isEqualTo(endLineOffset)
+        actual!!.let { actualNotNull: TextRange ->
+            assertThat(actualNotNull.start().line()).isEqualTo(startLine)
+            assertThat(actualNotNull.start().lineOffset()).isEqualTo(startLineOffset)
+            assertThat(actualNotNull.end().line()).isEqualTo(endLine)
+            assertThat(actualNotNull.end().lineOffset()).isEqualTo(endLineOffset)
+        }
         return this
     }
 }
