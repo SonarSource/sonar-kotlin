@@ -21,10 +21,12 @@ package org.sonarsource.kotlin.api
 
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.converter.Environment
@@ -127,6 +129,12 @@ internal class ApiExtensionsKtTest {
             .isEmpty()
         assertThat(referencesMap.filter { it.value.setterMatches(ctx, "x", setNameMatcher) }.map { it.key })
             .isEmpty()
+    }
+
+    @Test
+    fun `PsiElement getType()`() {
+        assertThat((null as PsiElement?).getType(BindingContext.EMPTY)).isNull()
+        assertThat(PsiWhiteSpaceImpl(" ").getType(BindingContext.EMPTY)).isNull()
     }
 
     private fun walker(node: PsiElement, action: (PsiElement) -> Unit) {
