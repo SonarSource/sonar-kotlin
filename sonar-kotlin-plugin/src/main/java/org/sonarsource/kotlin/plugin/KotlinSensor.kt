@@ -20,8 +20,10 @@
 package org.sonarsource.kotlin.plugin
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
@@ -194,13 +196,13 @@ class KotlinSensor(
             }
         }
 
-        withContext(analysisDispatcher) {
-            val workerJobs = mutableListOf<Job>()
+        val exceptions = withContext(analysisDispatcher) {
+            val workerJobs = mutableListOf<Deferred<Throwable?>>()
 
             for ((ktFile, doc, inputFile) in kotlinFiles) {
                 if (sensorContext.isCancelled) break
 
-                launch {
+                async {
                     dp("##0----")
                     val uri = inputFile.uri()
                     try {
@@ -211,8 +213,10 @@ class KotlinSensor(
                         dp("##3: Updating error report for '$uri'")
                         synchronized(progressReport) { progressReport.nextFile() }
                         dp("##4: done with '$uri'")
+                        null
                     } catch (e: Throwable) {
                         dp("################# ERROR ERROR ERROR on file '$uri'", e)
+                        e
                     } finally {
                         dp("## Done done: '$uri'")
                     }
@@ -222,15 +226,20 @@ class KotlinSensor(
             // TODO: make a loop to actually cancel when all jobs have been started
             if (sensorContext.isCancelled) {
                 workerJobs.forEach { it.cancel() }
+                emptyList()
             } else {
-                workerJobs.forEach { it.join() }
+                workerJobs.mapNotNull {
+                    it.await()
+                }
             }
         }
 
-        while (AbstractCheck.reported.get() > 0) {
+        while (AbstractCheck.reported.get() > 0 && exceptions.isEmpty()) {
             delay(10)
         }
         issueReporterJob.cancel()
+
+        exceptions.firstOrNull()?.let { throw it }
 
         sensorContext.isCancelled
     }
