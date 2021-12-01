@@ -20,10 +20,12 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.getType
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 @Rule(key = "S1481")
@@ -31,7 +33,10 @@ class UnusedLocalVariableCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
         context.bindingContext.diagnostics.noSuppression()
-            .filter { it.psiFile ==  file && it.factory == Errors.UNUSED_VARIABLE }
+            .filter {
+                it.psiFile == file && it.factory == Errors.UNUSED_VARIABLE &&
+                    it.psiElement.getType(context.bindingContext)?.getJetTypeFqName(false) != "kotlin.Nothing"
+            }
             .map { it.psiElement as KtNamedDeclaration }
             .forEach {
                 context.reportIssue(it.nameIdentifier!!, """Remove this unused "${it.name}" local variable.""")
