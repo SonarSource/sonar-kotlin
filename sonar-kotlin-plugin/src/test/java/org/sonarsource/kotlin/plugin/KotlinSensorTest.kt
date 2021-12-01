@@ -20,15 +20,24 @@
 package org.sonarsource.kotlin.plugin
 
 import io.mockk.every
+import io.mockk.mockkStatic
 import io.mockk.spyk
+import io.mockk.unmockkAll
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 import org.sonar.api.batch.rule.CheckFactory
 import org.sonar.api.batch.sensor.highlighting.TypeOfText
 import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.utils.log.LoggerLevel
+import org.sonar.check.Rule
+import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.testing.AbstractSensorTest
 import org.sonarsource.kotlin.testing.assertTextRange
 import java.io.IOException
@@ -37,12 +46,19 @@ import kotlin.time.ExperimentalTime
 @ExperimentalTime
 internal class KotlinSensorTest : AbstractSensorTest() {
 
+    @AfterEach
+    fun cleanupMocks() {
+        unmockkAll()
+    }
+
     @Test
     fun test_one_rule() {
-        val inputFile = createInputFile("file1.kt", """
+        val inputFile = createInputFile(
+            "file1.kt", """
      fun main(args: Array<String>) {
      print (1 == 1);}
-     """.trimIndent())
+     """.trimIndent()
+        )
         context.fileSystem().add(inputFile)
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
@@ -60,7 +76,8 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     @org.junit.jupiter.api.Disabled
     @Test
     fun test_commented_code() {
-        val inputFile = createInputFile("file1.kt", """
+        val inputFile = createInputFile(
+            "file1.kt", """
      fun main(args: Array<String>) {
      //fun foo () { if (true) {print("string literal");}}
      print (1 == 1);
@@ -72,7 +89,8 @@ internal class KotlinSensorTest : AbstractSensorTest() {
      val c = DoubleArray(n + 1) // quadratic
      val d = DoubleArray(n) // cubic
      }
-     """.trimIndent())
+     """.trimIndent()
+        )
         context.fileSystem().add(inputFile)
         val checkFactory = checkFactory("S125")
         sensor(checkFactory).execute(context)
@@ -87,11 +105,13 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun simple_file() {
-        val inputFile = createInputFile("file1.kt", """
+        val inputFile = createInputFile(
+            "file1.kt", """
      fun main(args: Array<String>) {
      print (1 == 1); print("abc"); }
      data class A(val a: Int)
-     """.trimIndent())
+     """.trimIndent()
+        )
         context.fileSystem().add(inputFile)
         sensor(checkFactory()).execute(context)
         Assertions.assertThat(context.highlightingTypeAt(inputFile.key(), 1, 0)).containsExactly(TypeOfText.KEYWORD)
@@ -111,14 +131,16 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun test_issue_suppression() {
-        val inputFile = createInputFile("file1.kt", """
+        val inputFile = createInputFile(
+            "file1.kt", """
      @SuppressWarnings("kotlin:S1764")
      fun main() {
      print (1 == 1);}
      @SuppressWarnings(value=["kotlin:S1764"])
      fun main2() {
      print (1 == 1);}
-     """.trimIndent())
+     """.trimIndent()
+        )
         context.fileSystem().add(inputFile)
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
@@ -128,14 +150,16 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun test_issue_not_suppressed() {
-        val inputFile = createInputFile("file1.kt", """
+        val inputFile = createInputFile(
+            "file1.kt", """
      @SuppressWarnings("S1764")
      fun main() {
      print (1 == 1);}
      @SuppressWarnings(value=["scala:S1764"])
      fun main2() {
      print (1 == 1);}
-     """.trimIndent())
+     """.trimIndent()
+        )
         context.fileSystem().add(inputFile)
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
@@ -160,8 +184,8 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         Assertions.assertThat(textPointer.lineOffset()).isEqualTo(14)
         Assertions.assertThat(logTester.logs())
             .contains(String.format("Unable to parse file: %s. Parse error at position 1:14", inputFile.uri()))
-    }   
-    
+    }
+
     @Test
     fun test_fail_reading() {
         val inputFile = spyk(createInputFile("file1.kt", "class A { fun f() = TODO() }"))
@@ -178,7 +202,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         Assertions.assertThat(analysisError.message()).isEqualTo("Unable to parse file: file1.kt")
         val textPointer = analysisError.location()
         Assertions.assertThat(textPointer).isNull()
-        
+
         Assertions.assertThat(logTester.logs(LoggerLevel.ERROR)).contains("Cannot read 'file1.kt': Can't read")
     }
 
@@ -208,7 +232,60 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         Assertions.assertThat(analysisErrors).isEmpty()
     }
 
+    private fun failFastSensorWithEnvironmentSetup(failFast: Boolean?): KotlinSensor {
+        mockkStatic("org.sonarsource.kotlin.plugin.KotlinCheckListKt")
+        every { KOTLIN_CHECKS } returns listOf(ExceptionThrowingCheck::class.java)
+
+        context.apply {
+            setSettings(MapSettings().apply {
+                failFast?.let { setProperty("sonar.internal.analysis.failFast", it) }
+            })
+
+            fileSystem().add(createInputFile("file1.kt", "class A { fun f() = TODO() }"))
+        }
+        return sensor(checkFactory("ETRule1"))
+    }
+
+    @Test
+    fun `ensure failFast is working when set`() {
+        val sensor = failFastSensorWithEnvironmentSetup(true)
+
+        assertThrows<IllegalStateException>("Exception in 'KtChecksVisitor' while analyzing 'file1.kt'") {
+            sensor.execute(context)
+        }.apply {
+            assertThat(this).hasCause(TestException("This is a test message"))
+        }
+
+        assertThat(logTester.logs(LoggerLevel.ERROR))
+            .containsExactly("Cannot analyse 'file1.kt' with 'KtChecksVisitor': This is a test message")
+    }
+
+    @Test
+    fun `ensure failFast is not triggering when set to false`() {
+        val sensor = failFastSensorWithEnvironmentSetup(false)
+        assertDoesNotThrow { sensor.execute(context) }
+        assertThat(logTester.logs(LoggerLevel.ERROR))
+            .containsExactly("Cannot analyse 'file1.kt' with 'KtChecksVisitor': This is a test message")
+    }
+
+    @Test
+    fun `ensure failFast is not triggered when not set at all`() {
+        val sensor = failFastSensorWithEnvironmentSetup(null)
+        assertDoesNotThrow { sensor.execute(context) }
+        assertThat(logTester.logs(LoggerLevel.ERROR))
+            .containsExactly("Cannot analyse 'file1.kt' with 'KtChecksVisitor': This is a test message")
+    }
+
     private fun sensor(checkFactory: CheckFactory): KotlinSensor {
         return KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language())
     }
 }
+
+@Rule(key = "ETRule1")
+internal class ExceptionThrowingCheck : AbstractCheck() {
+    override fun visitNamedFunction(function: KtNamedFunction, data: KotlinFileContext?) {
+        throw TestException("This is a test message")
+    }
+}
+
+internal class TestException(msg: String) : Exception(msg)
