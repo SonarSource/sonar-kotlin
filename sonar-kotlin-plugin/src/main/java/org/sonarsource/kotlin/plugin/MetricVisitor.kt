@@ -46,10 +46,8 @@ class MetricVisitor(
     private val fileLinesContextFactory: FileLinesContextFactory,
     private val noSonarFilter: NoSonarFilter,
 ) : KotlinFileVisitor() {
-    private lateinit var ktMetricVisitor: KtMetricVisitor
-
     override fun visit(kotlinFileContext: KotlinFileContext) {
-        ktMetricVisitor = KtMetricVisitor()
+        val ktMetricVisitor = KtMetricVisitor()
         val (ctx, file) = kotlinFileContext
         file.accept(ktMetricVisitor)
 
@@ -67,20 +65,6 @@ class MetricVisitor(
         fileLinesContext.save()
         noSonarFilter.noSonarInFile(ctx.inputFile, ktMetricVisitor.nosonarLines)
     }
-
-    fun commentLines() = ktMetricVisitor.commentLines.toSet()
-
-    fun linesOfCode() = ktMetricVisitor.linesOfCode.toSet()
-
-    fun nosonarLines() = ktMetricVisitor.nosonarLines.toSet()
-
-    fun numberOfFunctions() = ktMetricVisitor.numberOfFunctions
-
-    fun numberOfClasses() = ktMetricVisitor.numberOfClasses
-
-    fun cognitiveComplexity() = ktMetricVisitor.cognitiveComplexity
-
-    fun executableLines() = ktMetricVisitor.executableLines
 }
 
 private class KtMetricVisitor : KtTreeVisitorVoid() {

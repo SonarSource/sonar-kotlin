@@ -1,0 +1,6 @@
+projectKey=org.sonarsource.it.projects:tests-without-main-code
+serverUrl=http://127.0.0.1:36205
+serverVersion=7.9.0.26994
+dashboardUrl=http://127.0.0.1:36205/dashboard?id=org.sonarsource.it.projects%3Atests-without-main-code
+ceTaskId=AX1RgIMc37nGlCmvAr7h
+ceTaskUrl=http://127.0.0.1:36205/api/ce/task?id=AX1RgIMc37nGlCmvAr7h

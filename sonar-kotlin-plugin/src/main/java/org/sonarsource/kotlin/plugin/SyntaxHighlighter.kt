@@ -39,10 +39,12 @@ import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 
 class SyntaxHighlighter : KotlinFileVisitor() {
     override fun visit(kotlinFileContext: KotlinFileContext) {
-        val newHighlighting = kotlinFileContext.inputFileContext.sensorContext.newHighlighting()
-            .onFile(kotlinFileContext.inputFileContext.inputFile)
-        highlightElementsRec(kotlinFileContext.ktFile, newHighlighting, kotlinFileContext)
-        newHighlighting.save()
+        synchronized(kotlinFileContext.inputFileContext.sensorContext) {
+            val newHighlighting = kotlinFileContext.inputFileContext.sensorContext.newHighlighting()
+                .onFile(kotlinFileContext.inputFileContext.inputFile)
+            highlightElementsRec(kotlinFileContext.ktFile, newHighlighting, kotlinFileContext)
+            newHighlighting.save()
+        }
     }
 
     private fun highlightElementsRec(node: PsiElement, newHighlighting: NewHighlighting, context: KotlinFileContext) {

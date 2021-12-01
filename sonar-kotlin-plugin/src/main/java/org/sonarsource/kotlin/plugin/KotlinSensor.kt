@@ -19,7 +19,19 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.api.SonarProduct
 import org.sonar.api.batch.fs.FileSystem
 import org.sonar.api.batch.fs.InputFile
@@ -62,6 +74,7 @@ class KotlinSensor(
     private val noSonarFilter: NoSonarFilter,
     val language: KotlinLanguage,
 ) : Sensor {
+    private val analysisDispatcher: CoroutineDispatcher = Dispatchers.Default
 
     val checks: Checks<AbstractCheck> = checkFactory.create<AbstractCheck>(KOTLIN_REPOSITORY_KEY).apply {
         addAnnotatedChecks(KOTLIN_CHECKS as Iterable<*>)
@@ -80,7 +93,8 @@ class KotlinSensor(
         val fileSystem: FileSystem = sensorContext.fileSystem()
         val mainFilePredicate = fileSystem.predicates().and(
             fileSystem.predicates().hasLanguage(language.key),
-            fileSystem.predicates().hasType(InputFile.Type.MAIN))
+            fileSystem.predicates().hasType(InputFile.Type.MAIN)
+        )
 
         val inputFiles = fileSystem.inputFiles(mainFilePredicate)
         val filenames = inputFiles.map { it.toString() }
@@ -138,18 +152,96 @@ class KotlinSensor(
             LOG.info("Generating BindingContext for all files took: ${duration.inWholeMilliseconds} ms.")
 
             progressReport.start(filenames)
-            for ((ktFile, doc, inputFile) in kotlinFiles) {
-                if (sensorContext.isCancelled) return false
-                val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
 
-                analyseFile(sensorContext, inputFileContext, visitors, statistics, KotlinTree(ktFile, doc, bindingContext))
+            return analyseFilesConcurrently(
+                sensorContext,
+                kotlinFiles,
+                progressReport,
+                visitors,
+                statistics,
+                bindingContext,
+                isInAndroidContext
+            )
 
-                progressReport.nextFile()
-            }
         } finally {
             Disposer.dispose(environment.disposable)
         }
-        return true
+    }
+
+    fun dp(msg: String, e: Throwable? = null) {
+        System.err.println(msg)
+        if (e != null) {
+            LOG.warn(msg, e)
+            e.printStackTrace()
+        } else {
+            LOG.warn(msg)
+        }
+    }
+
+    private fun analyseFilesConcurrently(
+        sensorContext: SensorContext,
+        kotlinFiles: Iterable<KotlinSyntaxStructure>,
+        progressReport: ProgressReport,
+        visitors: List<KotlinFileVisitor>,
+        statistics: DurationStatistics,
+        bindingContext: BindingContext,
+        isInAndroidContext: Boolean,
+    ) = runBlocking {
+        val flow = MutableSharedFlow<AbstractCheck.IssueToReport>()
+
+        val issueReporterJob = launch {
+            flow.collect {
+                it.report()
+                AbstractCheck.reported.decrementAndGet()
+            }
+        }
+
+        val exceptions = withContext(analysisDispatcher) {
+            val workerJobs = mutableListOf<Deferred<Throwable?>>()
+
+            for ((ktFile, doc, inputFile) in kotlinFiles) {
+                if (sensorContext.isCancelled) break
+
+                async {
+                    dp("##0----")
+                    val uri = inputFile.uri()
+                    try {
+                        dp("##1: launching for '$uri'")
+                        val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext, flow)
+                        dp("##2: analyzing '$uri'...")
+                        analyseFile(sensorContext, inputFileContext, visitors, statistics, KotlinTree(ktFile, doc, bindingContext))
+                        dp("##3: Updating error report for '$uri'")
+                        synchronized(progressReport) { progressReport.nextFile() }
+                        dp("##4: done with '$uri'")
+                        null
+                    } catch (e: Throwable) {
+                        dp("################# ERROR ERROR ERROR on file '$uri'", e)
+                        e
+                    } finally {
+                        dp("## Done done: '$uri'")
+                    }
+                }.let { workerJobs.add(it) }
+            }
+
+            // TODO: make a loop to actually cancel when all jobs have been started
+            if (sensorContext.isCancelled) {
+                workerJobs.forEach { it.cancel() }
+                emptyList()
+            } else {
+                workerJobs.mapNotNull {
+                    it.await()
+                }
+            }
+        }
+
+        while (AbstractCheck.reported.get() > 0 && exceptions.isEmpty()) {
+            delay(10)
+        }
+        issueReporterJob.cancel()
+
+        exceptions.firstOrNull()?.let { throw it }
+
+        sensorContext.isCancelled
     }
 
     private fun analyseFile(
