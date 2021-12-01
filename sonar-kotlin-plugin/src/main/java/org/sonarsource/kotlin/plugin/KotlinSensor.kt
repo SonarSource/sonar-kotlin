@@ -166,6 +166,16 @@ class KotlinSensor(
         }
     }
 
+    fun dp(msg: String, e: Throwable? = null) {
+        System.err.println(msg)
+        if (e != null) {
+            LOG.warn(msg, e)
+            e.printStackTrace()
+        } else {
+            LOG.warn(msg)
+        }
+    }
+
     private fun analyseFilesConcurrently(
         sensorContext: SensorContext,
         kotlinFiles: Iterable<KotlinSyntaxStructure>,
@@ -191,9 +201,21 @@ class KotlinSensor(
                 if (sensorContext.isCancelled) break
 
                 launch {
-                    val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext, flow)
-                    analyseFile(sensorContext, inputFileContext, visitors, statistics, KotlinTree(ktFile, doc, bindingContext))
-                    synchronized(progressReport) { progressReport.nextFile() }
+                    dp("##0----")
+                    val uri = inputFile.uri()
+                    try {
+                        dp("##1: launching for '$uri'")
+                        val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext, flow)
+                        dp("##2: analyzing '$uri'...")
+                        analyseFile(sensorContext, inputFileContext, visitors, statistics, KotlinTree(ktFile, doc, bindingContext))
+                        dp("##3: Updating error report for '$uri'")
+                        synchronized(progressReport) { progressReport.nextFile() }
+                        dp("##4: done with '$uri'")
+                    } catch (e: Throwable) {
+                        dp("################# ERROR ERROR ERROR on file '$uri'", e)
+                    } finally {
+                        dp("## Done done: '$uri'")
+                    }
                 }.let { workerJobs.add(it) }
             }
 
