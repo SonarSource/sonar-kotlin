@@ -21,12 +21,12 @@ import otherpackage.OtherClass.set
 import java.io.File
 import java.lang.StringBuilder
 import java.nio.file.Path
-import java.util.Currency // Noncompliant {{Remove unused import.}}
+import java.util.Currency // Noncompliant {{Remove this unused import.}}
 import java.util.EventObject // Compliant (KDoc usage)
-import java.util.Base64 // Noncompliant {{Remove unused import.}}
+import java.util.Base64 // Noncompliant {{Remove this unused import.}}
 import java.util.BitSet // Compliant (KDoc usage)
-import java.util.Date // Noncompliant {{Remove unused import.}}
-import java.util.Timer // Noncompliant {{Remove unused import.}}
+import java.util.Date // Noncompliant {{Remove this unused import.}}
+import java.util.Timer // Noncompliant {{Remove this unused import.}}
 import okhttp3.TlsVersion.TLS_1_1
 import okhttp3.TlsVersion.TLS_1_2
 import otherpackage.OtherClass
@@ -43,7 +43,7 @@ import okhttp3.TlsVersion.SSL_3_0 as TLS3
 import okhttp3.TlsVersion.TLS_1_3 as TLS13
 import java.beans.*
 import kotlin.test.*
-import kotlin.* // Noncompliant {{Remove redundant import.}}
+import kotlin.* // Noncompliant {{Remove this redundant import.}}
 
 class UnnecessaryImportsCheckSamplePartialSemantics {
     fun foo() {
