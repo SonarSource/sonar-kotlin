@@ -73,8 +73,7 @@ import operators.times
 import operators.unaryMinus
 import operators.unaryPlus
 import operators.get
-// False-positive
-import operators.invoke // Noncompliant
+import operators.invoke
 import operators.set
 import operators.plusAssign // Noncompliant
 import operators.minusAssign // Noncompliant
