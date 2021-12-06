@@ -46,6 +46,9 @@ configure<com.diffplug.gradle.spotless.SpotlessExtension> {
 }
 
 val kotlinVersion: String by extra
+val junitVersion: String by project
+val mockkVersion: String by project
+val staxmateVersion: String by project
 
 dependencies {
     compileOnly("org.sonarsource.sonarqube:sonar-plugin-api")
@@ -53,14 +56,14 @@ dependencies {
     implementation("org.sonarsource.analyzer-commons:sonar-xml-parsing")
     implementation("org.sonarsource.analyzer-commons:sonar-regex-parsing")
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
-    implementation("com.fasterxml.staxmate:staxmate:2.3.1")
+    implementation("com.fasterxml.staxmate:staxmate:$staxmateVersion")
     implementation("com.google.code.gson:gson")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testImplementation("org.assertj:assertj-core")
     testImplementation("org.mockito:mockito-core")
-    testImplementation("io.mockk:mockk:1.10.6")
+    testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.github.classgraph:classgraph")
     testImplementation("org.sonarsource.analyzer-commons:sonar-analyzer-test-commons")
     testImplementation("org.sonarsource.sonarqube:sonar-plugin-api-impl")
