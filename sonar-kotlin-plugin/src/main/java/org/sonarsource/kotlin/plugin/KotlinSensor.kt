@@ -55,7 +55,7 @@ private const val FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast"
 private val LOG = Loggers.get(KotlinSensor::class.java)
 private val EMPTY_FILE_CONTENT_PATTERN = Regex("""\s*+""")
 
-@ExperimentalTime
+@OptIn(ExperimentalTime::class)
 class KotlinSensor(
     checkFactory: CheckFactory,
     private val fileLinesContextFactory: FileLinesContextFactory,

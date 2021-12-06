@@ -93,9 +93,7 @@ class KotlinCodeVerifier {
     }
 
     fun containsCode(content: String): Boolean {
-        // For now we keep the Java implementation of split, as the Kotlin one causes some different behaviour.
-        // TODO: how does this method function? The logic (e.g. splitting at \\w+) seems a bit odd
-        val words = (content.trim() as java.lang.String).split("\\w+").size
+        val words = content.trim().split(Regex("\\w+")).filter { it.isNotBlank() }.size
         return if (words < 2 || isKDoc(content)) {
             false
         } else {
@@ -104,7 +102,7 @@ class KotlinCodeVerifier {
                 val wrappedContent = "fun function () { $content }"
 
                 val ktFile = environment.ktPsiFactory.createFile(wrappedContent)
-                
+
                 ktFile.findDescendantOfType<PsiErrorElement>() == null && ! isSimpleExpression(ktFile)
             } catch (e: Exception) {
                 false

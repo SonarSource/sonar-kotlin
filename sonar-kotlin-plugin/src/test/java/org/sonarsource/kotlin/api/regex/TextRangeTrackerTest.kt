@@ -111,7 +111,7 @@ private class TextRangeTrackerAssert(actual: TextRangeTracker) : ObjectAssert<Te
     fun hasRangesAtIndexes(vararg expected: Pair<Int, Range>): TextRangeTrackerAssert {
         val expectedNavigable = TreeMap(expected.toMap())
         for (i in expectedNavigable.firstKey()..expectedNavigable.lastKey()) {
-            val (actualRealIndex, actualRange) = actual.rangeAtIndex(i)!!
+            val (actualRealIndex, actualRange) = actual.rangeAtIndex(i)
             val flooredExpectedKey = expectedNavigable.floorKey(i)
 
             val expectedRange = expectedNavigable[flooredExpectedKey]!!
