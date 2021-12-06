@@ -39,6 +39,7 @@ import kotlin.Any // Noncompliant {{Remove redundant import.}}
 import okhttp3.TlsVersion.TLS_1_1
 // unused
 import okhttp3.TlsVersion.TLS_1_2 // Noncompliant {{Remove unused import.}}
+import operators.OperatorsContainer
 import otherpackage.OtherClass
 import otherpackage.OtherClass2.plus
 import otherpackage.OtherClass2.get // FN due to missing binding context
@@ -55,6 +56,61 @@ import java.beans.* // Non|compliant FN (we currently ignore all wildcard import
 import kotlin.test.* // Non|compliant FN (we currently ignore all wildcard imports)
 // Except for this one
 import kotlin.* // Noncompliant {{Remove redundant import.}}
+
+// Operators
+import operators.getValue
+import operators.setValue // FN due to missing binding context
+// False-positive
+import operators.contains // Noncompliant
+import operators.dec
+import operators.div
+import operators.inc
+import operators.minus
+import operators.not
+import operators.plus
+import operators.rangeTo
+import operators.rem
+import operators.times
+// False-positive
+import operators.unaryMinus // Noncompliant
+// False-positive
+import operators.unaryPlus // Noncompliant
+import operators.get
+// False-positive
+import operators.invoke // Noncompliant
+import operators.set
+import operators.plusAssign // Noncompliant
+import operators.minusAssign // Noncompliant
+import operators.timesAssign // Noncompliant
+import operators.divAssign // Noncompliant
+import operators.remAssign // Noncompliant
+import operators.provideDelegate // FN due to missing binding context
+
+class SomeClassWithDelegateNoSemantics(var delegate: OperatorsContainer) {
+    val someProperty: String by delegate
+
+    fun test() {
+        +delegate
+        -delegate
+        !delegate
+        delegate++
+        delegate--
+        --delegate
+        ++delegate
+        delegate + 1
+        delegate - 1
+        delegate * 1
+        delegate / 1
+        delegate % 1
+        delegate .. 1
+        1 in delegate
+        2 !in delegate
+        delegate[1,2]
+        delegate[1,2] = delegate
+        delegate(0)
+    }
+}
+
 
 class UnnecessaryImportsCheckSampleNoSemantics {
     fun foo() {
@@ -85,6 +141,8 @@ class UnnecessaryImportsCheckSampleNoSemantics {
         "" someInfixFun ""
         val method: Method? = null
         val kf = method!!.kotlinFunction
+        
+        
     }
 
     /**
