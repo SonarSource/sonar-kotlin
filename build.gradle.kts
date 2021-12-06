@@ -13,6 +13,19 @@ plugins {
     signing
 }
 
+val projectTitle: String by project
+val analyzerCommonsVersion: String by project
+val sonarqubeVersion: String by project
+val orchestratorVersion: String by project
+val sonarlintVersion: String by project
+val sonarLinksCi: String by project
+val gsonVersion: String by project
+val junitVersion: String by project
+val assertjVersion: String by project
+val mockitoVersion: String by project
+val classgraphVersion: String by project
+val jsr305Version: String by project
+
 allprojects {
     apply<JavaPlugin>()
     apply(plugin = "jacoco")
@@ -31,18 +44,21 @@ allprojects {
         }
     }
 
+    val buildNumber: String? = System.getProperty("buildNumber")
+
     ext {
-        set("buildNumber", System.getProperty("buildNumber"))
-        set("analyzerCommonsVersion", "1.19.0.786")
-        set("sonarqubeVersion", "8.9.0.43852")
-        set("orchestratorVersion", "3.35.0.2707")
-        set("sonarlintVersion", "6.2.0.34235")
-        set("sonarLinksCi", "https://travis-ci.org/SonarSource/slang")
+        set("buildNumber", buildNumber)
+        set("analyzerCommonsVersion", analyzerCommonsVersion)
+        set("sonarqubeVersion", sonarqubeVersion)
+        set("orchestratorVersion", orchestratorVersion)
+        set("sonarlintVersion", sonarlintVersion)
+        set("sonarLinksCi", sonarLinksCi)
     }
+
     // Replaces the version defined in sources, usually x.y-SNAPSHOT, by a version identifying the build.
-    if (project.version.toString().endsWith("-SNAPSHOT") && ext["buildNumber"] != null) {
+    if (project.version.toString().endsWith("-SNAPSHOT") && buildNumber != null) {
         val versionSuffix =
-            if (project.version.toString().count { it == '.' } == 1) ".0.${ext["buildNumber"]}" else ".${ext["buildNumber"]}"
+            if (project.version.toString().count { it == '.' } == 1) ".0.$buildNumber" else ".$buildNumber}"
         project.version = project.version.toString().replace("-SNAPSHOT", versionSuffix)
     }
 
@@ -60,8 +76,6 @@ allprojects {
     }
 }
 
-val projectTitle: String by project
-
 subprojects {
     val javadoc: Javadoc by tasks
 
@@ -74,22 +88,22 @@ subprojects {
 
     configure<DependencyManagementExtension> {
         dependencies {
-            dependency("org.sonarsource.sonarqube:sonar-plugin-api:${extra["sonarqubeVersion"]}")
-            dependency("org.sonarsource.sonarqube:sonar-plugin-api-impl:${extra["sonarqubeVersion"]}")
-            dependency("org.sonarsource.sonarqube:sonar-ws:${extra["sonarqubeVersion"]}")
-            dependency("com.google.code.findbugs:jsr305:1.3.9")
-            dependency("com.google.code.gson:gson:2.8.9")
-            dependency("org.junit.jupiter:junit-jupiter-api:5.7.1")
-            dependency("org.junit.jupiter:junit-jupiter-engine:5.7.1")
-            dependency("org.mockito:mockito-core:2.21.0")
-            dependency("org.assertj:assertj-core:3.6.1")
-            dependency("io.github.classgraph:classgraph:4.8.90")
-            dependency("org.sonarsource.analyzer-commons:sonar-analyzer-test-commons:${extra["analyzerCommonsVersion"]}")
-            dependency("org.sonarsource.analyzer-commons:sonar-analyzer-commons:${extra["analyzerCommonsVersion"]}")
-            dependency("org.sonarsource.analyzer-commons:sonar-xml-parsing:${extra["analyzerCommonsVersion"]}")
-            dependency("org.sonarsource.analyzer-commons:sonar-regex-parsing:${extra["analyzerCommonsVersion"]}")
-            dependency("org.sonarsource.orchestrator:sonar-orchestrator:${extra["orchestratorVersion"]}")
-            dependency("org.sonarsource.sonarlint.core:sonarlint-core:${extra["sonarlintVersion"]}")
+            dependency("org.sonarsource.sonarqube:sonar-plugin-api:$sonarqubeVersion")
+            dependency("org.sonarsource.sonarqube:sonar-plugin-api-impl:$sonarqubeVersion")
+            dependency("org.sonarsource.sonarqube:sonar-ws:$sonarqubeVersion")
+            dependency("com.google.code.findbugs:jsr305:$jsr305Version")
+            dependency("com.google.code.gson:gson:$gsonVersion")
+            dependency("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+            dependency("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+            dependency("org.mockito:mockito-core:$mockitoVersion")
+            dependency("org.assertj:assertj-core:$assertjVersion")
+            dependency("io.github.classgraph:classgraph:$classgraphVersion")
+            dependency("org.sonarsource.analyzer-commons:sonar-analyzer-test-commons:$analyzerCommonsVersion")
+            dependency("org.sonarsource.analyzer-commons:sonar-analyzer-commons:$analyzerCommonsVersion")
+            dependency("org.sonarsource.analyzer-commons:sonar-xml-parsing:$analyzerCommonsVersion")
+            dependency("org.sonarsource.analyzer-commons:sonar-regex-parsing:$analyzerCommonsVersion")
+            dependency("org.sonarsource.orchestrator:sonar-orchestrator:$orchestratorVersion")
+            dependency("org.sonarsource.sonarlint.core:sonarlint-core:$sonarlintVersion")
         }
     }
 
@@ -215,7 +229,6 @@ subprojects {
 
 sonarqube {
     properties {
-        val sonarLinksCi: String by extra
         property("sonar.links.ci", sonarLinksCi)
         property("sonar.projectName", projectTitle)
         property("sonar.links.scm", "https://github.com/SonarSource/sonar-kotlin")

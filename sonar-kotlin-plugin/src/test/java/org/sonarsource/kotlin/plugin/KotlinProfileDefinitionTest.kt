@@ -32,7 +32,7 @@ internal class KotlinProfileDefinitionTest {
         val profile = context.profile("kotlin", "Sonar way")
         Assertions.assertThat(profile.rules().size).isGreaterThan(2)
         Assertions.assertThat(profile.rules())
-            .extracting { obj: BuiltInQualityProfilesDefinition.BuiltInActiveRule -> obj.ruleKey() }
+            .extracting<String> { obj: BuiltInQualityProfilesDefinition.BuiltInActiveRule -> obj.ruleKey() }
             .contains("S1764")
     }
 }
