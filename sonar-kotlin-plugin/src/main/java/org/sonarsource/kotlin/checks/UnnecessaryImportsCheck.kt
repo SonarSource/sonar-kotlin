@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocLink
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportDirective
@@ -58,7 +59,7 @@ class UnnecessaryImportsCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
 
-        val (references, arrayAccesses, kDocLinks, delegateImports) = collectReferences(file)
+        val (references, arrayAccesses, kDocLinks, delegateImports, calls) = collectReferences(file)
 
         val bindingContext = context.bindingContext
 
@@ -72,8 +73,9 @@ class UnnecessaryImportsCheck : AbstractCheck() {
 
         val arrayAccessesImportsFilter by lazy { getArrayAccessImportsFilter(arrayAccesses, bindingContext) }
         val delegatesImportsFilter by lazy { getDelegatesImportsFilter(delegateImports, bindingContext) }
+        val invokeCallsFilter by lazy { getInvokeCallsImportsFilter(calls, bindingContext) }
 
-        analyzeImports(file, groupedReferences, kDocLinks, unresolvedImports, arrayAccessesImportsFilter, delegatesImportsFilter, context)
+        analyzeImports(file, groupedReferences, kDocLinks, unresolvedImports, arrayAccessesImportsFilter, delegatesImportsFilter, invokeCallsFilter, context)
     }
 
     private fun analyzeImports(
@@ -83,6 +85,7 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         unresolvedImports: List<KtImportDirective>,
         arrayAccessesImportsFilter: (KtImportDirective) -> Boolean,
         delegateImportsFilter: (KtImportDirective) -> Boolean,
+        invokeCallsFilter: (KtImportDirective) -> Boolean,
         context: KotlinFileContext
     ) = file.importDirectives.filter {
         // 0. Filter out unresolved imports, to avoid FPs in case of incomplete semantic
@@ -105,11 +108,8 @@ class UnnecessaryImportsCheck : AbstractCheck() {
             filterImportsWithSameSimpleNameByReferences(importsWithSameName, relevantReferences, context)
         } ?: importsWithSameName
     }.filter {
-        // 4. Filter 'get' and 'set' imports
-        arrayAccessesImportsFilter(it)
-    }.filter {
-        // 5. Filter delegates imports
-        delegateImportsFilter(it)
+        // 4. Filter 'get', 'set', 'invoke' and delegates imports
+        arrayAccessesImportsFilter(it) && delegateImportsFilter(it) && invokeCallsFilter(it)
     }.forEach { importDirective ->
         // We could not find any usages for anything remaining at this point. Hence, report!
         importDirective.importedReference?.let { context.reportIssue(it, MESSAGE_UNUSED) }
@@ -187,6 +187,22 @@ class UnnecessaryImportsCheck : AbstractCheck() {
                 }
             }
         }
+
+    private fun getInvokeCallsImportsFilter(calls: Collection<KtCallExpression>, bindingContext: BindingContext) =
+        if (bindingContext == BindingContext.EMPTY) {
+            { imp: KtImportDirective -> imp.importedName?.asString() != "invoke" }
+        } else {
+            // Lazy because we don't want to do this operation unless we find at least one "invoke" import
+            val callsFqn by lazy(LazyThreadSafetyMode.NONE) {
+                calls.mapNotNull { it.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() }
+            }; // ';' is mandatory here
+            { imp: KtImportDirective ->
+                if (imp.importedName?.asString() != "invoke") true
+                else {
+                    imp.importedFqName !in callsFqn
+                }
+            }
+        }
 }
 
 private class DataCollector(val file: KtFile) : KtTreeVisitorVoid() {
@@ -195,17 +211,19 @@ private class DataCollector(val file: KtFile) : KtTreeVisitorVoid() {
         val references: Collection<KtReferenceExpression>,
         val arrayAccesses: Collection<KtArrayAccessExpression>,
         val kDocLinks: Collection<String>,
-        val delegateImports: Collection<KtPropertyDelegate>
+        val delegateImports: Collection<KtPropertyDelegate>,
+        val calls: Collection<KtCallExpression>
     )
 
     private val references = mutableListOf<KtReferenceExpression>()
     private val arrayAccesses = mutableListOf<KtArrayAccessExpression>()
     private val kDocLinks = mutableSetOf<String>()
     private val delegateImports = mutableSetOf<KtPropertyDelegate>()
+    private val calls = mutableSetOf<KtCallExpression>()
 
     val result: DataCollectionResult
-        get() = DataCollectionResult(references, arrayAccesses, kDocLinks, delegateImports)
-
+        get() = DataCollectionResult(references, arrayAccesses, kDocLinks, delegateImports, calls)
+    
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
         expression.takeUnless {
             it.children.isNotEmpty() || it.isQualifiedUserType()
@@ -223,6 +241,11 @@ private class DataCollector(val file: KtFile) : KtTreeVisitorVoid() {
     override fun visitPropertyDelegate(delegate: KtPropertyDelegate) {
         delegateImports.add(delegate)
         recurse(delegate)
+    }
+
+    override fun visitCallExpression(expression: KtCallExpression) {
+        calls.add(expression)
+        recurse(expression)
     }
 
     private fun recurse(element: KtElement) = super.visitElement(element)
