@@ -85,7 +85,4 @@
 'kotlin-corda-project:sources/kotlin/corda/tools/shell/src/integration-test/kotlin/net/corda/tools/shell/SSHServerTest.kt':[
 25,
 ],
-'kotlin-corda-project:sources/kotlin/corda/webserver/src/main/kotlin/net/corda/webserver/WebServerConfig.kt':[
-7,
-],
 }

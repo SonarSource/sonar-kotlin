@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableSet.of as immutable_set_of
 // unused
 import com.google.common.io.Files // Noncompliant {{Remove unused import.}}
 import com.google.common.io.Files.isFile
+import operators.OperatorsContainer
 import imports.ClassWithCompanionObject
 import imports.ClassWithNamedCompanionObject
 import okhttp3.TlsVersion
@@ -59,6 +60,81 @@ import java.beans.* // Non|compliant FN (we currently ignore all wildcard import
 import kotlin.test.* // Non|compliant FN (we currently ignore all wildcard imports)
 // Except for this one
 import kotlin.* // Noncompliant {{Remove redundant import.}}
+
+// Operators
+import operators.getValue // Compliant is a delegation operator
+import operators.setValue // Noncompliant
+// False-positive
+import operators.contains // Noncompliant
+import operators.dec
+import operators.div
+import operators.inc
+import operators.minus
+import operators.not
+import operators.plus
+import operators.rangeTo
+import operators.rem
+import operators.times
+// False-positive
+import operators.unaryMinus // Noncompliant
+// False-positive
+import operators.unaryPlus // Noncompliant
+import operators.get
+// False-positive
+import operators.invoke // Noncompliant
+import operators.set
+import operators.plusAssign // Noncompliant
+import operators.minusAssign // Noncompliant
+import operators.timesAssign // Noncompliant
+import operators.divAssign // Noncompliant
+import operators.remAssign // Noncompliant
+
+
+import operators.ResourceLoader
+import operators.provideDelegate // Compliant
+
+
+class MyUI {
+    fun <T> bindResource(id: ResourceID<T>): ResourceLoader<T> {
+        TODO()
+    }
+
+    val image by bindResource(ResourceID.image_id)
+    val text by bindResource(ResourceID.text_id)
+}
+
+class ResourceID<T> {
+    companion object {
+        val image_id: ResourceID<BitSet> = TODO()
+        val text_id: ResourceID<String> = TODO()
+
+    }
+}
+
+class SomeClassWithDelegate(var delegate: OperatorsContainer) {
+    val someProperty: String by delegate
+
+    fun test() {
+        +delegate
+        -delegate
+        !delegate
+        delegate++
+        delegate--
+        --delegate
+        ++delegate
+        delegate + 1
+        delegate - 1
+        delegate * 1
+        delegate / 1
+        delegate % 1
+        delegate .. 1
+        1 in delegate
+        2 !in delegate
+        delegate[1,2]
+        delegate[1,2] = delegate
+        delegate(0)
+    }
+}
 
 class UnnecessaryImportsCheckSample {
     fun foo() {
