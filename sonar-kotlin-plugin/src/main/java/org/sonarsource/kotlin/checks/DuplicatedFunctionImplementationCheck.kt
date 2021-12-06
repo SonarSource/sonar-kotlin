@@ -94,7 +94,6 @@ private class KtNamedFunctionsFinder : KtTreeVisitorVoid() {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        if (function !is KtConstructor<*>) functions.computeIfAbsent(function.parent) { mutableListOf() }
-            .add(function)
+        functions.computeIfAbsent(function.parent) { mutableListOf() }.add(function)
     }
 }

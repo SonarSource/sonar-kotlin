@@ -43,7 +43,8 @@ internal class TestContext(
     private val visitor: KtTestChecksVisitor = KtTestChecksVisitor(listOf(check) + furtherChecks)
     override var filteredRules: Map<String, Set<TextRange>> = emptyMap()
 
-    override val sensorContext: SensorContext by lazy { throw NotImplementedError() }
+    override val sensorContext: SensorContext
+        get() = throw NotImplementedError()
 
     fun scan(root: KotlinTree) {
         visitor.scan(this, root)
