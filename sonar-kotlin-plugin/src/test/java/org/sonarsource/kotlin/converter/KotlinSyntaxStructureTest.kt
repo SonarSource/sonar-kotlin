@@ -53,7 +53,8 @@ internal class KotlinSyntaxStructureTest {
         assertThrows<KotlinExceptionWithAttachments> { kotlinTreeOf(content, environment, inputFile) }.apply {
             assertThat(this)
                 .hasCause(expectedException)
-                .hasMessage("Exception while analyzing expression at (4,17) in SimpleClass.kt")
+                .hasMessageMatching("""Exception while analyzing expression at \(4,17\) in """ +
+                    """.*/sonar-kotlin-plugin/moduleKey/src/test/resources/api/sample/SimpleClass\.kt""")
         }
 
         unmockkAll()
@@ -71,6 +72,6 @@ internal class KotlinSyntaxStructureTest {
             .build()
 
         val (ktFile, _, _) = KotlinSyntaxStructure.of(content, environment, inputFile)
-        assertThat(ktFile.containingFile.name).isEqualTo("SimpleClass.kt")
+        assertThat(ktFile.containingFile.name).endsWith("/sonar-kotlin-plugin/moduleKey/src/test/resources/api/sample/SimpleClass.kt")
     }
 }
