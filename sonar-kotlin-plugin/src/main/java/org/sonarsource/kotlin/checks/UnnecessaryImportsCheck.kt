@@ -240,7 +240,7 @@ private fun KtReferenceExpression.importableSimpleName() =
     when (this) {
         is KtOperationReferenceExpression ->
             operationSignTokenType
-            ?.let { (OperatorConventions.BINARY_OPERATION_NAMES[it] ?: OperatorConventions.UNARY_OPERATION_NAMES[it])?.asString() }
+            ?.let { (OperatorConventions.getNameForOperationSymbol(it))?.asString() }
             ?: getReferencedName()
         is KtSimpleNameExpression -> getReferencedName()
         else -> null

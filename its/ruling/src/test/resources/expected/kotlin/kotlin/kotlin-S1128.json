@@ -333,12 +333,6 @@
 34,
 35,
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/search/declarationsSearch/declarationSearchUtil.kt':[
-29,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/search/usagesSearch/utils.kt':[
-42,
-],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/stubindex/resolve/StubBasedPackageMemberDeclarationProvider.kt':[
 30,
 ],
@@ -367,9 +361,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/ImportableFqNameClassifier.kt':[
 19,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/KotlinIndicesHelper.kt':[
-48,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/SmartCastCalculator.kt':[
 30,
@@ -447,9 +438,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/findUsages/KotlinReferenceUsageInfo.kt':[
 21,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/findUsages/handlers/KotlinFindClassUsagesHandler.kt':[
-48,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/hierarchy/KotlinTypeHierarchyProvider.kt':[
 33,
@@ -539,9 +527,6 @@
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/rename/renameUtil.kt':[
 33,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/search/ideaExtensions/KotlinDefinitionsSearcher.kt':[
-43,
 ],
 'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/slicer/KotlinSliceProvider.kt':[
 27,

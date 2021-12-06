@@ -60,8 +60,7 @@ import kotlin.* // Noncompliant {{Remove redundant import.}}
 // Operators
 import operators.getValue
 import operators.setValue // FN due to missing binding context
-// False-positive
-import operators.contains // Noncompliant
+import operators.contains
 import operators.dec
 import operators.div
 import operators.inc
