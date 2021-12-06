@@ -74,10 +74,8 @@ import operators.plus
 import operators.rangeTo
 import operators.rem
 import operators.times
-// False-positive
-import operators.unaryMinus // Noncompliant
-// False-positive
-import operators.unaryPlus // Noncompliant
+import operators.unaryMinus
+import operators.unaryPlus
 import operators.get
 // False-positive
 import operators.invoke // Noncompliant

@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtPackageDirective
+import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
 import org.jetbrains.kotlin.psi.KtReferenceExpression
@@ -36,6 +37,7 @@ import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import org.jetbrains.kotlin.psi2ir.deparenthesize
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
@@ -239,9 +241,12 @@ private fun KtImportDirective.isImportedImplicitlyAlready(containingPackage: Str
 private fun KtReferenceExpression.importableSimpleName() =
     when (this) {
         is KtOperationReferenceExpression ->
-            operationSignTokenType
-            ?.let { (OperatorConventions.getNameForOperationSymbol(it))?.asString() }
-            ?: getReferencedName()
+            operationSignTokenType?.let { token ->
+                if (deparenthesize().parent is KtPrefixExpression) OperatorConventions.UNARY_OPERATION_NAMES[token]
+                else OperatorConventions.getNameForOperationSymbol(token)
+            }
+                ?.asString()
+                ?: getReferencedName()
         is KtSimpleNameExpression -> getReferencedName()
         else -> null
     }
