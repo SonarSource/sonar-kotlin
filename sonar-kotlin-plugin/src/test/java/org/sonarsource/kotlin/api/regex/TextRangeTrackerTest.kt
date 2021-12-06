@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.DummyInputFile
 import org.sonarsource.kotlin.DummyInputFileContext
 import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.util.TreeMap
@@ -99,9 +98,10 @@ internal class TextRangeTrackerTest {
         )
 
         val ctx = KotlinFileContext(DummyInputFileContext(), tree.psiFile, tree.bindingContext)
-        val templates = tree.psiFile.collectDescendantsOfType<KtStringTemplateExpression>()
+        val entries = tree.psiFile.collectDescendantsOfType<KtStringTemplateExpression>()
+            .flatMap { it.entries.asSequence() }
 
-        return TextRangeTracker.of(templates, ctx)
+        return TextRangeTracker.of(entries, ctx)
     }
 }
 
