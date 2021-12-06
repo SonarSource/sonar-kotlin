@@ -791,6 +791,17 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "InjectDispatcher",
+    "name": "Inject Dispatcher",
+    "description": "Don\u0027t hardcode dispatchers when creating new coroutines or calling `withContext`. Use dependency injection for dispatchers to make testing easier.",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "InstanceOfCheckForException",
     "name": "Instance Of Check For Exception",
     "description": "Instead of checking for a general exception type and checking for a specific exception type use multiple catch blocks.",
@@ -861,6 +872,18 @@
     "type": "CODE_SMELL",
     "severity": "MAJOR",
     "constantDebtMinutes": 20
+  },
+  {
+    "key": "LambdaParameterNaming",
+    "name": "Lambda Parameter Naming",
+    "description": "Lambda parameter names should follow the naming convention set in the projects configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#lambdaparameternaming",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
   },
   {
     "key": "LargeClass",
@@ -1949,6 +1972,18 @@
     ],
     "type": "CODE_SMELL",
     "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseAnyOrNoneInsteadOfFind",
+    "name": "Use Any Or None Instead Of Find",
+    "description": "Use \u0027any\u0027 or \u0027none\u0027 instead of \u0027find\u0027 and null check",
+    "url": "https://detekt.github.io/detekt/style.html#useanyornoneinsteadoffind",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
     "constantDebtMinutes": 5
   },
   {

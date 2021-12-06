@@ -25,7 +25,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
-import io.gitlab.arturbosch.detekt.core.config.YamlConfig.Companion.loadResource
+import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.apache.commons.text.StringEscapeUtils
 import org.sonarsource.kotlin.externalreport.ExternalReporting
 import org.sonarsource.kotlin.externalreport.ExternalRule
@@ -86,7 +86,7 @@ internal object DetektRuleDefinitionGenerator {
         val rules: MutableList<Rule> = ArrayList()
         val configUrl = ClasspathResourceConverter().convert("default-detekt-config.yml")
         for (provider in ServiceLoader.load(RuleSetProvider::class.java)) {
-            val config = loadResource(configUrl)
+            val config = configUrl.openStream().reader().use(YamlConfig::load)
             rules.addAll(provider.instance(config).rules.asSequence()
                 .flatMap { rule -> if (rule is MultiRule) rule.rules.asSequence() else sequenceOf(rule) }
                 .filterIsInstance<Rule>()
