@@ -25,6 +25,7 @@ import io.mockk.unmockkAll
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.resolve.BindingContextUtils
 import org.jetbrains.kotlin.utils.KotlinExceptionWithAttachments
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
@@ -34,6 +35,11 @@ import java.nio.file.Path
 import kotlin.io.path.readText
 
 internal class KotlinSyntaxStructureTest {
+
+    @AfterEach
+    fun cleanup() {
+        unmockkAll()
+    }
 
     @Test
     fun `ensure file name is displayed on compiler exception`() {
@@ -53,11 +59,9 @@ internal class KotlinSyntaxStructureTest {
         assertThrows<KotlinExceptionWithAttachments> { kotlinTreeOf(content, environment, inputFile) }.apply {
             assertThat(this)
                 .hasCause(expectedException)
-                .hasMessageMatching("""Exception while analyzing expression at \(4,17\) in """ +
-                    """.*/sonar-kotlin-plugin/moduleKey/src/test/resources/api/sample/SimpleClass\.kt""")
+                .hasMessageStartingWith("Exception while analyzing expression at (4,17) in ")
+                .hasMessageContaining("/sonar-kotlin-plugin/moduleKey/src/test/resources/api/sample/SimpleClass.kt")
         }
-
-        unmockkAll()
     }
 
     @Test
