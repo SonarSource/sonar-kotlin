@@ -49,7 +49,7 @@ class DummyInputFile(val path: Path? = null) : InputFile {
 
     override fun path() = path ?: Path.of("./dummyFile.kt")
 
-    override fun uri() = URI(path().toString())
+    override fun uri() = path().toUri()
 
     override fun filename() = path().fileName.toString()
 
