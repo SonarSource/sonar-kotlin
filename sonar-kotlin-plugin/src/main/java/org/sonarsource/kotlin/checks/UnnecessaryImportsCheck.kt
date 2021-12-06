@@ -49,8 +49,8 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private const val MESSAGE_UNUSED = "Remove unused import."
-private const val MESSAGE_REDUNDANT = "Remove redundant import."
+private const val MESSAGE_UNUSED = "Remove this unused import."
+private const val MESSAGE_REDUNDANT = "Remove this redundant import."
 private val DELEGATES_IMPORTED_NAMES = setOf("getValue", "setValue", "provideDelegate")
 private val ARRAY_ACCESS_IMPORTED_NAMES = setOf("get", "set")
 

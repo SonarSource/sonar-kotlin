@@ -1,17 +1,17 @@
 package checks
 
 // same package/file
-import checks.ClassInSameFileB // Noncompliant {{Remove redundant import.}}
+import checks.ClassInSameFileB // Noncompliant {{Remove this redundant import.}}
 // same package
-import checks.DelicateCoroutinesApi // Noncompliant {{Remove redundant import.}}
+import checks.DelicateCoroutinesApi // Noncompliant {{Remove this redundant import.}}
 // unused
-import com.google.common.collect.ImmutableList // Noncompliant {{Remove unused import.}}
+import com.google.common.collect.ImmutableList // Noncompliant {{Remove this unused import.}}
 // unused
-import com.google.common.collect.ImmutableList.copyOf // Noncompliant {{Remove unused import.}}
+import com.google.common.collect.ImmutableList.copyOf // Noncompliant {{Remove this unused import.}}
 import com.google.common.collect.ImmutableList.of
 import com.google.common.collect.ImmutableSet.of as immutable_set_of
 // unused
-import com.google.common.io.Files // Noncompliant {{Remove unused import.}}
+import com.google.common.io.Files // Noncompliant {{Remove this unused import.}}
 import com.google.common.io.Files.isFile
 import okhttp3.TlsVersion
 import org.apache.commons.lang.StringUtils
@@ -26,19 +26,19 @@ import java.io.File
 import java.lang.StringBuilder
 import java.nio.file.Path
 // fully qualified name is used in KDoc
-import java.util.Currency // Noncompliant {{Remove unused import.}}
+import java.util.Currency // Noncompliant {{Remove this unused import.}}
 import java.util.EventObject // Compliant (KDoc usage)
 // fully qualified name is used in KDoc
-import java.util.Base64 // Noncompliant {{Remove unused import.}}
+import java.util.Base64 // Noncompliant {{Remove this unused import.}}
 import java.util.BitSet // Compliant (KDoc usage)
 // fully qualified name is used below
-import java.util.Date // Noncompliant {{Remove unused import.}}
+import java.util.Date // Noncompliant {{Remove this unused import.}}
 import java.util.Timer
 // kotlin.* is automatically imported
-import kotlin.Any // Noncompliant {{Remove redundant import.}}
+import kotlin.Any // Noncompliant {{Remove this redundant import.}}
 import okhttp3.TlsVersion.TLS_1_1
 // unused
-import okhttp3.TlsVersion.TLS_1_2 // Noncompliant {{Remove unused import.}}
+import okhttp3.TlsVersion.TLS_1_2 // Noncompliant {{Remove this unused import.}}
 import operators.OperatorsContainer
 import otherpackage.OtherClass
 import otherpackage.OtherClass2.plus
@@ -50,12 +50,12 @@ import otherpackage.stringExtFun2
 import java.io.InputStream
 import java.lang.reflect.Method
 import kotlin.reflect.jvm.kotlinFunction
-import okhttp3.TlsVersion.SSL_3_0 as TLS3 // Noncompliant {{Remove unused import.}}
+import okhttp3.TlsVersion.SSL_3_0 as TLS3 // Noncompliant {{Remove this unused import.}}
 import okhttp3.TlsVersion.TLS_1_3 as TLS13
 import java.beans.* // Non|compliant FN (we currently ignore all wildcard imports)
 import kotlin.test.* // Non|compliant FN (we currently ignore all wildcard imports)
 // Except for this one
-import kotlin.* // Noncompliant {{Remove redundant import.}}
+import kotlin.* // Noncompliant {{Remove this redundant import.}}
 
 // Operators
 import operators.getValue
