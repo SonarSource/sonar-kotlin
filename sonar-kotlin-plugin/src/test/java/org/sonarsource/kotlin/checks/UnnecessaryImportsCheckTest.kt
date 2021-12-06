@@ -19,4 +19,16 @@
  */
 package org.sonarsource.kotlin.checks
 
-class UnnecessaryImportsCheckTest : CheckTestWithNoSemantics(UnnecessaryImportsCheck(), shouldReport = true)
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.verifier.KotlinVerifier
+
+class UnnecessaryImportsCheckTest : CheckTestWithNoSemantics(UnnecessaryImportsCheck(), shouldReport = true) {
+    @Test
+    fun `with partial semantics`() {
+        KotlinVerifier(check) {
+            this.fileName = "${checkName}SamplePartialSemantics.kt"
+            this.classpath = System.getProperty("java.class.path").split(":")
+            this.deps = emptyList()
+        }.verify()
+    }
+}
