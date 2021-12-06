@@ -1,27 +1,28 @@
 package checks
 
 // same package/file
-import checks.ClassInSameFileA // Noncompliant {{Remove redundant import.}}
+import checks.ClassInSameFileA // Noncompliant {{Remove this redundant import.}}
 //     ^^^^^^^^^^^^^^^^^^^^^^^
 // same package
-import checks.DelicateCoroutinesApi // Noncompliant {{Remove redundant import.}}
+import checks.DelicateCoroutinesApi // Noncompliant {{Remove this redundant import.}}
 // unused
-import com.google.common.collect.ImmutableList // Noncompliant {{Remove unused import.}}
+import com.google.common.collect.ImmutableList // Noncompliant {{Remove this unused import.}}
 // unused
-import com.google.common.collect.ImmutableList.copyOf // Noncompliant {{Remove unused import.}}
+import com.google.common.collect.ImmutableList.copyOf // Noncompliant {{Remove this unused import.}}
 //     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 import com.google.common.collect.ImmutableList.of
 import com.google.common.collect.ImmutableSet.of as immutable_set_of
 // unused
-import com.google.common.io.Files // Noncompliant {{Remove unused import.}}
+import com.google.common.io.Files // Noncompliant {{Remove this unused import.}}
 import com.google.common.io.Files.isFile
+import operators.OperatorsContainer
 import imports.ClassWithCompanionObject
 import imports.ClassWithNamedCompanionObject
 import okhttp3.TlsVersion
 import org.apache.commons.lang.StringUtils
 import otherpackage.get
 // not used, defaults to String.plus
-import otherpackage.plus // Noncompliant {{Remove unused import.}}
+import otherpackage.plus // Noncompliant {{Remove this unused import.}}
 import otherpackage.OtherClass.minus
 import otherpackage.OtherClass.plus // Non|compliant FN (it is used below in OtherClass + OtherClass but doesn't need to be imported)
 import otherpackage.OtherClass.get
@@ -30,35 +31,106 @@ import java.io.File
 import java.lang.StringBuilder
 import java.nio.file.Path
 // fully qualified name is used in KDoc
-import java.util.Currency // Noncompliant {{Remove unused import.}}
+import java.util.Currency // Noncompliant {{Remove this unused import.}}
 import java.util.EventObject // Compliant (KDoc usage)
 // fully qualified name is used in KDoc
-import java.util.Base64 // Noncompliant {{Remove unused import.}}
+import java.util.Base64 // Noncompliant {{Remove this unused import.}}
 import java.util.BitSet // Compliant (KDoc usage)
 // fully qualified name is used below
-import java.util.Date // Noncompliant {{Remove unused import.}}
+import java.util.Date // Noncompliant {{Remove this unused import.}}
 import java.util.Timer
 // kotlin.* is automatically imported
-import kotlin.Any // Noncompliant {{Remove redundant import.}}
+import kotlin.Any // Noncompliant {{Remove this redundant import.}}
 import okhttp3.TlsVersion.TLS_1_1
 // unused
-import okhttp3.TlsVersion.TLS_1_2 // Noncompliant {{Remove unused import.}}
+import okhttp3.TlsVersion.TLS_1_2 // Noncompliant {{Remove this unused import.}}
 import otherpackage.OtherClass
 import otherpackage.OtherClass2.plus
-import otherpackage.OtherClass2.get // Noncompliant {{Remove unused import.}}
-import otherpackage.OtherClass2.set // Noncompliant {{Remove unused import.}}
+import otherpackage.OtherClass2.get // Noncompliant {{Remove this unused import.}}
+import otherpackage.OtherClass2.set // Noncompliant {{Remove this unused import.}}
 import otherpackage.someInfixFun
 import otherpackage.stringExtFun1
 import otherpackage.stringExtFun2
 import java.io.InputStream
 import java.lang.reflect.Method
 import kotlin.reflect.jvm.kotlinFunction
-import okhttp3.TlsVersion.SSL_3_0 as TLS3 // Noncompliant {{Remove unused import.}}
+import okhttp3.TlsVersion.SSL_3_0 as TLS3 // Noncompliant {{Remove this unused import.}}
 import okhttp3.TlsVersion.TLS_1_3 as TLS13
 import java.beans.* // Non|compliant FN (we currently ignore all wildcard imports)
 import kotlin.test.* // Non|compliant FN (we currently ignore all wildcard imports)
 // Except for this one
-import kotlin.* // Noncompliant {{Remove redundant import.}}
+import kotlin.* // Noncompliant {{Remove this redundant import.}}
+
+// Operators
+import operators.getValue // Compliant is a delegation operator
+import operators.setValue // Noncompliant
+import operators.contains
+import operators.dec
+import operators.div
+import operators.inc
+import operators.minus
+import operators.not
+import operators.plus
+import operators.rangeTo
+import operators.rem
+import operators.times
+import operators.unaryMinus
+import operators.unaryPlus
+import operators.get
+import operators.invoke
+import operators.set
+import operators.plusAssign // Noncompliant
+import operators.minusAssign // Noncompliant
+import operators.timesAssign // Noncompliant
+import operators.divAssign // Noncompliant
+import operators.remAssign // Noncompliant
+
+
+import operators.ResourceLoader
+import operators.provideDelegate // Compliant
+
+
+class MyUI {
+    fun <T> bindResource(id: ResourceID<T>): ResourceLoader<T> {
+        TODO()
+    }
+
+    val image by bindResource(ResourceID.image_id)
+    val text by bindResource(ResourceID.text_id)
+}
+
+class ResourceID<T> {
+    companion object {
+        val image_id: ResourceID<BitSet> = TODO()
+        val text_id: ResourceID<String> = TODO()
+
+    }
+}
+
+class SomeClassWithDelegate(var delegate: OperatorsContainer) {
+    val someProperty: String by delegate
+
+    fun test() {
+        +delegate
+        -delegate
+        !delegate
+        delegate++
+        delegate--
+        --delegate
+        ++delegate
+        delegate + 1
+        delegate - 1
+        delegate * 1
+        delegate / 1
+        delegate % 1
+        delegate .. 1
+        1 in delegate
+        2 !in delegate
+        delegate[1,2]
+        delegate[1,2] = delegate
+        delegate(0)
+    }
+}
 
 class UnnecessaryImportsCheckSample {
     fun foo() {
