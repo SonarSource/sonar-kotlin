@@ -64,8 +64,7 @@ import kotlin.* // Noncompliant {{Remove redundant import.}}
 // Operators
 import operators.getValue // Compliant is a delegation operator
 import operators.setValue // Noncompliant
-// False-positive
-import operators.contains // Noncompliant
+import operators.contains
 import operators.dec
 import operators.div
 import operators.inc
