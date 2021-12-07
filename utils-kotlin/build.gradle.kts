@@ -4,8 +4,10 @@ plugins {
     kotlin("jvm")
 }
 
-val detektVersion = "1.19.0"
-val ktlintVersion = "0.43.0"
+val detektVersion: String by project
+val ktlintVersion: String by project
+val jcommanderVersion: String by project
+val commonsTextVersion: String by project
 
 dependencies {
     implementation("io.gitlab.arturbosch.detekt", "detekt-cli", detektVersion)
@@ -18,9 +20,9 @@ dependencies {
 
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation("com.google.code.gson:gson:2.8.7")
-    implementation("com.beust:jcommander:1.81")
-    implementation("org.apache.commons:commons-text:1.9")
+    implementation("com.google.code.gson:gson")
+    implementation("com.beust:jcommander:$jcommanderVersion")
+    implementation("org.apache.commons:commons-text:$commonsTextVersion")
     implementation(project(":sonar-kotlin-plugin"))
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
