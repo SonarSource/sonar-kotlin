@@ -48,11 +48,6 @@ allprojects {
 
     ext {
         set("buildNumber", buildNumber)
-        set("analyzerCommonsVersion", analyzerCommonsVersion)
-        set("sonarqubeVersion", sonarqubeVersion)
-        set("orchestratorVersion", orchestratorVersion)
-        set("sonarlintVersion", sonarlintVersion)
-        set("sonarLinksCi", sonarLinksCi)
     }
 
     // Replaces the version defined in sources, usually x.y-SNAPSHOT, by a version identifying the build.
