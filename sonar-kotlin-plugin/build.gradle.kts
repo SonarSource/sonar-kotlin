@@ -5,9 +5,9 @@ import java.util.jar.JarInputStream
 
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("com.github.johnrengelman.shadow") version "7.1.0"
     kotlin("jvm")
-    id("com.diffplug.spotless") version "5.15.0"
+    id("com.diffplug.spotless") version "6.0.4"
 }
 
 configure<com.diffplug.gradle.spotless.SpotlessExtension> {

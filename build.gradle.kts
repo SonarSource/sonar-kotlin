@@ -5,8 +5,8 @@ import org.sonarsource.kotlin.buildsrc.tasks.FetchRuleMetadata
 plugins {
     java
     id("jacoco")
-    id("com.jfrog.artifactory") version "4.24.14"
-    id("io.spring.dependency-management") version "1.0.6.RELEASE" apply false
+    id("com.jfrog.artifactory") version "4.25.1"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE" apply false
     id("org.sonarqube") version "3.3"
     id("org.jetbrains.kotlin.jvm") apply false
     `maven-publish`
