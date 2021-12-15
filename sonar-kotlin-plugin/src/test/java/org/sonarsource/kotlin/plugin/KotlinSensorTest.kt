@@ -20,12 +20,29 @@
 package org.sonarsource.kotlin.plugin
 
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
+import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
+import org.jetbrains.kotlin.cli.common.messages.MessageCollector
+import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
+import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
+import org.jetbrains.kotlin.com.intellij.openapi.Disposable
+import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.config.CommonConfigurationKeys
+import org.jetbrains.kotlin.config.CompilerConfiguration
+import org.jetbrains.kotlin.config.JvmTarget
+import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtPsiFactory
+import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -38,9 +55,12 @@ import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.utils.log.LoggerLevel
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.converter.Environment
+import org.sonarsource.kotlin.converter.compilerConfiguration
 import org.sonarsource.kotlin.testing.AbstractSensorTest
 import org.sonarsource.kotlin.testing.assertTextRange
 import java.io.IOException
+import java.util.Optional
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -165,6 +185,29 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         sensor(checkFactory).execute(context)
         val issues = context.allIssues()
         Assertions.assertThat(issues).hasSize(2)
+    }
+
+    @Test
+    fun `Ensure compiler crashes during BindingContext generation don't crash engine`() {
+        val inputFile = createInputFile("file1.kt", """
+        abstract class MyClass {
+            abstract fun <P1> foo(): (P1) -> Unknown<String>
+        
+            private fun callTryConvertConstant() {
+                println(foo<String>())
+            }
+        }
+        """.trimIndent())
+        context.fileSystem().add(inputFile)
+
+        mockkStatic("org.sonarsource.kotlin.plugin.KotlinSensorKt")
+        every { environment(any()) } returns Environment(listOf("file1.kt"))
+
+        val checkFactory = checkFactory("S1764")
+        assertDoesNotThrow { sensor(checkFactory).execute(context) }
+        assertThat(logTester.logs(LoggerLevel.ERROR)).containsExactly("Could not generate binding context. Proceeding without semantics.")
+
+        unmockkAll()
     }
 
     @Test

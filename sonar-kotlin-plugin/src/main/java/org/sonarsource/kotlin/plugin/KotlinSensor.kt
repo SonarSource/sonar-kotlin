@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.plugin
 
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.api.SonarProduct
 import org.sonar.api.batch.fs.FileSystem
 import org.sonar.api.batch.fs.InputFile
@@ -80,7 +81,8 @@ class KotlinSensor(
         val fileSystem: FileSystem = sensorContext.fileSystem()
         val mainFilePredicate = fileSystem.predicates().and(
             fileSystem.predicates().hasLanguage(language.key),
-            fileSystem.predicates().hasType(InputFile.Type.MAIN))
+            fileSystem.predicates().hasType(InputFile.Type.MAIN)
+        )
 
         val inputFiles = fileSystem.inputFiles(mainFilePredicate)
         val filenames = inputFiles.map { it.toString() }
@@ -127,15 +129,24 @@ class KotlinSensor(
                     null
                 }
             }
-            val (bindingContext, duration) = measureTimedValue {
-                bindingContext(
-                    environment.env,
-                    environment.classpath,
-                    kotlinFiles.map { it.ktFile },
-                )
+
+            val bindingContext = runCatching {
+                measureTimedValue {
+                    bindingContext(
+                        environment.env,
+                        environment.classpath,
+                        kotlinFiles.map { it.ktFile },
+                    )
+                }
+            }.onSuccess { (_, duration) ->
+                LOG.info("Generating BindingContext for all files took: ${duration.inWholeMilliseconds} ms.")
+            }.map {
+                it.value
+            }.getOrElse { e ->
+                LOG.error("Could not generate binding context. Proceeding without semantics.", e)
+                BindingContext.EMPTY
             }
 
-            LOG.info("Generating BindingContext for all files took: ${duration.inWholeMilliseconds} ms.")
 
             progressReport.start(filenames)
             for ((ktFile, doc, inputFile) in kotlinFiles) {
