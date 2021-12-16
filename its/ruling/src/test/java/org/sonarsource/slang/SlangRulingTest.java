@@ -223,6 +223,12 @@ public class SlangRulingTest {
     Map<String, String> properties = new HashMap<>(projectProperties);
     properties.put("sonar.slang.converter.validation", "log");
     properties.put("sonar.slang.duration.statistics", "true");
+    properties.put("sonar.kotlin.performance.measure", "true");
+
+    File performanceMeasuresDirectory = FileLocation.of("build/performance/" + project).getFile();
+    performanceMeasuresDirectory.mkdirs();
+
+    properties.put("sonar.kotlin.performance.measure.json", performanceMeasuresDirectory.getAbsolutePath() + "/sonar.java.performance.measure.json");
 
     String projectKey = project.replace("/", "-") + "-project";
     orchestrator.getServer().provisionProject(projectKey, projectKey);
