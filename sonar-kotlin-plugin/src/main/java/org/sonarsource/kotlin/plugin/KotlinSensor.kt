@@ -46,11 +46,13 @@ import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
+import org.sonarsource.performance.measure.PerformanceMeasure
 import java.util.concurrent.TimeUnit
 import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 private const val FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast"
+private const val PERFORMANCE_MEASURE_ACTIVATION_PROPERTY = "sonar.kotlin.performance.measure"
+private const val PERFORMANCE_MEASURE_DESTINATION_FILE = "sonar.kotlin.performance.measure.json"
 
 @ExperimentalTime
 private val LOG = Loggers.get(KotlinSensor::class.java)
@@ -76,7 +78,7 @@ class KotlinSensor(
     }
 
     override fun execute(sensorContext: SensorContext) {
-        val statistics = DurationStatistics(sensorContext.config())
+        val sensorDuration = createPerformanceMeasureReport(sensorContext)
 
         val fileSystem: FileSystem = sensorContext.fileSystem()
         val mainFilePredicate = fileSystem.predicates().and(
@@ -92,7 +94,7 @@ class KotlinSensor(
         var success = false
 
         try {
-            success = analyseFiles(sensorContext, inputFiles, progressReport, visitors(sensorContext), statistics, filenames)
+            success = analyseFiles(sensorContext, inputFiles, progressReport, visitors(sensorContext), filenames)
         } finally {
             if (success) {
                 progressReport.stop()
@@ -100,7 +102,7 @@ class KotlinSensor(
                 progressReport.cancel()
             }
         }
-        statistics.log()
+        sensorDuration?.stop()
     }
 
     private fun analyseFiles(
@@ -108,7 +110,6 @@ class KotlinSensor(
         inputFiles: Iterable<InputFile>,
         progressReport: ProgressReport,
         visitors: List<KotlinFileVisitor>,
-        statistics: DurationStatistics,
         filenames: List<String>,
     ): Boolean {
         val environment = environment(sensorContext)
@@ -131,17 +132,13 @@ class KotlinSensor(
             }
 
             val bindingContext = runCatching {
-                measureTimedValue {
+                measureDuration("BindingContext") {
                     bindingContext(
                         environment.env,
                         environment.classpath,
                         kotlinFiles.map { it.ktFile },
                     )
                 }
-            }.onSuccess { (_, duration) ->
-                LOG.info("Generating BindingContext for all files took: ${duration.inWholeMilliseconds} ms.")
-            }.map {
-                it.value
             }.getOrElse { e ->
                 LOG.error("Could not generate binding context. Proceeding without semantics.", e)
                 BindingContext.EMPTY
@@ -153,7 +150,9 @@ class KotlinSensor(
                 if (sensorContext.isCancelled) return false
                 val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
 
-                analyseFile(sensorContext, inputFileContext, visitors, statistics, KotlinTree(ktFile, doc, bindingContext))
+                measureDuration(inputFile.filename()) {
+                    analyseFile(sensorContext, inputFileContext, visitors, KotlinTree(ktFile, doc, bindingContext))
+                }
 
                 progressReport.nextFile()
             }
@@ -167,26 +166,26 @@ class KotlinSensor(
         sensorContext: SensorContext,
         inputFileContext: InputFileContext,
         visitors: List<KotlinFileVisitor>,
-        statistics: DurationStatistics,
         tree: KotlinTree,
     ) {
         if (EMPTY_FILE_CONTENT_PATTERN.matches(inputFileContext.inputFile.contents())) {
             return
         }
-        visitFile(sensorContext, inputFileContext, visitors, statistics, tree)
+        visitFile(sensorContext, inputFileContext, visitors, tree)
     }
 
     private fun visitFile(
         sensorContext: SensorContext,
         inputFileContext: InputFileContext,
         visitors: List<KotlinFileVisitor>,
-        statistics: DurationStatistics,
         tree: KotlinTree,
     ) {
         for (visitor in visitors) {
             val visitorId = visitor.javaClass.simpleName
             try {
-                statistics.time(visitorId) { visitor.scan(inputFileContext, tree) }
+                measureDuration(visitorId) {
+                    visitor.scan(inputFileContext, tree)
+                }
             } catch (e: Exception) {
                 inputFileContext.reportAnalysisError(e.message, null)
                 LOG.error("Cannot analyse '${inputFileContext.inputFile}' with '$visitorId': ${e.message}", e)
@@ -236,3 +235,11 @@ fun environment(sensorContext: SensorContext) = Environment(
     getFilesFromProperty(sensorContext.config(), SONAR_JAVA_BINARIES) +
         getFilesFromProperty(sensorContext.config(), SONAR_JAVA_LIBRARIES)
 )
+
+private fun createPerformanceMeasureReport(context: SensorContext): PerformanceMeasure.Duration? {
+    return PerformanceMeasure.reportBuilder()
+        .activate(context.config()[PERFORMANCE_MEASURE_ACTIVATION_PROPERTY].filter { "true" == it }.isPresent)
+        .toFile(context.config()[PERFORMANCE_MEASURE_DESTINATION_FILE].orElse("/tmp/sonar.kotlin.performance.measure.json"))
+        .appendMeasurementCost()
+        .start("KotlinSensor")
+}
