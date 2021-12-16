@@ -35,5 +35,5 @@ fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile
         listOf(ktFile),
     )
 
-    return KotlinTree(ktFile, document, bindingContext)
+    return KotlinTree(ktFile, document, bindingContext, bindingContext.diagnostics.noSuppression().toList())
 }

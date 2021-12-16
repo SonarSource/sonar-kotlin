@@ -97,7 +97,7 @@ internal class TextRangeTrackerTest {
             inputFile = DummyInputFile()
         )
 
-        val ctx = KotlinFileContext(DummyInputFileContext(), tree.psiFile, tree.bindingContext)
+        val ctx = KotlinFileContext(DummyInputFileContext(), tree.psiFile, tree.bindingContext, tree.diagnostics)
         val entries = tree.psiFile.collectDescendantsOfType<KtStringTemplateExpression>()
             .flatMap { it.entries.asSequence() }
 

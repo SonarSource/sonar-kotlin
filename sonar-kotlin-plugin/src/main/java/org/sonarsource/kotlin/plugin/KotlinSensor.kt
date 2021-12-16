@@ -142,6 +142,9 @@ class KotlinSensor(
                 BindingContext.EMPTY
             }
 
+            val diagnostics = measureDuration("Diagnostics") {
+                bindingContext.diagnostics.noSuppression().groupBy { it.psiFile }.toMap()
+            }
 
             progressReport.start(filenames)
             for ((ktFile, doc, inputFile) in kotlinFiles) {
@@ -149,7 +152,12 @@ class KotlinSensor(
                 val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
 
                 measureDuration(inputFile.filename()) {
-                    analyseFile(sensorContext, inputFileContext, visitors, KotlinTree(ktFile, doc, bindingContext))
+                    analyseFile(
+                        sensorContext,
+                        inputFileContext,
+                        visitors,
+                        KotlinTree(ktFile, doc, bindingContext, diagnostics[ktFile] ?: emptyList()),
+                    )
                 }
 
                 progressReport.nextFile()

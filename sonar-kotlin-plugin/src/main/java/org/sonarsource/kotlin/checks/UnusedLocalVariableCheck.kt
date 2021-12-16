@@ -32,9 +32,9 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 class UnusedLocalVariableCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
-        context.bindingContext.diagnostics.noSuppression()
+        context.diagnostics
             .filter {
-                it.psiFile == file && it.factory == Errors.UNUSED_VARIABLE &&
+                it.factory == Errors.UNUSED_VARIABLE &&
                     it.psiElement.getType(context.bindingContext)?.getJetTypeFqName(false) != "kotlin.Nothing"
             }
             .map { it.psiElement as KtNamedDeclaration }
