@@ -97,6 +97,7 @@ subprojects {
             dependency("org.sonarsource.analyzer-commons:sonar-analyzer-commons:$analyzerCommonsVersion")
             dependency("org.sonarsource.analyzer-commons:sonar-xml-parsing:$analyzerCommonsVersion")
             dependency("org.sonarsource.analyzer-commons:sonar-regex-parsing:$analyzerCommonsVersion")
+            dependency("org.sonarsource.analyzer-commons:sonar-performance-measure:$analyzerCommonsVersion")
             dependency("org.sonarsource.orchestrator:sonar-orchestrator:$orchestratorVersion")
             dependency("org.sonarsource.sonarlint.core:sonarlint-core:$sonarlintVersion")
         }
