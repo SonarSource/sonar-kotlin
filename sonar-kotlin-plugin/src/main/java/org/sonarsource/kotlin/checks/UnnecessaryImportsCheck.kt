@@ -63,8 +63,7 @@ class UnnecessaryImportsCheck : AbstractCheck() {
 
         val bindingContext = context.bindingContext
 
-        val unresolvedImports = bindingContext.diagnostics.noSuppression()
-            .filter { it.psiFile == file }
+        val unresolvedImports = context.diagnostics
             .mapNotNull { it.psiElement.getParentOfType<KtImportDirective>(false) }
 
         val groupedReferences = references.groupBy { reference ->

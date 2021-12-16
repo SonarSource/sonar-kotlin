@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonarsource.kotlin.api.InputFileContext
@@ -27,4 +28,5 @@ data class KotlinFileContext(
     val inputFileContext: InputFileContext,
     val ktFile: KtFile,
     val bindingContext: BindingContext,
+    val diagnostics: List<Diagnostic>,
 )
