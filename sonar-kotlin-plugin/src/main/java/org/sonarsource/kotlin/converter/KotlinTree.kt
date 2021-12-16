@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -30,7 +31,7 @@ import org.sonar.api.batch.fs.InputFile
 import org.sonarsource.kotlin.api.ParseException
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textPointerAtOffset
 
-class KotlinTree(val psiFile: KtFile, val document: Document, val bindingContext: BindingContext)
+class KotlinTree(val psiFile: KtFile, val document: Document, val bindingContext: BindingContext, val diagnostics: List<Diagnostic>)
 
 data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val inputFile: InputFile) {
     companion object {
