@@ -1,6 +1,6 @@
 /*
- * SonarSource SLang
- * Copyright (C) 2018-2021 SonarSource SA
+ * SonarSource Kotlin
+ * Copyright (C) 2018-2022 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
