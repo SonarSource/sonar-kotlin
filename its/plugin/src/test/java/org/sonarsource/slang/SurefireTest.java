@@ -1,6 +1,6 @@
 /*
- * SonarSource SLang
- * Copyright (C) 2018-2021 SonarSource SA
+ * SonarSource Kotlin
+ * Copyright (C) 2018-2022 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ public class SurefireTest extends TestBase {
       .setPom(new File(BASE_DIRECTORY.toFile(), "tests-without-main-code/pom.xml"))
       .setGoals("clean test-compile surefire:test", "sonar:sonar");
     ORCHESTRATOR.executeBuild(build);
-    
+
     Map<String, Measures.Measure> measures = getMeasures("org.sonarsource.it.projects:tests-without-main-code",
       "tests", "test_errors", "test_failures", "skipped_tests", "test_execution_time", "test_success_density");
 
@@ -56,7 +56,7 @@ public class SurefireTest extends TestBase {
     assertThat(parseInt(measures.get("skipped_tests").getValue())).isEqualTo(1);
     assertThat(parseInt(measures.get("test_execution_time").getValue())).isPositive();
     assertThat(parseDouble(measures.get("test_success_density").getValue())).isEqualTo(100.0);
-    
+
   }
 
   @Test

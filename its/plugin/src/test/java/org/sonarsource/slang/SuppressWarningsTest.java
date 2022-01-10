@@ -1,6 +1,6 @@
 /*
- * SonarSource SLang
- * Copyright (C) 2018-2021 SonarSource SA
+ * SonarSource Kotlin
+ * Copyright (C) 2018-2022 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ public class SuppressWarningsTest extends TestBase {
   private static final String COGNITIVE_COMPLEXITY_RULE_KEY = "S3776";
   private static final String PROJECT_KEY = "issueSuppression";
   private static final String LANGUAGE = "kotlin";
-  
+
 
   @Test
   public void test_kotlin_issue_suppression() {

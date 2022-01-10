@@ -1,6 +1,6 @@
 /*
- * SonarSource SLang
- * Copyright (C) 2018-2021 SonarSource SA
+ * SonarSource Kotlin
+ * Copyright (C) 2018-2022 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ public class ExternalReportTest extends TestBase {
     ORCHESTRATOR.executeBuild(sonarScanner);
     List<Issue> issues = getExternalIssues(projectKey);
     assertThat(issues).hasSize(2);
-    
+
     Issue first = issues.stream().filter(issue -> issue.getRule().equals("external_detekt:ForEachOnRange")).findFirst().orElse(null);
     assertThat(first.getComponent()).isEqualTo(projectKey + ":main.kt");
     assertThat(first.getLine()).isEqualTo(2);
@@ -76,7 +76,7 @@ public class ExternalReportTest extends TestBase {
     assertThat(first.getMessage()).isEqualTo("A newer version of com.android.support:recyclerview-v7 than 26.0.0 is available: 27.1.1");
     assertThat(first.getSeverity().name()).isEqualTo("MINOR");
     assertThat(first.getDebt()).isEqualTo("5min");
-      
+
     Issue secondIssue = issues.stream().filter(issue -> issue.getRule().equals("external_android-lint:UnusedAttribute")).findFirst().orElse(null);
     assertThat(secondIssue.getLine()).isEqualTo(2);
     assertThat(secondIssue.getMessage()).isEqualTo("Attribute `required` is only used in API level 5 and higher (current min is 1)");
