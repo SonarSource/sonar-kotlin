@@ -60,7 +60,7 @@ public class SlangRulingTest {
   public static void setUp() {
     OrchestratorBuilder builder = Orchestrator.builderEnv()
       .setSonarVersion(System.getProperty(SQ_VERSION_PROPERTY, DEFAULT_SQ_VERSION))
-      .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin", "sonar-lits-plugin", "0.8.0.1209"));
+      .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin", "sonar-lits-plugin", "0.10.0.2181"));
 
     addLanguagePlugins(builder);
 
@@ -245,9 +245,9 @@ public class SlangRulingTest {
       .setSourceDirs("./")
       .setSourceEncoding("utf-8")
       .setProperties(properties)
-      .setProperty("dump.old", FileLocation.of("src/test/resources/expected/" + project).getFile().getAbsolutePath())
-      .setProperty("dump.new", actualDirectory.getAbsolutePath())
-      .setProperty("lits.differences", litsDifferencesFile.getAbsolutePath())
+      .setProperty("sonar.lits.dump.old", FileLocation.of("src/test/resources/expected/" + project).getFile().getAbsolutePath())
+      .setProperty("sonar.lits.dump.new", actualDirectory.getAbsolutePath())
+      .setProperty("sonar.lits.differences", litsDifferencesFile.getAbsolutePath())
       .setProperty("sonar.cpd.exclusions", "**/*")
       .setProperty("sonar.scm.disabled", "true")
       .setProperty("sonar.project", project)
