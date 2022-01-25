@@ -18,7 +18,6 @@ jobs:
         with:
           publish_to_binaries: true
           attach_artifacts_to_github_release: true
-          run_rules_cov: true
           slack_channel: team-lang-kotlin
         env:
           ARTIFACTORY_API_KEY: ${{ secrets.ARTIFACTORY_API_KEY }}
