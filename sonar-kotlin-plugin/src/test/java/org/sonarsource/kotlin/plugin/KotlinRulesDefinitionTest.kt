@@ -21,14 +21,20 @@ package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
+import org.sonar.api.SonarEdition
+import org.sonar.api.SonarQubeSide
+import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.rules.RuleType
 import org.sonar.api.server.rule.RulesDefinition
+import org.sonar.api.utils.Version
+
+private val RUNTIME = SonarRuntimeImpl.forSonarQube(Version.create(8, 9), SonarQubeSide.SCANNER, SonarEdition.ENTERPRISE);
 
 internal class KotlinRulesDefinitionTest {
 
     @Test
     fun rules() {
-        val rulesDefinition: RulesDefinition = KotlinRulesDefinition()
+        val rulesDefinition: RulesDefinition = KotlinRulesDefinition(RUNTIME)
         val context = RulesDefinition.Context()
         rulesDefinition.define(context)
         val repository = context.repository("kotlin")
