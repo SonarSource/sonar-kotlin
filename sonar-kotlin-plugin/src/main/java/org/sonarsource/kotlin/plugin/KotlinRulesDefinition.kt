@@ -19,10 +19,11 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import org.sonar.api.SonarRuntime
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonarsource.analyzer.commons.RuleMetadataLoader
 
-class KotlinRulesDefinition : RulesDefinition {
+class KotlinRulesDefinition(private val runtime: SonarRuntime) : RulesDefinition {
 
     companion object {
         private const val RESOURCE_FOLDER = "org/sonar/l10n/kotlin/rules/kotlin"
@@ -33,7 +34,7 @@ class KotlinRulesDefinition : RulesDefinition {
             .createRepository(KotlinPlugin.KOTLIN_REPOSITORY_KEY, KotlinPlugin.KOTLIN_LANGUAGE_KEY)
             .setName(KotlinPlugin.REPOSITORY_NAME).let { repository ->
                 val checks = KOTLIN_CHECKS
-                RuleMetadataLoader(RESOURCE_FOLDER, KotlinProfileDefinition.PATH_TO_JSON).addRulesByAnnotatedClass(repository, checks)
+                RuleMetadataLoader(RESOURCE_FOLDER, KotlinProfileDefinition.PATH_TO_JSON, runtime).addRulesByAnnotatedClass(repository, checks)
                 repository.done()
             }
     }
