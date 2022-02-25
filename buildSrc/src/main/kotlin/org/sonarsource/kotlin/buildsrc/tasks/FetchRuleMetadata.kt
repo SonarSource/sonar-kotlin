@@ -10,7 +10,7 @@ import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.repositories
 import org.gradle.process.ExecResult
 
-const val ruleApiVersion = "2.1.0.1948"
+const val ruleApiVersion = "2.3.0.2012"
 
 abstract class FetchRuleMetadata : DefaultTask() {
 
