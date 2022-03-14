@@ -231,17 +231,12 @@ class KotlinSensor(
     }
 }
 
-fun getFilesFromProperty(settings: Configuration, property: String): List<String> =
-    settings.get(property).map {
-        if (it.isNotBlank()) it.split(",").toList() else emptyList()
-    }.orElse(emptyList())
-
 private fun toParseException(action: String, inputFile: InputFile, cause: Throwable) =
     ParseException("Cannot $action '$inputFile': ${cause.message}", (cause as? ParseException)?.position, cause)
 
 fun environment(sensorContext: SensorContext) = Environment(
-    getFilesFromProperty(sensorContext.config(), SONAR_JAVA_BINARIES) +
-        getFilesFromProperty(sensorContext.config(), SONAR_JAVA_LIBRARIES)
+    sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
+        sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList()
 )
 
 private fun createPerformanceMeasureReport(context: SensorContext): PerformanceMeasure.Duration? {
