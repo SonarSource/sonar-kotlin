@@ -1,14 +1,14 @@
-gcp_credentials: ENCRYPTED[!17c59813193e86cc337bce848b358412b90f50bc5fe1b8b39d363cdf14a41ebe76cfba0482e7f81d076994b9f6dbfb4c!]
+gcp_credentials: ENCRYPTED[!149d4005ecdba4cdd78bb5ba22756ebb98bf8e3367ee2e9ab08c5a1608c0d3e3b501904b67a1d67c0b63085e469d7dde!]
 
 env:
   ARTIFACTORY_URL: ENCRYPTED[!2f8fa307d3289faa0aa6791f18b961627ae44f1ef46b136e1a1e63b0b4c86454dbb25520d49b339e2d50a1e1e5f95c88!]
-  ARTIFACTORY_PRIVATE_USERNAME: repox-private-reader-e2882e
-  ARTIFACTORY_PRIVATE_PASSWORD: ENCRYPTED[!815fc7526a6579b7d974d1c41b5c247cfed8c88fb2c7b41ec5d3d54244701186da777c4003476b5b9fa208c8b8f208dc!]
-  ARTIFACTORY_API_KEY: ENCRYPTED[!815fc7526a6579b7d974d1c41b5c247cfed8c88fb2c7b41ec5d3d54244701186da777c4003476b5b9fa208c8b8f208dc!]
+  ARTIFACTORY_PRIVATE_USERNAME: repox-private-reader-lt-ef42e7
+  ARTIFACTORY_PRIVATE_PASSWORD: ENCRYPTED[!9b954ad23535be51e04d7ad72d8f79b93141341f3b6fe5527140e1ffa9570694f23ddea6fc384b742e7ec956533765d6!]
+  ARTIFACTORY_API_KEY: ENCRYPTED[!9b954ad23535be51e04d7ad72d8f79b93141341f3b6fe5527140e1ffa9570694f23ddea6fc384b742e7ec956533765d6!]
 
   # Deploy public artifact to artifactory
-  ARTIFACTORY_DEPLOY_USERNAME: repox-qa-deployer
-  ARTIFACTORY_DEPLOY_PASSWORD: ENCRYPTED[!d484e19f33c9ce63b165f70e414a33b1ac6c215a126791aacbf8059626caf0fd8a78e999a20af5c1a4ba01c0b0247921!]
+  ARTIFACTORY_DEPLOY_USERNAME: repox-qa-deployer-lt-ef42e7
+  ARTIFACTORY_DEPLOY_PASSWORD: ENCRYPTED[!e9d67cbbb9ffaa6a05b863eae9d08292b431481ae920205c7cb42d8811c18a932f2a29f486a46171c9ac6c053bc51e73!]
   ARTIFACTORY_DEPLOY_REPO: sonarsource-public-qa
 
   ORG_GRADLE_PROJECT_signingKey: ENCRYPTED[!cc216dfe592f79db8006f2a591f8f98b40aa2b078e92025623594976fd32f6864c1e6b6ba74b50647f608e2418e6c336!]
@@ -29,9 +29,9 @@ env:
   GRADLE_USER_HOME: ${CIRRUS_WORKING_DIR}/.gradle
 
 linux_image_template: &LINUX_IMAGE
-  image: gcr.io/language-team/base:latest
-  cluster_name: cirrus-ci-lt-cluster
-  zone: us-central1-a
+  image: eu.gcr.io/release-engineering-ci-prod/base:j11-latest
+  cluster_name: cirrus-ci
+  zone: europe-west4-b
   namespace: default
   use_in_memory_disk: true
 
@@ -55,10 +55,10 @@ linux_6_cpu_12G_template: &LINUX_6_CPU_12G
 
 windows_4_cpu_15G_template: &WINDOWS_4_CPU_15G
   gce_instance:
-    image_project: language-team
-    image_family: lt-base-windows
+    image_project: release-engineering-ci-prod
+    image_family: lt-base-windows-jdk11
     platform: windows
-    zone: us-central1-a
+    zone: europe-west4-b
     preemptible: false
     # Note a standard "n1-standard-4" (4 cpu, 15GB) is cheaper than a custom { cpu: 4, memory: 8G }
     # see https://cloud.google.com/products/calculator/
@@ -117,7 +117,7 @@ kotlin_its_template: &KOTLIN_ITS_TEMPLATE
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 only_if_sonarsource_qa_template: &ONLY_IF_SONARSOURCE_QA
-  only_if: $CIRRUS_USER_COLLABORATOR == 'true' && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
+  only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
 
 qa_task_filter_template: &QA_TASK_FILTER
   depends_on:
