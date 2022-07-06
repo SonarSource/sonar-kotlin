@@ -40,7 +40,7 @@ class FunMatcherTest {
     val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"))
     val path = Paths.get("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
-    val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin")
+    val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin.kt")
         .setCharset(StandardCharsets.UTF_8)
         .initMetadata(content)
         .build()

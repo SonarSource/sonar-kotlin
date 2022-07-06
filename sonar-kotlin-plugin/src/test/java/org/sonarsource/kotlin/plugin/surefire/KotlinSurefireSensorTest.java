@@ -51,7 +51,7 @@ class KotlinSurefireSensorTest {
   @BeforeEach
   void before() {
     DefaultFileSystem fs = new DefaultFileSystem(new File("src/test/resources"));
-    DefaultInputFile kotlinFile = new TestInputFileBuilder("", "src/org/foo/kotlin").setLanguage("kotlin").build();
+    DefaultInputFile kotlinFile = new TestInputFileBuilder("", "src/org/foo/kotlin.kt").setLanguage("kotlin").build();
     fs.add(kotlinFile);
     context = SensorContextTester.create(new File(""));
     context.setFileSystem(fs);

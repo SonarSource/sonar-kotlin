@@ -54,7 +54,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
     fun verify() {
         val environment = Environment(classpath + deps)
         val converter = { content: String ->
-            val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin")
+            val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
                 .setCharset(StandardCharsets.UTF_8)
                 .initMetadata(content).build()
             kotlinTreeOf(content, environment, inputFile) to inputFile
@@ -67,7 +67,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
     fun verifyNoIssue() {
         val environment = Environment(classpath + deps)
         val converter = { content: String ->
-            val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin")
+            val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
                 .setCharset(StandardCharsets.UTF_8)
                 .initMetadata(content).build()
             kotlinTreeOf(content, environment, inputFile) to inputFile

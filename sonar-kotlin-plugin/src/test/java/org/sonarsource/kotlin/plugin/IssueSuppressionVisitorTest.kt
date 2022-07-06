@@ -61,7 +61,7 @@ class IssueSuppressionVisitorTest {
         val env = Environment(DEFAULT_KOTLIN_CLASSPATH)
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
-        val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin")
+        val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin.kt")
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(testFileContent)
             .build()
