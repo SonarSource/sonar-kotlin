@@ -145,7 +145,7 @@ internal class ApiExtensionsKtTest {
     private fun parse(code: String) = kotlinTreeOf(
         code,
         Environment(listOf("build/classes/kotlin/main")),
-        TestInputFileBuilder("moduleKey", "src/org/foo/kotlin")
+        TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt" )
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(code)
             .build())
