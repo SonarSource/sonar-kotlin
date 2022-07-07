@@ -33,10 +33,10 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi2ir.deparenthesize
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getFirstArgumentExpression
-import org.jetbrains.kotlin.resolve.calls.callUtil.getParentResolvedCall
-import org.jetbrains.kotlin.resolve.calls.callUtil.getReceiverExpression
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
+import org.jetbrains.kotlin.resolve.calls.util.getParentResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getReceiverExpression
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule

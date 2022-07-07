@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getReceiverExpression
+import org.jetbrains.kotlin.resolve.calls.util.getReceiverExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.api.batch.fs.TextRange
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation
