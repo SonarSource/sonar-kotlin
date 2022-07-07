@@ -67,6 +67,8 @@ class CoroutinesTimeoutApiUnusedCheck : CallAbstractCheck() {
             .filter { it is KtElement }
             .iterator()
 
+        if (!siblingIter.hasNext()) return
+
         // For now we only consider extremely simple cases where the job creation is directly followed by a delay(...) and subsequent
         // cancel() methods. If there is anything done in between we don't report anything, as it is non-trivial to check that this
         // rule remains valid.
