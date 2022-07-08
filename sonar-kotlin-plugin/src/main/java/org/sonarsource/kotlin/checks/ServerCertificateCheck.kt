@@ -19,8 +19,12 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.KtVisitorVoid
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.CLASS
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
@@ -45,11 +49,43 @@ class ServerCertificateCheck : AbstractCheck() {
         } ?: return
         if (extendsX509) {
             node.body?.functions?.forEach { f ->
-                if (methodNames.contains(f.name) 
+                if (methodNames.contains(f.name)
                     && f.hasCompliantParameters(bindingContext)
-                    && f.listStatements().none { it.throwsException(bindingContext) }) {
-                    kotlinFileContext.reportIssue(f.nameIdentifier ?: f,
-                        "Enable server certificate validation on this SSL/TLS connection.")
+                // TODO: there is a test (line 87) that pass only when this is not commented out
+                // && f.listStatements().none { it.throwsException(bindingContext) }
+                ) {
+                    val throwVisitor = object : KtVisitorVoid() {
+                        var found: Boolean = false
+                        override fun visitThrowExpression(expression: KtThrowExpression) {
+                            // TODO: check it is CertificateException
+                            found = true;
+                        }
+
+                        fun foundThrowCertificateException(): Boolean {
+                            return found;
+                        }
+                    }
+                    val catchVisitor = object : KtVisitorVoid() {
+                        var found: Boolean = false
+                        override fun visitCatchSection(catchClause: KtCatchClause) {
+                            // TODO check if CertificationException
+                            found = true;
+                        }
+
+                        fun foundCatchCertificateException(): Boolean {
+                            return found;
+                        }
+                    }
+
+                    f.acceptRecursively(throwVisitor)
+                    f.acceptRecursively(catchVisitor)
+                    if (!throwVisitor.foundThrowCertificateException()) {
+                        kotlinFileContext.reportIssue(f.nameIdentifier ?: f,
+                            "Enable server certificate validation on this SSL/TLS connection.")
+                    } else if (catchVisitor.foundCatchCertificateException()) {
+                        kotlinFileContext.reportIssue(f.nameIdentifier ?: f,
+                            "Enable server certificate validation on this SSL/TLS connection.")
+                    }
                 }
             }
         }
@@ -59,4 +95,11 @@ class ServerCertificateCheck : AbstractCheck() {
         valueParameters.size in 2..3
             && valueParameters[0].typeAsString(bindingContext).matches(firstArgRegex)
             && valueParameters[1].typeAsString(bindingContext).matches(secondArgRegex)
+
+    private fun PsiElement.acceptRecursively(visitor: KtVisitorVoid) {
+        this.accept(visitor)
+        for (child in this.children) {
+            child.acceptRecursively(visitor)
+        }
+    }
 }
