@@ -120,3 +120,11 @@ class CoroutinesTimeoutApiUnusedCheckSample {
         }
     }
 }
+
+class JobNotFollowedByDelay {
+    private val job = Job() // 'Job' not followed by 'delay' should not crash
+
+    fun justCancel() {
+        job.cancel()
+    }
+}
