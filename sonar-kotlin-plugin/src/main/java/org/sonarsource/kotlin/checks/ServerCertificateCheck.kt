@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.psi.KtVisitorVoid
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.CLASS
+import org.jetbrains.kotlin.resolve.calls.callUtil.getCalleeExpressionIfAny
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.resolve.descriptorUtil.getAllSuperClassifiers
 import org.sonar.check.Rule
@@ -105,17 +106,13 @@ class ServerCertificateCheck : AbstractCheck() {
         private var catchFound: Boolean = false
 
         override fun visitThrowExpression(expression: KtThrowExpression) {
-            // TODO: check it is CertificateException
-            throwFound = true
+            val callExpr = expression.thrownExpression as? KtCallExpression
+            throwFound = "CertificateException" == callExpr?.getCallNameExpression()?.getReferencedName()
         }
 
         override fun visitCatchSection(catchClause: KtCatchClause) {
             // TODO check if CertificationException
             catchFound = true
-        }
-
-        override fun visitCallExpression(expression: KtCallExpression) {
-            expression.getCallNameExpression()?.getReferencedName()
         }
 
         fun throwsCertificateExceptionWithoutCatching(): Boolean {

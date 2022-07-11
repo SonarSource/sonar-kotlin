@@ -93,11 +93,8 @@ internal object Main {
         }
         trustManager = object : X509TrustManager {
             @Throws(CertificateException::class)
-            override fun checkClientTrusted(
-                x509Certificates: Array<X509Certificate>,
-                s: String,
-            ) {
-                throw NumberFormatException() // FN, Throws different exception
+            override fun checkClientTrusted(x509Certificates: Array<X509Certificate>, s: String) {  // Noncompliant
+                throw NumberFormatException()
             }
 
             @Throws(CertificateException::class)
