@@ -54,35 +54,12 @@ class ServerCertificateCheck : AbstractCheck() {
                 // TODO: there is a test (line 87) that pass only when this is not commented out
                 // && f.listStatements().none { it.throwsException(bindingContext) }
                 ) {
-                    val throwVisitor = object : KtVisitorVoid() {
-                        var found: Boolean = false
-                        override fun visitThrowExpression(expression: KtThrowExpression) {
-                            // TODO: check it is CertificateException
-                            found = true;
-                        }
-
-                        fun foundThrowCertificateException(): Boolean {
-                            return found;
-                        }
-                    }
-                    val catchVisitor = object : KtVisitorVoid() {
-                        var found: Boolean = false
-                        override fun visitCatchSection(catchClause: KtCatchClause) {
-                            // TODO check if CertificationException
-                            found = true;
-                        }
-
-                        fun foundCatchCertificateException(): Boolean {
-                            return found;
-                        }
-                    }
-
-                    f.acceptRecursively(throwVisitor)
-                    f.acceptRecursively(catchVisitor)
-                    if (!throwVisitor.foundThrowCertificateException()) {
+                    val throwCatchVisitor = ThrowCatchVisitor()
+                    f.acceptRecursively(throwCatchVisitor)
+                    if (!throwCatchVisitor.foundThrow()) {
                         kotlinFileContext.reportIssue(f.nameIdentifier ?: f,
                             "Enable server certificate validation on this SSL/TLS connection.")
-                    } else if (catchVisitor.foundCatchCertificateException()) {
+                    } else if (throwCatchVisitor.foundCatch()) {
                         kotlinFileContext.reportIssue(f.nameIdentifier ?: f,
                             "Enable server certificate validation on this SSL/TLS connection.")
                     }
@@ -100,6 +77,29 @@ class ServerCertificateCheck : AbstractCheck() {
         this.accept(visitor)
         for (child in this.children) {
             child.acceptRecursively(visitor)
+        }
+    }
+
+    private class ThrowCatchVisitor : KtVisitorVoid() {
+        private var throwFound: Boolean = false
+        private var catchFound: Boolean = false
+
+        override fun visitThrowExpression(expression: KtThrowExpression) {
+            // TODO: check it is CertificateException
+            throwFound = true
+        }
+
+        override fun visitCatchSection(catchClause: KtCatchClause) {
+            // TODO check if CertificationException
+            catchFound = true
+        }
+
+        fun foundThrow(): Boolean {
+            return throwFound
+        }
+
+        fun foundCatch(): Boolean {
+            return catchFound
         }
     }
 }
