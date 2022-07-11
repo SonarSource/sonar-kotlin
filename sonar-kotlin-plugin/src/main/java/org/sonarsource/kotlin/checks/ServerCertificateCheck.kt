@@ -71,12 +71,6 @@ class ServerCertificateCheck : AbstractCheck() {
             && valueParameters[0].typeAsString(bindingContext).matches(firstArgRegex)
             && valueParameters[1].typeAsString(bindingContext).matches(secondArgRegex)
 
-    private fun KtNamedFunction.throwsCertificateExceptionWithoutCatching(): Boolean {
-        val visitor = ThrowCatchVisitor()
-        this.acceptRecursively(visitor)
-        return visitor.throwsCertificateExceptionWithoutCatching()
-    }
-
     /*
      * Returns true if a function contains a call to "checkClientTrusted" or "checkServerTrusted".
      */
@@ -96,11 +90,13 @@ class ServerCertificateCheck : AbstractCheck() {
         return visitor.callsCheckTrusted()
     }
 
-    private fun PsiElement.acceptRecursively(visitor: KtVisitorVoid) {
-        this.accept(visitor)
-        for (child in this.children) {
-            child.acceptRecursively(visitor)
-        }
+    /*
+     * Returns true only when the function throws a CertificateException without a catch against it.
+     */
+    private fun KtNamedFunction.throwsCertificateExceptionWithoutCatching(): Boolean {
+        val visitor = ThrowCatchVisitor()
+        this.acceptRecursively(visitor)
+        return visitor.throwsCertificateExceptionWithoutCatching()
     }
 
     private class ThrowCatchVisitor : KtVisitorVoid() {
@@ -118,6 +114,13 @@ class ServerCertificateCheck : AbstractCheck() {
 
         fun throwsCertificateExceptionWithoutCatching(): Boolean {
             return throwFound && !catchFound
+        }
+    }
+
+    private fun PsiElement.acceptRecursively(visitor: KtVisitorVoid) {
+        this.accept(visitor)
+        for (child in this.children) {
+            child.acceptRecursively(visitor)
         }
     }
 }
