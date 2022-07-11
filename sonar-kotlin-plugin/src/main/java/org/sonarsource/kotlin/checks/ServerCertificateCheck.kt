@@ -20,11 +20,13 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtVisitorVoid
+import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.CLASS
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
@@ -51,8 +53,7 @@ class ServerCertificateCheck : AbstractCheck() {
             node.body?.functions?.forEach { f ->
                 if (methodNames.contains(f.name)
                     && f.hasCompliantParameters(bindingContext)
-                // TODO: there is a test (line 87) that pass only when this is not commented out
-                // && f.listStatements().none { it.throwsException(bindingContext) }
+                    && !f.callsCheckTrusted()
                     && !f.throwsCertificateExceptionWithoutCatching()
                 ) {
                     kotlinFileContext.reportIssue(f.nameIdentifier ?: f,
@@ -67,10 +68,29 @@ class ServerCertificateCheck : AbstractCheck() {
             && valueParameters[0].typeAsString(bindingContext).matches(firstArgRegex)
             && valueParameters[1].typeAsString(bindingContext).matches(secondArgRegex)
 
-    private fun KtNamedFunction.throwsCertificateExceptionWithoutCatching() : Boolean {
+    private fun KtNamedFunction.throwsCertificateExceptionWithoutCatching(): Boolean {
         val visitor = ThrowCatchVisitor()
         this.acceptRecursively(visitor)
-        return visitor.foundThrow() && !visitor.foundCatch()
+        return visitor.throwsCertificateExceptionWithoutCatching()
+    }
+
+    /*
+     * Returns true if a function contains a call to "checkClientTrusted" or "checkServerTrusted".
+     */
+    private fun KtNamedFunction.callsCheckTrusted(): Boolean {
+        val visitor = object : KtVisitorVoid() {
+            private var foundCheckTrustedCall: Boolean = false
+
+            override fun visitCallExpression(expression: KtCallExpression) {
+                foundCheckTrustedCall = methodNames.contains(expression.getCallNameExpression()?.getReferencedName())
+            }
+
+            fun callsCheckTrusted(): Boolean {
+                return foundCheckTrustedCall
+            }
+        }
+        this.acceptRecursively(visitor)
+        return visitor.callsCheckTrusted()
     }
 
     private fun PsiElement.acceptRecursively(visitor: KtVisitorVoid) {
@@ -94,12 +114,12 @@ class ServerCertificateCheck : AbstractCheck() {
             catchFound = true
         }
 
-        fun foundThrow(): Boolean {
-            return throwFound
+        override fun visitCallExpression(expression: KtCallExpression) {
+            expression.getCallNameExpression()?.getReferencedName()
         }
 
-        fun foundCatch(): Boolean {
-            return catchFound
+        fun throwsCertificateExceptionWithoutCatching(): Boolean {
+            return throwFound && !catchFound
         }
     }
 }
