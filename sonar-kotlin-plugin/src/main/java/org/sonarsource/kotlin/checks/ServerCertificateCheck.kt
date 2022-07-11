@@ -36,6 +36,9 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
+
+private const val CERTIFICATE_EXCEPTION = "CertificateException"
+
 @Rule(key = "S4830")
 class ServerCertificateCheck : AbstractCheck() {
     companion object {
@@ -107,12 +110,11 @@ class ServerCertificateCheck : AbstractCheck() {
 
         override fun visitThrowExpression(expression: KtThrowExpression) {
             val callExpr = expression.thrownExpression as? KtCallExpression
-            throwFound = "CertificateException" == callExpr?.getCallNameExpression()?.getReferencedName()
+            throwFound = CERTIFICATE_EXCEPTION == callExpr?.getCallNameExpression()?.getReferencedName()
         }
 
         override fun visitCatchSection(catchClause: KtCatchClause) {
-            // TODO check if CertificationException
-            catchFound = true
+            catchFound = CERTIFICATE_EXCEPTION == catchClause.catchParameter?.typeReference?.typeElement?.text
         }
 
         fun throwsCertificateExceptionWithoutCatching(): Boolean {
