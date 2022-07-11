@@ -53,16 +53,10 @@ class ServerCertificateCheck : AbstractCheck() {
                     && f.hasCompliantParameters(bindingContext)
                 // TODO: there is a test (line 87) that pass only when this is not commented out
                 // && f.listStatements().none { it.throwsException(bindingContext) }
+                    && !f.throwsCertificateExceptionWithoutCatching()
                 ) {
-                    val throwCatchVisitor = ThrowCatchVisitor()
-                    f.acceptRecursively(throwCatchVisitor)
-                    if (!throwCatchVisitor.foundThrow()) {
-                        kotlinFileContext.reportIssue(f.nameIdentifier ?: f,
-                            "Enable server certificate validation on this SSL/TLS connection.")
-                    } else if (throwCatchVisitor.foundCatch()) {
-                        kotlinFileContext.reportIssue(f.nameIdentifier ?: f,
-                            "Enable server certificate validation on this SSL/TLS connection.")
-                    }
+                    kotlinFileContext.reportIssue(f.nameIdentifier ?: f,
+                        "Enable server certificate validation on this SSL/TLS connection.")
                 }
             }
         }
@@ -72,6 +66,12 @@ class ServerCertificateCheck : AbstractCheck() {
         valueParameters.size in 2..3
             && valueParameters[0].typeAsString(bindingContext).matches(firstArgRegex)
             && valueParameters[1].typeAsString(bindingContext).matches(secondArgRegex)
+
+    private fun KtNamedFunction.throwsCertificateExceptionWithoutCatching() : Boolean {
+        val visitor = ThrowCatchVisitor()
+        this.acceptRecursively(visitor)
+        return visitor.foundThrow() && !visitor.foundCatch()
+    }
 
     private fun PsiElement.acceptRecursively(visitor: KtVisitorVoid) {
         this.accept(visitor)
