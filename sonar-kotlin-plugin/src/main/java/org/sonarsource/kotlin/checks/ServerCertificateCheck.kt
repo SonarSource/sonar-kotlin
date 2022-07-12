@@ -79,13 +79,9 @@ class ServerCertificateCheck : AbstractCheck() {
         val visitor = object : KtVisitorVoid() {
             private var foundCheckTrustedCall: Boolean = false
 
-            private val funMatcher = FunMatcher {
-                qualifier = "javax.net.ssl.X509TrustManager"
-                withNames("checkServerTrusted", "checkClientTrusted")
-            }
-
             override fun visitCallExpression(expression: KtCallExpression) {
-                foundCheckTrustedCall = funMatcher.matches(expression, bindingContext)
+                foundCheckTrustedCall = FunMatcher { withNames("checkServerTrusted", "checkClientTrusted") }
+                    .matches(expression, bindingContext)
             }
 
             fun callsCheckTrusted(): Boolean {
