@@ -151,4 +151,23 @@ class DuplicateBranchCheckSample {
     private fun foo(): Int {
         return 3
     }
+
+    sealed interface Base
+    data class AA(val value: String) : Base
+    data class BB(val value: String) : Base
+
+    fun unwrap(obj: Base): String {
+        return when (obj) {
+            is AA -> obj.value
+            is BB -> obj.value
+        }
+    }
+
+    // TODO: really needed?
+    fun main() {
+        println(unwrap(AA("foo")))
+    }
 }
+
+
+
