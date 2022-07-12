@@ -33,6 +33,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.resolve.descriptorUtil.getAllSuperClassifiers
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 
@@ -56,7 +57,7 @@ class ServerCertificateCheck : AbstractCheck() {
             node.body?.functions?.forEach { f ->
                 if (methodNames.contains(f.name)
                     && f.hasCompliantParameters(bindingContext)
-                    && !f.callsCheckTrusted()
+                    && !f.callsCheckTrusted(bindingContext)
                     && !f.throwsCertificateExceptionWithoutCatching()
                 ) {
                     kotlinFileContext.reportIssue(f.nameIdentifier ?: f,
@@ -74,12 +75,17 @@ class ServerCertificateCheck : AbstractCheck() {
     /*
      * Returns true if a function contains a call to "checkClientTrusted" or "checkServerTrusted".
      */
-    private fun KtNamedFunction.callsCheckTrusted(): Boolean {
+    private fun KtNamedFunction.callsCheckTrusted(bindingContext: BindingContext): Boolean {
         val visitor = object : KtVisitorVoid() {
             private var foundCheckTrustedCall: Boolean = false
 
+            private val funMatcher = FunMatcher {
+                qualifier = "javax.net.ssl.X509TrustManager"
+                withNames("checkServerTrusted", "checkClientTrusted")
+            }
+
             override fun visitCallExpression(expression: KtCallExpression) {
-                foundCheckTrustedCall = methodNames.contains(expression.getCallNameExpression()?.getReferencedName())
+                foundCheckTrustedCall = funMatcher.matches(expression, bindingContext)
             }
 
             fun callsCheckTrusted(): Boolean {
