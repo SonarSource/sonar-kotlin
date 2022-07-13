@@ -45,7 +45,7 @@ class ServerCertificateCheck : AbstractCheck() {
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val (_, _, bindingContext) = kotlinFileContext
 
-        if (function.belongsToX509TrustManager(bindingContext)
+        if (function.belongsToTrustManagerClass(bindingContext)
             && !function.callsCheckTrusted(bindingContext)
             && !function.throwsCertificateExceptionWithoutCatching(bindingContext)
         ) {
@@ -54,7 +54,7 @@ class ServerCertificateCheck : AbstractCheck() {
         }
     }
 
-    private fun KtNamedFunction.belongsToX509TrustManager(bindingContext: BindingContext): Boolean {
+    private fun KtNamedFunction.belongsToTrustManagerClass(bindingContext: BindingContext): Boolean {
         val x509FunMatcher = FunMatcher {
             definingSupertype = "javax.net.ssl.X509TrustManager"
             withNames("checkClientTrusted", "checkServerTrusted")
