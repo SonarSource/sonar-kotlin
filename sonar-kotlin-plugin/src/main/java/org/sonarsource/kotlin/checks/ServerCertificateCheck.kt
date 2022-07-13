@@ -37,6 +37,18 @@ private const val CERTIFICATE_EXCEPTION = "CertificateException"
 
 @Rule(key = "S4830")
 class ServerCertificateCheck : AbstractCheck() {
+    companion object {
+        val x509FunMatcher = FunMatcher {
+            definingSupertype = "javax.net.ssl.X509TrustManager"
+            withNames("checkClientTrusted", "checkServerTrusted")
+        }
+
+        val x509extendedFunMatcher = FunMatcher {
+            definingSupertype = "javax.net.ssl.X509ExtendedTrustManager"
+            withNames("checkClientTrusted", "checkServerTrusted")
+        }
+    }
+
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val (_, _, bindingContext) = kotlinFileContext
 
@@ -50,16 +62,7 @@ class ServerCertificateCheck : AbstractCheck() {
     }
 
     private fun KtNamedFunction.belongsToTrustManagerClass(bindingContext: BindingContext): Boolean {
-        val x509FunMatcher = FunMatcher {
-            definingSupertype = "javax.net.ssl.X509TrustManager"
-            withNames("checkClientTrusted", "checkServerTrusted")
-        }
-
-        val extendedX509FunMatcher = FunMatcher {
-            definingSupertype = "javax.net.ssl.X509ExtendedTrustManager"
-            withNames("checkClientTrusted", "checkServerTrusted")
-        }
-        return x509FunMatcher.matches(this, bindingContext) || extendedX509FunMatcher.matches(this, bindingContext)
+        return x509FunMatcher.matches(this, bindingContext) || x509extendedFunMatcher.matches(this, bindingContext)
     }
 
     /*
