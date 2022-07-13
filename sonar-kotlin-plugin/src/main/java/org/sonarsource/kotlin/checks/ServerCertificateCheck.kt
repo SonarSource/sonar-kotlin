@@ -73,9 +73,7 @@ class ServerCertificateCheck : AbstractCheck() {
             private var foundCheckTrustedCall: Boolean = false
 
             override fun visitCallExpression(expression: KtCallExpression) {
-                foundCheckTrustedCall = FunMatcher {
-                    withNames("checkServerTrusted", "checkClientTrusted")
-                }.matches(expression, bindingContext)
+                foundCheckTrustedCall = funMatchers.any { it.matches(expression, bindingContext) }
             }
 
             fun callsCheckTrusted(): Boolean {
