@@ -28,16 +28,11 @@ import org.sonar.api.rules.RuleType
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonar.api.utils.Version
 
-private val RUNTIME = SonarRuntimeImpl.forSonarQube(Version.create(8, 9), SonarQubeSide.SCANNER, SonarEdition.ENTERPRISE);
-
 internal class KotlinRulesDefinitionTest {
 
     @Test
     fun rules() {
-        val rulesDefinition: RulesDefinition = KotlinRulesDefinition(RUNTIME)
-        val context = RulesDefinition.Context()
-        rulesDefinition.define(context)
-        val repository = context.repository("kotlin")
+        val repository = repositoryForVersion(Version.create(8, 9))
         Assertions.assertThat(repository!!.name()).isEqualTo("SonarQube")
         Assertions.assertThat(repository.language()).isEqualTo("kotlin")
         val rule = repository.rule("S1764")
@@ -49,5 +44,14 @@ internal class KotlinRulesDefinitionTest {
         val ruleWithConfig = repository.rule("S100")
         val param = ruleWithConfig!!.param("format")
         Assertions.assertThat(param!!.defaultValue()).isEqualTo("^[a-zA-Z][a-zA-Z0-9]*$")
+    }
+
+
+    private fun repositoryForVersion(version: Version): RulesDefinition.Repository? {
+        val rulesDefinition: RulesDefinition = KotlinRulesDefinition(
+            SonarRuntimeImpl.forSonarQube(version, SonarQubeSide.SCANNER, SonarEdition.COMMUNITY))
+        val context = RulesDefinition.Context()
+        rulesDefinition.define(context)
+        return context.repository("kotlin")
     }
 }
