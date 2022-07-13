@@ -37,11 +37,6 @@ private const val CERTIFICATE_EXCEPTION = "CertificateException"
 
 @Rule(key = "S4830")
 class ServerCertificateCheck : AbstractCheck() {
-    companion object {
-        private val firstArgRegex = Regex("""Array<(out )?X509Certificate\??>\??""")
-        private val secondArgRegex = Regex("""String\??""")
-    }
-
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val (_, _, bindingContext) = kotlinFileContext
 
@@ -58,15 +53,11 @@ class ServerCertificateCheck : AbstractCheck() {
         val x509FunMatcher = FunMatcher {
             definingSupertype = "javax.net.ssl.X509TrustManager"
             withNames("checkClientTrusted", "checkServerTrusted")
-            // TODO
-            //withArguments("kotlin.String")
         }
 
         val extendedX509FunMatcher = FunMatcher {
             definingSupertype = "javax.net.ssl.X509ExtendedTrustManager"
             withNames("checkClientTrusted", "checkServerTrusted")
-            // TODO
-            //withArguments("kotlin.String")
         }
         return x509FunMatcher.matches(this, bindingContext) || extendedX509FunMatcher.matches(this, bindingContext)
     }
