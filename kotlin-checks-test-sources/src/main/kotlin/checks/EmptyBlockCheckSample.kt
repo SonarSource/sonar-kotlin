@@ -17,14 +17,17 @@ class EmptyBlockCheckSample {
             /** Compliant - contains KDoc */
         }
 
-        when (c) {} // Noncompliant
+        /*when (c) {} // Noncompliant
 
         when (c) {
             // Compliant - contains comment
-        }
+        }*/
 
         when (c) {
             true -> {} // Noncompliant
+            else -> {
+                // Compliant - contains comment
+            }
         }
 
         while (c) {} // Compliant - exception to the rule
