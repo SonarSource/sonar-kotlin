@@ -25,6 +25,9 @@ internal class TrustAllManager : X509TrustManager {
         LOG.log(Level.SEVERE, "ERROR $s")
     }
 
+    fun checkServerTrusted(s1: String, s2: String) { // Compliant - function signature does not belong to X59TrustManager
+    }
+
     override fun getAcceptedIssuers(): Array<X509Certificate> {
         return emptyArray()
     }
