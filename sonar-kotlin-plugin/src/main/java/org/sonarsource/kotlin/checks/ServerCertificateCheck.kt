@@ -22,14 +22,10 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
-import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtVisitorVoid
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.BindingContext.CLASS
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.resolve.descriptorUtil.getAllSuperClassifiers
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
@@ -42,35 +38,38 @@ private const val CERTIFICATE_EXCEPTION = "CertificateException"
 @Rule(key = "S4830")
 class ServerCertificateCheck : AbstractCheck() {
     companion object {
-        private val methodNames = setOf("checkClientTrusted", "checkServerTrusted")
         private val firstArgRegex = Regex("""Array<(out )?X509Certificate\??>\??""")
         private val secondArgRegex = Regex("""String\??""")
     }
 
-    override fun visitClassOrObject(node: KtClassOrObject, kotlinFileContext: KotlinFileContext) {
+    override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val (_, _, bindingContext) = kotlinFileContext
 
-        val extendsX509 = bindingContext.get(CLASS, node)?.getAllSuperClassifiers()?.any {
-            it.fqNameOrNull()?.asString() == "javax.net.ssl.X509TrustManager"
-        } ?: return
-        if (extendsX509) {
-            node.body?.functions?.forEach { f ->
-                if (methodNames.contains(f.name)
-                    && f.hasCompliantParameters(bindingContext)
-                    && !f.callsCheckTrusted(bindingContext)
-                    && !f.throwsCertificateExceptionWithoutCatching(bindingContext)
-                ) {
-                    kotlinFileContext.reportIssue(f.nameIdentifier ?: f,
-                        "Enable server certificate validation on this SSL/TLS connection.")
-                }
-            }
+        if (function.belongsToX509TrustManager(bindingContext)
+            && !function.callsCheckTrusted(bindingContext)
+            && !function.throwsCertificateExceptionWithoutCatching(bindingContext)
+        ) {
+            kotlinFileContext.reportIssue(function.nameIdentifier ?: function,
+                "Enable server certificate validation on this SSL/TLS connection.")
         }
     }
 
-    private fun KtNamedFunction.hasCompliantParameters(bindingContext: BindingContext) =
-        valueParameters.size in 2..3
-            && valueParameters[0].typeAsString(bindingContext).matches(firstArgRegex)
-            && valueParameters[1].typeAsString(bindingContext).matches(secondArgRegex)
+    private fun KtNamedFunction.belongsToX509TrustManager(bindingContext: BindingContext): Boolean {
+        val x509FunMatcher = FunMatcher {
+            definingSupertype = "javax.net.ssl.X509TrustManager"
+            withNames("checkClientTrusted", "checkServerTrusted")
+            // TODO
+            //withArguments("kotlin.String")
+        }
+
+        val extendedX509FunMatcher = FunMatcher {
+            definingSupertype = "javax.net.ssl.X509ExtendedTrustManager"
+            withNames("checkClientTrusted", "checkServerTrusted")
+            // TODO
+            //withArguments("kotlin.String")
+        }
+        return x509FunMatcher.matches(this, bindingContext) || extendedX509FunMatcher.matches(this, bindingContext)
+    }
 
     /*
      * Returns true if a function contains a call to "checkClientTrusted" or "checkServerTrusted".
