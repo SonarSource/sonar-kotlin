@@ -51,7 +51,7 @@ val mockkVersion: String by project
 val staxmateVersion: String by project
 
 dependencies {
-    compileOnly("org.sonarsource.sonarqube:sonar-plugin-api")
+    compileOnly("org.sonarsource.sonarqube:sonar-plugin-api:9.3.0.51899")
     implementation("org.sonarsource.analyzer-commons:sonar-analyzer-commons")
     implementation("org.sonarsource.analyzer-commons:sonar-xml-parsing")
     implementation("org.sonarsource.analyzer-commons:sonar-regex-parsing")
@@ -67,7 +67,7 @@ dependencies {
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.github.classgraph:classgraph")
     testImplementation("org.sonarsource.analyzer-commons:sonar-analyzer-test-commons")
-    testImplementation("org.sonarsource.sonarqube:sonar-plugin-api-impl")
+    testImplementation("org.sonarsource.sonarqube:sonar-plugin-api-impl:9.3.0.51899")
 }
 
 tasks.withType<JavaCompile> {
