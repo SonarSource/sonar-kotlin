@@ -346,7 +346,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     @Test
-    fun `setting the kotlin version analyzer property to an invalid value results in log message and teh default version to be used`() {
+    fun `setting the kotlin version analyzer property to an invalid value results in log message and the default version to be used`() {
         logTester.setLevel(LoggerLevel.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
@@ -362,6 +362,26 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
         assertThat(logTester.logs(LoggerLevel.WARN))
             .containsExactly("Failed to find Kotlin version 'foo'. Defaulting to ${expectedKotlinVersion.versionString}")
+        assertThat(logTester.logs(LoggerLevel.DEBUG))
+            .containsExactly("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
+    }
+
+    @Test
+    fun `setting the kotlin version analyzer property to whitespaces only results in the default version to be used`() {
+        logTester.setLevel(LoggerLevel.DEBUG)
+
+        val sensorContext = mockk<SensorContext> {
+            every { config() } returns ConfigurationBridge(MapSettings().apply {
+                setProperty("sonar.kotlin.source.version", "  ")
+            })
+        }
+
+        val environment = environment(sensorContext)
+
+        val expectedKotlinVersion = LanguageVersion.KOTLIN_1_5
+
+        assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
+        assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
         assertThat(logTester.logs(LoggerLevel.DEBUG))
             .containsExactly("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
     }
