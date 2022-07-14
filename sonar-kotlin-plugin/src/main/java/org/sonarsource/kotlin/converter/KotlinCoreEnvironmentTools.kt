@@ -44,9 +44,9 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
 
-class Environment(val classpath: List<String>) {
+class Environment(val classpath: List<String>, kotlinLanguageVersion: LanguageVersion, javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8) {
     val disposable = Disposer.newDisposable()
-    val configuration = compilerConfiguration(classpath, LanguageVersion.KOTLIN_1_5, JvmTarget.JVM_1_8)
+    val configuration = compilerConfiguration(classpath, kotlinLanguageVersion, javaLanguageVersion)
     val env = kotlinCoreEnvironment(configuration, disposable)
     val ktPsiFactory: KtPsiFactory = KtPsiFactory(env.project, false)
 }

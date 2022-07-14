@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.verifier
 
 import io.mockk.InternalPlatformDsl.toStr
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
@@ -52,7 +53,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
     var isAndroid = false
 
     fun verify() {
-        val environment = Environment(classpath + deps)
+        val environment = Environment(classpath + deps, LanguageVersion.LATEST_STABLE)
         val converter = { content: String ->
             val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
                 .setCharset(StandardCharsets.UTF_8)
@@ -65,7 +66,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
     }
 
     fun verifyNoIssue() {
-        val environment = Environment(classpath + deps)
+        val environment = Environment(classpath + deps, LanguageVersion.LATEST_STABLE)
         val converter = { content: String ->
             val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
                 .setCharset(StandardCharsets.UTF_8)

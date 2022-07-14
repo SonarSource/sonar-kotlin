@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.Assertions
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.Test
 import org.sonar.api.SonarEdition
 import org.sonar.api.SonarQubeSide
@@ -48,18 +49,18 @@ internal class KotlinPluginTest {
         kotlinPlugin.define(context)
         Assertions.assertThat(context.extensions).hasSize(4)
     }
-    
+
     @Test
     fun test_android_context() {
-        val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/java/main"))
-        
+        val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/java/main"), LanguageVersion.LATEST_STABLE)
+
         Assertions.assertThat(isInAndroidContext(environment)).isTrue
     }
-    
+
     @Test
     fun test_non_android_context() {
-        val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"))
-        
+        val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
+
         Assertions.assertThat(isInAndroidContext(environment)).isFalse
     }
 }

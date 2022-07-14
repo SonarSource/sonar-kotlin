@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.ObjectAssert
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
@@ -62,7 +63,7 @@ class CopyPasteDetectorTest {
             .setContents(content)
             .build()
 
-        val root = kotlinTreeOf(content, Environment(emptyList()), inputFile)
+        val root = kotlinTreeOf(content, Environment(emptyList(), LanguageVersion.LATEST_STABLE), inputFile)
         val ctx = InputFileContextImpl(sensorContext, inputFile, false)
         CopyPasteDetector().scan(ctx, root)
 

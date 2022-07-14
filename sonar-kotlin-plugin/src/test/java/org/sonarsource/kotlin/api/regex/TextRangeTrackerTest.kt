@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.api.regex
 
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.ObjectAssert
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.junit.jupiter.api.Test
@@ -93,7 +94,7 @@ internal class TextRangeTrackerTest {
             val x = 
             $regex
         """.trimIndent(),
-            environment = Environment(emptyList()),
+            environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE),
             inputFile = DummyInputFile()
         )
 
