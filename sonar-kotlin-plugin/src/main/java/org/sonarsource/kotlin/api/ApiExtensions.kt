@@ -25,19 +25,24 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.coroutines.hasSuspendFunctionType
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.translate.callTranslator.getReturnType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -76,6 +81,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
+import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
 
@@ -449,3 +455,27 @@ fun KtBinaryExpression.isPlus() =
 
 fun PsiElement?.getType(bindingContext: BindingContext) =
     this?.let { bindingContext.get(BindingContext.VARIABLE, it)?.type }
+
+fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
+    this?.let {
+        when (this) {
+            is KtCallExpression -> getResolvedCall(bindingContext)?.getReturnType()
+            is KtParameter -> determineType(bindingContext)
+            is KtTypeReference -> determineType(bindingContext)
+            is KtProperty -> determineType(bindingContext)
+            is KtDotQualifiedExpression -> resolveReferenceTarget(bindingContext).determineType()
+            is KtReferenceExpression -> bindingContext.get(BindingContext.REFERENCE_TARGET, this).determineType()
+            is KtFunction -> bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, this).determineType()
+            is KtClass -> bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, this).determineType()
+            else -> bindingContext.get(BindingContext.VARIABLE, it)?.type
+        }
+
+    }
+
+fun DeclarationDescriptor?.determineType(): KotlinType? =
+    when (this) {
+        is FunctionDescriptor -> returnType
+        is ClassDescriptor -> defaultType
+        is PropertyDescriptor -> type
+        else -> null
+    }
