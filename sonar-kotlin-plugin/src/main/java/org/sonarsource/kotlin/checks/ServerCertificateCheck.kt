@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -30,25 +31,25 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
 import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.getType
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 
-private const val CERTIFICATE_EXCEPTION = "CertificateException"
+private const val CERTIFICATE_EXCEPTION = "java.security.cert.CertificateException"
+
+private val funMatchers = listOf(
+    FunMatcher {
+        definingSupertype = "javax.net.ssl.X509TrustManager"
+        withNames("checkClientTrusted", "checkServerTrusted")
+    },
+    FunMatcher {
+        definingSupertype = "javax.net.ssl.X509ExtendedTrustManager"
+        withNames("checkClientTrusted", "checkServerTrusted")
+    })
+
 
 @Rule(key = "S4830")
 class ServerCertificateCheck : AbstractCheck() {
-    companion object {
-        val funMatchers = listOf(
-            FunMatcher {
-                definingSupertype = "javax.net.ssl.X509TrustManager"
-                withNames("checkClientTrusted", "checkServerTrusted")
-            },
-            FunMatcher {
-                definingSupertype = "javax.net.ssl.X509ExtendedTrustManager"
-                withNames("checkClientTrusted", "checkServerTrusted")
-            })
-    }
-
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val (_, _, bindingContext) = kotlinFileContext
 
@@ -61,9 +62,8 @@ class ServerCertificateCheck : AbstractCheck() {
         }
     }
 
-    private fun KtNamedFunction.belongsToTrustManagerClass(bindingContext: BindingContext): Boolean {
-        return funMatchers.any { it.matches(this, bindingContext) }
-    }
+    private fun KtNamedFunction.belongsToTrustManagerClass(bindingContext: BindingContext): Boolean =
+        funMatchers.any { it.matches(this, bindingContext) }
 
     /*
      * Returns true if a function contains a call to "checkClientTrusted" or "checkServerTrusted".
@@ -73,7 +73,7 @@ class ServerCertificateCheck : AbstractCheck() {
             private var foundCheckTrustedCall: Boolean = false
 
             override fun visitCallExpression(expression: KtCallExpression) {
-                foundCheckTrustedCall = funMatchers.any { it.matches(expression, bindingContext) }
+                foundCheckTrustedCall = foundCheckTrustedCall || funMatchers.any { it.matches(expression, bindingContext) }
             }
 
             fun callsCheckTrusted(): Boolean {
@@ -98,17 +98,11 @@ class ServerCertificateCheck : AbstractCheck() {
         private var catchFound: Boolean = false
 
         override fun visitThrowExpression(expression: KtThrowExpression) {
-            val callExpr = expression.thrownExpression as? KtCallExpression
-            throwFound = callExpr?.let {
-                ConstructorMatcher {
-                    qualifier = "java.security.cert.CertificateException"
-                    withNoArguments()
-                }.matches(it, bindingContext)
-            } ?: false
+            throwFound = throwFound || CERTIFICATE_EXCEPTION == expression.thrownExpression.getType(bindingContext)?.getJetTypeFqName(false)
         }
 
         override fun visitCatchSection(catchClause: KtCatchClause) {
-            catchFound = CERTIFICATE_EXCEPTION == catchClause.catchParameter?.typeReference?.typeElement?.text
+            catchFound = catchFound || CERTIFICATE_EXCEPTION == catchClause.catchParameter.getType(bindingContext)?.getJetTypeFqName(false)
         }
 
         fun throwsCertificateExceptionWithoutCatching(): Boolean {
