@@ -181,7 +181,7 @@ class ApiExtensionsKtDetermineTypeTest {
 
     @Test
     fun `determineType of KtCallExpression`() {
-        val expr = ktFile.findDescendantOfType<KtCallExpression>()!!
+        val expr = ktFile.findDescendantOfType<KtCallExpression> { it.text == "stringReturning()" }!!
 
         assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
             .isEqualTo("kotlin.String")
@@ -189,7 +189,7 @@ class ApiExtensionsKtDetermineTypeTest {
 
     @Test
     fun `determineType of KtParameter`() {
-        val expr = ktFile.findDescendantOfType<KtParameter>()!!
+        val expr = ktFile.findDescendantOfType<KtParameter> { it.text == "param: Float" }!!
 
         assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
             .isEqualTo("kotlin.Float")
@@ -197,7 +197,7 @@ class ApiExtensionsKtDetermineTypeTest {
 
     @Test
     fun `determineType of KtTypeReference`() {
-        val expr = ktFile.findDescendantOfType<KtTypeReference>()!!
+        val expr = ktFile.findDescendantOfType<KtTypeReference> { it.text == "Int" }!!
 
         assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
             .isEqualTo("kotlin.Int")
@@ -205,7 +205,7 @@ class ApiExtensionsKtDetermineTypeTest {
 
     @Test
     fun `determineType of KtProperty`() {
-        val expr = ktFile.findDescendantOfType<KtProperty>()!!
+        val expr = ktFile.findDescendantOfType<KtProperty> { it.text == "val prop: Int = 0" }!!
 
         assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
             .isEqualTo("kotlin.Int")
@@ -213,7 +213,7 @@ class ApiExtensionsKtDetermineTypeTest {
 
     @Test
     fun `determineType of KtDotQualifiedExpression`() {
-        val expr = ktFile.findDescendantOfType<KtDotQualifiedExpression>()!!
+        val expr = ktFile.findDescendantOfType<KtDotQualifiedExpression> { it.text == "this.prop" }!!
 
         assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
             .isEqualTo("kotlin.Int")
@@ -237,7 +237,7 @@ class ApiExtensionsKtDetermineTypeTest {
 
     @Test
     fun `determineType of KtClass`() {
-        val expr = ktFile.findDescendantOfType<KtClass>()!!
+        val expr = ktFile.findDescendantOfType<KtClass> { it.name == "Foo" }!!
 
         assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
             .isEqualTo("bar.Foo")
