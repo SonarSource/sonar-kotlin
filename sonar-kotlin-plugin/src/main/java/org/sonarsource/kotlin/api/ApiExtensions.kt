@@ -77,6 +77,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.constants.ArrayValue
 import org.jetbrains.kotlin.resolve.constants.KClassValue
+import org.jetbrains.kotlin.resolve.descriptorUtil.classValueType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
@@ -452,6 +453,7 @@ fun KtExpression?.getterMatches(bindingContext: BindingContext, propertyName: St
 
 fun KtBinaryExpression.isPlus() =
     this.operationReference.operationSignTokenType?.let { OperatorConventions.BINARY_OPERATION_NAMES[it] }?.asString() == "plus"
+
 
 fun PsiElement?.getType(bindingContext: BindingContext) =
     this?.let { bindingContext.get(BindingContext.VARIABLE, it)?.type }
