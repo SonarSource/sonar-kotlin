@@ -22,15 +22,26 @@ package org.sonarsource.kotlin.api
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
+import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
+import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.nio.charset.StandardCharsets
 import java.util.TreeMap
@@ -141,14 +152,118 @@ internal class ApiExtensionsKtTest {
         action(node)
         node.allChildren.forEach { walker(it, action) }
     }
-
-    private fun parse(code: String) = kotlinTreeOf(
-        code,
-        Environment(listOf("build/classes/kotlin/main")),
-        TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt" )
-            .setCharset(StandardCharsets.UTF_8)
-            .initMetadata(code)
-            .build())
-
 }
 
+class ApiExtensionsKtDetermineTypeTest {
+    private val bindingContext: BindingContext
+    private val ktFile: KtFile
+
+    init {
+        val kotlinTree = parse(
+            """
+        package bar
+        
+        class Foo {
+            val prop: Int = 0
+        
+            fun aFun(param: Float): Long {
+                stringReturning()
+                this.prop
+                val localVal: Double
+            }
+            fun stringReturning(): String {}
+        }
+        """.trimIndent()
+        )
+        bindingContext = kotlinTree.bindingContext
+        ktFile = kotlinTree.psiFile
+    }
+
+    @Test
+    fun `determineType of KtCallExpression`() {
+        val expr = ktFile.findDescendantOfType<KtCallExpression>()!!
+
+        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("kotlin.String")
+    }
+
+    @Test
+    fun `determineType of KtParameter`() {
+        val expr = ktFile.findDescendantOfType<KtParameter>()!!
+
+        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("kotlin.Float")
+    }
+
+    @Test
+    fun `determineType of KtTypeReference`() {
+        val expr = ktFile.findDescendantOfType<KtTypeReference>()!!
+
+        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("kotlin.Int")
+    }
+
+    @Test
+    fun `determineType of KtProperty`() {
+        val expr = ktFile.findDescendantOfType<KtProperty>()!!
+
+        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("kotlin.Int")
+    }
+
+    @Test
+    fun `determineType of KtDotQualifiedExpression`() {
+        val expr = ktFile.findDescendantOfType<KtDotQualifiedExpression>()!!
+
+        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("kotlin.Int")
+    }
+
+    @Test
+    fun `determineType of KtReferenceExpression`() {
+        val expr = ktFile.findDescendantOfType<KtReferenceExpression> { it.text == "Int" }!!
+
+        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("kotlin.Int")
+    }
+
+    @Test
+    fun `determineType of KtFunction`() {
+        val expr = ktFile.findDescendantOfType<KtFunction> { it.name == "stringReturning" }!!
+
+        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("kotlin.String")
+    }
+
+    @Test
+    fun `determineType of KtClass`() {
+        val expr = ktFile.findDescendantOfType<KtClass>()!!
+
+        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("bar.Foo")
+    }
+
+    @Test
+    fun `determineType else`() {
+        // Block - not supported for now and will return null
+        val expr = ktFile.findDescendantOfType<KtBlockExpression>()!!
+
+        assertThat(expr.determineType(bindingContext))
+            .isNull()
+    }
+
+    @Test
+    fun `determineType of declaration not supported`() {
+        assertThat((null as FunctionDescriptor?).determineType())
+            .isNull()
+    }
+}
+
+private fun parse(code: String) = kotlinTreeOf(
+    code,
+    Environment(listOf("build/classes/kotlin/main")),
+    TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
+        .setCharset(StandardCharsets.UTF_8)
+        .initMetadata(code)
+        .build()
+)
