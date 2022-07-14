@@ -52,7 +52,7 @@ val staxmateVersion: String by project
 
 dependencies {
     // TODO how to correctly define the version number
-    compileOnly("org.sonarsource.sonarqube:sonar-plugin-api:9.3.0.51899")
+    compileOnly("org.sonarsource.sonarqube:sonar-plugin-api")
     implementation("org.sonarsource.analyzer-commons:sonar-analyzer-commons")
     implementation("org.sonarsource.analyzer-commons:sonar-xml-parsing")
     implementation("org.sonarsource.analyzer-commons:sonar-regex-parsing")
@@ -69,7 +69,7 @@ dependencies {
     testImplementation("io.github.classgraph:classgraph")
     testImplementation("org.sonarsource.analyzer-commons:sonar-analyzer-test-commons")
     // TODO how to correctly define the version number
-    testImplementation("org.sonarsource.sonarqube:sonar-plugin-api-impl:9.3.0.51899")
+    testImplementation("org.sonarsource.sonarqube:sonar-plugin-api-impl")
 }
 
 tasks.withType<JavaCompile> {
