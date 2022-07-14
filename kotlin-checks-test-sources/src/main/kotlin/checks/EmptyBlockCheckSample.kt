@@ -17,7 +17,11 @@ class EmptyBlockCheckSample {
             /** Compliant - contains KDoc */
         }
 
-        /*when (c) {} // Noncompliant
+        /* The following is commented out since we upgraded to 1.7, as it does not compile anymore (non-exhaustive when statements have
+         * become a compile-time error with 1.7). If we introduce test source parsing with different Kotlin versions at some point, this
+         * could be re-enabled for a Kotlin version <1.7.
+
+        when (c) {} // Noncompliant
 
         when (c) {
             // Compliant - contains comment
