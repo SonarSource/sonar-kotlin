@@ -31,6 +31,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
 import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.determineType
 import org.sonarsource.kotlin.api.getType
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
@@ -98,11 +99,11 @@ class ServerCertificateCheck : AbstractCheck() {
         private var catchFound: Boolean = false
 
         override fun visitThrowExpression(expression: KtThrowExpression) {
-            throwFound = throwFound || CERTIFICATE_EXCEPTION == expression.thrownExpression.getType(bindingContext)?.getJetTypeFqName(false)
+            throwFound = throwFound || CERTIFICATE_EXCEPTION == expression.thrownExpression.determineType(bindingContext)?.getJetTypeFqName(false)
         }
 
         override fun visitCatchSection(catchClause: KtCatchClause) {
-            catchFound = catchFound || CERTIFICATE_EXCEPTION == catchClause.catchParameter.getType(bindingContext)?.getJetTypeFqName(false)
+            catchFound = catchFound || CERTIFICATE_EXCEPTION == catchClause.catchParameter.determineType(bindingContext)?.getJetTypeFqName(false)
         }
 
         fun throwsCertificateExceptionWithoutCatching(): Boolean {
