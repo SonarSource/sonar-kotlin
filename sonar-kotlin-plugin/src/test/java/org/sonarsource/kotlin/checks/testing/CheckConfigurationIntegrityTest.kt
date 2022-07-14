@@ -47,7 +47,7 @@ class CheckConfigurationIntegrityTest {
 
         val actualChecks = KOTLIN_CHECKS.map { it.simpleName }
 
-        Assertions.assertThat(actualChecks).containsOnlyElementsOf(expectedChecks)
+        Assertions.assertThat(actualChecks).hasSameElementsAs(expectedChecks)
     }
 
     private fun isCheckFile(candidate: Path) = candidate.isRegularFile() && candidate.fileName.toString().endsWith("Check.kt")
