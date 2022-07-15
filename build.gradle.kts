@@ -18,6 +18,7 @@ val analyzerCommonsVersion: String by project
 val sonarqubeVersion: String by project
 val orchestratorVersion: String by project
 val sonarlintVersion: String by project
+val sonarPluginApiVersion: String by project
 val sonarLinksCi: String by project
 val gsonVersion: String by project
 val junitVersion: String by project
@@ -83,8 +84,8 @@ subprojects {
 
     configure<DependencyManagementExtension> {
         dependencies {
-            dependency("org.sonarsource.sonarqube:sonar-plugin-api:$sonarqubeVersion")
-            dependency("org.sonarsource.sonarqube:sonar-plugin-api-impl:$sonarqubeVersion")
+            dependency("org.sonarsource.sonarqube:sonar-plugin-api:$sonarPluginApiVersion")
+            dependency("org.sonarsource.sonarqube:sonar-plugin-api-impl:$sonarPluginApiVersion")
             dependency("org.sonarsource.sonarqube:sonar-ws:$sonarqubeVersion")
             dependency("com.google.code.findbugs:jsr305:$jsr305Version")
             dependency("com.google.code.gson:gson:$gsonVersion")

@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.Assertions
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.converter.Environment
 
@@ -59,7 +60,7 @@ internal class StatementsVisitorTest {
 }
 
 private fun statements(content: String): Int {
-    val ktFile = Environment(emptyList()).ktPsiFactory.createFile(content)
+    val ktFile = Environment(emptyList(), LanguageVersion.LATEST_STABLE).ktPsiFactory.createFile(content)
     val statementsVisitor = StatementsVisitor()
     ktFile.accept(statementsVisitor)
     return statementsVisitor.statements

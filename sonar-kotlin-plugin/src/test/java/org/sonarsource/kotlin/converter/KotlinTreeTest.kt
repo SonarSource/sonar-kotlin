@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.converter
 import java.nio.file.Files
 import java.nio.file.Path
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
@@ -33,9 +34,9 @@ class KotlinTreeTest {
 
   @Test
   fun testCreateKotlinTree() {
-    val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"))
+    val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
     val path = Path.of("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
-    val content = String(Files.readAllBytes(path))   
+    val content = String(Files.readAllBytes(path))
     val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin.kt")
       .setCharset(StandardCharsets.UTF_8)
       .initMetadata(content)

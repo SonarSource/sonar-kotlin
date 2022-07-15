@@ -70,8 +70,8 @@ internal object Main {
                 println("123")
             }
 
-            // does not override
-            fun checkServerTrusted(s: String?) {}
+            fun checkServerTrusted(s: String?) {} // Compliant - function signature does not belong to X59TrustManager
+
             override fun getAcceptedIssuers(): Array<X509Certificate> {
                 return emptyArray()
             }
@@ -79,12 +79,16 @@ internal object Main {
         trustManager = object : X509TrustManager {
             @Throws(CertificateException::class)
             override fun checkClientTrusted(x509Certificates: Array<X509Certificate>, s: String) {
-                throw CertificateException()
+                if (true)
+                    throw CertificateException()
+                else
+                    throw RuntimeException()
             }
 
             @Throws(CertificateException::class)
             override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String) {
                 checkClientTrusted(x509Certificates, s)
+                getAcceptedIssuers()
             }
 
             override fun getAcceptedIssuers(): Array<X509Certificate> {
@@ -93,11 +97,8 @@ internal object Main {
         }
         trustManager = object : X509TrustManager {
             @Throws(CertificateException::class)
-            override fun checkClientTrusted(
-                x509Certificates: Array<X509Certificate>,
-                s: String,
-            ) {
-                throw NumberFormatException() // FN, Throws different exception
+            override fun checkClientTrusted(x509Certificates: Array<X509Certificate>, s: String) {  // Noncompliant
+                throw NumberFormatException()
             }
 
             @Throws(CertificateException::class)
@@ -106,6 +107,35 @@ internal object Main {
                     throw CertificateException()
                 } catch (e: CertificateException) {
                     e.printStackTrace()
+                } catch (e: RuntimeException) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun getAcceptedIssuers(): Array<X509Certificate> {
+                return emptyArray()
+            }
+        }
+        trustManager = object : X509TrustManager {
+            @Throws(CertificateException::class)
+            override fun checkClientTrusted(x509Certificates: Array<X509Certificate>, s: String) {
+                try {
+                    getAcceptedIssuers()
+                } catch (e: RuntimeException) {
+                    throw CertificateException()
+                }
+            }
+
+            @Throws(CertificateException::class)
+            override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String) {
+                try {
+                    getAcceptedIssuers()
+                } catch (e: RuntimeException) {
+                    try {
+                        getAcceptedIssuers()
+                    } catch (e: IllegalAccessException) {
+                        throw CertificateException()
+                    }
                 }
             }
 

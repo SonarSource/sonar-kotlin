@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
@@ -58,7 +59,7 @@ class IssueSuppressionVisitorTest {
         scanFile(path, false, BadClassNameCheck(), BadFunctionNameCheck(), VariableAndParameterNameCheck(), UnusedLocalVariableCheck())
 
     private fun scanFile(path: Path, suppress: Boolean, check: AbstractCheck, vararg checks: AbstractCheck): SingleFileVerifier {
-        val env = Environment(DEFAULT_KOTLIN_CLASSPATH)
+        val env = Environment(DEFAULT_KOTLIN_CLASSPATH, LanguageVersion.LATEST_STABLE)
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
         val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin.kt")

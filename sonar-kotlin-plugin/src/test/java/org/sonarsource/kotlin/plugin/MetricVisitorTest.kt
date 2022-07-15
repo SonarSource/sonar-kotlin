@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.Assertions
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -41,7 +42,7 @@ import kotlin.io.path.createTempFile
 import kotlin.io.path.name
 
 internal class MetricVisitorTest {
-    private val environment = Environment(emptyList())
+    private val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
     private lateinit var mockNoSonarFilter: NoSonarFilter
     private lateinit var visitor: MetricVisitor
     private lateinit var sensorContext: SensorContextTester

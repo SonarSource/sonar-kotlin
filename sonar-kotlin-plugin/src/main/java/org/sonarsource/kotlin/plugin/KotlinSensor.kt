@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.plugin
 
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.api.SonarProduct
 import org.sonar.api.batch.fs.FileSystem
@@ -29,7 +30,6 @@ import org.sonar.api.batch.rule.Checks
 import org.sonar.api.batch.sensor.Sensor
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
-import org.sonar.api.config.Configuration
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContextFactory
 import org.sonar.api.utils.log.Loggers
@@ -53,8 +53,9 @@ import kotlin.time.ExperimentalTime
 private const val FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast"
 private const val PERFORMANCE_MEASURE_ACTIVATION_PROPERTY = "sonar.kotlin.performance.measure"
 private const val PERFORMANCE_MEASURE_DESTINATION_FILE = "sonar.kotlin.performance.measure.json"
+private const val KOTLIN_LANGUAGE_VERSION = "sonar.kotlin.source.version"
+private val DEFAULT_KOTLIN_LANGUAGE_VERSION = LanguageVersion.KOTLIN_1_5
 
-@ExperimentalTime
 private val LOG = Loggers.get(KotlinSensor::class.java)
 private val EMPTY_FILE_CONTENT_PATTERN = Regex("""\s*+""")
 
@@ -236,8 +237,19 @@ private fun toParseException(action: String, inputFile: InputFile, cause: Throwa
 
 fun environment(sensorContext: SensorContext) = Environment(
     sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
-        sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList()
+        sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
+    determineKotlinLanguageVersion(sensorContext)
 )
+
+private fun determineKotlinLanguageVersion(sensorContext: SensorContext) =
+    (sensorContext.config().get(KOTLIN_LANGUAGE_VERSION).map { versionString ->
+        LanguageVersion.fromVersionString(versionString).also { langVersion ->
+            if (langVersion == null && versionString.isNotBlank()) {
+                LOG.warn("Failed to find Kotlin version '$versionString'. Defaulting to ${DEFAULT_KOTLIN_LANGUAGE_VERSION.versionString}")
+            }
+        }
+    }.orElse(null) ?: DEFAULT_KOTLIN_LANGUAGE_VERSION)
+        .also { LOG.debug { "Using Kotlin ${it.versionString} to parse source code" } }
 
 private fun createPerformanceMeasureReport(context: SensorContext): PerformanceMeasure.Duration? {
     return PerformanceMeasure.reportBuilder()

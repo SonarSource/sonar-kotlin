@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtCollectionLiteralExpression
@@ -97,7 +98,7 @@ class KotlinCodeVerifier {
         return if (words < 2 || isKDoc(content)) {
             false
         } else {
-            val environment = Environment(emptyList())
+            val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
             try {
                 val wrappedContent = "fun function () { $content }"
 

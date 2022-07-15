@@ -26,41 +26,27 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
-import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
-import org.jetbrains.kotlin.cli.common.messages.MessageCollector
-import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
-import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
-import org.jetbrains.kotlin.com.intellij.openapi.Disposable
-import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
-import org.jetbrains.kotlin.config.CommonConfigurationKeys
-import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
-import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtPsiFactory
-import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.sonar.api.batch.rule.CheckFactory
+import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.highlighting.TypeOfText
 import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
+import org.sonar.api.config.internal.ConfigurationBridge
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.utils.log.LoggerLevel
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.compilerConfiguration
 import org.sonarsource.kotlin.testing.AbstractSensorTest
 import org.sonarsource.kotlin.testing.assertTextRange
 import java.io.IOException
-import java.util.Optional
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -189,7 +175,8 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun `Ensure compiler crashes during BindingContext generation don't crash engine`() {
-        val inputFile = createInputFile("file1.kt", """
+        val inputFile = createInputFile(
+            "file1.kt", """
         abstract class MyClass {
             abstract fun <P1> foo(): (P1) -> Unknown<String>
         
@@ -197,11 +184,12 @@ internal class KotlinSensorTest : AbstractSensorTest() {
                 println(foo<String>())
             }
         }
-        """.trimIndent())
+        """.trimIndent()
+        )
         context.fileSystem().add(inputFile)
 
         mockkStatic("org.sonarsource.kotlin.plugin.KotlinSensorKt")
-        every { environment(any()) } returns Environment(listOf("file1.kt"))
+        every { environment(any()) } returns Environment(listOf("file1.kt"), LanguageVersion.LATEST_STABLE)
 
         val checkFactory = checkFactory("S1764")
         assertDoesNotThrow { sensor(checkFactory).execute(context) }
@@ -317,6 +305,85 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertDoesNotThrow { sensor.execute(context) }
         assertThat(logTester.logs(LoggerLevel.ERROR))
             .containsExactly("Cannot analyse 'file1.kt' with 'KtChecksVisitor': This is a test message")
+    }
+
+    @Test
+    fun `not setting the kotlin version analyzer property results in Environment with the default Kotlin version`() {
+        logTester.setLevel(LoggerLevel.DEBUG)
+
+        val sensorContext = mockk<SensorContext> {
+            every { config() } returns ConfigurationBridge(MapSettings())
+        }
+
+        val environment = environment(sensorContext)
+
+        val expectedKotlinVersion = LanguageVersion.KOTLIN_1_5
+
+        assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
+        assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
+        assertThat(logTester.logs(LoggerLevel.DEBUG))
+            .containsExactly("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
+    }
+
+    @Test
+    fun `setting the kotlin version analyzer property to a valid value is reflected in the Environment`() {
+        logTester.setLevel(LoggerLevel.DEBUG)
+
+        val sensorContext = mockk<SensorContext> {
+            every { config() } returns ConfigurationBridge(MapSettings().apply {
+                setProperty("sonar.kotlin.source.version", "1.3")
+            })
+        }
+
+        val environment = environment(sensorContext)
+
+        val expectedKotlinVersion = LanguageVersion.KOTLIN_1_3
+
+        assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
+        assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
+        assertThat(logTester.logs(LoggerLevel.DEBUG))
+            .containsExactly("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
+    }
+
+    @Test
+    fun `setting the kotlin version analyzer property to an invalid value results in log message and the default version to be used`() {
+        logTester.setLevel(LoggerLevel.DEBUG)
+
+        val sensorContext = mockk<SensorContext> {
+            every { config() } returns ConfigurationBridge(MapSettings().apply {
+                setProperty("sonar.kotlin.source.version", "foo")
+            })
+        }
+
+        val environment = environment(sensorContext)
+
+        val expectedKotlinVersion = LanguageVersion.KOTLIN_1_5
+
+        assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
+        assertThat(logTester.logs(LoggerLevel.WARN))
+            .containsExactly("Failed to find Kotlin version 'foo'. Defaulting to ${expectedKotlinVersion.versionString}")
+        assertThat(logTester.logs(LoggerLevel.DEBUG))
+            .containsExactly("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
+    }
+
+    @Test
+    fun `setting the kotlin version analyzer property to whitespaces only results in the default version to be used`() {
+        logTester.setLevel(LoggerLevel.DEBUG)
+
+        val sensorContext = mockk<SensorContext> {
+            every { config() } returns ConfigurationBridge(MapSettings().apply {
+                setProperty("sonar.kotlin.source.version", "  ")
+            })
+        }
+
+        val environment = environment(sensorContext)
+
+        val expectedKotlinVersion = LanguageVersion.KOTLIN_1_5
+
+        assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
+        assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
+        assertThat(logTester.logs(LoggerLevel.DEBUG))
+            .containsExactly("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
     }
 
     private fun sensor(checkFactory: CheckFactory): KotlinSensor {
