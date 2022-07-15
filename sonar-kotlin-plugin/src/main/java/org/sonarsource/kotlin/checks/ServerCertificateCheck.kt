@@ -75,9 +75,7 @@ class ServerCertificateCheck : AbstractCheck() {
                 foundCheckTrustedCall = foundCheckTrustedCall || funMatchers.any { it.matches(expression, bindingContext) }
             }
 
-            fun callsCheckTrusted(): Boolean {
-                return foundCheckTrustedCall
-            }
+            fun callsCheckTrusted(): Boolean = foundCheckTrustedCall
         }
         this.acceptRecursively(visitor)
         return visitor.callsCheckTrusted()

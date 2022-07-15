@@ -453,7 +453,6 @@ fun KtExpression?.getterMatches(bindingContext: BindingContext, propertyName: St
 fun KtBinaryExpression.isPlus() =
     this.operationReference.operationSignTokenType?.let { OperatorConventions.BINARY_OPERATION_NAMES[it] }?.asString() == "plus"
 
-
 fun PsiElement?.getType(bindingContext: BindingContext) =
     this?.let { bindingContext.get(BindingContext.VARIABLE, it)?.type }
 
