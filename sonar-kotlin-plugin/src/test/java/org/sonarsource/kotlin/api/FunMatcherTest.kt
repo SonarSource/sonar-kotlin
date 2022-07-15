@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.api
 
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
@@ -37,7 +38,7 @@ import java.nio.file.Paths
 
 class FunMatcherTest {
 
-    val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"))
+    val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
     val path = Paths.get("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
     val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin.kt")

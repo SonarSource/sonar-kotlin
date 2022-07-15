@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.converter
 
 import org.assertj.core.api.Assertions
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.dev.AstPrinter
@@ -30,7 +31,7 @@ import java.nio.file.Path
 import java.util.stream.Collectors
 import kotlin.io.path.readText
 
-private val environment = Environment(emptyList())
+private val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
 
 fun main() {
     fix_all_cls_files_test_automatically()

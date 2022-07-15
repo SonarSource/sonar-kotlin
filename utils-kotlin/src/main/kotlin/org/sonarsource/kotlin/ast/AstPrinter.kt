@@ -1,5 +1,6 @@
 package org.sonarsource.kotlin.ast
 
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.dev.AstPrinter
 import java.nio.file.Path
@@ -14,7 +15,7 @@ fun main(vararg args: String) {
 
     val mode = args[0].lowercase()
     val inputFile = resolveDir(args[1])
-    val environment = Environment(emptyList())
+    val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
 
     val ktFile by lazy { environment.ktPsiFactory.createFile(inputFile.readText()) }
 
