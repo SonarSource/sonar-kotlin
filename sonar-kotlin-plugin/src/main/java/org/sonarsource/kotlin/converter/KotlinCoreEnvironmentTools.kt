@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.converter
 
-import java.io.File
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
@@ -43,6 +42,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
+import java.io.File
 
 class Environment(val classpath: List<String>) {
     val disposable = Disposer.newDisposable()
@@ -101,7 +101,8 @@ private fun analyzeAndGetBindingContext(
 ): BindingContext {
     val analyzer = AnalyzerWithCompilerReport(
         MessageCollector.NONE,
-        env.configuration.languageVersionSettings
+        env.configuration.languageVersionSettings,
+        false
     )
     analyzer.analyzeAndReport(ktFiles) {
         TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
@@ -130,6 +131,7 @@ fun compilerConfiguration(
     return CompilerConfiguration().apply {
         put(CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS, versionSettings)
         put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
+        put(JVMConfigurationKeys.JDK_HOME, File(System.getProperty("java.home")))
         addJvmClasspathRoots(classpathFiles)
     }
 }

@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.api
 
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
