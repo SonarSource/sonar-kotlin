@@ -108,9 +108,100 @@ internal class MetricVisitorTest {
         val x = true || false
     }
     """.trimIndent())
-        Assertions.assertThat(visitor.nosonarLines()).containsExactly(2)
+        assertThat(visitor.nosonarLines()).containsExactly(2)
+        assertThat(visitor.commentLines()).containsExactly(3)
         Mockito.verify(mockNoSonarFilter).noSonarInFile(inputFile, setOf(2))
     }
+
+    @Test
+    fun `kDocs are counted`() {
+        scan("""
+    fun function1(x: Int) { x + 1 }
+    /**
+     * KDoc comment
+     */
+    fun function2() {
+        val x = true || false
+    }
+    """.trimIndent())
+        assertThat(visitor.commentLines()).containsExactly(2, 3, 4)
+        assertThat(visitor.nosonarLines()).isEmpty()
+    }
+
+    @Test
+    fun `header comments are not counted`() {
+        scan("""
+    // Header comment
+    //
+    package a
+    
+    fun function1(x: Int) { x + 1 }
+    """.trimIndent())
+        assertThat(visitor.commentLines()).isEmpty()
+    }
+
+
+    @Test
+    fun `header block comments are not counted`() {
+        scan("""
+            
+    /*
+     * Header comment
+     */
+    package b
+      
+    val my_c = 2
+     
+    fun function1(x: Int) { x + 1 }
+    """.trimIndent())
+        assertThat(visitor.commentLines()).isEmpty()
+    }
+
+    @Test
+    fun `double header comments are counted correctly`() {
+        scan("""
+            
+    /*
+     * Header comment
+     */
+     
+    // Another header comment
+     
+    package b
+      
+    val my_c = 2
+     
+    fun function1(x: Int) { x + 1 }
+    """.trimIndent())
+        assertThat(visitor.commentLines()).isEmpty()
+    }
+
+    @Test
+    fun `a mixture of comments is counted correctly`() {
+        scan("""
+            
+    /*
+     * Header comment
+     */
+    package b
+      
+    // This is a comment
+    // for the variable my_c
+    val my_c = 2
+     
+    // NOSONAR comment
+    
+    /**
+     * A KDoc comment
+     */
+    fun function1(x: Int) { x + 1 } // A comment
+
+    // NOSONAR comment
+    """.trimIndent())
+        assertThat(visitor.commentLines()).containsExactly(7, 8, 13, 14, 15, 16)
+        assertThat(visitor.nosonarLines()).containsExactly(11, 18)
+    }
+
 
     @Test
     fun functions() {

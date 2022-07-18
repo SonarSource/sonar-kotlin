@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.plugin
 import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
+import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -124,7 +125,8 @@ private class KtMetricVisitor : KtTreeVisitorVoid() {
         file.accept(statementsVisitor)
         statements = statementsVisitor.statements
 
-        super.visitKtFile(file)
+        // We don't want to count file headers as comment.
+        file.children.dropWhile { it is PsiComment || it is PsiWhiteSpace }.forEach { it.accept(this) }
     }
 
     override fun visitComment(comment: PsiComment) {
@@ -132,6 +134,8 @@ private class KtMetricVisitor : KtTreeVisitorVoid() {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
+        function.docComment?.let { addCommentMetrics(it, commentLines, nosonarLines) }
+
         if (function.hasBody() && function.name != null) {
             numberOfFunctions++
         }
@@ -170,9 +174,10 @@ private fun saveMetric(ctx: InputFileContext, metric: Metric<Int>, value: Int) =
 
 private fun addCommentMetrics(comment: PsiComment, commentLines: MutableSet<Int>, nosonarLines: MutableSet<Int>) {
     val document = comment.containingFile.viewProvider.document!!
-    add(comment.textRange, commentLines, document)
     if (isNosonarComment(comment)) {
         add(comment.textRange, nosonarLines, document)
+    } else {
+        add(comment.textRange, commentLines, document)
     }
 }
 
