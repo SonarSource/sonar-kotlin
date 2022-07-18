@@ -23,6 +23,7 @@ import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.resolve.BindingContextUtils
 import org.jetbrains.kotlin.utils.KotlinExceptionWithAttachments
 import org.junit.jupiter.api.AfterEach
@@ -51,7 +52,7 @@ internal class KotlinSyntaxStructureTest {
         every { BindingContextUtils.getRecordedTypeInfo(any(), any()) } throws expectedException
 
         val content = path.readText()
-        val environment = Environment(System.getProperty("java.class.path").split(":"))
+        val environment = Environment(System.getProperty("java.class.path").split(":"), LanguageVersion.LATEST_STABLE)
         val inputFile = TestInputFileBuilder("moduleKey", path.toString())
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(content).build()
@@ -68,7 +69,7 @@ internal class KotlinSyntaxStructureTest {
     fun `ensure ktfile name is properly set`() {
         val path = Path.of("src/test/resources/api/sample/SimpleClass.kt")
         val content = path.readText()
-        val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"))
+        val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
 
         val inputFile = TestInputFileBuilder("moduleKey", path.toString())
             .setCharset(StandardCharsets.UTF_8)

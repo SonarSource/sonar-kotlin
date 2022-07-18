@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.api
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -261,7 +262,7 @@ class ApiExtensionsKtDetermineTypeTest {
 
 private fun parse(code: String) = kotlinTreeOf(
     code,
-    Environment(listOf("build/classes/kotlin/main")),
+    Environment(listOf("build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE),
     TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
         .setCharset(StandardCharsets.UTF_8)
         .initMetadata(code)

@@ -2,8 +2,7 @@ package checks
 
 @Deprecated("Some text")
 enum class MyEnumClass(val value: String) {
-    ENTRY1(""), // Noncompliant
-//        ^
+    ENTRY1(""), // Compliant (FN?) since Kotlin 1.7, where the compiler doesn't seem to find this anymore.
 }
 
 class Example : DeprecatedCode() // Noncompliant {{Deprecated code should not be used.}}
@@ -12,14 +11,14 @@ class Example : DeprecatedCode() // Noncompliant {{Deprecated code should not be
     @DeprecatedAnnotation() // Noncompliant
 //   ^^^^^^^^^^^^^^^^^^^^
 class DeprecatedCodeUsedCheckSample {
-    
+
     fun usesDeprecated(kStr: DeprecatedString): String { // Noncompliant
 //                           ^^^^^^^^^^^^^^^^
-        
+
         //Noncompliant@+1
         val d = DeprecatedCode("") // Noncompliant
 //              ^^^^^^^^^^^^^^
-        
+
         d.prop // Noncompliant
 //        ^^^^
 
@@ -33,11 +32,11 @@ class DeprecatedCodeUsedCheckSample {
 
         deprecatedFunction() // Noncompliant
 //      ^^^^^^^^^^^^^^^^^^
-        
+
         return kStr - "" // Noncompliant
-//             ^^^^^^^^^        
+//             ^^^^^^^^^
     }
-    
+
 }
 
 @Deprecated("")

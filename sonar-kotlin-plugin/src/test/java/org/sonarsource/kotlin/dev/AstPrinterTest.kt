@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.dev
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.util.Files
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.converter.Environment
@@ -30,7 +31,7 @@ import kotlin.io.path.readText
 private val INPUT_FILE = Path.of("src", "test", "resources", "ast-printing", "TestFileToPrintAstFor.kt").toAbsolutePath()
 private val EXPECTED_DOT_OUTPUT = Path.of("src", "test", "resources", "ast-printing", "TestFileToPrintAstFor.dot")
 private val EXPECTED_TXT_OUTPUT = Path.of("src", "test", "resources", "ast-printing", "TestFileToPrintAstFor.txt")
-private val INPUT_KT = Environment(emptyList()).ktPsiFactory.createFile(INPUT_FILE.readText())
+private val INPUT_KT = Environment(emptyList(), LanguageVersion.LATEST_STABLE).ktPsiFactory.createFile(INPUT_FILE.readText())
 
 class AstPrinterTest {
 
