@@ -83,6 +83,10 @@ The Gradle task `generateRuleMetadata` will download the rule metadata from the 
 For example, execute the following in the project root to fetch the metadata for rule `S42`:
 
     ./gradlew generateRuleMetadata -PruleKey=S42
+    
+If fetching from a branch:
+
+    ./gradlew generateRuleMetadata -PruleKey=S4830 -Pbranch=a_branch
 
 If you want to update all rules' metadata, you can use:
     
