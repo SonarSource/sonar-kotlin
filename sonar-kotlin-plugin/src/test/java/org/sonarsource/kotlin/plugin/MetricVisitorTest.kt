@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -73,7 +74,7 @@ internal class MetricVisitorTest {
         val x = true || false 
     }
     """.trimIndent())
-        Assertions.assertThat(visitor.linesOfCode()).containsExactly(1, 3, 4, 5)
+        assertThat(visitor.linesOfCode()).containsExactly(1, 3, 4, 5)
     }
 
     @Test
@@ -85,7 +86,7 @@ internal class MetricVisitorTest {
         val x = true || false
     }
     """.trimIndent())
-        Assertions.assertThat(visitor.commentLines()).containsExactly(2, 3)
+        assertThat(visitor.commentLines()).containsExactly(2, 3)
     }
 
     @Test
@@ -95,8 +96,8 @@ internal class MetricVisitorTest {
     x + 1
     end*/
     """.trimIndent())
-        Assertions.assertThat(visitor.commentLines()).containsExactly(1, 2, 3)
-        Assertions.assertThat(visitor.linesOfCode()).isEmpty()
+        assertThat(visitor.commentLines()).containsExactly(1, 2, 3)
+        assertThat(visitor.linesOfCode()).isEmpty()
     }
 
     @Test
@@ -213,7 +214,7 @@ internal class MetricVisitorTest {
                 }
             }
     """.trimIndent())
-        Assertions.assertThat(visitor.numberOfFunctions()).isZero
+        assertThat(visitor.numberOfFunctions()).isZero
 
         scan("""
             abstract class C {
@@ -223,7 +224,7 @@ internal class MetricVisitorTest {
                 }
             }
     """.trimIndent())
-        Assertions.assertThat(visitor.numberOfFunctions()).isEqualTo(1)
+        assertThat(visitor.numberOfFunctions()).isEqualTo(1)
     }
 
     @Test
@@ -232,7 +233,7 @@ internal class MetricVisitorTest {
              fun foo(x: Int) { x + 1 }
              fun bar() = true || false;
     """.trimIndent())
-        Assertions.assertThat(visitor.numberOfClasses()).isZero
+        assertThat(visitor.numberOfClasses()).isZero
 
         scan("""class C {}
                 fun function() {}
@@ -240,7 +241,7 @@ internal class MetricVisitorTest {
                 class E {
                   fun doSomething(x: Int) {}
                 }""")
-        Assertions.assertThat(visitor.numberOfClasses()).isEqualTo(3)
+        assertThat(visitor.numberOfClasses()).isEqualTo(3)
     }
 
     @Test
@@ -263,7 +264,7 @@ internal class MetricVisitorTest {
                         }
                       }
                 }""")
-        Assertions.assertThat(visitor.cognitiveComplexity()).isEqualTo(7)
+        assertThat(visitor.cognitiveComplexity()).isEqualTo(7)
     }
 
     @Test
@@ -280,7 +281,7 @@ internal class MetricVisitorTest {
                fun bar() {
                  val x = 42
                }""")
-        Assertions.assertThat(visitor.executableLines()).containsExactly(5, 10)
+        assertThat(visitor.executableLines()).containsExactly(5, 10)
     }
 
     private fun scan(code: String) {
