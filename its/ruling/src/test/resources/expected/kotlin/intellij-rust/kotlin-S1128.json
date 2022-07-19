@@ -29,6 +29,9 @@
 10,
 11,
 ],
+'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/implementMembers/ImplementMembersFix.kt':[
+13,
+],
 'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/implementMembers/impl.kt':[
 14,
 15,
@@ -45,6 +48,9 @@
 ],
 'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsFormatterTest.kt':[
 9,
+],
+'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/lineMarkers/RsTraitItemImplLineMarkerProviderTest.kt':[
+8,
 ],
 'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsTypeAwareResolveTest.kt':[
 8,
