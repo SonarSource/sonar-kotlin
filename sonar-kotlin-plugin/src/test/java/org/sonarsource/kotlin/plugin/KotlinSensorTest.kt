@@ -269,7 +269,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         context.apply {
             setSettings(MapSettings().apply {
-                failFast?.let { setProperty("sonar.internal.analysis.failFast", it) }
+                failFast?.let { setProperty(KotlinPlugin.FAIL_FAST_PROPERTY_NAME, it) }
             })
 
             fileSystem().add(createInputFile("file1.kt", "class A { fun f() = TODO() }"))
@@ -331,7 +331,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         val sensorContext = mockk<SensorContext> {
             every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty("sonar.kotlin.source.version", "1.3")
+                setProperty(KotlinPlugin.KOTLIN_LANGUAGE_VERSION, "1.3")
             })
         }
 
@@ -351,7 +351,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         val sensorContext = mockk<SensorContext> {
             every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty("sonar.kotlin.source.version", "foo")
+                setProperty(KotlinPlugin.KOTLIN_LANGUAGE_VERSION, "foo")
             })
         }
 
@@ -372,7 +372,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         val sensorContext = mockk<SensorContext> {
             every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty("sonar.kotlin.source.version", "  ")
+                setProperty(KotlinPlugin.KOTLIN_LANGUAGE_VERSION, "  ")
             })
         }
 
