@@ -33,7 +33,7 @@ class UnnecessaryImportsCheckTest : CheckTestWithNoSemantics(UnnecessaryImportsC
     }
 
     @Test
-    fun `with long package name`() {
+    fun `with long package name and no semantics`() {
         KotlinVerifier(check) {
             this.fileName = "otherpackage/${checkName}SampleNoSemanticsLongPackage.kt"
             this.classpath = emptyList()
