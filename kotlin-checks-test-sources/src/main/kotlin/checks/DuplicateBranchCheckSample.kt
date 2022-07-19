@@ -157,7 +157,7 @@ class DuplicateBranchCheckSample {
     data class BB(val value: String) : Base {fun id(): Int = 1}
     data class CC(val value: String) : Base {fun id(): Int = 2}
 
-    fun unwrap(obj: Base): String {
+    fun multiLine(obj: Base): String {
         return when (obj) {
             is AA -> obj
                 .value
