@@ -153,19 +153,38 @@ class DuplicateBranchCheckSample {
     }
 
     sealed interface Base
-    data class AA(val value: String) : Base
-    data class BB(val value: String) : Base
+    data class AA(val value: String) : Base {fun id(): Int = 0}
+    data class BB(val value: String) : Base {fun id(): Int = 1}
+    data class CC(val value: String) : Base {fun id(): Int = 2}
 
     fun unwrap(obj: Base): String {
         return when (obj) {
-            is AA -> obj.value
-            is BB -> obj.value
+            is AA -> obj
+                .value
+            is BB -> obj
+                .value
+            is CC -> obj
+                .value
         }
     }
 
-    // TODO: really needed?
-    fun main() {
-        println(unwrap(AA("foo")))
+    fun singleLine(obj: Base): String {
+        return when (obj) {
+            is AA -> obj.value
+            is BB -> obj.value
+            is CC -> obj.value
+        }
+    }
+
+    fun funCall(obj: Base): Int {
+        return when (obj) {
+            is AA -> obj
+                .id()
+            is BB -> obj
+                .id()
+            is CC -> obj
+                .id()
+        }
     }
 }
 

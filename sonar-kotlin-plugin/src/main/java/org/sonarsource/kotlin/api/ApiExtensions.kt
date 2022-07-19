@@ -53,10 +53,12 @@ import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
@@ -481,3 +483,13 @@ fun DeclarationDescriptor?.determineType(): KotlinType? =
         is ValueDescriptor -> type
         else -> null
     }
+
+fun KtDotQualifiedExpression?.determineSignature(bindingContext: BindingContext): DeclarationDescriptor? =
+    this?.let {
+        when (val selectorExpr = this?.selectorExpression) {
+            is KtCallExpression -> bindingContext.get(BindingContext.REFERENCE_TARGET, selectorExpr.getCallNameExpression())
+            is KtSimpleNameExpression -> bindingContext.get(BindingContext.REFERENCE_TARGET, selectorExpr)
+            else -> null
+        }
+    }
+
