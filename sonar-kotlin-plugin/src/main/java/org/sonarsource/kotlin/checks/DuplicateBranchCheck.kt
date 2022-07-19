@@ -20,8 +20,8 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.SecondaryLocation
@@ -38,7 +38,7 @@ class DuplicateBranchCheck : AbstractBranchDuplication() {
             group.asSequence()
                 .drop(1)
                 .filter { spansMultipleLines(it, ctx) }
-                .filter { it !is KtDotQualifiedExpression || it.hasSameSignature(original as  KtDotQualifiedExpression, ctx.bindingContext) }
+                .filter { it !is KtQualifiedExpression || it.hasSameSignature(original as  KtQualifiedExpression, ctx.bindingContext) }
                 .forEach { duplicated ->
                     val originalRange = ctx.textRange(original)
                     ctx.reportIssue(
@@ -55,7 +55,7 @@ class DuplicateBranchCheck : AbstractBranchDuplication() {
     }
 }
 
-private fun KtDotQualifiedExpression.hasSameSignature(other: KtDotQualifiedExpression, bindingContext: BindingContext): Boolean =
+private fun KtQualifiedExpression.hasSameSignature(other: KtQualifiedExpression, bindingContext: BindingContext): Boolean =
     this.determineSignature(bindingContext) == other.determineSignature(bindingContext)
 
 

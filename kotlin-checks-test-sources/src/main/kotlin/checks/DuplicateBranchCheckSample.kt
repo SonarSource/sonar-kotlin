@@ -186,6 +186,17 @@ class DuplicateBranchCheckSample {
                 .id()
         }
     }
+
+    fun safeQualifiedExp(obj: Base): Int? {
+        return when (obj) {
+            is AA -> obj
+                ?.id()
+            is BB -> obj
+                ?.id()
+            is CC -> obj
+                ?.id()
+        }
+    }
 }
 
 

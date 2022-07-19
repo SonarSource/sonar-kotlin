@@ -484,7 +484,7 @@ fun DeclarationDescriptor?.determineType(): KotlinType? =
         else -> null
     }
 
-fun KtDotQualifiedExpression?.determineSignature(bindingContext: BindingContext): DeclarationDescriptor? =
+fun KtQualifiedExpression?.determineSignature(bindingContext: BindingContext): DeclarationDescriptor? =
     this?.let {
         when (val selectorExpr = this?.selectorExpression) {
             is KtCallExpression -> bindingContext.get(BindingContext.REFERENCE_TARGET, selectorExpr.getCallNameExpression())
