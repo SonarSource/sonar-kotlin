@@ -26,6 +26,7 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -322,7 +323,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
         assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
         assertThat(logTester.logs(LoggerLevel.DEBUG))
-            .containsExactly("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
+            .contains("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
     }
 
     @Test
@@ -342,7 +343,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
         assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
         assertThat(logTester.logs(LoggerLevel.DEBUG))
-            .containsExactly("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
+            .contains("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
     }
 
     @Test
@@ -363,7 +364,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertThat(logTester.logs(LoggerLevel.WARN))
             .containsExactly("Failed to find Kotlin version 'foo'. Defaulting to ${expectedKotlinVersion.versionString}")
         assertThat(logTester.logs(LoggerLevel.DEBUG))
-            .containsExactly("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
+            .contains("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
     }
 
     @Test
@@ -383,7 +384,79 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
         assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
         assertThat(logTester.logs(LoggerLevel.DEBUG))
-            .containsExactly("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
+            .contains("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
+    }
+
+    @Test
+    fun `not setting threads to use explicitly will not set anything in the environment`() {
+        logTester.setLevel(LoggerLevel.DEBUG)
+
+        val sensorContext = mockk<SensorContext> {
+            every { config() } returns ConfigurationBridge(MapSettings())
+        }
+
+        val environment = environment(sensorContext)
+
+        assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
+        assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
+        assertThat(logTester.logs(LoggerLevel.DEBUG))
+            .contains("Using the default amount of threads")
+    }
+
+    @Test
+    fun `setting the amount of threads to use is reflected in environment`() {
+        logTester.setLevel(LoggerLevel.DEBUG)
+
+        val sensorContext = mockk<SensorContext> {
+            every { config() } returns ConfigurationBridge(MapSettings().apply {
+                setProperty(KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY, "42")
+            })
+        }
+
+        val environment = environment(sensorContext)
+
+        assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isEqualTo(42)
+        assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
+        assertThat(logTester.logs(LoggerLevel.DEBUG))
+            .contains("Using 42 threads")
+    }
+
+    @Test
+    fun `setting the amount of threads to use to an invalid integer value produces warning`() {
+        logTester.setLevel(LoggerLevel.DEBUG)
+
+        val sensorContext = mockk<SensorContext> {
+            every { config() } returns ConfigurationBridge(MapSettings().apply {
+                setProperty(KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY, "0")
+            })
+        }
+
+        val environment = environment(sensorContext)
+
+        assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
+        assertThat(logTester.logs(LoggerLevel.WARN))
+            .containsExactly("Invalid amount of threads specified for ${KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY}: '0'.")
+        assertThat(logTester.logs(LoggerLevel.DEBUG))
+            .contains("Using the default amount of threads")
+    }
+
+    @Test
+    fun `setting the amount of threads to use to an invalid non-integer value produces warning`() {
+        logTester.setLevel(LoggerLevel.DEBUG)
+
+        val sensorContext = mockk<SensorContext> {
+            every { config() } returns ConfigurationBridge(MapSettings().apply {
+                setProperty(KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY, "foo")
+            })
+        }
+
+        val environment = environment(sensorContext)
+
+        assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
+        assertThat(logTester.logs(LoggerLevel.WARN))
+            .containsExactly("${KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY} needs to be set to an integer value. Could not interpret 'foo' is integer.")
+        assertThat(logTester.logs(LoggerLevel.DEBUG))
+            .contains("Using the default amount of threads")
     }
 
     private fun sensor(checkFactory: CheckFactory): KotlinSensor {
