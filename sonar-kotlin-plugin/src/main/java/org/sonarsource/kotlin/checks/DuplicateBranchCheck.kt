@@ -38,7 +38,7 @@ class DuplicateBranchCheck : AbstractBranchDuplication() {
             group.asSequence()
                 .drop(1)
                 .filter { spansMultipleLines(it, ctx) }
-                .filter { it !is KtQualifiedExpression || it.hasSameSignature(original as  KtQualifiedExpression, ctx.bindingContext) }
+                .filter { it !is KtQualifiedExpression || it.hasSameSignature(original as KtQualifiedExpression, ctx.bindingContext) }
                 .forEach { duplicated ->
                     val originalRange = ctx.textRange(original)
                     ctx.reportIssue(
@@ -57,7 +57,6 @@ class DuplicateBranchCheck : AbstractBranchDuplication() {
 
 private fun KtQualifiedExpression.hasSameSignature(other: KtQualifiedExpression, bindingContext: BindingContext): Boolean =
     this.determineSignature(bindingContext) == other.determineSignature(bindingContext)
-
 
 
 private fun spansMultipleLines(tree: KtElement, ctx: KotlinFileContext): Boolean {
