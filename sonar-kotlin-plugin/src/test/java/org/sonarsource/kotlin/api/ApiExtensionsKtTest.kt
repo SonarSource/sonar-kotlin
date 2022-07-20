@@ -35,6 +35,7 @@ import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
@@ -257,6 +258,41 @@ class ApiExtensionsKtDetermineTypeTest {
     fun `determineType of declaration not supported`() {
         assertThat((null as FunctionDescriptor?).determineType())
             .isNull()
+    }
+}
+
+class ApiExtensionsKtDetermineSignatureTest {
+    private val bindingContext: BindingContext
+    private val ktFile: KtFile
+
+    init {
+        val kotlinTree = parse(
+            """
+        package bar
+        
+        class Foo {
+            val prop: Int = 0
+        
+            fun aFun(param: Float): Long {
+                this.prop
+            }
+        }
+        """.trimIndent()
+        )
+        bindingContext = kotlinTree.bindingContext
+        ktFile = kotlinTree.psiFile
+    }
+
+    @Test
+    fun `determineSignature of KtQualifiedExpression`() {
+        val expr = ktFile.findDescendantOfType<KtQualifiedExpression> { it.text == "this.prop" }!!
+
+       assertThat(expr.determineSignature(bindingContext)).isNotNull
+    }
+
+    @Test
+    fun `determineSignature of a null KtQualifiedExpression`() {
+        assertThat(null.determineSignature(bindingContext)).isNull()
     }
 }
 
