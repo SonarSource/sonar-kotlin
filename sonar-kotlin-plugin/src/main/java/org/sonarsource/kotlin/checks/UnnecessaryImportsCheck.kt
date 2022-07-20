@@ -91,7 +91,7 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         it !in unresolvedImports
     }.filter { imp ->
         // 1. Filter out & report all imports that import from kotlin.* or the same package as our file
-        if (imp.isImportedImplicitlyAlready(file.packageDirective?.name)) {
+        if (imp.isImportedImplicitlyAlready(file.packageDirective?.qualifiedName)) {
             imp.importedReference?.let { context.reportIssue(it, MESSAGE_REDUNDANT) }
             false
         } else true
@@ -222,7 +222,7 @@ private class DataCollector(val file: KtFile) : KtTreeVisitorVoid() {
 
     val result: DataCollectionResult
         get() = DataCollectionResult(references, arrayAccesses, kDocLinks, delegateImports, calls)
-    
+
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
         expression.takeUnless {
             it.children.isNotEmpty() || it.isQualifiedUserType()
