@@ -187,6 +187,18 @@ class DuplicateBranchCheckSample {
         }
     }
 
+    fun nonCompliant(obj: AA): Int {
+        return if (bar() == 0) {
+            bar()
+            obj.id()
+        } else if (foo() == 1) { // Noncompliant
+            bar()
+            obj.id()
+        }
+        else
+            bar()
+    }
+
     fun safeQualifiedExp(obj: Base): Int? {
         return when (obj) {
             is AA -> obj
