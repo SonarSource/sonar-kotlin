@@ -101,3 +101,9 @@ To use this task, you need to know the rule key and a fitting name for the check
 rule `S42` in the class `AnswersEverythingCheck`, you can call the following in the root of the project:
 
     ./gradlew setupRuleStubs -PruleKey=S42 -PclassName=AnswersEverythingCheck
+
+### Updating external linter rule mappings
+See [this README in the utils](utils-kotlin/README.md).
+
+### Visualizing ASTs
+If you want a graphical output of ASTs, see [this README in the utils](utils-kotlin/README.md) for more info on how to convert an AST into a DOT format.
