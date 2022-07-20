@@ -68,7 +68,7 @@ internal class AndroidLintSensorTest {
         val first = externalIssues[0]
         assertThat(first.primaryLocation().inputComponent().key())
             .isEqualTo("androidlint-project:AndroidManifest.xml")
-        assertThat(first.ruleKey()).hasToString("external_android-lint:AllowBackup")
+        assertThat(first.ruleKey()).hasToString("external_android-lint:DataExtractionRules")
         assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(first.severity()).isEqualTo(Severity.MINOR)
         assertThat(first.primaryLocation().message()).isEqualTo(

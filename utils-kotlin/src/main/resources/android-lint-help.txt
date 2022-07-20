@@ -438,6 +438,20 @@ A motion scene file specifies the animations used in a MotionLayout. The
 layoutDescription is required to specify a valid motion scene file.
 
 
+MotionLayoutMissingId
+---------------------
+Summary: Views inside MotionLayout require an android:id
+
+Priority: 8 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Views inside MotionLayout require an android:id.
+
+
 MotionSceneFileValidationError
 ------------------------------
 Summary: Validation errors in MotionScene files
@@ -2672,6 +2686,24 @@ increase accuracy across method boundaries.
 More information: 
 https://developer.android.com/guide/components/processes-and-threads.html#Threads
 
+AppBundleLocaleChanges
+----------------------
+Summary: App Bundle handling of runtime locale changes
+
+Priority: 5 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+When changing locales at runtime (e.g. to provide an in-app language
+switcher), the Android App Bundle must be configured to not split by locale or
+the Play Core library must be used to download additional locales at runtime.
+
+More information: 
+https://developer.android.com/guide/app-bundle/configure-base#handling_language_changes
+
 AppCompatResource
 -----------------
 Summary: Menu namespace
@@ -2808,8 +2840,8 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-Ensures that a <full-backup-content> file, which is pointed to by a
-android:fullBackupContent attribute in the manifest file, is valid
+Ensures that <data-extraction-rules> and <full-backup-content> files, which
+configure backup options, are valid.
 
 More information: 
 https://android-developers.googleblog.com/2015/07/auto-backup-for-apps-made-simple.html
@@ -2881,6 +2913,54 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This issue flags code that will not work correctly in Instant Apps
 
+
+IntentFilterUniqueDataAttributes
+--------------------------------
+Summary: Data tags should only declare unique attributes
+
+Priority: 5 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+<intent-filter> <data> tags should only declare a single unique attribute
+(i.e. scheme OR host, but not both). This better matches the runtime behavior
+of intent filters, as they combine all of the declared data attributes into a
+single matcher which is allowed to handle any combination across attribute
+types.
+
+For example, the following two <intent-filter> declarations are the same:
+<intent-filter>
+    <data android:scheme="http" android:host="example.com" />
+    <data android:scheme="https" android:host="example.org" />
+</intent-filter>
+
+<intent-filter>
+    <data android:scheme="http"/>
+    <data android:scheme="https"/>
+    <data android:host="example.com" />
+    <data android:host="example.org" />
+</intent-filter>
+
+They both handle all of the following:
+* http://example.com
+* https://example.com
+* http://example.org
+* https://example.org
+
+The second one better communicates the combining behavior and is clearer to an
+external reader that one should not rely on the scheme/host being self
+contained. It is not obvious in the first that http://example.org is also
+matched, which can lead to confusion (or incorrect behavior) with a more
+complex set of schemes/hosts.
+
+Note that this does not apply to host + port, as those must be declared in the
+same <data> tag and are only associated with each other.
+
+More information: 
+https://developer.android.com/guide/components/intents-filters
 
 InvalidVectorPath
 -----------------
@@ -3010,22 +3090,6 @@ This check looks through the manifest, and if it finds any tags that look like
 likely misspellings, they are flagged.
 
 
-MediaCapabilities
------------------
-Summary: Media Capabilities property not specified
-
-Priority: 5 / 10
-Severity: Warning
-Category: Correctness
-Vendor: Android Open Source Project
-Contact: https://groups.google.com/g/lint-dev
-Feedback: https://issuetracker.google.com/issues/new?component=192708
-
-In Android 12 and higher, an app that opens media files should explicitly
-specify media formats that it doesn't support, so the OS can provide a
-transcoded file instead.
-
-
 MissingId
 ---------
 Summary: Fragments should specify an id or tag
@@ -3147,6 +3211,22 @@ PackageManager#queryIntentActivities.
 
 More information: 
 https://g.co/dev/packagevisibility
+
+RedundantLabel
+--------------
+Summary: Redundant label on activity
+
+Priority: 5 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+When an activity does not have a label attribute, it will use the one from the
+application tag. Since the application has already specified the same label,
+the label on this activity can be omitted.
+
 
 SQLiteString
 ------------
@@ -3292,8 +3372,6 @@ Category: Correctness
 Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
-NOTE: This issue is disabled by default!
-You can enable it by adding --enable VectorDrawableCompat
 
 To use VectorDrawableCompat, you need to make two modifications to your
 project. First, set android.defaultConfig.vectorDrawables.useSupportLibrary =
@@ -3343,6 +3421,26 @@ activity task in order to work correctly. Thus only launchMode="standard" is
 allowed. The watch face will not be shown on the watch if it does not satisfy
 this requirement.
 
+
+WearableConfigurationAction
+---------------------------
+Summary: Wear configuration action metadata must match an activity
+
+Priority: 5 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+If and only if a watch face service defines wearableConfigurationAction
+metadata, with the value WATCH_FACE_EDITOR, there should be an activity in the
+same package, which has an intent filter for WATCH_FACE_EDITOR (with
+com.google.android.wearable.watchface.category.WEARABLE_CONFIGURATION if
+minSdkVersion is less than 30).
+
+More information: 
+https://developer.android.com/training/wearables/watch-faces/configuration
 
 XmlEscapeNeeded
 ---------------
@@ -3451,6 +3549,23 @@ but that should not be done when using ellipsize.
 
 More information: 
 https://issuetracker.google.com/issues/36950033
+
+FileEndsWithExt
+---------------
+Summary: File endsWith on file extensions
+
+Priority: 4 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+The Kotlin extension method File.endsWith(suffix) checks whole path
+components, not just string suffixes. This means that
+File("foo.txt").endsWith(".txt") will return false. Instead you might have
+intended file.path.endsWith or file.extension.equals.
+
 
 GradleDependency
 ----------------
@@ -3645,11 +3760,28 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The <activity> element should be allowed to be resized to allow users to take
 advantage of the multi-window environments available on larger screen Android
-devices.To fix the issue, consider declaring the corresponding activity
-element with resizableActivity="true" attribute.
+devices.
+
+To fix the issue, consider declaring the corresponding activity element with
+resizableActivity="true" attribute.
 
 More information: 
 https://developer.android.com/topic/arc/window-management
+
+NotConstructor
+--------------
+Summary: Not a Constructor
+
+Priority: 4 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+This check catches methods that look like they were intended to be
+constructors, but aren't.
+
 
 ObjectAnimatorBinding
 ---------------------
@@ -3721,14 +3853,13 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-The Activity should not be locked to a portrait orientation so that users
-can take advantage of the multi-window environments and larger landscape-first
-screens
-that Android runs on such as Chrome OS. To fix the issue, consider calling
-setRequestedOrientation with the ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
-or
-ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED options or removing the call
-all together.
+The Activity should not be locked to a portrait orientation so that users can
+take advantage of the multi-window environments and larger landscape-first
+screens that Android runs on such as Chrome OS. To fix the issue, consider
+calling setRequestedOrientation with the
+ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR or
+ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED options or removing the call all
+together.
 
 
 UnsupportedChromeOsCameraSystemFeature
@@ -3742,13 +3873,12 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-You should look for the FEATURE_CAMERA_ANY features to include all
-possible cameras that may be on the device. Looking for FEATURE_CAMERA
-only looks for a rear facing camera, which certain tablets or Chrome OS
-devices don't have, as well as newer device configurations and modes may place
-the
-device in a state where the rear camera is not available. To fix the issue,
-look for FEATURE_CAMERA_ANY instead.
+You should look for the FEATURE_CAMERA_ANY features to include all possible
+cameras that may be on the device. Looking for FEATURE_CAMERA only looks for a
+rear facing camera, which certain tablets or Chrome OS devices don't have, as
+well as newer device configurations and modes may place the device in a state
+where the rear camera is not available. To fix the issue, look for
+FEATURE_CAMERA_ANY instead.
 
 
 VisibleForTests
@@ -4086,6 +4216,21 @@ Deprecated views, attributes and so on are deprecated because there is a
 better way to do something. Do it that new way. You've been warned.
 
 
+DiscouragedApi
+--------------
+Summary: Using discouraged APIs
+
+Priority: 2 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Discouraged APIs are allowed and are not deprecated, but they may be unfit for
+common use (e.g. due to slow performance or subtle behavior).
+
+
 MangledCRLF
 -----------
 Summary: Mangled file line endings
@@ -4212,6 +4357,20 @@ plugin.
 
 More information: 
 https://kotlinlang.org/docs/reference/kapt.html
+
+ViewBindingType
+---------------
+Summary: tools:viewBindingType issues
+
+Priority: 1 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+All issues related to using the View Binding tools:viewBindingType attribute.
+
 
 Correctness:Messages
 ====================
@@ -5216,7 +5375,10 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Apps targeting Android 12 and higher are required to specify an explicit value
 for android:exported when the corresponding component has an intent filter
-defined. Otherwise, installation will fail.
+defined. Otherwise, installation will fail. Set it to true to make this
+activity accessible to other apps, and false to limit it to be used only by
+this app or the OS. For launch activities, this should be set to true;
+otherwise, the app will fail to launch.
 
 Previously, android:exported for components without any intent filters present
 used to default to false, and when intent filters were present, the default
@@ -5282,6 +5444,23 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Apps targeting Android 12 and higher must specify either FLAG_IMMUTABLE or
 FLAG_MUTABLE when constructing a PendingIntent.
+
+More information: 
+https://developer.android.com/about/versions/12/behavior-changes-12#pending-intent-mutability
+
+WebViewClientOnReceivedSslError
+-------------------------------
+Summary: Proceeds with the HTTPS connection despite SSL errors
+
+Priority: 5 / 10
+Severity: Warning
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+This check looks for onReceivedSslError implementations that invoke
+SslErrorHandler#proceed.
 
 
 UnsafeDynamicallyLoadedCode
@@ -5359,9 +5538,9 @@ contain no private data, and that if the file is modified by a malicious
 application it does not trick or compromise your application.
 
 
-AllowBackup
------------
-Summary: AllowBackup/FullBackupContent Problems
+DataExtractionRules
+-------------------
+Summary: Missing data extraction rules
 
 Priority: 3 / 10
 Severity: Warning
@@ -5370,33 +5549,40 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-The allowBackup attribute determines if an application's data can be backed up
-and restored. It is documented at
-https://developer.android.com/reference/android/R.attr.html#allowBackup
+Before Android 12, the attributes android:allowBackup and
+android:fullBackupContent were used to configure all forms of backup,
+including cloud backups, device-to-device transfers and adb backup.
 
-By default, this flag is set to true which means application data can be
-backed up and restored by the OS. Setting allowBackup="false" opts the
-application out of being backed up and so users can't restore data related to
-it when they go through the device setup wizard.
-
-Allowing backups may have security consequences for an application. Currently
-adb backup allows users who have enabled USB debugging to copy application
-data off of the device. Once backed up, all application data can be read by
-the user. adb restore allows creation of application data from a source
-specified by the user. Following a restore, applications should not assume
-that the data, file permissions, and directory permissions were created by the
-application itself.
-
-To fix this warning, decide whether your application should support backup,
-and explicitly set android:allowBackup=(true|false)".
-
-If not set to false, and if targeting API 23 or later, lint will also warn
-that you should set android:fullBackupContent or android:fullBackupOnly to
-configure auto backup.
+In Android 12 and higher, these attributes have been deprecated and will only
+apply to cloud backups. You should instead use the attribute
+android:dataExtractionRules, specifying an @xml resource that configures which
+files to back up, for cloud backups and for device-to-device transfers,
+separately. If your minSdkVersion supports older versions, you'll still want
+to specify an android:fullBackupContent resource if the default behavior is
+not right for your app.
 
 More information: 
-https://developer.android.com/guide/topics/data/autobackup
-https://developer.android.com/reference/android/R.attr.html#allowBackup
+https://developer.android.com/about/versions/12/backup-restore#xml-changes
+
+BidiSpoofing
+------------
+Summary: Bidirectional text spoofing
+
+Priority: 2 / 10
+Severity: Error
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Unicode bidirectional text characters can alter the order in which the
+compiler processes tokens. However, this can also be used to hide malicious
+code, and can be difficult to spot. This lint check audits the source code and
+looks for cases where it looks like bidirectional text has the potential to be
+misleading.
+
+More information: 
+https://krebsonsecurity.com/2021/11/trojan-source-bug-threatens-the-security-of-all-code/
 
 ProxyPassword
 -------------
@@ -5930,6 +6116,26 @@ This check will also flag other potential reflection problems it encounters,
 such as a missing property, wrong argument types, etc.
 
 
+AssertionSideEffect
+-------------------
+Summary: Assertions with Side Effects
+
+Priority: 4 / 10
+Severity: Warning
+Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Assertion conditions can have side effects. This is risky because the behavior
+depends on whether assertions are on or off. This is usually not intentional,
+and can lead to bugs where the production version differs from the version
+tested during development.
+
+Generally, you'll want to perform the operation with the side effect before
+the assertion, and then assert that the result was what you expected.
+
+
 DuplicateDivider
 ----------------
 Summary: Unnecessary Divider Copy
@@ -6440,9 +6646,10 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-The "n dash" (–, &#8211;) and the "m dash" (—, &#8212;) characters are used
-for ranges (n dash) and breaks (m dash). Using these instead of plain hyphens
-can make text easier to read and your application will look more polished.
+The "n dash" (u2013, &#8211;) and the "m dash" (u2014, &#8212;) characters are
+used for ranges (n dash) and breaks (m dash). Using these instead of plain
+hyphens can make text easier to read and your application will look more
+polished.
 
 More information: 
 https://en.wikipedia.org/wiki/Dash
@@ -6459,7 +6666,7 @@ Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 You can replace the string "..." with a dedicated ellipsis character, ellipsis
-character (…, &#8230;). This can help make the text more readable.
+character (u2026, &#8230;). This can help make the text more readable.
 
 More information: 
 https://en.wikipedia.org/wiki/Ellipsis
@@ -6497,12 +6704,9 @@ You can enable it by adding --enable TypographyQuotes
 
 Straight single quotes and double quotes, when used as a pair, can be replaced
 by "curvy quotes" (or directional quotes). This can make the text more
-readable.
-
-Note that you should never use grave accents and apostrophes to quote, `like
-this'.
-
-(Also note that you should not use curvy quotes for code fragments.)
+readable. Note that you should never use grave accents and apostrophes to
+quote, `like this'. (Also note that you should not use curvy quotes for code
+fragments.)
 
 More information: 
 https://en.wikipedia.org/wiki/Quotation_mark
@@ -6519,8 +6723,8 @@ Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check looks for miscellaneous typographical problems and offers
-replacement sequences that will make the text easier to read and your
-application more polished.
+replacement                     sequences that will make the text easier to
+read and your application more                     polished.
 
 
 Usability:Icons
@@ -7596,8 +7800,8 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable LambdaLast
 
-To improve calling this code from Kotlin,
-parameter types eligible for SAM conversion should be last.
+To improve calling this code from Kotlin, parameter types eligible for SAM
+conversion should be last.
 
 More information: 
 https://android.github.io/kotlin-guides/interop.html#lambda-parameters-last
@@ -7615,15 +7819,14 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable NoHardKeywords
 
-Do not use Kotlin’s hard keywords as the name of methods or fields.
-These require the use of backticks to escape when calling from Kotlin.
-Soft keywords, modifier keywords, and special identifiers are allowed.
+Do not use Kotlin’s hard keywords as the name of methods or fields. These
+require the use of backticks to escape when calling from Kotlin. Soft
+keywords, modifier keywords, and special identifiers are allowed.
 
 For example, Mockito’s when function requires backticks when used from
 Kotlin:
-
-    val callable = Mockito.mock(Callable::class.java)
-    Mockito.`when`(callable.call()).thenReturn(/* … */)
+val callable = Mockito.mock(Callable::class.java)
+Mockito.\`when\`(callable.call()).thenReturn(/* … */)
 
 More information: 
 https://android.github.io/kotlin-guides/interop.html#no-hard-keywords
@@ -7641,16 +7844,27 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable UnknownNullness
 
-To improve referencing this code from Kotlin, consider adding
-explicit nullness information here with either @NonNull or @Nullable.
+To improve referencing this code from Kotlin, consider adding explicit
+nullness information here with either @NonNull or @Nullable.
 
-You can set the environment variable
-    `ANDROID_LINT_NULLNESS_IGNORE_DEPRECATED=true`
-if you want lint to ignore classes and members that have been annotated with
-@Deprecated.
+Available options:
+
+ignore-deprecated (default is false):
+Whether to ignore classes and members that have been annotated with @Deprecated.
+
+Normally this lint check will flag all unannotated elements, but by setting this option to true it will skip any deprecated elements.
+
+To configure this option, use a lint.xml file with an <option> like this:
+
+<lint>
+    <issue id="UnknownNullness">
+        <option name="ignore-deprecated" value="false" />
+    </issue>
+</lint>
+
 
 More information: 
-https://android.github.io/kotlin-guides/interop.html#nullability-annotations
+https://developer.android.com/kotlin/interop#nullability_annotations
 
 Lint Implementation Issues
 ==========================
@@ -7885,5 +8099,22 @@ potentially other languages).
 
 There are UAST specific methods you need to call instead and lint will flag
 these.
+
+
+UastImplementation
+------------------
+Summary: Avoid using UAST implementation
+
+Priority: 4 / 10
+Severity: Warning
+Category: Lint Implementation Issues
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Use UAST interface whenever possible, and do not rely on UAST implementation,
+which is subject to change. If language-specific information is needed, the
+next option is to use PSI directly (though these APIs are less stable and can
+depend on compiler internals, especially in the case of Kotlin).
 
 
