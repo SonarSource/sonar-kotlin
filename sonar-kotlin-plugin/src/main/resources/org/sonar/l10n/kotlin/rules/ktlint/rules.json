@@ -1,5 +1,41 @@
 [
   {
+    "key": "annotation",
+    "name": "Annotation",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "annotation-spacing",
+    "name": "Annotation Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "argument-list-wrapping",
+    "name": "Argument List Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
     "key": "chain-wrapping",
     "name": "Chain Wrapping",
     "url": "https://ktlint.github.io/#rules",
@@ -14,6 +50,18 @@
   {
     "key": "comment-spacing",
     "name": "Comment Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "enum-entry-name-case",
+    "name": "Enum Entry Name Case",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -96,8 +144,32 @@
     "constantDebtMinutes": 0
   },
   {
+    "key": "multiline-if-else",
+    "name": "Multi Line If Else",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
     "key": "no-blank-line-before-rbrace",
     "name": "No Blank Line Before Rbrace",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "no-blank-lines-in-chained-method-calls",
+    "name": "No Blank Lines In Chained Method Calls",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -122,6 +194,18 @@
   {
     "key": "no-empty-class-body",
     "name": "No Empty Class Body",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "no-empty-first-line-in-method-block",
+    "name": "No Empty First Line In Method Block",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -228,8 +312,32 @@
     "constantDebtMinutes": 0
   },
   {
+    "key": "package-name",
+    "name": "Package Name",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
     "key": "parameter-list-wrapping",
     "name": "Parameter List Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "spacing-around-angle-brackets",
+    "name": "Spacing Around Angle Brackets",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -288,6 +396,18 @@
     "constantDebtMinutes": 0
   },
   {
+    "key": "double-colon-spacing",
+    "name": "Spacing Around Double Colon",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
     "key": "keyword-spacing",
     "name": "Spacing Around Keyword",
     "url": "https://ktlint.github.io/#rules",
@@ -336,116 +456,8 @@
     "constantDebtMinutes": 0
   },
   {
-    "key": "string-template",
-    "name": "String Template",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "annotation",
-    "name": "Annotation",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "argument-list-wrapping",
-    "name": "Argument List Wrapping",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "multiline-if-else",
-    "name": "Multi Line If Else",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "no-empty-first-line-in-method-block",
-    "name": "No Empty First Line In Method Block",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "trailing-comma",
-    "name": "Trailing Comma",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "package-name",
-    "name": "Package Name",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "enum-entry-name-case",
-    "name": "Enum Entry Name Case",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "double-colon-spacing",
-    "name": "Spacing Around Double Colon",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "spacing-between-declarations-with-comments",
-    "name": "Spacing Between Declarations With Comments",
+    "key": "unary-op-spacing",
+    "name": "Spacing Around Unary Operator",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -468,8 +480,8 @@
     "constantDebtMinutes": 0
   },
   {
-    "key": "spacing-around-angle-brackets",
-    "name": "Spacing Around Angle Brackets",
+    "key": "spacing-between-declarations-with-comments",
+    "name": "Spacing Between Declarations With Comments",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -480,8 +492,8 @@
     "constantDebtMinutes": 0
   },
   {
-    "key": "unary-op-spacing",
-    "name": "Spacing Around Unary Operator",
+    "key": "string-template",
+    "name": "String Template",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -492,8 +504,212 @@
     "constantDebtMinutes": 0
   },
   {
-    "key": "annotation-spacing",
-    "name": "Annotation Spacing",
+    "key": "trailing-comma",
+    "name": "Trailing Comma",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "wrapping",
+    "name": "Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:unnecessary-parentheses-before-trailing-lambda",
+    "name": "Unnecessary Parentheses Before Trailing Lambda",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:type-parameter-list-spacing",
+    "name": "Type Parameter List Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:type-argument-list-spacing",
+    "name": "Type Argument List Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:block-comment-initial-star-alignment",
+    "name": "Block Comment Initial Star Alignment",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:discouraged-comment-location",
+    "name": "Discouraged Comment Location",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:fun-keyword-spacing",
+    "name": "Fun Keyword Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:function-type-reference-spacing",
+    "name": "Function Type Reference Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:modifier-list-spacing",
+    "name": "Modifier List Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:comment-wrapping",
+    "name": "Comment Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:kdoc-wrapping",
+    "name": "Kdoc Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:spacing-between-function-name-and-opening-parenthesis",
+    "name": "Spacing Between Function Name And Opening Parenthesis",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:parameter-list-spacing",
+    "name": "Parameter List Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:function-return-type-spacing",
+    "name": "Function Return Type Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:function-start-of-body-spacing",
+    "name": "Function Start Of Body Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:nullable-type-spacing",
+    "name": "Nullable Type Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "experimental:function-signature",
+    "name": "Function Signature",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
