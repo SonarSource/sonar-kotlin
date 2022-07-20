@@ -151,4 +151,64 @@ class DuplicateBranchCheckSample {
     private fun foo(): Int {
         return 3
     }
+
+    sealed interface Base
+    data class AA(val value: String) : Base {fun id(): Int = 0}
+    data class BB(val value: String) : Base {fun id(): Int = 1}
+    data class CC(val value: String) : Base {fun id(): Int = 2}
+
+    fun multiLines(obj: Base): String {
+        return when (obj) {
+            is AA -> obj
+                .value
+            is BB -> obj
+                .value
+            is CC -> obj
+                .value
+        }
+    }
+
+    fun singleLine(obj: Base): String {
+        return when (obj) {
+            is AA -> obj.value
+            is BB -> obj.value
+            is CC -> obj.value
+        }
+    }
+
+    fun funCall(obj: Base): Int {
+        return when (obj) {
+            is AA -> obj
+                .id()
+            is BB -> obj
+                .id()
+            is CC -> obj
+                .id()
+        }
+    }
+
+    fun nonCompliant(obj: Base): Int {
+        return when (obj) {
+            is AA -> (obj as AA)
+                .id()
+            is BB -> (obj as AA) // Noncompliant
+                .id()
+            is CC -> obj
+                .id()
+        }
+    }
+
+    fun safeQualifiedExp(obj: Base): Int? {
+        return when (obj) {
+            is AA -> obj
+                ?.id()
+            is BB -> obj
+                ?.id()
+            is CC -> obj
+                ?.id()
+        }
+    }
 }
+
+
+
