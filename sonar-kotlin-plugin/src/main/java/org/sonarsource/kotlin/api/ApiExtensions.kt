@@ -480,7 +480,6 @@ fun DeclarationDescriptor?.determineType(): KotlinType? =
         is FunctionDescriptor -> returnType
         is ClassDescriptor -> defaultType
         is PropertyDescriptor -> type
-        is ValueDescriptor -> type
         else -> null
     }
 
