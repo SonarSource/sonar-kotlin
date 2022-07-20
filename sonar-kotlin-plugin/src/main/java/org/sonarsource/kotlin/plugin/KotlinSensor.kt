@@ -41,7 +41,12 @@ import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinSyntaxStructure
 import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.converter.bindingContext
+import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.DEFAULT_KOTLIN_LANGUAGE_VERSION
+import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.FAIL_FAST_PROPERTY_NAME
+import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.KOTLIN_LANGUAGE_VERSION
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.KOTLIN_REPOSITORY_KEY
+import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.PERFORMANCE_MEASURE_ACTIVATION_PROPERTY
+import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.PERFORMANCE_MEASURE_DESTINATION_FILE
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
@@ -49,12 +54,6 @@ import org.sonarsource.kotlin.visiting.KtChecksVisitor
 import org.sonarsource.performance.measure.PerformanceMeasure
 import java.util.concurrent.TimeUnit
 import kotlin.time.ExperimentalTime
-
-private const val FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast"
-private const val PERFORMANCE_MEASURE_ACTIVATION_PROPERTY = "sonar.kotlin.performance.measure"
-private const val PERFORMANCE_MEASURE_DESTINATION_FILE = "sonar.kotlin.performance.measure.json"
-private const val KOTLIN_LANGUAGE_VERSION = "sonar.kotlin.source.version"
-private val DEFAULT_KOTLIN_LANGUAGE_VERSION = LanguageVersion.KOTLIN_1_5
 
 private val LOG = Loggers.get(KotlinSensor::class.java)
 private val EMPTY_FILE_CONTENT_PATTERN = Regex("""\s*+""")

@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
 import org.sonar.api.Plugin
@@ -59,6 +60,11 @@ class KotlinPlugin : Plugin {
         const val KOTLIN_FILE_SUFFIXES_DEFAULT_VALUE = ".kt"
         const val SONAR_JAVA_BINARIES = "sonar.java.binaries"
         const val SONAR_JAVA_LIBRARIES = "sonar.java.libraries"
+        const val FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast"
+        const val PERFORMANCE_MEASURE_ACTIVATION_PROPERTY = "sonar.kotlin.performance.measure"
+        const val PERFORMANCE_MEASURE_DESTINATION_FILE = "sonar.kotlin.performance.measure.json"
+        const val KOTLIN_LANGUAGE_VERSION = "sonar.kotlin.source.version"
+        val DEFAULT_KOTLIN_LANGUAGE_VERSION = LanguageVersion.KOTLIN_1_5
     }
 
     override fun define(context: Plugin.Context) {
