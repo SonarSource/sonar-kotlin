@@ -175,6 +175,10 @@ class ApiExtensionsKtDetermineTypeTest {
                 val localVal: Double
             }
             fun stringReturning(): String {}
+            
+            fun anotherFun(obj: Foo): Long {
+                obj.prop
+            }
         }
         """.trimIndent()
         )
@@ -259,6 +263,14 @@ class ApiExtensionsKtDetermineTypeTest {
     fun `determineType of declaration not supported`() {
         assertThat((null as FunctionDescriptor?).determineType())
             .isNull()
+    }
+
+    @Test
+    fun `determineType of ValueDescriptor`() {
+        val expr = ktFile.findDescendantOfType<KtReferenceExpression> { it.text == "obj" }!!
+
+        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("bar.Foo")
     }
 }
 
