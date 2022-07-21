@@ -248,12 +248,12 @@ private fun determineNumberOfThreadsToUse(sensorContext: SensorContext) =
             stringInput.trim().toInt()
         }.getOrElse {
             LOG.warn(
-                "$COMPILER_THREAD_COUNT_PROPERTY needs to be set to an integer value. Could not interpret '$stringInput' is integer."
+                "$COMPILER_THREAD_COUNT_PROPERTY needs to be set to an integer value. Could not interpret '$stringInput' as integer."
             )
             null
-        }?.let { amount ->
-            if (amount > 0) {
-                amount
+        }?.let { threadCount ->
+            if (threadCount > 0) {
+                threadCount
             } else {
                 LOG.warn("Invalid amount of threads specified for $COMPILER_THREAD_COUNT_PROPERTY: '$stringInput'.")
                 null

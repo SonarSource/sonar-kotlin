@@ -388,7 +388,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     @Test
-    fun `not setting threads to use explicitly will not set anything in the environment`() {
+    fun `not setting the amount of threads to use explicitly will not set anything in the environment`() {
         logTester.setLevel(LoggerLevel.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
@@ -404,7 +404,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     @Test
-    fun `setting the amount of threads to use is reflected in environment`() {
+    fun `setting the amount of threads to use is reflected in the environment`() {
         logTester.setLevel(LoggerLevel.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
@@ -454,7 +454,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
         assertThat(logTester.logs(LoggerLevel.WARN))
-            .containsExactly("${KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY} needs to be set to an integer value. Could not interpret 'foo' is integer.")
+            .containsExactly("${KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY} needs to be set to an integer value. Could not interpret 'foo' as integer.")
         assertThat(logTester.logs(LoggerLevel.DEBUG))
             .contains("Using the default amount of threads")
     }
