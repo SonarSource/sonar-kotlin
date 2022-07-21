@@ -38,7 +38,6 @@ import org.sonarsource.kotlin.externalreport.ktlint.KtlintSensor
 import org.sonarsource.kotlin.plugin.surefire.KotlinResourcesLocator
 import org.sonarsource.kotlin.plugin.surefire.KotlinSurefireParser
 import org.sonarsource.kotlin.plugin.surefire.KotlinSurefireSensor
-import kotlin.time.ExperimentalTime
 
 class KotlinPlugin : Plugin {
 
@@ -65,6 +64,7 @@ class KotlinPlugin : Plugin {
         const val PERFORMANCE_MEASURE_DESTINATION_FILE = "sonar.kotlin.performance.measure.json"
         const val KOTLIN_LANGUAGE_VERSION = "sonar.kotlin.source.version"
         val DEFAULT_KOTLIN_LANGUAGE_VERSION = LanguageVersion.KOTLIN_1_5
+        const val COMPILER_THREAD_COUNT_PROPERTY = "sonar.kotlin.threads"
     }
 
     override fun define(context: Plugin.Context) {
@@ -124,7 +124,7 @@ class KotlinPlugin : Plugin {
     }
 }
 
-fun isInAndroidContext(environment: Environment) : Boolean {
+fun isInAndroidContext(environment: Environment): Boolean {
     val content = """
         |import android.app.Application
         |

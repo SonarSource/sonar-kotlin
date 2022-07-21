@@ -41,6 +41,7 @@ import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinSyntaxStructure
 import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.converter.bindingContext
+import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.COMPILER_THREAD_COUNT_PROPERTY
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.DEFAULT_KOTLIN_LANGUAGE_VERSION
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.FAIL_FAST_PROPERTY_NAME
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.KOTLIN_LANGUAGE_VERSION
@@ -237,8 +238,30 @@ private fun toParseException(action: String, inputFile: InputFile, cause: Throwa
 fun environment(sensorContext: SensorContext) = Environment(
     sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
         sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
-    determineKotlinLanguageVersion(sensorContext)
+    determineKotlinLanguageVersion(sensorContext),
+    numberOfThreads = determineNumberOfThreadsToUse(sensorContext)
 )
+
+private fun determineNumberOfThreadsToUse(sensorContext: SensorContext) =
+    sensorContext.config().get(COMPILER_THREAD_COUNT_PROPERTY).map { stringInput ->
+        runCatching {
+            stringInput.trim().toInt()
+        }.getOrElse {
+            LOG.warn(
+                "$COMPILER_THREAD_COUNT_PROPERTY needs to be set to an integer value. Could not interpret '$stringInput' as integer."
+            )
+            null
+        }?.let { threadCount ->
+            if (threadCount > 0) {
+                threadCount
+            } else {
+                LOG.warn("Invalid amount of threads specified for $COMPILER_THREAD_COUNT_PROPERTY: '$stringInput'.")
+                null
+            }
+        }
+    }.orElse(null).also {
+        LOG.debug("Using ${it ?: "the default amount of"} threads")
+    }
 
 private fun determineKotlinLanguageVersion(sensorContext: SensorContext) =
     (sensorContext.config().get(KOTLIN_LANGUAGE_VERSION).map { versionString ->

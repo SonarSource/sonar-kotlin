@@ -27,14 +27,14 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
 
 class KotlinCoreEnviromentToolsTest {
-  
+
   @Test
   fun testEmptyBindingContext() {
     val kotlinCoreEnvironment = kotlinCoreEnvironment(
-      compilerConfiguration(emptyList(), LanguageVersion.KOTLIN_1_4, JvmTarget.JVM_1_8),
+      compilerConfiguration(emptyList(), LanguageVersion.KOTLIN_1_4, JvmTarget.JVM_1_8, null),
       Disposer.newDisposable()
     )
-    
+
     assertThat(bindingContext(kotlinCoreEnvironment, emptyList(), emptyList()))
       .isEqualTo(BindingContext.EMPTY)
   }
@@ -42,10 +42,10 @@ class KotlinCoreEnviromentToolsTest {
   @Test
   fun testNonEmptyBindingContext() {
     val kotlinCoreEnvironment = kotlinCoreEnvironment(
-      compilerConfiguration(emptyList(), LanguageVersion.KOTLIN_1_4, JvmTarget.JVM_1_8),
+      compilerConfiguration(emptyList(), LanguageVersion.KOTLIN_1_4, JvmTarget.JVM_1_8, null),
       Disposer.newDisposable()
     )
-    
+
     assertThat(bindingContext(kotlinCoreEnvironment, listOf(""), emptyList()))
       .isNotEqualTo(BindingContext.EMPTY)
   }
