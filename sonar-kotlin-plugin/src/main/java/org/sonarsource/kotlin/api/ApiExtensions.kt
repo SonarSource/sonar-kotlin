@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.descriptors.ValueDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
@@ -479,6 +480,7 @@ fun DeclarationDescriptor?.determineType(): KotlinType? =
         is FunctionDescriptor -> returnType
         is ClassDescriptor -> defaultType
         is PropertyDescriptor -> type
+        is ValueDescriptor -> type
         else -> null
     }
 
