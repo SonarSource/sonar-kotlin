@@ -15,7 +15,7 @@ dependencies {
     implementation("commons-net:commons-net:3.8.0")
     implementation("org.springframework.security:spring-security-crypto:5.0.6.RELEASE")
     implementation("org.springframework.security:spring-security-core:4.2.17.RELEASE")
-    implementation("commons-codec:commons-codec:1.11")
+    implementation("commons-codec:commons-codec:1.13")
     implementation("com.google.guava:guava:30.1.1-jre")
     implementation("org.apache.commons:commons-lang3:3.9")
     implementation("commons-lang:commons-lang:2.6")
