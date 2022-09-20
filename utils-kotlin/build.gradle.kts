@@ -13,6 +13,11 @@ dependencies {
     implementation("io.gitlab.arturbosch.detekt", "detekt-cli", detektVersion)
     implementation("io.gitlab.arturbosch.detekt", "detekt-core", detektVersion)
     implementation("io.gitlab.arturbosch.detekt", "detekt-api", detektVersion)
+    constraints {
+        runtimeOnly("org.yaml:snakeyaml:1.32") {
+            because("detekt-core brings an outdated version of snakeyaml exposed to CVE-2022-25857")
+        }
+    }
     implementation("com.pinterest", "ktlint", ktlintVersion)
     implementation("com.pinterest.ktlint", "ktlint-core", ktlintVersion)
     implementation("com.pinterest.ktlint", "ktlint-ruleset-standard", ktlintVersion)
