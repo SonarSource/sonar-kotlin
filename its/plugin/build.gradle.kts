@@ -1,9 +1,9 @@
 dependencies {
-    testImplementation("org.sonarsource.sonarlint.core:sonarlint-core")
-    testImplementation("org.sonarsource.orchestrator:sonar-orchestrator")
-    testImplementation("org.assertj:assertj-core")
-    testImplementation("org.sonarsource.sonarqube:sonar-ws")
-    testImplementation("org.sonarsource.analyzer-commons:sonar-analyzer-commons")
+    testImplementation(testLibs.sonarlint.core)
+    testImplementation(testLibs.sonar.orchestrator)
+    testImplementation(testLibs.assertj.core)
+    testImplementation(testLibs.sonar.ws)
+    testImplementation(libs.sonar.analyzer.commons)
 }
 
 sonarqube.isSkipProject = true

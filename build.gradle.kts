@@ -14,18 +14,7 @@ plugins {
 }
 
 val projectTitle: String by project
-val analyzerCommonsVersion: String by project
-val sonarqubeVersion: String by project
-val orchestratorVersion: String by project
-val sonarlintVersion: String by project
-val sonarPluginApiVersion: String by project
 val sonarLinksCi: String by project
-val gsonVersion: String by project
-val junitVersion: String by project
-val assertjVersion: String by project
-val mockitoVersion: String by project
-val classgraphVersion: String by project
-val jsr305Version: String by project
 
 allprojects {
     apply<JavaPlugin>()
@@ -78,30 +67,6 @@ subprojects {
     // do not publish to Artifactory by default
     tasks.artifactoryPublish {
         skip = true
-    }
-
-    apply(plugin = "io.spring.dependency-management")
-
-    configure<DependencyManagementExtension> {
-        dependencies {
-            dependency("org.sonarsource.sonarqube:sonar-plugin-api:$sonarPluginApiVersion")
-            dependency("org.sonarsource.sonarqube:sonar-plugin-api-impl:$sonarPluginApiVersion")
-            dependency("org.sonarsource.sonarqube:sonar-ws:$sonarqubeVersion")
-            dependency("com.google.code.findbugs:jsr305:$jsr305Version")
-            dependency("com.google.code.gson:gson:$gsonVersion")
-            dependency("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-            dependency("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-            dependency("org.mockito:mockito-core:$mockitoVersion")
-            dependency("org.assertj:assertj-core:$assertjVersion")
-            dependency("io.github.classgraph:classgraph:$classgraphVersion")
-            dependency("org.sonarsource.analyzer-commons:sonar-analyzer-test-commons:$analyzerCommonsVersion")
-            dependency("org.sonarsource.analyzer-commons:sonar-analyzer-commons:$analyzerCommonsVersion")
-            dependency("org.sonarsource.analyzer-commons:sonar-xml-parsing:$analyzerCommonsVersion")
-            dependency("org.sonarsource.analyzer-commons:sonar-regex-parsing:$analyzerCommonsVersion")
-            dependency("org.sonarsource.analyzer-commons:sonar-performance-measure:$analyzerCommonsVersion")
-            dependency("org.sonarsource.orchestrator:sonar-orchestrator:$orchestratorVersion")
-            dependency("org.sonarsource.sonarlint.core:sonarlint-core:$sonarlintVersion")
-        }
     }
 
     java.sourceCompatibility = JavaVersion.VERSION_1_8

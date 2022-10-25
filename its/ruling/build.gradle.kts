@@ -4,9 +4,9 @@ plugins {
 }
 
 dependencies {
-    testImplementation("org.sonarsource.orchestrator:sonar-orchestrator")
-    testImplementation("org.assertj:assertj-core")
-    testImplementation("org.sonarsource.analyzer-commons:sonar-analyzer-commons")
+    testImplementation(testLibs.sonar.orchestrator)
+    testImplementation(testLibs.assertj.core)
+    testImplementation(libs.sonar.analyzer.commons)
 }
 
 sonarqube.isSkipProject = true
