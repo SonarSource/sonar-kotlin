@@ -4,31 +4,21 @@ plugins {
     kotlin("jvm")
 }
 
-val detektVersion: String by project
-val ktlintVersion: String by project
-val jcommanderVersion: String by project
-val commonsTextVersion: String by project
-
 dependencies {
-    implementation("io.gitlab.arturbosch.detekt", "detekt-cli", detektVersion)
-    implementation("io.gitlab.arturbosch.detekt", "detekt-core", detektVersion)
-    implementation("io.gitlab.arturbosch.detekt", "detekt-api", detektVersion)
-    implementation("com.pinterest", "ktlint", ktlintVersion)
-    implementation("com.pinterest.ktlint", "ktlint-core", ktlintVersion)
-    implementation("com.pinterest.ktlint", "ktlint-ruleset-standard", ktlintVersion)
-    implementation("com.pinterest.ktlint", "ktlint-ruleset-experimental", ktlintVersion)
-
     implementation(kotlin("stdlib-jdk8"))
-
-    implementation("com.google.code.gson:gson")
-    implementation("com.beust:jcommander:$jcommanderVersion")
-    implementation("org.apache.commons:commons-text:$commonsTextVersion")
     implementation(project(":sonar-kotlin-plugin"))
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    testImplementation("org.assertj:assertj-core")
-    testImplementation("org.sonarsource.sonarqube:sonar-plugin-api")
+    implementation(utilLibs.bundles.detekt)
+    implementation(utilLibs.bundles.ktlint)
+
+    implementation(libs.gson)
+    implementation(utilLibs.jcommander)
+    implementation(utilLibs.apache.commons.text)
+
+    testImplementation(testLibs.junit.api)
+    testRuntimeOnly(testLibs.junit.engine)
+    testImplementation(testLibs.assertj.core)
+    testImplementation(libs.sonar.plugin.api)
 }
 
 tasks {
@@ -38,7 +28,7 @@ tasks {
         mainClass.set("org.sonarsource.kotlin.externalreport.detekt.DetektRuleDefinitionGeneratorKt")
 
         doFirst {
-            println("Updating rules for Detekt version $detektVersion...")
+            println("Updating rules for Detekt version ${utilLibs.versions.detekt.get()}...")
         }
     }
 
@@ -48,7 +38,7 @@ tasks {
         mainClass.set("org.sonarsource.kotlin.externalreport.ktlint.KtlintRuleDefinitionGeneratorKt")
 
         doFirst {
-            println("Updating rules for ktlint version $detektVersion...")
+            println("Updating rules for ktlint version ${utilLibs.versions.ktlint.get()}...")
         }
     }
 

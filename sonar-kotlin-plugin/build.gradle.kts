@@ -45,29 +45,25 @@ configure<com.diffplug.gradle.spotless.SpotlessExtension> {
     }
 }
 
-val kotlinVersion: String by extra
-val junitVersion: String by project
-val mockkVersion: String by project
-val staxmateVersion: String by project
-
 dependencies {
-    compileOnly("org.sonarsource.sonarqube:sonar-plugin-api")
-    implementation("org.sonarsource.analyzer-commons:sonar-analyzer-commons")
-    implementation("org.sonarsource.analyzer-commons:sonar-xml-parsing")
-    implementation("org.sonarsource.analyzer-commons:sonar-regex-parsing")
-    implementation("org.sonarsource.analyzer-commons:sonar-performance-measure")
-    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
-    implementation("com.fasterxml.staxmate:staxmate:$staxmateVersion")
-    implementation("com.google.code.gson:gson")
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    testImplementation("org.assertj:assertj-core")
-    testImplementation("org.mockito:mockito-core")
-    testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("io.github.classgraph:classgraph")
-    testImplementation("org.sonarsource.analyzer-commons:sonar-analyzer-test-commons")
-    testImplementation("org.sonarsource.sonarqube:sonar-plugin-api-impl")
+    compileOnly(libs.sonar.plugin.api)
+    implementation(libs.sonar.analyzer.commons)
+    implementation(libs.sonar.xml.parsing)
+    implementation(libs.sonar.regex.parsing)
+    implementation(libs.sonar.performance.measure)
+    implementation(libs.kotlin.compiler.embeddable)
+    implementation(libs.staxmate)
+    implementation(libs.gson)
+
+    testImplementation(testLibs.junit.api)
+    testImplementation(testLibs.junit.params)
+    testRuntimeOnly(testLibs.junit.engine)
+    testImplementation(testLibs.assertj.core)
+    testImplementation(testLibs.mockito.core)
+    testImplementation(testLibs.mockk)
+    testImplementation(testLibs.classgraph)
+    testImplementation(testLibs.sonar.analyzer.test.commons)
+    testImplementation(testLibs.sonar.plugin.api.impl)
 }
 
 tasks.withType<JavaCompile> {
