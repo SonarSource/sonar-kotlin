@@ -13,6 +13,6 @@ class KtlintRuleDefinitionGeneratorTest {
 
         val actual = getActual { main(*it) }
 
-        Assertions.assertThat(actual).isEqualTo(expected)
+        Assertions.assertThat(actual).isEqualToIgnoringNewLines(expected)
     }
 }

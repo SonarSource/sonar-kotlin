@@ -47,7 +47,7 @@ internal class KotlinASTTest {
             val expectingAst = if (astPath.toFile().exists()) astPath.readText() else ""
             Assertions.assertThat(actualAst.trim { it <= ' ' })
                 .describedAs("In the file: $astPath (run KotlinASTTest.main manually)")
-                .isEqualTo(expectingAst.trim { it <= ' ' })
+                .isEqualToIgnoringWhitespace(expectingAst.trim { it <= ' ' })
         }
     }
 }
