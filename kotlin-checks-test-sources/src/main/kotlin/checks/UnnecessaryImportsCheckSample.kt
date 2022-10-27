@@ -85,6 +85,12 @@ import operators.timesAssign // Noncompliant
 import operators.divAssign // Noncompliant
 import operators.remAssign // Noncompliant
 
+import com.github.kittinunf.fuel.httpGet
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import com.github.kittinunf.fuel.serialization.responseObject
+import com.github.kittinunf.result.getOrElse
+
 
 import operators.ResourceLoader
 import operators.provideDelegate // Compliant
@@ -185,3 +191,20 @@ class UnnecessaryImportsCheckSample {
 class ChildClass1A: java.util.Date()
 class ChildClass2A: Timer()
 class ClassInSameFileA
+
+
+private val json = Json {
+    isLenient = true
+    ignoreUnknownKeys = true
+}
+
+fun issueJqlQuery(jqlQuery: String, maxResults: Int = 0) =
+    "".httpGet()
+        .responseObject<IssueSearchResponse>(json).let { (_, _, result) ->
+            result.getOrElse {
+                throw it
+            }
+        }
+
+@Serializable
+class IssueSearchResponse(val total: Int)

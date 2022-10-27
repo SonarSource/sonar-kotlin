@@ -20,22 +20,9 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.descriptors.containingPackage
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocLink
-import org.jetbrains.kotlin.psi.KtArrayAccessExpression
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtImportDirective
-import org.jetbrains.kotlin.psi.KtImportList
-import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
-import org.jetbrains.kotlin.psi.KtPackageDirective
-import org.jetbrains.kotlin.psi.KtPrefixExpression
-import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtPropertyDelegate
-import org.jetbrains.kotlin.psi.KtReferenceExpression
-import org.jetbrains.kotlin.psi.KtSimpleNameExpression
-import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
-import org.jetbrains.kotlin.psi.KtUserType
+import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi2ir.deparenthesize
@@ -44,7 +31,9 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
 import org.jetbrains.kotlin.resolve.descriptorUtil.isCompanionObject
+import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
+import org.sonar.api.utils.log.Loggers
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
@@ -53,6 +42,8 @@ private const val MESSAGE_UNUSED = "Remove this unused import."
 private const val MESSAGE_REDUNDANT = "Remove this redundant import."
 private val DELEGATES_IMPORTED_NAMES = setOf("getValue", "setValue", "provideDelegate")
 private val ARRAY_ACCESS_IMPORTED_NAMES = setOf("get", "set")
+
+private val LOG = Loggers.get(UnnecessaryImportsCheck::class.java)
 
 @Rule(key = "S1128")
 class UnnecessaryImportsCheck : AbstractCheck() {
@@ -111,7 +102,10 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         arrayAccessesImportsFilter(it) && delegateImportsFilter(it) && invokeCallsFilter(it)
     }.forEach { importDirective ->
         // We could not find any usages for anything remaining at this point. Hence, report!
-        importDirective.importedReference?.let { context.reportIssue(it, MESSAGE_UNUSED) }
+        importDirective.importedReference?.let {
+            LOG.error("TA-DA!!!")
+            context.reportIssue(it, MESSAGE_UNUSED)
+        }
     }
 
     private fun filterImportsWithSameSimpleNameByReferences(
@@ -120,10 +114,17 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         context: KotlinFileContext
     ): List<KtImportDirective> {
         var relevantImports = importsWithSameName
+
+        LOG.error("relevant imports: ${relevantImports.joinToString { it.importedFqName?.asString() ?: "" }}")
         for (ref in relevantReferences) {
             val refDescriptor = context.bindingContext.get(BindingContext.REFERENCE_TARGET, ref)?.getImportableDescriptor()
                 ?: return emptyList() // Discard all: over-estimate, resulting in less FPs and more FNs without binding ctx
+
+            LOG.error("isExtension = ${refDescriptor.isExtension}")
+            LOG.error("containingPackage = ${refDescriptor.containingPackage()}")
             val refName = refDescriptor.fqNameOrNull() ?: return emptyList()
+
+            LOG.error("refName = ${refName.asString()}")
 
             relevantImports = relevantImports.filter {
                 it.importedFqName != refName && !(refDescriptor.isCompanionObject() && it.importedFqName == refName.parent())
