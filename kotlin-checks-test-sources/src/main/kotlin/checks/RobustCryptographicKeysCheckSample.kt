@@ -44,12 +44,12 @@ internal class CryptographicKeySizeCheckRSA {
         }
 
         KeyPairGenerator.getInstance("RSA").run {
-            this.initialize(1024) // Compliant FN - We currently don't resolve the 'this'
+            this.initialize(1024) // Noncompliant
         }
 
         KeyPairGenerator.getInstance("RSA").run {
             this.let {
-                it.initialize(1024) // Compliant FN - We currently don't resolve the 'this'
+                it.initialize(1024) // Noncompliant
             }
         }
 
@@ -101,7 +101,7 @@ internal class CryptographicKeySizeCheckRSA {
 
         KeyPairGenerator.getInstance("RSA").also {
             1024.run {
-                it.initialize(this) // Compliant FN - we currently don't resolve the 'this'
+                it.initialize(this) // Noncompliant
             }
         }
     }

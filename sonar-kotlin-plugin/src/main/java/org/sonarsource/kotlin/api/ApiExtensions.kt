@@ -55,6 +55,7 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
@@ -125,6 +126,13 @@ internal fun KtExpression.predictRuntimeBooleanValue(bindingContext: BindingCont
         }
     }
 
+/**
+ * In Kotlin, we may often be dealing with expressions that can already statically be resolved to prior and more accurate expressions that
+ * they will alias at runtime. A good example of this are `it` within `let` and `also` scopes, as well as `this` within `with`, `apply`
+ * and `run` scopes. Other examples include constants assigned to a property elsewhere.
+ *
+ * This function will try to resolve the current expression as far as it statically can, including deparenthesizing the expression.
+ */
 internal fun KtExpression.predictRuntimeValueExpression(
     bindingContext: BindingContext,
     declarations: MutableList<PsiElement> = mutableListOf(),
@@ -138,6 +146,8 @@ internal fun KtExpression.predictRuntimeValueExpression(
         }
         is KtParenthesizedExpression -> deparenthesized.expression?.predictRuntimeValueExpression(bindingContext, declarations)
         is KtBinaryExpressionWithTypeRHS -> deparenthesized.left.predictRuntimeValueExpression(bindingContext, declarations)
+        is KtThisExpression -> bindingContext.get(BindingContext.REFERENCE_TARGET, deparenthesized.instanceReference)
+            ?.findFunctionLiteral(deparenthesized, bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
         else -> deparenthesized.getCall(bindingContext)?.predictValueExpression(bindingContext)
     } ?: deparenthesized as? KtExpression
 } ?: this
@@ -154,7 +164,7 @@ internal fun KtCallExpression.predictReceiverExpression(
     }
 
     // For calls of the format `foo()` (i.e. where `this` is the implicit receiver)
-    return resolvedCall?.getImplicitReceiverValue()?.extractWithRunTargetExpression(this, bindingContext)
+    return resolvedCall?.getImplicitReceiverValue()?.extractWithRunApplyTargetExpression(this, bindingContext)
 }
 
 internal fun KtStringTemplateExpression.asString() = entries.joinToString("") { it.text }
@@ -233,10 +243,16 @@ private fun KtReferenceExpression.extractFromInitializer(
         } else null
     }
 
+/**
+ * Will try to resolve what `it` is an alias for inside of a `let` or `also` scope.
+ */
 private fun KtReferenceExpression.extractLetAlsoTargetExpression(bindingContext: BindingContext) =
     findReceiverScopeFunctionLiteral(bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
 
-private fun ImplicitReceiver.extractWithRunTargetExpression(startNode: PsiElement, bindingContext: BindingContext) =
+/**
+ * Will try to resolve what `this` is an alias for inside a `with`, `run` or `apply` scope.
+ */
+private fun ImplicitReceiver.extractWithRunApplyTargetExpression(startNode: PsiElement, bindingContext: BindingContext) =
     findReceiverScopeFunctionLiteral(startNode, bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
 
 private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(bindingContext: BindingContext): KtExpression? =

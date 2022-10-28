@@ -48,7 +48,7 @@ private val DEFAULT_TEST_JARS_DIRECTORY = "../kotlin-checks-test-sources/build/t
 class KotlinVerifier(private val check: AbstractCheck) {
 
     var fileName: String = ""
-    var classpath: List<String> = System.getProperty("java.class.path").split(":") + DEFAULT_KOTLIN_CLASSPATH
+    var classpath: List<String> = System.getProperty("java.class.path").split(System.getProperty("path.separator")) + DEFAULT_KOTLIN_CLASSPATH
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
     var isAndroid = false
 

@@ -19,7 +19,9 @@
  */
 package org.sonarsource.kotlin.api
 
+import org.assertj.core.api.AbstractAssert
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.ObjectAssert
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import org.jetbrains.kotlin.config.LanguageVersion
@@ -28,6 +30,8 @@ import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassLikeDeclaration
+import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
@@ -37,6 +41,7 @@ import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
@@ -53,7 +58,8 @@ internal class ApiExtensionsKtTest {
 
     @Test
     fun `test isLocalVariable`() {
-        val tree = parse("""
+        val tree = parse(
+            """
             const val a = "abc"
             val b = 1
             var c = true
@@ -80,7 +86,8 @@ internal class ApiExtensionsKtTest {
               val o = 0
               return o
             }
-            """.trimIndent())
+            """.trimIndent()
+        )
         val referencesMap: MutableMap<String, KtReferenceExpression> = TreeMap()
         walker(tree.psiFile) {
             if (it is KtNameReferenceExpression) {
@@ -90,15 +97,18 @@ internal class ApiExtensionsKtTest {
         val ctx = tree.bindingContext
         assertThat((null as KtExpression?).isLocalVariable(ctx)).isFalse
 
-        assertThat(referencesMap.keys).containsExactlyInAnyOrder("Any", "Int", "List",
-            "a", "b", "c", "d", "e", "f", "g", "h", "i", "it", "j", "k", "l", "listOf", "m", "n", "o")
+        assertThat(referencesMap.keys).containsExactlyInAnyOrder(
+            "Any", "Int", "List",
+            "a", "b", "c", "d", "e", "f", "g", "h", "i", "it", "j", "k", "l", "listOf", "m", "n", "o"
+        )
         assertThat(referencesMap.filter { it.value.isLocalVariable(ctx) }.map { it.key })
             .containsExactlyInAnyOrder("h", "i", "j", "k", "m", "n", "o")
     }
 
     @Test
     fun `test getterMatches and setterMatches`() {
-        val tree = parse("""
+        val tree = parse(
+            """
         fun foo(thread: Thread): Int {
           thread.name = "1"
           thread.isDaemon = false
@@ -106,7 +116,8 @@ internal class ApiExtensionsKtTest {
           x = 1
           return thread.priority
         }
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         val referencesMap: MutableMap<String, KtReferenceExpression> = TreeMap()
         walker(tree.psiFile) {
@@ -309,11 +320,156 @@ class ApiExtensionsKtDetermineSignatureTest {
     }
 }
 
+class ApiExtensionsScopeFunctionResolutionTest {
+    companion object {
+        private fun generateAst(funContent: String) = """
+            package bar
+
+            class Foo {
+                val prop: Int = 42
+
+                fun aFun() {
+                    $funContent
+                }
+            }
+        """.let { parse(it) }.let { it.psiFile to it.bindingContext }
+    }
+
+    @Test
+    fun `resolve this as arg in with`() {
+        val (tree, bindingContext) = generateAst(
+            """
+                with(prop) {
+                    println(this)
+                }
+            """.trimIndent()
+        )
+
+        assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
+            .isConstantExpr(42)
+    }
+
+    @Test
+    fun `resolve this as explicit target in with`() {
+        val (tree, bindingContext) = generateAst(
+            """
+                with(prop) {
+                    this.toString()
+                }
+            """.trimIndent()
+        )
+
+        assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
+            .isConstantExpr(42)
+    }
+
+    @Test
+    fun `resolve this as arg in apply`() {
+        val (tree, bindingContext) = generateAst(
+            """
+                prop.apply {
+                    println(this)
+                }
+            """.trimIndent()
+        )
+
+        assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
+            .isConstantExpr(42)
+    }
+
+    @Test
+    fun `resolve this as explicit target in apply`() {
+        val (tree, bindingContext) = generateAst(
+            """
+                prop.apply {
+                    this.toString()
+                }
+            """.trimIndent()
+        )
+
+        assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
+            .isConstantExpr(42)
+    }
+
+    @Test
+    fun `resolve this as arg in run`() {
+        val (tree, bindingContext) = generateAst(
+            """
+                prop.run {
+                    println(this)
+                }
+            """.trimIndent()
+        )
+
+        assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
+            .isConstantExpr(42)
+    }
+
+    @Test
+    fun `resolve this as explicit target in run`() {
+        val (tree, bindingContext) = generateAst(
+            """
+                prop.run {
+                    this.toString()
+                }
+            """.trimIndent()
+        )
+
+        assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
+            .isConstantExpr(42)
+    }
+
+    @Test
+    fun `resolve this to current object`() {
+        val (tree, bindingContext) = generateAst(
+            """
+                prop.let {
+                    println(this)
+                }
+            """.trimIndent()
+        )
+
+        assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
+            .isInstanceOf(KtThisExpression::class.java)
+    }
+}
+
 private fun parse(code: String) = kotlinTreeOf(
     code,
-    Environment(listOf("build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE),
+    Environment(
+        listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(System.getProperty("path.separator")),
+        LanguageVersion.LATEST_STABLE
+    ),
     TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
         .setCharset(StandardCharsets.UTF_8)
         .initMetadata(code)
         .build()
 )
+
+private class KtExpressionAssert(expression: KtExpression?) : ObjectAssert<KtExpression>(expression) {
+    fun isConstantExpr(value: Int): KtExpressionAssert {
+        isNotNull
+        actual!!.let { actualNonNull ->
+            assertThat(actualNonNull)
+                .withFailMessage {
+                    "Expecting KtExpression of type ${KtConstantExpression::class.simpleName}, got ${actualNonNull::class.simpleName}"
+                }
+                .isInstanceOf(KtConstantExpression::class.java)
+
+            assertThat((actualNonNull as KtConstantExpression).elementType.debugName)
+                .withFailMessage {
+                    "Expecting KtConstant with element type INTEGER_CONSTANT, got ${actualNonNull.elementType.debugName}"
+                }
+                .isEqualTo("INTEGER_CONSTANT")
+
+            assertThat(actualNonNull.text)
+                .withFailMessage {
+                    "Expecting constant expression with value $value, got ${actualNonNull.text}"
+                }
+                .isEqualTo(value.toString())
+        }
+        return this
+    }
+}
+
+private fun assertThatExpr(expression: KtExpression?) = KtExpressionAssert(expression)
