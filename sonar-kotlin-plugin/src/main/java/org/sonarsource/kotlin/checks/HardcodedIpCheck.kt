@@ -35,6 +35,7 @@ private val IPV6_LOOPBACK = Regex("[0:]++0*+1")
 private val IPV6_NON_ROUTABLE = Regex("[0:]++")
 private val INVALID_IPV4_PART_PATTERN = Regex("""^0\d{1,2}""")
 private val IPV6_SPLIT_REGEX = Regex("::?")
+private val RESERVED_DOC_IP_RANGE = listOf("192.0.2.", "198.51.100.", "203.0.113.", "2001:db8:")
 
 private const val MESSAGE = "Make sure using this hardcoded IP address is safe here."
 
@@ -84,8 +85,10 @@ private fun isValidIPV6(ipv6: String, ipv4: String?): Boolean {
 }
 
 private fun isIPV4Exception(ip: String) = ip.startsWith("127.")
-        || "255.255.255.255" == ip || "0.0.0.0" == ip || ip.startsWith("2.5.")
+        || "255.255.255.255" == ip || "0.0.0.0" == ip || ip.startsWith("2.5.") || isReservedDocumentationIp(ip)
 
-private fun isIPV6Exception(ip: String) = IPV6_LOOPBACK.matches(ip) || IPV6_NON_ROUTABLE.matches(ip)
+private fun isIPV6Exception(ip: String) = IPV6_LOOPBACK.matches(ip) || IPV6_NON_ROUTABLE.matches(ip) || isReservedDocumentationIp(ip)
 
 private fun getCompressionSeparatorCount(str: String) = str.split("::").size - 1
+
+private fun isReservedDocumentationIp(str: String) : Boolean = RESERVED_DOC_IP_RANGE.any { it -> str.startsWith(it) }

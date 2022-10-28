@@ -60,9 +60,9 @@ class HardcodedIpCheckSample {
         "1080:0:0:0:8:200C:417A:131.107"; // Compliant - not valid IPv6
 
 // Noncompliant@+1 {{Make sure using this hardcoded IP address is safe here.}}
-        "http://[2001:db8:1f70::999:de8:7648:6e8]";
+        "http://[::1234:5678:91.123.4.56]";
 // Noncompliant@+1
-        "http://[2001:db8:1f70::999:de8:7648:6e8]:100/";
+        "http://[::1234:5678:1.2.3.4]:100/";
 // Noncompliant@+1
         "https://[3FFE:1A05:510:1111:0:5EFE:131.107.129.8]:8080/";
 //      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -72,6 +72,11 @@ class HardcodedIpCheckSample {
 
         "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"; // Noncompliant
 
+        "192.0.3.1" // Noncompliant
+        "198.51.101.10" // Noncompliant
+        "203.0.112.10" // Noncompliant
+        "2000:db8:1f70::999:de8:7648:6e8" // Noncompliant
+
 // Exceptions
         "0.0.0.0";
         "::1";
@@ -80,9 +85,12 @@ class HardcodedIpCheckSample {
         "255.255.255.255:80";
         "2.5.255.255";
         "127.5.255.255";
+        "192.0.2.1";
+        "198.51.100.10";
+        "203.0.113.70";
         "http://[::0]:100/";
         "0000:0000:0000:0000:0000:0000:0000:0000";
-
+        "2001:db8:1f70::999:de8:7648:6e8";
     }
 
 }

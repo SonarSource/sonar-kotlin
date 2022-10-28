@@ -5,6 +5,10 @@ build/
 # ---- Orchestrator
 its/ruling/target/
 its/plugin/target/
+its/plugin/projects/tests-surefire-suffix/target/
+its/plugin/projects/tests-with-submodule/submodule/target/
+its/plugin/projects/tests-with-submodule/target/
+its/plugin/projects/tests-without-main-code/target/
 
 # ---- SonarQube analysis
 .scannerwork/
