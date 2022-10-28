@@ -76,6 +76,10 @@ class HardcodedIpCheckSample {
         "198.51.101.10" // Noncompliant
         "203.0.112.10" // Noncompliant
         "2000:db8:1f70::999:de8:7648:6e8" // Noncompliant
+        "::ffff:0:128.255.255.255" // Noncompliant
+        "::ffff:1:127.255.255.255" // Noncompliant
+        "::ffff:128.255.255.255" // Noncompliant
+        "::ffff:89.0.0.1" // Noncompliant
 
 // Exceptions
         "0.0.0.0";
@@ -91,6 +95,8 @@ class HardcodedIpCheckSample {
         "http://[::0]:100/";
         "0000:0000:0000:0000:0000:0000:0000:0000";
         "2001:db8:1f70::999:de8:7648:6e8";
+        "::ffff:0:127.0.0.1"
+        "::ffff:127.168.0.1"
     }
 
 }
