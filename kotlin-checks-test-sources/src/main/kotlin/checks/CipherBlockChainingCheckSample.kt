@@ -15,7 +15,7 @@ class CipherBlockChainingCheckSample {
 
         val cipher: Cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv) // Noncompliant {{Use a dynamically-generated, random IV.}}
-        
+
         val encryptedBytes: ByteArray = cipher.doFinal("foo".toByteArray())
     }
 
@@ -58,14 +58,25 @@ class CipherBlockChainingCheckSample {
 
         IvParameterSpec(bytesIV).apply {
             Cipher.getInstance("AES/CBC/PKCS5PADDING")
-                .init(Cipher.ENCRYPT_MODE, skeySpec, this) // FN, can't resolve 'this'
+                .init(Cipher.ENCRYPT_MODE, skeySpec, this) // Noncompliant
 
+        }
+
+        val iv = IvParameterSpec(bytesIV)
+        iv.apply {
+            Cipher.getInstance("AES/CBC/PKCS5PADDING")
+                .init(Cipher.ENCRYPT_MODE, skeySpec, this) // Noncompliant
         }
 
         IvParameterSpec(bytesIV).run {
             Cipher.getInstance("AES/CBC/PKCS5PADDING")
-                .init(Cipher.ENCRYPT_MODE, skeySpec, this) // FN, can't resolve 'this'
+                .init(Cipher.ENCRYPT_MODE, skeySpec, this) // Noncompliant
 
+        }
+
+        iv.run {
+            Cipher.getInstance("AES/CBC/PKCS5PADDING")
+                .init(Cipher.ENCRYPT_MODE, skeySpec, this) // Noncompliant
         }
 
         IvParameterSpec(bytesIV).also {
@@ -76,7 +87,12 @@ class CipherBlockChainingCheckSample {
 
         with(IvParameterSpec(bytesIV)) {
             Cipher.getInstance("AES/CBC/PKCS5PADDING")
-                .init(Cipher.ENCRYPT_MODE, skeySpec, this) // FN, can't resolve 'this'
+                .init(Cipher.ENCRYPT_MODE, skeySpec, this) // Noncompliant
+        }
+
+        with(iv) {
+            Cipher.getInstance("AES/CBC/PKCS5PADDING")
+                .init(Cipher.ENCRYPT_MODE, skeySpec, this) // Noncompliant
         }
     }
 
@@ -110,11 +126,11 @@ class CipherBlockChainingCheckSample {
         random.nextBytes(bytesIV); // Unpredictable / random IV
 
         val iv = IvParameterSpec(bytesIV)
-        
+
         val skeySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
 
         val cipher: Cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
-        
+
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv) //Compliant
 
         val encryptedBytes: ByteArray = cipher.doFinal("foo".toByteArray())
@@ -130,7 +146,7 @@ class CipherBlockChainingCheckSample {
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv) // Compliant
 
         val encryptedBytes: ByteArray = cipher.doFinal("foo".toByteArray())
-   }
+    }
 
     fun compliant3(secretKey: String, ivParameterSpec: IvParameterSpec) {
         val skeySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
@@ -139,7 +155,7 @@ class CipherBlockChainingCheckSample {
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, ivParameterSpec) // Compliant
 
         val encryptedBytes: ByteArray = cipher.doFinal("foo".toByteArray())
-   }
+    }
 
     fun compliant4(secretKey: String, ivParameterSpec: IvParameterSpec) {
         val skeySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
@@ -149,7 +165,7 @@ class CipherBlockChainingCheckSample {
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv) // Compliant
 
         val encryptedBytes: ByteArray = cipher.doFinal("foo".toByteArray())
-   }
+    }
 
     fun compliant5(secretKey: String, ivParameterSpec: IvParameterSpec, bytes: ByteArray) {
         val skeySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
@@ -159,7 +175,7 @@ class CipherBlockChainingCheckSample {
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv) // Compliant
 
         val encryptedBytes: ByteArray = cipher.doFinal("foo".toByteArray())
-   }
+    }
 
     fun compliant6(secretKey: String, ivParameterSpec: IvParameterSpec) {
         val skeySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
@@ -170,7 +186,7 @@ class CipherBlockChainingCheckSample {
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv) // Compliant
 
         val encryptedBytes: ByteArray = cipher.doFinal("foo".toByteArray())
-   }
+    }
 
     fun compliant7(secretKey: String, ivParameterSpec: IvParameterSpec) {
         val skeySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
@@ -182,7 +198,7 @@ class CipherBlockChainingCheckSample {
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv) // Compliant
 
         val encryptedBytes: ByteArray = cipher.doFinal("foo".toByteArray())
-   }
+    }
 
     fun non_compliant2(secretKey: String, pass: String) {
         val bytesIV = pass.toByteArray(charset("UTF-8")) // Predictable / hardcoded IV
@@ -194,6 +210,6 @@ class CipherBlockChainingCheckSample {
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv) // Noncompliant
 
         val encryptedBytes: ByteArray = cipher.doFinal("foo".toByteArray())
-   }
+    }
 
 }
