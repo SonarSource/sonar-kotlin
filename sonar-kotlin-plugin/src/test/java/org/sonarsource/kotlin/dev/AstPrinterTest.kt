@@ -45,7 +45,7 @@ class AstPrinterTest {
         val tmpFile = Files.newTemporaryFile()
         AstPrinter.dotPrint(INPUT_KT, tmpFile.toPath())
 
-        assertThat(tmpFile.readText()).isEqualTo(EXPECTED_DOT_OUTPUT.readText())
+        assertThat(tmpFile.readText()).isEqualToIgnoringNewLines(EXPECTED_DOT_OUTPUT.readText())
 
         tmpFile.delete()
     }
@@ -55,7 +55,7 @@ class AstPrinterTest {
         val tmpFile = Files.newTemporaryFile()
         AstPrinter.txtPrint(INPUT_KT, tmpFile.toPath(), INPUT_KT.viewProvider.document)
 
-        assertThat(tmpFile.readText()).isEqualTo(EXPECTED_TXT_OUTPUT.readText())
+        assertThat(tmpFile.readText()).isEqualToIgnoringNewLines(EXPECTED_TXT_OUTPUT.readText())
 
         tmpFile.delete()
     }

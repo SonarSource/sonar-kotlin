@@ -15,6 +15,6 @@ class DetektRuleDefinitionGeneratorTest {
 
         val actual = getActual { main(*it) }
 
-        assertThat(actual).isEqualTo(expected)
+        assertThat(actual).isEqualToIgnoringNewLines(expected)
     }
 }

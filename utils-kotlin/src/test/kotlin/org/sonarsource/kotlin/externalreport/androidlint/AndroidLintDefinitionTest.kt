@@ -15,7 +15,7 @@ class AndroidLintDefinitionTest {
 
         val actual = getActual(androidLintHelperPath) { main(*it) }
 
-        assertThat(actual).isEqualTo(expected)
+        assertThat(actual).isEqualToIgnoringNewLines(expected)
     }
 
     @Test
