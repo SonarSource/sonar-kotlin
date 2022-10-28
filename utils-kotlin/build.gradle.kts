@@ -13,7 +13,6 @@ dependencies {
 
     implementation(libs.gson)
     implementation(utilLibs.jcommander)
-    implementation(utilLibs.apache.commons.text)
 
     testImplementation(testLibs.junit.api)
     testRuntimeOnly(testLibs.junit.engine)

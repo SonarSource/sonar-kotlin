@@ -48,12 +48,10 @@ dependencyResolutionManagement {
         }
 
         create("utilLibs") {
-            val commonsText = version("commonsText", "1.9")
             val detekt = version("detekt", "1.19.0")
             val jcommander = version("jcommander", "1.81")
             val ktlint = version("ktlint", "0.46.1")
 
-            library("apache-commons-text", "org.apache.commons", "commons-text").versionRef(commonsText)
             library("detekt-api", "io.gitlab.arturbosch.detekt", "detekt-api").versionRef(detekt)
             library("detekt-cli", "io.gitlab.arturbosch.detekt", "detekt-cli").versionRef(detekt)
             library("detekt-core", "io.gitlab.arturbosch.detekt", "detekt-core").versionRef(detekt)
