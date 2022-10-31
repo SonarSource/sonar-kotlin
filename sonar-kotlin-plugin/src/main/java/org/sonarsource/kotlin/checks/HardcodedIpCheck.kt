@@ -86,14 +86,14 @@ private fun isValidIPV6(ipv6: String, ipv4: String?): Boolean {
 }
 
 private fun isIPV4Exception(ip: String) = ip.startsWith("127.")
-        || "255.255.255.255" == ip || "0.0.0.0" == ip || ip.startsWith("2.5.")
-        || isReservedDocumentationIp(ip) || isLocalIPv4MappedIPv6(ip)
+    || "255.255.255.255" == ip || "0.0.0.0" == ip || ip.startsWith("2.5.")
+    || isReservedDocumentationIp(ip) || isLocalIPv4MappedIPv6(ip)
 
 private fun isIPV6Exception(ip: String) = IPV6_LOOPBACK.matches(ip) || IPV6_NON_ROUTABLE.matches(ip) || isReservedDocumentationIp(ip)
-        || isLocalIPv4MappedIPv6(ip)
+    || isLocalIPv4MappedIPv6(ip)
 
 private fun getCompressionSeparatorCount(str: String) = str.split("::").size - 1
 
-private fun isReservedDocumentationIp(str: String) : Boolean = RESERVED_DOC_IP_RANGE.any { it -> str.startsWith(it) }
+private fun isReservedDocumentationIp(ip: String) = RESERVED_DOC_IP_RANGE.any { ip.startsWith(it) }
 
-private fun isLocalIPv4MappedIPv6(str: String) : Boolean = LOCAL_IPV4_MAPPED_IPV6.any { it -> str.startsWith(it, true) }
+private fun isLocalIPv4MappedIPv6(ip: String) = LOCAL_IPV4_MAPPED_IPV6.any { ip.startsWith(it, true) }
