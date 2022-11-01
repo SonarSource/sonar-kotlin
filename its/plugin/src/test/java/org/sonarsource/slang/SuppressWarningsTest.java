@@ -29,6 +29,7 @@ public class SuppressWarningsTest extends TestBase {
   private static final String SUPPRESS_WARNINGS_PROFILE = "suppress-warnings-profile";
   private static final String RULE_KEY = "S1145";
   private static final String COGNITIVE_COMPLEXITY_RULE_KEY = "S3776";
+  private static final String TOO_MANY_CASES_RULE_KEY = "S1479";
   private static final String PROJECT_KEY = "issueSuppression";
   private static final String LANGUAGE = "kotlin";
 
@@ -40,5 +41,6 @@ public class SuppressWarningsTest extends TestBase {
     assertThat(getMeasureAsInt(PROJECT_KEY, "files")).isEqualTo(2);
     assertThat(getIssuesForRule(PROJECT_KEY, LANGUAGE + ":" + RULE_KEY)).hasSize(7);
     assertThat(getIssuesForRule(PROJECT_KEY, LANGUAGE + ":" + COGNITIVE_COMPLEXITY_RULE_KEY)).hasSize(1);
+    assertThat(getIssuesForRule(PROJECT_KEY, LANGUAGE + ":" + TOO_MANY_CASES_RULE_KEY)).isEmpty();
   }
 }
