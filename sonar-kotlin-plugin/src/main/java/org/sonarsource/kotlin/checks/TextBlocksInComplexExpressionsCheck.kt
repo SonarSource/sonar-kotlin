@@ -21,8 +21,8 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
-import org.jetbrains.kotlin.psi.KtTreeVisitor
 import org.jetbrains.kotlin.psi.KtValueArgument
+import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
@@ -45,38 +45,17 @@ class TextBlocksInComplexExpressionsCheck : AbstractCheck() {
     )
     var linesNumber = DEFAULT_LINES_NUMBER
 
-    override fun visitLambdaExpression(expression: KtLambdaExpression, ctx: KotlinFileContext?) {
+    override fun visitLambdaExpression(expression: KtLambdaExpression, ctx: KotlinFileContext) {
         if (expression.parent is KtValueArgument) {
-            var finder = TextBlockFinder(linesNumber)
-            expression.bodyExpression?.accept(finder)
-            finder.misusedTextBlocks.forEach { block ->
-                ctx?.reportIssue(block, MESSAGE)
-            }
-        }
-    }
-
-    class TextBlockFinder : KtTreeVisitor<KtStringTemplateExpression> {
-
-        var maxLines = DEFAULT_LINES_NUMBER
-
-        constructor(maxLines: Int) {
-            this.maxLines = maxLines
-        }
-
-        val misusedTextBlocks = mutableListOf<KtStringTemplateExpression>()
-
-        // We visit all string templates in the lambda body, and check if they start with triple quote.
-        // If they do, we check that they do not exceed the maximum amount of allowed lines
-        override fun visitStringTemplateExpression(expression: KtStringTemplateExpression, data: KtStringTemplateExpression?): Void? {
-            if (expression.firstChild.text.startsWith("\"\"\"")) {
-                var lines = expression.text.split(Pattern.compile("\r?\n|\r"))?.size
-                if (lines != null && lines > maxLines) {
-                    misusedTextBlocks.add(expression)
+            expression.forEachDescendantOfType<KtStringTemplateExpression> { stringTemplate ->
+                if (stringTemplate.firstChild.text.startsWith("\"\"\"")) {
+                    val lines = stringTemplate.text.split(Pattern.compile("\r?\n|\r")).size
+                    if (lines > linesNumber) {
+                        ctx.reportIssue(stringTemplate, MESSAGE)
+                    }
                 }
             }
-            return null
         }
-
     }
 
 }
