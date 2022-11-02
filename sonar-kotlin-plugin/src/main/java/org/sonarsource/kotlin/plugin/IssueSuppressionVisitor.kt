@@ -21,15 +21,12 @@ package org.sonarsource.kotlin.plugin
 
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
-import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtCollectionLiteralExpression
-import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtParameter
-import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.ValueArgument
 import org.sonar.api.batch.fs.TextRange
 import org.sonarsource.kotlin.api.asString
+import org.sonarsource.kotlin.checks.annotatedElement
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.visiting.KtTreeVisitor
@@ -57,11 +54,8 @@ private class IssueSuppressionTreeVisitor(
     val kotlinFileContext: KotlinFileContext,
     val acc: MutableMap<String, Set<TextRange>>,
 ) : KtTreeVisitor() {
-
-    override fun visitNamedFunction(function: KtNamedFunction) = detectSuppressedRules(function)
-    override fun visitClassOrObject(classOrObject: KtClassOrObject) = detectSuppressedRules(classOrObject)
-    override fun visitParameter(parameter: KtParameter) = detectSuppressedRules(parameter)
-    override fun visitProperty(property: KtProperty) = detectSuppressedRules(property)
+    override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry) =
+        detectSuppressedRules(annotationEntry.annotatedElement())
 
     private fun detectSuppressedRules(node: KtAnnotated) {
         val suppressedRules = detectSuppressedRulesInAnnotation(node.annotationEntries.asSequence())

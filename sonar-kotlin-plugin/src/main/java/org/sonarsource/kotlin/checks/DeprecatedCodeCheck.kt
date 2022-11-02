@@ -53,7 +53,7 @@ private fun KtAnnotationEntry.elementToReport(): PsiElement =
         else -> this
     }
 
-private fun KtAnnotationEntry.annotatedElement(): PsiElement {
+fun KtAnnotationEntry.annotatedElement(): KtAnnotated {
     var annotated = parent
     while (annotated !is KtAnnotated) annotated = annotated.parent
     return annotated

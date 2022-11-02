@@ -26,6 +26,7 @@ import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.checks.BadClassNameCheck
 import org.sonarsource.kotlin.checks.BadFunctionNameCheck
+import org.sonarsource.kotlin.checks.TooManyCasesCheck
 import org.sonarsource.kotlin.checks.UnusedLocalVariableCheck
 import org.sonarsource.kotlin.checks.VariableAndParameterNameCheck
 import org.sonarsource.kotlin.converter.Comment
@@ -48,15 +49,15 @@ class IssueSuppressionVisitorTest {
         val forNoSuppressionTestFile = KOTLIN_BASE_DIR.resolve("../sample/IssueNonSuppressionSample.kt")
         val withoutSuppressionTestFile = KOTLIN_BASE_DIR.resolve("../sample/IssueWithoutSuppressionSample.kt")
         scanWithSuppression(withSuppressionTestFile).assertOneOrMoreIssues()
-        scanWithSuppression(withoutSuppressionTestFile).assertOneOrMoreIssues()
         scanWithoutSuppression(forNoSuppressionTestFile).assertOneOrMoreIssues()
+        scanWithSuppression(withoutSuppressionTestFile).assertOneOrMoreIssues()
     }
 
     private fun scanWithSuppression(path: Path) =
-        scanFile(path, true, BadClassNameCheck(), BadFunctionNameCheck(), VariableAndParameterNameCheck(), UnusedLocalVariableCheck())
+        scanFile(path, true, BadClassNameCheck(), BadFunctionNameCheck(), VariableAndParameterNameCheck(), UnusedLocalVariableCheck(), TooManyCasesCheck())
 
     private fun scanWithoutSuppression(path: Path) =
-        scanFile(path, false, BadClassNameCheck(), BadFunctionNameCheck(), VariableAndParameterNameCheck(), UnusedLocalVariableCheck())
+        scanFile(path, false, BadClassNameCheck(), BadFunctionNameCheck(), VariableAndParameterNameCheck(), UnusedLocalVariableCheck(), TooManyCasesCheck())
 
     private fun scanFile(path: Path, suppress: Boolean, check: AbstractCheck, vararg checks: AbstractCheck): SingleFileVerifier {
         val env = Environment(DEFAULT_KOTLIN_CLASSPATH, LanguageVersion.LATEST_STABLE)
