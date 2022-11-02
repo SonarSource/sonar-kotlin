@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.kotlin.compiler.embeddable)
     implementation(libs.staxmate)
     implementation(libs.gson)
+    implementation(libs.sonar.analyzer.commons.recognizers)
 
     testImplementation(testLibs.junit.api)
     testImplementation(testLibs.junit.params)

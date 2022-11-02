@@ -1,0 +1,15 @@
+{
+'kotlin-corda-project:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/transactions/CompatibleTransactionTests.kt':[
+443,
+],
+'kotlin-corda-project:sources/kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/Util.kt':[
+84,
+],
+'kotlin-corda-project:sources/kotlin/corda/samples/simm-valuation-demo/src/test/kotlin/net/corda/vega/SwapExample.kt':[
+82,
+],
+'kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/EnumEvolveTests.kt':[
+72,
+112,
+],
+}

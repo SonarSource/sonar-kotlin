@@ -40,6 +40,7 @@ dependencyResolutionManagement {
             library("gson", "com.google.code.gson", "gson").versionRef(gson)
             library("kotlin-compiler-embeddable", "org.jetbrains.kotlin", "kotlin-compiler-embeddable").version(kotlinVersion)
             library("sonar-analyzer-commons", "org.sonarsource.analyzer-commons", "sonar-analyzer-commons").versionRef(analyzerCommons)
+            library("sonar-analyzer-commons-recognizers", "org.sonarsource.analyzer-commons", "sonar-analyzer-recognizers").versionRef(analyzerCommons)
             library("sonar-performance-measure", "org.sonarsource.analyzer-commons", "sonar-performance-measure").versionRef(analyzerCommons)
             library("sonar-plugin-api", "org.sonarsource.sonarqube", "sonar-plugin-api").versionRef(sonarPluginApi)
             library("sonar-regex-parsing", "org.sonarsource.analyzer-commons", "sonar-regex-parsing").versionRef(analyzerCommons)
