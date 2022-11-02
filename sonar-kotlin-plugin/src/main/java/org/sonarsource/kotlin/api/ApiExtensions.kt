@@ -36,6 +36,8 @@ import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.js.translate.callTranslator.getReturnType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.Call
+import org.jetbrains.kotlin.psi.KtAnnotated
+import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -491,3 +493,8 @@ fun KtQualifiedExpression?.determineSignature(bindingContext: BindingContext): D
         else -> null
     }
 
+fun KtAnnotationEntry.annotatedElement(): KtAnnotated {
+    var annotated = parent
+    while (annotated !is KtAnnotated) annotated = annotated.parent
+    return annotated
+}

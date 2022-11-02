@@ -25,8 +25,8 @@ import org.jetbrains.kotlin.psi.KtCollectionLiteralExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.ValueArgument
 import org.sonar.api.batch.fs.TextRange
+import org.sonarsource.kotlin.api.annotatedElement
 import org.sonarsource.kotlin.api.asString
-import org.sonarsource.kotlin.checks.annotatedElement
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.visiting.KtTreeVisitor
