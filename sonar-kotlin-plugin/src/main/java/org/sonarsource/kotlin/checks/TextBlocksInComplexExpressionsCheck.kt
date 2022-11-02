@@ -19,15 +19,23 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.lexer.KtSingleValueToken
+import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
+import org.jetbrains.kotlin.psi.psiUtil.isAncestor
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.predictRuntimeValueExpression
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import java.util.regex.Pattern
+import org.sonarsource.kotlin.api.isPlus as isConcat
 
 @Rule(key = "S6203")
 class TextBlocksInComplexExpressionsCheck : AbstractCheck() {
@@ -47,13 +55,18 @@ class TextBlocksInComplexExpressionsCheck : AbstractCheck() {
 
     override fun visitLambdaExpression(expression: KtLambdaExpression, ctx: KotlinFileContext) {
         if (expression.parent is KtValueArgument) {
-            expression.forEachDescendantOfType<KtStringTemplateExpression> { stringTemplate ->
-                if (stringTemplate.firstChild.text.startsWith("\"\"\"")) {
-                    val lines = stringTemplate.text.split(Pattern.compile("\r?\n|\r")).size
-                    if (lines > linesNumber) {
-                        ctx.reportIssue(stringTemplate, MESSAGE)
-                    }
-                }
+            expression.forEachDescendantOfType<KtStringTemplateExpression>(
+                canGoInside = { elem -> elem !is KtLambdaExpression || elem === expression })
+            { stringTemplate ->
+                evaluateStringTemplateLines(stringTemplate, ctx)
+            }
+        }
+    }
+
+    private fun evaluateStringTemplateLines(stringTemplate: KtStringTemplateExpression, ctx: KotlinFileContext) {
+        if (stringTemplate.firstChild.text.startsWith("\"\"\"")) {
+            if (stringTemplate.numberOfLinesOfCode() > linesNumber) {
+                ctx.reportIssue(stringTemplate, MESSAGE)
             }
         }
     }

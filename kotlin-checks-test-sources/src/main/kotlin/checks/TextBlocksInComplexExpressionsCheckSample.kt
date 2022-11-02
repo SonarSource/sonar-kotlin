@@ -4,10 +4,111 @@ class TextBlocksInComplexExpressionsCheckSample {
 
     val listOfStrings = listOf("1", "2", "3")
 
+    fun test5() {
+        listOfStrings
+            .map ({ str ->
+                listOfStrings.forEach{
+                    foo( // Noncompliant@+1
+                        """<parent>
+                        <anothertag>
+                            <groupId>com.mycompany.app</groupId>
+                            <artifactId>my-app</artifactId>
+                          </parent>
+                          <tag>
+                          <test>"""
+                    )
+                }
+                foo( // Noncompliant@+1
+                        """<parent>
+                        <anothertag>
+                            <groupId>com.mycompany.app</groupId>
+                            <artifactId>my-app</artifactId>
+                          </parent>
+                          <tag>
+                          <test>"""
+                    )
+            })
+    }
 
-    fun test4(){
+    fun simpleLambda() {
+        listOfStrings.forEach {
 
-        // Compliant
+            println(  // Noncompliant@+1
+                """<parent>
+                        <anothertag>
+                            <groupId>com.mycompany.app</groupId>
+                            <artifactId>my-app</artifactId>
+                          </parent>
+                          <tag>
+                          <test>"""
+            )
+
+            listOf("test").forEach {
+                println(  // Noncompliant@+1
+                    """<parent>
+                        <anothertag>
+                            <groupId>com.mycompany.app</groupId>
+                            <artifactId>my-app</artifactId>
+                          </parent>
+                          <tag>
+                          <test>"""
+                )
+            }
+        }
+    }
+
+    var res = """<project>
+                          <parent>
+                            <groupId>com.mycompany.app</groupId>
+                            <artifactId>my-app</artifactId>
+                          </parent>"""
+
+
+    fun foo(str: String) {
+        str.split(":")
+    }
+
+
+    fun test4() {
+
+
+        listOfStrings
+            .map { str ->
+                str != res +
+                    """<parent>
+                        <anothertag>
+                            <groupId>com.mycompany.app</groupId>
+                            <artifactId>my-app</artifactId>
+                          </parent>""" +
+                    res +
+                    """
+                        test me"""
+            }
+
+
+        listOfStrings
+            .map { str ->
+                str != res +
+                    """<parent>
+                        <anothertag>
+                            <groupId>com.mycompany.app</groupId>
+                            <artifactId>my-app</artifactId>
+                          </parent>"""
+            }
+
+
+        listOfStrings
+            .map { str ->
+                str != res + // Noncompliant@+1
+                    """<parent>
+                        <anothertag>
+                        </anothertag>
+                            <groupId>com.mycompany.app</groupId>
+                            <artifactId>my-app</artifactId>
+                          </parent>"""
+            }
+
+
         listOfStrings
             .map { str ->
                 str != """<project>
@@ -21,6 +122,27 @@ class TextBlocksInComplexExpressionsCheckSample {
                           </parent>"""
             }
 
+
+        listOfStrings
+            .map { str -> // Noncompliant@+1 {{Move this text block out of the lambda body and refactor it to a local variable or a static final field.}}
+                str != """
+                        <project>
+                          <modelVersion>4.0.0</modelVersion>
+                          <parent>
+                            <groupId>com.mycompany.app</groupId>
+                            <artifactId>my-app</artifactId>
+                            <version>1</version>
+                          </parent>
+                
+                          <groupId>com.mycompany.app</groupId>
+                          <artifactId>my-module</artifactId>
+                          <version>1</version>
+                        </project>
+                        """
+            }
+
+
+
         listOfStrings.map { str ->
             var b = "not using multiline string literal"
             var c = "this should not raise and issue"
@@ -31,9 +153,9 @@ class TextBlocksInComplexExpressionsCheckSample {
         }
     }
 
-    // Noncompliant@+3
-    fun test3(){
-        listOfStrings.map {str ->
+
+    fun test3() {
+        listOfStrings.map { str -> // Noncompliant@+1
             var b = !"""
                         <projectB>
                           <modelVersion>B</modelVersion>
@@ -50,8 +172,8 @@ class TextBlocksInComplexExpressionsCheckSample {
                     """.equals(str)
             println("ABC")
 
-            // Noncompliant@+2
-            var c = !
+
+            var c = ! // Noncompliant@+1
             """
                         <projectC>
                           <modelVersion>C</modelVersion>
@@ -72,26 +194,7 @@ class TextBlocksInComplexExpressionsCheckSample {
     }
 
     fun test() {
-        // Noncompliant@+3 {{Move this text block out of the lambda body and refactor it to a local variable or a static final field.}}
-        listOfStrings
-            .map { str ->
-                str != """
-                        <project>
-                          <modelVersion>4.0.0</modelVersion>
-                          <parent>
-                            <groupId>com.mycompany.app</groupId>
-                            <artifactId>my-app</artifactId>
-                            <version>1</version>
-                          </parent>
-                
-                          <groupId>com.mycompany.app</groupId>
-                          <artifactId>my-module</artifactId>
-                          <version>1</version>
-                        </project>
-                        """
-            }
 
-        // Compliant@+3
         listOfStrings
             .map { str ->
                 str != """<project>
@@ -100,8 +203,6 @@ class TextBlocksInComplexExpressionsCheckSample {
                             <artifactId>my-app</artifactId>
                           </parent>"""
             }
-
-
     }
 
     var myTextBlock = """
@@ -119,13 +220,13 @@ class TextBlocksInComplexExpressionsCheckSample {
                         </project>
                     """
 
-    fun test2(){
-        listOfStrings.map {
-            str -> !myTextBlock.equals(str) // Compliant
+    fun test2() {
+        listOfStrings.map { str ->
+            !myTextBlock.equals(str) // Compliant
         }
 
-        listOfStrings.map {
-            str -> "ABC\\nABC\\nABC\\nABC\\nABC\\nABC" // Compliant
+        listOfStrings.map { str ->
+            "ABC\\nABC\\nABC\\nABC\\nABC\\nABC" // Compliant
         }
 
     }
