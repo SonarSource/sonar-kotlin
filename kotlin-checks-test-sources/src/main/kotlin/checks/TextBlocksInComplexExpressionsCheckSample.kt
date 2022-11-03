@@ -2,6 +2,16 @@ package checks
 
 class TextBlocksInComplexExpressionsCheckSample {
 
+    val increment = { list: List<String> -> println("""
+        this multi
+        line string
+        should not 
+        raise an issue
+        because the lambda is not
+        a parameter
+    """.trimIndent()) }
+
+
     val listOfStrings = listOf("1", "2", "3")
 
     fun test5() {
