@@ -504,8 +504,20 @@
     "constantDebtMinutes": 0
   },
   {
-    "key": "trailing-comma",
-    "name": "Trailing Comma",
+    "key": "trailing-comma-on-call-site",
+    "name": "Trailing Comma On Call Site",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "trailing-comma-on-declaration-site",
+    "name": "Trailing Comma On Declaration Site",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",

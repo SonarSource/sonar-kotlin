@@ -36,7 +36,7 @@ class KtlintRulesDefinitionTest {
         assertThat(repository.name()).isEqualTo("ktlint")
         assertThat(repository.language()).isEqualTo("kotlin")
         assertThat(repository.isExternal).isTrue
-        assertThat(repository.rules().size).isEqualTo(61)
+        assertThat(repository.rules().size).isEqualTo(62)
         val modifierOrder = repository.rule("modifier-order")!!
         assertThat(modifierOrder).isNotNull
         assertThat(modifierOrder.name()).isEqualTo("Modifier Order")
