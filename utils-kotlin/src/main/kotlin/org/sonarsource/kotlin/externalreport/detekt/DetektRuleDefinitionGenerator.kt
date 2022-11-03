@@ -26,9 +26,9 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
-import org.apache.commons.text.StringEscapeUtils
 import org.sonarsource.kotlin.externalreport.ExternalReporting
 import org.sonarsource.kotlin.externalreport.ExternalRule
+import org.sonarsource.kotlin.externalreport.common.Translator
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
@@ -98,7 +98,7 @@ internal object DetektRuleDefinitionGenerator {
                 name = pascalCaseToTitle(rule.ruleId),
                 type = "CODE_SMELL",
                 severity = SEVERITY_TRANSLATIONS_MAP.getOrDefault(rule.issue.severity, "MINOR"),
-                description = StringEscapeUtils.escapeHtml4(rule.issue.description),
+                description = Translator.escapeHtml4(rule.issue.description),
                 url = ruleDocumentation(rule),
                 tags = setOf(rule.issue.severity.name.lowercase()),
                 constantDebtMinutes = rule.issue.debt.toString().replace("min", "").toLong(),

@@ -20,9 +20,9 @@
 package org.sonarsource.kotlin.externalreport.androidlint
 
 import com.google.gson.GsonBuilder
-import org.apache.commons.text.StringEscapeUtils
 import org.sonarsource.kotlin.externalreport.ExternalReporting
 import org.sonarsource.kotlin.externalreport.ExternalRule
+import org.sonarsource.kotlin.externalreport.common.Translator
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -182,7 +182,7 @@ private class AndroidLintHelp(androidLintHelpPath: Path) {
         html.append("<p>\n")
         var lastLineWasMoreInformation = false
         while (pos < lines.size && !isSection("=+|-+")) {
-            val line = StringEscapeUtils.escapeHtml4(lines[pos])
+            val line = Translator.escapeHtml4(lines[pos])
             if (line.isEmpty()) {
                 html.append(line).append("</p>\n<p>\n")
             } else if (lastLineWasMoreInformation && line.startsWith("http") && line.matches(NON_SPACES)) {
