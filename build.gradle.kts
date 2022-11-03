@@ -15,7 +15,6 @@ plugins {
 }
 
 val projectTitle: String by project
-val sonarLinksCi: String by project
 
 configure(subprojects.filter { it.name != "kotlin-checks-test-sources"}) {
     apply(plugin = "com.diffplug.spotless")
@@ -230,7 +229,7 @@ subprojects {
 
 sonarqube {
     properties {
-        property("sonar.links.ci", sonarLinksCi)
+        property("sonar.links.ci", "https://cirrus-ci.com/github/SonarSource/sonar-kotlin")
         property("sonar.projectName", projectTitle)
         property("sonar.links.scm", "https://github.com/SonarSource/sonar-kotlin")
         property("sonar.links.issue", "https://jira.sonarsource.com/browse/SONARKT")
