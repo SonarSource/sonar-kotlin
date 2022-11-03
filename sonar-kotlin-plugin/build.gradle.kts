@@ -7,42 +7,6 @@ import java.util.jar.JarInputStream
 plugins {
     id("com.github.johnrengelman.shadow") version "7.1.0"
     kotlin("jvm")
-    id("com.diffplug.spotless") version "6.0.4"
-}
-
-configure<com.diffplug.gradle.spotless.SpotlessExtension> {
-
-    lineEndings = com.diffplug.spotless.LineEnding.UNIX
-
-    fun SourceSet.findSourceFilesToTarget() = allJava.srcDirs.flatMap { srcDir ->
-        project.fileTree(srcDir).filter { file ->
-            file.name.endsWith(".kt") || (file.name.endsWith(".java") && file.name != "package-info.java")
-        }
-    }
-
-    kotlin {
-        // ktlint()
-        licenseHeaderFile(rootProject.file("LICENSE_HEADER")).updateYearWithLatest(true)
-
-        target(
-            project.sourceSets.main.get().findSourceFilesToTarget(),
-            project.sourceSets.test.get().findSourceFilesToTarget()
-        )
-    }
-    kotlinGradle {
-        target("*.gradle.kts")
-        ktlint()
-    }
-
-    format("misc") {
-        // define the files to apply `misc` to
-        target("*.gradle", "*.md", ".gitignore")
-
-        // define the steps to apply to those files
-        trimTrailingWhitespace()
-        indentWithSpaces()
-        endWithNewline()
-    }
 }
 
 dependencies {
@@ -80,8 +44,12 @@ test.dependsOn(project(":kotlin-checks-test-sources").tasks.named("build"))
 
 tasks.jar {
     manifest {
-        val displayVersion = if (project.property("buildNumber") == null) project.version else project.version.toString()
-            .substring(0, project.version.toString().lastIndexOf(".")) + " (build ${project.property("buildNumber")})"
+        val displayVersion = if (project.property("buildNumber") == null) {
+            project.version
+        } else {
+            project.version.toString()
+                .substring(0, project.version.toString().lastIndexOf(".")) + " (build ${project.property("buildNumber")})"
+        }
         val buildDate = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ").withZone(ZoneId.systemDefault()).format(Date().toInstant())
         attributes(
             mapOf(

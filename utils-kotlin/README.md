@@ -45,5 +45,5 @@ So for instance, if you want to visualize the AST for the file `Example.kt` do t
 dot -Tpng /tmp/ast.dot -o /tmp/ast.png
 ```
 
-Now open the file `/tmp/ast.png` with an image viewer of your choice. See the documentation of the `dot` tool to find various 
+Now open the file `/tmp/ast.png` with an image viewer of your choice. See the documentation of the `dot` tool to find various
 alternative output formats.
