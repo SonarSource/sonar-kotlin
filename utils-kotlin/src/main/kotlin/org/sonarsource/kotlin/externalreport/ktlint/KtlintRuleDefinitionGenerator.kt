@@ -52,10 +52,14 @@ fun main(vararg args: String?) {
 }
 
 fun generateRuleDefinitionsJson(): String {
-    val standardRules = StandardRuleSetProvider().get().map(::ktlintToExternalRule).also {
+    val standardRules = StandardRuleSetProvider().getRuleProviders().map {
+        ktlintToExternalRule(it.createNewRuleInstance())
+    }.also {
         println("Importing ${it.size} standard rules")
     }
-    val experimentalRules = ExperimentalRuleSetProvider().get().map(::ktlintToExternalRule).also {
+    val experimentalRules = ExperimentalRuleSetProvider().getRuleProviders().map {
+        ktlintToExternalRule(it.createNewRuleInstance())
+    }.also {
         println("Importing ${it.size} experimental rules")
     }
 
