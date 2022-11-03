@@ -31,7 +31,6 @@ configure(subprojects.filter { it.name != "kotlin-checks-test-sources"}) {
         }
 
         kotlin {
-            // ktlint()
             licenseHeaderFile(rootProject.file("LICENSE_HEADER")).updateYearWithLatest(true)
 
             target(
