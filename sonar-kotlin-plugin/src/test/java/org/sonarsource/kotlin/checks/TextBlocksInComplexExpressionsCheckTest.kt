@@ -22,13 +22,17 @@ package org.sonarsource.kotlin.checks
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 
-internal class TextBlocksInComplexExpressionsCheckTest : CheckTest(TextBlocksInComplexExpressionsCheck())
+internal class TextBlocksInComplexExpressionsCheckTest : CheckTest(TextBlocksInComplexExpressionsCheck()) {
 
-@Test
-fun test() {
-    val check = TextBlocksInComplexExpressionsCheck()
-    check.linesNumber = 1
-    KotlinVerifier(check) {
-        fileName = "TextBlocksInComplexExpressionsCheckSampleSingleLines.kt"
-    }.verify()
+    @Test
+    fun `custom linesNumber rule property is effectively enforced`() {
+        val check = TextBlocksInComplexExpressionsCheck()
+        check.linesNumber = 1
+        KotlinVerifier(check) {
+            fileName = "TextBlocksInComplexExpressionsCheckSampleSingleLines.kt"
+        }.verify()
+    }
+
 }
+
+
