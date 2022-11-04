@@ -34,7 +34,7 @@ internal class KotlinCodeVerifierTest {
         assertThat(KotlinCodeVerifier.containsCode(" ")).isFalse
         assertThat(KotlinCodeVerifier.containsCode(" continue ")).isFalse
         assertThat(KotlinCodeVerifier.containsCode("description for foo(\"hello world\")")).isFalse
-        assertThat(KotlinCodeVerifier.containsCode("foo(\"hello world\")")).isFalse // FN
+        assertThat(KotlinCodeVerifier.containsCode("foo(\"hello world\")")).isTrue
         assertThat(KotlinCodeVerifier.containsCode("foo.rs")).isFalse
 
         // containing some keywords or operations
@@ -70,6 +70,19 @@ internal class KotlinCodeVerifierTest {
             )
         ).isFalse
 
+        // Short code
+        assertThat(KotlinCodeVerifier.containsCode("            ctx.stopLoop()")).isTrue
+
+        // more complex string expression
+        assertThat(KotlinCodeVerifier.containsCode("""println("${'$'}foo says ${'$'}bar")""")).isTrue
+
+        // long sentence with a little bit that looks like code
+        assertThat(
+            KotlinCodeVerifier.containsCode(
+                "only unlocked states only soft locked states only those soft locked states specified by lock id(s) all unlocked " +
+                        "states plus those soft locked states specified by lock id(s)"
+            )
+        ).isFalse
     }
 
     @Test

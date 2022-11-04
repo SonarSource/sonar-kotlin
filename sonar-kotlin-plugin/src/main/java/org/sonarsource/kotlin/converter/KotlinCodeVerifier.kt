@@ -19,8 +19,23 @@
  */
 package org.sonarsource.kotlin.converter
 
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
+import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
+import org.jetbrains.kotlin.psi.KtCollectionLiteralExpression
+import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtIsExpression
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
+import org.jetbrains.kotlin.psi.KtParenthesizedExpression
+import org.jetbrains.kotlin.psi.KtPostfixExpression
+import org.jetbrains.kotlin.psi.KtPrefixExpression
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.sonarsource.analyzer.commons.recognizers.CamelCaseDetector
 import org.sonarsource.analyzer.commons.recognizers.CodeRecognizer
@@ -53,7 +68,7 @@ object KotlinCodeVerifier {
     )
 
     fun containsCode(content: String): Boolean {
-        val words = content.trim().split(Regex("\\w+")).filter { it.isNotBlank() }.size
+        val words = content.trim().split(Regex("\\w+")).filter { it.isNotBlank() }.sumOf { it.trim().length }
         return words > 2 && !isKDoc(content) && codeRecognizer.isLineOfCode(content) && parsingIsSuccessful(content)
     }
 
@@ -61,12 +76,25 @@ object KotlinCodeVerifier {
         val wrappedContent = "fun function () { $content }"
         val ktFile = environment.ktPsiFactory.createFile(wrappedContent)
 
-        ktFile.findDescendantOfType<PsiErrorElement>() == null
+        ktFile.findDescendantOfType<PsiErrorElement>() == null && !isNonCodeParsedAsCode(ktFile)
     } catch (e: Exception) {
         false
     }
 
     private fun isKDoc(content: String) = KDOC_TAGS.any { content.lowercase().contains(it) }
+
+    // Filter natural language sentences parsed without errors
+    private fun isNonCodeParsedAsCode(tree: PsiFile) =
+        tree.lastChild.lastChild.children.let { elements ->
+            elements.all { isInfixNotation(it) }
+        }
+
+    // Kotlin supports infix function invocation like `1 shl 2` instead of `1.shl(2)`
+    // A regular three words sentence would be parsed as infix notation by Kotlin
+    private fun isInfixNotation(element: PsiElement) =
+        element is KtBinaryExpression && element.getChildren().let { binaryExprChildren ->
+            binaryExprChildren.size == 3 && binaryExprChildren[1] is KtOperationReferenceExpression
+        }
 }
 
 private object KotlinFootprint : LanguageFootprint {
@@ -102,7 +130,7 @@ private object KotlinFootprint : LanguageFootprint {
 
     private val detectors = setOf(
         EndWithDetector(0.95, '}', '{'),
-        KeywordsDetector(0.7, "++", "||", "&&", "+=", "){", "${'$'}{"),
+        KeywordsDetector(0.7, "++", "||", "&&", "+=", "){", "$", "(\"", "\")"),
         KeywordsDetector(0.3, *KOTLIN_KEYWORDS),
 
         ContainsDetector(0.95, *COMMON_KOTLIN_PATTERN_SNIPPETS),
@@ -110,10 +138,17 @@ private object KotlinFootprint : LanguageFootprint {
 
         RegexDetector(
             0.95,
-            Regex("""\{\s*+\w++\s*+->"""),
-            Regex("""[\s{(]it\.[a-zA-Z]"""),
-            Regex("""va[lr]\s++\w++\s*+="""),
-            Regex("""\w++\([^\s,)]++[,)]"""),
+            Regex("""\{\s*+\w++\s*+->"""), // matches lamdbas: { foo ->
+            Regex("""[\s{(]it\.[a-zA-Z]"""), // matches calls on 'it' in blocks or as args: { it.foo
+            Regex("""va[lr]\s++\w++\s*+="""), // matches val/var declarations: val foo =
+
+            // matches function calls with & without string as first arg:
+            // foo("foo bar")
+            // foo("foo bar",
+            // foo(bar)
+            // foo(bar,
+            // Will (try to) not match sentences with parentheses, e.g. hello(this is a sentence) with some incorrect formatting
+            Regex("""\w++\(([^\s,)]++|"[^"]*+")[,)]"""),
         ),
     )
 
