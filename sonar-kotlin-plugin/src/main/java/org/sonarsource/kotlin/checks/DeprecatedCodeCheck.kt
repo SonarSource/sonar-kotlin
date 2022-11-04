@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.annotatedElement
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 @Rule(key = "S1133")
@@ -52,9 +53,3 @@ private fun KtAnnotationEntry.elementToReport(): PsiElement =
         is KtNamedDeclaration -> annotated.nameIdentifier ?: this
         else -> this
     }
-
-private fun KtAnnotationEntry.annotatedElement(): PsiElement {
-    var annotated = parent
-    while (annotated !is KtAnnotated) annotated = annotated.parent
-    return annotated
-}
