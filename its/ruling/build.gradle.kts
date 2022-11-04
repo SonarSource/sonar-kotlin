@@ -1,6 +1,6 @@
 plugins {
-  // include kotlin in the source main classpath exported bellow as "gradle.main.compile.classpath"
-  kotlin("jvm")
+    // include kotlin in the source main classpath exported bellow as "gradle.main.compile.classpath"
+    kotlin("jvm")
 }
 
 dependencies {
@@ -17,6 +17,6 @@ tasks.test {
     }
     systemProperty("java.awt.headless", "true")
     // export a classpath containing kotlin standard dependencies
-    systemProperty( "gradle.main.compile.classpath", sourceSets.main.get().compileClasspath.asPath)
+    systemProperty("gradle.main.compile.classpath", sourceSets.main.get().compileClasspath.asPath)
     outputs.upToDateWhen { false }
 }

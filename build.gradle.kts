@@ -1,4 +1,4 @@
-import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
+
 import org.sonarsource.kotlin.buildsrc.tasks.CreateRuleStubsTask
 import org.sonarsource.kotlin.buildsrc.tasks.FetchRuleMetadata
 
@@ -9,12 +9,51 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE" apply false
     id("org.sonarqube") version "3.3"
     id("org.jetbrains.kotlin.jvm") apply false
+    id("com.diffplug.spotless") version "6.11.0"
     `maven-publish`
     signing
 }
 
 val projectTitle: String by project
 val sonarLinksCi: String by project
+
+configure(subprojects.filter { it.name != "kotlin-checks-test-sources"}) {
+    apply(plugin = "com.diffplug.spotless")
+
+    configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+
+        lineEndings = com.diffplug.spotless.LineEnding.UNIX
+
+        fun SourceSet.findSourceFilesToTarget() = allJava.srcDirs.flatMap { srcDir ->
+            project.fileTree(srcDir).filter { file ->
+                file.name.endsWith(".kt") || (file.name.endsWith(".java") && file.name != "package-info.java")
+            }
+        }
+
+        kotlin {
+            licenseHeaderFile(rootProject.file("LICENSE_HEADER")).updateYearWithLatest(true)
+
+            target(
+                project.sourceSets.main.get().findSourceFilesToTarget(),
+                project.sourceSets.test.get().findSourceFilesToTarget()
+            )
+        }
+        kotlinGradle {
+            target("*.gradle.kts")
+            ktlint()
+        }
+
+        format("misc") {
+            // define the files to apply `misc` to
+            target("*.gradle", "*.md", ".gitignore")
+
+            // define the steps to apply to those files
+            trimTrailingWhitespace()
+            indentWithSpaces()
+            endWithNewline()
+        }
+    }
+}
 
 allprojects {
     apply<JavaPlugin>()
@@ -220,25 +259,28 @@ artifactory {
             setPassword(System.getenv("ARTIFACTORY_DEPLOY_PASSWORD"))
         }
 
-        defaults(delegateClosureOf<groovy.lang.GroovyObject> {
-            setProperty(
-                "properties", mapOf(
-                    "build.name" to "sonar-kotlin",
-                    "build.number" to System.getenv("BUILD_NUMBER"),
-                    "pr.branch.target" to System.getenv("PULL_REQUEST_BRANCH_TARGET"),
-                    "pr.number" to System.getenv("PULL_REQUEST_NUMBER"),
-                    "vcs.branch" to System.getenv("GIT_BRANCH"),
-                    "vcs.revision" to System.getenv("GIT_COMMIT"),
-                    "version" to project.version as String,
+        defaults(
+            delegateClosureOf<groovy.lang.GroovyObject> {
+                setProperty(
+                    "properties",
+                    mapOf(
+                        "build.name" to "sonar-kotlin",
+                        "build.number" to System.getenv("BUILD_NUMBER"),
+                        "pr.branch.target" to System.getenv("PULL_REQUEST_BRANCH_TARGET"),
+                        "pr.number" to System.getenv("PULL_REQUEST_NUMBER"),
+                        "vcs.branch" to System.getenv("GIT_BRANCH"),
+                        "vcs.revision" to System.getenv("GIT_COMMIT"),
+                        "version" to project.version as String,
 
-                    "publishPom" to "true",
-                    "publishIvy" to "false"
+                        "publishPom" to "true",
+                        "publishIvy" to "false"
+                    )
                 )
-            )
-            invokeMethod("publications", "mavenJava")
-            setProperty("publishPom", true) // Publish generated POM files to Artifactory (true by default)
-            setProperty("publishIvy", false) // Publish generated Ivy descriptor files to Artifactory (true by default)
-        })
+                invokeMethod("publications", "mavenJava")
+                setProperty("publishPom", true) // Publish generated POM files to Artifactory (true by default)
+                setProperty("publishIvy", false) // Publish generated Ivy descriptor files to Artifactory (true by default)
+            }
+        )
     }
 }
 
