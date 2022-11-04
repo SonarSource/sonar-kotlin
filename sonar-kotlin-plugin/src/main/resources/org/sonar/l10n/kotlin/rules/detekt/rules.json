@@ -12,6 +12,18 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "AlsoCouldBeApply",
+    "name": "Also Could Be Apply",
+    "description": "When an `also` block contains only `it`-started expressions, simplify it to the `apply` block.",
+    "url": "https://detekt.github.io/detekt/style.html#alsocouldbeapply",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "ArrayPrimitive",
     "name": "Array Primitive",
     "description": "Using `Array\u0026lt;Primitive\u0026gt;` leads to implicit boxing and a performance hit.",
@@ -696,18 +708,6 @@
     "constantDebtMinutes": 10
   },
   {
-    "key": "ForbiddenPublicDataClass",
-    "name": "Forbidden Public Data Class",
-    "description": "The data classes are bad for the binary compatibility in public APIs. Avoid to use it.",
-    "url": "https://detekt.github.io/detekt/style.html#forbiddenpublicdataclass",
-    "tags": [
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "INFO",
-    "constantDebtMinutes": 20
-  },
-  {
     "key": "ForbiddenSuppress",
     "name": "Forbidden Suppress",
     "description": "Suppressing a rule which is forbidden in current configuration.",
@@ -982,30 +982,6 @@
     "constantDebtMinutes": 20
   },
   {
-    "key": "LibraryCodeMustSpecifyReturnType",
-    "name": "Library Code Must Specify Return Type",
-    "description": "Library functions/properties should have an explicit return type. Inferred return types can easily be changed by mistake which may lead to breaking changes.",
-    "url": "https://detekt.github.io/detekt/style.html#librarycodemustspecifyreturntype",
-    "tags": [
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "INFO",
-    "constantDebtMinutes": 5
-  },
-  {
-    "key": "LibraryEntitiesShouldNotBePublic",
-    "name": "Library Entities Should Not Be Public",
-    "description": "Library classes should not be public.",
-    "url": "https://detekt.github.io/detekt/style.html#libraryentitiesshouldnotbepublic",
-    "tags": [
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "INFO",
-    "constantDebtMinutes": 5
-  },
-  {
     "key": "LongMethod",
     "name": "Long Method",
     "description": "One method should have one responsibility. Long methods tend to handle many things at once. Prefer smaller methods to make them easier to understand.",
@@ -1202,6 +1178,18 @@
     "name": "Multiline Lambda It Parameter",
     "description": "Multiline lambdas should not use `it` as a parameter name.",
     "url": "https://detekt.github.io/detekt/style.html#multilinelambdaitparameter",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "MultilineRawStringIndentation",
+    "name": "Multiline Raw String Indentation",
+    "description": "The indentation of the raw String should be consistent",
+    "url": "https://detekt.github.io/detekt/style.html#multilinerawstringindentation",
     "tags": [
       "style"
     ],
@@ -1818,6 +1806,18 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "TrimMultilineRawString",
+    "name": "Trim Multiline Raw String",
+    "description": "Multiline raw strings should be followed by `trimMargin()` or `trimIndent()`.",
+    "url": "https://detekt.github.io/detekt/style.html#trimmultilinerawstring",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "UnconditionalJumpStatementInLoop",
     "name": "Unconditional Jump Statement In Loop",
     "description": "An unconditional jump statement in a loop is useless. The loop itself is only executed once.",
@@ -1880,7 +1880,7 @@
   {
     "key": "UnnecessaryAbstractClass",
     "name": "Unnecessary Abstract Class",
-    "description": "An abstract class is unnecessary and can be refactored. An abstract class should have both abstract and concrete properties or functions. An abstract class without a concrete member can be refactored to an interface. An abstract class without an abstract member can be refactored to a concrete class.",
+    "description": "An abstract class is unnecessary. May be refactored to an interface or to a concrete class.",
     "url": "https://detekt.github.io/detekt/style.html#unnecessaryabstractclass",
     "tags": [
       "style"
@@ -1974,6 +1974,18 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "UnnecessaryNotNullCheck",
+    "name": "Unnecessary Not Null Check",
+    "description": "Remove unnecessary not-null checks on non-null types.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unnecessarynotnullcheck",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "UnnecessaryNotNullOperator",
     "name": "Unnecessary Not Null Operator",
     "description": "Unnecessary not-null unary operator (!!) detected.",
@@ -1995,6 +2007,18 @@
     ],
     "type": "CODE_SMELL",
     "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnnecessaryPartOfBinaryExpression",
+    "name": "Unnecessary Part Of Binary Expression",
+    "description": "Detects duplicate condition into binary expression and recommends to remove unnecessary checks",
+    "url": "https://detekt.github.io/detekt/performance.html#unnecessarypartofbinaryexpression",
+    "tags": [
+      "performance"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
     "constantDebtMinutes": 5
   },
   {
@@ -2266,6 +2290,18 @@
     "name": "Use Require Not Null",
     "description": "Use requireNotNull() instead of require() for checking not-null.",
     "url": "https://detekt.github.io/detekt/style.html#userequirenotnull",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseSumOfInsteadOfFlatMapSize",
+    "name": "Use Sum Of Instead Of Flat Map Size",
+    "description": "Use `sumOf` instead of `flatMap` and `size/count` calls",
+    "url": "https://detekt.github.io/detekt/style.html#usesumofinsteadofflatmapsize",
     "tags": [
       "style"
     ],

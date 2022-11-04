@@ -36,7 +36,7 @@ internal class DetektRulesDefinitionTest {
         assertThat(repository!!.name()).isEqualTo("detekt")
         assertThat(repository.language()).isEqualTo("kotlin")
         assertThat(repository.isExternal).isTrue
-        assertThat(repository.rules().size).isEqualTo(200)
+        assertThat(repository.rules().size).isEqualTo(203)
 
         val classNaming = repository.rule("ClassNaming")
         assertThat(classNaming).isNotNull
