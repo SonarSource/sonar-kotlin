@@ -21,7 +21,6 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtClassBody
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.ArgumentMatcher
