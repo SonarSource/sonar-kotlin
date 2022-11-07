@@ -52,7 +52,6 @@ object KotlinCodeVerifier {
 
     private val KDOC_TAGS = listOf(
         "@param",
-        "@name",
         "@return",
         "@constructor",
         "@receiver",

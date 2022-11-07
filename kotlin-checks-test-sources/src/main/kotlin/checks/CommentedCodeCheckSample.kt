@@ -48,4 +48,13 @@ class CommentedCodeCheckSample {
 //    println("code")
 //    println("and")
 //    println("detected")
+
+    // Noncompliant@+2
+
+    //if (true) println()
+
+    // Compliant@+2 tihs is actually parsed as code - many nested infix notation expressions. But it is - obviously - not code.
+
+    // only unlocked states only soft locked states only those soft locked states specified by lock id(s) all unlocked
+    // states plus those soft locked states specified by lock id(s)
 }
