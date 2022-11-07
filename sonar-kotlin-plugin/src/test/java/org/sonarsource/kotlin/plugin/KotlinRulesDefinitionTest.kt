@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test
 import org.sonar.api.SonarEdition
 import org.sonar.api.SonarQubeSide
 import org.sonar.api.internal.SonarRuntimeImpl
+import org.sonar.api.rule.RuleScope
 import org.sonar.api.rules.RuleType
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonar.api.utils.Version
@@ -39,6 +40,7 @@ internal class KotlinRulesDefinitionTest {
         Assertions.assertThat(rule.name())
             .isEqualTo("Identical expressions should not be used on both sides of a binary operator")
         Assertions.assertThat(rule.type()).isEqualTo(RuleType.BUG)
+        Assertions.assertThat(rule.scope()).isEqualTo(RuleScope.ALL)
         Assertions.assertThat(rule.htmlDescription()).startsWith("<p>Using the same value on either side")
         val ruleWithConfig = repository.rule("S100")
         val param = ruleWithConfig!!.param("format")

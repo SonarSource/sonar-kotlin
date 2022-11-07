@@ -29,7 +29,7 @@ dependencyResolutionManagement {
     versionCatalogs {
 
         val kotlinVersion: String by extra
-        val analyzerCommonsVersionStr = "1.26.0.1029"
+        val analyzerCommonsVersionStr = "1.28.0.1058"
 
         create("libs") {
             val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
