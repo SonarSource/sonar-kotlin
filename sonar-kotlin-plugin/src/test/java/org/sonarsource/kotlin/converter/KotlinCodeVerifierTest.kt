@@ -19,44 +19,84 @@
  */
 package org.sonarsource.kotlin.converter
 
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 internal class KotlinCodeVerifierTest {
-    private val kotlinCodeVerifier = KotlinCodeVerifier()
     @Test
     fun testContainsCode() {
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("This is a normal sentence: definitely not code")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("this is a normal comment")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("just three words")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("SNAPSHOT")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode(" ")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode(" continue ")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("description for foo(\"hello world\")")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("foo(\"hello world\")")).isTrue
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("foo.rs")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("This is a normal sentence: definitely not code")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("this is a normal comment")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("just three words")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("SNAPSHOT")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode(" ")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode(" continue ")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("description for foo(\"hello world\")")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("foo(\"hello world\")")).isTrue
+        assertThat(KotlinCodeVerifier.containsCode("foo.rs")).isFalse
 
         // containing some keywords or operations
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("this is a + b")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("The user name is empty")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("exposed as public")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode(" --- check")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("Loops --- ")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode(
-            "Generic Query tests (combining both FungibleState and LinearState contract types)")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("\"E0308 cyclic type of infinite size\"")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("(just remove it)")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("this is a + b")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("The user name is empty")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("exposed as public")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode(" --- check")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("Loops --- ")).isFalse
+        assertThat(
+            KotlinCodeVerifier.containsCode(
+                "Generic Query tests (combining both FungibleState and LinearState contract types)"
+            )
+        ).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("\"E0308 cyclic type of infinite size\"")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("(just remove it)")).isFalse
 
         // infix
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("1 shl 2")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("1 shl foo")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("1 shl 2")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("1 shl foo")).isFalse
 
         // kdoc tags
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("* @return foo(bar)")).isFalse
-        Assertions.assertThat(kotlinCodeVerifier.containsCode("only unlocked states")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("* @return foo(bar)")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode("only unlocked states")).isFalse
 
         // numeral literals
-        Assertions.assertThat(kotlinCodeVerifier.containsCode(" 0\n 1")).isFalse
+        assertThat(KotlinCodeVerifier.containsCode(" 0\n 1")).isFalse
+
+        // Code within text comments is not counted, as it is probably used for explanation purposes
+        assertThat(KotlinCodeVerifier.containsCode("if (foo) { doSomething() } else { somethingElse }")).isTrue
+        assertThat(
+            KotlinCodeVerifier.containsCode(
+                "An if-else statement is written as follows: if (foo) { doSomething() } else { somethingElse }"
+            )
+        ).isFalse
+
+        // Short code
+        assertThat(KotlinCodeVerifier.containsCode("            ctx.stopLoop()")).isTrue
+
+        // more complex string expression
+        assertThat(KotlinCodeVerifier.containsCode("""println("${'$'}foo says ${'$'}bar")""")).isTrue
+
+        // long sentence with a little bit that looks like code
+        assertThat(
+            KotlinCodeVerifier.containsCode(
+                "only unlocked states only soft locked states only those soft locked states specified by lock id(s) all unlocked " +
+                        "states plus those soft locked states specified by lock id(s)"
+            )
+        ).isFalse
     }
+
+    @Test
+    fun `parsing error returns false`() {
+        assertThat(KotlinCodeVerifier.containsCode("if (foo) { doSomething() } else { somethingElse } }")).isFalse
+    }
+
+    @Test
+    fun `constructs that may be used in natural language are only parsed as code if someone is writing a very strange comment`() {
+        assertThat(
+            KotlinCodeVerifier.containsCode(
+                """"public abstract class. return throw private. internal enum continue assert. Float super true false object companion """"
+            )
+        ).isTrue // Okay FP
+    }
+
+
 }

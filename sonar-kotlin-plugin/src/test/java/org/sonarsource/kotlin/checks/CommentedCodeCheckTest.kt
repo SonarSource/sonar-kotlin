@@ -19,5 +19,5 @@
  */
 package org.sonarsource.kotlin.checks
 
-@org.junit.jupiter.api.Disabled
+//@org.junit.jupiter.api.Disabled
 class CommentedCodeCheckTest : CheckTest(CommentedCodeCheck())

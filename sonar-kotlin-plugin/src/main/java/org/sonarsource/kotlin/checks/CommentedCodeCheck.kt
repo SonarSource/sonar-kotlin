@@ -35,17 +35,14 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 @Rule(key = "S125")
 class CommentedCodeCheck : AbstractCheck() {
 
-/*
+
     override fun visitKtFile(file: KtFile, kotlinFileContext: KotlinFileContext) {
         val groupedComments = mutableListOf<MutableList<PsiComment>>()
         var currentGroup = mutableListOf<PsiComment>()
         groupedComments.add(currentGroup)
         file.accept(object : KtTreeVisitorVoid() {
             /** Note that [visitComment] not called for [org.jetbrains.kotlin.kdoc.psi.api.KDoc] */
-            override fun visitElement(element: PsiElement) {
-                super.visitElement(element)
-                if (element !is PsiComment) return
-                if (element.tokenType == KtTokens.DOC_COMMENT) return
+            override fun visitComment(element: PsiComment) {
                 if (currentGroup.isNotEmpty() && !areAdjacent(currentGroup.last(), element)) {
                     currentGroup = mutableListOf()
                     groupedComments.add(currentGroup)
@@ -54,12 +51,13 @@ class CommentedCodeCheck : AbstractCheck() {
             }
         })
 
-        val codeVerifier = KotlinCodeVerifier()
         groupedComments.forEach { comments ->
-            val content = comments.joinToString("\n") { it.getContent() }
-            if (codeVerifier.containsCode(content)) {
-                val textRanges = comments.map { kotlinFileContext.textRange(it) }
-                kotlinFileContext.reportIssue(kotlinFileContext.merge(textRanges), "Remove this commented out code.")
+            if (file.firstChild !in comments) {
+                val content = comments.joinToString("\n") { it.getContent() }
+                if (KotlinCodeVerifier.containsCode(content)) {
+                    val textRanges = comments.map { kotlinFileContext.textRange(it) }
+                    kotlinFileContext.reportIssue(kotlinFileContext.merge(textRanges), "Remove this commented out code.")
+                }
             }
         }
     }
@@ -68,6 +66,4 @@ class CommentedCodeCheck : AbstractCheck() {
         val document = c1.containingFile.viewProvider.document!!
         return document.getLineNumber(c1.textRange.startOffset) + 1 == document.getLineNumber(c2.textRange.startOffset)
     }
-*/
-
 }

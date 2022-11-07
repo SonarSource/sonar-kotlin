@@ -1,0 +1,8 @@
+{
+'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/intentions/IfLetToMatchIntention.kt':[
+51,
+],
+'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/template/RsContextType.kt':[
+63,
+],
+}
