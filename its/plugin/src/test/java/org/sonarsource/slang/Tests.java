@@ -28,7 +28,6 @@ import java.io.File;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import org.apache.commons.lang.StringUtils;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -67,7 +66,7 @@ public class Tests {
     LANGUAGES.forEach(language -> {
       Location pluginLocation;
       String plugin = "sonar-" + language +"-plugin";
-      if (StringUtils.isEmpty(slangVersion)) {
+      if (slangVersion == null || slangVersion.isEmpty()) {
         // use the plugin that was built on local machine
         pluginLocation = FileLocation.byWildcardMavenFilename(new File("../../" + plugin + "/build/libs"), plugin + "-*-all.jar");
       } else {

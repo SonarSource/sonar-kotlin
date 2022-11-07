@@ -37,7 +37,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.apache.commons.lang.StringUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -82,7 +81,7 @@ public class SlangRulingTest {
     LANGUAGES.forEach(language -> {
       Location pluginLocation;
       String plugin = "sonar-" + language +"-plugin";
-      if (StringUtils.isEmpty(slangVersion)) {
+      if (slangVersion == null || slangVersion.isEmpty()) {
         // use the plugin that was built on local machine
         pluginLocation = FileLocation.byWildcardMavenFilename(new File("../../" + plugin + "/build/libs"), plugin + "-*-all.jar");
       } else {
