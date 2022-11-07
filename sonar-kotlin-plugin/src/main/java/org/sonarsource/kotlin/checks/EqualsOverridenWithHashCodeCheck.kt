@@ -1,0 +1,66 @@
+/*
+ * SonarSource Kotlin
+ * Copyright (C) 2018-2022 SonarSource SA
+ * mailto:info AT sonarsource DOT com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+package org.sonarsource.kotlin.checks
+
+import org.jetbrains.kotlin.psi.KtClassBody
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.types.typeUtil.TypeNullability
+import org.sonar.check.Rule
+import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.ArgumentMatcher
+import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.plugin.KotlinFileContext
+
+@Rule(key = "S1206")
+class EqualsOverridenWithHashCodeCheck : AbstractCheck() {
+
+    val HASHCODE_METHOD_NAME = "hashCode"
+    val EQUALS_METHOD_NAME = "equals"
+    val MESSAGE = """This class overrides "%s()" and should therefore also override "%s()".""";
+
+    val equalsMatcher = FunMatcher {
+        name = EQUALS_METHOD_NAME
+        withArguments(ArgumentMatcher.ANY)
+    }
+    val hashCodeMatcher = FunMatcher {
+        name = HASHCODE_METHOD_NAME
+        withNoArguments()
+    }
+
+    override fun visitClassBody(klass: KtClassBody, ctx: KotlinFileContext) {
+        var equalsMethod: KtNamedFunction? = null
+        var hashCodeMethod: KtNamedFunction? = null
+
+        klass.functions.forEach {
+            when {
+                hashCodeMatcher.matches(it, ctx.bindingContext) -> hashCodeMethod = it
+                equalsMatcher.matches(it, ctx.bindingContext) -> equalsMethod = it
+            }
+        }
+
+        if (equalsMethod != null && hashCodeMethod == null) {
+            ctx.reportIssue(equalsMethod!!, String.format(MESSAGE, EQUALS_METHOD_NAME, HASHCODE_METHOD_NAME))
+        } else if (hashCodeMethod != null && equalsMethod == null) {
+            ctx.reportIssue(hashCodeMethod!!, String.format(MESSAGE, HASHCODE_METHOD_NAME, EQUALS_METHOD_NAME))
+        }
+    }
+
+
+}
