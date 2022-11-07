@@ -35,9 +35,8 @@ internal class KotlinRulesDefinitionTest {
         val repository = repositoryForVersion(Version.create(8, 9))
         Assertions.assertThat(repository!!.name()).isEqualTo("SonarQube")
         Assertions.assertThat(repository.language()).isEqualTo("kotlin")
-        val rule = repository.rule("S1764")
-        Assertions.assertThat(rule).isNotNull
-        Assertions.assertThat(rule!!.name())
+        val rule = repository.rule("S1764")!!
+        Assertions.assertThat(rule.name())
             .isEqualTo("Identical expressions should not be used on both sides of a binary operator")
         Assertions.assertThat(rule.type()).isEqualTo(RuleType.BUG)
         Assertions.assertThat(rule.htmlDescription()).startsWith("<p>Using the same value on either side")
@@ -49,17 +48,23 @@ internal class KotlinRulesDefinitionTest {
     @Test
     fun owaspSecurityStandard2021() {
         val repository: RulesDefinition.Repository? = repositoryForVersion(Version.create(9, 3))
-        val rule = repository?.rule("S1313")
-        Assertions.assertThat(rule).isNotNull
-        Assertions.assertThat(rule!!.securityStandards()).containsExactlyInAnyOrder("owaspTop10:a3", "owaspTop10-2021:a1")
+        val rule = repository?.rule("S1313")!!
+        Assertions.assertThat(rule.securityStandards()).containsExactlyInAnyOrder("owaspTop10:a3", "owaspTop10-2021:a1")
     }
 
     @Test
     fun owaspSecurityStandard() {
         val repository: RulesDefinition.Repository? = repositoryForVersion(Version.create(8, 9))
-        val rule = repository?.rule("S1313")
-        Assertions.assertThat(rule).isNotNull
-        Assertions.assertThat(rule!!.securityStandards()).containsExactly("owaspTop10:a3")
+        val rule = repository?.rule("S1313")!!
+        Assertions.assertThat(rule.securityStandards()).containsExactly("owaspTop10:a3")
+    }
+
+    @Test
+    fun pciDssSecurityStandard() {
+        val repository: RulesDefinition.Repository? = repositoryForVersion(Version.create(9, 9))
+        val rule = repository?.rule("S6288")!!
+        Assertions.assertThat(rule.securityStandards())
+            .containsExactly("cwe:522", "owaspAsvs-4.0:2.10.3", "owaspTop10-2021:a4", "pciDss-3.2:6.5.8", "pciDss-4.0:6.2.4")
     }
 
     private fun repositoryForVersion(version: Version): RulesDefinition.Repository? {
