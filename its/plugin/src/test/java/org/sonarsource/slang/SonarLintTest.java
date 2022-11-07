@@ -33,7 +33,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -120,7 +119,7 @@ public class SonarLintTest {
 
   private ClientInputFile prepareInputFile(String relativePath, String content, final boolean isTest, String language) throws IOException {
     File file = new File(baseDir, relativePath);
-    FileUtils.write(file, content, StandardCharsets.UTF_8);
+    Files.writeString(file.toPath(), content, StandardCharsets.UTF_8);
     return createInputFile(file.toPath(), isTest, language);
   }
 
