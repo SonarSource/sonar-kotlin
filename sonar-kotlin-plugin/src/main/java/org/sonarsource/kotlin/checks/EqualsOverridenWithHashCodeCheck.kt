@@ -24,12 +24,13 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.ArgumentMatcher
+import org.sonarsource.kotlin.api.EQUALS_METHOD_NAME
 import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.HASHCODE_METHOD_NAME
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private const val HASHCODE_METHOD_NAME = "hashCode"
-private const val EQUALS_METHOD_NAME = "equals"
-private const val MESSAGE = """This class overrides "%s()" and should therefore also override "%s()".""";
+private const val EQUALS_MESSAGE = """This class overrides "equals()" and should therefore also override "hashCode()".""";
+private const val HASHCODE_MESSAGE = """This class overrides "hashCode()" and should therefore also override "equals()".""";
 
 private val equalsMatcher = FunMatcher {
     name = EQUALS_METHOD_NAME
@@ -49,15 +50,16 @@ class EqualsOverridenWithHashCodeCheck : AbstractCheck() {
 
         klass.functions.forEach {
             when {
-                hashCodeMatcher.matches(it, ctx.bindingContext) -> hashCodeMethod = it
-                equalsMatcher.matches(it, ctx.bindingContext) -> equalsMethod = it
+                hashCodeMethod == null && hashCodeMatcher.matches(it, ctx.bindingContext) -> hashCodeMethod = it
+                equalsMethod == null && equalsMatcher.matches(it, ctx.bindingContext) -> equalsMethod = it
             }
+            if( hashCodeMethod != null && equalsMethod != null ) return@forEach
         }
 
         if (equalsMethod != null && hashCodeMethod == null) {
-            ctx.reportIssue(equalsMethod!!, String.format(MESSAGE, EQUALS_METHOD_NAME, HASHCODE_METHOD_NAME))
+            ctx.reportIssue(equalsMethod!!, EQUALS_MESSAGE)
         } else if (hashCodeMethod != null && equalsMethod == null) {
-            ctx.reportIssue(hashCodeMethod!!, String.format(MESSAGE, HASHCODE_METHOD_NAME, EQUALS_METHOD_NAME))
+            ctx.reportIssue(hashCodeMethod!!, HASHCODE_MESSAGE)
         }
     }
 
