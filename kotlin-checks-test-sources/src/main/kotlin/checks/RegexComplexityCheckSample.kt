@@ -14,6 +14,7 @@ class RegexComplexityCheckSample {
 
     // Noncompliant@+1 {{Simplify this regular expression to reduce its complexity from 95 to the 20 allowed.}}
     private val email_regexp = Regex("((((a|b)|(c|d))+|((e|f)|(g|h))+)+|(((h|i)|(j|j))+|((k|l)|(m|n))+)+)")
+    //                               ^
     // Noncompliant@+1 {{Simplify this regular expression to reduce its complexity from 95 to the 20 allowed.}}
     private val email_regexp_tq = Regex("""((((a|b)|(c|d))+|((e|f)|(g|h))+)+|(((h|i)|(j|j))+|((k|l)|(m|n))+)+)""")
 
