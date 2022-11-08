@@ -84,7 +84,7 @@ class TextRangeTracker private constructor(
     tailrec fun textRangesBetween(startIndex: Int, endIndex: Int, acc: MutableList<TextRange> = mutableListOf()): Collection<TextRange> {
         if (startIndex >= endIndex) return emptyList()
 
-        val (startRangeIndex, start) = rangeAtIndex(startIndex)
+        val (startRangeIndex, start) = if (startIndex < 0) rangeAtIndex(0) else rangeAtIndex(startIndex)
         val startOffset: Int = startIndex - startRangeIndex
         val (endRangeIndex, end) = if (endIndex > 0) rangeBeforeIndex(endIndex) else startRangeIndex to start
         val endOffset: Int = endIndex - endRangeIndex
