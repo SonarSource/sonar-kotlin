@@ -27,21 +27,21 @@ import org.sonarsource.kotlin.api.ArgumentMatcher
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
+private const val HASHCODE_METHOD_NAME = "hashCode"
+private const val EQUALS_METHOD_NAME = "equals"
+private const val MESSAGE = """This class overrides "%s()" and should therefore also override "%s()".""";
+
+private val equalsMatcher = FunMatcher {
+    name = EQUALS_METHOD_NAME
+    withArguments(ArgumentMatcher.ANY)
+}
+private val hashCodeMatcher = FunMatcher {
+    name = HASHCODE_METHOD_NAME
+    withNoArguments()
+}
+
 @Rule(key = "S1206")
 class EqualsOverridenWithHashCodeCheck : AbstractCheck() {
-
-    val HASHCODE_METHOD_NAME = "hashCode"
-    val EQUALS_METHOD_NAME = "equals"
-    val MESSAGE = """This class overrides "%s()" and should therefore also override "%s()".""";
-
-    val equalsMatcher = FunMatcher {
-        name = EQUALS_METHOD_NAME
-        withArguments(ArgumentMatcher.ANY)
-    }
-    val hashCodeMatcher = FunMatcher {
-        name = HASHCODE_METHOD_NAME
-        withNoArguments()
-    }
 
     override fun visitClassBody(klass: KtClassBody, ctx: KotlinFileContext) {
         var equalsMethod: KtNamedFunction? = null
@@ -60,6 +60,5 @@ class EqualsOverridenWithHashCodeCheck : AbstractCheck() {
             ctx.reportIssue(hashCodeMethod!!, String.format(MESSAGE, HASHCODE_METHOD_NAME, EQUALS_METHOD_NAME))
         }
     }
-
 
 }
