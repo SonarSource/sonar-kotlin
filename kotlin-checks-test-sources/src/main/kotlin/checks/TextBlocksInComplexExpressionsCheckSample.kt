@@ -2,6 +2,18 @@ package checks
 
 class TextBlocksInComplexExpressionsCheckSample {
 
+    fun exceptions(){
+        listOfStrings.forEach{
+                        """<parent>
+                        <anothertag>
+                            <groupId>com.mycompany.app</groupId>
+                            <artifactId>my-app</artifactId>
+                          </parent>
+                          <tag>
+                          <test>"""
+        }
+    }
+
     val increment = { list: List<String> -> println("""
         this multi
         line string
@@ -41,6 +53,7 @@ class TextBlocksInComplexExpressionsCheckSample {
     }
 
     fun simpleLambda() {
+
         listOfStrings.forEach {
 
             println(  // Noncompliant@+1

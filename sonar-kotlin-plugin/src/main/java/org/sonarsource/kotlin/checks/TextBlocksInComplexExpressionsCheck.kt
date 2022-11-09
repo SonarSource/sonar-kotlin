@@ -49,12 +49,17 @@ class TextBlocksInComplexExpressionsCheck : AbstractCheck() {
             expression.forEachDescendantOfType<KtStringTemplateExpression>(
                 canGoInside = { elem -> elem !is KtLambdaExpression || elem === expression })
             { stringTemplate ->
-                evaluateStringTemplateLines(stringTemplate, ctx)
+                evaluateStringTemplateLines(stringTemplate, expression, ctx)
             }
         }
     }
 
-    private fun evaluateStringTemplateLines(stringTemplate: KtStringTemplateExpression, ctx: KotlinFileContext) {
+    private fun evaluateStringTemplateLines(
+        stringTemplate: KtStringTemplateExpression,
+        lambda: KtLambdaExpression,
+        ctx: KotlinFileContext,
+    ) {
+        if (lambda.bodyExpression?.children?.size == 1 && lambda.bodyExpression == stringTemplate.parent) return
         if (stringTemplate.firstChild.text.startsWith("\"\"\"") && stringTemplate.numberOfLinesOfCode() > linesNumber) {
             ctx.reportIssue(stringTemplate, MESSAGE)
         }
