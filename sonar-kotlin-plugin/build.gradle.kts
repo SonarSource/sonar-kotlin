@@ -40,6 +40,13 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
 }
 
+tasks.withType<Javadoc> {
+    options {
+        this as StandardJavadocDocletOptions
+        addStringOption("tag", "javax.annotation.ParametersAreNonnullByDefault:ParametersAreNonnullByDefault")
+    }
+}
+
 val test: Test by tasks
 test.dependsOn(project(":kotlin-checks-test-sources").tasks.named("build"))
 
