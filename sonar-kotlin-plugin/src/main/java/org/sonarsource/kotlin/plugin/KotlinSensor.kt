@@ -87,15 +87,21 @@ class KotlinSensor(
             fileSystem.predicates().hasType(InputFile.Type.MAIN)
         )
 
-        val inputFiles = fileSystem.inputFiles(mainFilePredicate)
-        val filenames = inputFiles.map { it.toString() }
+        var totalFiles = 0
+        val changedFiles = fileSystem.inputFiles(mainFilePredicate)
+            .filter {
+                totalFiles++; it.status() != InputFile.Status.SAME
+            }
+        val filenames = changedFiles.map { it.toString() }
+
+        LOG.info("About to analyze ${changedFiles.size} changed files out of ${totalFiles}.")
 
         val progressReport = ProgressReport("Progress of the ${language.name} analysis", TimeUnit.SECONDS.toMillis(10))
 
         var success = false
 
         try {
-            success = analyseFiles(sensorContext, inputFiles, progressReport, visitors(sensorContext), filenames)
+            success = analyseFiles(sensorContext, changedFiles, progressReport, visitors(sensorContext), filenames)
         } finally {
             if (success) {
                 progressReport.stop()

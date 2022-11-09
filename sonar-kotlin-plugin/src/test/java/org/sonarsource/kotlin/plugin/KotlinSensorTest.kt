@@ -34,6 +34,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
+import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.CheckFactory
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.highlighting.TypeOfText
@@ -457,6 +458,60 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             .containsExactly("${KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY} needs to be set to an integer value. Could not interpret 'foo' as integer.")
         assertThat(logTester.logs(LoggerLevel.DEBUG))
             .contains("Using the default amount of threads")
+    }
+
+    @Test
+    fun `the sensor distinguishes between changed and unchanged files`() {
+        logTester.setLevel(LoggerLevel.DEBUG)
+        val changedFile = createInputFile(
+            "changed.kt",
+            """
+            fun main(args: Array<String>) {
+                print (1 == 1);
+            }
+            """.trimIndent(),
+            status=InputFile.Status.CHANGED
+        )
+        context.fileSystem().add(changedFile)
+        val unchangedFile = createInputFile(
+            "unchanged.kt",
+            """
+            fun isIdentical(input: Int): Boolean = input == input
+            """.trimIndent(),
+            status=InputFile.Status.SAME
+        )
+        context.fileSystem().add(unchangedFile)
+        val addedFile = createInputFile(
+            "added.kt",
+            """
+            fun isAlsoIdentical(input: Int): Boolean = input == input
+            """.trimIndent(),
+            status=InputFile.Status.ADDED
+        )
+        context.fileSystem().add(addedFile)
+
+        val checkFactory = checkFactory("S1764")
+        sensor(checkFactory).execute(context)
+        val issueIterator = context.allIssues().iterator()
+        val firstIssue = issueIterator.next()
+        val secondIssue = issueIterator.next()
+        assertThrows<NoSuchElementException>("There should be no more than 2 issues from this analysis") {
+            issueIterator.next()
+        }
+        assertThat(firstIssue.ruleKey().rule()).isEqualTo("S1764")
+        assertThat(secondIssue.ruleKey().rule()).isEqualTo("S1764")
+        val locationOfFirstIssue = firstIssue.primaryLocation()
+        assertThat(locationOfFirstIssue.inputComponent()).isEqualTo(changedFile)
+        assertThat(locationOfFirstIssue.message())
+            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
+
+        val locationOfSecondIssue = secondIssue.primaryLocation()
+        assertThat(locationOfSecondIssue.inputComponent()).isEqualTo(addedFile)
+        assertThat(locationOfSecondIssue.message())
+            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
+
+        assertThat(logTester.logs())
+            .contains("About to analyze 2 changed files out of 3.")
     }
 
     private fun sensor(checkFactory: CheckFactory): KotlinSensor {
