@@ -54,7 +54,7 @@ import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
 import org.sonarsource.performance.measure.PerformanceMeasure
 import java.util.concurrent.TimeUnit
-import kotlin.jvm.optionals.getOrDefault
+import kotlin.jvm.optionals.getOrElse
 import kotlin.time.ExperimentalTime
 
 private val LOG = Loggers.get(KotlinSensor::class.java)
@@ -121,10 +121,12 @@ class KotlinSensor(
 
     @OptIn(ExperimentalStdlibApi::class)
     private fun canSkipUnchangedFiles(sensorContext: SensorContext): Boolean {
-        return try {
-            sensorContext.canSkipUnchangedFiles()
-        } catch (_: AbstractMethodError) {
-            sensorContext.config().getBoolean("sonar.kotlin.canSkipUnchangedFiles").getOrDefault(false)
+        return sensorContext.config().getBoolean("sonar.kotlin.canSkipUnchangedFiles").getOrElse {
+            try {
+                sensorContext.canSkipUnchangedFiles()
+            } catch (_: AbstractMethodError) {
+                false
+            }
         }
     }
 

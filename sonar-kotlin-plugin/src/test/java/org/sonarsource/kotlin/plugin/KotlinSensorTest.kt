@@ -460,35 +460,14 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             .contains("Using the default amount of threads")
     }
 
+
     @Test
     fun `the kotlin sensor optimizes analyses in contexts where it can skip unchanged files`() {
         logTester.setLevel(LoggerLevel.DEBUG)
-        val changedFile = createInputFile(
-            "changed.kt",
-            """
-            fun main(args: Array<String>) {
-                print (1 == 1);
-            }
-            """.trimIndent(),
-            status=InputFile.Status.CHANGED
-        )
-        context.fileSystem().add(changedFile)
-        val unchangedFile = createInputFile(
-            "unchanged.kt",
-            """
-            fun isIdentical(input: Int): Boolean = input == input
-            """.trimIndent(),
-            status=InputFile.Status.SAME
-        )
-        context.fileSystem().add(unchangedFile)
-        val addedFile = createInputFile(
-            "added.kt",
-            """
-            fun isAlsoIdentical(input: Int): Boolean = input == input
-            """.trimIndent(),
-            status=InputFile.Status.ADDED
-        )
-        context.fileSystem().add(addedFile)
+        val files = incrementalAnalysisFileSet()
+        val addedFile = files[InputFile.Status.ADDED]
+        val changedFile = files[InputFile.Status.CHANGED]
+        files.values.forEach { context.fileSystem().add(it) }
 
         // Enable analysis property canSkipUnchangedFiles
         context.settings().setProperty("sonar.kotlin.canSkipUnchangedFiles", "true")
@@ -519,34 +498,15 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     @Test
-    fun `the kotlin sensor does not optimize analyses in contexts where it cannot skip unchanged files`() {
-        logTester.setLevel(LoggerLevel.DEBUG)
-        val changedFile = createInputFile(
-            "changed.kt",
-            """
-            fun main(args: Array<String>) {
-                print (1 == 1);
-            }
-            """.trimIndent(),
-            status=InputFile.Status.CHANGED
-        )
-        context.fileSystem().add(changedFile)
-        val addedFile = createInputFile(
-            "added.kt",
-            """
-            fun isAlsoIdentical(input: Int): Boolean = input == input
-            """.trimIndent(),
-            status=InputFile.Status.ADDED
-        )
-        context.fileSystem().add(addedFile)
-        val unchangedFile = createInputFile(
-            "unchanged.kt",
-            """
-            fun isIdentical(input: Int): Boolean = input == input
-            """.trimIndent(),
-            status=InputFile.Status.SAME
-        )
-        context.fileSystem().add(unchangedFile)
+    fun `the kotlin sensor does not optimize analyses in contexts when the analysis parameter is not set and canSkipUnchangedFiles is not implemented`() {
+        val files = incrementalAnalysisFileSet()
+        val addedFile = files[InputFile.Status.ADDED]
+        val changedFile = files[InputFile.Status.CHANGED]
+        val unchangedFile = files[InputFile.Status.SAME]
+        files.values.forEach { context.fileSystem().add(it) }
+
+        // Explicitly prevent the skipping of unchanged files
+        context.settings().setProperty("sonar.kotlin.canSkipUnchangedFiles", "false")
 
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
@@ -579,6 +539,78 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertThat(logTester.logs())
             .doesNotContain("The Kotlin analyzer is working in a context where it can skip unchanged files.")
     }
+
+    @Test
+    fun `the kotlin sensor does not optimize analyses in contexts when sonar-kotlin-canSkipUnchangedFiles is explicitly set to false`() {
+        val files = incrementalAnalysisFileSet()
+        val addedFile = files[InputFile.Status.ADDED]
+        val changedFile = files[InputFile.Status.CHANGED]
+        val unchangedFile = files[InputFile.Status.SAME]
+        files.values.forEach { context.fileSystem().add(it) }
+
+        val checkFactory = checkFactory("S1764")
+        sensor(checkFactory).execute(context)
+        val issueIterator = context.allIssues().iterator()
+        val firstIssue = issueIterator.next()
+        val secondIssue = issueIterator.next()
+        val thirdIssue = issueIterator.next()
+        assertThrows<NoSuchElementException>("There should be no more than 2 issues from this analysis") {
+            issueIterator.next()
+        }
+        assertThat(firstIssue.ruleKey().rule()).isEqualTo("S1764")
+        assertThat(secondIssue.ruleKey().rule()).isEqualTo("S1764")
+        assertThat(thirdIssue.ruleKey().rule()).isEqualTo("S1764")
+
+        val locationOfFirstIssue = firstIssue.primaryLocation()
+        assertThat(locationOfFirstIssue.inputComponent()).isEqualTo(changedFile)
+        assertThat(locationOfFirstIssue.message())
+            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
+
+        val locationOfSecondIssue = secondIssue.primaryLocation()
+        assertThat(locationOfSecondIssue.inputComponent()).isEqualTo(addedFile)
+        assertThat(locationOfSecondIssue.message())
+            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
+
+        val locationOfThirdIssue = thirdIssue.primaryLocation()
+        assertThat(locationOfThirdIssue.inputComponent()).isEqualTo(unchangedFile)
+        assertThat(locationOfThirdIssue.message())
+            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
+
+        assertThat(logTester.logs())
+            .doesNotContain("The Kotlin analyzer is working in a context where it can skip unchanged files.")
+    }
+
+    private fun incrementalAnalysisFileSet(): Map<InputFile.Status, InputFile> {
+        val changedFile = createInputFile(
+            "changed.kt",
+            """
+        fun main(args: Array<String>) {
+            print (1 == 1);
+        }
+        """.trimIndent(),
+            status=InputFile.Status.CHANGED
+        )
+        val addedFile = createInputFile(
+            "added.kt",
+            """
+        fun isAlsoIdentical(input: Int): Boolean = input == input
+        """.trimIndent(),
+            status=InputFile.Status.ADDED
+        )
+        val unchangedFile = createInputFile(
+            "unchanged.kt",
+            """
+        fun isIdentical(input: Int): Boolean = input == input
+        """.trimIndent(),
+            status=InputFile.Status.SAME
+        )
+        return mapOf(
+            InputFile.Status.ADDED to addedFile,
+            InputFile.Status.CHANGED to changedFile,
+            InputFile.Status.SAME to unchangedFile,
+        )
+    }
+
 
     private fun sensor(checkFactory: CheckFactory): KotlinSensor {
         return KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language())
