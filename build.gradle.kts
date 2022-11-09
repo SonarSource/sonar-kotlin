@@ -23,23 +23,44 @@ configure(subprojects.filter { it.name != "kotlin-checks-test-sources"}) {
 
         lineEndings = com.diffplug.spotless.LineEnding.UNIX
 
-        fun SourceSet.findSourceFilesToTarget() = allJava.srcDirs.flatMap { srcDir ->
+        fun SourceSet.findJavaFilesToTarget() = allJava.srcDirs.flatMap { srcDir ->
             project.fileTree(srcDir).filter { file ->
-                file.name.endsWith(".kt") || (file.name.endsWith(".java") && file.name != "package-info.java")
+                file.name.endsWith(".java") && file.name != "package-info.java"
+            }
+        }
+
+        fun SourceSet.findKotlinFilesToTarget() = allJava.srcDirs.flatMap { srcDir ->
+            project.fileTree(srcDir).filter { file ->
+                file.name.endsWith(".kt")
             }
         }
 
         kotlin {
             licenseHeaderFile(rootProject.file("LICENSE_HEADER")).updateYearWithLatest(true)
 
+            ktlint()
+
             target(
-                project.sourceSets.main.get().findSourceFilesToTarget(),
-                project.sourceSets.test.get().findSourceFilesToTarget()
+                project.sourceSets.main.get().findKotlinFilesToTarget().also {
+                    println(it)
+                                                                             },
+                project.sourceSets.test.get().findKotlinFilesToTarget().also {
+                    println(it)
+                }
             )
         }
         kotlinGradle {
             target("*.gradle.kts")
             ktlint()
+        }
+
+        java {
+            licenseHeaderFile(rootProject.file("LICENSE_HEADER")).updateYearWithLatest(true)
+
+            target(
+                project.sourceSets.main.get().findJavaFilesToTarget(),
+                project.sourceSets.test.get().findJavaFilesToTarget()
+            )
         }
 
         format("misc") {
