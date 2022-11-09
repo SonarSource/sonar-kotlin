@@ -461,7 +461,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     @Test
-    fun `the sensor distinguishes between changed and unchanged files`() {
+    fun `the kotlin sensor optimizes analyses in contexts where it can skip unchanged files`() {
         logTester.setLevel(LoggerLevel.DEBUG)
         val changedFile = createInputFile(
             "changed.kt",
@@ -490,6 +490,9 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         )
         context.fileSystem().add(addedFile)
 
+        // Enable analysis property canSkipUnchangedFiles
+        context.settings().setProperty("sonar.kotlin.canSkipUnchangedFiles", "true")
+
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
         val issueIterator = context.allIssues().iterator()
@@ -511,7 +514,70 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
 
         assertThat(logTester.logs())
-            .contains("About to analyze 2 changed files out of 3.")
+            .contains("The Kotlin analyzer is working in a context where it can skip unchanged files.")
+            .contains("The Kotlin analyzer will analyze 2 out of 3 files.")
+    }
+
+    @Test
+    fun `the kotlin sensor does not optimize analyses in contexts where it cannot skip unchanged files`() {
+        logTester.setLevel(LoggerLevel.DEBUG)
+        val changedFile = createInputFile(
+            "changed.kt",
+            """
+            fun main(args: Array<String>) {
+                print (1 == 1);
+            }
+            """.trimIndent(),
+            status=InputFile.Status.CHANGED
+        )
+        context.fileSystem().add(changedFile)
+        val addedFile = createInputFile(
+            "added.kt",
+            """
+            fun isAlsoIdentical(input: Int): Boolean = input == input
+            """.trimIndent(),
+            status=InputFile.Status.ADDED
+        )
+        context.fileSystem().add(addedFile)
+        val unchangedFile = createInputFile(
+            "unchanged.kt",
+            """
+            fun isIdentical(input: Int): Boolean = input == input
+            """.trimIndent(),
+            status=InputFile.Status.SAME
+        )
+        context.fileSystem().add(unchangedFile)
+
+        val checkFactory = checkFactory("S1764")
+        sensor(checkFactory).execute(context)
+        val issueIterator = context.allIssues().iterator()
+        val firstIssue = issueIterator.next()
+        val secondIssue = issueIterator.next()
+        val thirdIssue = issueIterator.next()
+        assertThrows<NoSuchElementException>("There should be no more than 2 issues from this analysis") {
+            issueIterator.next()
+        }
+        assertThat(firstIssue.ruleKey().rule()).isEqualTo("S1764")
+        assertThat(secondIssue.ruleKey().rule()).isEqualTo("S1764")
+        assertThat(thirdIssue.ruleKey().rule()).isEqualTo("S1764")
+
+        val locationOfFirstIssue = firstIssue.primaryLocation()
+        assertThat(locationOfFirstIssue.inputComponent()).isEqualTo(changedFile)
+        assertThat(locationOfFirstIssue.message())
+            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
+
+        val locationOfSecondIssue = secondIssue.primaryLocation()
+        assertThat(locationOfSecondIssue.inputComponent()).isEqualTo(addedFile)
+        assertThat(locationOfSecondIssue.message())
+            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
+
+        val locationOfThirdIssue = thirdIssue.primaryLocation()
+        assertThat(locationOfThirdIssue.inputComponent()).isEqualTo(unchangedFile)
+        assertThat(locationOfThirdIssue.message())
+            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
+
+        assertThat(logTester.logs())
+            .doesNotContain("The Kotlin analyzer is working in a context where it can skip unchanged files.")
     }
 
     private fun sensor(checkFactory: CheckFactory): KotlinSensor {

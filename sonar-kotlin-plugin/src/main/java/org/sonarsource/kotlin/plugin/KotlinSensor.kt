@@ -54,6 +54,7 @@ import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
 import org.sonarsource.performance.measure.PerformanceMeasure
 import java.util.concurrent.TimeUnit
+import kotlin.jvm.optionals.getOrDefault
 import kotlin.time.ExperimentalTime
 
 private val LOG = Loggers.get(KotlinSensor::class.java)
@@ -87,21 +88,27 @@ class KotlinSensor(
             fileSystem.predicates().hasType(InputFile.Type.MAIN)
         )
 
-        var totalFiles = 0
-        val changedFiles = fileSystem.inputFiles(mainFilePredicate)
-            .filter {
-                totalFiles++; it.status() != InputFile.Status.SAME
-            }
-        val filenames = changedFiles.map { it.toString() }
+        val files = if (canSkipUnchangedFiles(sensorContext)) {
+            LOG.info("The Kotlin analyzer is working in a context where it can skip unchanged files.")
+            var totalFiles = 0
+            val changedFiles = fileSystem.inputFiles(mainFilePredicate)
+                .filter {
+                    totalFiles++; it.status() != InputFile.Status.SAME
+                }
+            LOG.info("The Kotlin analyzer will analyze ${changedFiles.size} out of $totalFiles files.")
+            changedFiles
+        } else {
+            fileSystem.inputFiles(mainFilePredicate)
+        }
 
-        LOG.info("About to analyze ${changedFiles.size} changed files out of ${totalFiles}.")
+        val filenames = files.map { it.toString() }
 
         val progressReport = ProgressReport("Progress of the ${language.name} analysis", TimeUnit.SECONDS.toMillis(10))
 
         var success = false
 
         try {
-            success = analyseFiles(sensorContext, changedFiles, progressReport, visitors(sensorContext), filenames)
+            success = analyseFiles(sensorContext, files, progressReport, visitors(sensorContext), filenames)
         } finally {
             if (success) {
                 progressReport.stop()
@@ -110,6 +117,15 @@ class KotlinSensor(
             }
         }
         sensorDuration?.stop()
+    }
+
+    @OptIn(ExperimentalStdlibApi::class)
+    private fun canSkipUnchangedFiles(sensorContext: SensorContext): Boolean {
+        return try {
+            sensorContext.canSkipUnchangedFiles()
+        } catch (_: AbstractMethodError) {
+            sensorContext.config().getBoolean("sonar.kotlin.canSkipUnchangedFiles").getOrDefault(false)
+        }
     }
 
     private fun analyseFiles(
@@ -205,7 +221,10 @@ class KotlinSensor(
                 inputFileContext.reportAnalysisError(e.message, null)
                 LOG.error("Cannot analyse '${inputFileContext.inputFile}' with '$visitorId': ${e.message}", e)
                 if (sensorContext.config().getBoolean(FAIL_FAST_PROPERTY_NAME).orElse(false)) {
-                    throw IllegalStateException("Exception in '$visitorId' while analyzing '${inputFileContext.inputFile}'", e)
+                    throw IllegalStateException(
+                        "Exception in '$visitorId' while analyzing '${inputFileContext.inputFile}'",
+                        e
+                    )
                 }
             }
         }
