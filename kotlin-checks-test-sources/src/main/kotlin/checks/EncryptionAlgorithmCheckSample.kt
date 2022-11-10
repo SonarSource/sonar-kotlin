@@ -7,7 +7,8 @@ import javax.crypto.Cipher
 
 internal abstract class EncryptionAlgorithmCheckSample {
     fun foo(props: Properties) {
-        Cipher.getInstance("AES/GCM/NoPadding") // Compliant
+        // Compliant
+        Cipher.getInstance("AES/GCM/NoPadding")
         /*
     should complain:
     - everytime ECB mode is used whatever the encryption algorithm
@@ -28,19 +29,19 @@ internal abstract class EncryptionAlgorithmCheckSample {
 
         // Second case
         Cipher.getInstance("AES/CBC/PKCS5Padding") // Noncompliant {{Use another cipher mode or disable padding.}}
-        Cipher.getInstance("Blowfish/CBC/PKCS5Padding") // Noncompliant {{Use another cipher mode or disable padding.}}
-        Cipher.getInstance("DES/CBC/PKCS5Padding") // Noncompliant {{Use another cipher mode or disable padding.}}
-        Cipher.getInstance("AES/CBC/PKCS7Padding") // Noncompliant {{Use another cipher mode or disable padding.}}
-        Cipher.getInstance("Blowfish/CBC/PKCS7Padding") // Noncompliant {{Use another cipher mode or disable padding.}}
-        Cipher.getInstance("DES/CBC/PKCS7Padding") // Noncompliant {{Use another cipher mode or disable padding.}}
+        Cipher.getInstance("Blowfish/CBC/PKCS5Padding") // Noncompliant
+        Cipher.getInstance("DES/CBC/PKCS5Padding") // Noncompliant
+        Cipher.getInstance("AES/CBC/PKCS7Padding") // Noncompliant
+        Cipher.getInstance("Blowfish/CBC/PKCS7Padding") // Noncompliant
+        Cipher.getInstance("DES/CBC/PKCS7Padding") // Noncompliant
         Cipher.getInstance("DES/CBC/NoPadding") // Compliant - CBC considered as safe
         Cipher.getInstance("AES/GCM/NoPadding") // Compliant
         Cipher.getInstance("Blowfish/GCM/NoPadding") // Compliant
 
         // Third case
         Cipher.getInstance("RSA/NONE/NoPadding") // Noncompliant {{Use a secure padding scheme.}}
-        Cipher.getInstance("RSA/GCM/NoPadding") // Noncompliant {{Use a secure padding scheme.}}
-        Cipher.getInstance("RSA/ECB/NoPadding") // Noncompliant {{Use a secure padding scheme.}}
+        Cipher.getInstance("RSA/GCM/NoPadding") // Noncompliant
+        Cipher.getInstance("RSA/ECB/NoPadding") // Noncompliant
 
         // SUN Security Provider (default for openjdk 11 for example) treats ECB as None
         Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding") // Compliant
