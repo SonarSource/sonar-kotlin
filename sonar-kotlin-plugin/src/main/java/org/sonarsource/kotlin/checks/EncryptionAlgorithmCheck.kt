@@ -50,7 +50,7 @@ class EncryptionAlgorithmCheck : CallAbstractCheck() {
         callExpression.valueArguments.firstOrNull()?.let { argument ->
             argument.getArgumentExpression()!!
                 .predictRuntimeStringValueWithSecondaries(bindingContext).let { (algorithm, secondaries) ->
-                    algorithm?.getAlgorithmSecurityIssues()?.let { errorMessage ->
+                    algorithm?.getInsecureAlgorithmMessage()?.let { errorMessage ->
                         val locations = secondaries.map { secondaryLocation ->
                             SecondaryLocation(kotlinFileContext.textRange(secondaryLocation), "Transformation definition")
                         }
@@ -61,7 +61,7 @@ class EncryptionAlgorithmCheck : CallAbstractCheck() {
     }
 }
 
-private fun String.getAlgorithmSecurityIssues(): String? {
+private fun String.getInsecureAlgorithmMessage(): String? {
     val matcher: MatchResult? = ALGORITHM_PATTERN.matchEntire(this)
     // First element is a full match
     matcher?.groupValues?.let { (_, algorithm, mode, padding) ->
