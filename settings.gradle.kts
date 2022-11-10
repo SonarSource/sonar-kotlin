@@ -49,7 +49,7 @@ dependencyResolutionManagement {
         }
 
         create("utilLibs") {
-            val detekt = version("detekt", "1.22.0-RC2")
+            val detekt = version("detekt", "1.22.0-RC3")
             val jcommander = version("jcommander", "1.81")
             val ktlint = version("ktlint", "0.47.1")
 
