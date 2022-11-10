@@ -90,7 +90,6 @@ import org.sonarsource.kotlin.checks.StrongCipherAlgorithmCheck
 import org.sonarsource.kotlin.checks.StructuredConcurrencyPrinciplesCheck
 import org.sonarsource.kotlin.checks.SuspendingFunCallerDispatcherCheck
 import org.sonarsource.kotlin.checks.TabsCheck
-import org.sonarsource.kotlin.checks.TextBlocksInComplexExpressionsCheck
 import org.sonarsource.kotlin.checks.TodoCommentCheck
 import org.sonarsource.kotlin.checks.TooComplexExpressionCheck
 import org.sonarsource.kotlin.checks.TooDeeplyNestedStatementsCheck
@@ -191,7 +190,6 @@ val KOTLIN_CHECKS = listOf(
     StructuredConcurrencyPrinciplesCheck::class.java,
     SuspendingFunCallerDispatcherCheck::class.java,
     TabsCheck::class.java,
-    TextBlocksInComplexExpressionsCheck::class.java,
     TodoCommentCheck::class.java,
     TooComplexExpressionCheck::class.java,
     TooDeeplyNestedStatementsCheck::class.java,
