@@ -30,7 +30,6 @@ import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private val ALGORITHM_PATTERN = Regex("([^/]+)/([^/]+)/([^/]+)")
-private const val MESSAGE = "Use secure mode and padding scheme."
 
 val CIPHER_GET_INSTANCE_MATCHER = FunMatcher {
     qualifier = "javax.crypto.Cipher"
@@ -51,27 +50,31 @@ class EncryptionAlgorithmCheck : CallAbstractCheck() {
         callExpression.valueArguments.firstOrNull()?.let { argument ->
             argument.getArgumentExpression()!!
                 .predictRuntimeStringValueWithSecondaries(bindingContext).let { (algorithm, secondaries) ->
-                    if (algorithm.isInsecure()) {
-                        val locations = secondaries.map {
-                            SecondaryLocation(kotlinFileContext.textRange(it), "Transformation definition")
+                    algorithm?.getInsecureAlgorithmMessage()?.let { errorMessage ->
+                        val locations = secondaries.map { secondaryLocation ->
+                            SecondaryLocation(kotlinFileContext.textRange(secondaryLocation), "Transformation definition")
                         }
-                        kotlinFileContext.reportIssue(argument, MESSAGE, locations)
+                        kotlinFileContext.reportIssue(argument, errorMessage, locations)
                     }
                 }
         }
     }
 }
 
-private fun String?.isInsecure(): Boolean {
-    if (this == null) return false
+private fun String.getInsecureAlgorithmMessage(): String? {
     val matcher: MatchResult? = ALGORITHM_PATTERN.matchEntire(this)
     // First element is a full match
     matcher?.groupValues?.let { (_, algorithm, mode, padding) ->
         val isRSA = "RSA".equals(algorithm, ignoreCase = true)
-        return if ("ECB".equals(mode, ignoreCase = true) && !isRSA) true
-        else if ("CBC".equals(mode, ignoreCase = true)) false
-        else isRSA && !padding.uppercase().startsWith("OAEP")
+        return if ("ECB".equals(mode, ignoreCase = true) && !isRSA)
+            "Use a secure cipher mode."
+        else if ("CBC".equals(mode, ignoreCase = true) && !"NoPadding".equals(padding, ignoreCase = true))
+            "Use another cipher mode or disable padding."
+        else if (isRSA && !padding.uppercase().startsWith("OAEP"))
+            "Use a secure padding scheme."
+        else
+            null
     }
     // By default, ECB is used.
-        ?: return true
+        ?: return "Use secure mode and padding scheme."
 }
