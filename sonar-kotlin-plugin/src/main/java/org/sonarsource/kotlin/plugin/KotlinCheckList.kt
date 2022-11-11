@@ -50,6 +50,7 @@ import org.sonarsource.kotlin.checks.EmptyLineRegexCheck
 import org.sonarsource.kotlin.checks.EmptyStringRepetitionCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
 import org.sonarsource.kotlin.checks.EqualsOverriddenWithArrayFieldCheck
+import org.sonarsource.kotlin.checks.EqualsOverridenWithHashCodeCheck
 import org.sonarsource.kotlin.checks.ExposedMutableFlowCheck
 import org.sonarsource.kotlin.checks.ExternalAndroidStorageAccessCheck
 import org.sonarsource.kotlin.checks.FileHeaderCheck
@@ -150,6 +151,7 @@ val KOTLIN_CHECKS = listOf(
     EmptyStringRepetitionCheck::class.java,
     EncryptionAlgorithmCheck::class.java,
     EqualsOverriddenWithArrayFieldCheck::class.java,
+    EqualsOverridenWithHashCodeCheck::class.java,
     ExposedMutableFlowCheck::class.java,
     ExternalAndroidStorageAccessCheck::class.java,
     FileHeaderCheck::class.java,

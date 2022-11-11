@@ -1,0 +1,40 @@
+<p>In Kotlin, you must override either both or neither of the <code>equals(Any?)</code> and <code>hashCode()</code> methods in order to keep the
+contract between the two:</p>
+<blockquote>
+  <ul>
+    <li> Whenever the <code>hashCode</code> method is invoked on the same object more than once, it must consistently return the same integer,
+    provided no information used in <code>equals</code> comparisons on the object is modified. </li>
+    <li> If two objects are equal according to the <code>equals</code> method, then calling the <code>hashCode</code> method on each of the two
+    objects must produce the same integer result. </li>
+  </ul>
+</blockquote>
+<p>By overriding only one of the two methods with a non-trivial implementation, this contract is almost certainly broken.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+class MyClass {    // Noncompliant - should also override "hashCode()"
+
+  override fun equals(other: Any?): Boolean {
+    /* ... */
+  }
+
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+class MyClass {    // Compliant
+
+  override fun equals(other: Any?): Boolean {
+    /* ... */
+  }
+
+  override fun hashCode(): Int {
+    /* ... */
+  }
+
+}
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html"><code>hashCode</code> - kotlinlang.org</a> </li>
+</ul>
+

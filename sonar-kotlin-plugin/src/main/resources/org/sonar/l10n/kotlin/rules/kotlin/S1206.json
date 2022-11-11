@@ -1,0 +1,22 @@
+{
+  "title": "\"equals(Any?)\" and \"hashCode()\" should be overridden in pairs",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "cwe"
+  ],
+  "defaultSeverity": "Minor",
+  "ruleSpecification": "RSPEC-1206",
+  "sqKey": "S1206",
+  "scope": "Main",
+  "securityStandards": {
+    "CWE": [
+      581
+    ]
+  },
+  "quickfix": "unknown"
+}
