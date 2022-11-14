@@ -68,6 +68,10 @@ abstract class AmbiguousParent {
     abstract override fun equals(other: Any?): Boolean
 }
 
+abstract class AmbiguousParent4 {
+    abstract override fun hashCode(): Int
+}
+
 abstract class AmbiguousParent2 {
     abstract override fun hashCode(): Int
 
