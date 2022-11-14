@@ -61,6 +61,31 @@ class EqualsOverridenWithHashCodeCheckSample {
         }
     }
 
+
 }
 
+abstract class AmbiguousParent {
+    abstract override fun equals(other: Any?): Boolean
+}
 
+abstract class AmbiguousParent4 {
+    abstract override fun hashCode(): Int
+}
+
+abstract class AmbiguousParent2 {
+    abstract override fun hashCode(): Int
+
+    override fun equals(other: Any?): Boolean {
+        return super.equals(other)
+    }
+}
+
+abstract class AmbiguousParent3 {
+
+    override fun hashCode(): Int { // Noncompliant
+        return super.hashCode()
+    }
+    fun equals(other: String?): Boolean {
+        return super.equals(other)
+    }
+}
