@@ -22,11 +22,12 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.psi.KtClassBody
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.sonar.check.Rule
+import org.sonarsource.kotlin.api.ANY_TYPE
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.api.ArgumentMatcher
 import org.sonarsource.kotlin.api.EQUALS_METHOD_NAME
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.HASHCODE_METHOD_NAME
+import org.sonarsource.kotlin.api.isAbstract
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private const val EQUALS_MESSAGE = """This class overrides "equals()" and should therefore also override "hashCode()".""";
@@ -34,7 +35,7 @@ private const val HASHCODE_MESSAGE = """This class overrides "hashCode()" and sh
 
 private val equalsMatcher = FunMatcher {
     name = EQUALS_METHOD_NAME
-    withArguments(ArgumentMatcher.ANY)
+    withArguments(ANY_TYPE)
 }
 private val hashCodeMatcher = FunMatcher {
     name = HASHCODE_METHOD_NAME
@@ -56,8 +57,12 @@ class EqualsOverridenWithHashCodeCheck : AbstractCheck() {
             if (hashCodeMethod != null && equalsMethod != null) return
         }
 
-        equalsMethod?.let { ctx.reportIssue(it, EQUALS_MESSAGE) }
-        hashCodeMethod?.let { ctx.reportIssue(it, HASHCODE_MESSAGE) }
+        equalsMethod?.let {
+            if (!it.isAbstract()) ctx.reportIssue(it, EQUALS_MESSAGE)   
+        }
+        hashCodeMethod?.let {
+            if (!it.isAbstract()) ctx.reportIssue(it, HASHCODE_MESSAGE)
+        }
     }
 
 }
