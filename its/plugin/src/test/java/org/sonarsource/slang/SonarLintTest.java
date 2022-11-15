@@ -64,6 +64,7 @@ public class SonarLintTest {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv();
     Tests.addLanguagePlugins(orchestratorBuilder);
     Orchestrator orchestrator = orchestratorBuilder
+      .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion(System.getProperty(Tests.SQ_VERSION_PROPERTY, Tests.DEFAULT_SQ_VERSION))
       .build();
 
