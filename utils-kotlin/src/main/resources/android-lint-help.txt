@@ -438,20 +438,6 @@ A motion scene file specifies the animations used in a MotionLayout. The
 layoutDescription is required to specify a valid motion scene file.
 
 
-MotionLayoutMissingId
----------------------
-Summary: Views inside MotionLayout require an android:id
-
-Priority: 8 / 10
-Severity: Error
-Category: Correctness
-Vendor: Android Open Source Project
-Contact: https://groups.google.com/g/lint-dev
-Feedback: https://issuetracker.google.com/issues/new?component=192708
-
-Views inside MotionLayout require an android:id.
-
-
 MotionSceneFileValidationError
 ------------------------------
 Summary: Validation errors in MotionScene files
@@ -2925,24 +2911,23 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-<intent-filter> <data> tags should only declare a single unique attribute
-(i.e. scheme OR host, but not both). This better matches the runtime behavior
-of intent filters, as they combine all of the declared data attributes into a
-single matcher which is allowed to handle any combination across attribute
-types.
 
-For example, the following two <intent-filter> declarations are the same:
+
+For example, the following two `<intent-filter>` declarations are the same:
+xml
 <intent-filter>
     <data android:scheme="http" android:host="example.com" />
     <data android:scheme="https" android:host="example.org" />
 </intent-filter>
 
+xml
 <intent-filter>
     <data android:scheme="http"/>
     <data android:scheme="https"/>
     <data android:host="example.com" />
     <data android:host="example.org" />
 </intent-filter>
+`
 
 They both handle all of the following:
 * http://example.com
@@ -3422,26 +3407,6 @@ allowed. The watch face will not be shown on the watch if it does not satisfy
 this requirement.
 
 
-WearableConfigurationAction
----------------------------
-Summary: Wear configuration action metadata must match an activity
-
-Priority: 5 / 10
-Severity: Warning
-Category: Correctness
-Vendor: Android Open Source Project
-Contact: https://groups.google.com/g/lint-dev
-Feedback: https://issuetracker.google.com/issues/new?component=192708
-
-If and only if a watch face service defines wearableConfigurationAction
-metadata, with the value WATCH_FACE_EDITOR, there should be an activity in the
-same package, which has an intent filter for WATCH_FACE_EDITOR (with
-com.google.android.wearable.watchface.category.WEARABLE_CONFIGURATION if
-minSdkVersion is less than 30).
-
-More information: 
-https://developer.android.com/training/wearables/watch-faces/configuration
-
 XmlEscapeNeeded
 ---------------
 Summary: Missing XML Escape
@@ -3562,9 +3527,11 @@ Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The Kotlin extension method File.endsWith(suffix) checks whole path
-components, not just string suffixes. This means that
-File("foo.txt").endsWith(".txt") will return false. Instead you might have
-intended file.path.endsWith or file.extension.equals.
+components,
+not just string suffixes. This means that File("foo.txt").endsWith(".txt")
+will return
+false. Instead you might have intended file.path.endsWith or
+file.extension.equals.
 
 
 GradleDependency
@@ -3760,28 +3727,11 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The <activity> element should be allowed to be resized to allow users to take
 advantage of the multi-window environments available on larger screen Android
-devices.
-
-To fix the issue, consider declaring the corresponding activity element with
-resizableActivity="true" attribute.
+devices.To fix the issue, consider declaring the corresponding activity
+element with resizableActivity="true" attribute.
 
 More information: 
 https://developer.android.com/topic/arc/window-management
-
-NotConstructor
---------------
-Summary: Not a Constructor
-
-Priority: 4 / 10
-Severity: Warning
-Category: Correctness
-Vendor: Android Open Source Project
-Contact: https://groups.google.com/g/lint-dev
-Feedback: https://issuetracker.google.com/issues/new?component=192708
-
-This check catches methods that look like they were intended to be
-constructors, but aren't.
-
 
 ObjectAnimatorBinding
 ---------------------
@@ -3853,13 +3803,14 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-The Activity should not be locked to a portrait orientation so that users can
-take advantage of the multi-window environments and larger landscape-first
-screens that Android runs on such as Chrome OS. To fix the issue, consider
-calling setRequestedOrientation with the
-ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR or
-ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED options or removing the call all
-together.
+The Activity should not be locked to a portrait orientation so that users
+can take advantage of the multi-window environments and larger landscape-first
+screens
+that Android runs on such as Chrome OS. To fix the issue, consider calling
+setRequestedOrientation with the ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
+or
+ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED options or removing the call
+all together.
 
 
 UnsupportedChromeOsCameraSystemFeature
@@ -3873,12 +3824,13 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-You should look for the FEATURE_CAMERA_ANY features to include all possible
-cameras that may be on the device. Looking for FEATURE_CAMERA only looks for a
-rear facing camera, which certain tablets or Chrome OS devices don't have, as
-well as newer device configurations and modes may place the device in a state
-where the rear camera is not available. To fix the issue, look for
-FEATURE_CAMERA_ANY instead.
+You should look for the FEATURE_CAMERA_ANY features to include all
+possible cameras that may be on the device. Looking for FEATURE_CAMERA
+only looks for a rear facing camera, which certain tablets or Chrome OS
+devices don't have, as well as newer device configurations and modes may place
+the
+device in a state where the rear camera is not available. To fix the issue,
+look for FEATURE_CAMERA_ANY instead.
 
 
 VisibleForTests
@@ -6116,26 +6068,6 @@ This check will also flag other potential reflection problems it encounters,
 such as a missing property, wrong argument types, etc.
 
 
-AssertionSideEffect
--------------------
-Summary: Assertions with Side Effects
-
-Priority: 4 / 10
-Severity: Warning
-Category: Performance
-Vendor: Android Open Source Project
-Contact: https://groups.google.com/g/lint-dev
-Feedback: https://issuetracker.google.com/issues/new?component=192708
-
-Assertion conditions can have side effects. This is risky because the behavior
-depends on whether assertions are on or off. This is usually not intentional,
-and can lead to bugs where the production version differs from the version
-tested during development.
-
-Generally, you'll want to perform the operation with the side effect before
-the assertion, and then assert that the result was what you expected.
-
-
 DuplicateDivider
 ----------------
 Summary: Unnecessary Divider Copy
@@ -7800,8 +7732,8 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable LambdaLast
 
-To improve calling this code from Kotlin, parameter types eligible for SAM
-conversion should be last.
+To improve calling this code from Kotlin,
+parameter types eligible for SAM conversion should be last.
 
 More information: 
 https://android.github.io/kotlin-guides/interop.html#lambda-parameters-last
@@ -7819,14 +7751,15 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable NoHardKeywords
 
-Do not use Kotlin’s hard keywords as the name of methods or fields. These
-require the use of backticks to escape when calling from Kotlin. Soft
-keywords, modifier keywords, and special identifiers are allowed.
+Do not use Kotlin’s hard keywords as the name of methods or fields.
+These require the use of backticks to escape when calling from Kotlin.
+Soft keywords, modifier keywords, and special identifiers are allowed.
 
 For example, Mockito’s when function requires backticks when used from
 Kotlin:
-val callable = Mockito.mock(Callable::class.java)
-Mockito.\`when\`(callable.call()).thenReturn(/* … */)
+
+    val callable = Mockito.mock(Callable::class.java)
+    Mockito.`when`(callable.call()).thenReturn(/* … */)
 
 More information: 
 https://android.github.io/kotlin-guides/interop.html#no-hard-keywords
@@ -7844,27 +7777,16 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable UnknownNullness
 
-To improve referencing this code from Kotlin, consider adding explicit
-nullness information here with either @NonNull or @Nullable.
+To improve referencing this code from Kotlin, consider adding
+explicit nullness information here with either @NonNull or @Nullable.
 
-Available options:
-
-ignore-deprecated (default is false):
-Whether to ignore classes and members that have been annotated with @Deprecated.
-
-Normally this lint check will flag all unannotated elements, but by setting this option to true it will skip any deprecated elements.
-
-To configure this option, use a lint.xml file with an <option> like this:
-
-<lint>
-    <issue id="UnknownNullness">
-        <option name="ignore-deprecated" value="false" />
-    </issue>
-</lint>
-
+You can set the environment variable
+    `ANDROID_LINT_NULLNESS_IGNORE_DEPRECATED=true`
+if you want lint to ignore classes and members that have been annotated with
+@Deprecated.
 
 More information: 
-https://developer.android.com/kotlin/interop#nullability_annotations
+https://android.github.io/kotlin-guides/interop.html#nullability-annotations
 
 Lint Implementation Issues
 ==========================
@@ -8099,22 +8021,5 @@ potentially other languages).
 
 There are UAST specific methods you need to call instead and lint will flag
 these.
-
-
-UastImplementation
-------------------
-Summary: Avoid using UAST implementation
-
-Priority: 4 / 10
-Severity: Warning
-Category: Lint Implementation Issues
-Vendor: Android Open Source Project
-Contact: https://groups.google.com/g/lint-dev
-Feedback: https://issuetracker.google.com/issues/new?component=192708
-
-Use UAST interface whenever possible, and do not rely on UAST implementation,
-which is subject to change. If language-specific information is needed, the
-next option is to use PSI directly (though these APIs are less stable and can
-depend on compiler internals, especially in the case of Kotlin).
 
 
