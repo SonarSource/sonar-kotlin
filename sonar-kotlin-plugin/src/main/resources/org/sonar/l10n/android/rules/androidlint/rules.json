@@ -228,18 +228,6 @@
     "constantDebtMinutes": 5
   },
   {
-    "key": "AssertionSideEffect",
-    "name": "Assertions with Side Effects",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nAssertion conditions can have side effects. This is risky because the behavior\ndepends on whether assertions are on or off. This is usually not intentional,\nand can lead to bugs where the production version differs from the version\ntested during development.\n</p>\n<p>\nGenerally, you'll want to perform the operation with the side effect before\nthe assertion, and then assert that the result was what you expected.\n</p>\n<p>\n</p>\n",
-    "tags": [
-      "performance",
-      "android"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MINOR",
-    "constantDebtMinutes": 5
-  },
-  {
     "key": "AuthLeak",
     "name": "Code might contain an auth leak",
     "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nStrings in java apps can be discovered by decompiling apps, this lint check\nlooks for code which looks like it may contain an url with a username and\npassword\n</p>\n<p>\n</p>\n",
@@ -955,7 +943,7 @@
   {
     "key": "FileEndsWithExt",
     "name": "File endsWith on file extensions",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe Kotlin extension method File.endsWith(suffix) checks whole path\ncomponents, not just string suffixes. This means that\nFile(&quot;foo.txt&quot;).endsWith(&quot;.txt&quot;) will return false. Instead you might have\nintended file.path.endsWith or file.extension.equals.\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe Kotlin extension method File.endsWith(suffix) checks whole path\ncomponents,\nnot just string suffixes. This means that File(&quot;foo.txt&quot;).endsWith(&quot;.txt&quot;)\nwill return\nfalse. Instead you might have intended file.path.endsWith or\nfile.extension.equals.\n</p>\n<p>\n</p>\n",
     "tags": [
       "android"
     ],
@@ -1618,7 +1606,7 @@
   {
     "key": "IntentFilterUniqueDataAttributes",
     "name": "Data tags should only declare unique attributes",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\n&lt;intent-filter&gt; &lt;data&gt; tags should only declare a single unique attribute\n(i.e. scheme OR host, but not both). This better matches the runtime behavior\nof intent filters, as they combine all of the declared data attributes into a\nsingle matcher which is allowed to handle any combination across attribute\ntypes.\n</p>\n<p>\nFor example, the following two &lt;intent-filter&gt; declarations are the same:<br />\n&lt;intent-filter&gt;\n    &lt;data android:scheme=&quot;http&quot; android:host=&quot;example.com&quot; /&gt;\n    &lt;data android:scheme=&quot;https&quot; android:host=&quot;example.org&quot; /&gt;\n&lt;/intent-filter&gt;\n</p>\n<p>\n&lt;intent-filter&gt;\n    &lt;data android:scheme=&quot;http&quot;/&gt;\n    &lt;data android:scheme=&quot;https&quot;/&gt;\n    &lt;data android:host=&quot;example.com&quot; /&gt;\n    &lt;data android:host=&quot;example.org&quot; /&gt;\n&lt;/intent-filter&gt;\n</p>\n<p>\nThey both handle all of the following:<br />\n* http://example.com\n* https://example.com\n* http://example.org\n* https://example.org\n</p>\n<p>\nThe second one better communicates the combining behavior and is clearer to an\nexternal reader that one should not rely on the scheme/host being self\ncontained. It is not obvious in the first that http://example.org is also\nmatched, which can lead to confusion (or incorrect behavior) with a more\ncomplex set of schemes/hosts.\n</p>\n<p>\nNote that this does not apply to host + port, as those must be declared in the\nsame &lt;data&gt; tag and are only associated with each other.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/guide/components/intents-filters\">https://developer.android.com/guide/components/intents-filters</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\n</p>\n<p>\n</p>\n<p>\nFor example, the following two `&lt;intent-filter&gt;` declarations are the same:<br />\nxml\n&lt;intent-filter&gt;\n    &lt;data android:scheme=&quot;http&quot; android:host=&quot;example.com&quot; /&gt;\n    &lt;data android:scheme=&quot;https&quot; android:host=&quot;example.org&quot; /&gt;\n&lt;/intent-filter&gt;\n</p>\n<p>\nxml\n&lt;intent-filter&gt;\n    &lt;data android:scheme=&quot;http&quot;/&gt;\n    &lt;data android:scheme=&quot;https&quot;/&gt;\n    &lt;data android:host=&quot;example.com&quot; /&gt;\n    &lt;data android:host=&quot;example.org&quot; /&gt;\n&lt;/intent-filter&gt;\n`\n</p>\n<p>\nThey both handle all of the following:<br />\n* http://example.com\n* https://example.com\n* http://example.org\n* https://example.org\n</p>\n<p>\nThe second one better communicates the combining behavior and is clearer to an\nexternal reader that one should not rely on the scheme/host being self\ncontained. It is not obvious in the first that http://example.org is also\nmatched, which can lead to confusion (or incorrect behavior) with a more\ncomplex set of schemes/hosts.\n</p>\n<p>\nNote that this does not apply to host + port, as those must be declared in the\nsame &lt;data&gt; tag and are only associated with each other.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/guide/components/intents-filters\">https://developer.android.com/guide/components/intents-filters</a><br />\n</p>\n",
     "tags": [
       "android"
     ],
@@ -1856,7 +1844,7 @@
   {
     "key": "LambdaLast",
     "name": "Lambda Parameters Last",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable LambdaLast\n</p>\n<p>\nTo improve calling this code from Kotlin, parameter types eligible for SAM\nconversion should be last.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://android.github.io/kotlin-guides/interop.html#lambda-parameters-last\">https://android.github.io/kotlin-guides/interop.html#lambda-parameters-last</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable LambdaLast\n</p>\n<p>\nTo improve calling this code from Kotlin,\nparameter types eligible for SAM conversion should be last.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://android.github.io/kotlin-guides/interop.html#lambda-parameters-last\">https://android.github.io/kotlin-guides/interop.html#lambda-parameters-last</a><br />\n</p>\n",
     "tags": [
       "interoperability",
       "android"
@@ -2022,7 +2010,7 @@
   {
     "key": "LintImplUseUast",
     "name": "Using Wrong UAST Method",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nUAST is a library that sits on top of PSI, and in many cases PSI is part of\nthe UAST API; for example, UResolvable#resolve returns a PsiElement.\n</p>\n<p>\nAlso, for convenience, a UClass is a PsiClass, a UMethod is a PsiMethod, and\nso on.\n</p>\n<p>\nHowever, there are some parts of the PSI API that does not work correctly when\nused in this way. For example, if you call PsiMethod#getBody or\nPsiVariable#getInitializer, this will only work in Java, not for Kotlin (or\npotentially other languages).\n</p>\n<p>\nThere are UAST specific methods you need to call instead and lint will flag\nthese.\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nUAST is a library that sits on top of PSI, and in many cases PSI is part of\nthe UAST API; for example, UResolvable#resolve returns a PsiElement.\n</p>\n<p>\nAlso, for convenience, a UClass is a PsiClass, a UMethod is a PsiMethod, and\nso on.\n</p>\n<p>\nHowever, there are some parts of the PSI API that does not work correctly when\nused in this way. For example, if you call PsiMethod#getBody or\nPsiVariable#getInitializer, this will only work in Java, not for Kotlin (or\npotentially other languages).\n</p>\n<p>\nThere are UAST specific methods you need to call instead and lint will flag\nthese.\n</p>\n<p>\n</p>\n<p>\n</p>\n",
     "tags": [
       "lint-implementation",
       "android"
@@ -2433,17 +2421,6 @@
     "constantDebtMinutes": 5
   },
   {
-    "key": "MotionLayoutMissingId",
-    "name": "Views inside MotionLayout require an android:id",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nViews inside MotionLayout require an android:id.\n</p>\n<p>\n</p>\n",
-    "tags": [
-      "android"
-    ],
-    "type": "BUG",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 5
-  },
-  {
     "key": "MotionSceneFileValidationError",
     "name": "Validation errors in MotionScene files",
     "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nA motion scene file specifies the animations used in a MotionLayout. This\ncheck performs various serious correctness checks in a motion scene file.\n</p>\n<p>\n</p>\n",
@@ -2569,7 +2546,7 @@
   {
     "key": "NoHardKeywords",
     "name": "No Hard Kotlin Keywords",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable NoHardKeywords\n</p>\n<p>\nDo not use Kotlin&rsquo;s hard keywords as the name of methods or fields. These\nrequire the use of backticks to escape when calling from Kotlin. Soft\nkeywords, modifier keywords, and special identifiers are allowed.\n</p>\n<p>\nFor example, Mockito&rsquo;s when function requires backticks when used from\nKotlin:<br />\nval callable = Mockito.mock(Callable::class.java)\nMockito.\\`when\\`(callable.call()).thenReturn(/* &hellip; */)\n</p>\n<p>\nMore information: <br />\n<a href=\"https://android.github.io/kotlin-guides/interop.html#no-hard-keywords\">https://android.github.io/kotlin-guides/interop.html#no-hard-keywords</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable NoHardKeywords\n</p>\n<p>\nDo not use Kotlin&rsquo;s hard keywords as the name of methods or fields.\nThese require the use of backticks to escape when calling from Kotlin.\nSoft keywords, modifier keywords, and special identifiers are allowed.\n</p>\n<p>\nFor example, Mockito&rsquo;s when function requires backticks when used from\nKotlin:<br />\n</p>\n<p>\n    val callable = Mockito.mock(Callable::class.java)\n    Mockito.`when`(callable.call()).thenReturn(/* &hellip; */)\n</p>\n<p>\nMore information: <br />\n<a href=\"https://android.github.io/kotlin-guides/interop.html#no-hard-keywords\">https://android.github.io/kotlin-guides/interop.html#no-hard-keywords</a><br />\n</p>\n",
     "tags": [
       "interoperability",
       "android"
@@ -2592,18 +2569,7 @@
   {
     "key": "NonResizeableActivity",
     "name": "Activity is set to be non resizeable",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe &lt;activity&gt; element should be allowed to be resized to allow users to take\nadvantage of the multi-window environments available on larger screen Android\ndevices.\n</p>\n<p>\nTo fix the issue, consider declaring the corresponding activity element with\nresizableActivity=&quot;true&quot; attribute.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/topic/arc/window-management\">https://developer.android.com/topic/arc/window-management</a><br />\n</p>\n",
-    "tags": [
-      "android"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MINOR",
-    "constantDebtMinutes": 5
-  },
-  {
-    "key": "NotConstructor",
-    "name": "Not a Constructor",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThis check catches methods that look like they were intended to be\nconstructors, but aren't.\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe &lt;activity&gt; element should be allowed to be resized to allow users to take\nadvantage of the multi-window environments available on larger screen Android\ndevices.To fix the issue, consider declaring the corresponding activity\nelement with resizableActivity=&quot;true&quot; attribute.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/topic/arc/window-management\">https://developer.android.com/topic/arc/window-management</a><br />\n</p>\n",
     "tags": [
       "android"
     ],
@@ -3500,7 +3466,7 @@
   {
     "key": "SourceLockedOrientationActivity",
     "name": "Incompatible setRequestedOrientation value",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe Activity should not be locked to a portrait orientation so that users can\ntake advantage of the multi-window environments and larger landscape-first\nscreens that Android runs on such as Chrome OS. To fix the issue, consider\ncalling setRequestedOrientation with the\nActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR or\nActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED options or removing the call all\ntogether.\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe Activity should not be locked to a portrait orientation so that users\ncan take advantage of the multi-window environments and larger landscape-first\nscreens\nthat Android runs on such as Chrome OS. To fix the issue, consider calling\nsetRequestedOrientation with the ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR\nor\nActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED options or removing the call\nall together.\n</p>\n<p>\n</p>\n",
     "tags": [
       "android"
     ],
@@ -3841,18 +3807,6 @@
     "constantDebtMinutes": 5
   },
   {
-    "key": "UastImplementation",
-    "name": "Avoid using UAST implementation",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nUse UAST interface whenever possible, and do not rely on UAST implementation,\nwhich is subject to change. If language-specific information is needed, the\nnext option is to use PSI directly (though these APIs are less stable and can\ndepend on compiler internals, especially in the case of Kotlin).\n</p>\n<p>\n</p>\n<p>\n</p>\n",
-    "tags": [
-      "lint-implementation",
-      "android"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MINOR",
-    "constantDebtMinutes": 5
-  },
-  {
     "key": "UniqueConstants",
     "name": "Overlapping Enumeration Constants",
     "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe @IntDef annotation allows you to create a light-weight &quot;enum&quot; or type\ndefinition. However, it's possible to accidentally specify the same value for\ntwo or more of the values, which can lead to hard-to-detect bugs. This check\nlooks for this scenario and flags any repeated constants.\n</p>\n<p>\nIn some cases, the repeated constant is intentional (for example, renaming a\nconstant to a more intuitive name, and leaving the old name in place for\ncompatibility purposes).  In that case, simply suppress this check by adding a\n@SuppressLint(&quot;UniqueConstants&quot;) annotation.\n</p>\n<p>\n</p>\n",
@@ -3899,7 +3853,7 @@
   {
     "key": "UnknownNullness",
     "name": "Unknown nullness",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable UnknownNullness\n</p>\n<p>\nTo improve referencing this code from Kotlin, consider adding explicit\nnullness information here with either @NonNull or @Nullable.\n</p>\n<p>\nAvailable options:<br />\n</p>\n<p>\nignore-deprecated (default is false):<br />\nWhether to ignore classes and members that have been annotated with @Deprecated.\n</p>\n<p>\nNormally this lint check will flag all unannotated elements, but by setting this option to true it will skip any deprecated elements.\n</p>\n<p>\nTo configure this option, use a lint.xml file with an &lt;option&gt; like this:<br />\n</p>\n<p>\n&lt;lint&gt;\n    &lt;issue id=&quot;UnknownNullness&quot;&gt;\n        &lt;option name=&quot;ignore-deprecated&quot; value=&quot;false&quot; /&gt;\n    &lt;/issue&gt;\n&lt;/lint&gt;\n</p>\n<p>\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/kotlin/interop#nullability_annotations\">https://developer.android.com/kotlin/interop#nullability_annotations</a><br />\n</p>\n<p>\nLint Implementation Issues\n==========================\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable UnknownNullness\n</p>\n<p>\nTo improve referencing this code from Kotlin, consider adding\nexplicit nullness information here with either @NonNull or @Nullable.\n</p>\n<p>\nYou can set the environment variable\n    `ANDROID_LINT_NULLNESS_IGNORE_DEPRECATED=true`\nif you want lint to ignore classes and members that have been annotated with\n@Deprecated.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://android.github.io/kotlin-guides/interop.html#nullability-annotations\">https://android.github.io/kotlin-guides/interop.html#nullability-annotations</a><br />\n</p>\n<p>\nLint Implementation Issues\n==========================\n</p>\n",
     "tags": [
       "interoperability",
       "android"
@@ -3994,7 +3948,7 @@
   {
     "key": "UnsupportedChromeOsCameraSystemFeature",
     "name": "Looking for Rear Camera only feature",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nYou should look for the FEATURE_CAMERA_ANY features to include all possible\ncameras that may be on the device. Looking for FEATURE_CAMERA only looks for a\nrear facing camera, which certain tablets or Chrome OS devices don't have, as\nwell as newer device configurations and modes may place the device in a state\nwhere the rear camera is not available. To fix the issue, look for\nFEATURE_CAMERA_ANY instead.\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nYou should look for the FEATURE_CAMERA_ANY features to include all\npossible cameras that may be on the device. Looking for FEATURE_CAMERA\nonly looks for a rear facing camera, which certain tablets or Chrome OS\ndevices don't have, as well as newer device configurations and modes may place\nthe\ndevice in a state where the rear camera is not available. To fix the issue,\nlook for FEATURE_CAMERA_ANY instead.\n</p>\n<p>\n</p>\n",
     "tags": [
       "android"
     ],
@@ -4416,17 +4370,6 @@
     ],
     "type": "CODE_SMELL",
     "severity": "CRITICAL",
-    "constantDebtMinutes": 5
-  },
-  {
-    "key": "WearableConfigurationAction",
-    "name": "Wear configuration action metadata must match an activity",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nIf and only if a watch face service defines wearableConfigurationAction\nmetadata, with the value WATCH_FACE_EDITOR, there should be an activity in the\nsame package, which has an intent filter for WATCH_FACE_EDITOR (with\ncom.google.android.wearable.watchface.category.WEARABLE_CONFIGURATION if\nminSdkVersion is less than 30).\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/wearables/watch-faces/configuration\">https://developer.android.com/training/wearables/watch-faces/configuration</a><br />\n</p>\n",
-    "tags": [
-      "android"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MINOR",
     "constantDebtMinutes": 5
   },
   {
