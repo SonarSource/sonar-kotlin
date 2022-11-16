@@ -33,7 +33,34 @@ class CipherModeOperationCheckSample {
 //                                                 ^^^^^^^
     }
 
-    fun compliant(key: ByteArray) {
+    fun letApplyRunWithAlso(secretKey: String) {
+        val skeySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
+        val bytesGCM = "7cVgr5cbdCZV".toByteArray(charset("UTF-8"))
+        val gcm = GCMParameterSpec(128, bytesGCM)
+
+        Cipher.getInstance("AES/CBC/NoPadding").let {
+            it.init(Cipher.ENCRYPT_MODE, skeySpec, gcm) // Noncompliant
+        }
+
+        Cipher.getInstance("AES/CBC/NoPadding").apply {
+            init(Cipher.ENCRYPT_MODE, skeySpec, gcm) // Noncompliant
+        }
+
+        Cipher.getInstance("AES/CBC/NoPadding").run {
+            init(Cipher.ENCRYPT_MODE, skeySpec, gcm) // Noncompliant
+        }
+
+        Cipher.getInstance("AES/CBC/NoPadding").also {
+            it.init(Cipher.ENCRYPT_MODE, skeySpec, gcm) // Noncompliant
+        }
+
+        with(Cipher.getInstance("AES/CBC/NoPadding")) {
+            init(Cipher.ENCRYPT_MODE, skeySpec, gcm) // Noncompliant
+        }
+
+    }
+
+    fun compliant1(key: ByteArray) {
         val skeySpec = SecretKeySpec(key, "AES")
 
         val nonce = ByteArray(12)
@@ -51,6 +78,39 @@ class CipherModeOperationCheckSample {
 
         val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, gcmSpec) // Compliant
+    }
+
+    fun compliant3(secretKey: String, gcmParameterSpec: GCMParameterSpec) {
+        val skeySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
+
+        val cipher: Cipher = Cipher.getInstance("AES/CBC/NoPadding")
+        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, gcmParameterSpec) // Compliant
+    }
+
+    fun compliant4(secretKey: String, gcmParameterSpec: GCMParameterSpec) {
+        val skeySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
+        val gcm = gcmParameterSpec
+
+        val cipher: Cipher = Cipher.getInstance("AES/CBC/NoPadding")
+        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, gcm) // Compliant
+    }
+
+    fun compliant5(secretKey: String, bytes: ByteArray) {
+        val skeySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
+        val gcm = GCMParameterSpec(128, bytes)
+
+        val cipher: Cipher = Cipher.getInstance("AES/CBC/NoPadding")
+        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, gcm) // Compliant
+    }
+
+    fun compliant6(secretKey: String) {
+        val skeySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
+        val bytes1 = ByteArray(100)
+        val bytes = bytes1
+        val gcmParameterSpec = GCMParameterSpec(128, bytes)
+
+        val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, gcmParameterSpec) // Compliant
     }
 
 }
