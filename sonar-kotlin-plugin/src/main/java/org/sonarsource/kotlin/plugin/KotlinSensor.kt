@@ -88,17 +88,20 @@ class KotlinSensor(
             fileSystem.predicates().hasType(InputFile.Type.MAIN)
         )
 
-        val files = if (canSkipUnchangedFiles(sensorContext)) {
-            LOG.info("The Kotlin analyzer is working in a context where it can skip unchanged files.")
-            var totalFiles = 0
-            val changedFiles = fileSystem.inputFiles(mainFilePredicate)
-                .filter {
-                    totalFiles++; it.status() != InputFile.Status.SAME
-                }
-            LOG.info("The Kotlin analyzer will analyze ${changedFiles.size} out of $totalFiles files.")
-            changedFiles
-        } else {
-            fileSystem.inputFiles(mainFilePredicate)
+        val files = fileSystem.inputFiles(mainFilePredicate).let { mainFiles ->
+            if (canSkipUnchangedFiles(sensorContext)) {
+                LOG.info("The Kotlin analyzer is working in a context where it can skip unchanged files.")
+                var totalFiles = 0
+                mainFiles
+                    .filter {
+                        totalFiles++
+                        it.status() != InputFile.Status.SAME
+                    }.also {
+                        LOG.info("The Kotlin analyzer will analyze ${it.size} out of $totalFiles files.")
+                    }
+            } else {
+                mainFiles
+            }
         }
 
         val filenames = files.map { it.toString() }
@@ -122,9 +125,9 @@ class KotlinSensor(
     @OptIn(ExperimentalStdlibApi::class)
     private fun canSkipUnchangedFiles(sensorContext: SensorContext): Boolean {
         return sensorContext.config().getBoolean("sonar.kotlin.canSkipUnchangedFiles").getOrElse {
-            try {
+            runCatching {
                 sensorContext.canSkipUnchangedFiles()
-            } catch (_: AbstractMethodError) {
+            }.getOrElse {
                 false
             }
         }
@@ -264,7 +267,7 @@ private fun toParseException(action: String, inputFile: InputFile, cause: Throwa
 
 fun environment(sensorContext: SensorContext) = Environment(
     sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
-        sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
+            sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
     determineKotlinLanguageVersion(sensorContext),
     numberOfThreads = determineNumberOfThreadsToUse(sensorContext)
 )
