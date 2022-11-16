@@ -73,12 +73,12 @@ private val classesToKeepWhenMinimizingJar = arrayOf(
 
 fun kotlinCoreEnvironment(
     configuration: CompilerConfiguration,
-    disposable: Disposable,
+    disposable: Disposable
 ): KotlinCoreEnvironment {
     setIdeaIoUseFallback()
     configuration.put(
         CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
-        MessageCollector.NONE
+        MessageCollector.NONE,
     )
     configuration.put(CommonConfigurationKeys.MODULE_NAME, "sonar-kotlin-ng")
 
@@ -93,21 +93,22 @@ fun kotlinCoreEnvironment(
 fun bindingContext(
     environment: KotlinCoreEnvironment,
     classpath: List<String>,
-    files: List<KtFile>,
+    files: List<KtFile>
 ): BindingContext =
-    if (classpath.isEmpty())
+    if (classpath.isEmpty()) {
         BindingContext.EMPTY
-    else
+    } else {
         analyzeAndGetBindingContext(environment, files)
+    }
 
 private fun analyzeAndGetBindingContext(
     env: KotlinCoreEnvironment,
-    ktFiles: List<KtFile>,
+    ktFiles: List<KtFile>
 ): BindingContext {
     val analyzer = AnalyzerWithCompilerReport(
         MessageCollector.NONE,
         env.configuration.languageVersionSettings,
-        false
+        false,
     )
     analyzer.analyzeAndReport(ktFiles) {
         TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
@@ -116,7 +117,7 @@ private fun analyzeAndGetBindingContext(
             NoScopeRecordCliBindingTrace(),
             env.configuration,
             env::createPackagePartProvider,
-            ::FileBasedDeclarationProviderFactory
+            ::FileBasedDeclarationProviderFactory,
         )
     }
     return analyzer.analysisResult.bindingContext
@@ -126,7 +127,7 @@ fun compilerConfiguration(
     classpath: List<String>,
     languageVersion: LanguageVersion,
     jvmTarget: JvmTarget,
-    numberOfThreads: Int?,
+    numberOfThreads: Int?
 ): CompilerConfiguration {
     val classpathFiles = classpath.map(::File)
     val versionSettings = LanguageVersionSettingsImpl(
@@ -142,4 +143,3 @@ fun compilerConfiguration(
         addJvmClasspathRoots(classpathFiles)
     }
 }
-

@@ -33,7 +33,7 @@ private const val PARSING_ERROR_RULE_KEY = "ParsingError"
 class InputFileContextImpl(
     override val sensorContext: SensorContext,
     override val inputFile: InputFile,
-    override val isAndroid: Boolean,
+    override val isAndroid: Boolean
 ) : InputFileContext {
 
     override var filteredRules: Map<String, Set<TextRange>> = HashMap()
@@ -43,7 +43,7 @@ class InputFileContextImpl(
         textRange: TextRange?,
         message: String,
         secondaryLocations: List<SecondaryLocation>,
-        gap: Double?,
+        gap: Double?
     ) {
         if (textRange != null && (filteredRules[ruleKey.toString()] ?: emptySet()).any { textRange in it }) {
             // Issue is filtered by one of the filter.
@@ -53,20 +53,22 @@ class InputFileContextImpl(
         with(sensorContext.newIssue()) {
             forRule(ruleKey)
 
-            at(newLocation()
-                .on(inputFile)
-                .message(message).let {
-                    if (textRange != null) it.at(textRange) else it
-                }
+            at(
+                newLocation()
+                    .on(inputFile)
+                    .message(message).let {
+                        if (textRange != null) it.at(textRange) else it
+                    },
             )
 
             gap(gap)
 
             for (secondary in secondaryLocations) {
-                addLocation(newLocation()
-                    .on(inputFile)
-                    .at(secondary.textRange)
-                    .message(secondary.message ?: "")
+                addLocation(
+                    newLocation()
+                        .on(inputFile)
+                        .at(secondary.textRange)
+                        .message(secondary.message ?: ""),
                 )
             }
 
@@ -90,7 +92,7 @@ class InputFileContextImpl(
                 newLocation()
                     .on(inputFile)
                     .message("A parsing error occurred in this file.")
-                    .let { if (location != null) it.at(inputFile.selectLine(location.line())) else it }
+                    .let { if (location != null) it.at(inputFile.selectLine(location.line())) else it },
             )
 
             save()

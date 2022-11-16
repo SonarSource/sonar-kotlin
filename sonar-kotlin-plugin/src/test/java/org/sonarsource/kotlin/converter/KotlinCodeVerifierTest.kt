@@ -44,8 +44,8 @@ internal class KotlinCodeVerifierTest {
         assertThat(KotlinCodeVerifier.containsCode("Loops --- ")).isFalse
         assertThat(
             KotlinCodeVerifier.containsCode(
-                "Generic Query tests (combining both FungibleState and LinearState contract types)"
-            )
+                "Generic Query tests (combining both FungibleState and LinearState contract types)",
+            ),
         ).isFalse
         assertThat(KotlinCodeVerifier.containsCode("\"E0308 cyclic type of infinite size\"")).isFalse
         assertThat(KotlinCodeVerifier.containsCode("(just remove it)")).isFalse
@@ -65,8 +65,8 @@ internal class KotlinCodeVerifierTest {
         assertThat(KotlinCodeVerifier.containsCode("if (foo) { doSomething() } else { somethingElse }")).isTrue
         assertThat(
             KotlinCodeVerifier.containsCode(
-                "An if-else statement is written as follows: if (foo) { doSomething() } else { somethingElse }"
-            )
+                "An if-else statement is written as follows: if (foo) { doSomething() } else { somethingElse }",
+            ),
         ).isFalse
 
         // Short code
@@ -79,8 +79,8 @@ internal class KotlinCodeVerifierTest {
         assertThat(
             KotlinCodeVerifier.containsCode(
                 "only unlocked states only soft locked states only those soft locked states specified by lock id(s) all unlocked " +
-                        "states plus those soft locked states specified by lock id(s)"
-            )
+                    "states plus those soft locked states specified by lock id(s)",
+            ),
         ).isFalse
     }
 
@@ -93,10 +93,8 @@ internal class KotlinCodeVerifierTest {
     fun `constructs that may be used in natural language are only parsed as code if someone is writing a very strange comment`() {
         assertThat(
             KotlinCodeVerifier.containsCode(
-                """"public abstract class. return throw private. internal enum continue assert. Float super true false object companion """"
-            )
+                """"public abstract class. return throw private. internal enum continue assert. Float super true false object companion """",
+            ),
         ).isTrue // Okay FP
     }
-
-
 }

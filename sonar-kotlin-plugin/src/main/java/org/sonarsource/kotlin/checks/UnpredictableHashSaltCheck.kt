@@ -21,8 +21,8 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.BYTE_ARRAY_CONSTRUCTOR
 import org.sonarsource.kotlin.api.BYTE_ARRAY_CONSTRUCTOR_SIZE_ARG_ONLY
@@ -79,7 +79,7 @@ class UnpredictableHashSaltCheck : CallAbstractCheck() {
             kotlinFileContext.reportIssue(
                 saltArg,
                 MSG_MAKE_UNPREDICTABLE,
-                listOf(kotlinFileContext.secondaryOf(predictedSaltValue, SMSG_PREDICTABLE_SALT))
+                listOf(kotlinFileContext.secondaryOf(predictedSaltValue, SMSG_PREDICTABLE_SALT)),
             )
             return
         }
@@ -97,7 +97,7 @@ class UnpredictableHashSaltCheck : CallAbstractCheck() {
             kotlinFileContext.reportIssue(
                 saltArg,
                 MSG_MAKE_UNPREDICTABLE,
-                listOf(kotlinFileContext.secondaryOf(predictedSaltValue, SMSG_PREDICTABLE_SALT))
+                listOf(kotlinFileContext.secondaryOf(predictedSaltValue, SMSG_PREDICTABLE_SALT)),
             )
         }
     }

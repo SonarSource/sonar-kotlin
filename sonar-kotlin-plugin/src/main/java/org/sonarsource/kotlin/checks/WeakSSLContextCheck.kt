@@ -80,21 +80,22 @@ class WeakSSLContextCheck : AbstractCheck() {
     private fun handleSSL(
         node: KtCallExpression,
         bindingContext: BindingContext,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
         node.valueArguments
             .firstOrNull()
             ?.getArgumentExpression()
             ?.let {
-                if (WEAK_FOR_SSL.contains(it.value(bindingContext)))
+                if (WEAK_FOR_SSL.contains(it.value(bindingContext))) {
                     reportUnsecureSSLContext(listOf(it), kotlinFileContext)
+                }
             }
     }
 
     private fun handleOkHttp(
         node: KtCallExpression,
         bindingContext: BindingContext,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
         val unsecureVersions = node.valueArguments
             .mapNotNull { it.getArgumentExpression() }
@@ -107,7 +108,7 @@ class WeakSSLContextCheck : AbstractCheck() {
 
     private fun reportUnsecureSSLContext(
         unsecureVersions: List<KtExpression>,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
         if (unsecureVersions.isNotEmpty()) {
             val secondaries = unsecureVersions - unsecureVersions[0]
@@ -116,25 +117,30 @@ class WeakSSLContextCheck : AbstractCheck() {
                 message = "Change this code to use a stronger protocol.",
                 secondaryLocations = secondaries.map {
                     SecondaryLocation(kotlinFileContext.textRange(it), "Other weak protocol.")
-                }
+                },
             )
         }
     }
 
     private fun KtExpression.value(
-        bindingContext: BindingContext,
+        bindingContext: BindingContext
     ): String? = when (this) {
         is KtStringTemplateExpression -> asConstant()
         is KtNameReferenceExpression -> {
             val descriptor = bindingContext.get(REFERENCE_TARGET, this)
-            if (descriptor is PropertyDescriptor) descriptor.compileTimeInitializer?.boxedValue().toString()
-            else null
+            if (descriptor is PropertyDescriptor) {
+                descriptor.compileTimeInitializer?.boxedValue().toString()
+            } else {
+                null
+            }
         }
         is KtDotQualifiedExpression -> {
             val selectorExpression = selectorExpression
-            if (selectorExpression is KtNameReferenceExpression)
+            if (selectorExpression is KtNameReferenceExpression) {
                 bindingContext.get(REFERENCE_TARGET, selectorExpression)?.fqNameOrNull()?.asString()
-            else null
+            } else {
+                null
+            }
         }
         else -> null
     }

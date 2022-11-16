@@ -36,7 +36,8 @@ class BadClassNameCheck : AbstractCheck() {
     @RuleProperty(
         key = "format",
         description = "Regular expression used to check the class names against.",
-        defaultValue = DEFAULT_FORMAT)
+        defaultValue = DEFAULT_FORMAT,
+    )
     var format = DEFAULT_FORMAT
 
     private lateinit var formatRegex: Regex

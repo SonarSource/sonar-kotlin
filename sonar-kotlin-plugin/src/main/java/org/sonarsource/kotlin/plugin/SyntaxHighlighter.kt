@@ -70,6 +70,9 @@ class SyntaxHighlighter : KotlinFileVisitor() {
         }
 
     private fun determineTypeOfText(node: LeafPsiElement) =
-        if (node.elementType is KtKeywordToken) TypeOfText.KEYWORD
-        else null
+        if (node.elementType is KtKeywordToken) {
+            TypeOfText.KEYWORD
+        } else {
+            null
+        }
 }

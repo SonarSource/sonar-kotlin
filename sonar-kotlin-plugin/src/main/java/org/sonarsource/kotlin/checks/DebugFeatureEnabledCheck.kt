@@ -20,8 +20,8 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
@@ -34,10 +34,8 @@ private const val MESSAGE = "Make sure this debug feature is deactivated before 
 class DebugFeatureEnabledCheck : CallAbstractCheck() {
 
     override val functionsToVisit = listOf(
-        FunMatcher(definingSupertype = "android.webkit.WebView", name = "setWebContentsDebuggingEnabled")
-        { withArguments("kotlin.Boolean") },
-        FunMatcher(definingSupertype = "android.webkit.WebViewFactoryProvider.Statics", name = "setWebContentsDebuggingEnabled")
-        { withArguments("kotlin.Boolean") },
+        FunMatcher(definingSupertype = "android.webkit.WebView", name = "setWebContentsDebuggingEnabled") { withArguments("kotlin.Boolean") },
+        FunMatcher(definingSupertype = "android.webkit.WebViewFactoryProvider.Statics", name = "setWebContentsDebuggingEnabled") { withArguments("kotlin.Boolean") },
     )
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
@@ -45,5 +43,4 @@ class DebugFeatureEnabledCheck : CallAbstractCheck() {
             kotlinFileContext.reportIssue(callExpression, MESSAGE)
         }
     }
-
 }

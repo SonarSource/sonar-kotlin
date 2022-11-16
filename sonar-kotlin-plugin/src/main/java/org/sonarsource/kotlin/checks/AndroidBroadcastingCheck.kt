@@ -41,19 +41,20 @@ private val STICKY_BROADCAST_NAMES = setOf(
 @Rule(key = "S5320")
 class AndroidBroadcastingCheck : CallAbstractCheck() {
 
-    override val functionsToVisit = listOf(FunMatcher(definingSupertype = "android.content.Context") {
-        withNames(
-            "sendBroadcast",
-            "sendBroadcastAsUser",
-            "sendOrderedBroadcast",
-            "sendOrderedBroadcastAsUser",
-            "sendStickyBroadcast",
-            "sendStickyBroadcastAsUser",
-            "sendStickyOrderedBroadcast",
-            "sendStickyOrderedBroadcastAsUser",
-        )
-    })
-
+    override val functionsToVisit = listOf(
+        FunMatcher(definingSupertype = "android.content.Context") {
+            withNames(
+                "sendBroadcast",
+                "sendBroadcastAsUser",
+                "sendOrderedBroadcast",
+                "sendOrderedBroadcastAsUser",
+                "sendStickyBroadcast",
+                "sendStickyBroadcastAsUser",
+                "sendStickyOrderedBroadcast",
+                "sendStickyOrderedBroadcastAsUser",
+            )
+        },
+    )
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
@@ -65,11 +66,11 @@ class AndroidBroadcastingCheck : CallAbstractCheck() {
 
         if (
             with(kotlinFileContext.bindingContext) {
-                name in STICKY_BROADCAST_NAMES
-                    || isSendBroadcast(name, arguments)
-                    || isSendBroadcastAsUser(name, arguments)
-                    || isSendOrderedBroadcast(name, arguments)
-                    || isSendOrderedBroadcastAsUser(name, arguments)
+                name in STICKY_BROADCAST_NAMES ||
+                    isSendBroadcast(name, arguments) ||
+                    isSendBroadcastAsUser(name, arguments) ||
+                    isSendOrderedBroadcast(name, arguments) ||
+                    isSendOrderedBroadcastAsUser(name, arguments)
             }
         ) {
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
@@ -89,5 +90,4 @@ class AndroidBroadcastingCheck : CallAbstractCheck() {
 
     private fun BindingContext.isSendBroadcast(name: String, argumentsByIndex: List<ResolvedValueArgument>) =
         name == "sendBroadcastAsUser" && (argumentsByIndex.getOrNull(2)?.isNull(this) ?: true)
-
 }

@@ -33,8 +33,10 @@ internal class ReportImporter(val analysisWarnings: AnalysisWarnings, val contex
         when (reportFile.extension) {
             "json" -> importJsonFile(reportFile)
             "xml" -> CheckstyleReportParser(context).importFile(reportFile)
-            else -> ("The ktlint report file '$reportFile' has an unsupported extension/format. " +
-                "Expected 'json' or 'xml', got '${reportFile.extension}'.").let {
+            else -> (
+                "The ktlint report file '$reportFile' has an unsupported extension/format. " +
+                    "Expected 'json' or 'xml', got '${reportFile.extension}'."
+                ).let {
                 LOG.error(it)
                 analysisWarnings.addUnique(it)
             }
@@ -53,9 +55,12 @@ internal class ReportImporter(val analysisWarnings: AnalysisWarnings, val contex
 
     private fun importExternalIssues(filePath: String, linterFindings: List<Finding>) {
         val predicates = context.fileSystem().predicates()
-        val inputFile = context.fileSystem().inputFile(predicates.or(
-            predicates.hasAbsolutePath(filePath),
-            predicates.hasRelativePath(filePath)))
+        val inputFile = context.fileSystem().inputFile(
+            predicates.or(
+                predicates.hasAbsolutePath(filePath),
+                predicates.hasRelativePath(filePath),
+            ),
+        )
             ?: run {
                 LOG.warn("Invalid input file $filePath")
                 return
@@ -65,12 +70,18 @@ internal class ReportImporter(val analysisWarnings: AnalysisWarnings, val contex
         linterFindings.forEach { (line, _, message, preliminaryRuleKey) ->
 
             val truncatedPrelimRuleKey =
-                if (preliminaryRuleKey.startsWith(EXPERIMENTAL_RULE_PREFIX)) preliminaryRuleKey.substring(EXPERIMENTAL_RULE_PREFIX.length)
-                else preliminaryRuleKey
+                if (preliminaryRuleKey.startsWith(EXPERIMENTAL_RULE_PREFIX)) {
+                    preliminaryRuleKey.substring(EXPERIMENTAL_RULE_PREFIX.length)
+                } else {
+                    preliminaryRuleKey
+                }
 
             val ruleKey =
-                if (KtlintRulesDefinition.RULE_LOADER.ruleKeys().contains(truncatedPrelimRuleKey)) truncatedPrelimRuleKey
-                else ExternalReporting.FALLBACK_RULE_KEY
+                if (KtlintRulesDefinition.RULE_LOADER.ruleKeys().contains(truncatedPrelimRuleKey)) {
+                    truncatedPrelimRuleKey
+                } else {
+                    ExternalReporting.FALLBACK_RULE_KEY
+                }
 
             context.newExternalIssue().apply {
                 type(ruleLoader.ruleType(ruleKey))
@@ -79,7 +90,7 @@ internal class ReportImporter(val analysisWarnings: AnalysisWarnings, val contex
                 at(
                     newLocation().message(message)
                         .on(inputFile)
-                        .at(inputFile.selectLine(line))
+                        .at(inputFile.selectLine(line)),
                 )
                 engineId(KtlintSensor.LINTER_KEY)
                 ruleId(ruleKey)

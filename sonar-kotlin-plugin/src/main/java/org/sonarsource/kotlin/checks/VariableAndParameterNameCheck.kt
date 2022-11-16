@@ -40,7 +40,8 @@ class VariableAndParameterNameCheck : AbstractCheck() {
     @RuleProperty(
         key = "format",
         description = "Regular expression used to check the names against.",
-        defaultValue = DEFAULT_FORMAT)
+        defaultValue = DEFAULT_FORMAT,
+    )
     var format: String = DEFAULT_FORMAT
 
     private lateinit var formatRegex: Regex
@@ -78,5 +79,4 @@ class VariableAndParameterNameCheck : AbstractCheck() {
             kotlinFileContext.reportIssue(declaration.nameIdentifier!!, """Rename this $kind to match the regular expression $format""")
         }
     }
-
 }

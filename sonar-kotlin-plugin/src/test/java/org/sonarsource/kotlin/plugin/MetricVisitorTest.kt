@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.plugin
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.BeforeEach
@@ -35,7 +34,6 @@ import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContext
 import org.sonar.api.measures.FileLinesContextFactory
 import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
@@ -58,57 +56,71 @@ internal class MetricVisitorTest {
         sensorContext = SensorContextTester.create(tempFolder!!.root)
         val mockFileLinesContext = Mockito.mock(FileLinesContext::class.java)
         val mockFileLinesContextFactory = Mockito.mock(
-            FileLinesContextFactory::class.java)
+            FileLinesContextFactory::class.java,
+        )
         mockNoSonarFilter = Mockito.mock(NoSonarFilter::class.java)
-        Mockito.`when`(mockFileLinesContextFactory.createFor(ArgumentMatchers.any(
-            InputFile::class.java))).thenReturn(mockFileLinesContext)
+        Mockito.`when`(
+            mockFileLinesContextFactory.createFor(
+                ArgumentMatchers.any(
+                    InputFile::class.java,
+                ),
+            ),
+        ).thenReturn(mockFileLinesContext)
         visitor = MetricVisitor(mockFileLinesContextFactory, mockNoSonarFilter)
     }
 
     @Test
     fun linesOfCode() {
-        scan("""
+        scan(
+            """
     fun function1(x: Int) { x + 1 }
     // comment
     fun function1() { // comment
         val x = true || false 
     }
-    """.trimIndent())
+            """.trimIndent(),
+        )
         assertThat(visitor.linesOfCode()).containsExactly(1, 3, 4, 5)
     }
 
     @Test
     fun commentLines() {
-        scan("""
+        scan(
+            """
     fun function1(x: Int) { x + 1 }
     // comment
     fun function1() { // comment
         val x = true || false
     }
-    """.trimIndent())
+            """.trimIndent(),
+        )
         assertThat(visitor.commentLines()).containsExactly(2, 3)
     }
 
     @Test
     fun multiLineComment() {
-        scan("""
+        scan(
+            """
     /*start
     x + 1
     end*/
-    """.trimIndent())
+            """.trimIndent(),
+        )
         assertThat(visitor.commentLines()).containsExactly(1, 2, 3)
         assertThat(visitor.linesOfCode()).isEmpty()
     }
 
     @Test
     fun nosonarLines() {
-        scan("""
+        scan(
+            """
     fun function1(x: Int) { x + 1 }
     // NOSONAR comment
     fun function2() { // comment
         val x = true || false
     }
-    """.trimIndent())
+            """.trimIndent(),
+        )
         assertThat(visitor.nosonarLines()).containsExactly(2)
         assertThat(visitor.commentLines()).containsExactly(3)
         Mockito.verify(mockNoSonarFilter).noSonarInFile(inputFile, setOf(2))
@@ -116,7 +128,8 @@ internal class MetricVisitorTest {
 
     @Test
     fun `kDocs are counted`() {
-        scan("""
+        scan(
+            """
     fun function1(x: Int) { x + 1 }
     /**
      * KDoc comment
@@ -124,27 +137,30 @@ internal class MetricVisitorTest {
     fun function2() {
         val x = true || false
     }
-    """.trimIndent())
+            """.trimIndent(),
+        )
         assertThat(visitor.commentLines()).containsExactly(2, 3, 4)
         assertThat(visitor.nosonarLines()).isEmpty()
     }
 
     @Test
     fun `header comments are not counted`() {
-        scan("""
+        scan(
+            """
     // Header comment
     //
     package a
     
     fun function1(x: Int) { x + 1 }
-    """.trimIndent())
+            """.trimIndent(),
+        )
         assertThat(visitor.commentLines()).isEmpty()
     }
 
-
     @Test
     fun `header block comments are not counted`() {
-        scan("""
+        scan(
+            """
             
     /*
      * Header comment
@@ -154,13 +170,15 @@ internal class MetricVisitorTest {
     val my_c = 2
      
     fun function1(x: Int) { x + 1 }
-    """.trimIndent())
+            """.trimIndent(),
+        )
         assertThat(visitor.commentLines()).isEmpty()
     }
 
     @Test
     fun `double header comments are counted correctly`() {
-        scan("""
+        scan(
+            """
             
     /*
      * Header comment
@@ -173,13 +191,15 @@ internal class MetricVisitorTest {
     val my_c = 2
      
     fun function1(x: Int) { x + 1 }
-    """.trimIndent())
+            """.trimIndent(),
+        )
         assertThat(visitor.commentLines()).isEmpty()
     }
 
     @Test
     fun `a mixture of comments is counted correctly`() {
-        scan("""
+        scan(
+            """
             
     /*
      * Header comment
@@ -198,55 +218,64 @@ internal class MetricVisitorTest {
     fun function1(x: Int) { x + 1 } // A comment
 
     // NOSONAR comment
-    """.trimIndent())
+            """.trimIndent(),
+        )
         assertThat(visitor.commentLines()).containsExactly(7, 8, 13, 14, 15, 16)
         assertThat(visitor.nosonarLines()).containsExactly(11, 18)
     }
 
-
     @Test
     fun functions() {
-        scan("""
+        scan(
+            """
             class C {
                 init {
                     val y = 1 + 1;
                     val x = true || false;
                 }
             }
-    """.trimIndent())
+            """.trimIndent(),
+        )
         assertThat(visitor.numberOfFunctions()).isZero
 
-        scan("""
+        scan(
+            """
             abstract class C {
                 fun noBodyFunction()
                 fun function1() { // comment
                     val x = true || false
                 }
             }
-    """.trimIndent())
+            """.trimIndent(),
+        )
         assertThat(visitor.numberOfFunctions()).isEqualTo(1)
     }
 
     @Test
     fun classes() {
-        scan("""
+        scan(
+            """
              fun foo(x: Int) { x + 1 }
              fun bar() = true || false;
-    """.trimIndent())
+            """.trimIndent(),
+        )
         assertThat(visitor.numberOfClasses()).isZero
 
-        scan("""class C {}
+        scan(
+            """class C {}
                 fun function() {}
                 class D { val x = 0 }
                 class E {
                   fun doSomething(x: Int) {}
-                }""")
+                }""",
+        )
         assertThat(visitor.numberOfClasses()).isEqualTo(3)
     }
 
     @Test
     fun cognitiveComplexity() {
-        scan("""
+        scan(
+            """
                 class A { fun foo() { if(1 != 1) return 1 } } // +1
                     fun function() {
                       if (1 != 1) { // +1
@@ -263,7 +292,8 @@ internal class MetricVisitorTest {
                           }
                         }
                       }
-                }""")
+                }""",
+        )
         assertThat(visitor.cognitiveComplexity()).isEqualTo(7)
     }
 
@@ -280,7 +310,8 @@ internal class MetricVisitorTest {
                }
                fun bar() {
                  val x = 42
-               }""")
+               }""",
+        )
         assertThat(visitor.executableLines()).containsExactly(5, 10)
     }
 

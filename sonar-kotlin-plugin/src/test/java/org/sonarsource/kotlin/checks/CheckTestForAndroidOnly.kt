@@ -30,7 +30,7 @@ abstract class CheckTestForAndroidOnly(
     sampleFileSemantics: String? = null,
     val sampleFileNonAndroid: String? = null,
     classpath: List<String>? = null,
-    dependencies: List<String>? = null,
+    dependencies: List<String>? = null
 ) : CheckTest(
     check = check,
     sampleFileSemantics = sampleFileSemantics,

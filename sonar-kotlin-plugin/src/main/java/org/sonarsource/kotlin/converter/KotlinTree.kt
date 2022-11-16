@@ -37,7 +37,6 @@ data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val
     companion object {
         @JvmStatic
         fun of(content: String, environment: Environment, inputFile: InputFile): KotlinSyntaxStructure {
-
             val psiFile: KtFile = environment.ktPsiFactory.createFile(inputFile.uri().path, normalizeEol(content))
 
             val document = try {
@@ -60,7 +59,7 @@ fun checkParsingErrors(psiFile: PsiFile, document: Document, inputFile: InputFil
         ?.let { element: PsiElement ->
             throw ParseException(
                 "Cannot convert file due to syntactic errors",
-                inputFile.textPointerAtOffset(document, element.startOffset)
+                inputFile.textPointerAtOffset(document, element.startOffset),
             )
         }
 }

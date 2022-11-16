@@ -76,9 +76,12 @@ private fun saveIssue(context: SensorContext, id: String, file: String, line: St
         return
     }
     val predicates = context.fileSystem().predicates()
-    val inputFile = context.fileSystem().inputFile(predicates.or(
-        predicates.hasAbsolutePath(file),
-        predicates.hasRelativePath(file)))
+    val inputFile = context.fileSystem().inputFile(
+        predicates.or(
+            predicates.hasAbsolutePath(file),
+            predicates.hasRelativePath(file),
+        ),
+    )
     if (inputFile == null) {
         LOG.warn("No input file found for {}. No android lint issues will be imported on this file.", file)
         return
@@ -86,8 +89,11 @@ private fun saveIssue(context: SensorContext, id: String, file: String, line: St
     val externalRuleLoader = RULE_LOADER
 
     val ruleKey =
-        if (externalRuleLoader.ruleKeys().contains(id)) id
-        else ExternalReporting.FALLBACK_RULE_KEY
+        if (externalRuleLoader.ruleKeys().contains(id)) {
+            id
+        } else {
+            ExternalReporting.FALLBACK_RULE_KEY
+        }
 
     val newExternalIssue = context.newExternalIssue()
     newExternalIssue

@@ -63,7 +63,9 @@ class ElseIfWithoutElseCheck : AbstractCheck() {
             // if different from the else branch of parent,
             // it means that it is a statement inside parent and so the top level "if"
             parent.`else` != this
-        } else true
+        } else {
+            true
+        }
     }
 
     private fun KtIfExpression.terminates(): Boolean =
@@ -71,5 +73,4 @@ class ElseIfWithoutElseCheck : AbstractCheck() {
             is KtReturnExpression, is KtThrowExpression, is KtBreakExpression, is KtContinueExpression -> true
             else -> false
         }
-
 }

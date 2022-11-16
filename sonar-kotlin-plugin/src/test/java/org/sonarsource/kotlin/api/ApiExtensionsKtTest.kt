@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.api
 
-import org.assertj.core.api.AbstractAssert
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.ObjectAssert
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -30,7 +29,6 @@ import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtClassLikeDeclaration
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -86,7 +84,7 @@ internal class ApiExtensionsKtTest {
               val o = 0
               return o
             }
-            """.trimIndent()
+            """.trimIndent(),
         )
         val referencesMap: MutableMap<String, KtReferenceExpression> = TreeMap()
         walker(tree.psiFile) {
@@ -99,7 +97,7 @@ internal class ApiExtensionsKtTest {
 
         assertThat(referencesMap.keys).containsExactlyInAnyOrder(
             "Any", "Int", "List",
-            "a", "b", "c", "d", "e", "f", "g", "h", "i", "it", "j", "k", "l", "listOf", "m", "n", "o"
+            "a", "b", "c", "d", "e", "f", "g", "h", "i", "it", "j", "k", "l", "listOf", "m", "n", "o",
         )
         assertThat(referencesMap.filter { it.value.isLocalVariable(ctx) }.map { it.key })
             .containsExactlyInAnyOrder("h", "i", "j", "k", "m", "n", "o")
@@ -116,7 +114,7 @@ internal class ApiExtensionsKtTest {
           x = 1
           return thread.priority
         }
-        """.trimIndent()
+            """.trimIndent(),
         )
 
         val referencesMap: MutableMap<String, KtReferenceExpression> = TreeMap()
@@ -191,7 +189,7 @@ class ApiExtensionsKtDetermineTypeTest {
                 obj.prop
             }
         }
-        """.trimIndent()
+            """.trimIndent(),
         )
         bindingContext = kotlinTree.bindingContext
         ktFile = kotlinTree.psiFile
@@ -301,7 +299,7 @@ class ApiExtensionsKtDetermineSignatureTest {
                 this.prop
             }
         }
-        """.trimIndent()
+            """.trimIndent(),
         )
         bindingContext = kotlinTree.bindingContext
         ktFile = kotlinTree.psiFile
@@ -342,7 +340,7 @@ class ApiExtensionsScopeFunctionResolutionTest {
                 with(prop) {
                     println(this)
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
@@ -356,7 +354,7 @@ class ApiExtensionsScopeFunctionResolutionTest {
                 with(prop) {
                     this.toString()
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
@@ -370,7 +368,7 @@ class ApiExtensionsScopeFunctionResolutionTest {
                 prop.apply {
                     println(this)
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
@@ -384,7 +382,7 @@ class ApiExtensionsScopeFunctionResolutionTest {
                 prop.apply {
                     this.toString()
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
@@ -398,7 +396,7 @@ class ApiExtensionsScopeFunctionResolutionTest {
                 prop.run {
                     println(this)
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
@@ -412,7 +410,7 @@ class ApiExtensionsScopeFunctionResolutionTest {
                 prop.run {
                     this.toString()
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
@@ -426,7 +424,7 @@ class ApiExtensionsScopeFunctionResolutionTest {
                 prop.let {
                     println(this)
                 }
-            """.trimIndent()
+            """.trimIndent(),
         )
 
         assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
@@ -438,12 +436,12 @@ private fun parse(code: String) = kotlinTreeOf(
     code,
     Environment(
         listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(System.getProperty("path.separator")),
-        LanguageVersion.LATEST_STABLE
+        LanguageVersion.LATEST_STABLE,
     ),
     TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
         .setCharset(StandardCharsets.UTF_8)
         .initMetadata(code)
-        .build()
+        .build(),
 )
 
 private class KtExpressionAssert(expression: KtExpression?) : ObjectAssert<KtExpression>(expression) {

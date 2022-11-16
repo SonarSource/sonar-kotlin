@@ -36,7 +36,8 @@ class TooManyCasesCheck : AbstractCheck() {
     @RuleProperty(
         key = "maximum",
         description = "Maximum number of branches",
-        defaultValue = "" + DEFAULT_MAX)
+        defaultValue = "" + DEFAULT_MAX,
+    )
     var maximum = DEFAULT_MAX
 
     override fun visitWhenExpression(expression: KtWhenExpression, kotlinFileContext: KotlinFileContext) {
@@ -51,5 +52,4 @@ class TooManyCasesCheck : AbstractCheck() {
             )
         }
     }
-
 }

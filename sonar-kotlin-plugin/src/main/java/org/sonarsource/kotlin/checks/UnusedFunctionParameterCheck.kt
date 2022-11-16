@@ -41,11 +41,17 @@ class UnusedFunctionParameterCheck : AbstractCheck() {
         if (!shouldBeChecked(function)) return
         val unusedParameters = function.getUnusedParameters()
         val singleMessage =
-            if (function.isAnonymous()) """Use "_" instead of this unused function parameter"""
-            else "Remove this unused function parameter"
+            if (function.isAnonymous()) {
+                """Use "_" instead of this unused function parameter"""
+            } else {
+                "Remove this unused function parameter"
+            }
         val pluralMessage =
-            if (function.isAnonymous()) """Use "_" instead of these unused function parameters."""
-            else "Remove these unused function parameters."
+            if (function.isAnonymous()) {
+                """Use "_" instead of these unused function parameters."""
+            } else {
+                "Remove these unused function parameters."
+            }
         if (unusedParameters.isNotEmpty()) reportUnusedParameters(context, unusedParameters, singleMessage, pluralMessage)
     }
 
@@ -60,23 +66,28 @@ class UnusedFunctionParameterCheck : AbstractCheck() {
         context: KotlinFileContext,
         unusedParameters: List<KtNamedDeclaration>,
         singleMessage: String,
-        pluralMessage: String,
+        pluralMessage: String
     ) {
         val firstUnused = unusedParameters[0]
         val secondaryLocations = unusedParameters.asSequence()
             .map { unusedParameter: KtNamedDeclaration ->
-                SecondaryLocation(context.textRange(unusedParameter.nameIdentifier!!),
-                    """$singleMessage "${unusedParameter.name}".""")
+                SecondaryLocation(
+                    context.textRange(unusedParameter.nameIdentifier!!),
+                    """$singleMessage "${unusedParameter.name}".""",
+                )
             }
             .toList()
-        if (unusedParameters.size > 1) context.reportIssue(firstUnused.nameIdentifier!!, pluralMessage, secondaryLocations)
-        else  context.reportIssue(firstUnused.nameIdentifier!!, """$singleMessage "${firstUnused.name}".""")
+        if (unusedParameters.size > 1) {
+            context.reportIssue(firstUnused.nameIdentifier!!, pluralMessage, secondaryLocations)
+        } else {
+            context.reportIssue(firstUnused.nameIdentifier!!, """$singleMessage "${firstUnused.name}".""")
+        }
     }
 }
 
 private fun shouldBeChecked(function: KtNamedFunction) =
-    function.hasBody()
-        && (function.isTopLevel || function.isPrivate() || function.isAnonymous())
+    function.hasBody() &&
+        (function.isTopLevel || function.isPrivate() || function.isAnonymous())
 
 private fun KtNamedFunction.getUnusedParameters(): List<KtParameter> =
     valueParameters.asSequence()
@@ -89,8 +100,8 @@ private fun KtLambdaExpression.getUnusedParameters(): List<KtNamedDeclaration> =
         .toList()
 
 private fun KtNamedDeclaration.notUsedIn(ktElement: KtElement) =
-    name != "_"
-        && !ktElement.anyDescendantOfType<KtNameReferenceExpression> { it.getReferencedName() == name }
+    name != "_" &&
+        !ktElement.anyDescendantOfType<KtNameReferenceExpression> { it.getReferencedName() == name }
 
 private fun KtParameter.unusedParametersList(ktElement: KtElement) =
     when {

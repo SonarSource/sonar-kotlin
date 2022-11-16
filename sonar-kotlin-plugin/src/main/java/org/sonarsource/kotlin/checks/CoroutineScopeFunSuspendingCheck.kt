@@ -42,8 +42,10 @@ class CoroutineScopeFunSuspendingCheck : AbstractCheck() {
         val resolvedReceiverType = kotlinFileContext.bindingContext.get(BindingContext.TYPE, receiverType) ?: return
 
         if (
-            (resolvedReceiverType.getJetTypeFqName(false) == COROUTINE_SCOPE ||
-                resolvedReceiverType.supertypes().any { it.getJetTypeFqName(false) == COROUTINE_SCOPE })
+            (
+                resolvedReceiverType.getJetTypeFqName(false) == COROUTINE_SCOPE ||
+                    resolvedReceiverType.supertypes().any { it.getJetTypeFqName(false) == COROUTINE_SCOPE }
+                )
         ) {
             val secondaries = listOf(SecondaryLocation(kotlinFileContext.textRange(receiverType)))
             kotlinFileContext.reportIssue(suspendModifier, MESSAGE, secondaries)

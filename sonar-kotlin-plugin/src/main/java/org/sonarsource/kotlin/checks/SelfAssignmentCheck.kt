@@ -30,7 +30,8 @@ class SelfAssignmentCheck : AbstractCheck() {
 
     override fun visitBinaryExpression(expression: KtBinaryExpression, context: KotlinFileContext) {
         if (expression.operationToken == KtTokens.EQ &&
-            SyntacticEquivalence.areEquivalent(expression.left!!, expression.right!!)) {
+            SyntacticEquivalence.areEquivalent(expression.left!!, expression.right!!)
+        ) {
             context.reportIssue(expression, "Remove or correct this useless self-assignment.")
         }
     }

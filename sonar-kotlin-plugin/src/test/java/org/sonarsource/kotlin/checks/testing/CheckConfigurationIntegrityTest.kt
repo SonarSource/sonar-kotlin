@@ -31,7 +31,7 @@ class CheckConfigurationIntegrityTest {
 
     companion object {
         private val CHECKS_PACKAGE_DIRECTORIES = listOf(
-            Path.of("checks")
+            Path.of("checks"),
         ).map { Path.of("src", "main", "java", "org", "sonarsource", "kotlin").resolve(it) }
     }
 

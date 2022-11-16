@@ -33,7 +33,6 @@ import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.determineType
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-
 private const val CERTIFICATE_EXCEPTION = "java.security.cert.CertificateException"
 
 private val funMatchers = listOf(
@@ -44,20 +43,22 @@ private val funMatchers = listOf(
     FunMatcher {
         definingSupertype = "javax.net.ssl.X509ExtendedTrustManager"
         withNames("checkClientTrusted", "checkServerTrusted")
-    })
-
+    },
+)
 
 @Rule(key = "S4830")
 class ServerCertificateCheck : AbstractCheck() {
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val (_, _, bindingContext) = kotlinFileContext
 
-        if (function.belongsToTrustManagerClass(bindingContext)
-            && !function.callsCheckTrusted(bindingContext)
-            && !function.throwsCertificateExceptionWithoutCatching(bindingContext)
+        if (function.belongsToTrustManagerClass(bindingContext) &&
+            !function.callsCheckTrusted(bindingContext) &&
+            !function.throwsCertificateExceptionWithoutCatching(bindingContext)
         ) {
-            kotlinFileContext.reportIssue(function.nameIdentifier ?: function,
-                "Enable server certificate validation on this SSL/TLS connection.")
+            kotlinFileContext.reportIssue(
+                function.nameIdentifier ?: function,
+                "Enable server certificate validation on this SSL/TLS connection.",
+            )
         }
     }
 

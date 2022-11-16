@@ -53,7 +53,9 @@ class InjectableDispatchersCheck : CallAbstractCheck() {
         if (argReference.scope() == DISPATCHERS_OBJECT) {
             val secondaries = if (argExpr !== argValueExpr) {
                 listOf(kotlinFileContext.secondaryOf(argValueExpr, "Hard-coded dispatcher"))
-            } else emptyList()
+            } else {
+                emptyList()
+            }
 
             kotlinFileContext.reportIssue(argExpr, MESSAGE, secondaries)
         }

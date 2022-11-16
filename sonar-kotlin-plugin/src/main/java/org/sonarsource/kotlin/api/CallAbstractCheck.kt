@@ -20,8 +20,8 @@
 package org.sonarsource.kotlin.api
 
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 abstract class CallAbstractCheck : AbstractCheck() {

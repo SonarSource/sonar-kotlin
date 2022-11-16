@@ -32,15 +32,13 @@ import org.sonarsource.kotlin.checks.VariableAndParameterNameCheck
 import org.sonarsource.kotlin.converter.Comment
 import org.sonarsource.kotlin.converter.CommentAnnotationsAndTokenVisitor
 import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.utils.kotlinTreeOf
-import org.sonarsource.kotlin.verifier.KotlinVerifier
+import org.sonarsource.kotlin.verifier.DEFAULT_KOTLIN_CLASSPATH
+import org.sonarsource.kotlin.verifier.KOTLIN_BASE_DIR
 import org.sonarsource.kotlin.verifier.TestContext
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
-import org.sonarsource.kotlin.verifier.DEFAULT_KOTLIN_CLASSPATH
-import org.sonarsource.kotlin.verifier.KOTLIN_BASE_DIR
 
 class IssueSuppressionVisitorTest {
     @Test
@@ -63,7 +61,7 @@ class IssueSuppressionVisitorTest {
         val env = Environment(DEFAULT_KOTLIN_CLASSPATH, LanguageVersion.LATEST_STABLE)
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
-        val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin.kt")
+        val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(testFileContent)
             .build()

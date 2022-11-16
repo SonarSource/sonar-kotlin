@@ -25,10 +25,9 @@ import org.sonarsource.kotlin.converter.KotlinSyntaxStructure
 import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.converter.bindingContext
 
-
 fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile): KotlinTree {
     val (ktFile, document) = KotlinSyntaxStructure.of(content, environment, inputFile)
-   
+
     val bindingContext = bindingContext(
         environment.env,
         environment.classpath,

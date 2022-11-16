@@ -79,6 +79,8 @@ class IdenticalConditionsCheck : AbstractCheck() {
         val elseBranch = ifTree.`else`
         return if (elseBranch is KtIfExpression) {
             collectConditions(elseBranch, list)
-        } else list
+        } else {
+            list
+        }
     }
 }

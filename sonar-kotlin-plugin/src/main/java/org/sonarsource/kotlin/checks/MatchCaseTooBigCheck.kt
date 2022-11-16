@@ -43,8 +43,8 @@ class MatchCaseTooBigCheck : AbstractCheck() {
         if (numberOfLinesOfCode > max) {
             kotlinFileContext.reportIssue(
                 whenEntry,
-                "Reduce this case clause number of lines from $numberOfLinesOfCode to at most $max, for example by extracting code into methods.")
+                "Reduce this case clause number of lines from $numberOfLinesOfCode to at most $max, for example by extracting code into methods.",
+            )
         }
     }
-
 }

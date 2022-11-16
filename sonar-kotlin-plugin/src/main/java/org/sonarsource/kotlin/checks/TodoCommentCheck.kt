@@ -34,25 +34,26 @@ val todoPattern = Regex("(?i)(^|[[^\\p{L}]&&\\D])(todo)($|[[^\\p{L}]&&\\D])")
 class TodoCommentCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, kotlinFileContext: KotlinFileContext) {
-        file.accept(object : KtTreeVisitorVoid() {
-            /** Note that [visitComment] not called for [org.jetbrains.kotlin.kdoc.psi.api.KDoc] */
-            override fun visitElement(element: PsiElement) {
-                super.visitElement(element)
-                if (element !is PsiComment) {
-                    return
+        file.accept(
+            object : KtTreeVisitorVoid() {
+                /** Note that [visitComment] not called for [org.jetbrains.kotlin.kdoc.psi.api.KDoc] */
+                override fun visitElement(element: PsiElement) {
+                    super.visitElement(element)
+                    if (element !is PsiComment) {
+                        return
+                    }
+                    todoPattern.find(element.text)?.let { matchResult ->
+                        val todoOffset = element.textOffset + matchResult.groups[2]!!.range.first
+                        val document = kotlinFileContext.ktFile.viewProvider.document!!
+                        val inputFile = kotlinFileContext.inputFileContext.inputFile
+                        val todoRange = inputFile.newRange(
+                            inputFile.textPointerAtOffset(document, todoOffset),
+                            inputFile.textPointerAtOffset(document, todoOffset + 4),
+                        )
+                        kotlinFileContext.reportIssue(todoRange, "Complete the task associated to this TODO comment.")
+                    }
                 }
-                todoPattern.find(element.text)?.let { matchResult ->
-                    val todoOffset = element.textOffset + matchResult.groups[2]!!.range.first
-                    val document = kotlinFileContext.ktFile.viewProvider.document!!
-                    val inputFile = kotlinFileContext.inputFileContext.inputFile
-                    val todoRange = inputFile.newRange(
-                        inputFile.textPointerAtOffset(document, todoOffset),
-                        inputFile.textPointerAtOffset(document, todoOffset + 4)
-                    )
-                    kotlinFileContext.reportIssue(todoRange, "Complete the task associated to this TODO comment.")
-                }
-            }
-        })
+            },
+        )
     }
-
 }

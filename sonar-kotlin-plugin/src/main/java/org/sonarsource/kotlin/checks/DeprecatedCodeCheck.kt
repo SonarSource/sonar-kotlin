@@ -20,7 +20,6 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
@@ -34,7 +33,7 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 @Rule(key = "S1133")
 class DeprecatedCodeCheck : AbstractCheck() {
-    
+
     override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry, context: KotlinFileContext) {
         val descriptor = context.bindingContext.get(BindingContext.ANNOTATION, annotationEntry)
         if ("kotlin.Deprecated" == descriptor?.fqName?.asString()) {
@@ -43,13 +42,12 @@ class DeprecatedCodeCheck : AbstractCheck() {
     }
 }
 
-private fun KtAnnotationEntry.elementToReport(): PsiElement = 
-    when (val annotated = annotatedElement()) {
-        // Deprecated Primary constructor should always have a "constructor" keyword 
-        is KtPrimaryConstructor -> annotated.getConstructorKeyword()!!
-        is KtSecondaryConstructor -> annotated.getConstructorKeyword()
-        is KtPropertyAccessor -> annotated.namePlaceholder
-        // Can deprecate anonymous functions and classes
-        is KtNamedDeclaration -> annotated.nameIdentifier ?: this
-        else -> this
-    }
+private fun KtAnnotationEntry.elementToReport(): PsiElement = when (val annotated = annotatedElement()) {
+    // Deprecated Primary constructor should always have a "constructor" keyword
+    is KtPrimaryConstructor -> annotated.getConstructorKeyword()!!
+    is KtSecondaryConstructor -> annotated.getConstructorKeyword()
+    is KtPropertyAccessor -> annotated.namePlaceholder
+    // Can deprecate anonymous functions and classes
+    is KtNamedDeclaration -> annotated.nameIdentifier ?: this
+    else -> this
+}

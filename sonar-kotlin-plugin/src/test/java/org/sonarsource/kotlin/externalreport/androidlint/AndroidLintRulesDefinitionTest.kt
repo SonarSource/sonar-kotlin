@@ -55,7 +55,8 @@ internal class AndroidLintRulesDefinitionTest {
                 </p>
                 <p>
                 </p>
-                """.trimIndent())
+            """.trimIndent(),
+        )
         assertThat(rule.tags()).containsExactlyInAnyOrder("android")
         assertThat(rule.debtRemediationFunction()!!.baseEffort()).isEqualTo("5min")
     }

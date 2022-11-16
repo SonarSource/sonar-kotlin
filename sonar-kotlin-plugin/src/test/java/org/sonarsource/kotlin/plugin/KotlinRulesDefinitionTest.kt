@@ -71,7 +71,8 @@ internal class KotlinRulesDefinitionTest {
 
     private fun repositoryForVersion(version: Version): RulesDefinition.Repository? {
         val rulesDefinition: RulesDefinition = KotlinRulesDefinition(
-            SonarRuntimeImpl.forSonarQube(version, SonarQubeSide.SCANNER, SonarEdition.COMMUNITY))
+            SonarRuntimeImpl.forSonarQube(version, SonarQubeSide.SCANNER, SonarEdition.COMMUNITY),
+        )
         val context = RulesDefinition.Context()
         rulesDefinition.define(context)
         return context.repository("kotlin")

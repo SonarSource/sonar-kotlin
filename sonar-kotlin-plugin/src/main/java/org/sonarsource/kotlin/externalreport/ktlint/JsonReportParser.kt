@@ -47,4 +47,3 @@ class InvalidReportFormatException(msg: String) : RuntimeException(msg) {
 
 data class FindingsPerFile(val file: String, val errors: List<Finding>)
 data class Finding(val line: Int, val column: Int, val message: String, val rule: String)
-

@@ -41,5 +41,4 @@ class TooLongLambdaCheck : AbstractTooLongFunctionRule() {
     override fun visitLambdaExpression(expression: KtLambdaExpression, kotlinFileContext: KotlinFileContext) {
         check(expression.functionLiteral, kotlinFileContext)
     }
-
 }

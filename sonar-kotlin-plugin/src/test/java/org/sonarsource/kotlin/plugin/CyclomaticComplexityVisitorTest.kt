@@ -44,7 +44,8 @@ internal class CyclomaticComplexityVisitorTest {
                            else -> println("it's complicated")
                        }
                    }
-             }""".trimMargin()
+             }
+            """.trimMargin()
         val trees = getComplexityTrees(content)
         Assertions.assertThat(trees)
             .hasSize(4)
@@ -96,7 +97,8 @@ internal class CyclomaticComplexityVisitorTest {
                            }
                        }
                    }
-             }""".trimMargin()
+             }
+            """.trimMargin()
 
         val trees = getComplexityTrees(content)
         Assertions.assertThat(trees)
@@ -111,7 +113,8 @@ internal class CyclomaticComplexityVisitorTest {
                    init {
                        do { x = x - 1 } while (x > y)
                    }
-             }""".trimMargin()
+             }
+            """.trimMargin()
 
         val trees = getComplexityTrees(content)
         Assertions.assertThat(trees)
@@ -124,7 +127,8 @@ internal class CyclomaticComplexityVisitorTest {
         val content =
             """class X() {
                    val decrement = fun(x: Int) { x = x - 1 }
-             }""".trimMargin()
+             }
+            """.trimMargin()
 
         val trees = getComplexityTrees(content)
         Assertions.assertThat(trees).isEmpty()
@@ -135,7 +139,8 @@ internal class CyclomaticComplexityVisitorTest {
         val content =
             """abstract class X() {
                    fun f(x: Int)
-             }""".trimMargin()
+             }
+            """.trimMargin()
 
         val trees = getComplexityTrees(content)
         Assertions.assertThat(trees).isEmpty()

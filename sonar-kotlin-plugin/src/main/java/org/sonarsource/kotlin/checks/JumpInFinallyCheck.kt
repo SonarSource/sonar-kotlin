@@ -40,9 +40,11 @@ import java.util.Stack
 class JumpInFinallyCheck : AbstractCheck() {
 
     override fun visitFinallySection(finallySection: KtFinallySection, kotlinFileContext: KotlinFileContext) {
-        finallySection.accept(FinallyBlockVisitor {
-            kotlinFileContext.reportIssue(it.firstChild, it.buildReportMessage())
-        })
+        finallySection.accept(
+            FinallyBlockVisitor {
+                kotlinFileContext.reportIssue(it.firstChild, it.buildReportMessage())
+            },
+        )
     }
 }
 

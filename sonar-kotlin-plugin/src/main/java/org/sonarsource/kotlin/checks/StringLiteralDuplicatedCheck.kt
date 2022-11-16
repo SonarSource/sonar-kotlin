@@ -43,13 +43,13 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
     @RuleProperty(
         key = "threshold",
         description = "Number of times a literal must be duplicated to trigger an issue",
-        defaultValue = "" + DEFAULT_THRESHOLD
+        defaultValue = "" + DEFAULT_THRESHOLD,
     )
     var threshold = DEFAULT_THRESHOLD
 
     private fun check(
         context: KotlinFileContext,
-        occurrencesMap: Map<String, List<KtStringTemplateExpression>>,
+        occurrencesMap: Map<String, List<KtStringTemplateExpression>>
     ) {
         for ((_, occurrences) in occurrencesMap) {
             val size = occurrences.size

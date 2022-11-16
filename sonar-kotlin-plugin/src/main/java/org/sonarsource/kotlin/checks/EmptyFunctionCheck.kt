@@ -29,15 +29,15 @@ class EmptyFunctionCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val bodyBlockExpression = function.bodyBlockExpression
-        if (bodyBlockExpression != null
-            && bodyBlockExpression.statements.isEmpty()
+        if (bodyBlockExpression != null &&
+            bodyBlockExpression.statements.isEmpty() &&
             // function.lastChild is either bodyBlockExpression or trailing comment
-            && !function.lastChild.hasComment()
+            !function.lastChild.hasComment()
         ) {
             kotlinFileContext.reportIssue(
                 bodyBlockExpression,
-                "Add a nested comment explaining why this function is empty or complete the implementation.")
+                "Add a nested comment explaining why this function is empty or complete the implementation.",
+            )
         }
     }
-
 }

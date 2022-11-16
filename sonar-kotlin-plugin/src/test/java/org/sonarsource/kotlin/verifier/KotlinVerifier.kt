@@ -82,7 +82,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
         converter: (String) -> Pair<KotlinTree, InputFile>,
         path: Path,
         check: AbstractCheck,
-        isAndroid: Boolean,
+        isAndroid: Boolean
     ): SingleFileVerifier {
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
 
@@ -106,7 +106,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
             classpath = getFilesRecursively(testJars)
         } else if (DEFAULT_TEST_JARS_DIRECTORY != jarsDirectory) {
             throw AssertionError(
-                "The directory to be used to extend class path does not exists (${testJars.toAbsolutePath()})."
+                "The directory to be used to extend class path does not exists (${testJars.toAbsolutePath()}).",
             )
         }
         return classpath
@@ -132,4 +132,3 @@ class KotlinVerifier(private val check: AbstractCheck) {
 fun KotlinVerifier(check: AbstractCheck, block: KotlinVerifier.() -> Unit) =
     KotlinVerifier(check)
         .apply(block)
-

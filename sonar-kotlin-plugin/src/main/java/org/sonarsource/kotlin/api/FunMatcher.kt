@@ -29,9 +29,9 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.RESOLVED_CALL
-import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.tasks.isDynamic
+import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
 import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequence
@@ -47,7 +47,7 @@ class FunMatcherImpl(
     val dynamic: Boolean? = null,
     val extensionFunction: Boolean? = null,
     val suspending: Boolean? = null,
-    val returnType: String? = null,
+    val returnType: String? = null
 ) {
 
     fun matches(node: KtCallExpression, bindingContext: BindingContext): Boolean {
@@ -112,7 +112,9 @@ class FunMatcherImpl(
             matchConstructor
         } else if (!matchConstructor) {
             names.isEmpty() || functionDescriptor.name.asString() in names
-        } else false
+        } else {
+            false
+        }
 
     private fun checkCallParameters(descriptor: CallableDescriptor): Boolean {
         val valueParameters: List<ValueParameterDescriptor> =
@@ -135,8 +137,11 @@ class FunMatcherImpl(
     private fun checkReturnType(descriptor: CallableDescriptor) =
         returnType?.let {
             val kotlinType = descriptor.returnType
-            if (kotlinType?.constructor?.declarationDescriptor != null) it == kotlinType.getJetTypeFqName(false)
-            else null
+            if (kotlinType?.constructor?.declarationDescriptor != null) {
+                it == kotlinType.getJetTypeFqName(false)
+            } else {
+                null
+            }
         } ?: true
 
     private fun checkIsSuspending(descriptor: CallableDescriptor) =
@@ -153,7 +158,7 @@ class FunMatcherBuilderContext(
     var dynamic: Boolean? = null,
     var extensionFunction: Boolean? = null,
     var suspending: Boolean? = null,
-    var returnType: String? = null,
+    var returnType: String? = null
 ) {
     var arguments: MutableList<List<ArgumentMatcher>> = arguments.toMutableList()
 
@@ -189,7 +194,7 @@ fun FunMatcher(
     extensionFunction: Boolean? = null,
     suspending: Boolean? = null,
     returnType: String? = null,
-    block: FunMatcherBuilderContext.() -> Unit = {},
+    block: FunMatcherBuilderContext.() -> Unit = {}
 ) = FunMatcherBuilderContext(
     qualifier,
     name,

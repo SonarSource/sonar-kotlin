@@ -44,7 +44,7 @@ class DuplicateBranchCheck : AbstractBranchDuplication() {
                     ctx.reportIssue(
                         duplicated,
                         "This branch's code block is the same as the block for the branch on line ${originalRange.start().line()}.",
-                        listOf(SecondaryLocation(originalRange, "Original"))
+                        listOf(SecondaryLocation(originalRange, "Original")),
                     )
                 }
         }
@@ -57,7 +57,6 @@ class DuplicateBranchCheck : AbstractBranchDuplication() {
 
 private fun KtQualifiedExpression.hasSameSignature(other: KtQualifiedExpression, bindingContext: BindingContext): Boolean =
     this.determineSignature(bindingContext) == other.determineSignature(bindingContext)
-
 
 private fun spansMultipleLines(tree: KtElement, ctx: KotlinFileContext): Boolean {
     if (tree is KtBlockExpression) {

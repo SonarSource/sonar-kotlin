@@ -34,5 +34,4 @@ class NestedMatchCheck : AbstractCheck() {
             kotlinFileContext.reportIssue(expression, """Refactor the code to eliminate this nested "when".""")
         }
     }
-
 }

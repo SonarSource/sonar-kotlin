@@ -28,5 +28,5 @@ data class KotlinFileContext(
     val inputFileContext: InputFileContext,
     val ktFile: KtFile,
     val bindingContext: BindingContext,
-    val diagnostics: List<Diagnostic>,
+    val diagnostics: List<Diagnostic>
 )

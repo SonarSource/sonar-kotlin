@@ -34,9 +34,11 @@ class FunctionCognitiveComplexityCheck : AbstractCheck() {
         private const val DEFAULT_THRESHOLD = 15
     }
 
-    @RuleProperty(key = "threshold",
+    @RuleProperty(
+        key = "threshold",
         description = "The maximum authorized complexity.",
-        defaultValue = "" + DEFAULT_THRESHOLD)
+        defaultValue = "" + DEFAULT_THRESHOLD,
+    )
     var threshold = DEFAULT_THRESHOLD
 
     override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext) {

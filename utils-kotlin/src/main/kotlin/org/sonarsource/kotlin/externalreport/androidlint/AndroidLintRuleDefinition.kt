@@ -41,13 +41,18 @@ private val WORDS = Regex("\\w+")
  */
 fun main(vararg args: String?) {
     val rulesFile =
-        if (args.isNotEmpty() && !args[0].isNullOrBlank()) Path.of(args[0])
-        else DEFAULT_RULES_FILE
+        if (args.isNotEmpty() && !args[0].isNullOrBlank()) {
+            Path.of(args[0])
+        } else {
+            DEFAULT_RULES_FILE
+        }
 
     val androidLintHelpPath =
-        if (args.size > 1 && !args[1].isNullOrBlank()) Path.of(args[1])
-        else ANDROID_LINT_HELP
-
+        if (args.size > 1 && !args[1].isNullOrBlank()) {
+            Path.of(args[1])
+        } else {
+            ANDROID_LINT_HELP
+        }
 
     var projectPath = Paths.get(".").toRealPath()
     while (!projectPath.resolve(rulesFile).toFile().exists()) {

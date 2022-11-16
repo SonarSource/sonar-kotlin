@@ -61,7 +61,7 @@ private val CRYPTO_APIS = listOf(
     "java.security.KeyPairGenerator",
     "java.security.Signature",
     "javax.crypto.Mac",
-    "javax.crypto.KeyGenerator"
+    "javax.crypto.KeyGenerator",
 )
 
 private val DEPRECATED_SPRING_PASSWORD_ENCODERS = setOf(
@@ -96,7 +96,7 @@ private val WEAK_METHOD_MATCHERS = listOf(
 }
 
 private val DEPRECATED_SPRING_PASSWORD_ENCODER_METHODS = DEPRECATED_SPRING_PASSWORD_ENCODERS.map(::ConstructorMatcher).toList() +
-        FunMatcher(qualifier = "org.springframework.security.crypto.password.NoOpPasswordEncoder", name = GET_INSTANCE)
+    FunMatcher(qualifier = "org.springframework.security.crypto.password.NoOpPasswordEncoder", name = GET_INSTANCE)
 
 @Rule(key = "S4790")
 class DataHashingCheck : AbstractCheck() {

@@ -34,28 +34,29 @@ val fixMePattern = Regex("(?i)(^|[[^\\p{L}]&&\\D])(fixme)($|[[^\\p{L}]&&\\D])")
 class FixMeCommentCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, kotlinFileContext: KotlinFileContext) {
-        file.accept(object : KtTreeVisitorVoid() {
-            /** Note that [visitComment] not called for [org.jetbrains.kotlin.kdoc.psi.api.KDoc] */
-            override fun visitElement(element: PsiElement) {
-                super.visitElement(element)
-                if (element !is PsiComment) {
-                    return
+        file.accept(
+            object : KtTreeVisitorVoid() {
+                /** Note that [visitComment] not called for [org.jetbrains.kotlin.kdoc.psi.api.KDoc] */
+                override fun visitElement(element: PsiElement) {
+                    super.visitElement(element)
+                    if (element !is PsiComment) {
+                        return
+                    }
+                    fixMePattern.find(element.text)?.let { matchResult ->
+                        val fixmeOffset = element.textOffset + matchResult.groups[2]!!.range.first
+                        val document = kotlinFileContext.ktFile.viewProvider.document!!
+                        val inputFile = kotlinFileContext.inputFileContext.inputFile
+                        val fixmeRange = inputFile.newRange(
+                            inputFile.textPointerAtOffset(document, fixmeOffset),
+                            inputFile.textPointerAtOffset(document, fixmeOffset + 5),
+                        )
+                        kotlinFileContext.reportIssue(
+                            fixmeRange,
+                            """Take the required action to fix the issue indicated by this "FIXME" comment.""",
+                        )
+                    }
                 }
-                fixMePattern.find(element.text)?.let { matchResult ->
-                    val fixmeOffset = element.textOffset + matchResult.groups[2]!!.range.first
-                    val document = kotlinFileContext.ktFile.viewProvider.document!!
-                    val inputFile = kotlinFileContext.inputFileContext.inputFile
-                    val fixmeRange = inputFile.newRange(
-                        inputFile.textPointerAtOffset(document, fixmeOffset),
-                        inputFile.textPointerAtOffset(document, fixmeOffset + 5)
-                    )
-                    kotlinFileContext.reportIssue(
-                        fixmeRange,
-                        """Take the required action to fix the issue indicated by this "FIXME" comment."""
-                    )
-                }
-            }
-        })
+            },
+        )
     }
-
 }

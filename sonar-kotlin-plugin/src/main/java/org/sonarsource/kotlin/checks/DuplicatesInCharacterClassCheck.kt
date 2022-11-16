@@ -27,7 +27,7 @@ import org.sonarsource.kotlin.api.regex.RegexContext
 
 @Rule(key = "S5869")
 class DuplicatesInCharacterClassCheck : AbstractRegexCheck() {
-    
+
     override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {
         DuplicatesInCharacterClassFinder(regexContext::reportIssue).visit(regex)
     }

@@ -63,9 +63,9 @@ abstract class AbstractSensorTest {
         Mockito.`when`(
             fileLinesContextFactory.createFor(
                 ArgumentMatchers.any(
-                    InputFile::class.java
-                )
-            )
+                    InputFile::class.java,
+                ),
+            ),
         ).thenReturn(fileLinesContext)
     }
 

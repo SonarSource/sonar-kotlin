@@ -44,8 +44,8 @@ class TooManyLinesOfCodeFileCheck : AbstractCheck() {
             kotlinFileContext.reportIssue(
                 null,
                 // TODO add filename to the message
-                "File has $numberOfLinesOfCode lines, which is greater than $max authorized. Split it into smaller files.")
+                "File has $numberOfLinesOfCode lines, which is greater than $max authorized. Split it into smaller files.",
+            )
         }
     }
-
 }

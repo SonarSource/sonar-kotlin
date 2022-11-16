@@ -93,9 +93,9 @@ internal class TextRangeTrackerTest {
             """
             val x = 
             $regex
-        """.trimIndent(),
+            """.trimIndent(),
             environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE),
-            inputFile = DummyInputFile()
+            inputFile = DummyInputFile(),
         )
 
         val ctx = KotlinFileContext(DummyInputFileContext(), tree.psiFile, tree.bindingContext, tree.diagnostics)
@@ -126,18 +126,18 @@ private class TextRangeTrackerAssert(actual: TextRangeTracker) : ObjectAssert<Te
             Assertions.assertThat(actualRange.start().lineOffset())
                 .withFailMessage(
                     "Expected start offset for range @ $i ($actualRealIndex) to be ${expectedRange.startIndex} " +
-                        "but was ${actualRange.start().lineOffset()}"
+                        "but was ${actualRange.start().lineOffset()}",
                 )
                 .isEqualTo(expectedRange.startIndex)
             Assertions.assertThat(actualRange.end().line())
                 .withFailMessage(
-                    "Expected end line for range @ $i ($actualRealIndex) to be 2 but was ${actualRange.end().line()}"
+                    "Expected end line for range @ $i ($actualRealIndex) to be 2 but was ${actualRange.end().line()}",
                 )
                 .isEqualTo(2)
             Assertions.assertThat(actualRange.end().lineOffset())
                 .withFailMessage(
                     "Expected end offset for range @ $i ($actualRealIndex) to be ${expectedRange.endIndex} " +
-                        "but was ${actualRange.end().lineOffset()}"
+                        "but was ${actualRange.end().lineOffset()}",
                 )
                 .isEqualTo(expectedRange.endIndex)
         }

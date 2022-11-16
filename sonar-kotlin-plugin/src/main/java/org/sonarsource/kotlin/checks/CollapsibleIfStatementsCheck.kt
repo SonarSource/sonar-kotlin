@@ -42,18 +42,20 @@ class CollapsibleIfStatementsCheck : AbstractCheck() {
     }
 
     private fun getCollapsibleIfStatement(expression: KtExpression): KtIfExpression? =
-        if (expression is KtBlockExpression)
-            if (expression.statements.size == 1)
+        if (expression is KtBlockExpression) {
+            if (expression.statements.size == 1) {
                 getIfStatementWithoutElse(expression.firstStatement)
-            else
+            } else {
                 null
-        else
+            }
+        } else {
             getIfStatementWithoutElse(expression)
+        }
 
     private fun getIfStatementWithoutElse(expression: KtExpression?): KtIfExpression? =
-        if (expression is KtIfExpression && expression.elseKeyword == null)
+        if (expression is KtIfExpression && expression.elseKeyword == null) {
             expression
-        else
+        } else {
             null
-
+        }
 }

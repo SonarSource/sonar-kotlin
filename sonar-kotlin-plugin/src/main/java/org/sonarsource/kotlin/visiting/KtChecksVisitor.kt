@@ -45,6 +45,9 @@ class KtChecksVisitor(val checks: Checks<out AbstractCheck>) : KotlinFileVisitor
     }
 
     private tailrec fun flattenNodes(childNodes: List<PsiElement>, acc: MutableList<PsiElement> = mutableListOf()): List<PsiElement> =
-        if (childNodes.none()) acc
-        else flattenNodes(childNodes = childNodes.flatMap { it.children.asList() }, acc = acc.apply { addAll(childNodes) })
+        if (childNodes.none()) {
+            acc
+        } else {
+            flattenNodes(childNodes = childNodes.flatMap { it.children.asList() }, acc = acc.apply { addAll(childNodes) })
+        }
 }

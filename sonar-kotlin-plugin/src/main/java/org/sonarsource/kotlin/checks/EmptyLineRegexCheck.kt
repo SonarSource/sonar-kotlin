@@ -19,8 +19,6 @@
  */
 package org.sonarsource.kotlin.checks
 
-import java.util.regex.Pattern
-import java.util.stream.Collectors
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -33,12 +31,12 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi2ir.deparenthesize
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
 import org.jetbrains.kotlin.resolve.calls.util.getParentResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getReceiverExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.ast.BoundaryTree
@@ -60,6 +58,8 @@ import org.sonarsource.kotlin.api.regex.RegexContext
 import org.sonarsource.kotlin.api.regex.TO_REGEX_MATCHER
 import org.sonarsource.kotlin.api.secondaryOf
 import org.sonarsource.kotlin.plugin.KotlinFileContext
+import java.util.regex.Pattern
+import java.util.stream.Collectors
 
 private const val MESSAGE = "Remove MULTILINE mode or change the regex."
 
@@ -79,7 +79,7 @@ class EmptyLineRegexCheck : AbstractRegexCheck() {
         regexContext: RegexContext,
         callExpression: KtCallExpression,
         matchedFun: FunMatcherImpl,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
         val visitor = EmptyLineMultilineVisitor()
         visitor.visit(regex)
@@ -119,7 +119,7 @@ class EmptyLineRegexCheck : AbstractRegexCheck() {
     private fun getSecondaries(
         bindingContext: BindingContext,
         parent: PsiElement?,
-        findMapper: (KtElement, BindingContext) -> KtExpression?,
+        findMapper: (KtElement, BindingContext) -> KtExpression?
     ): List<KtElement> = when (parent) {
         is KtProperty -> {
             parent.findUsages()
@@ -128,7 +128,7 @@ class EmptyLineRegexCheck : AbstractRegexCheck() {
         }
         is KtDotQualifiedExpression -> {
             findMapper(parent.selectorExpression!!, bindingContext)
-                ?.let { if (it.canBeEmpty(bindingContext)) listOf(it) else emptyList()} ?: emptyList()
+                ?.let { if (it.canBeEmpty(bindingContext)) listOf(it) else emptyList() } ?: emptyList()
         }
         else -> {
             emptyList()
@@ -148,15 +148,15 @@ class EmptyLineRegexCheck : AbstractRegexCheck() {
                         kotlinFileContext.reportIssue(
                             it.getFirstArgumentExpression()!!,
                             MESSAGE,
-                            listOf(kotlinFileContext.secondaryOf(callExpression))
+                            listOf(kotlinFileContext.secondaryOf(callExpression)),
                         )
                     }
             }
             else -> {
                 val resolvedCall = callExpression.getParentResolvedCall(bindingContext)
                 if (
-                    resolvedCall matches STRING_REPLACE
-                    && resolvedCall?.getReceiverExpression()?.canBeEmpty(bindingContext) == true
+                    resolvedCall matches STRING_REPLACE &&
+                    resolvedCall?.getReceiverExpression()?.canBeEmpty(bindingContext) == true
                 ) {
                     kotlinFileContext.reportIssue(resolvedCall.getFirstArgumentExpression()!!, MESSAGE)
                 }
@@ -207,7 +207,9 @@ private fun getStringInMatcherFind(ref: KtElement, bindingContext: BindingContex
         is KtExpression -> if (preParent.getResolvedCall(bindingContext) matches PATTERN_FIND) extractArgument(resolvedCall) else null
         is KtProperty -> if (preParent.findUsages().any { it.getParentResolvedCall(bindingContext) matches PATTERN_FIND }) {
             extractArgument(resolvedCall)
-        } else null
+        } else {
+            null
+        }
         else -> null
     }
 }
@@ -219,12 +221,15 @@ private fun getStringInRegexFind(ref: KtElement, bindingContext: BindingContext)
 
 private fun extractArgument(resolvedCall: ResolvedCall<out CallableDescriptor>): KtExpression? {
     val arguments = resolvedCall.valueArgumentsByIndex
-    return if (arguments == null
-        || arguments.isEmpty()
-        || arguments[0] == null
-        || arguments[0] !is ExpressionValueArgument
-    ) null
-    else (arguments[0] as ExpressionValueArgument).valueArgument?.getArgumentExpression()
+    return if (arguments == null ||
+        arguments.isEmpty() ||
+        arguments[0] == null ||
+        arguments[0] !is ExpressionValueArgument
+    ) {
+        null
+    } else {
+        (arguments[0] as ExpressionValueArgument).valueArgument?.getArgumentExpression()
+    }
 }
 
 /**
@@ -252,6 +257,8 @@ private fun KtExpression.canBeEmpty(bindingContext: BindingContext): Boolean =
 private fun KtBinaryExpression?.isEmptinessCheck(bindingContext: BindingContext) =
     this?.let {
         operationToken in setOf(KtTokens.EQEQ, KtTokens.EXCLEQ) &&
-            (left?.predictRuntimeStringValue(bindingContext)?.isEmpty() ?: false
-                || right?.predictRuntimeStringValue(bindingContext)?.isEmpty() ?: false)
+            (
+                left?.predictRuntimeStringValue(bindingContext)?.isEmpty() ?: false ||
+                    right?.predictRuntimeStringValue(bindingContext)?.isEmpty() ?: false
+                )
     } ?: false

@@ -34,7 +34,7 @@ class RegexComplexityCheck : AbstractRegexCheck() {
     @RuleProperty(
         key = "maxComplexity",
         description = "The maximum authorized complexity.",
-        defaultValue = "$DEFAULT_MAX"
+        defaultValue = "$DEFAULT_MAX",
     )
     var maxComplexity = DEFAULT_MAX
 

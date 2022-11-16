@@ -40,7 +40,8 @@ class TooComplexExpressionCheck : AbstractCheck() {
     @RuleProperty(
         key = "max",
         description = "Maximum number of allowed conditional operators in an expression",
-        defaultValue = "" + DEFAULT_MAX_COMPLEXITY)
+        defaultValue = "" + DEFAULT_MAX_COMPLEXITY,
+    )
     var max = DEFAULT_MAX_COMPLEXITY
 
     override fun visitBinaryExpression(expression: KtBinaryExpression, kotlinFileContext: KotlinFileContext) {
@@ -59,9 +60,9 @@ class TooComplexExpressionCheck : AbstractCheck() {
         for (parent in expression.parents) {
             if (parent is KtBinaryExpression) {
                 return false
-            } else if (parent !is KtUnaryExpression
+            } else if (parent !is KtUnaryExpression ||
                 // TODO(Godin): seems that instead of logical-or should be logical-and
-                || parent !is KtParenthesizedExpression
+                parent !is KtParenthesizedExpression
             ) {
                 return true
             }
@@ -82,5 +83,4 @@ class TooComplexExpressionCheck : AbstractCheck() {
             else -> 0
         }
     }
-
 }

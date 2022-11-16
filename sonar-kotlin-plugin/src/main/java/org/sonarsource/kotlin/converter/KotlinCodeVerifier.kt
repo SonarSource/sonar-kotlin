@@ -24,18 +24,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtBinaryExpression
-import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
-import org.jetbrains.kotlin.psi.KtCollectionLiteralExpression
-import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.KtIsExpression
-import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
-import org.jetbrains.kotlin.psi.KtParenthesizedExpression
-import org.jetbrains.kotlin.psi.KtPostfixExpression
-import org.jetbrains.kotlin.psi.KtPrefixExpression
-import org.jetbrains.kotlin.psi.KtStringTemplateExpression
-import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.sonarsource.analyzer.commons.recognizers.CamelCaseDetector
 import org.sonarsource.analyzer.commons.recognizers.CodeRecognizer
@@ -63,7 +52,7 @@ object KotlinCodeVerifier {
         "@author",
         "@since",
         "@suppress",
-        "`"
+        "`",
     )
 
     fun containsCode(content: String): Boolean {
@@ -120,11 +109,11 @@ private object KotlinFootprint : LanguageFootprint {
         "true",
         "false",
         "object",
-        "companion"
+        "companion",
     )
 
     private val COMMON_KOTLIN_PATTERN_SNIPPETS = arrayOf(
-        "for(", "if(", "while(", "catch(", "when(", "try{", "else{", ".let{", ".also{", ".run{", ".apply{", ".map{", ".forEach{", "()"
+        "for(", "if(", "while(", "catch(", "when(", "try{", "else{", ".let{", ".also{", ".run{", ".apply{", ".map{", ".forEach{", "()",
     )
 
     private val detectors = setOf(

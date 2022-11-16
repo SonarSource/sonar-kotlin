@@ -21,8 +21,8 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.ArgumentMatcher
 import org.sonarsource.kotlin.api.BYTE_ARRAY_CONSTRUCTOR_SIZE_ARG_ONLY
@@ -44,7 +44,7 @@ private const val SECURE_RANDOM = "java.security.SecureRandom"
 class UnpredictableSecureRandomSaltCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(
         FunMatcher(qualifier = SECURE_RANDOM, name = "setSeed"),
-        ConstructorMatcher(SECURE_RANDOM, arguments = listOf(listOf(ArgumentMatcher.ANY)))
+        ConstructorMatcher(SECURE_RANDOM, arguments = listOf(listOf(ArgumentMatcher.ANY))),
     )
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {

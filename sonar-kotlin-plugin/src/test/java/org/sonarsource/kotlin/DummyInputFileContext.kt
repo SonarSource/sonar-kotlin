@@ -53,7 +53,6 @@ class DummyInputFileContext : InputFileContext {
     override fun reportAnalysisError(message: String?, location: TextPointer?) {
         throw NotImplementedError()
     }
-
 }
 
 data class ReportedIssue(

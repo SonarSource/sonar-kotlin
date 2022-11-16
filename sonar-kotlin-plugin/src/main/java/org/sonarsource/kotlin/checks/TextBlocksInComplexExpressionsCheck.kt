@@ -40,15 +40,15 @@ class TextBlocksInComplexExpressionsCheck : AbstractCheck() {
     @RuleProperty(
         key = "MaximumNumberOfLines",
         description = "The maximum number of lines in a text block that can be nested into a complex expression.",
-        defaultValue = "" + DEFAULT_LINES_NUMBER
+        defaultValue = "" + DEFAULT_LINES_NUMBER,
     )
     var linesNumber = DEFAULT_LINES_NUMBER
 
     override fun visitLambdaExpression(expression: KtLambdaExpression, ctx: KotlinFileContext) {
         if (expression.parent is KtValueArgument) {
             expression.forEachDescendantOfType<KtStringTemplateExpression>(
-                canGoInside = { elem -> elem !is KtLambdaExpression || elem === expression })
-            { stringTemplate ->
+                canGoInside = { elem -> elem !is KtLambdaExpression || elem === expression },
+            ) { stringTemplate ->
                 evaluateStringTemplateLines(stringTemplate, ctx)
             }
         }
@@ -59,5 +59,4 @@ class TextBlocksInComplexExpressionsCheck : AbstractCheck() {
             ctx.reportIssue(stringTemplate, MESSAGE)
         }
     }
-
 }

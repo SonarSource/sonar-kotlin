@@ -19,8 +19,6 @@
  */
 package org.sonarsource.kotlin.checks
 
-import java.net.URI
-import java.net.URISyntaxException
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -34,12 +32,16 @@ import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
+import java.net.URI
+import java.net.URISyntaxException
 
 @Rule(key = "S2068")
 class HardcodedCredentialsCheck : AbstractCheck() {
-    @RuleProperty(key = "credentialWords",
+    @RuleProperty(
+        key = "credentialWords",
         description = "Comma separated list of words identifying potential credentials",
-        defaultValue = DEFAULT_VALUE)
+        defaultValue = DEFAULT_VALUE,
+    )
     var credentialWords = DEFAULT_VALUE
     private var variablePatterns: Sequence<Regex>? = null
     private var literalPatterns: Sequence<Regex>? = null
@@ -65,11 +67,13 @@ class HardcodedCredentialsCheck : AbstractCheck() {
 
         private fun isQuery(value: String, match: String): Boolean {
             val followingString = value.substring(value.indexOf(match) + match.length)
-            return (followingString.startsWith("=?")
-                || followingString.startsWith("=%")
-                || followingString.startsWith("=:")
-                || followingString.startsWith("={") // string format
-                || followingString == "='")
+            return (
+                followingString.startsWith("=?") ||
+                    followingString.startsWith("=%") ||
+                    followingString.startsWith("=:") ||
+                    followingString.startsWith("={") || // string format
+                    followingString == "='"
+                )
         }
     }
 
@@ -99,9 +103,9 @@ class HardcodedCredentialsCheck : AbstractCheck() {
         }
     }
 
-    private fun KtElement.isNotEmptyString() = this is KtStringTemplateExpression
-        && !this.hasInterpolation()
-        && this.asConstant().isNotEmpty()
+    private fun KtElement.isNotEmptyString() = this is KtStringTemplateExpression &&
+        !this.hasInterpolation() &&
+        this.asConstant().isNotEmpty()
 
     private fun KotlinFileContext.report(tree: PsiElement, matchName: String) {
         reportIssue(tree, """"$matchName" detected here, make sure this is not a hard-coded credential.""")
@@ -128,7 +132,8 @@ class HardcodedCredentialsCheck : AbstractCheck() {
                         matcher,
                         regex,
                         variable,
-                        (value as KtStringTemplateExpression).asConstant())
+                        (value as KtStringTemplateExpression).asConstant(),
+                    )
                 }
         }
     }

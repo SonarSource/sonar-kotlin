@@ -44,9 +44,9 @@ class BiometricAuthWithoutCryptoCheck : CallAbstractCheck() {
         callExpression: KtCallExpression,
         resolvedCall: ResolvedCall<*>,
         matchedFun: FunMatcherImpl,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
-        when(matchedFun) {
+        when (matchedFun) {
             ANDROID_HARDWARE_AUTH -> checkCall(callExpression, kotlinFileContext, 4, 0)
             ANDROIDX_AUTH -> checkCall(callExpression, kotlinFileContext, 2, 1)
         }

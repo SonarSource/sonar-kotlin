@@ -19,4 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-class UnusedDeferredResultCheckTest : CheckTest(UnusedDeferredResultCheck()) 
+class UnusedDeferredResultCheckTest : CheckTest(UnusedDeferredResultCheck())

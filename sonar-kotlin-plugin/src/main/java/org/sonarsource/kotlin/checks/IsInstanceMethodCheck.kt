@@ -77,5 +77,4 @@ class IsInstanceMethodCheck : CallAbstractCheck() {
 
     private fun KtReferenceExpression.isClass(ctx: KotlinFileContext) =
         ctx.bindingContext.get(BindingContext.REFERENCE_TARGET, this) is ClassDescriptor
-
 }

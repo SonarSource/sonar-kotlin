@@ -47,23 +47,23 @@ class AbstractCheckTest {
                 check.apply {
                     kotlinFileContext.reportIssue(
                         kotlinFileContext.textRange(node),
-                        "Hello World!"
+                        "Hello World!",
                     )
                 }
-            }),
+            },),
             Arguments.of({ check: DummyCheck, kotlinFileContext: KotlinFileContext, node: PsiElement ->
                 check.apply { kotlinFileContext.reportIssue(node, "Hello World!") }
-            }),
+            },),
             Arguments.of({ check: DummyCheck, kotlinFileContext: KotlinFileContext, node: PsiElement ->
                 check.apply {
                     kotlinFileContext.reportIssue(
                         node,
                         "Hello World!",
                         listOf(SecondaryLocation(kotlinFileContext.textRange(21, 22, 23, 24), "secondary 2")),
-                        2.2
+                        2.2,
                     )
                 }
-            })
+            },),
         )
     }
 
@@ -79,11 +79,10 @@ class AbstractCheckTest {
     @ArgumentsSource(IssueReportingFunProvider::class)
     fun `report issues in various ways`(reportingFunction: (DummyCheck, KotlinFileContext, PsiElement) -> Unit) {
         KotlinVerifier(
-            DummyCheck(reportingFunction).apply { initialize(RuleKey.of("kotlinTest", "X99999")) }
+            DummyCheck(reportingFunction).apply { initialize(RuleKey.of("kotlinTest", "X99999")) },
         ) {
             fileName = "Dummy.kt"
             classpath = emptyList()
         }.verify()
     }
 }
-

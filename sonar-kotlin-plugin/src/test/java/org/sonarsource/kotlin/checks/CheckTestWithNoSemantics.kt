@@ -31,12 +31,12 @@ abstract class CheckTestWithNoSemantics(
     val sampleFileNoSemantics: String? = null,
     classpath: List<String>? = null,
     dependencies: List<String>? = null,
-    val shouldReport: Boolean = false,
+    val shouldReport: Boolean = false
 ) : CheckTest(
     check = check,
     sampleFileSemantics = sampleFileSemantics,
     classpath = classpath,
-    dependencies = dependencies
+    dependencies = dependencies,
 ) {
     @Test
     fun `without semantics`() {
@@ -44,7 +44,7 @@ abstract class CheckTestWithNoSemantics(
             this.fileName = sampleFileNoSemantics ?: "$checkName$NO_SEMANTICS_TEST_FILE_POSTFIX"
             this.classpath = this@CheckTestWithNoSemantics.classpath ?: emptyList()
             this.deps = this@CheckTestWithNoSemantics.dependencies ?: emptyList()
-        }.let { 
+        }.let {
             if (this.shouldReport) it.verify() else it.verifyNoIssue()
         }
     }

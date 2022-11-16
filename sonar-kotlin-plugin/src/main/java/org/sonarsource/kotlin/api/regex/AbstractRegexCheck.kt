@@ -28,8 +28,8 @@ import org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getReceiverExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getReceiverExpression
 import org.sonar.api.batch.fs.TextRange
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
@@ -147,16 +147,18 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
         kotlinFileContext: KotlinFileContext
     ): AnalyzerIssueReportInfo? {
         val (mainLocation, additionalSecondaries) = kotlinFileContext.mergeTextRanges(
-            regexCtx.regexSource.textRangeTracker.textRangesBetween(regexElement.range.beginningOffset, regexElement.range.endingOffset)
+            regexCtx.regexSource.textRangeTracker.textRangesBetween(regexElement.range.beginningOffset, regexElement.range.endingOffset),
         )?.let { mergedRanges ->
             mergedRanges.first() to mergedRanges.drop(1).map { SecondaryLocation(it, message) }
         } ?: return null
 
         // Add the method call as the last secondary to make sure it is always referenced (can sometimes be far away from the regex string)
         val allSecondaries =
-            (additionalSecondaries + secondaryLocations.flatMap {
-                it.toSecondaries(regexCtx.regexSource.textRangeTracker, kotlinFileContext)
-            } + SecondaryLocation(kotlinFileContext.textRange(regexCallExpression.calleeExpression!!), REGEX_CALL_LOC_MSG))
+            (
+                additionalSecondaries + secondaryLocations.flatMap {
+                    it.toSecondaries(regexCtx.regexSource.textRangeTracker, kotlinFileContext)
+                } + SecondaryLocation(kotlinFileContext.textRange(regexCallExpression.calleeExpression!!), REGEX_CALL_LOC_MSG)
+                )
                 .distinct()
 
         return AnalyzerIssueReportInfo(mainLocation, message, allSecondaries, gap)
@@ -167,7 +169,7 @@ private data class AnalyzerIssueReportInfo(
     val mainLocation: TextRange,
     val message: String,
     val secondaryLocations: List<SecondaryLocation>,
-    val gap: Double?,
+    val gap: Double?
 )
 
 private fun KtExpression?.extractRegexFlags(bindingContext: BindingContext): FlagSet =
@@ -178,7 +180,7 @@ private fun KtExpression?.extractRegexFlags(bindingContext: BindingContext): Fla
             ?.mapNotNull { bindingContext.get(BindingContext.REFERENCE_TARGET, it) }
             ?.mapNotNull { FLAGS[it.name.asString()] }
             ?.fold(0, Int::or)
-            ?: 0
+            ?: 0,
     )
 
 private fun KtExpression?.collectResolvedListOfStringTemplates(bindingContext: BindingContext): Sequence<KtStringTemplateExpression?> =

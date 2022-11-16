@@ -24,7 +24,6 @@ import io.mockk.verify
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
-import org.sonar.api.issue.NoSonarFilter
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.testing.AbstractSensorTest
@@ -41,11 +40,14 @@ class CheckRegistrationTest : AbstractSensorTest() {
     @ExperimentalTime
     @Test
     fun ensure_check_registration_works() {
-        val inputFile = createInputFile("file1.kt", """
+        val inputFile = createInputFile(
+            "file1.kt",
+            """
             fun main(args: Array<String>) {
                 print (1 == 1);
             }
-             """.trimIndent())
+            """.trimIndent(),
+        )
         context.fileSystem().add(inputFile)
         val dummyCheck = spyk(DummyCheck())
         KotlinSensor(checkFactory("S99999"), fileLinesContextFactory, DefaultNoSonarFilter(), language()).also { sensor ->

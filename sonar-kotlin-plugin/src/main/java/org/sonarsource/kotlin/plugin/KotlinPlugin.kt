@@ -118,7 +118,7 @@ class KotlinPlugin : Plugin {
                     .subCategory(KOTLIN_SUBCATEGORY)
                     .onQualifiers(Qualifiers.PROJECT)
                     .multiValues(true)
-                    .build()
+                    .build(),
             )
         }
     }

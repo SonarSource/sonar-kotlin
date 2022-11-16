@@ -47,5 +47,4 @@ class OneStatementPerLineCheck : AbstractCheck() {
                 }
             }
     }
-
 }

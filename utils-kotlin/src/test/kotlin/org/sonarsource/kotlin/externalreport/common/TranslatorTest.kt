@@ -26,7 +26,6 @@ class TranslatorTest {
 
     @Test
     fun `should escape html`() {
-
         val input = """
             <!DOCTYPE html>
             <html>
@@ -47,7 +46,8 @@ class TranslatorTest {
             </html>
         """.trimIndent()
 
-        assertThat( Translator.escapeHtml4(input)).isEqualToIgnoringWhitespace("""
+        assertThat(Translator.escapeHtml4(input)).isEqualToIgnoringWhitespace(
+            """
             &lt;!DOCTYPE html&gt;
             &lt;html&gt;
               &lt;head&gt;
@@ -64,9 +64,8 @@ class TranslatorTest {
                 This data is as of 21 Sep 2020.
                 😂
               &lt;/body&gt;
-            &lt;/html&gt;""".trimIndent()
+            &lt;/html&gt;
+            """.trimIndent(),
         )
-
     }
-
 }

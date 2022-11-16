@@ -137,5 +137,4 @@ class ReplaceGuavaWithKotlinCheck : CallAbstractCheck() {
             ?.getJetTypeFqName(false)
             ?.let { REPLACEMENT_TYPES[it]?.let(action) }
     }
-
 }

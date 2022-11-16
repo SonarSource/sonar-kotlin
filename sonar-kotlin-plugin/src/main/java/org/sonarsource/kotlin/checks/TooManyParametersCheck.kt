@@ -40,7 +40,8 @@ class TooManyParametersCheck : AbstractCheck() {
     @RuleProperty(
         key = "Max",
         description = "Maximum authorized number of parameters",
-        defaultValue = "" + DEFAULT_MAX)
+        defaultValue = "" + DEFAULT_MAX,
+    )
     var max = DEFAULT_MAX
 
     private val exceptionsList = listOf(
@@ -50,12 +51,13 @@ class TooManyParametersCheck : AbstractCheck() {
         "PutMapping",
         "DeleteMapping",
         "PatchMapping",
-        "JsonCreator")
+        "JsonCreator",
+    )
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        if (function.valueParameters.size > max
-            && !function.hasModifier(KtTokens.OVERRIDE_KEYWORD)
-            && function.annotationEntries.none { exceptionsList.contains(it.shortName?.asString()) }
+        if (function.valueParameters.size > max &&
+            !function.hasModifier(KtTokens.OVERRIDE_KEYWORD) &&
+            function.annotationEntries.none { exceptionsList.contains(it.shortName?.asString()) }
         ) {
             report(
                 /** see [org.sonarsource.slang.impl.FunctionDeclarationTreeImpl.rangeToHighlight] */
@@ -75,7 +77,7 @@ class TooManyParametersCheck : AbstractCheck() {
     private fun report(
         reportingLocation: PsiElement,
         parameters: List<KtParameter>,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
         kotlinFileContext.reportIssue(
             reportingLocation,

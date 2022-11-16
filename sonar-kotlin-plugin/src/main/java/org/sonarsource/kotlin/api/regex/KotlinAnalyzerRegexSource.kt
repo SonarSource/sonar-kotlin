@@ -37,7 +37,7 @@ import java.util.TreeMap
  */
 class KotlinAnalyzerRegexSource(
     sourceTemplateEntries: Iterable<KtStringTemplateEntry>,
-    kotlinFileContext: KotlinFileContext,
+    kotlinFileContext: KotlinFileContext
 ) : JavaRegexSource(templateEntriesAsString(sourceTemplateEntries)) {
     val textRangeTracker = TextRangeTracker.of(sourceTemplateEntries, kotlinFileContext)
 }
@@ -51,12 +51,12 @@ fun isUnescapedEscapeChar(entry: KtStringTemplateEntry) = entry is KtLiteralStri
 class TextRangeTracker private constructor(
     private val regexIndexToTextRange: NavigableMap<Int, TextRange>,
     private val textRangeToKtNode: Map<TextRange, KtStringTemplateEntry>,
-    private val textRange: (startLine: Int, startColumn: Int, endLine: Int, endColumn: Int) -> TextRange,
+    private val textRange: (startLine: Int, startColumn: Int, endLine: Int, endColumn: Int) -> TextRange
 ) {
     companion object {
         fun of(
             stringTemplateEntries: Iterable<KtStringTemplateEntry>,
-            kotlinFileContext: KotlinFileContext,
+            kotlinFileContext: KotlinFileContext
         ): TextRangeTracker {
             var endIndex = 0
             val regexIndexToTextRange = TreeMap<Int, TextRange>()
@@ -71,7 +71,6 @@ class TextRangeTracker private constructor(
             return TextRangeTracker(regexIndexToTextRange, textRangeToKtNode) { startLine, startColumn, endLine, endColumn ->
                 kotlinFileContext.textRange(startLine, startColumn, endLine, endColumn)
             }
-
         }
     }
 
@@ -94,12 +93,23 @@ class TextRangeTracker private constructor(
                 start.start().line(),
                 start.start().lineOffset() + startOffset,
                 start.end().line(),
-                start.start().lineOffset() + endOffset
+                start.start().lineOffset() + endOffset,
             )
         } else {
-            textRangesBetween(regexIndexToTextRange.higherKey(startRangeIndex), endIndex, acc.apply {
-                add(textRange(start.start().line(), start.start().lineOffset() + startOffset, start.end().line(), start.end().lineOffset()))
-            })
+            textRangesBetween(
+                regexIndexToTextRange.higherKey(startRangeIndex),
+                endIndex,
+                acc.apply {
+                    add(
+                        textRange(
+                            start.start().line(),
+                            start.start().lineOffset() + startOffset,
+                            start.end().line(),
+                            start.end().lineOffset(),
+                        ),
+                    )
+                },
+            )
         }
     }
 }

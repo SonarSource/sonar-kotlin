@@ -58,7 +58,6 @@ private val ARRAY_ACCESS_IMPORTED_NAMES = setOf("get", "set")
 class UnnecessaryImportsCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
-
         val (references, arrayAccesses, kDocLinks, delegateImports, calls) = collectReferences(file)
 
         val bindingContext = context.bindingContext
@@ -94,7 +93,9 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         if (imp.isImportedImplicitlyAlready(file.packageDirective?.qualifiedName)) {
             imp.importedReference?.let { context.reportIssue(it, MESSAGE_REDUNDANT) }
             false
-        } else true
+        } else {
+            true
+        }
     }.groupBy {
         it.importedName?.asString()
     }.filterKeys { simpleName ->
@@ -196,8 +197,9 @@ class UnnecessaryImportsCheck : AbstractCheck() {
                 calls.mapNotNull { it.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() }
             }; // ';' is mandatory here
             { imp: KtImportDirective ->
-                if (imp.importedName?.asString() != "invoke") true
-                else {
+                if (imp.importedName?.asString() != "invoke") {
+                    true
+                } else {
                     imp.importedFqName !in callsFqn
                 }
             }
@@ -264,8 +266,11 @@ private fun KtReferenceExpression.importableSimpleName() =
     when (this) {
         is KtOperationReferenceExpression ->
             operationSignTokenType?.let { token ->
-                if (deparenthesize().parent is KtPrefixExpression) OperatorConventions.UNARY_OPERATION_NAMES[token]
-                else OperatorConventions.getNameForOperationSymbol(token)
+                if (deparenthesize().parent is KtPrefixExpression) {
+                    OperatorConventions.UNARY_OPERATION_NAMES[token]
+                } else {
+                    OperatorConventions.getNameForOperationSymbol(token)
+                }
             }
                 ?.asString()
                 ?: getReferencedName()

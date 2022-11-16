@@ -40,8 +40,11 @@ private const val DEFAULT_DEBT = 0L
 
 fun main(vararg args: String?) {
     val rulesFile =
-        if (args.isNotEmpty() && !args[0].isNullOrBlank()) Path.of(args[0])
-        else DEFAULT_RULES_FILE
+        if (args.isNotEmpty() && !args[0].isNullOrBlank()) {
+            Path.of(args[0])
+        } else {
+            DEFAULT_RULES_FILE
+        }
 
     val rules = generateRuleDefinitionsJson()
     var projectPath = Paths.get(".").toRealPath()

@@ -30,7 +30,6 @@ import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -41,7 +40,7 @@ class FunMatcherTest {
     val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
     val path = Paths.get("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
-    val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin.kt")
+    val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
         .setCharset(StandardCharsets.UTF_8)
         .initMetadata(content)
         .build()
@@ -62,7 +61,6 @@ class FunMatcherTest {
     val ktCallExpression4 = allCallExpressions[4]
 
     private val testFunCalls = allCallExpressions.subList(1, 5)
-
 
     @Test
     fun `match method by type and name`() {
@@ -350,7 +348,6 @@ class FunMatcherTest {
         assertThat(funMatcher.matches(callExpression, BindingContext.EMPTY)).isFalse
     }
 
-
     @Test
     fun `Don't match constructor`() {
         val funMatcher = ConstructorMatcher {
@@ -377,30 +374,54 @@ class FunMatcherTest {
 
     @Test
     fun `Match only methods with non-nullable paramter`() {
-        check(FunMatcher {
-            withArguments(ArgumentMatcher(nullability = TypeNullability.NOT_NULL))
-        }, true, true, false, false)
+        check(
+            FunMatcher {
+                withArguments(ArgumentMatcher(nullability = TypeNullability.NOT_NULL))
+            },
+            true,
+            true,
+            false,
+            false,
+        )
     }
 
     @Test
     fun `Match only methods with nullable parameter`() {
-        check(FunMatcher {
-            withArguments(ArgumentMatcher(nullability = TypeNullability.NULLABLE))
-        }, false, false, true, false)
+        check(
+            FunMatcher {
+                withArguments(ArgumentMatcher(nullability = TypeNullability.NULLABLE))
+            },
+            false,
+            false,
+            true,
+            false,
+        )
     }
 
     @Test
     fun `Match methods with a parameter with any nullability`() {
-        check(FunMatcher {
-            withArguments(ArgumentMatcher(nullability = null))
-        }, true, true, true, false)
+        check(
+            FunMatcher {
+                withArguments(ArgumentMatcher(nullability = null))
+            },
+            true,
+            true,
+            true,
+            false,
+        )
     }
 
     @Test
     fun `Don't match methods without flexible nullability parameter`() {
-        check(FunMatcher {
-            withArguments(ArgumentMatcher(nullability = TypeNullability.FLEXIBLE))
-        }, false, false, false, false)
+        check(
+            FunMatcher {
+                withArguments(ArgumentMatcher(nullability = TypeNullability.FLEXIBLE))
+            },
+            false,
+            false,
+            false,
+            false,
+        )
     }
 
     @Test

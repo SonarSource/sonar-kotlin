@@ -45,7 +45,7 @@ class EncryptionAlgorithmCheck : CallAbstractCheck() {
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
         resolvedCall: ResolvedCall<*>,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
         val bindingContext = kotlinFileContext.bindingContext
         callExpression.valueArguments.firstOrNull()?.let { argument ->
@@ -68,10 +68,14 @@ private fun String?.isInsecure(): Boolean {
     // First element is a full match
     matcher?.groupValues?.let { (_, algorithm, mode, padding) ->
         val isRSA = "RSA".equals(algorithm, ignoreCase = true)
-        return if ("ECB".equals(mode, ignoreCase = true) && !isRSA) true
-        else if ("CBC".equals(mode, ignoreCase = true)) false
-        else isRSA && !padding.uppercase().startsWith("OAEP")
+        return if ("ECB".equals(mode, ignoreCase = true) && !isRSA) {
+            true
+        } else if ("CBC".equals(mode, ignoreCase = true)) {
+            false
+        } else {
+            isRSA && !padding.uppercase().startsWith("OAEP")
+        }
     }
-    // By default, ECB is used.
+        // By default, ECB is used.
         ?: return true
 }

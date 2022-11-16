@@ -27,9 +27,9 @@ import org.jetbrains.kotlin.psi.KtPsiUtil.deparenthesize
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.REFERENCE_TARGET
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.CallAbstractCheck
@@ -55,11 +55,13 @@ private val UNSAFE_CALLS_GENERAL = mapOf(
 
 private val UNSAFE_CALLS_OK_HTTP = listOf(
     ConstructorMatcher("okhttp3.ConnectionSpec.Builder"),
-    FunMatcher(qualifier = "okhttp3.OkHttpClient.Builder", name = "connectionSpecs")
+    FunMatcher(qualifier = "okhttp3.OkHttpClient.Builder", name = "connectionSpecs"),
 )
 
-private val ANDROID_SET_MIXED_CONTENT_MODE = FunMatcher(definingSupertype = "android.webkit.WebSettings",
-    name = "setMixedContentMode") { withArguments("kotlin.Int") }
+private val ANDROID_SET_MIXED_CONTENT_MODE = FunMatcher(
+    definingSupertype = "android.webkit.WebSettings",
+    name = "setMixedContentMode",
+) { withArguments("kotlin.Int") }
 
 private fun msg(insecure: String, replaceWith: String) = "Using $insecure is insecure. Use $replaceWith instead."
 
@@ -72,7 +74,7 @@ class ClearTextProtocolCheck : CallAbstractCheck() {
         callExpression: KtCallExpression,
         resolvedCall: ResolvedCall<*>,
         matchedFun: FunMatcherImpl,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
         UNSAFE_CALLS_GENERAL[matchedFun]?.let { msg ->
             kotlinFileContext.reportIssue(callExpression, msg)
@@ -82,8 +84,10 @@ class ClearTextProtocolCheck : CallAbstractCheck() {
         if (matchedFun in UNSAFE_CALLS_OK_HTTP) {
             analyzeOkHttpCall(kotlinFileContext, callExpression)
         } else if (matchedFun == ANDROID_SET_MIXED_CONTENT_MODE) {
-            checkAndroidMixedContentArgument(kotlinFileContext,
-                deparenthesize(callExpression.getResolvedCall(kotlinFileContext.bindingContext)?.getFirstArgumentExpression()))
+            checkAndroidMixedContentArgument(
+                kotlinFileContext,
+                deparenthesize(callExpression.getResolvedCall(kotlinFileContext.bindingContext)?.getFirstArgumentExpression()),
+            )
         }
     }
 
@@ -110,7 +114,7 @@ class ClearTextProtocolCheck : CallAbstractCheck() {
 
 private class OkHttpArgumentFinder(
     private val bindingContext: BindingContext,
-    private val issueReporter: (KtSimpleNameExpression) -> Unit,
+    private val issueReporter: (KtSimpleNameExpression) -> Unit
 ) : KtTreeVisitor() {
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         if (bindingContext.get(REFERENCE_TARGET, expression)?.fqNameOrNull()?.asString() == CLEARTEXT_FQN) issueReporter(expression)

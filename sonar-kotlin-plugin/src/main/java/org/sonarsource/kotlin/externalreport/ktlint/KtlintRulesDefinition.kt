@@ -31,7 +31,8 @@ class KtlintRulesDefinition : RulesDefinition {
             KtlintSensor.LINTER_KEY,
             KtlintSensor.LINTER_NAME,
             RULES_FILE,
-            KotlinPlugin.KOTLIN_LANGUAGE_KEY)
+            KotlinPlugin.KOTLIN_LANGUAGE_KEY,
+        )
 
         internal const val EXPERIMENTAL_RULE_PREFIX = "experimental:"
     }

@@ -40,7 +40,7 @@ object KotlinTextRanges {
 
         return newPointer(startLineNumber + 1, startLineOffset)
     }
-    
+
     fun KotlinFileContext.textRange(psiElement: PsiElement) =
         inputFileContext.inputFile.textRange(ktFile.viewProvider.document!!, psiElement)
 
@@ -52,7 +52,7 @@ object KotlinTextRanges {
     fun InputFile.merge(ranges: Iterable<TextRange>): TextRange =
         newRange(
             ranges.map { it.start() }.minOrNull() ?: throw IllegalArgumentException("Can't merge 0 ranges"),
-            ranges.map { it.end() }.maxOrNull() ?: throw IllegalArgumentException("Can't merge 0 ranges")
+            ranges.map { it.end() }.maxOrNull() ?: throw IllegalArgumentException("Can't merge 0 ranges"),
         )
 
     fun KotlinFileContext.merge(ranges: Iterable<TextRange>) = inputFileContext.inputFile.merge(ranges)

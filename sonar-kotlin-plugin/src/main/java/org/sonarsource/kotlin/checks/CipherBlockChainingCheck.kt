@@ -22,8 +22,8 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
@@ -55,7 +55,7 @@ class CipherBlockChainingCheck : CallAbstractCheck() {
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
         resolvedCall: ResolvedCall<*>,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
         val bindingContext = kotlinFileContext.bindingContext
         val calleeExpression = callExpression.calleeExpression ?: return
@@ -84,6 +84,9 @@ private fun KtExpression.isCBC(bindingContext: BindingContext) =
 private fun KtExpression.firstArgumentOfInitializer(bindingContext: BindingContext, matcher: FunMatcherImpl) =
     predictRuntimeValueExpression(bindingContext)
         .getCall(bindingContext)?.let {
-            if (matcher.matches(it, bindingContext)) it.valueArguments[0].getArgumentExpression()
-            else null
+            if (matcher.matches(it, bindingContext)) {
+                it.valueArguments[0].getArgumentExpression()
+            } else {
+                null
+            }
         }

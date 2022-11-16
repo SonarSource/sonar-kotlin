@@ -27,11 +27,11 @@ import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getParentCall
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.DefaultValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getParentCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
@@ -93,11 +93,13 @@ class MainSafeCoroutinesCheck : AbstractCheck() {
                 context.reportIssue(call.calleeExpression!!, """Replace this "Thread.sleep()" call with "delay()".""")
             } else {
                 resolvedCall?.resultingDescriptor?.let { descriptor ->
-                    if (isInsideNonSafeDispatcher(call, bindingContext)
-                        && descriptor.throwsExceptions(BLOCKING_ANNOTATIONS)
+                    if (isInsideNonSafeDispatcher(call, bindingContext) &&
+                        descriptor.throwsExceptions(BLOCKING_ANNOTATIONS)
                     ) {
-                        context.reportIssue(call.calleeExpression!!,
-                            """Use "Dispatchers.IO" to run this potentially blocking operation.""")
+                        context.reportIssue(
+                            call.calleeExpression!!,
+                            """Use "Dispatchers.IO" to run this potentially blocking operation.""",
+                        )
                     }
                 }
             }
@@ -107,7 +109,7 @@ class MainSafeCoroutinesCheck : AbstractCheck() {
 
 private fun isInsideNonSafeDispatcher(
     callExpr: KtCallExpression,
-    bindingContext: BindingContext,
+    bindingContext: BindingContext
 ): Boolean {
     var parentCall: Call? = callExpr.getParentCall(bindingContext) ?: return true
     var resolvedCall = parentCall.getResolvedCall(bindingContext) ?: return false
@@ -125,16 +127,18 @@ private fun isInsideNonSafeDispatcher(
 
 private fun ResolvedCall<*>.usesNonSafeDispatcher(bindingContext: BindingContext): Boolean {
     val arg = valueArgumentsByIndex?.get(0)
-    val argValue = ((arg as? ExpressionValueArgument)
-        ?.valueArgument
-        ?.getArgumentExpression()
-        ?.predictRuntimeValueExpression(bindingContext) as? KtDotQualifiedExpression)
+    val argValue = (
+        (arg as? ExpressionValueArgument)
+            ?.valueArgument
+            ?.getArgumentExpression()
+            ?.predictRuntimeValueExpression(bindingContext) as? KtDotQualifiedExpression
+        )
         ?.resolveReferenceTarget(bindingContext)
         ?.fqNameOrNull()
         ?.asString()
 
-    return arg == null
-        || arg is DefaultValueArgument
-        || argValue == "$KOTLINX_COROUTINES_PACKAGE.Dispatchers.Main"
-        || argValue == "$KOTLINX_COROUTINES_PACKAGE.Dispatchers.Default"
+    return arg == null ||
+        arg is DefaultValueArgument ||
+        argValue == "$KOTLINX_COROUTINES_PACKAGE.Dispatchers.Main" ||
+        argValue == "$KOTLINX_COROUTINES_PACKAGE.Dispatchers.Default"
 }

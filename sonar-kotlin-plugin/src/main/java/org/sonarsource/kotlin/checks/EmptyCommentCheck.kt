@@ -32,23 +32,24 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 class EmptyCommentCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, kotlinFileContext: KotlinFileContext) {
-        file.accept(object : KtTreeVisitorVoid() {
-            /** Note that [visitComment] not called for [org.jetbrains.kotlin.kdoc.psi.api.KDoc] */
-            override fun visitElement(element: PsiElement) {
-                super.visitElement(element)
-                if (element is PsiComment) {
-                    val content = when (element.tokenType) {
-                        KtTokens.DOC_COMMENT -> element.text.substring(3, element.textLength - 2)
-                        KtTokens.BLOCK_COMMENT -> element.text.substring(2, element.textLength - 2)
-                        // End-of-line comments are always compliant
-                        else -> return
-                    }
-                    if (content.trim().isEmpty()) {
-                        kotlinFileContext.reportIssue(element, "Remove this comment, it is empty.");
+        file.accept(
+            object : KtTreeVisitorVoid() {
+                /** Note that [visitComment] not called for [org.jetbrains.kotlin.kdoc.psi.api.KDoc] */
+                override fun visitElement(element: PsiElement) {
+                    super.visitElement(element)
+                    if (element is PsiComment) {
+                        val content = when (element.tokenType) {
+                            KtTokens.DOC_COMMENT -> element.text.substring(3, element.textLength - 2)
+                            KtTokens.BLOCK_COMMENT -> element.text.substring(2, element.textLength - 2)
+                            // End-of-line comments are always compliant
+                            else -> return
+                        }
+                        if (content.trim().isEmpty()) {
+                            kotlinFileContext.reportIssue(element, "Remove this comment, it is empty.")
+                        }
                     }
                 }
-            }
-        })
+            },
+        )
     }
-
 }

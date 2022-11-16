@@ -19,4 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-internal class UnencryptedFilesInMobileApplicationsCheckTest: CheckTestForAndroidOnly(UnencryptedFilesInMobileApplicationsCheck())
+internal class UnencryptedFilesInMobileApplicationsCheckTest : CheckTestForAndroidOnly(UnencryptedFilesInMobileApplicationsCheck())

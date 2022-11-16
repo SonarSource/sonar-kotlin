@@ -29,8 +29,8 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
@@ -76,22 +76,26 @@ class CoroutinesTimeoutApiUnusedCheck : CallAbstractCheck() {
         val initializerCall = asInitializerCallIfMatching(siblingIter.next(), jobDeclaration, bindingContext) ?: return
 
         kotlinFileContext.reportIssue(
-            cancelCallCalleeExpression, MESSAGE, listOf(
+            cancelCallCalleeExpression,
+            MESSAGE,
+            listOf(
                 SecondaryLocation(kotlinFileContext.textRange(delayCall)),
-                SecondaryLocation(kotlinFileContext.textRange(initializerCall))
-            )
+                SecondaryLocation(kotlinFileContext.textRange(initializerCall)),
+            ),
         )
     }
 
     private fun asDelayCallIfMatching(element: PsiElement, bindingContext: BindingContext) =
         if (element is KtCallExpression && element.getResolvedCall(bindingContext) matches DELAY_MATCHER) {
             element.calleeExpression
-        } else null
+        } else {
+            null
+        }
 
     private fun asInitializerCallIfMatching(
         element: PsiElement,
         targetInitializer: DeclarationDescriptor,
-        bindingContext: BindingContext,
+        bindingContext: BindingContext
     ): KtExpression? {
         if (element is KtProperty && bindingContext.get(BindingContext.VARIABLE, element) === targetInitializer) {
             val initializer = element.initializer as? KtCallExpression ?: return null

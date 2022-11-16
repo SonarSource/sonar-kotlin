@@ -36,7 +36,7 @@ class UnicodeAwareCharClassesCheck : AbstractRegexCheck() {
         regexContext: RegexContext,
         callExpression: KtCallExpression,
         matchedFun: FunMatcherImpl,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
         UnicodeUnawareCharClassFinder(regexContext::reportIssue) { msg, _, secondaries ->
             kotlinFileContext.reportIssue(

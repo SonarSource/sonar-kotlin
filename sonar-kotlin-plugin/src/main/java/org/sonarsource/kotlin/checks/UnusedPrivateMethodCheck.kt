@@ -43,7 +43,7 @@ private val IGNORED_METHODS: Set<String> = setOf(
 )
 
 private val COMMON_ANNOTATIONS = listOf(
-    "kotlin.OptIn", 
+    "kotlin.OptIn",
     "kotlin.Suppress",
     "kotlinx.coroutines.DelicateCoroutinesApi",
     "kotlin.jvm.Throws",
@@ -74,14 +74,13 @@ class UnusedPrivateMethodCheck : AbstractCheck() {
         anyDescendantOfType<KtOperationReferenceExpression> { it.getReferencedName() == name }
 
     private fun KtNamedFunction.shouldCheckForUsage(bindingContext: BindingContext) =
-        isPrivate()
-            && !hasModifier(KtTokens.OPERATOR_KEYWORD)
-            && (annotationEntries.isEmpty() || annotatedWithCommonAnnotations(bindingContext))
+        isPrivate() &&
+            !hasModifier(KtTokens.OPERATOR_KEYWORD) &&
+            (annotationEntries.isEmpty() || annotatedWithCommonAnnotations(bindingContext))
 
     private fun KtNamedFunction.annotatedWithCommonAnnotations(bindingContext: BindingContext) =
         bindingContext.get(BindingContext.FUNCTION, this)
             ?.annotations
             ?.all { it.fqName?.asString() in COMMON_ANNOTATIONS }
             ?: false
-
 }

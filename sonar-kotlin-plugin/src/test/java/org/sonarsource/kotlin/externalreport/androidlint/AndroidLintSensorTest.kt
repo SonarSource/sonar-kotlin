@@ -72,7 +72,7 @@ internal class AndroidLintSensorTest {
         assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(first.severity()).isEqualTo(Severity.MINOR)
         assertThat(first.primaryLocation().message()).isEqualTo(
-            "On SDK version 23 and up, your app data will be automatically backed up and restored on app install. Consider adding the attribute `android:fullBackupContent` to specify an `@xml` resource which configures which files to backup. More info: https://developer.android.com/training/backup/autosyncapi.html"
+            "On SDK version 23 and up, your app data will be automatically backed up and restored on app install. Consider adding the attribute `android:fullBackupContent` to specify an `@xml` resource which configures which files to backup. More info: https://developer.android.com/training/backup/autosyncapi.html",
         )
         assertThat(first.primaryLocation().textRange()!!.start().line()).isEqualTo(2)
 
@@ -158,20 +158,19 @@ internal class AndroidLintSensorTest {
         assertThat(first.primaryLocation().textRange()).isNull()
         assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty()
         assertThat(logTester.logs(LoggerLevel.WARN)).containsExactlyInAnyOrder(
-            "No input file found for unknown-file.xml. No android lint issues will be imported on this file."
+            "No input file found for unknown-file.xml. No android lint issues will be imported on this file.",
         )
         assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactlyInAnyOrder(
             "Missing information or unsupported file type for id:'', file:'AndroidManifest.xml', message:'Missing rule key.'",
             "Missing information or unsupported file type for id:'UnusedAttribute', file:'binary-file.gif', message:'Valid rule key with binary file.'",
             "Missing information or unsupported file type for id:'UnusedAttribute', file:'', message:'Valid rule key without file path.'",
             "Missing information or unsupported file type for id:'UnusedAttribute', file:'', message:'Valid rule key with invalid location.'",
-            "Missing information or unsupported file type for id:'', file:'', message:''"
+            "Missing information or unsupported file type for id:'', file:'', message:''",
         )
     }
 
     @Throws(IOException::class)
     private fun executeSensorImporting(fileName: String?): List<ExternalIssue> {
-
         val context = ExternalReportTestUtils.createContext(PROJECT_DIR)
         if (fileName != null) {
             val settings = MapSettings()

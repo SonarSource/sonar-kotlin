@@ -52,9 +52,8 @@ class BadFunctionNameCheck : AbstractCheck() {
         if (!name.matches(formatRegex)) {
             kotlinFileContext.reportIssue(
                 function.nameIdentifier!!,
-                """Rename function "$name" to match the regular expression $format"""
+                """Rename function "$name" to match the regular expression $format""",
             )
         }
     }
-
 }

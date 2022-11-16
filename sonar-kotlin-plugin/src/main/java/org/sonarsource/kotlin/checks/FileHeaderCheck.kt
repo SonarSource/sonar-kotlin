@@ -32,13 +32,15 @@ class FileHeaderCheck : AbstractCheck() {
         key = "headerFormat",
         description = "Expected copyright and license header",
         defaultValue = "",
-        type = "TEXT")
+        type = "TEXT",
+    )
     var headerFormat = ""
 
     @RuleProperty(
         key = "isRegularExpression",
         description = "Whether the headerFormat is a regular expression",
-        defaultValue = "false")
+        defaultValue = "false",
+    )
     var isRegularExpression = false
 
     private lateinit var searchPattern: Regex
@@ -52,7 +54,8 @@ class FileHeaderCheck : AbstractCheck() {
             } catch (e: IllegalArgumentException) {
                 throw IllegalArgumentException(
                     "[" + javaClass.simpleName + "] Unable to compile the regular expression: " + headerFormat,
-                    e)
+                    e,
+                )
             }
         } else {
             expectedLines = headerFormat.lines()
@@ -72,5 +75,4 @@ class FileHeaderCheck : AbstractCheck() {
             expectedLines == file.text.lineSequence().take(expectedLines.size).toList()
         }
     }
-
 }

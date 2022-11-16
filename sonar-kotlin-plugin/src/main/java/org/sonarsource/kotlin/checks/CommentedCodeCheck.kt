@@ -20,8 +20,6 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.sonar.check.Rule
@@ -35,21 +33,22 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 @Rule(key = "S125")
 class CommentedCodeCheck : AbstractCheck() {
 
-
     override fun visitKtFile(file: KtFile, kotlinFileContext: KotlinFileContext) {
         val groupedComments = mutableListOf<MutableList<PsiComment>>()
         var currentGroup = mutableListOf<PsiComment>()
         groupedComments.add(currentGroup)
-        file.accept(object : KtTreeVisitorVoid() {
-            /** Note that [visitComment] not called for [org.jetbrains.kotlin.kdoc.psi.api.KDoc] */
-            override fun visitComment(element: PsiComment) {
-                if (currentGroup.isNotEmpty() && !areAdjacent(currentGroup.last(), element)) {
-                    currentGroup = mutableListOf()
-                    groupedComments.add(currentGroup)
+        file.accept(
+            object : KtTreeVisitorVoid() {
+                /** Note that [visitComment] not called for [org.jetbrains.kotlin.kdoc.psi.api.KDoc] */
+                override fun visitComment(element: PsiComment) {
+                    if (currentGroup.isNotEmpty() && !areAdjacent(currentGroup.last(), element)) {
+                        currentGroup = mutableListOf()
+                        groupedComments.add(currentGroup)
+                    }
+                    currentGroup.add(element)
                 }
-                currentGroup.add(element)
-            }
-        })
+            },
+        )
 
         groupedComments.forEach { comments ->
             if (file.firstChild !in comments) {

@@ -53,6 +53,6 @@ class TooLongLineCheck : AbstractCheck() {
 
     private fun getLineRange(inputFile: InputFile, lineNumber: Int, line: String) = inputFile.newRange(
         inputFile.newPointer(lineNumber + 1, 0),
-        inputFile.newPointer(lineNumber + 1, line.length)
+        inputFile.newPointer(lineNumber + 1, line.length),
     )
 }

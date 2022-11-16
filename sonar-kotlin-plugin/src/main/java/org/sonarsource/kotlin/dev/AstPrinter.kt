@@ -70,8 +70,6 @@ object AstPrinter {
 
         return (listOf(node) + nodes) to (localEdges + edges)
     }
-
-
 }
 
 data class DotNode(val title: String, val text: String, val type: String, val children: List<DotNode>, val range: TextRange?) {
@@ -86,8 +84,11 @@ data class DotNode(val title: String, val text: String, val type: String, val ch
             }
 
             val text = with(original.text.trim()) {
-                if (length <= 65) this
-                else "${substring(0, 30)} … ${substring(length - 30)}"
+                if (length <= 65) {
+                    this
+                } else {
+                    "${substring(0, 30)} … ${substring(length - 30)}"
+                }
             }.replace("\n", "")
 
             val range = document?.let {

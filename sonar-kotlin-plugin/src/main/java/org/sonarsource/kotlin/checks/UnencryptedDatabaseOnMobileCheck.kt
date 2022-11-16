@@ -33,7 +33,7 @@ private val PROBLEMATIC_SIMPLE_CALLS = listOf(
     FunMatcher(definingSupertype = "android.app.Activity", name = "getPreferences"),
     FunMatcher(definingSupertype = "android.content.Context", name = "getSharedPreferences"),
     FunMatcher(definingSupertype = "android.preference.PreferenceManager", name = "getDefaultSharedPreferences"),
-    FunMatcher(definingSupertype = "android.content.Context", name = "openOrCreateDatabase")
+    FunMatcher(definingSupertype = "android.content.Context", name = "openOrCreateDatabase"),
 )
 
 private val PROBLEMATIC_REALM_CALL = FunMatcher(definingSupertype = "io.realm.RealmConfiguration.Builder", name = "build")

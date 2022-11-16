@@ -43,22 +43,22 @@ class IfConditionalAlwaysTrueOrFalseCheck : AbstractCheck() {
     }
 
     private fun isAlwaysTrueOrFalse(condition: KtExpression) =
-        condition.isTrueValueLiteral() || condition.isFalseValueLiteral()
-            || condition.isSimpleExpressionWithLiteral(KtTokens.ANDAND) { it.isFalseValueLiteral() }
-            || condition.isSimpleExpressionWithLiteral(KtTokens.OROR) { it.isTrueValueLiteral() }
+        condition.isTrueValueLiteral() || condition.isFalseValueLiteral() ||
+            condition.isSimpleExpressionWithLiteral(KtTokens.ANDAND) { it.isFalseValueLiteral() } ||
+            condition.isSimpleExpressionWithLiteral(KtTokens.OROR) { it.isTrueValueLiteral() }
 
     /** Replacement for [org.sonarsource.slang.checks.utils.ExpressionUtils.isTrueValueLiteral] */
     private fun KtExpression.isTrueValueLiteral(): Boolean {
         val e = skipParentheses()
-        return (e is KtConstantExpression && e.text == "true")
-            || (e.isNegation() && (e as KtUnaryExpression).baseExpression!!.isFalseValueLiteral())
+        return (e is KtConstantExpression && e.text == "true") ||
+            (e.isNegation() && (e as KtUnaryExpression).baseExpression!!.isFalseValueLiteral())
     }
 
     /** Replacement for [org.sonarsource.slang.checks.utils.ExpressionUtils.isFalseValueLiteral] */
     private fun KtExpression.isFalseValueLiteral(): Boolean {
         val e = skipParentheses()
-        return (e is KtConstantExpression && e.text == "false")
-            || (e.isNegation() && (e as KtUnaryExpression).baseExpression!!.isTrueValueLiteral())
+        return (e is KtConstantExpression && e.text == "false") ||
+            (e.isNegation() && (e as KtUnaryExpression).baseExpression!!.isTrueValueLiteral())
     }
 
     /** Replacement for [org.sonarsource.slang.checks.utils.ExpressionUtils.isNegation] */
@@ -68,15 +68,16 @@ class IfConditionalAlwaysTrueOrFalseCheck : AbstractCheck() {
     /** Replacement for [org.sonarsource.slang.checks.IfConditionalAlwaysTrueOrFalseCheck.isSimpleExpressionWithLiteral] */
     private fun KtExpression.isSimpleExpressionWithLiteral(
         operation: KtSingleValueToken,
-        hasLiteralValue: (KtExpression) -> Boolean,
+        hasLiteralValue: (KtExpression) -> Boolean
     ) = isSimpleExpression(operation) && anyDescendantOfType(hasLiteralValue)
 
     private fun KtExpression.isSimpleExpression(operation: KtSingleValueToken): Boolean =
         when (val e = skipParentheses()) {
             is KtNameReferenceExpression -> true
             is KtConstantExpression -> true
-            is KtBinaryExpression -> e.operationToken == operation &&
-                e.left!!.isSimpleExpression(operation) && e.right!!.isSimpleExpression(operation)
+            is KtBinaryExpression ->
+                e.operationToken == operation &&
+                    e.left!!.isSimpleExpression(operation) && e.right!!.isSimpleExpression(operation)
             else -> false
         }
 }

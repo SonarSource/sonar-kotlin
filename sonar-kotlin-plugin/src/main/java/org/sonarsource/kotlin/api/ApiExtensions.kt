@@ -102,7 +102,7 @@ private const val MAX_AST_PARENT_TRAVERSALS = 25
 
 private val STRING_TO_BYTE_FUNS = listOf(
     FunMatcher(qualifier = "kotlin.text", name = "toByteArray"),
-    FunMatcher(qualifier = "java.lang.String", name = "getBytes")
+    FunMatcher(qualifier = "java.lang.String", name = "getBytes"),
 )
 
 internal fun KtExpression.predictRuntimeStringValue(bindingContext: BindingContext) =
@@ -137,7 +137,7 @@ internal fun KtExpression.predictRuntimeBooleanValue(bindingContext: BindingCont
  */
 internal fun KtExpression.predictRuntimeValueExpression(
     bindingContext: BindingContext,
-    declarations: MutableList<PsiElement> = mutableListOf(),
+    declarations: MutableList<PsiElement> = mutableListOf()
 ): KtExpression = this.deparenthesize().let { deparenthesized ->
     when (deparenthesized) {
         is KtReferenceExpression -> run {
@@ -146,17 +146,19 @@ internal fun KtExpression.predictRuntimeValueExpression(
 
             referenceTarget?.predictRuntimeValueExpression(bindingContext, declarations)
         }
+
         is KtParenthesizedExpression -> deparenthesized.expression?.predictRuntimeValueExpression(bindingContext, declarations)
         is KtBinaryExpressionWithTypeRHS -> deparenthesized.left.predictRuntimeValueExpression(bindingContext, declarations)
         is KtThisExpression -> bindingContext.get(BindingContext.REFERENCE_TARGET, deparenthesized.instanceReference)
             ?.findFunctionLiteral(deparenthesized, bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
+
         else -> deparenthesized.getCall(bindingContext)?.predictValueExpression(bindingContext)
     } ?: deparenthesized as? KtExpression
 } ?: this
 
 internal fun KtCallExpression.predictReceiverExpression(
     bindingContext: BindingContext,
-    precomputedResolvedCall: ResolvedCall<*>? = null,
+    precomputedResolvedCall: ResolvedCall<*>? = null
 ): KtExpression? {
     val resolvedCall = precomputedResolvedCall ?: getResolvedCall(bindingContext)
 
@@ -174,14 +176,16 @@ internal fun KtStringTemplateExpression.asString() = entries.joinToString("") { 
 internal fun PsiElement.linesOfCode(): Set<Int> {
     val lines = mutableSetOf<Int>()
     val document = this.containingFile.viewProvider.document!!
-    this.accept(object : KtTreeVisitorVoid() {
-        override fun visitElement(element: PsiElement) {
-            super.visitElement(element)
-            if (element is LeafPsiElement && element !is PsiWhiteSpace && element !is PsiComment) {
-                lines.add(document.getLineNumber(element.textRange.startOffset) + 1)
+    this.accept(
+        object : KtTreeVisitorVoid() {
+            override fun visitElement(element: PsiElement) {
+                super.visitElement(element)
+                if (element is LeafPsiElement && element !is PsiWhiteSpace && element !is PsiComment) {
+                    lines.add(document.getLineNumber(element.textRange.startOffset) + 1)
+                }
             }
-        }
-    })
+        },
+    )
     return lines
 }
 
@@ -201,7 +205,7 @@ internal fun PsiComment.getContent() =
  */
 private fun KtExpression.stringValue(
     bindingContext: BindingContext,
-    declarations: MutableList<PsiElement> = mutableListOf(),
+    declarations: MutableList<PsiElement> = mutableListOf()
 ): String? = when (this) {
     is KtStringTemplateExpression -> {
         val entries = entries.map {
@@ -209,6 +213,7 @@ private fun KtExpression.stringValue(
         }
         if (entries.all { it != null }) entries.joinToString("") else null
     }
+
     is KtNameReferenceExpression -> {
         val descriptor = bindingContext.get(BindingContext.REFERENCE_TARGET, this)
         descriptor?.let {
@@ -216,25 +221,33 @@ private fun KtExpression.stringValue(
             if (declaration is KtProperty && !declaration.isVar) {
                 declarations.add(declaration)
                 declaration.delegateExpressionOrInitializer?.stringValue(bindingContext, declarations)
-            } else null
+            } else {
+                null
+            }
         }
     }
+
     is KtDotQualifiedExpression -> selectorExpression?.stringValue(bindingContext, declarations)
     is KtBinaryExpression ->
-        if (operationToken == KtTokens.PLUS)
+        if (operationToken == KtTokens.PLUS) {
             left?.stringValue(bindingContext, declarations)?.plus(right?.stringValue(bindingContext, declarations))
-        else null
+        } else {
+            null
+        }
+
     else -> null
 }
 
 private fun Call.predictValueExpression(bindingContext: BindingContext) =
     if (GET_PROP_WITH_DEFAULT_MATCHER.matches(this, bindingContext)) {
         valueArguments[1].getArgumentExpression()
-    } else null
+    } else {
+        null
+    }
 
 private fun KtReferenceExpression.extractFromInitializer(
     bindingContext: BindingContext,
-    declarations: MutableList<PsiElement> = mutableListOf(),
+    declarations: MutableList<PsiElement> = mutableListOf()
 ) =
     bindingContext.get(BindingContext.REFERENCE_TARGET, this)?.let {
         DescriptorToSourceUtils.descriptorToDeclaration(it) as? KtProperty
@@ -242,7 +255,9 @@ private fun KtReferenceExpression.extractFromInitializer(
         if (!declaration.isVar) {
             declarations.add(declaration)
             declaration.delegateExpressionOrInitializer?.predictRuntimeValueExpression(bindingContext)
-        } else null
+        } else {
+            null
+        }
     }
 
 /**
@@ -263,10 +278,12 @@ private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(bindingContext:
             in KOTLIN_CHAIN_CALL_CONSTRUCTS -> {
                 (larwCallCandidate.explicitReceiver as? ExpressionReceiver)?.expression?.predictRuntimeValueExpression(bindingContext)
             }
+
             "with" -> {
                 larwCallCandidate.getResolvedCall(bindingContext)?.getFirstArgumentExpression()
                     ?.predictRuntimeValueExpression(bindingContext)
             }
+
             else -> null
         }
     }
@@ -280,7 +297,7 @@ private fun ImplicitReceiver.findReceiverScopeFunctionLiteral(startNode: PsiElem
 
 private fun DeclarationDescriptor.findFunctionLiteral(
     startNode: PsiElement,
-    bindingContext: BindingContext,
+    bindingContext: BindingContext
 ): KtFunctionLiteral? {
     var curNode: PsiElement? = startNode
     for (i in 0 until MAX_AST_PARENT_TRAVERSALS) {
@@ -305,8 +322,8 @@ fun KtCallExpression.expressionTypeFqn(bindingContext: BindingContext) =
     bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, this)?.type?.getJetTypeFqName(false)
 
 private fun KtProperty.determineType(bindingContext: BindingContext) =
-    (typeReference?.let { bindingContext.get(BindingContext.TYPE, it) }
-        ?: bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, initializer)?.type)
+    typeReference?.let { bindingContext.get(BindingContext.TYPE, it) }
+        ?: bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, initializer)?.type
 
 fun KtProperty.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getJetTypeFqName(printTypeArguments)
@@ -330,7 +347,7 @@ fun KtNamedFunction.returnType(bindingContext: BindingContext) =
     createTypeBindingForReturnType(bindingContext)?.type
 
 fun KtLambdaArgument.isSuspending(
-    bindingContext: BindingContext,
+    bindingContext: BindingContext
 ) = (parent as? KtCallExpression)
     ?.getResolvedCall(bindingContext)
     ?.resultingDescriptor
@@ -343,14 +360,16 @@ fun KtLambdaArgument.isSuspending(
 fun CallableDescriptor.throwsExceptions(exceptions: Collection<String>) =
     annotations.any {
         it.fqName?.asString() == THROWS_FQN &&
-            (it.allValueArguments.asSequence()
-                .find { (k, _) -> k.asString() == "exceptionClasses" }
-                ?.value as? ArrayValue)
+            (
+                it.allValueArguments.asSequence()
+                    .find { (k, _) -> k.asString() == "exceptionClasses" }
+                    ?.value as? ArrayValue
+                )
                 ?.value
                 ?.mapNotNull { it.value as? KClassValue.Value.NormalClass }
                 ?.map { it.value.toString().replace("/", ".") }
                 ?.any(exceptions::contains)
-            ?: false
+                ?: false
     }
 
 fun KtNamedFunction.isInfix() = hasModifier(KtTokens.INFIX_KEYWORD)
@@ -460,6 +479,7 @@ fun KtExpression?.isLocalVariable(bindingContext: BindingContext) =
 fun KtExpression?.setterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
     is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
         (matcher.matches((bindingContext.get(BindingContext.REFERENCE_TARGET, this) as? PropertyDescriptor)?.unwrappedSetMethod))
+
     is KtQualifiedExpression -> selectorExpression.setterMatches(bindingContext, propertyName, matcher)
     else -> false
 }
@@ -467,6 +487,7 @@ fun KtExpression?.setterMatches(bindingContext: BindingContext, propertyName: St
 fun KtExpression?.getterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
     is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
         (matcher.matches((bindingContext.get(BindingContext.REFERENCE_TARGET, this) as? PropertyDescriptor)?.unwrappedGetMethod))
+
     is KtQualifiedExpression -> selectorExpression.getterMatches(bindingContext, propertyName, matcher)
     else -> false
 }
@@ -490,7 +511,6 @@ fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
             is KtClass -> bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, this).determineType()
             else -> bindingContext.get(BindingContext.VARIABLE, it)?.type
         }
-
     }
 
 fun DeclarationDescriptor?.determineType(): KotlinType? =

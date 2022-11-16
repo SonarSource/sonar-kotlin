@@ -39,14 +39,13 @@ class EmptyBlockCheck : AbstractCheck() {
     }
 
     override fun visitBlockExpression(expression: KtBlockExpression, kotlinFileContext: KotlinFileContext) {
-        if (expression.statements.isEmpty()
-            && !expression.hasComment()
-            && expression.parent !is KtFunction
+        if (expression.statements.isEmpty() &&
+            !expression.hasComment() &&
+            expression.parent !is KtFunction &&
             /** Between [KtWhileExpression] and [KtBlockExpression] there is [org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody] */
-            && expression.parent.parent !is KtWhileExpression
+            expression.parent.parent !is KtWhileExpression
         ) {
             kotlinFileContext.reportIssue(expression, message)
         }
     }
-
 }

@@ -43,5 +43,4 @@ class UnencryptedFilesInMobileApplicationsCheck : CallAbstractCheck() {
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
         }
     }
-    
-} 
+}

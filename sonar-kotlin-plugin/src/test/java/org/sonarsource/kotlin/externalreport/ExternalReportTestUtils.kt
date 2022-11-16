@@ -62,7 +62,7 @@ object ExternalReportTestUtils {
                     .setLanguage(language(file))
                     .setContents(String(Files.readAllBytes(file), StandardCharsets.UTF_8))
                     .setType(InputFile.Type.MAIN)
-                    .build()
+                    .build(),
             )
         } catch (e: IOException) {
             throw IllegalStateException(e)
@@ -71,7 +71,10 @@ object ExternalReportTestUtils {
 
     private fun language(file: Path): String {
         val path = file.toString()
-        return if (path.endsWith(".kt")) KotlinPlugin.KOTLIN_LANGUAGE_KEY
-        else path.substring(path.lastIndexOf('.') + 1)
+        return if (path.endsWith(".kt")) {
+            KotlinPlugin.KOTLIN_LANGUAGE_KEY
+        } else {
+            path.substring(path.lastIndexOf('.') + 1)
+        }
     }
 }

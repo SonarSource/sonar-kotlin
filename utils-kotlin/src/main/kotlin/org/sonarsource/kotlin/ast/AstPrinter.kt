@@ -40,11 +40,17 @@ fun main(vararg args: String) {
 
     when (mode) {
         "dot" ->
-            if (args.size > 2) AstPrinter.dotPrint(ktFile, resolveDir(args[2]))
-            else println(AstPrinter.dotPrint(ktFile))
+            if (args.size > 2) {
+                AstPrinter.dotPrint(ktFile, resolveDir(args[2]))
+            } else {
+                println(AstPrinter.dotPrint(ktFile))
+            }
         "txt" ->
-            if (args.size > 2) AstPrinter.txtPrint(ktFile, resolveDir(args[2]), ktFile.viewProvider.document)
-            else println(AstPrinter.txtPrint(ktFile, ktFile.viewProvider.document))
+            if (args.size > 2) {
+                AstPrinter.txtPrint(ktFile, resolveDir(args[2]), ktFile.viewProvider.document)
+            } else {
+                println(AstPrinter.txtPrint(ktFile, ktFile.viewProvider.document))
+            }
         else -> exitWithUsageInfoAndError()
     }
 }
@@ -56,6 +62,9 @@ private fun exitWithUsageInfoAndError() {
 }
 
 private fun resolveDir(stringPath: String) = Path.of(stringPath).let {
-    if (it.isAbsolute) it
-    else WORKING_DIR.resolve(it)
+    if (it.isAbsolute) {
+        it
+    } else {
+        WORKING_DIR.resolve(it)
+    }
 }

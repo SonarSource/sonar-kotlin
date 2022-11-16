@@ -89,7 +89,7 @@ class StatementsVisitor : KtTreeVisitorVoid() {
 }
 
 private fun KtElement.isDeclaration() =
-    this is KtClassOrObject
-        || this is KtNamedFunction
-        || this is KtPackageDirective
-        || this is KtImportDirective
+    this is KtClassOrObject ||
+        this is KtNamedFunction ||
+        this is KtPackageDirective ||
+        this is KtImportDirective

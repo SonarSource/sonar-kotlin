@@ -19,12 +19,12 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 
 abstract class AbstractBranchDuplication : AbstractCheck() {
     protected abstract fun checkDuplicatedBranches(ctx: KotlinFileContext, tree: KtElement, branches: List<KtElement>)

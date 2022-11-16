@@ -32,7 +32,4 @@ internal class TextBlocksInComplexExpressionsCheckTest : CheckTest(TextBlocksInC
             fileName = "TextBlocksInComplexExpressionsCheckSampleSingleLines.kt"
         }.verify()
     }
-
 }
-
-

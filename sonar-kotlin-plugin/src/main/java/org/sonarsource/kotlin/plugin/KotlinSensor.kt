@@ -64,7 +64,7 @@ class KotlinSensor(
     checkFactory: CheckFactory,
     private val fileLinesContextFactory: FileLinesContextFactory,
     private val noSonarFilter: NoSonarFilter,
-    val language: KotlinLanguage,
+    val language: KotlinLanguage
 ) : Sensor {
 
     val checks: Checks<AbstractCheck> = checkFactory.create<AbstractCheck>(KOTLIN_REPOSITORY_KEY).apply {
@@ -84,7 +84,7 @@ class KotlinSensor(
         val fileSystem: FileSystem = sensorContext.fileSystem()
         val mainFilePredicate = fileSystem.predicates().and(
             fileSystem.predicates().hasLanguage(language.key),
-            fileSystem.predicates().hasType(InputFile.Type.MAIN)
+            fileSystem.predicates().hasType(InputFile.Type.MAIN),
         )
 
         val inputFiles = fileSystem.inputFiles(mainFilePredicate)
@@ -111,7 +111,7 @@ class KotlinSensor(
         inputFiles: Iterable<InputFile>,
         progressReport: ProgressReport,
         visitors: List<KotlinFileVisitor>,
-        filenames: List<String>,
+        filenames: List<String>
     ): Boolean {
         val environment = environment(sensorContext)
         try {
@@ -175,7 +175,7 @@ class KotlinSensor(
         sensorContext: SensorContext,
         inputFileContext: InputFileContext,
         visitors: List<KotlinFileVisitor>,
-        tree: KotlinTree,
+        tree: KotlinTree
     ) {
         if (EMPTY_FILE_CONTENT_PATTERN.matches(inputFileContext.inputFile.contents())) {
             return
@@ -187,7 +187,7 @@ class KotlinSensor(
         sensorContext: SensorContext,
         inputFileContext: InputFileContext,
         visitors: List<KotlinFileVisitor>,
-        tree: KotlinTree,
+        tree: KotlinTree
     ) {
         for (visitor in visitors) {
             val visitorId = visitor.javaClass.simpleName
@@ -239,7 +239,7 @@ fun environment(sensorContext: SensorContext) = Environment(
     sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
         sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
     determineKotlinLanguageVersion(sensorContext),
-    numberOfThreads = determineNumberOfThreadsToUse(sensorContext)
+    numberOfThreads = determineNumberOfThreadsToUse(sensorContext),
 )
 
 private fun determineNumberOfThreadsToUse(sensorContext: SensorContext) =
@@ -248,7 +248,7 @@ private fun determineNumberOfThreadsToUse(sensorContext: SensorContext) =
             stringInput.trim().toInt()
         }.getOrElse {
             LOG.warn(
-                "$COMPILER_THREAD_COUNT_PROPERTY needs to be set to an integer value. Could not interpret '$stringInput' as integer."
+                "$COMPILER_THREAD_COUNT_PROPERTY needs to be set to an integer value. Could not interpret '$stringInput' as integer.",
             )
             null
         }?.let { threadCount ->
@@ -264,13 +264,15 @@ private fun determineNumberOfThreadsToUse(sensorContext: SensorContext) =
     }
 
 private fun determineKotlinLanguageVersion(sensorContext: SensorContext) =
-    (sensorContext.config().get(KOTLIN_LANGUAGE_VERSION).map { versionString ->
-        LanguageVersion.fromVersionString(versionString).also { langVersion ->
-            if (langVersion == null && versionString.isNotBlank()) {
-                LOG.warn("Failed to find Kotlin version '$versionString'. Defaulting to ${DEFAULT_KOTLIN_LANGUAGE_VERSION.versionString}")
+    (
+        sensorContext.config().get(KOTLIN_LANGUAGE_VERSION).map { versionString ->
+            LanguageVersion.fromVersionString(versionString).also { langVersion ->
+                if (langVersion == null && versionString.isNotBlank()) {
+                    LOG.warn("Failed to find Kotlin version '$versionString'. Defaulting to ${DEFAULT_KOTLIN_LANGUAGE_VERSION.versionString}")
+                }
             }
-        }
-    }.orElse(null) ?: DEFAULT_KOTLIN_LANGUAGE_VERSION)
+        }.orElse(null) ?: DEFAULT_KOTLIN_LANGUAGE_VERSION
+        )
         .also { LOG.debug { "Using Kotlin ${it.versionString} to parse source code" } }
 
 private fun createPerformanceMeasureReport(context: SensorContext): PerformanceMeasure.Duration? {

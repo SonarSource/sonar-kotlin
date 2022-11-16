@@ -44,7 +44,7 @@ class DetektSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandler
         const val REPORT_PROPERTY_KEY = "sonar.kotlin.detekt.reportPaths"
 
         private class ReportImporter(
-            context: SensorContext,
+            context: SensorContext
         ) : CheckstyleFormatImporterWithRuleLoader(context, LINTER_KEY, DetektRulesDefinition.RULE_LOADER) {
 
             override fun createRuleKey(source: String): RuleKey? {
@@ -57,8 +57,11 @@ class DetektSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandler
                     }
 
                 val ruleKey =
-                    if (DetektRulesDefinition.RULE_LOADER.ruleKeys().contains(preliminaryRuleKey)) preliminaryRuleKey
-                    else ExternalReporting.FALLBACK_RULE_KEY
+                    if (DetektRulesDefinition.RULE_LOADER.ruleKeys().contains(preliminaryRuleKey)) {
+                        preliminaryRuleKey
+                    } else {
+                        ExternalReporting.FALLBACK_RULE_KEY
+                    }
 
                 return super.createRuleKey(ruleKey)
             }

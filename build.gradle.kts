@@ -1,4 +1,5 @@
 
+import com.diffplug.spotless.kotlin.KtLintStep
 import org.sonarsource.kotlin.buildsrc.tasks.CreateRuleStubsTask
 import org.sonarsource.kotlin.buildsrc.tasks.FetchRuleMetadata
 
@@ -38,12 +39,16 @@ configure(subprojects.filter { it.name != "kotlin-checks-test-sources"}) {
         kotlin {
             licenseHeaderFile(rootProject.file("LICENSE_HEADER")).updateYearWithLatest(true)
 
-            ktlint()
+            ktlint().editorConfigOverride(
+                mapOf(
+                    "ij_kotlin_allow_trailing_comma_on_call_site" to "true"
+                )
+            )
 
             target(
                 project.sourceSets.main.get().findKotlinFilesToTarget().also {
                     println(it)
-                                                                             },
+                },
                 project.sourceSets.test.get().findKotlinFilesToTarget().also {
                     println(it)
                 }

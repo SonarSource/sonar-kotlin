@@ -184,11 +184,11 @@ internal class DetektSensorTest {
         assertThat(first.primaryLocation().textRange()).isNull()
         assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty()
         assertThat(logTester.logs(LoggerLevel.WARN)).containsExactlyInAnyOrder(
-            "No input file found for not-existing-file.kt. No detekt issues will be imported on this file."
+            "No input file found for not-existing-file.kt. No detekt issues will be imported on this file.",
         )
         assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactlyInAnyOrder(
             "Unexpected error without any message for rule: 'detekt.EmptyIfBlock'",
-            "Unexpected rule key without 'detekt.' suffix: 'invalid-format'"
+            "Unexpected rule key without 'detekt.' suffix: 'invalid-format'",
         )
     }
 

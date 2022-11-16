@@ -61,10 +61,11 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     @Test
     fun test_one_rule() {
         val inputFile = createInputFile(
-            "file1.kt", """
+            "file1.kt",
+            """
      fun main(args: Array<String>) {
      print (1 == 1);}
-     """.trimIndent()
+            """.trimIndent(),
         )
         context.fileSystem().add(inputFile)
         val checkFactory = checkFactory("S1764")
@@ -84,7 +85,8 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     @Test
     fun test_commented_code() {
         val inputFile = createInputFile(
-            "file1.kt", """
+            "file1.kt",
+            """
      fun main(args: Array<String>) {
      //fun foo () { if (true) {print("string literal");}}
      print (1 == 1);
@@ -96,7 +98,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
      val c = DoubleArray(n + 1) // quadratic
      val d = DoubleArray(n) // cubic
      }
-     """.trimIndent()
+            """.trimIndent(),
         )
         context.fileSystem().add(inputFile)
         val checkFactory = checkFactory("S125")
@@ -113,11 +115,12 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     @Test
     fun simple_file() {
         val inputFile = createInputFile(
-            "file1.kt", """
+            "file1.kt",
+            """
      fun main(args: Array<String>) {
      print (1 == 1); print("abc"); }
      data class A(val a: Int)
-     """.trimIndent()
+            """.trimIndent(),
         )
         context.fileSystem().add(inputFile)
         sensor(checkFactory()).execute(context)
@@ -133,20 +136,21 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         Assertions.assertThat(context.measure(inputFile.key(), CoreMetrics.STATEMENTS).value()).isEqualTo(2)
 
         // FIXME
-        //assertThat(logTester.logs()).contains("1 source files to be analyzed");
+        // assertThat(logTester.logs()).contains("1 source files to be analyzed");
     }
 
     @Test
     fun test_issue_suppression() {
         val inputFile = createInputFile(
-            "file1.kt", """
+            "file1.kt",
+            """
      @SuppressWarnings("kotlin:S1764")
      fun main() {
      print (1 == 1);}
      @SuppressWarnings(value=["kotlin:S1764"])
      fun main2() {
      print (1 == 1);}
-     """.trimIndent()
+            """.trimIndent(),
         )
         context.fileSystem().add(inputFile)
         val checkFactory = checkFactory("S1764")
@@ -158,14 +162,15 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     @Test
     fun test_issue_not_suppressed() {
         val inputFile = createInputFile(
-            "file1.kt", """
+            "file1.kt",
+            """
      @SuppressWarnings("S1764")
      fun main() {
      print (1 == 1);}
      @SuppressWarnings(value=["scala:S1764"])
      fun main2() {
      print (1 == 1);}
-     """.trimIndent()
+            """.trimIndent(),
         )
         context.fileSystem().add(inputFile)
         val checkFactory = checkFactory("S1764")
@@ -177,7 +182,8 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     @Test
     fun `Ensure compiler crashes during BindingContext generation don't crash engine`() {
         val inputFile = createInputFile(
-            "file1.kt", """
+            "file1.kt",
+            """
         abstract class MyClass {
             abstract fun <P1> foo(): (P1) -> Unknown<String>
         
@@ -185,7 +191,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
                 println(foo<String>())
             }
         }
-        """.trimIndent()
+            """.trimIndent(),
         )
         context.fileSystem().add(inputFile)
 
@@ -269,9 +275,11 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         every { KOTLIN_CHECKS } returns listOf(ExceptionThrowingCheck::class.java)
 
         context.apply {
-            setSettings(MapSettings().apply {
-                failFast?.let { setProperty(KotlinPlugin.FAIL_FAST_PROPERTY_NAME, it) }
-            })
+            setSettings(
+                MapSettings().apply {
+                    failFast?.let { setProperty(KotlinPlugin.FAIL_FAST_PROPERTY_NAME, it) }
+                },
+            )
 
             fileSystem().add(createInputFile("file1.kt", "class A { fun f() = TODO() }"))
         }
@@ -331,9 +339,11 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         logTester.setLevel(LoggerLevel.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
-            every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(KotlinPlugin.KOTLIN_LANGUAGE_VERSION, "1.3")
-            })
+            every { config() } returns ConfigurationBridge(
+                MapSettings().apply {
+                    setProperty(KotlinPlugin.KOTLIN_LANGUAGE_VERSION, "1.3")
+                },
+            )
         }
 
         val environment = environment(sensorContext)
@@ -351,9 +361,11 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         logTester.setLevel(LoggerLevel.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
-            every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(KotlinPlugin.KOTLIN_LANGUAGE_VERSION, "foo")
-            })
+            every { config() } returns ConfigurationBridge(
+                MapSettings().apply {
+                    setProperty(KotlinPlugin.KOTLIN_LANGUAGE_VERSION, "foo")
+                },
+            )
         }
 
         val environment = environment(sensorContext)
@@ -372,9 +384,11 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         logTester.setLevel(LoggerLevel.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
-            every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(KotlinPlugin.KOTLIN_LANGUAGE_VERSION, "  ")
-            })
+            every { config() } returns ConfigurationBridge(
+                MapSettings().apply {
+                    setProperty(KotlinPlugin.KOTLIN_LANGUAGE_VERSION, "  ")
+                },
+            )
         }
 
         val environment = environment(sensorContext)
@@ -408,9 +422,11 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         logTester.setLevel(LoggerLevel.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
-            every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY, "42")
-            })
+            every { config() } returns ConfigurationBridge(
+                MapSettings().apply {
+                    setProperty(KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY, "42")
+                },
+            )
         }
 
         val environment = environment(sensorContext)
@@ -426,9 +442,11 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         logTester.setLevel(LoggerLevel.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
-            every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY, "0")
-            })
+            every { config() } returns ConfigurationBridge(
+                MapSettings().apply {
+                    setProperty(KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY, "0")
+                },
+            )
         }
 
         val environment = environment(sensorContext)
@@ -445,9 +463,11 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         logTester.setLevel(LoggerLevel.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
-            every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY, "foo")
-            })
+            every { config() } returns ConfigurationBridge(
+                MapSettings().apply {
+                    setProperty(KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY, "foo")
+                },
+            )
         }
 
         val environment = environment(sensorContext)

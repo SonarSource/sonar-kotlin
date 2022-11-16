@@ -31,9 +31,9 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi2ir.deparenthesize
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
@@ -55,7 +55,7 @@ class MobileDatabaseEncryptionKeysCheck : CallAbstractCheck() {
         FunMatcher(qualifier = SQLITE) {
             withNames(CHANGE_PASSWORD, "openDatabase", "openOrCreateDatabase", "create")
         },
-        FunMatcher(qualifier = "io.realm.RealmConfiguration.Builder", name = ENCRYPTION_KEY)
+        FunMatcher(qualifier = "io.realm.RealmConfiguration.Builder", name = ENCRYPTION_KEY),
     )
 
     override fun visitFunctionCall(
@@ -71,7 +71,9 @@ class MobileDatabaseEncryptionKeysCheck : CallAbstractCheck() {
 
         val arg = if (functionName in setOf(ENCRYPTION_KEY, CHANGE_PASSWORD)) {
             valueArgumentsList[0]
-        } else valueArgumentsList[1]
+        } else {
+            valueArgumentsList[1]
+        }
         val argExpr = (arg as? ExpressionValueArgument)?.valueArgument?.getArgumentExpression() ?: return
 
         val secondaries = mutableListOf<PsiElement>()
@@ -94,19 +96,21 @@ private fun KtElement.isHardCoded(bindingContext: BindingContext, secondaries: M
         is KtParenthesizedExpression ->
             deparenthesize().apply { secondaries.add(this) }.isHardCoded(bindingContext, secondaries)
         is KtDotQualifiedExpression ->
-            (selectorExpression?.isHardCoded(bindingContext, secondaries) ?: false)
-                || receiverExpression
-                .predictRuntimeValueExpression(bindingContext, secondaries)
-                .isHardCoded(bindingContext, secondaries)
+            (selectorExpression?.isHardCoded(bindingContext, secondaries) ?: false) ||
+                receiverExpression
+                    .predictRuntimeValueExpression(bindingContext, secondaries)
+                    .isHardCoded(bindingContext, secondaries)
         is KtCallExpression ->
             if (CREATE_CHAR_BYTE_ARRAY.matches(this, bindingContext)) {
                 secondaries.add(calleeExpression!!)
                 true
-            } else returnsHardcoded(bindingContext, secondaries)
+            } else {
+                returnsHardcoded(bindingContext, secondaries)
+            }
         else -> false
     }
 
-fun KtCallExpression.returnsHardcoded(bindingContext: BindingContext, secondaries: MutableList<PsiElement>) : Boolean {
+fun KtCallExpression.returnsHardcoded(bindingContext: BindingContext, secondaries: MutableList<PsiElement>): Boolean {
     val resultingDescriptor = this.getResolvedCall(bindingContext)?.resultingDescriptor ?: return false
     val declaration = DescriptorToSourceUtils.descriptorToDeclaration(resultingDescriptor) as? KtNamedFunction ?: return false
 
@@ -115,5 +119,7 @@ fun KtCallExpression.returnsHardcoded(bindingContext: BindingContext, secondarie
         declaration.anyDescendantOfType<KtReturnExpression> {
             it.returnedExpression?.isHardCoded(bindingContext, secondaries) ?: false
         }
-    } else declaration.bodyExpression?.isHardCoded(bindingContext, secondaries) ?: false
+    } else {
+        declaration.bodyExpression?.isHardCoded(bindingContext, secondaries) ?: false
+    }
 }

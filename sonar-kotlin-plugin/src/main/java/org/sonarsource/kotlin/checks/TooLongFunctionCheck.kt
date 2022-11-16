@@ -46,5 +46,4 @@ class TooLongFunctionCheck : AbstractTooLongFunctionRule() {
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         check(function, kotlinFileContext)
     }
-
 }

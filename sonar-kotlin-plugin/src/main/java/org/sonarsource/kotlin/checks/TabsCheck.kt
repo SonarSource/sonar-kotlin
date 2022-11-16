@@ -30,11 +30,10 @@ class TabsCheck : AbstractCheck() {
     override fun visitKtFile(file: KtFile, kotlinFileContext: KotlinFileContext) {
         if (file.text.contains('\t')) {
             kotlinFileContext.reportIssue(
-                    null,
-                    // TODO add filename to the message
-                    "Replace all tab characters in this file by sequences of white-spaces.")
-
+                null,
+                // TODO add filename to the message
+                "Replace all tab characters in this file by sequences of white-spaces.",
+            )
         }
     }
-
 }

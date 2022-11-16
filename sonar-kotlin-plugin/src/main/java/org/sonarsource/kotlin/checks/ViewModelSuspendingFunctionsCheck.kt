@@ -37,11 +37,13 @@ class ViewModelSuspendingFunctionsCheck : AbstractCheck() {
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val bindingContext = kotlinFileContext.bindingContext
         function.suspendModifier()?.let {
-            if (!function.isPrivate()
-                && function.extendsViewModel(bindingContext)
+            if (!function.isPrivate() &&
+                function.extendsViewModel(bindingContext)
             ) {
-                kotlinFileContext.reportIssue(it,
-                    """Classes extending "ViewModel" should not expose suspending functions.""")
+                kotlinFileContext.reportIssue(
+                    it,
+                    """Classes extending "ViewModel" should not expose suspending functions.""",
+                )
             }
         }
     }

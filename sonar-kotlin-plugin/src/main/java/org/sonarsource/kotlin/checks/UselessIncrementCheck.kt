@@ -61,5 +61,4 @@ class UselessIncrementCheck : AbstractCheck() {
 
     private fun matchSameNameReference(a: KtExpression?, b: KtExpression?): Boolean =
         (a is KtNameReferenceExpression) && (b is KtNameReferenceExpression) && (a.getReferencedName() == b.getReferencedName())
-
 }

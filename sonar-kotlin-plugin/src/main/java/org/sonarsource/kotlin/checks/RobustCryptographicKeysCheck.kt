@@ -20,9 +20,9 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.ArgumentMatcher
@@ -87,7 +87,7 @@ class RobustCryptographicKeysCheck : AbstractCheck() {
                     ASYMMETRIC_MIN_KEY_SIZE,
                     ASYMMETRIC_ALGORITHMS,
                     ASYMMETRIC_GENERATOR_GET_INSTANCE_MATCHER,
-                    context
+                    context,
                 )
                 resolvedCall matches SYMMETRIC_INIT_MATCHER -> handleKeyGeneratorAndKeyPairGenerator(
                     callExpr,
@@ -95,7 +95,7 @@ class RobustCryptographicKeysCheck : AbstractCheck() {
                     SYMMETRIC_MIN_KEY_SIZE,
                     SYMMETRIC_ALGORITHMS,
                     SYMMETRIC_GENERATOR_GET_INSTANCE_MATCHER,
-                    context
+                    context,
                 )
                 resolvedCall matches EC_GEN_PARAMETER_SPEC_MATCHER -> handleECGenParameterSpec(callExpr, context)
             }
@@ -116,17 +116,15 @@ class RobustCryptographicKeysCheck : AbstractCheck() {
         minKeySize: Int,
         unsafeAlgorithms: Collection<String>,
         getInstanceMatcher: FunMatcherImpl,
-        context: KotlinFileContext,
+        context: KotlinFileContext
     ) {
         val bindingContext = context.bindingContext
 
         val keySizeExpression = resolvedCall.getFirstArgumentExpression() ?: return
         val keySize = keySizeExpression.predictRuntimeIntValue(bindingContext)
         if (keySize != null && keySize < minKeySize) {
-
             val getInstanceCall = callExpr.predictReceiverExpression(bindingContext, resolvedCall)?.getResolvedCall(bindingContext)
             if (getInstanceMatcher.matches(getInstanceCall)) {
-
                 val algoExpr = getInstanceCall?.getFirstArgumentExpression()
                 algoExpr?.predictRuntimeStringValue(bindingContext)?.let { algo ->
 
@@ -134,7 +132,7 @@ class RobustCryptographicKeysCheck : AbstractCheck() {
                         context.reportIssue(
                             keySizeExpression,
                             msg(minKeySize, algo),
-                            secondaryLocations = context.locationListOf(algoExpr to "Using $algo cipher algorithm")
+                            secondaryLocations = context.locationListOf(algoExpr to "Using $algo cipher algorithm"),
                         )
                     }
                 }

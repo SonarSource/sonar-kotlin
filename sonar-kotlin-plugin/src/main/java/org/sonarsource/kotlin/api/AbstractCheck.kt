@@ -62,7 +62,7 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
         textRange: TextRange? = null,
         message: String,
         secondaryLocations: List<SecondaryLocation> = emptyList(),
-        gap: Double? = null,
+        gap: Double? = null
     ) = inputFileContext.reportIssue(ruleKey, textRange, message, secondaryLocations, gap)
 
     internal fun KotlinFileContext.locationListOf(vararg nodesForSecondaryLocations: Pair<PsiElement, String>) =
@@ -74,7 +74,7 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
         psiElement: PsiElement,
         message: String,
         secondaryLocations: List<SecondaryLocation> = emptyList(),
-        gap: Double? = null,
+        gap: Double? = null
     ) = reportIssue(textRange(psiElement), message, secondaryLocations, gap)
 
     internal fun KotlinFileContext.isInAndroid() = inputFileContext.isAndroid
@@ -87,8 +87,10 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
             is KtThrowExpression -> true
             is KtDotQualifiedExpression ->
                 selectorExpression?.hasAnnotation(THROWS_FQN, bindingContext)
+
             is KtCallExpression ->
                 hasAnnotation(THROWS_FQN, bindingContext)
+
             else -> false
         } ?: false
 
@@ -114,29 +116,33 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
 
     internal fun PsiElement.hasComment(): Boolean {
         var result = false
-        this.accept(object : KtTreeVisitorVoid() {
-            /** Note [visitComment] not called for [org.jetbrains.kotlin.kdoc.psi.api.KDoc] */
-            override fun visitElement(element: PsiElement) {
-                super.visitElement(element)
-                if (element is PsiComment) {
-                    result = true
+        this.accept(
+            object : KtTreeVisitorVoid() {
+                /** Note [visitComment] not called for [org.jetbrains.kotlin.kdoc.psi.api.KDoc] */
+                override fun visitElement(element: PsiElement) {
+                    super.visitElement(element)
+                    if (element is PsiComment) {
+                        result = true
+                    }
                 }
-            }
-        })
+            },
+        )
         return result
     }
 
     internal fun PsiElement.numberOfLinesOfCode(): Int {
         val lines = BitSet()
         val document = this.containingFile.viewProvider.document!!
-        this.accept(object : KtTreeVisitorVoid() {
-            override fun visitElement(element: PsiElement) {
-                super.visitElement(element)
-                if (element is LeafPsiElement && element !is PsiWhiteSpace && element !is PsiComment) {
-                    lines.set(document.getLineNumber(element.textRange.startOffset))
+        this.accept(
+            object : KtTreeVisitorVoid() {
+                override fun visitElement(element: PsiElement) {
+                    super.visitElement(element)
+                    if (element is LeafPsiElement && element !is PsiWhiteSpace && element !is PsiComment) {
+                        lines.set(document.getLineNumber(element.textRange.startOffset))
+                    }
                 }
-            }
-        })
+            },
+        )
         return lines.cardinality()
     }
 
@@ -146,7 +152,7 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
         ranges.map {
             MutableOffsetRange(
                 doc.getLineStartOffset(it.start().line() - 1) + it.start().lineOffset(),
-                doc.getLineStartOffset(it.end().line() - 1) + it.end().lineOffset()
+                doc.getLineStartOffset(it.end().line() - 1) + it.end().lineOffset(),
             )
         }.fold(mutableListOf<MutableOffsetRange>()) { acc, curOffsets ->
             acc.apply {

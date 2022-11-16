@@ -23,11 +23,14 @@ import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
 
 class KotlinLanguage(
-    private val configuration: Configuration,
+    private val configuration: Configuration
 ) : AbstractLanguage(KotlinPlugin.KOTLIN_LANGUAGE_KEY, KotlinPlugin.KOTLIN_LANGUAGE_NAME) {
     override fun getFileSuffixes(): Array<String> =
         (configuration.getStringArray(KotlinPlugin.KOTLIN_FILE_SUFFIXES_KEY)).let {
-            if (it.isNullOrEmpty()) KotlinPlugin.KOTLIN_FILE_SUFFIXES_DEFAULT_VALUE.split(",").toTypedArray()
-            else it
+            if (it.isNullOrEmpty()) {
+                KotlinPlugin.KOTLIN_FILE_SUFFIXES_DEFAULT_VALUE.split(",").toTypedArray()
+            } else {
+                it
+            }
         }
 }

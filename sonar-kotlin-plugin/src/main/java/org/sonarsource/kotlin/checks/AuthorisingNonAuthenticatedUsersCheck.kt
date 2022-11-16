@@ -21,9 +21,9 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
@@ -49,7 +49,7 @@ class AuthorisingNonAuthenticatedUsersCheck : CallAbstractCheck() {
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
         resolvedCall: ResolvedCall<*>,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
         val bindingContext = kotlinFileContext.bindingContext
         val call = callExpression.getCall(bindingContext) ?: return
@@ -72,9 +72,10 @@ class AuthorisingNonAuthenticatedUsersCheck : CallAbstractCheck() {
             receiver = callElement.predictReceiverExpression(bindingContext)
                 ?.getCall(bindingContext) ?: return
         }
-        kotlinFileContext.reportIssue(receiver.calleeExpression!!,
+        kotlinFileContext.reportIssue(
+            receiver.calleeExpression!!,
             "Make sure authorizing non-authenticated users to use this key is safe here.",
-            secondaryLocations)
+            secondaryLocations,
+        )
     }
-
 }

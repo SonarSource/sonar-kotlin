@@ -42,12 +42,16 @@ class WrongAssignmentOperatorCheck : AbstractCheck() {
             return if (expression.operationToken == KtTokens.EXCL) {
                 // For expressions such as "b =! c" we want to display the other message
                 "Add a space between \"=\" and \"!\" to avoid confusion."
-            } else "Was \"${expression.operationReference.text}=\" meant instead?"
+            } else {
+                "Was \"${expression.operationReference.text}=\" meant instead?"
+            }
         }
 
         private fun hasSpacingBetween(firstToken: TextRange, secondToken: TextRange): Boolean {
-            return (firstToken.end().line() != secondToken.start().line()
-                || firstToken.end().lineOffset() != secondToken.start().lineOffset())
+            return (
+                firstToken.end().line() != secondToken.start().line() ||
+                    firstToken.end().lineOffset() != secondToken.start().lineOffset()
+                )
         }
     }
 

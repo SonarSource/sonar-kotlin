@@ -20,4 +20,3 @@
 package org.sonarsource.kotlin.checks
 
 class JumpInFinallyCheckTest : CheckTest(JumpInFinallyCheck())
-

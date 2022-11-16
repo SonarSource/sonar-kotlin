@@ -35,7 +35,7 @@ internal class StatementsVisitorTest {
             class A{}
             fun bar() = if (a) println()
             fun foo() {}
-            """.trimIndent()
+        """.trimIndent()
         Assertions.assertThat(statements(content)).isEqualTo(2)
     }
 
@@ -54,7 +54,8 @@ internal class StatementsVisitorTest {
             fun f() {
               var a = 2
               var b = 3 
-            }""".trimIndent()
+            }
+        """.trimIndent()
         Assertions.assertThat(statements(content)).isEqualTo(6)
     }
 }

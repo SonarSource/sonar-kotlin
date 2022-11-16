@@ -35,7 +35,7 @@ private val MATH_RANDOM_MATCHER = FunMatcher(qualifier = "java.lang.Math", name 
     withNoArguments()
 }
 
-private val KOTLIN_RANDOM_MATCHER = FunMatcher (qualifier = "kotlin.random", name = "Random")
+private val KOTLIN_RANDOM_MATCHER = FunMatcher(qualifier = "kotlin.random", name = "Random")
 
 private val RANDOM_STATIC_TYPES = setOf(
     "java.util.concurrent.ThreadLocalRandom",
@@ -47,7 +47,7 @@ private val RANDOM_STATIC_TYPES = setOf(
 
 private val RANDOM_CONSTRUCTOR_TYPES = setOf(
     "java.util.Random",
-    "org.apache.commons.lang.math.JVMRandom"
+    "org.apache.commons.lang.math.JVMRandom",
 )
 
 @Rule(key = "S2245")
@@ -56,20 +56,22 @@ class PseudoRandomCheck : AbstractCheck() {
     override fun visitCallExpression(expression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
         val bindingContext = kotlinFileContext.bindingContext
         val calleeExpression = expression.calleeExpression ?: return
-        
-        if (MATH_RANDOM_MATCHER.matches(expression, bindingContext) || KOTLIN_RANDOM_MATCHER.matches(expression, bindingContext))
-            kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
 
-        when(val resultingDescriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor) {
+        if (MATH_RANDOM_MATCHER.matches(expression, bindingContext) || KOTLIN_RANDOM_MATCHER.matches(expression, bindingContext)) {
+            kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
+        }
+
+        when (val resultingDescriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor) {
             is ConstructorDescriptor -> {
-                resultingDescriptor.constructedClass.fqNameOrNull()?.asString()?.let { 
+                resultingDescriptor.constructedClass.fqNameOrNull()?.asString()?.let {
                     if (RANDOM_CONSTRUCTOR_TYPES.contains(it)) kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
                 }
             }
             else -> {
                 resultingDescriptor?.fqNameOrNull()?.asString()?.substringBeforeLast(".")?.let {
-                    if (RANDOM_STATIC_TYPES.contains(it) && !expression.isChainedMethodInvocation())
+                    if (RANDOM_STATIC_TYPES.contains(it) && !expression.isChainedMethodInvocation()) {
                         kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
+                    }
                 }
             }
         }

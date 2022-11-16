@@ -19,8 +19,6 @@
  */
 package org.sonarsource.kotlin.converter
 
-import java.nio.file.Files
-import java.nio.file.Path
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtElement
@@ -29,27 +27,29 @@ import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.nio.charset.StandardCharsets
+import java.nio.file.Files
+import java.nio.file.Path
 
 class KotlinTreeTest {
 
-  @Test
-  fun testCreateKotlinTree() {
-    val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
-    val path = Path.of("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
-    val content = String(Files.readAllBytes(path))
-    val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin.kt")
-      .setCharset(StandardCharsets.UTF_8)
-      .initMetadata(content)
-      .build()
+    @Test
+    fun testCreateKotlinTree() {
+        val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
+        val path = Path.of("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
+        val content = String(Files.readAllBytes(path))
+        val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
+            .setCharset(StandardCharsets.UTF_8)
+            .initMetadata(content)
+            .build()
 
-    val tree = kotlinTreeOf(content, environment, inputFile)
-    assertThat(tree.psiFile.children).hasSize(9)
+        val tree = kotlinTreeOf(content, environment, inputFile)
+        assertThat(tree.psiFile.children).hasSize(9)
 
-    assertThat(tree.bindingContext.getSliceContents(BindingContext.RESOLVED_CALL)).hasSize(13)
+        assertThat(tree.bindingContext.getSliceContents(BindingContext.RESOLVED_CALL)).hasSize(13)
 
-    val ktCallExpression = tree.psiFile.children[3].children[2].children[1].children[1].children[0] as KtElement
-    val call = tree.bindingContext.get(BindingContext.CALL, ktCallExpression)
-    val resolvedCall = tree.bindingContext.get(BindingContext.RESOLVED_CALL, call)
-    assertThat(resolvedCall).isNotNull
-  }
+        val ktCallExpression = tree.psiFile.children[3].children[2].children[1].children[1].children[0] as KtElement
+        val call = tree.bindingContext.get(BindingContext.CALL, ktCallExpression)
+        val resolvedCall = tree.bindingContext.get(BindingContext.RESOLVED_CALL, call)
+        assertThat(resolvedCall).isNotNull
+    }
 }

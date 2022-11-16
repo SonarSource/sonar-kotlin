@@ -38,7 +38,7 @@ private val COMPILER_KEY_TO_SONAR_KEYS = mapOf(
     "UNUSED_PARAMETER" to sequenceOf("kotlin:S1172"),
     "UNUSED_VARIABLE" to sequenceOf("kotlin:S1481"),
     "UNUSED" to sequenceOf("kotlin:S1172", "kotlin:S1481"),
-    "TOO_MANY_ARGUMENTS" to sequenceOf("kotlin:S107")
+    "TOO_MANY_ARGUMENTS" to sequenceOf("kotlin:S107"),
 )
 
 class IssueSuppressionVisitor : KotlinFileVisitor() {
@@ -52,7 +52,7 @@ class IssueSuppressionVisitor : KotlinFileVisitor() {
 
 private class IssueSuppressionTreeVisitor(
     val kotlinFileContext: KotlinFileContext,
-    val acc: MutableMap<String, Set<TextRange>>,
+    val acc: MutableMap<String, Set<TextRange>>
 ) : KtTreeVisitor() {
     override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry) =
         detectSuppressedRules(annotationEntry.annotatedElement())

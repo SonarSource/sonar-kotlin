@@ -30,7 +30,9 @@ class AllBranchesIdenticalCheck : AbstractBranchDuplication() {
     }
 
     override fun onAllIdenticalBranches(ctx: KotlinFileContext, tree: KtElement) {
-        ctx.reportIssue(tree,
-            "Remove this conditional structure or edit its code blocks so that they're not all the same.")
+        ctx.reportIssue(
+            tree,
+            "Remove this conditional structure or edit its code blocks so that they're not all the same.",
+        )
     }
 }

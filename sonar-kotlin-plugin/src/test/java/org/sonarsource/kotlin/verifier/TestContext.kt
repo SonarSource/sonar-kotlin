@@ -38,7 +38,7 @@ internal class TestContext(
     check: AbstractCheck,
     vararg furtherChecks: AbstractCheck,
     override val inputFile: InputFile = DummyInputFile(),
-    override val isAndroid: Boolean = false,
+    override val isAndroid: Boolean = false
 ) : InputFileContext {
     private val visitor: KtTestChecksVisitor = KtTestChecksVisitor(listOf(check) + furtherChecks)
     override var filteredRules: Map<String, Set<TextRange>> = emptyMap()
@@ -55,7 +55,7 @@ internal class TestContext(
         textRange: TextRange?,
         message: String,
         secondaryLocations: List<SecondaryLocation>,
-        gap: Double?,
+        gap: Double?
     ) {
         if (textRange != null &&
             filteredRules.getOrDefault(ruleKey.toString(), emptySet()).any { other: TextRange -> textRange in other }
@@ -71,14 +71,17 @@ internal class TestContext(
                 .onRange(start.line(), start.lineOffset() + 1, end.line(), end.lineOffset())
         } ?: verifier.reportIssue(message).onFile()
         issue.withGap(gap)
-        secondaryLocations.forEach(Consumer { secondary: SecondaryLocation ->
-            issue.addSecondary(
-                secondary.textRange.start().line(),
-                secondary.textRange.start().lineOffset() + 1,
-                secondary.textRange.end().line(),
-                secondary.textRange.end().lineOffset(),
-                secondary.message)
-        })
+        secondaryLocations.forEach(
+            Consumer { secondary: SecondaryLocation ->
+                issue.addSecondary(
+                    secondary.textRange.start().line(),
+                    secondary.textRange.start().lineOffset() + 1,
+                    secondary.textRange.end().line(),
+                    secondary.textRange.end().lineOffset(),
+                    secondary.message,
+                )
+            },
+        )
     }
 
     override fun reportAnalysisParseError(repositoryKey: String, inputFile: InputFile, location: TextPointer?) {

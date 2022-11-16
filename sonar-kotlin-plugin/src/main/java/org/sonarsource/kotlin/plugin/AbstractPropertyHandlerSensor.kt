@@ -35,7 +35,7 @@ abstract class AbstractPropertyHandlerSensor protected constructor(
     private val propertyKey: String,
     private val propertyName: String,
     private val configurationKey: String,
-    private val languageKey: String,
+    private val languageKey: String
 ) : Sensor {
     override fun describe(descriptor: SensorDescriptor) {
         descriptor
@@ -73,7 +73,8 @@ abstract class AbstractPropertyHandlerSensor protected constructor(
             val missingFilesAsString = missingFiles.joinToString(separator = "\n- ", prefix = "\n- ")
 
             val logWarning = """Unable to import $propertyName report file(s):$missingFilesAsString
-                |The report file(s) can not be found. Check that the property '$configurationKey' is correctly configured.""".trimMargin()
+                |The report file(s) can not be found. Check that the property '$configurationKey' is correctly configured.
+            """.trimMargin()
             LOG.warn(logWarning)
 
             val uiWarning = """Unable to import ${missingFiles.size} $propertyName report file(s).

@@ -32,7 +32,8 @@ class DetektRulesDefinition : RulesDefinition {
             DetektSensor.LINTER_KEY,
             DetektSensor.LINTER_NAME,
             RULES_FILE,
-            KotlinPlugin.KOTLIN_LANGUAGE_KEY)
+            KotlinPlugin.KOTLIN_LANGUAGE_KEY,
+        )
     }
 
     override fun define(context: RulesDefinition.Context) {

@@ -42,8 +42,11 @@ internal val DEFAULT_RULES_FILE = Path.of("sonar-kotlin-plugin", "src", "main", 
 
 fun main(vararg args: String?) {
     val rulesFile =
-        if (args.isNotEmpty() && !args[0].isNullOrBlank()) Path.of(args[0])
-        else DEFAULT_RULES_FILE
+        if (args.isNotEmpty() && !args[0].isNullOrBlank()) {
+            Path.of(args[0])
+        } else {
+            DEFAULT_RULES_FILE
+        }
 
     val rules = DetektRuleDefinitionGenerator.generateRuleDefinitionJson()
     var projectPath = Paths.get(".").toRealPath()
@@ -87,9 +90,10 @@ internal object DetektRuleDefinitionGenerator {
         val configUrl = ClasspathResourceConverter().convert("default-detekt-config.yml")
         for (provider in ServiceLoader.load(RuleSetProvider::class.java)) {
             val config = configUrl.openStream().reader().use(YamlConfig::load)
-            rules.addAll(provider.instance(config).rules.asSequence()
-                .flatMap { rule -> if (rule is MultiRule) rule.rules.asSequence() else sequenceOf(rule) }
-                .filterIsInstance<Rule>()
+            rules.addAll(
+                provider.instance(config).rules.asSequence()
+                    .flatMap { rule -> if (rule is MultiRule) rule.rules.asSequence() else sequenceOf(rule) }
+                    .filterIsInstance<Rule>(),
             )
         }
         val externalRules = rules.map { rule ->
@@ -129,6 +133,8 @@ internal object DetektRuleDefinitionGenerator {
         val url = PACKAGE_TO_URL[packageName]
         return if (url != null) {
             "$url.html#${rule.ruleId.lowercase()}"
-        } else null
+        } else {
+            null
+        }
     }
 }

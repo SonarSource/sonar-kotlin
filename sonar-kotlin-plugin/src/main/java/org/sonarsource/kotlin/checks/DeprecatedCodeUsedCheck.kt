@@ -38,7 +38,6 @@ class DeprecatedCodeUsedCheck : AbstractCheck() {
             .filter { it.factory == Errors.DEPRECATION }
             .forEach { context.reportIssue(it.psiElement.elementToReport(), "Deprecated code should not be used.") }
     }
-
 }
 
 private fun PsiElement.elementToReport() = when (this) {

@@ -72,7 +72,7 @@ class VerifiedServerHostnamesCheck : AbstractCheck() {
 
     private fun onlyReturnsTrue(
         ktExpression: KtExpression,
-        bindingContext: BindingContext,
+        bindingContext: BindingContext
     ): Boolean = when (ktExpression) {
         is KtReturnExpression ->
             ktExpression.returnedExpression?.isTrueConstant(bindingContext) ?: false
@@ -80,7 +80,7 @@ class VerifiedServerHostnamesCheck : AbstractCheck() {
     }
 
     private fun KtExpression.isTrueConstant(
-        bindingContext: BindingContext,
+        bindingContext: BindingContext
     ) = getType(bindingContext)?.let {
         bindingContext.get(BindingContext.COMPILE_TIME_VALUE, this)?.getValue(it) == true
     } ?: false

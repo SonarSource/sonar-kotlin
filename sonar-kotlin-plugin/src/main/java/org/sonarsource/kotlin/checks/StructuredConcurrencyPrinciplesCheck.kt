@@ -28,9 +28,9 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.TYPE
-import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.FUNS_ACCEPTING_DISPATCHERS
@@ -84,10 +84,12 @@ private fun MutableList<KtAnnotationEntry>?.isAnnotatedWithOptInDelicateApi(bind
             bindingContext.get(TYPE, annotation.typeReference)
             val typeFqn = annotation.typeReference?.determineTypeAsString(bindingContext)
             typeFqn == "kotlinx.coroutines.DelicateCoroutinesApi" ||
-                (typeFqn == "kotlin.OptIn"
-                    && annotation.valueArguments.any { valueArgument ->
-                    valueArgument.getArgumentExpression()?.getType(bindingContext)
-                        ?.getJetTypeFqName(true) == DELICATE_API_CLASS_TYPE
-                })
+                (
+                    typeFqn == "kotlin.OptIn" &&
+                        annotation.valueArguments.any { valueArgument ->
+                            valueArgument.getArgumentExpression()?.getType(bindingContext)
+                                ?.getJetTypeFqName(true) == DELICATE_API_CLASS_TYPE
+                        }
+                    )
         }
     } ?: false

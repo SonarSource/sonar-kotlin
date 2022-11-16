@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.types.typeUtil.nullability
 class ArgumentMatcher(
     private val typeName: String? = null,
     private val nullability: TypeNullability? = null,
-    private val qualified: Boolean = true,
+    private val qualified: Boolean = true
 ) {
     companion object {
         val ANY = ArgumentMatcher()

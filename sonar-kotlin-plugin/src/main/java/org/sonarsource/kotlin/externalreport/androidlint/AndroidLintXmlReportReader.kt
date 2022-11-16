@@ -19,12 +19,12 @@
  */
 package org.sonarsource.kotlin.externalreport.androidlint
 
+import org.sonarsource.analyzer.commons.xml.SafeStaxParserFactory
 import java.io.IOException
 import java.io.InputStream
 import javax.xml.namespace.QName
 import javax.xml.stream.XMLStreamException
 import javax.xml.stream.events.StartElement
-import org.sonarsource.analyzer.commons.xml.SafeStaxParserFactory
 
 private val ISSUES_ELEMENT = QName("issues")
 private val ISSUE_ELEMENT = QName("issue")

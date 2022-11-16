@@ -37,7 +37,7 @@ private val HOTSPOT_FUNS = listOf(
     FunMatcher(definingSupertype = "android.os.Environment") {
         withNames(
             "getExternalStorageDirectory",
-            "getExternalStoragePublicDirectory"
+            "getExternalStoragePublicDirectory",
         )
     },
     FunMatcher(definingSupertype = "android.content.Context") {
@@ -50,7 +50,7 @@ private val HOTSPOT_FUNS = listOf(
             "getObbDir",
             "getObbDirs",
         )
-    }
+    },
 )
 
 private val HOTSPOT_PROPS = listOf(

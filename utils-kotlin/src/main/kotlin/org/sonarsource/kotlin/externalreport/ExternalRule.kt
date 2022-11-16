@@ -27,5 +27,5 @@ data class ExternalRule(
     val tags: Set<String>,
     val type: String,
     val severity: String? = null,
-    val constantDebtMinutes: Long,
+    val constantDebtMinutes: Long
 )

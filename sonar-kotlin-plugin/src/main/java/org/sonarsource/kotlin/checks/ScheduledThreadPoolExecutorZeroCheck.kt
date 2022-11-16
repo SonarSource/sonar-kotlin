@@ -24,8 +24,8 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil.deparenthesize
-import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
@@ -65,5 +65,4 @@ class ScheduledThreadPoolExecutorZeroCheck : CallAbstractCheck() {
 
     private fun isZero(ctx: KotlinFileContext, expression: KtExpression?): Boolean =
         expression?.predictRuntimeIntValue(ctx.bindingContext) == 0
-
 }

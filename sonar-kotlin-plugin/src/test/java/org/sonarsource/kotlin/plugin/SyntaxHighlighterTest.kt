@@ -127,7 +127,8 @@ class SyntaxHighlighterTest : AbstractSensorTest() {
 }
 
 private class HighlightingAssert(
-    context: SensorContextTester, inputFile: InputFile,
+    context: SensorContextTester,
+    inputFile: InputFile
 ) : ObjectAssert<Pair<SensorContextTester, InputFile>>(context to inputFile) {
     fun isHighlighted(line: Int, offset: Int, type: TypeOfText): HighlightingAssert {
         val (context, inputFile) = actual

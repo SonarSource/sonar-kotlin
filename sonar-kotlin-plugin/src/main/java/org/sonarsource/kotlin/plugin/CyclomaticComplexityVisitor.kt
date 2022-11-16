@@ -34,7 +34,7 @@ class CyclomaticComplexityVisitor : KtTreeVisitorVoid() {
     fun complexityTrees() = complexityTrees.toList()
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if(function.hasBody() && function.name != null) {
+        if (function.hasBody() && function.name != null) {
             complexityTrees.add(function)
         }
         super.visitNamedFunction(function)

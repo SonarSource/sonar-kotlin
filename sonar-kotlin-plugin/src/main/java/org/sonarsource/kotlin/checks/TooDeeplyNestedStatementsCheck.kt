@@ -44,7 +44,8 @@ class TooDeeplyNestedStatementsCheck : AbstractCheck() {
     @RuleProperty(
         key = "max",
         description = "Maximum allowed control flow statement nesting depth",
-        defaultValue = "" + DEFAULT_MAX_DEPTH)
+        defaultValue = "" + DEFAULT_MAX_DEPTH,
+    )
     var max: Int = DEFAULT_MAX_DEPTH
 
     override fun visitIfExpression(expression: KtIfExpression, kotlinFileContext: KotlinFileContext) {
@@ -112,11 +113,12 @@ class TooDeeplyNestedStatementsCheck : AbstractCheck() {
 
     private fun isTernaryOperator(tree: KtExpression): Boolean {
         /** see [org.sonarsource.slang.checks.utils.ExpressionUtils.isTernaryOperator] */
-        if (tree !is KtIfExpression || tree.`else` == null)
+        if (tree !is KtIfExpression || tree.`else` == null) {
             return false
-        return tree.then !is KtBlockExpression
-            && tree.`else` !is KtBlockExpression
-            && tree.`else` !is KtIfExpression
+        }
+        return tree.then !is KtBlockExpression &&
+            tree.`else` !is KtBlockExpression &&
+            tree.`else` !is KtIfExpression
     }
 
     private fun isElseIfStatement(parent: PsiElement, tree: PsiElement): Boolean {
@@ -125,9 +127,8 @@ class TooDeeplyNestedStatementsCheck : AbstractCheck() {
          * whose parent is [KtIfExpression]
          */
         val p = parent.parent
-        return tree is KtIfExpression
-            && p is KtIfExpression
-            && tree == p.`else`
+        return tree is KtIfExpression &&
+            p is KtIfExpression &&
+            tree == p.`else`
     }
-
 }

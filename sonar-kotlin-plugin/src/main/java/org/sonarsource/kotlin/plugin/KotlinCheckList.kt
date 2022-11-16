@@ -66,6 +66,7 @@ import org.sonarsource.kotlin.checks.IfConditionalAlwaysTrueOrFalseCheck
 import org.sonarsource.kotlin.checks.InjectableDispatchersCheck
 import org.sonarsource.kotlin.checks.InvalidRegexCheck
 import org.sonarsource.kotlin.checks.IsInstanceMethodCheck
+import org.sonarsource.kotlin.checks.JumpInFinallyCheck
 import org.sonarsource.kotlin.checks.MainSafeCoroutinesCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
 import org.sonarsource.kotlin.checks.MobileDatabaseEncryptionKeysCheck
@@ -76,7 +77,6 @@ import org.sonarsource.kotlin.checks.PseudoRandomCheck
 import org.sonarsource.kotlin.checks.ReceivingIntentsCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RedundantSuspendModifierCheck
-import org.sonarsource.kotlin.checks.JumpInFinallyCheck
 import org.sonarsource.kotlin.checks.RegexComplexityCheck
 import org.sonarsource.kotlin.checks.ReluctantQuantifierCheck
 import org.sonarsource.kotlin.checks.ReplaceGuavaWithKotlinCheck

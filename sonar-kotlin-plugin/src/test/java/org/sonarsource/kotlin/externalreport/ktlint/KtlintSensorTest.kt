@@ -204,11 +204,11 @@ class KtlintSensorTest {
         val externalIssues = executeSensorImporting("foo-report-with-errors.xml")
         assertThat(externalIssues).hasSize(4)
         assertThat(logTester.logs(LoggerLevel.WARN)).containsExactlyInAnyOrder(
-            "No input file found for non-existent-file.kt. No ktlint issues will be imported on this file."
+            "No input file found for non-existent-file.kt. No ktlint issues will be imported on this file.",
         )
         assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactlyInAnyOrder(
             "Unexpected error without any message for rule: ''",
-            "Unexpected error without any message for rule: 'some-rule-key'"
+            "Unexpected error without any message for rule: 'some-rule-key'",
         )
     }
 

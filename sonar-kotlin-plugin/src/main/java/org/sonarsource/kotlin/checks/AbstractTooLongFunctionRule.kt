@@ -34,8 +34,8 @@ abstract class AbstractTooLongFunctionRule : AbstractCheck() {
         if (numberOfLinesOfCode > max) {
             kotlinFileContext.reportIssue(
                 function.nameIdentifier ?: function.firstChild,
-                "This $elementName has $numberOfLinesOfCode lines of code, which is greater than the $max authorized. Split it into smaller functions.")
+                "This $elementName has $numberOfLinesOfCode lines of code, which is greater than the $max authorized. Split it into smaller functions.",
+            )
         }
     }
-
 }

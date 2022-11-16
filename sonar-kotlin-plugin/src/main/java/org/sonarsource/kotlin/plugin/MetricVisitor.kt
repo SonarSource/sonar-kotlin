@@ -45,7 +45,7 @@ const val NOSONAR_PREFIX = "NOSONAR"
 
 class MetricVisitor(
     private val fileLinesContextFactory: FileLinesContextFactory,
-    private val noSonarFilter: NoSonarFilter,
+    private val noSonarFilter: NoSonarFilter
 ) : KotlinFileVisitor() {
     private lateinit var ktMetricVisitor: KtMetricVisitor
 
@@ -155,11 +155,11 @@ private class KtMetricVisitor : KtTreeVisitorVoid() {
     private fun addExecutableLines(elements: List<KtElement>, document: Document) {
         elements.asSequence()
             .filterNot {
-                it is KtPackageDirective
-                    || it is KtImportDirective
-                    || it is KtClassOrObject
-                    || it is KtNamedFunction
-                    || it is KtBlockExpression
+                it is KtPackageDirective ||
+                    it is KtImportDirective ||
+                    it is KtClassOrObject ||
+                    it is KtNamedFunction ||
+                    it is KtBlockExpression
             }
             .forEach { executableLines.add(document.getLineNumber(it.textRange.startOffset) + 1) }
     }
@@ -189,4 +189,3 @@ private fun add(range: TextRange, lineNumbers: MutableSet<Int>, document: Docume
 
 fun isNosonarComment(comment: PsiComment) =
     comment.getContent().trim { it <= ' ' }.uppercase().startsWith(NOSONAR_PREFIX)
-

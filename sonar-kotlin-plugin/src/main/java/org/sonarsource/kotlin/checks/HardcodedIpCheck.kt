@@ -85,12 +85,12 @@ private fun isValidIPV6(ipv6: String, ipv4: String?): Boolean {
     return validUncompressed || validCompressed
 }
 
-private fun isIPV4Exception(ip: String) = ip.startsWith("127.")
-    || "255.255.255.255" == ip || "0.0.0.0" == ip || ip.startsWith("2.5.")
-    || isReservedDocumentationIp(ip) || isLocalIPv4MappedIPv6(ip)
+private fun isIPV4Exception(ip: String) = ip.startsWith("127.") ||
+    "255.255.255.255" == ip || "0.0.0.0" == ip || ip.startsWith("2.5.") ||
+    isReservedDocumentationIp(ip) || isLocalIPv4MappedIPv6(ip)
 
-private fun isIPV6Exception(ip: String) = IPV6_LOOPBACK.matches(ip) || IPV6_NON_ROUTABLE.matches(ip) || isReservedDocumentationIp(ip)
-    || isLocalIPv4MappedIPv6(ip)
+private fun isIPV6Exception(ip: String) = IPV6_LOOPBACK.matches(ip) || IPV6_NON_ROUTABLE.matches(ip) || isReservedDocumentationIp(ip) ||
+    isLocalIPv4MappedIPv6(ip)
 
 private fun getCompressionSeparatorCount(str: String) = str.split("::").size - 1
 

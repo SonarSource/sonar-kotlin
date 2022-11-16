@@ -37,7 +37,7 @@ import org.sonarsource.kotlin.converter.KotlinTextRanges.textPointerAtOffset
 
 class CommentAnnotationsAndTokenVisitor(
     private val psiDocument: Document,
-    private val inputFile: InputFile,
+    private val inputFile: InputFile
 ) : KtTreeVisitorVoid() {
 
     companion object {

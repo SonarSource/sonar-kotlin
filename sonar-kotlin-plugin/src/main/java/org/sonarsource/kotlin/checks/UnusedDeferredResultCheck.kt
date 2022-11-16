@@ -32,8 +32,8 @@ class UnusedDeferredResultCheck : AbstractCheck() {
 
     override fun visitCallExpression(expression: KtCallExpression, context: KotlinFileContext) {
         val bindingContext = context.bindingContext
-        if (expression.expressionTypeFqn(bindingContext) == DEFERRED_FQN
-            && expression.isUsedAsStatement(bindingContext)
+        if (expression.expressionTypeFqn(bindingContext) == DEFERRED_FQN &&
+            expression.isUsedAsStatement(bindingContext)
         ) {
             context.reportIssue(expression.calleeExpression!!, """This function returns "Deferred", but its result is never used.""")
             return

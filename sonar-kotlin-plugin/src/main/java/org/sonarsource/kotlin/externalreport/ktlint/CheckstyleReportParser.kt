@@ -32,12 +32,18 @@ internal class CheckstyleReportParser(context: SensorContext) : CheckstyleFormat
 ) {
     override fun createRuleKey(source: String): RuleKey? {
         val preliminaryRuleKey =
-            if (source.startsWith(EXPERIMENTAL_RULE_PREFIX)) source.substring(EXPERIMENTAL_RULE_PREFIX.length)
-            else source
+            if (source.startsWith(EXPERIMENTAL_RULE_PREFIX)) {
+                source.substring(EXPERIMENTAL_RULE_PREFIX.length)
+            } else {
+                source
+            }
 
         val ruleKey =
-            if (KtlintRulesDefinition.RULE_LOADER.ruleKeys().contains(preliminaryRuleKey)) preliminaryRuleKey
-            else ExternalReporting.FALLBACK_RULE_KEY
+            if (KtlintRulesDefinition.RULE_LOADER.ruleKeys().contains(preliminaryRuleKey)) {
+                preliminaryRuleKey
+            } else {
+                ExternalReporting.FALLBACK_RULE_KEY
+            }
 
         return super.createRuleKey(ruleKey)
     }

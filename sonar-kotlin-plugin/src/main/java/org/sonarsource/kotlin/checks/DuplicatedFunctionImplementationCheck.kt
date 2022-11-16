@@ -20,7 +20,6 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.psi.KtConstructor
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
@@ -44,7 +43,7 @@ class DuplicatedFunctionImplementationCheck : AbstractCheck() {
 
         private fun areDuplicatedImplementation(
             original: KtNamedFunction,
-            possibleDuplicate: KtNamedFunction,
+            possibleDuplicate: KtNamedFunction
         ): Boolean {
             return SyntacticEquivalence.areEquivalent(original, possibleDuplicate)
         }
@@ -75,7 +74,7 @@ class DuplicatedFunctionImplementationCheck : AbstractCheck() {
     private fun reportDuplicate(
         ctx: KotlinFileContext,
         original: KtNamedFunction,
-        duplicate: KtNamedFunction,
+        duplicate: KtNamedFunction
     ) {
         val textRange = ctx.textRange(original.nameIdentifier ?: original)
         val line = textRange.start().line()

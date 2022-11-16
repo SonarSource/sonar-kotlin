@@ -20,7 +20,6 @@
 package org.sonarsource.kotlin.externalreport.detekt
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.externalreport.getActual
 import java.nio.file.Path

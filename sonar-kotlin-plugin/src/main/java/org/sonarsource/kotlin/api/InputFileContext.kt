@@ -36,7 +36,7 @@ interface InputFileContext {
         textRange: TextRange?,
         message: String,
         secondaryLocations: List<SecondaryLocation>,
-        gap: Double?,
+        gap: Double?
     )
 
     fun reportAnalysisParseError(repositoryKey: String, inputFile: InputFile, location: TextPointer?)
