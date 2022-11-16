@@ -37,18 +37,22 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonarsource.analyzer.commons.ProfileGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SlangRulingTest {
+
+  private static final Logger LOG = LoggerFactory.getLogger(SlangRulingTest.class);
 
   private static final String SQ_VERSION_PROPERTY = "sonar.runtimeVersion";
   private static final String DEFAULT_SQ_VERSION = "LATEST_RELEASE";
@@ -336,8 +340,13 @@ public class SlangRulingTest {
   @AfterClass
   public static void after() {
     if (keepSonarqubeRunning) {
-      // keep server running, use CTRL-C to stop it
-      new Scanner(System.in).next();
+      try {
+        LOG.info("::: Intentionally keep SonarQube running at {} use CTRL+C to stop it :::",
+          orchestrator.getServer().getUrl());
+        Thread.sleep(TimeUnit.HOURS.toMillis(2));
+      } catch (InterruptedException e) {
+        // CTRL-C was pressed, ignore the exception
+      }
     }
   }
 
