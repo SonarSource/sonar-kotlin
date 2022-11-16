@@ -275,7 +275,7 @@ public class SlangRulingTest {
     return GradleBuild.create(projectDirectory(project).toFile())
       .setProperties(properties)
       .setEnvironmentVariable("GRADLE_OPTS", "-Xmx1024m")
-      .addArguments("--stacktrace", "--info", "-x", "test")
+      .addArguments("--stacktrace", "--info", "--console=plain", "-x", "test")
       .setTimeoutSeconds(600);
   }
 

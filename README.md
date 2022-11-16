@@ -41,23 +41,23 @@ Then you need to switch to Java8 and run the command to generate binaries for Kt
 
 Then build and run the Integration Tests using the `its` property:
 
-    ./gradlew build -Pits --info --no-daemon -Dsonar.runtimeVersion=9.7.1.62043
+    ./gradlew build -Pits --info --console=plain --no-daemon
 
 You can also build and run only Ruling Tests using the `ruling` property:
 
-    ./gradlew build -Pruling --info --no-daemon
+    ./gradlew build -Pruling --info --console=plain --no-daemon
 
 You can also build and run only Plugin Tests using the `plugin` property:
 
-    ./gradlew build -Pplugin --info --no-daemon -Dsonar.runtimeVersion=9.7.1.62043
+    ./gradlew build -Pplugin --info --console=plain --no-daemon
 
 To run e.g. the ruling tests in the IDE, create a new Run/Debug Configuration where you run the following:
 
-    ./gradlew :its:ruling:test --info -Pruling
+    :its:ruling:test --info --console=plain -Pruling
 
 You can also run single ruling tests, e.g.:
 
-    ./gradlew :its:ruling:test --info -Pruling --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_corda"
+    :its:ruling:test --info --console=plain -Pruling --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_corda"
 
 **Additional ruling parameters**
 
@@ -87,11 +87,11 @@ Then you can attach to this JVM instance and debug as normal via your IDE.
 The ruling test already provides a convenient API where all you need to do is supply the port you want to debug on (e.g. 5005)
 to `sonar.rulingDebugPort`. So, for instance, if you start the ruling tests from the CLI, run:
 
-    ./gradlew build -Pruling --info --no-daemon -Dsonar.runtimeVersion=7.9 -Dsonar.rulingDebugPort=5005
+    ./gradlew :its:ruling:test -Pruling --info --console=plain --no-daemon -Dsonar.rulingDebugPort=5005
 
 You can obviously do the same in the IDE and/or only run a particular test:
 
-    :its:ruling:test --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_corda" -Pruling -Dsonar.runtimeVersion=7.9 -Dsonar.rulingDebugPort=5005
+    :its:ruling:test -Pruling --info --console=plain --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_corda" -Dsonar.rulingDebugPort=5005
 
 ## Utilities and Developing
 
