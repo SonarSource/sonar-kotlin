@@ -60,6 +60,17 @@ class CipherModeOperationCheckSample {
 
     }
 
+    fun compliantEncryptMode() {
+        val key: ByteArray = "0123456789123456".toByteArray()
+        val nonce: ByteArray = "7cVgr5cbdCZV".toByteArray()
+
+        val gcmSpec = GCMParameterSpec(128, nonce)
+        val skeySpec = SecretKeySpec(key, "AES")
+
+        val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        cipher.init(Cipher.DECRYPT_MODE, skeySpec, gcmSpec) // Compliant
+    }
+
     fun compliant1(key: ByteArray) {
         val skeySpec = SecretKeySpec(key, "AES")
 
