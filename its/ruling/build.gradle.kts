@@ -15,6 +15,10 @@ tasks.test {
     onlyIf {
         project.hasProperty("its") || project.hasProperty("ruling")
     }
+    listOf("keepSonarqubeRunning", "reportAll", "cleanProjects", "buildProjects")
+        .associateWith { System.getProperty(it) }
+        .filter { it.value != null }
+        .forEach { systemProperty(it.key, it.value) }
     systemProperty("java.awt.headless", "true")
     // export a classpath containing kotlin standard dependencies
     systemProperty("gradle.main.compile.classpath", sourceSets.main.get().compileClasspath.asPath)

@@ -55,6 +55,18 @@ To run e.g. the ruling tests in the IDE, create a new Run/Debug Configuration wh
 
     :its:ruling:test -Pruling -Dsonar.runtimeVersion=7.9
 
+By default, analyzed projects are built by gradle only if changed, but you can force a clean build by using:
+
+    -DcleanProjects=true
+
+To keep SonarQube running at the end of the analysis:
+
+    -DkeepSonarqubeRunning=true
+
+To see in SonarQube not only the issue differences but all the issues:
+
+    -DkeepSonarqubeRunning=true -DreportAll=true
+
 You can also run single ruling tests, e.g.:
 
     :its:ruling:test --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_corda" -Pruling -Dsonar.runtimeVersion=7.9

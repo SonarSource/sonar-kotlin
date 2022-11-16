@@ -21,6 +21,8 @@ package org.sonarsource.slang;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
+import com.sonar.orchestrator.build.Build;
+import com.sonar.orchestrator.build.GradleBuild;
 import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.locator.FileLocation;
 import com.sonar.orchestrator.locator.Location;
@@ -28,6 +30,7 @@ import com.sonar.orchestrator.locator.MavenLocation;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -52,7 +55,8 @@ public class SlangRulingTest {
 
   private static Orchestrator orchestrator;
   private static boolean keepSonarqubeRunning = "true".equals(System.getProperty("keepSonarqubeRunning"));
-
+  private static final boolean IGNORE_EXPECTED_ISSUES_AND_REPORT_ALL = "true".equals(System.getProperty("reportAll"));
+  private static final boolean CLEAN_PROJECT_BINARIES = "true".equals(System.getProperty("cleanProjects"));
   private static final Set<String> LANGUAGES = new HashSet<>(Collections.singletonList("kotlin"));
 
   @BeforeClass
@@ -105,14 +109,12 @@ public class SlangRulingTest {
     test_kotlin_compiler();
     test_kotlin_okio();
     test_kotlin_intellij_rust();
+    test_kotlin_language_server();
+    test_resources_sources();
   }
 
   @Test
   public void test_kotlin_ktor() throws IOException {
-    Map<String, String> properties = new HashMap<>();
-    properties.put("sonar.inclusions", "sources/kotlin/ktor/**/*.kt");
-    properties.put("sonar.exclusions", "**/testData/**/*");
-
     List<String> ktorDirs = Arrays.asList(
       "ktor-client/ktor-client-apache/",
       "ktor-client/ktor-client-cio/",
@@ -147,68 +149,68 @@ public class SlangRulingTest {
     String binaries = ktorDirs.stream().map(dir -> FileLocation.of("../sources/kotlin/ktor/" + dir + "build/classes"))
       .map(SlangRulingTest::getFileLocationAbsolutePath)
       .collect(Collectors.joining(","));
-    properties.put("sonar.java.binaries", binaries);
 
-    run_ruling_test("kotlin/ktor", properties);
+    executeSonarScannerAndAssertDifferences("kotlin/ktor", Map.of(
+      "sonar.inclusions", "sources/kotlin/ktor/**/*.kt",
+      "sonar.exclusions", "**/testData/**/*",
+      "sonar.java.binaries", binaries));
   }
 
   @Test
   public void test_kotlin_compiler() throws IOException {
-    Map<String, String> properties = new HashMap<>();
-    properties.put("sonar.inclusions", "sources/kotlin/kotlin/**/*.kt");
-    properties.put("sonar.exclusions", String.join(",",
-            "**/testData/**/*"
-            , "sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/CompileServiceImpl.kt"
-            , "sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/psiUtil/ktPsiUtil.kt"
-            , "sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/psiUtil/psiUtils.kt"
-            , "sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ast/Statements.kt"
-    ));
-
-    run_ruling_test("kotlin/kotlin", properties);
+    List<String> exclusions = List.of(
+      "**/testData/**/*",
+      "sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/CompileServiceImpl.kt",
+      "sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/psiUtil/ktPsiUtil.kt",
+      "sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/psiUtil/psiUtils.kt",
+      "sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ast/Statements.kt");
+    executeSonarScannerAndAssertDifferences("kotlin/kotlin", Map.of(
+      "sonar.inclusions", "sources/kotlin/kotlin/**/*.kt",
+      "sonar.exclusions", String.join(",", exclusions)));
   }
 
   @Test
   public void test_resources_sources() throws IOException {
-    Map<String, String> properties = new HashMap<>();
-    properties.put("sonar.inclusions", "ruling/src/test/resources/sources/kotlin/**/*.kt");
-    properties.put("sonar.java.libraries", System.getProperty("gradle.main.compile.classpath"));
-    run_ruling_test("kotlin/test-resources-sources", properties);
+    executeSonarScannerAndAssertDifferences("kotlin/test-resources-sources", Map.of(
+      "sonar.inclusions", "ruling/src/test/resources/sources/kotlin/**/*.kt",
+      "sonar.java.libraries", System.getProperty("gradle.main.compile.classpath")
+    ));
   }
 
   @Test
   public void test_kotlin_android() throws IOException {
-    Map<String, String> properties = new HashMap<>();
-    properties.put("sonar.inclusions", "sources/kotlin/android-architecture-components/**/*.kt");
-    properties.put("sonar.exclusions", "**/testData/**/*");
-
-    run_ruling_test("kotlin/android-architecture-components", properties);
+    executeSonarScannerAndAssertDifferences("kotlin/android-architecture-components", Map.of(
+      "sonar.inclusions", "sources/kotlin/android-architecture-components/**/*.kt",
+      "sonar.exclusions", "**/testData/**/*"
+    ));
   }
 
   @Test
   public void test_kotlin_corda() throws IOException {
-    Map<String, String> properties = new HashMap<>();
-    properties.put("sonar.inclusions", "sources/kotlin/corda/**/*.kt");
-    properties.put("sonar.exclusions", "**/testData/**/*");
-
-    run_ruling_test("kotlin/corda", properties);
+    executeSonarScannerAndAssertDifferences("kotlin/corda", Map.of(
+      "sonar.inclusions", "sources/kotlin/corda/**/*.kt",
+      "sonar.exclusions", "**/testData/**/*"
+    ));
   }
 
   @Test
   public void test_kotlin_intellij_rust() throws IOException {
-    Map<String, String> properties = new HashMap<>();
-    properties.put("sonar.inclusions", "sources/kotlin/intellij-rust/**/*.kt");
-    properties.put("sonar.exclusions", "**/testData/**/*");
-
-    run_ruling_test("kotlin/intellij-rust", properties);
+    executeSonarScannerAndAssertDifferences("kotlin/intellij-rust", Map.of(
+      "sonar.inclusions", "sources/kotlin/intellij-rust/**/*.kt",
+      "sonar.exclusions", "**/testData/**/*"
+    ));
   }
 
   @Test
   public void test_kotlin_okio() throws IOException {
-    Map<String, String> properties = new HashMap<>();
-    properties.put("sonar.inclusions", "sources/kotlin/okio/**/*.kt");
-    properties.put("sonar.exclusions", "**/testData/**/*");
+    executeSonarScannerAndAssertDifferences("kotlin/okio", Map.of(
+      "sonar.inclusions", "sources/kotlin/okio/**/*.kt",
+      "sonar.exclusions", "**/testData/**/*"));
+  }
 
-    run_ruling_test("kotlin/okio", properties);
+  @Test
+  public void test_kotlin_language_server() throws IOException {
+    executeGradleBuildAndAssertDifferences("kotlin/kotlin-language-server", Map.of());
   }
 
   private static String getFileLocationAbsolutePath(FileLocation location) {
@@ -219,50 +221,115 @@ public class SlangRulingTest {
     }
   }
 
-  private void run_ruling_test(String project, Map<String, String> projectProperties) throws IOException {
-    Map<String, String> properties = new HashMap<>(projectProperties);
+  private static Map<String, String> prepareAnalysisConfiguration(String project, Map<String, String> additionalProperties) throws IOException {
+    Map<String, String> properties = new HashMap<>(additionalProperties);
+    properties.put("sonar.projectKey", projectKey(project));
+    properties.put("sonar.projectName", project);
+    properties.put("sonar.projectVersion", "1");
+    properties.put("sonar.sourceEncoding", "UTF-8");
     properties.put("sonar.slang.converter.validation", "log");
     properties.put("sonar.slang.duration.statistics", "true");
     properties.put("sonar.kotlin.performance.measure", "true");
+    properties.put("sonar.cpd.exclusions", "**/*");
+    properties.put("sonar.scm.disabled", "true");
+    properties.put("sonar.internal.analysis.failFast", "true");
 
-    File performanceMeasuresDirectory = FileLocation.of("build/performance/" + project).getFile();
-    performanceMeasuresDirectory.mkdirs();
+    Path rulingDirectory = rulingDirectory();
+    Path performanceMeasuresDirectory = rulingDirectory.resolve(Path.of("build", "performance")).resolve(projectRelativePath(project));
+    Files.createDirectories(performanceMeasuresDirectory);
+    properties.put("sonar.kotlin.performance.measure.json", performanceMeasuresDirectory.resolve("sonar.kotlin.performance.measure.json").toString());
 
-    properties.put("sonar.kotlin.performance.measure.json", performanceMeasuresDirectory.getAbsolutePath() + "/sonar.kotlin.performance.measure.json");
+    Path expectedDirectory;
+    if (IGNORE_EXPECTED_ISSUES_AND_REPORT_ALL) {
+      expectedDirectory = rulingDirectory.resolve(Path.of("build", "tmp", "empty"));
+      Files.createDirectories(expectedDirectory);
+    } else {
+      expectedDirectory = rulingDirectory.resolve(Path.of("src", "test", "resources", "expected")).resolve(projectRelativePath(project));
+    }
+    Path actualDirectory = rulingDirectory.resolve(Path.of("build", "tmp", "actual", project));
+    Files.createDirectories(actualDirectory);
 
-    String projectKey = project.replace("/", "-") + "-project";
-    orchestrator.getServer().provisionProject(projectKey, projectKey);
-    LANGUAGES.forEach(lang -> orchestrator.getServer().associateProjectToQualityProfile(projectKey, lang, "rules"));
+    properties.put("sonar.lits.dump.old", expectedDirectory.toString());
+    properties.put("sonar.lits.dump.new", actualDirectory.toString());
+    properties.put("sonar.lits.differences", litsDifferencesFilePath(project).toString());
+    return properties;
+  }
+  
+  private static String projectKey(String project) {
+    return project.replace("/", "-") + "-project";
+  }
 
-    File actualDirectory = FileLocation.of("build/tmp/actual/" + project).getFile();
-    actualDirectory.mkdirs();
+  private static Path projectRelativePath(String project) {
+    return Path.of(project.replace('/', File.separatorChar));
+  }
 
-    File litsDifferencesFile = FileLocation.of("build/" + projectKey + "-differences").getFile();
-    SonarScanner build = SonarScanner.create(FileLocation.of("../").getFile())
-      .setProjectKey(projectKey)
-      .setProjectName(projectKey)
-      .setProjectVersion("1")
-      .setSourceDirs("./")
-      .setSourceEncoding("utf-8")
+  private static Path projectDirectory(String project) throws IOException {
+    Path directory = Path.of("..", "sources").resolve(projectRelativePath(project));
+    if (!Files.exists(directory)) {
+      throw new IOException("Project directory not found: " + directory);
+    }
+    return directory.toRealPath();
+  }
+
+  private static Path rulingDirectory() throws IOException {
+    Path currentDirectory = Path.of(".").toRealPath();
+    if (!currentDirectory.getFileName().toString().equals("ruling")) {
+      throw new IOException("Current directory is not its/ruling but: " + currentDirectory);
+    }
+    return currentDirectory;
+  }
+
+  private static Path litsDifferencesFilePath(String project) throws IOException {
+    return rulingDirectory().resolve(Path.of("build", projectKey(project) + "-differences"));
+  }
+
+  private static GradleBuild gradleBuild(String project, Map<String, String> properties) throws IOException {
+    return GradleBuild.create(projectDirectory(project).toFile())
       .setProperties(properties)
-      .setProperty("sonar.lits.dump.old", FileLocation.of("src/test/resources/expected/" + project).getFile().getAbsolutePath())
-      .setProperty("sonar.lits.dump.new", actualDirectory.getAbsolutePath())
-      .setProperty("sonar.lits.differences", litsDifferencesFile.getAbsolutePath())
-      .setProperty("sonar.cpd.exclusions", "**/*")
-      .setProperty("sonar.scm.disabled", "true")
-      .setProperty("sonar.project", project)
-      .setProperty("sonar.internal.analysis.failFast", "true")
+      .setEnvironmentVariable("GRADLE_OPTS", "-Xmx1024m")
+      .addArguments("--stacktrace", "--info", "-x", "test")
+      .setTimeoutSeconds(600);
+  }
+
+  private void executeGradleBuildAndAssertDifferences(String project, Map<String, String> additionalProperties) throws IOException {
+    if (CLEAN_PROJECT_BINARIES) {
+      orchestrator.executeBuild(gradleBuild(project, Map.of())
+        .setTasks("clean"));
+    }
+
+    Map<String, String> properties = prepareAnalysisConfiguration(project, additionalProperties);
+    String debugPort = System.getProperty("sonar.rulingDebugPort");
+    if (debugPort != null) {
+      properties.put("org.gradle.debug", "true");
+      properties.put("org.gradle.debug.port", debugPort);
+    }
+    executeBuildAndAssertDifferences(project, gradleBuild(project, properties)
+      .setTasks("build").addArguments("sonar", "-x", "test"));
+  }
+
+  private void executeSonarScannerAndAssertDifferences(String project, Map<String, String> additionalProperties) throws IOException {
+    Map<String, String> properties = prepareAnalysisConfiguration(project, additionalProperties);
+
+    SonarScanner build = SonarScanner.create(FileLocation.of("../").getFile())
+      .setSourceDirs("./")
+      .setProperties(properties)
       .setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx1024m");
 
     String debugPort = System.getProperty("sonar.rulingDebugPort");
     if (debugPort != null) {
-      build.setEnvironmentVariable(
-        "SONAR_SCANNER_DEBUG_OPTS", "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" + debugPort);
+      build.setEnvironmentVariable("SONAR_SCANNER_DEBUG_OPTS",
+        "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" + debugPort);
     }
 
-    orchestrator.executeBuild(build);
+    executeBuildAndAssertDifferences(project, build);
+  }
 
-    String litsDifference = new String(Files.readAllBytes(litsDifferencesFile.toPath()));
+  private void executeBuildAndAssertDifferences(String project, Build<?> build) throws IOException {
+    String projectKey = projectKey(project);
+    orchestrator.getServer().provisionProject(projectKey, projectKey);
+    LANGUAGES.forEach(lang -> orchestrator.getServer().associateProjectToQualityProfile(projectKey, lang, "rules"));
+    orchestrator.executeBuild(build);
+    String litsDifference = new String(Files.readAllBytes(litsDifferencesFilePath(project)));
     assertThat(litsDifference).isEmpty();
   }
 
