@@ -42,7 +42,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,21 +99,6 @@ public class SlangRulingTest {
 
       builder.addPlugin(pluginLocation);
     });
-  }
-
-  @Test
-  // @Ignore because it should only be run manually
-  @Ignore
-  public void kotlin_manual_keep_sonarqube_server_up() throws IOException {
-    keepSonarqubeRunning = true;
-    test_kotlin_ktor();
-    test_kotlin_android();
-    test_kotlin_corda();
-    test_kotlin_compiler();
-    test_kotlin_okio();
-    test_kotlin_intellij_rust();
-    test_kotlin_language_server();
-    test_resources_sources();
   }
 
   @Test
