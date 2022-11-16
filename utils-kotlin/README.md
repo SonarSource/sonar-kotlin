@@ -27,6 +27,21 @@ To re-generate android lint's [`rules.json`](../../sonar-kotlin-plugin/src/main/
 3. Export android lint help `$ANDROID_SDK_HOME/cmdline-tools/$version/bin/lint --show > utils-kotlin/src/main/resources/android-lint-help.txt`
 4. Run `./gradlew utils-kotlin:updateAndroidLintRules` from the project's root directory
 
+Note if you do not have the latest android sdk on your local machine, you can use the latest androidsdk/android-XX docker image from [androidsdk](https://hub.docker.com/u/androidsdk), for example for `androidsdk/android-31` the commands are:
+````shell
+# go to the project's root directory
+cd sonar-kotlin
+# enter into the docker container
+docker run --rm -it -v "$PWD:/root/sonar-kotlin" androidsdk/android-31 /bin/bash
+export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
+$ANDROID_HOME/cmdline-tools/latest/bin/lint --version
+    lint: version 7.1.0
+$ANDROID_SDK_HOME/cmdline-tools/latest/bin/lint --show > /root/sonar-kotlin/utils-kotlin/src/main/resources/android-lint-help.txt
+# exit the docker container
+exit
+./gradlew utils-kotlin:updateAndroidLintRules
+````
+
 ## Printing ASTs to Dot
 
 You can print the AST generated from a `*.kt` or `*.kts` file in TXT or DOT (Graphviz) format, either on `stdout` or to a file. To print the AST to

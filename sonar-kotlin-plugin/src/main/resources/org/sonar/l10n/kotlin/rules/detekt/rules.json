@@ -120,6 +120,18 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "CognitiveComplexMethod",
+    "name": "Cognitive Complex Method",
+    "description": "Prefer splitting up complex methods into smaller, easier to understand methods.",
+    "url": "https://detekt.github.io/detekt/complexity.html#cognitivecomplexmethod",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
     "key": "CollapsibleIfStatements",
     "name": "Collapsible If Statements",
     "description": "Two if statements which could be collapsed were detected. These statements can be merged to improve readability.",
@@ -180,18 +192,6 @@
     "constantDebtMinutes": 20
   },
   {
-    "key": "ComplexMethod",
-    "name": "Complex Method",
-    "description": "Prefer splitting up complex methods into smaller, easier to understand methods.",
-    "url": "https://detekt.github.io/detekt/complexity.html#complexmethod",
-    "tags": [
-      "maintainability"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 20
-  },
-  {
     "key": "ConstructorParameterNaming",
     "name": "Constructor Parameter Naming",
     "description": "Constructor parameter names should follow the naming convention set in the projects configuration.",
@@ -214,6 +214,18 @@
     "type": "CODE_SMELL",
     "severity": "CRITICAL",
     "constantDebtMinutes": 5
+  },
+  {
+    "key": "CyclomaticComplexMethod",
+    "name": "Cyclomatic Complex Method",
+    "description": "Prefer splitting up complex methods into smaller, easier to test methods.",
+    "url": "https://detekt.github.io/detekt/complexity.html#cyclomaticcomplexmethod",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
   },
   {
     "key": "DataClassContainsFunctions",

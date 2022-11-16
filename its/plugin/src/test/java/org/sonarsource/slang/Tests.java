@@ -54,6 +54,7 @@ public class Tests {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv();
     addLanguagePlugins(orchestratorBuilder);
     ORCHESTRATOR = orchestratorBuilder
+      .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion(System.getProperty(SQ_VERSION_PROPERTY, DEFAULT_SQ_VERSION))
       .restoreProfileAtStartup(FileLocation.of("src/test/resources/suppress-warnings-kotlin.xml"))
       .restoreProfileAtStartup(FileLocation.of("src/test/resources/norule.xml"))

@@ -35,7 +35,7 @@ internal class AndroidLintRulesDefinitionTest {
         assertThat(repository!!.name()).isEqualTo("Android Lint")
         assertThat(repository.language()).isEqualTo("kotlin")
         assertThat(repository.isExternal).isTrue
-        assertThat(repository.rules().size).isEqualTo(408)
+        assertThat(repository.rules().size).isEqualTo(403)
         val rule = repository.rule("AaptCrash")
         assertThat(rule).isNotNull
         assertThat(rule!!.name()).isEqualTo("Potential AAPT crash")

@@ -49,7 +49,7 @@ dependencyResolutionManagement {
         }
 
         create("utilLibs") {
-            val detekt = version("detekt", "1.22.0-RC2")
+            val detekt = version("detekt", "1.22.0-RC3")
             val jcommander = version("jcommander", "1.81")
             val ktlint = version("ktlint", "0.47.1")
 
@@ -73,7 +73,7 @@ dependencyResolutionManagement {
             val junit = version("junit", "5.8.2")
             val mockito = version("mockito", "4.6.1")
             val mockk = version("mockk", "1.12.4")
-            val orchestrator = version("orchestrator", "3.38.0.115")
+            val orchestrator = version("orchestrator", "3.40.0.183")
             val sonarlint = version("sonarlint", "7.0.0.37656")
             val sonarqube = version("sonarqube", "9.2.1.49989")
 

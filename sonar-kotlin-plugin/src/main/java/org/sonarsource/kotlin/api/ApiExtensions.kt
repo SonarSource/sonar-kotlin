@@ -294,6 +294,8 @@ private fun DeclarationDescriptor.findFunctionLiteral(
 
 fun KtNamedFunction.overrides() = modifierList?.hasModifier(KtTokens.OVERRIDE_KEYWORD) ?: false
 
+fun KtNamedFunction.isAbstract() = modifierList?.hasModifier(KtTokens.ABSTRACT_KEYWORD) ?: false
+
 fun KtNamedFunction.suspendModifier() = modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD)
 
 fun KtQualifiedExpression.resolveReferenceTarget(bindingContext: BindingContext) =

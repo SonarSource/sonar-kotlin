@@ -51,6 +51,7 @@ import org.sonarsource.kotlin.checks.EmptyLineRegexCheck
 import org.sonarsource.kotlin.checks.EmptyStringRepetitionCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
 import org.sonarsource.kotlin.checks.EqualsOverriddenWithArrayFieldCheck
+import org.sonarsource.kotlin.checks.EqualsOverridenWithHashCodeCheck
 import org.sonarsource.kotlin.checks.ExposedMutableFlowCheck
 import org.sonarsource.kotlin.checks.ExternalAndroidStorageAccessCheck
 import org.sonarsource.kotlin.checks.FileHeaderCheck
@@ -91,7 +92,6 @@ import org.sonarsource.kotlin.checks.StrongCipherAlgorithmCheck
 import org.sonarsource.kotlin.checks.StructuredConcurrencyPrinciplesCheck
 import org.sonarsource.kotlin.checks.SuspendingFunCallerDispatcherCheck
 import org.sonarsource.kotlin.checks.TabsCheck
-import org.sonarsource.kotlin.checks.TextBlocksInComplexExpressionsCheck
 import org.sonarsource.kotlin.checks.TodoCommentCheck
 import org.sonarsource.kotlin.checks.TooComplexExpressionCheck
 import org.sonarsource.kotlin.checks.TooDeeplyNestedStatementsCheck
@@ -153,6 +153,7 @@ val KOTLIN_CHECKS = listOf(
     EmptyStringRepetitionCheck::class.java,
     EncryptionAlgorithmCheck::class.java,
     EqualsOverriddenWithArrayFieldCheck::class.java,
+    EqualsOverridenWithHashCodeCheck::class.java,
     ExposedMutableFlowCheck::class.java,
     ExternalAndroidStorageAccessCheck::class.java,
     FileHeaderCheck::class.java,
@@ -193,7 +194,6 @@ val KOTLIN_CHECKS = listOf(
     StructuredConcurrencyPrinciplesCheck::class.java,
     SuspendingFunCallerDispatcherCheck::class.java,
     TabsCheck::class.java,
-    TextBlocksInComplexExpressionsCheck::class.java,
     TodoCommentCheck::class.java,
     TooComplexExpressionCheck::class.java,
     TooDeeplyNestedStatementsCheck::class.java,
