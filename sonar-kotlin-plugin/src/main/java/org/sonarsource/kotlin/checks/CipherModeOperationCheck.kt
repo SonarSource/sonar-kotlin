@@ -57,41 +57,40 @@ class CipherModeOperationCheck : CallAbstractCheck() {
         kotlinFileContext: KotlinFileContext,
     ) {
         val bindingContext = kotlinFileContext.bindingContext
-        val firstArgument = callExpression.valueArguments[0].getArgumentExpression() ?: return
-        val thirdArgument = callExpression.valueArguments[2].getArgumentExpression() ?: return
+
+        // Call expression already matched three arguments
+        val firstArgument = callExpression.valueArguments[0].getArgumentExpression()!!
+        val thirdArgument = callExpression.valueArguments[2].getArgumentExpression()!!
+        val calleeExpression = callExpression.calleeExpression ?: return
 
         val secondaries = mutableListOf<PsiElement>()
+        val byteExpression = thirdArgument.getGCMExpression(bindingContext, secondaries)
+            ?.getByteExpression(bindingContext, secondaries) ?: return
 
-        val gcmExpr = thirdArgument.getGCMExpression(bindingContext, secondaries)
-        val byteExpression = gcmExpr?.getByteExpression(bindingContext, secondaries)
+        if (firstArgument.predictRuntimeIntValue(bindingContext) == 1 && byteExpression.isBytesInitializedFromString(bindingContext)) {
+            secondaries.add(thirdArgument)
+            val locations = secondaries.map {
+                SecondaryLocation(kotlinFileContext.textRange(it), "Initialization vector is configured here.")
+            }
 
-        if (firstArgument.predictRuntimeIntValue(bindingContext) == 1 && byteExpression?.isBytesInitializedFromString(bindingContext) == true) {
-            val locations =
-                secondaries.map { SecondaryLocation(kotlinFileContext.textRange(it), "Initialization vector is configured here.") }
-                    .groupBy { location -> location.textRange.start().line() }
-                    .map { it.value[it.value.size - 1] }
-
-            kotlinFileContext.reportIssue(thirdArgument, "The initialization vector is a static value.", locations)
+            kotlinFileContext.reportIssue(calleeExpression, "The initialization vector is a static value.", locations)
         }
-
     }
 }
 
-private fun KtExpression.getByteExpression(bindingContext: BindingContext, secondaries: MutableList<PsiElement>): KtExpression? {
-    val expression = predictRuntimeValueExpression(bindingContext, secondaries)
-    expression.getCall(bindingContext)?.let {
-        if (GET_BYTES_MATCHER.matches(it, bindingContext))
-            return expression
+private fun KtExpression.getByteExpression(bindingContext: BindingContext, secondaries: MutableList<PsiElement>) =
+    with(predictRuntimeValueExpression(bindingContext, secondaries)) {
+        getCall(bindingContext)?.let {
+            if (GET_BYTES_MATCHER.matches(it, bindingContext)) this
+            else null
+        }
     }
-    return null
-}
 
-
-private fun KtExpression.getGCMExpression(bindingContext: BindingContext, secondaries: MutableList<PsiElement>): KtExpression? =
+private fun KtExpression.getGCMExpression(bindingContext: BindingContext, secondaries: MutableList<PsiElement>) =
     predictRuntimeValueExpression(bindingContext)
         .getCall(bindingContext)?.let {
             if (GCM_PARAMETER_SPEC_MATCHER.matches(it, bindingContext)) {
                 secondaries.add(it.valueArguments[1].asElement())
-                return it.valueArguments[1].getArgumentExpression()
+                it.valueArguments[1].getArgumentExpression()
             } else null
         }

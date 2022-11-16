@@ -18,7 +18,7 @@ class CipherModeOperationCheckSample {
 
         val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, gcmSpec) // Noncompliant {{The initialization vector is a static value.}}
-//                                                 ^^^^^^^
+//             ^^^^                                ^^^^^^^< {{Initialization vector is configured here.}}
     }
 
     fun nonCompliant2() {
@@ -30,7 +30,7 @@ class CipherModeOperationCheckSample {
 
         val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, gcmSpec) // Noncompliant {{The initialization vector is a static value.}}
-//                                                 ^^^^^^^
+//             ^^^^                                ^^^^^^^< {{Initialization vector is configured here.}}
     }
 
     fun letApplyRunWithAlso(secretKey: String) {
