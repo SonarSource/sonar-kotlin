@@ -584,25 +584,25 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val changedFile = createInputFile(
             "changed.kt",
             """
-        fun main(args: Array<String>) {
-            print (1 == 1);
-        }
-        """.trimIndent(),
-            status=InputFile.Status.CHANGED
+                fun main(args: Array<String>) {
+                    print (1 == 1);
+                }
+                """.trimIndent(),
+            status = InputFile.Status.CHANGED
         )
         val addedFile = createInputFile(
             "added.kt",
             """
-        fun isAlsoIdentical(input: Int): Boolean = input == input
-        """.trimIndent(),
-            status=InputFile.Status.ADDED
+                fun isAlsoIdentical(input: Int): Boolean = input == input
+                """.trimIndent(),
+            status = InputFile.Status.ADDED
         )
         val unchangedFile = createInputFile(
             "unchanged.kt",
             """
-        fun isIdentical(input: Int): Boolean = input == input
-        """.trimIndent(),
-            status=InputFile.Status.SAME
+                fun isIdentical(input: Int): Boolean = input == input
+                """.trimIndent(),
+            status = InputFile.Status.SAME
         )
         return mapOf(
             InputFile.Status.ADDED to addedFile,
