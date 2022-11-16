@@ -41,35 +41,42 @@ Then you need to switch to Java8 and run the command to generate binaries for Kt
 
 Then build and run the Integration Tests using the `its` property:
 
-    ./gradlew build -Pits --info --no-daemon -Dsonar.runtimeVersion=7.9
+    ./gradlew build -Pits --info --no-daemon -Dsonar.runtimeVersion=9.7.1.62043
 
 You can also build and run only Ruling Tests using the `ruling` property:
 
-    ./gradlew build -Pruling --info --no-daemon -Dsonar.runtimeVersion=7.9
+    ./gradlew build -Pruling --info --no-daemon
 
 You can also build and run only Plugin Tests using the `plugin` property:
 
-    ./gradlew build -Pplugin --info --no-daemon -Dsonar.runtimeVersion=7.9
+    ./gradlew build -Pplugin --info --no-daemon -Dsonar.runtimeVersion=9.7.1.62043
 
 To run e.g. the ruling tests in the IDE, create a new Run/Debug Configuration where you run the following:
 
-    :its:ruling:test -Pruling -Dsonar.runtimeVersion=7.9
-
-By default, analyzed projects are built by gradle only if changed, but you can force a clean build by using:
-
-    -DcleanProjects=true
-
-To keep SonarQube running at the end of the analysis:
-
-    -DkeepSonarqubeRunning=true
-
-To see in SonarQube not only the issue differences but all the issues:
-
-    -DkeepSonarqubeRunning=true -DreportAll=true
+    ./gradlew :its:ruling:test --info -Pruling
 
 You can also run single ruling tests, e.g.:
 
-    :its:ruling:test --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_corda" -Pruling -Dsonar.runtimeVersion=7.9
+    ./gradlew :its:ruling:test --info -Pruling --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_corda"
+
+**Additional ruling parameters**
+
+* By default, the SonarQube version used is LATEST_RELEASE, you can use the following property to set a different one:
+
+  -Dsonar.runtimeVersion=9.7.1.62043
+
+* By default, analyzed projects are built by gradle only if changed, but you can force a clean build by using:
+
+    -DcleanProjects=true
+
+* To keep SonarQube running at the end of the analysis:
+
+    -DkeepSonarqubeRunning=true
+
+* To see in SonarQube not only the issue differences but all the issues:
+
+    -DkeepSonarqubeRunning=true -DreportAll=true
+
 
 ### Debugging ruling tests
 
