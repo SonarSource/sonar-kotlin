@@ -1,0 +1,15 @@
+{
+'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/KotlinLanguageServer.kt':[
+69,
+],
+'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/KotlinWorkspaceService.kt':[
+89,
+],
+'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt':[
+94,
+139,
+],
+'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/definition/GoToDefinition.kt':[
+50,
+],
+}

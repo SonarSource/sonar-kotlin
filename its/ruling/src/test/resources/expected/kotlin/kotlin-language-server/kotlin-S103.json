@@ -1,0 +1,11 @@
+{
+'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/KotlinLanguageServer.kt':[
+27,
+],
+'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/ImplementAbstractFunctionsQuickFix.kt':[
+182,
+],
+'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt':[
+526,
+],
+}

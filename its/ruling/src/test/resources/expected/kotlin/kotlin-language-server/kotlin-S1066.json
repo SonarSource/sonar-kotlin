@@ -1,0 +1,8 @@
+{
+'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/semantictokens/SemanticTokens.kt':[
+179,
+],
+'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/signaturehelp/SignatureHelp.kt':[
+111,
+],
+}
