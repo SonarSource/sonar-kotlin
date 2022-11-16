@@ -61,7 +61,7 @@ class CipherModeOperationCheck : CallAbstractCheck() {
         // Call expression already matched three arguments
         val firstArgument = callExpression.valueArguments[0].getArgumentExpression()!!
         val thirdArgument = callExpression.valueArguments[2].getArgumentExpression()!!
-        val calleeExpression = callExpression.calleeExpression ?: return
+        val calleeExpression = callExpression.calleeExpression!!
 
         val secondaries = mutableListOf<PsiElement>()
         val byteExpression = thirdArgument.getGCMExpression(bindingContext, secondaries)
