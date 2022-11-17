@@ -39,7 +39,7 @@ class RegexContext(
     val reportedIssues: List<ReportedIssue>
         get() = _reportedIssues
 
-    val regexSource = KotlinAnalyzerRegexSource(stringTemplateEntries, kotlinFileContext)
+    val regexSource = KotlinAnalyzerRegexSource(stringTemplateEntries, kotlinFileContext.inputFileContext.inputFile, kotlinFileContext.ktFile.viewProvider.document!!)
 
     fun parseRegex(flags: FlagSet) =
         globalCache.computeIfAbsent(stringTemplateEntries.toList() to flags.mask) {

@@ -19,13 +19,14 @@
  */
 package org.sonarsource.kotlin.api.regex
 
+import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
+import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.TextRange
 import org.sonarsource.analyzer.commons.regex.ast.IndexRange
 import org.sonarsource.analyzer.commons.regex.java.JavaRegexSource
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
-import org.sonarsource.kotlin.plugin.KotlinFileContext
 import java.util.NavigableMap
 import java.util.TreeMap
 
@@ -37,9 +38,10 @@ import java.util.TreeMap
  */
 class KotlinAnalyzerRegexSource(
     sourceTemplateEntries: Iterable<KtStringTemplateEntry>,
-    kotlinFileContext: KotlinFileContext,
+    inputFile: InputFile,
+    document: Document,
 ) : JavaRegexSource(templateEntriesAsString(sourceTemplateEntries)) {
-    val textRangeTracker = TextRangeTracker.of(sourceTemplateEntries, kotlinFileContext)
+    val textRangeTracker = TextRangeTracker.of(sourceTemplateEntries, inputFile, document)
 }
 
 private fun templateEntriesAsString(entries: Iterable<KtStringTemplateEntry>) = entries.joinToString("") {
@@ -56,20 +58,21 @@ class TextRangeTracker private constructor(
     companion object {
         fun of(
             stringTemplateEntries: Iterable<KtStringTemplateEntry>,
-            kotlinFileContext: KotlinFileContext,
+            inputFile: InputFile,
+            document: Document,
         ): TextRangeTracker {
             var endIndex = 0
             val regexIndexToTextRange = TreeMap<Int, TextRange>()
             val textRangeToKtNode = stringTemplateEntries
                 .associateBy { entry ->
-                    val textRange = kotlinFileContext.textRange(entry)
+                    val textRange = inputFile.textRange(document, entry)
                     regexIndexToTextRange[endIndex] = textRange
 
                     endIndex += if (isUnescapedEscapeChar(entry)) 2 else entry.textLength
                     textRange
                 }
             return TextRangeTracker(regexIndexToTextRange, textRangeToKtNode) { startLine, startColumn, endLine, endColumn ->
-                kotlinFileContext.textRange(startLine, startColumn, endLine, endColumn)
+                inputFile.newRange(startLine, startColumn, endLine, endColumn)
             }
 
         }
