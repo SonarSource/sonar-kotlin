@@ -29,6 +29,7 @@ import org.sonarsource.kotlin.checks.BiometricAuthWithoutCryptoCheck
 import org.sonarsource.kotlin.checks.BooleanInversionCheck
 import org.sonarsource.kotlin.checks.BooleanLiteralCheck
 import org.sonarsource.kotlin.checks.CipherBlockChainingCheck
+import org.sonarsource.kotlin.checks.CipherModeOperationCheck
 import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.CodeAfterJumpCheck
 import org.sonarsource.kotlin.checks.CollapsibleIfStatementsCheck
@@ -130,6 +131,7 @@ val KOTLIN_CHECKS = listOf(
     BooleanInversionCheck::class.java,
     BooleanLiteralCheck::class.java,
     CipherBlockChainingCheck::class.java,
+    CipherModeOperationCheck::class.java,
     ClearTextProtocolCheck::class.java,
     CodeAfterJumpCheck::class.java,
     CollapsibleIfStatementsCheck::class.java,
