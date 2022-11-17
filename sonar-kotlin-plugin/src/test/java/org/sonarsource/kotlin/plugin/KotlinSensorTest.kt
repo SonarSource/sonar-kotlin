@@ -470,7 +470,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         files.values.forEach { context.fileSystem().add(it) }
 
         // Enable analysis property canSkipUnchangedFiles
-        context.settings().setProperty("sonar.kotlin.canSkipUnchangedFiles", "true")
+        context.settings().setProperty("sonar.kotlin.skipUnchanged", "true")
 
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
@@ -492,9 +492,12 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertThat(locationOfSecondIssue.message())
             .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
 
-        assertThat(logTester.logs())
-            .contains("The Kotlin analyzer is working in a context where it can skip unchanged files.")
-            .contains("The Kotlin analyzer will analyze 2 out of 3 files.")
+        assertThat(logTester.logs(LoggerLevel.DEBUG))
+            .contains("The Kotlin analyzer is running in a context where it can skip unchanged files.")
+        assertThat(logTester.logs(LoggerLevel.INFO))
+            .contains(
+                "The Kotlin analyzer will analyze 2 out of 3 files. All others, if any, can be skipped without impacting analysis results."
+            )
     }
 
     @Test
@@ -506,7 +509,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         files.values.forEach { context.fileSystem().add(it) }
 
         // Explicitly prevent the skipping of unchanged files
-        context.settings().setProperty("sonar.kotlin.canSkipUnchangedFiles", "false")
+        context.settings().setProperty("sonar.kotlin.skipUnchanged", "false")
 
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
@@ -536,8 +539,8 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertThat(locationOfThirdIssue.message())
             .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
 
-        assertThat(logTester.logs())
-            .doesNotContain("The Kotlin analyzer is working in a context where it can skip unchanged files.")
+        assertThat(logTester.logs(LoggerLevel.DEBUG))
+            .contains("The Kotlin analyzer is running in a context where unchanged files cannot be skipped.")
     }
 
     @Test

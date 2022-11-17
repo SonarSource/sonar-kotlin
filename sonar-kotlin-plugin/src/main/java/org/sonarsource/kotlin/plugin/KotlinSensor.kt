@@ -88,30 +88,34 @@ class KotlinSensor(
             fileSystem.predicates().hasType(InputFile.Type.MAIN)
         )
 
-        val files = fileSystem.inputFiles(mainFilePredicate).let { mainFiles ->
+        val filesToAnalyze = fileSystem.inputFiles(mainFilePredicate).let { mainFiles ->
             if (canSkipUnchangedFiles(sensorContext)) {
-                LOG.info("The Kotlin analyzer is working in a context where it can skip unchanged files.")
+                LOG.debug("The Kotlin analyzer is running in a context where it can skip unchanged files.")
                 var totalFiles = 0
                 mainFiles
                     .filter {
                         totalFiles++
                         it.status() != InputFile.Status.SAME
                     }.also {
-                        LOG.info("The Kotlin analyzer will analyze ${it.size} out of $totalFiles files.")
+                        LOG.info(
+                            "The Kotlin analyzer will analyze ${it.size} out of $totalFiles files. " +
+                                    "All others, if any, can be skipped without impacting analysis results."
+                        )
                     }
             } else {
+                LOG.debug("The Kotlin analyzer is running in a context where unchanged files cannot be skipped.")
                 mainFiles
             }
         }
 
-        val filenames = files.map { it.toString() }
+        val filenames = filesToAnalyze.map { it.toString() }
 
         val progressReport = ProgressReport("Progress of the ${language.name} analysis", TimeUnit.SECONDS.toMillis(10))
 
         var success = false
 
         try {
-            success = analyseFiles(sensorContext, files, progressReport, visitors(sensorContext), filenames)
+            success = analyseFiles(sensorContext, filesToAnalyze, progressReport, visitors(sensorContext), filenames)
         } finally {
             if (success) {
                 progressReport.stop()
@@ -124,7 +128,7 @@ class KotlinSensor(
 
     @OptIn(ExperimentalStdlibApi::class)
     private fun canSkipUnchangedFiles(sensorContext: SensorContext): Boolean {
-        return sensorContext.config().getBoolean("sonar.kotlin.canSkipUnchangedFiles").getOrElse {
+        return sensorContext.config().getBoolean(KotlinPlugin.SKIP_UNCHANGED_FILES_OVERRIDE).getOrElse {
             runCatching {
                 sensorContext.canSkipUnchangedFiles()
             }.getOrElse {
