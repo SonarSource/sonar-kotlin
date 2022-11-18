@@ -75,7 +75,7 @@ dependencyResolutionManagement {
             val mockk = version("mockk", "1.12.4")
             val orchestrator = version("orchestrator", "3.40.0.183")
             val sonarlint = version("sonarlint", "7.0.0.37656")
-            val sonarqube = version("sonarqube", "9.2.1.49989")
+            val sonarqube = version("sonarqube", "9.7.1.62043")
 
             library("assertj-core", "org.assertj", "assertj-core").versionRef(assertj)
             library("classgraph", "io.github.classgraph", "classgraph").versionRef(classgraph)
