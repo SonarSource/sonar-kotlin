@@ -29,9 +29,16 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.api.batch.fs.InputFile
 import org.sonarsource.kotlin.api.ParseException
+import org.sonarsource.kotlin.api.regex.RegexCache
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textPointerAtOffset
 
-class KotlinTree(val psiFile: KtFile, val document: Document, val bindingContext: BindingContext, val diagnostics: List<Diagnostic>)
+class KotlinTree(
+    val psiFile: KtFile,
+    val document: Document,
+    val bindingContext: BindingContext,
+    val diagnostics: List<Diagnostic>,
+    val regexCache: RegexCache,
+)
 
 data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val inputFile: InputFile) {
     companion object {

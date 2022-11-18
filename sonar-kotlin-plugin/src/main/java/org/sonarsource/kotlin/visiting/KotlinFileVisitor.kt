@@ -25,7 +25,7 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 abstract class KotlinFileVisitor {
     fun scan(fileContext: InputFileContext, root: KotlinTree) {
-        visit(KotlinFileContext(fileContext, root.psiFile, root.bindingContext, root.diagnostics))
+        visit(KotlinFileContext(fileContext, root.psiFile, root.bindingContext, root.diagnostics, root.regexCache))
     }
 
     abstract fun visit(kotlinFileContext: KotlinFileContext)
