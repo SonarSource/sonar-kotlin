@@ -131,7 +131,7 @@ class KotlinSensor(
         return sensorContext.config().getBoolean(KotlinPlugin.SKIP_UNCHANGED_FILES_OVERRIDE).getOrElse {
             try {
                 sensorContext.canSkipUnchangedFiles()
-            } catch (_: AbstractMethodError) {
+            } catch (_: IncompatibleClassChangeError) {
                 false
             }
         }

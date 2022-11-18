@@ -464,142 +464,65 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun `the kotlin sensor optimizes analyses in contexts where sonar-kotlin-skipUnchanged is true`() {
-        logTester.setLevel(LoggerLevel.DEBUG)
-        val files = incrementalAnalysisFileSet()
-        val addedFile = files[InputFile.Status.ADDED]
-        val changedFile = files[InputFile.Status.CHANGED]
-        files.values.forEach { context.fileSystem().add(it) }
-
         context.setCanSkipUnchangedFiles(false)
 
         // Enable analysis property to override skipUnchanged setting
         context.settings().setProperty("sonar.kotlin.skipUnchanged", "true")
 
-        val checkFactory = checkFactory("S1764")
-        sensor(checkFactory).execute(context)
-        val issueIterator = context.allIssues().iterator()
-        val firstIssue = issueIterator.next()
-        val secondIssue = issueIterator.next()
-        assertThrows<NoSuchElementException>("There should be no more than 2 issues from this analysis") {
-            issueIterator.next()
-        }
-        assertThat(firstIssue.ruleKey().rule()).isEqualTo("S1764")
-        assertThat(secondIssue.ruleKey().rule()).isEqualTo("S1764")
-        val locationOfFirstIssue = firstIssue.primaryLocation()
-        assertThat(locationOfFirstIssue.inputComponent()).isEqualTo(changedFile)
-        assertThat(locationOfFirstIssue.message())
-            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
-
-        val locationOfSecondIssue = secondIssue.primaryLocation()
-        assertThat(locationOfSecondIssue.inputComponent()).isEqualTo(addedFile)
-        assertThat(locationOfSecondIssue.message())
-            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
-
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
-            .contains("The Kotlin analyzer is running in a context where it can skip unchanged files.")
-        assertThat(logTester.logs(LoggerLevel.INFO))
-            .contains(
-                "The Kotlin analyzer will analyze 2 out of 3 files. All others, if any, can be skipped without impacting analysis results."
-            )
+        assertAnalysisIsIncremental()
     }
 
     @Test
     fun `the kotlin sensor does not optimize analyses in contexts when the sonar-kotlin-skipUnchanged is false`() {
-        val files = incrementalAnalysisFileSet()
-        val addedFile = files[InputFile.Status.ADDED]
-        val changedFile = files[InputFile.Status.CHANGED]
-        val unchangedFile = files[InputFile.Status.SAME]
-        files.values.forEach { context.fileSystem().add(it) }
-
         context.setCanSkipUnchangedFiles(true)
 
         // Explicitly prevent the skipping of unchanged files
         context.settings().setProperty("sonar.kotlin.skipUnchanged", "false")
 
-        val checkFactory = checkFactory("S1764")
-        sensor(checkFactory).execute(context)
-        val issueIterator = context.allIssues().iterator()
-        val firstIssue = issueIterator.next()
-        val secondIssue = issueIterator.next()
-        val thirdIssue = issueIterator.next()
-        assertThrows<NoSuchElementException>("There should be no more than 2 issues from this analysis") {
-            issueIterator.next()
-        }
-        assertThat(firstIssue.ruleKey().rule()).isEqualTo("S1764")
-        assertThat(secondIssue.ruleKey().rule()).isEqualTo("S1764")
-        assertThat(thirdIssue.ruleKey().rule()).isEqualTo("S1764")
-
-        val locationOfFirstIssue = firstIssue.primaryLocation()
-        assertThat(locationOfFirstIssue.inputComponent()).isEqualTo(changedFile)
-        assertThat(locationOfFirstIssue.message())
-            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
-
-        val locationOfSecondIssue = secondIssue.primaryLocation()
-        assertThat(locationOfSecondIssue.inputComponent()).isEqualTo(addedFile)
-        assertThat(locationOfSecondIssue.message())
-            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
-
-        val locationOfThirdIssue = thirdIssue.primaryLocation()
-        assertThat(locationOfThirdIssue.inputComponent()).isEqualTo(unchangedFile)
-        assertThat(locationOfThirdIssue.message())
-            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
-
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
-            .contains("The Kotlin analyzer is running in a context where unchanged files cannot be skipped.")
+        assertAnalysisIsNotIncremental()
     }
 
     @Test
     fun `the kotlin sensor does not optimize analyses in contexts where it is not appropriate`() {
-        val files = incrementalAnalysisFileSet()
-        val addedFile = files[InputFile.Status.ADDED]
-        val changedFile = files[InputFile.Status.CHANGED]
-        val unchangedFile = files[InputFile.Status.SAME]
-        files.values.forEach { context.fileSystem().add(it) }
-
         context.setCanSkipUnchangedFiles(false)
-
-        val checkFactory = checkFactory("S1764")
-        sensor(checkFactory).execute(context)
-        val issueIterator = context.allIssues().iterator()
-        val firstIssue = issueIterator.next()
-        val secondIssue = issueIterator.next()
-        val thirdIssue = issueIterator.next()
-        assertThrows<NoSuchElementException>("There should be no more than 2 issues from this analysis") {
-            issueIterator.next()
-        }
-        assertThat(firstIssue.ruleKey().rule()).isEqualTo("S1764")
-        assertThat(secondIssue.ruleKey().rule()).isEqualTo("S1764")
-        assertThat(thirdIssue.ruleKey().rule()).isEqualTo("S1764")
-
-        val locationOfFirstIssue = firstIssue.primaryLocation()
-        assertThat(locationOfFirstIssue.inputComponent()).isEqualTo(changedFile)
-        assertThat(locationOfFirstIssue.message())
-            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
-
-        val locationOfSecondIssue = secondIssue.primaryLocation()
-        assertThat(locationOfSecondIssue.inputComponent()).isEqualTo(addedFile)
-        assertThat(locationOfSecondIssue.message())
-            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
-
-        val locationOfThirdIssue = thirdIssue.primaryLocation()
-        assertThat(locationOfThirdIssue.inputComponent()).isEqualTo(unchangedFile)
-        assertThat(locationOfThirdIssue.message())
-            .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
-
-        assertThat(logTester.logs())
-            .doesNotContain("The Kotlin analyzer is working in a context where it can skip unchanged files.")
+        assertAnalysisIsNotIncremental()
     }
 
     @Test
     fun `the kotlin sensor optimizes analyses in contexts where this is appropriate`() {
+        context.setCanSkipUnchangedFiles(true)
+        assertAnalysisIsIncremental()
+    }
+
+    @Test
+    fun `the kotlin sensor defaults to not optimizing in case the API implementation is out of date (AbstractMethodError)`() {
+        context = spyk(context) {
+            every { canSkipUnchangedFiles() } throws AbstractMethodError()
+        }
+
+        assertAnalysisIsNotIncremental()
+
+        verify(exactly = 1) { context.canSkipUnchangedFiles() }
+    }
+
+    @Test
+    fun `the kotlin sensor defaults to not optimizing in case the API implementation is out of date (NoSuchMethodError)`() {
+        context = spyk(context) {
+            every { canSkipUnchangedFiles() } throws NoSuchMethodError()
+        }
+
+        assertAnalysisIsNotIncremental()
+
+        verify(exactly = 1) { context.canSkipUnchangedFiles() }
+    }
+
+    private fun assertAnalysisIsIncremental() {
         logTester.setLevel(LoggerLevel.DEBUG)
         val files = incrementalAnalysisFileSet()
         val addedFile = files[InputFile.Status.ADDED]
         val changedFile = files[InputFile.Status.CHANGED]
         files.values.forEach { context.fileSystem().add(it) }
 
-        context.setCanSkipUnchangedFiles(true)
-
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
         val issueIterator = context.allIssues().iterator()
@@ -628,17 +551,12 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             )
     }
 
-    @Test
-    fun `the kotlin sensor defaults to not optimizing in case the API implementation is out of date`() {
+    private fun assertAnalysisIsNotIncremental() {
         val files = incrementalAnalysisFileSet()
         val addedFile = files[InputFile.Status.ADDED]
         val changedFile = files[InputFile.Status.CHANGED]
         val unchangedFile = files[InputFile.Status.SAME]
         files.values.forEach { context.fileSystem().add(it) }
-
-        context = spyk(context) {
-            every { canSkipUnchangedFiles() } throws AbstractMethodError()
-        }
 
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
@@ -670,8 +588,6 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         assertThat(logTester.logs())
             .doesNotContain("The Kotlin analyzer is working in a context where it can skip unchanged files.")
-
-        verify(exactly = 1) { context.canSkipUnchangedFiles() }
     }
 
     private fun incrementalAnalysisFileSet(): Map<InputFile.Status, InputFile> {
