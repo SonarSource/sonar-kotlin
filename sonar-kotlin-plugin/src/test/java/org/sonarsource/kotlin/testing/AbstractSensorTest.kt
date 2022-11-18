@@ -82,13 +82,14 @@ abstract class AbstractSensorTest {
         return CheckFactory(context.activeRules())
     }
 
-    protected fun createInputFile(relativePath: String, content: String): InputFile {
+    protected fun createInputFile(relativePath: String, content: String, status: InputFile.Status=InputFile.Status.SAME): InputFile {
         return TestInputFileBuilder("moduleKey", relativePath)
             .setModuleBaseDir(baseDir)
             .setType(InputFile.Type.MAIN)
             .setLanguage(language().key)
             .setCharset(StandardCharsets.UTF_8)
             .setContents(content)
+            .setStatus(status)
             .build()
     }
 

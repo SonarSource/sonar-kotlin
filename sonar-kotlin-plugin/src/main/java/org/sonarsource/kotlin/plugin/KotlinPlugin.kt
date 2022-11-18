@@ -65,6 +65,7 @@ class KotlinPlugin : Plugin {
         const val KOTLIN_LANGUAGE_VERSION = "sonar.kotlin.source.version"
         val DEFAULT_KOTLIN_LANGUAGE_VERSION = LanguageVersion.KOTLIN_1_5
         const val COMPILER_THREAD_COUNT_PROPERTY = "sonar.kotlin.threads"
+        const val SKIP_UNCHANGED_FILES_OVERRIDE = "sonar.kotlin.skipUnchanged"
     }
 
     override fun define(context: Plugin.Context) {
