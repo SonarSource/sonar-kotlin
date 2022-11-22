@@ -10,14 +10,14 @@ class CipherModeOperationCheckSample {
     fun nonCompliant() {
         val key: ByteArray = "0123456789123456".toByteArray()
         val nonce: ByteArray = "7cVgr5cbdCZV".toByteArray()
-//      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^> {{Initialization vector is configured here.}}
+//      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^> {{The initialization vector is a static value.}}
 
         val gcmSpec = GCMParameterSpec(128, nonce)
 //                                          ^^^^^> {{Initialization vector is configured here.}}
         val skeySpec = SecretKeySpec(key, "AES")
 
         val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
-        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, gcmSpec) // Noncompliant {{The initialization vector is a static value.}}
+        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, gcmSpec) // Noncompliant {{Use a dynamically-generated initialization vector (IV) to avoid IV-key pair reuse.}}
 //             ^^^^                                ^^^^^^^< {{Initialization vector is configured here.}}
     }
 
@@ -25,11 +25,11 @@ class CipherModeOperationCheckSample {
         val key: ByteArray = "0123456789123456".toByteArray()
 
         val gcmSpec = GCMParameterSpec(128, "7cVgr5cbdCZV".toByteArray())
-//                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^> {{Initialization vector is configured here.}}
+//                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^> {{The initialization vector is a static value.}}
         val skeySpec = SecretKeySpec(key, "AES")
 
         val cipher: Cipher = Cipher.getInstance("AES/GCM/NoPadding")
-        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, gcmSpec) // Noncompliant {{The initialization vector is a static value.}}
+        cipher.init(Cipher.ENCRYPT_MODE, skeySpec, gcmSpec) // Noncompliant {{Use a dynamically-generated initialization vector (IV) to avoid IV-key pair reuse.}}
 //             ^^^^                                ^^^^^^^< {{Initialization vector is configured here.}}
     }
 

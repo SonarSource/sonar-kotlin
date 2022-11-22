@@ -64,19 +64,28 @@ class CipherModeOperationCheck : CallAbstractCheck() {
         val calleeExpression = callExpression.calleeExpression!!
 
         val secondaries = mutableListOf<PsiElement>()
+        secondaries.add(thirdArgument)
         val byteExpression = thirdArgument.getGCMExpression(bindingContext, secondaries)
             ?.getByteExpression(bindingContext, secondaries) ?: return
 
         if (firstArgument.predictRuntimeIntValue(bindingContext) == 1 && byteExpression.isBytesInitializedFromString(bindingContext)) {
-            secondaries.add(thirdArgument)
-            val locations = secondaries.map {
-                SecondaryLocation(kotlinFileContext.textRange(it), "Initialization vector is configured here.")
-            }
-
-            kotlinFileContext.reportIssue(calleeExpression, "The initialization vector is a static value.", locations)
+            kotlinFileContext.reportIssue(
+                calleeExpression,
+                "Use a dynamically-generated initialization vector (IV) to avoid IV-key pair reuse.",
+                generateSecondaryLocations(secondaries, kotlinFileContext)
+            )
         }
     }
 }
+
+private fun generateSecondaryLocations(secondaries: MutableList<PsiElement>, kotlinFileContext: KotlinFileContext) =
+    secondaries.mapIndexed { i, secondary ->
+        if (i < secondaries.size - 1) {
+            SecondaryLocation(kotlinFileContext.textRange(secondary), "Initialization vector is configured here.")
+        } else {
+            SecondaryLocation(kotlinFileContext.textRange(secondary), "The initialization vector is a static value.")
+        }
+    }
 
 private fun KtExpression.getByteExpression(bindingContext: BindingContext, secondaries: MutableList<PsiElement>) =
     with(predictRuntimeValueExpression(bindingContext, secondaries)) {
