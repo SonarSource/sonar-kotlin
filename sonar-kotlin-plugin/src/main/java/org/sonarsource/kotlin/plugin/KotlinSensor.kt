@@ -37,6 +37,7 @@ import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.InputFileContext
 import org.sonarsource.kotlin.api.ParseException
+import org.sonarsource.kotlin.api.regex.RegexCache
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinSyntaxStructure
 import org.sonarsource.kotlin.converter.KotlinTree
@@ -180,6 +181,8 @@ class KotlinSensor(
                 bindingContext.diagnostics.noSuppression().groupBy { it.psiFile }.toMap()
             }
 
+            val regexCache = RegexCache()
+
             progressReport.start(filenames)
             for ((ktFile, doc, inputFile) in kotlinFiles) {
                 if (sensorContext.isCancelled) return false
@@ -190,7 +193,7 @@ class KotlinSensor(
                         sensorContext,
                         inputFileContext,
                         visitors,
-                        KotlinTree(ktFile, doc, bindingContext, diagnostics[ktFile] ?: emptyList()),
+                        KotlinTree(ktFile, doc, bindingContext, diagnostics[ktFile] ?: emptyList(), regexCache),
                     )
                 }
 

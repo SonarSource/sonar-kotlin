@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.utils
 
 import org.sonar.api.batch.fs.InputFile
+import org.sonarsource.kotlin.api.regex.RegexCache
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinSyntaxStructure
 import org.sonarsource.kotlin.converter.KotlinTree
@@ -35,5 +36,5 @@ fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile
         listOf(ktFile),
     )
 
-    return KotlinTree(ktFile, document, bindingContext, bindingContext.diagnostics.noSuppression().toList())
+    return KotlinTree(ktFile, document, bindingContext, bindingContext.diagnostics.noSuppression().toList(), RegexCache())
 }
