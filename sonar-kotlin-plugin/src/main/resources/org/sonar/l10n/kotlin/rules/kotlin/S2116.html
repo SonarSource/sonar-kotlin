@@ -1,0 +1,41 @@
+<p>While <code>hashCode</code> and <code>toString</code> are available on arrays, they are largely useless. <code>hashCode</code> returns the array’s
+"identity hash code", and <code>toString</code> returns nearly the same value. Neither method’s output actually reflects the array’s contents.
+Furthermore, <code>contentHashCode()</code> and <code>contentToString()</code> are also useless on arrays of array.</p>
+<p>Instead, you should use:</p>
+<ul>
+  <li> On array of objects or arrays: <code>contentDeepHashCode()</code> and <code>contentDeepToString()</code> </li>
+  <li> On array of primitives: <code>contentHashCode()</code> and <code>contentToString()</code> </li>
+</ul>
+<h2>Noncompliant Code Example</h2>
+<pre>
+fun main() {
+    val primitiveArray = intArrayOf(1, 2, 3)
+    val objectArray = arrayOf("A", "B", "C")
+    val arrayOfArray = arrayOf(arrayOf("A", "B"), arrayOf("C", "D"))
+
+    println(primitiveArray.toString())       // Noncompliant, output: [I@2acf57e3
+    println(primitiveArray.hashCode())       // Noncompliant, output: 718231523
+    println(objectArray.toString())          // Noncompliant, output: [Ljava.lang.String;@506e6d5e
+    println(objectArray.hashCode())          // Noncompliant, output: 1349414238
+    println(arrayOfArray.toString())         // Noncompliant, output: [[Ljava.lang.String;@96532d6
+    println(arrayOfArray.contentToString())  // Noncompliant, output: [[Ljava.lang.String;@3796751b, [Ljava.lang.String;@67b64c45]
+    println(arrayOfArray.hashCode())         // Noncompliant, output: 157627094
+    println(arrayOfArray.contentHashCode())  // Noncompliant, output: 586055243
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+fun main() {
+    val primitiveArray = intArrayOf(1, 2, 3)
+    val objectArray = arrayOf("A", "B", "C")
+    val arrayOfArray = arrayOf(arrayOf("A", "B"), arrayOf("C", "D"))
+
+    println(primitiveArray.contentToString())   // Compliant, output: [1, 2, 3]
+    println(primitiveArray.contentHashCode())   // Compliant, output: 30817
+    println(objectArray.contentDeepToString())  // Compliant, output: [A, B, C]
+    println(objectArray.contentDeepHashCode())  // Compliant, output: 94369
+    println(arrayOfArray.contentDeepToString()) // Compliant, output: [[A, B], [C, D]]
+    println(arrayOfArray.contentDeepHashCode()) // Compliant, output: 98369
+}
+</pre>
+
