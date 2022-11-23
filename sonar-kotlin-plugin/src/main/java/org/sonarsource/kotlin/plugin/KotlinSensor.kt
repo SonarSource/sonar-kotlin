@@ -98,10 +98,7 @@ class KotlinSensor(
                         totalFiles++
                         it.status() != InputFile.Status.SAME
                     }.also {
-                        LOG.info(
-                            "The Kotlin analyzer will analyze ${it.size} out of $totalFiles files. " +
-                                    "All others, if any, can be skipped without impacting analysis results."
-                        )
+                        LOG.info("Only analyzing ${it.size} changed Kotlin files out of ${totalFiles}.")
                     }
             } else {
                 LOG.debug("The Kotlin analyzer is running in a context where unchanged files cannot be skipped.")
