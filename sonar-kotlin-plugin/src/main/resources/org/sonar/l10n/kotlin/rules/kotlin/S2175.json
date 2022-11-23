@@ -1,0 +1,20 @@
+{
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-2175",
+  "sqKey": "S2175",
+  "scope": "All",
+  "securityStandards": {
+    "CERT": [
+      "EXP04-J."
+    ]
+  },
+  "quickfix": "unknown",
+  "title": "Inappropriate collection calls should not be made"
+}
