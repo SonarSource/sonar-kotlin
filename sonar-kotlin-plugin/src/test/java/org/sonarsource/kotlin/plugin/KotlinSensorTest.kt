@@ -559,9 +559,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertThat(logTester.logs(LoggerLevel.DEBUG))
             .contains("The Kotlin analyzer is running in a context where it can skip unchanged files.")
         assertThat(logTester.logs(LoggerLevel.INFO))
-            .contains(
-                "The Kotlin analyzer will analyze 2 out of 3 files. All others, if any, can be skipped without impacting analysis results."
-            )
+            .contains("Only analyzing 2 changed Kotlin files out of 3.")
     }
 
     private fun assertAnalysisIsNotIncremental() {
