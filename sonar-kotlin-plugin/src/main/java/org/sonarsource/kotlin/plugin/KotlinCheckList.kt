@@ -33,6 +33,7 @@ import org.sonarsource.kotlin.checks.CipherModeOperationCheck
 import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.CodeAfterJumpCheck
 import org.sonarsource.kotlin.checks.CollapsibleIfStatementsCheck
+import org.sonarsource.kotlin.checks.CollectionCallingItselfCheck
 import org.sonarsource.kotlin.checks.CommentedCodeCheck
 import org.sonarsource.kotlin.checks.CoroutineScopeFunSuspendingCheck
 import org.sonarsource.kotlin.checks.CoroutinesTimeoutApiUnusedCheck
@@ -135,6 +136,7 @@ val KOTLIN_CHECKS = listOf(
     ClearTextProtocolCheck::class.java,
     CodeAfterJumpCheck::class.java,
     CollapsibleIfStatementsCheck::class.java,
+    CollectionCallingItselfCheck::class.java,
     CoroutineScopeFunSuspendingCheck::class.java,
     CommentedCodeCheck::class.java,
     CoroutinesTimeoutApiUnusedCheck::class.java,
