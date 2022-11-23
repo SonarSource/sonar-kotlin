@@ -110,6 +110,9 @@ class KotlinSensor(
         }
 
         val filenames = filesToAnalyze.map { it.toString() }
+        if (filenames.isEmpty()) {
+            return
+        }
 
         val progressReport = ProgressReport("Progress of the ${language.name} analysis", TimeUnit.SECONDS.toMillis(10))
 

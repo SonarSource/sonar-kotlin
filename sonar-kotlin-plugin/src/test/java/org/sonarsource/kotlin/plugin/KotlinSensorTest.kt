@@ -178,6 +178,19 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun `Ensure compiler crashes during BindingContext generation don't crash engine`() {
+        context.setCanSkipUnchangedFiles(false)
+        executeAnalysisWithInvalidBindingContext()
+        assertThat(logTester.logs(LoggerLevel.ERROR)).containsExactly("Could not generate binding context. Proceeding without semantics.")
+    }
+
+    @Test
+    fun `BindingContext generation does not crash when there are no files to analyze`() {
+        context.setCanSkipUnchangedFiles(true)
+        executeAnalysisWithInvalidBindingContext()
+        assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty()
+    }
+
+    private fun executeAnalysisWithInvalidBindingContext() {
         val inputFile = createInputFile(
             "file1.kt", """
         abstract class MyClass {
@@ -187,7 +200,8 @@ internal class KotlinSensorTest : AbstractSensorTest() {
                 println(foo<String>())
             }
         }
-        """.trimIndent()
+        """.trimIndent(),
+            InputFile.Status.SAME
         )
         context.fileSystem().add(inputFile)
 
@@ -196,7 +210,6 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         val checkFactory = checkFactory("S1764")
         assertDoesNotThrow { sensor(checkFactory).execute(context) }
-        assertThat(logTester.logs(LoggerLevel.ERROR)).containsExactly("Could not generate binding context. Proceeding without semantics.")
 
         unmockkAll()
     }
