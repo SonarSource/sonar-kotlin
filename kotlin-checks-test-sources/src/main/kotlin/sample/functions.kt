@@ -6,6 +6,8 @@ suspend fun main() {
     sampleClass.sayHello("Java")
     sampleClass.sayHelloNullable("nothingness")
     "".suspendExtFun()
+    sampleClass.intAndVararg(42, "one")
+    sampleClass.intAndVararg(42, "one", "two")
 
     val mySampleClass = MySampleClass()
 }

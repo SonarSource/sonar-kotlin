@@ -36,11 +36,14 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
 import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequence
 
+private const val VARARG_PREFIX = "vararg ";
+
 class FunMatcherImpl(
     // In case of Top Level function there is no type there,
     // so you just need to specify the package
     val qualifier: String? = null,
     val names: Set<String> = emptySet(),
+    private val maxArgumentCount: Int = Int.MAX_VALUE,
     val arguments: List<List<ArgumentMatcher>> = emptyList(),
     val definingSupertype: String? = null,
     private val matchConstructor: Boolean = false,
@@ -52,8 +55,8 @@ class FunMatcherImpl(
 
     fun matches(node: KtCallExpression, bindingContext: BindingContext): Boolean {
         val call = node.getCall(bindingContext)
-        val functionDescriptor = bindingContext.get(RESOLVED_CALL, call)?.resultingDescriptor
-        return matches(functionDescriptor)
+        return preCheckArgumentCount(call) &&
+            matches(bindingContext.get(RESOLVED_CALL, call)?.resultingDescriptor)
     }
 
     fun matches(node: KtNamedFunction, bindingContext: BindingContext): Boolean {
@@ -61,9 +64,13 @@ class FunMatcherImpl(
         return matches(functionDescriptor)
     }
 
-    fun matches(call: Call, bindingContext: BindingContext) = matches(bindingContext.get(RESOLVED_CALL, call))
+    fun matches(call: Call, bindingContext: BindingContext) = preCheckArgumentCount(call) &&
+        matches(bindingContext.get(RESOLVED_CALL, call)?.resultingDescriptor)
 
-    fun matches(call: ResolvedCall<*>?) = matches(call?.resultingDescriptor)
+    fun matches(resolvedCall: ResolvedCall<*>?) = preCheckArgumentCount(resolvedCall?.call) &&
+        matches(resolvedCall?.resultingDescriptor)
+
+    private fun preCheckArgumentCount(call: Call?) = call == null || call.valueArguments.size <= maxArgumentCount
 
     fun matches(functionDescriptor: CallableDescriptor?) =
         functionDescriptor != null &&
@@ -162,7 +169,13 @@ class FunMatcherBuilderContext(
     }
 
     fun withArguments(vararg args: String) {
-        withArguments(args.map { ArgumentMatcher(it) })
+        withArguments(args.map {
+            if (it.startsWith(VARARG_PREFIX)) {
+                ArgumentMatcher(typeName = it.substring(VARARG_PREFIX.length), isVararg = true)
+            } else {
+                ArgumentMatcher(typeName = it)
+            }
+        })
     }
 
     fun withArguments(vararg args: ArgumentMatcher) {
@@ -202,9 +215,12 @@ fun FunMatcher(
     suspending,
     returnType,
 ).apply(block).run {
+    val maxArgumentCount: Int =
+        if (this.arguments.isEmpty()) Int.MAX_VALUE else this.arguments.maxOf { if (it.any { arg -> arg.isVararg }) Int.MAX_VALUE else it.size }
     FunMatcherImpl(
         this.qualifier,
         this.name?.let { this.names + it } ?: this.names,
+        maxArgumentCount,
         this.arguments,
         this.definingSupertype,
         this.matchConstructor,

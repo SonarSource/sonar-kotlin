@@ -57,6 +57,7 @@ class  ArrayHashCodeAndToStringCheckSample {
             booleanArray.toString() +                   // Noncompliant {{Use "contentToString()" instead.}}
             booleanArray.contentToString() +            // Compliant
             byteArray.toString() +                      // Noncompliant {{Use "contentToString()" instead.}}
+            byteArray.toString(Charsets.UTF_8) +        // Compliant
             byteArray.contentToString() +               // Compliant
             shortArray.toString() +                     // Noncompliant {{Use "contentToString()" instead.}}
             shortArray.contentToString() +              // Compliant

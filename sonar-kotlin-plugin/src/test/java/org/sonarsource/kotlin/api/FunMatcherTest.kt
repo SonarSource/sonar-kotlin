@@ -19,6 +19,10 @@
  */
 package org.sonarsource.kotlin.api
 
+import io.mockk.Called
+import io.mockk.spyk
+import io.mockk.unmockkAll
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -30,7 +34,6 @@ import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -61,8 +64,13 @@ class FunMatcherTest {
     // "".suspendExtFun()
     val ktCallExpression4 = allCallExpressions[4]
 
-    private val testFunCalls = allCallExpressions.subList(1, 5)
+    // sampleClass.intAndVararg(42, "one")
+    val ktCallExpressionIntAndVararg1 = allCallExpressions[5]
 
+    // sampleClass.intAndVararg(42, "one", "two")
+    val ktCallExpressionIntAndVararg2 = allCallExpressions[6]
+
+    private val testFunCalls = allCallExpressions.subList(1, 7)
 
     @Test
     fun `match method by type and name`() {
@@ -203,6 +211,68 @@ class FunMatcherTest {
 
         assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isFalse
         assertThat(funMatcher.matches(ktCallExpression2, tree.bindingContext)).isFalse
+    }
+
+    @Test
+    fun `Don't request the bindingContext for calls with too many arguments`() {
+        val funMatcher1 = FunMatcher { withNoArguments() }
+        val funMatcher2 = FunMatcher { withArguments("kotlin.String") }
+
+        val callWithOneArgument = ktCallExpression1.getCall(tree.bindingContext)!!
+        val callWithTwoArguments = ktCallExpressionIntAndVararg1.getCall(tree.bindingContext)!!
+        val spiedBindingContext = spyk(tree.bindingContext)
+        assertThat(funMatcher1.matches(callWithOneArgument, spiedBindingContext)).isFalse
+        assertThat(funMatcher2.matches(callWithTwoArguments, spiedBindingContext)).isFalse
+        verify { spiedBindingContext wasNot Called }
+        unmockkAll()
+    }
+
+    @Test
+    fun `Match vararg arguments`() {
+        var matcher = FunMatcher { withArguments("kotlin.Int", "vararg kotlin.String") }
+        assertThat(matcher.matches(ktCallExpressionIntAndVararg1, tree.bindingContext)).isTrue
+        assertThat(matcher.matches(ktCallExpressionIntAndVararg2, tree.bindingContext)).isTrue
+
+        matcher= FunMatcher { withArguments("kotlin.Int", "kotlin.String") }
+        assertThat(matcher.matches(ktCallExpressionIntAndVararg1, tree.bindingContext)).isFalse
+        assertThat(matcher.matches(ktCallExpressionIntAndVararg2, tree.bindingContext)).isFalse
+
+        matcher = FunMatcher { withArguments("kotlin.Int", "kotlin.Array") }
+        assertThat(matcher.matches(ktCallExpressionIntAndVararg1, tree.bindingContext)).isFalse
+        assertThat(matcher.matches(ktCallExpressionIntAndVararg2, tree.bindingContext)).isFalse
+
+        matcher = FunMatcher { withArguments(ArgumentMatcher(isVararg = false), ArgumentMatcher(isVararg = true)) }
+        assertThat(matcher.matches(ktCallExpressionIntAndVararg1, tree.bindingContext)).isTrue
+        assertThat(matcher.matches(ktCallExpressionIntAndVararg2, tree.bindingContext)).isTrue
+
+        matcher = FunMatcher { withArguments(ArgumentMatcher(isVararg = false), ArgumentMatcher(typeName = "kotlin.Int", isVararg = true)) }
+        assertThat(matcher.matches(ktCallExpressionIntAndVararg1, tree.bindingContext)).isFalse
+        assertThat(matcher.matches(ktCallExpressionIntAndVararg2, tree.bindingContext)).isFalse
+
+        matcher = FunMatcher { withArguments(ArgumentMatcher(isVararg = false), ArgumentMatcher(isVararg = false)) }
+        assertThat(matcher.matches(ktCallExpressionIntAndVararg1, tree.bindingContext)).isFalse
+        assertThat(matcher.matches(ktCallExpressionIntAndVararg2, tree.bindingContext)).isFalse
+
+        matcher = FunMatcher { withArguments("kotlin.String") }
+        assertThat(matcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
+
+        matcher = FunMatcher { withArguments("vararg kotlin.String") }
+        assertThat(matcher.matches(ktCallExpression1, tree.bindingContext)).isFalse
+
+        matcher = FunMatcher { withArguments(ArgumentMatcher(isVararg = false)) }
+        assertThat(matcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
+
+        matcher = FunMatcher { withArguments(ArgumentMatcher(isVararg = true)) }
+        assertThat(matcher.matches(ktCallExpression1, tree.bindingContext)).isFalse
+
+        matcher = FunMatcher { withArguments(ArgumentMatcher(typeName = "String", qualified = false, isVararg = false)) }
+        assertThat(matcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
+
+        matcher = FunMatcher { withArguments(ArgumentMatcher(typeName = "Int", qualified = false, isVararg = false)) }
+        assertThat(matcher.matches(ktCallExpression1, tree.bindingContext)).isFalse
+
+        matcher = FunMatcher { withArguments(ArgumentMatcher(typeName = "String", qualified = false, isVararg = true)) }
+        assertThat(matcher.matches(ktCallExpression1, tree.bindingContext)).isFalse
     }
 
     @Test
@@ -379,63 +449,63 @@ class FunMatcherTest {
     fun `Match only methods with non-nullable paramter`() {
         check(FunMatcher {
             withArguments(ArgumentMatcher(nullability = TypeNullability.NOT_NULL))
-        }, true, true, false, false)
+        }, true, true, false, false, false, false)
     }
 
     @Test
     fun `Match only methods with nullable parameter`() {
         check(FunMatcher {
             withArguments(ArgumentMatcher(nullability = TypeNullability.NULLABLE))
-        }, false, false, true, false)
+        }, false, false, true, false, false, false)
     }
 
     @Test
     fun `Match methods with a parameter with any nullability`() {
         check(FunMatcher {
             withArguments(ArgumentMatcher(nullability = null))
-        }, true, true, true, false)
+        }, true, true, true, false, false, false)
     }
 
     @Test
     fun `Don't match methods without flexible nullability parameter`() {
         check(FunMatcher {
             withArguments(ArgumentMatcher(nullability = TypeNullability.FLEXIBLE))
-        }, false, false, false, false)
+        }, false, false, false, false, false, false)
     }
 
     @Test
     fun `Match only suspending methods`() {
-        check(FunMatcher(suspending = true), false, false, false, true)
+        check(FunMatcher(suspending = true), false, false, false, true, false, false)
     }
 
     @Test
     fun `Match only non-suspending methods`() {
-        check(FunMatcher(suspending = false), true, true, true, false)
+        check(FunMatcher(suspending = false), true, true, true, false, true, true)
     }
 
     @Test
     fun `Match only extension methods`() {
-        check(FunMatcher(extensionFunction = true), false, false, false, true)
+        check(FunMatcher(extensionFunction = true), false, false, false, true, false, false)
     }
 
     @Test
     fun `Match only non-extension methods`() {
-        check(FunMatcher(extensionFunction = false), true, true, true, false)
+        check(FunMatcher(extensionFunction = false), true, true, true, false, true, true)
     }
 
     @Test
     fun `Match only methods returning String`() {
-        check(FunMatcher(returnType = "kotlin.String"), false, false, false, true)
+        check(FunMatcher(returnType = "kotlin.String"), false, false, false, true, false, false)
     }
 
     @Test
     fun `Match only methods returning int`() {
-        check(FunMatcher(returnType = "kotlin.Int"), false, false, true, false)
+        check(FunMatcher(returnType = "kotlin.Int"), false, false, true, false, false, false)
     }
 
     @Test
     fun `Match only methods returning Unit`() {
-        check(FunMatcher(returnType = "kotlin.Unit"), true, true, false, false)
+        check(FunMatcher(returnType = "kotlin.Unit"), true, true, false, false, true, true)
     }
 
     private fun check(funMatcher: FunMatcherImpl, vararg expected: Boolean?) {

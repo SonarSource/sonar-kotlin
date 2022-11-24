@@ -482,7 +482,7 @@ fun PsiElement?.getType(bindingContext: BindingContext) =
 fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
     this?.let {
         when (this) {
-            is KtCallExpression -> getResolvedCall(bindingContext)?.getReturnType()
+            is KtCallExpression -> getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
             is KtParameter -> determineType(bindingContext)
             is KtTypeReference -> determineType(bindingContext)
             is KtProperty -> determineType(bindingContext)
