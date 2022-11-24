@@ -9,6 +9,10 @@ class SampleClass {
         println("Hello, ${name ?: "empty void"}!")
         return 0
     }
+
+    fun intAndVararg(one: Int, vararg two: String) {
+        // empty
+    }
 }
 
 suspend fun String.suspendExtFun(): String = ""

@@ -179,6 +179,7 @@ class ApiExtensionsKtDetermineTypeTest {
         
         class Foo {
             val prop: Int = 0
+            val arr = arrayOf("a", "b")
         
             fun aFun(param: Float): Long {
                 stringReturning()
@@ -199,9 +200,15 @@ class ApiExtensionsKtDetermineTypeTest {
 
     @Test
     fun `determineType of KtCallExpression`() {
-        val expr = ktFile.findDescendantOfType<KtCallExpression> { it.text == "stringReturning()" }!!
+        val expr1 = ktFile.findDescendantOfType<KtCallExpression> { it.text == "stringReturning()" }!!
+        val expr2 = ktFile.findDescendantOfType<KtCallExpression> { it.text == "arrayOf(\"a\", \"b\")" }!!
 
-        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+        assertThat(expr1.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("kotlin.String")
+        val expr2Type = expr2.determineType(bindingContext)!!
+        assertThat(expr2Type.getJetTypeFqName(false))
+            .isEqualTo("kotlin.Array")
+        assertThat(expr2Type.arguments[0].type.getJetTypeFqName(false))
             .isEqualTo("kotlin.String")
     }
 
