@@ -13,10 +13,19 @@ jobs:
   dogfood_merge:
     runs-on: ubuntu-latest
     name: Update dogfood branch
+    permissions:
+      id-token: write # required for SonarSource/vault-action-wrapper
+      contents: write # required to grant GITHUB_TOKEN writing permission
     steps:
+      - name: get secrets
+        id: secrets
+        uses: SonarSource/vault-action-wrapper@d1c1ab4ca5ad07fd9cdfe1eff038a39673dfca64  # tag=2.4.2-1
+        with:
+          secrets: |
+            development/kv/data/slack webhook | SLACK_WEBHOOK;
       - name: git octopus step
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: dogfood
         uses: SonarSource/gh-action_dogfood_merge@master
         with:
@@ -31,6 +40,6 @@ jobs:
         with:
           status: failure
           fields: repo,author,eventName
+          channel: '#team-lang-kotlin'
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_BUILD_WEBHOOK }}
-
+          SLACK_WEBHOOK_URL: ${{ fromJSON(steps.secrets.outputs.vault).SLACK_WEBHOOK }}
