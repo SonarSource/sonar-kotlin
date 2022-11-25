@@ -28,15 +28,23 @@ import org.sonarsource.kotlin.api.predictReceiverExpression
 import org.sonarsource.kotlin.api.predictRuntimeValueExpression
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private val COLLECTION_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections.MutableCollection") {
+private val MUTABLE_COLLECTION_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections.MutableCollection") {
     withNames("containsAll", "addAll", "removeAll", "retainAll")
+}
+
+private val LIST_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections.MutableList") {
+    withNames("add")
+}
+
+private val COLLECTIONS_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections") {
+    withNames("fill")
 }
 
 private const val MESSAGE = "Collections should not be passed as arguments to their own methods."
 
 @Rule(key = "S2114")
 class CollectionCallingItselfCheck : CallAbstractCheck() {
-    override val functionsToVisit = listOf(COLLECTION_FUN_MATCHER)
+    override val functionsToVisit = listOf(MUTABLE_COLLECTION_FUN_MATCHER, LIST_FUN_MATCHER, COLLECTIONS_FUN_MATCHER)
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
@@ -45,7 +53,7 @@ class CollectionCallingItselfCheck : CallAbstractCheck() {
     ) {
         val bindingContext = kotlinFileContext.bindingContext
 
-        val receiver = callExpression.predictReceiverExpression(bindingContext)?.predictRuntimeValueExpression(bindingContext)
+        val receiver = callExpression.predictReceiverExpression(bindingContext)?.predictRuntimeValueExpression(bindingContext) ?: return
         val argument = callExpression.valueArguments[0].getArgumentExpression()!!
 
         val argumentValue = argument.predictRuntimeValueExpression(bindingContext)

@@ -10,6 +10,10 @@ class CollectionCallingItselfCheckSample {
         strings.removeAll(strings) // Noncompliant
         strings.retainAll(strings) // Noncompliant {{Collections should not be passed as arguments to their own methods.}}
 //                        ^^^^^^^
+
+        val anys = mutableListOf<Any>()
+        anys.add(anys) // Noncompliant
+        anys.fill(anys) // Noncompliant
     }
 
     fun compliant(newList: MutableList<String>) {
@@ -19,6 +23,10 @@ class CollectionCallingItselfCheckSample {
         strings.addAll(newList) // Compliant
         strings.removeAll(newList) // Compliant
         strings.retainAll(newList) // Compliant
+
+        val anys = mutableListOf<Any>()
+        anys.add(newList) // Compliant
+        anys.fill(newList) // Compliant
     }
 
     fun compliant1() {
@@ -35,6 +43,10 @@ class CollectionCallingItselfCheckSample {
         strings.addAll(strings1) // Compliant
         strings.removeAll(strings1) // Compliant
         strings.retainAll(strings1) // Compliant
+
+        val anys = mutableListOf<Any>()
+        anys.add(strings1) // Compliant
+        anys.fill(strings1) // Compliant
     }
 
 }
