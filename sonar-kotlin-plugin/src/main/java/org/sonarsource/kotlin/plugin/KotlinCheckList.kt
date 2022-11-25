@@ -68,6 +68,7 @@ import org.sonarsource.kotlin.checks.HardcodedIpCheck
 import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
 import org.sonarsource.kotlin.checks.IfConditionalAlwaysTrueOrFalseCheck
+import org.sonarsource.kotlin.checks.IgnoredOperationStatusCheck
 import org.sonarsource.kotlin.checks.InjectableDispatchersCheck
 import org.sonarsource.kotlin.checks.InvalidRegexCheck
 import org.sonarsource.kotlin.checks.IsInstanceMethodCheck
@@ -173,6 +174,7 @@ val KOTLIN_CHECKS = listOf(
     IdenticalBinaryOperandCheck::class.java,
     IdenticalConditionsCheck::class.java,
     IfConditionalAlwaysTrueOrFalseCheck::class.java,
+    IgnoredOperationStatusCheck::class.java,
     InjectableDispatchersCheck::class.java,
     InvalidRegexCheck::class.java,
     IsInstanceMethodCheck::class.java,

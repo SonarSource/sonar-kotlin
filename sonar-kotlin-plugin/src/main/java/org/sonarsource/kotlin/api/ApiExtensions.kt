@@ -490,6 +490,8 @@ fun KtBinaryExpression.isPlus() =
 fun PsiElement?.getType(bindingContext: BindingContext) =
     this?.let { bindingContext.get(BindingContext.VARIABLE, it)?.type }
 
+fun KotlinType.simpleName(): String = getJetTypeFqName(false).substringAfterLast(".")
+
 fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
     this?.let {
         when (this) {
