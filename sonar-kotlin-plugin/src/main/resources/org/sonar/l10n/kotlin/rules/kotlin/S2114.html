@@ -15,14 +15,13 @@ objs.retainAll(objs) // Noncompliant; NOOP
 </pre>
 <h2>Compliant Code Example</h2>
 <pre>
-fun compliant(newList: MutableList&lt;Any&gt;) {
-    val objs = mutableListOf&lt;Any&gt;()
-    objs.add("Hello")
+val newList = mutableListOf&lt;Any&gt;()
+val objs = mutableListOf&lt;Any&gt;()
+objs.add("Hello")
 
-    objs.containsAll(newList) // Compliant
-    objs.addAll(newList) // Compliant
-    objs.removeAll(newList) // Compliant
-    objs.retainAll(newList) // Compliant
-}
+objs.containsAll(newList) // Compliant
+objs.addAll(newList) // Compliant
+objs.removeAll(newList) // Compliant
+objs.retainAll(newList) // Compliant
 </pre>
 
