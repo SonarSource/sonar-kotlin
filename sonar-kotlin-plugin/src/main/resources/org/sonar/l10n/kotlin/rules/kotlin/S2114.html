@@ -13,7 +13,7 @@ objs.containsAll(objs) // Noncompliant; always true
 objs.removeAll(objs) // Noncompliant; confusing. Use clear() instead
 objs.retainAll(objs) // Noncompliant; NOOP
 </pre>
-<h2>Compliant Code Example</h2>
+<h2>Compliant Solution</h2>
 <pre>
 val newList = mutableListOf&lt;Any&gt;()
 val objs = mutableListOf&lt;Any&gt;()
