@@ -35,6 +35,7 @@ import org.sonarsource.kotlin.checks.ClearTextProtocolCheck
 import org.sonarsource.kotlin.checks.CodeAfterJumpCheck
 import org.sonarsource.kotlin.checks.CollapsibleIfStatementsCheck
 import org.sonarsource.kotlin.checks.CollectionCallingItselfCheck
+import org.sonarsource.kotlin.checks.CollectionSizeAndArrayLengthCheck
 import org.sonarsource.kotlin.checks.CollectionInappropriateCallsCheck
 import org.sonarsource.kotlin.checks.CommentedCodeCheck
 import org.sonarsource.kotlin.checks.CoroutineScopeFunSuspendingCheck
@@ -68,7 +69,6 @@ import org.sonarsource.kotlin.checks.HardcodedIpCheck
 import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
 import org.sonarsource.kotlin.checks.IfConditionalAlwaysTrueOrFalseCheck
-import org.sonarsource.kotlin.checks.IgnoredOperationStatusCheck
 import org.sonarsource.kotlin.checks.InjectableDispatchersCheck
 import org.sonarsource.kotlin.checks.InvalidRegexCheck
 import org.sonarsource.kotlin.checks.IsInstanceMethodCheck
@@ -141,6 +141,7 @@ val KOTLIN_CHECKS = listOf(
     CodeAfterJumpCheck::class.java,
     CollapsibleIfStatementsCheck::class.java,
     CollectionCallingItselfCheck::class.java,
+    CollectionSizeAndArrayLengthCheck::class.java,
     CollectionInappropriateCallsCheck::class.java,
     CoroutineScopeFunSuspendingCheck::class.java,
     CommentedCodeCheck::class.java,
@@ -174,7 +175,6 @@ val KOTLIN_CHECKS = listOf(
     IdenticalBinaryOperandCheck::class.java,
     IdenticalConditionsCheck::class.java,
     IfConditionalAlwaysTrueOrFalseCheck::class.java,
-    IgnoredOperationStatusCheck::class.java,
     InjectableDispatchersCheck::class.java,
     InvalidRegexCheck::class.java,
     IsInstanceMethodCheck::class.java,
