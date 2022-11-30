@@ -1,0 +1,17 @@
+{
+  "title": "\"PreparedStatement\" and \"ResultSet\" methods should be called with valid indices",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "2min"
+  },
+  "tags": [
+    "sql"
+  ],
+  "defaultSeverity": "Blocker",
+  "ruleSpecification": "RSPEC-2695",
+  "sqKey": "S2695",
+  "scope": "All",
+  "quickfix": "unknown"
+}

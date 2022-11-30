@@ -1,0 +1,28 @@
+<p>The parameters in a <code>PreparedStatement</code> are indexed beginning at 1, not 0, so using any "set" method of a <code>PreparedStatement</code>
+with a number less than 1 is a bug, as is using an index higher than the number of parameters. The same indexing style also applies to
+<code>ResultSet</code>.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+val ps: PreparedStatement = con.prepareStatement("SELECT fname, lname FROM employees where hireDate &gt; ? and salary &lt; ?")
+ps.setDate(0, date) // Noncompliant
+ps.setDouble(3, salary) // Noncompliant
+
+val rs: ResultSet = ps.executeQuery()
+while (rs.next()) {
+    val fname: String = rs.getString(0) // Noncompliant
+    // ...
+}
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+val ps: PreparedStatement = con.prepareStatement("SELECT fname, lname FROM employees where hireDate &gt; ? and salary &lt; ?")
+ps.setDate(1, date)
+ps.setDouble(2, salary)
+
+val rs: ResultSet = ps.executeQuery()
+while (rs.next()) {
+  val fname: String = rs.getString(1)
+  // ...
+}
+</pre>
+

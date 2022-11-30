@@ -81,6 +81,7 @@ import org.sonarsource.kotlin.checks.ReceivingIntentsCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RedundantSuspendModifierCheck
 import org.sonarsource.kotlin.checks.JumpInFinallyCheck
+import org.sonarsource.kotlin.checks.PreparedStatementAndResultSetCheck
 import org.sonarsource.kotlin.checks.RegexComplexityCheck
 import org.sonarsource.kotlin.checks.ReluctantQuantifierCheck
 import org.sonarsource.kotlin.checks.ReplaceGuavaWithKotlinCheck
@@ -181,6 +182,7 @@ val KOTLIN_CHECKS = listOf(
     NestedMatchCheck::class.java,
     OneStatementPerLineCheck::class.java,
     ParsingErrorCheck::class.java,
+    PreparedStatementAndResultSetCheck::class.java,
     PseudoRandomCheck::class.java,
     ReceivingIntentsCheck::class.java,
     RedundantParenthesesCheck::class.java,

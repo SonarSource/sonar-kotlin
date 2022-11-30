@@ -43,6 +43,7 @@ class FunMatcherImpl(
     // so you just need to specify the package
     val qualifier: String? = null,
     val names: Set<String> = emptySet(),
+    private val nameRegex: Regex?,
     private val maxArgumentCount: Int = Int.MAX_VALUE,
     val arguments: List<List<ArgumentMatcher>> = emptyList(),
     val definingSupertype: String? = null,
@@ -118,7 +119,8 @@ class FunMatcherImpl(
         if (functionDescriptor is ConstructorDescriptor) {
             matchConstructor
         } else if (!matchConstructor) {
-            names.isEmpty() || functionDescriptor.name.asString() in names
+            nameRegex?.containsMatchIn(functionDescriptor.name.asString())
+                ?: (names.isEmpty() || functionDescriptor.name.asString() in names)
         } else false
 
     private fun checkCallParameters(descriptor: CallableDescriptor): Boolean {
@@ -154,6 +156,7 @@ class FunMatcherBuilderContext(
     var qualifier: String? = null,
     var name: String? = null,
     var names: Set<String> = mutableSetOf(),
+    var nameRegex: Regex?,
     arguments: List<List<ArgumentMatcher>> = listOf(),
     var definingSupertype: String? = null,
     var matchConstructor: Boolean = false,
@@ -195,6 +198,7 @@ fun FunMatcher(
     qualifier: String? = null,
     name: String? = null,
     names: Set<String> = mutableSetOf(),
+    nameRegex: Regex? = null,
     arguments: List<List<ArgumentMatcher>> = listOf(),
     definingSupertype: String? = null,
     matchConstructor: Boolean = false,
@@ -207,6 +211,7 @@ fun FunMatcher(
     qualifier,
     name,
     names,
+    nameRegex,
     arguments,
     definingSupertype,
     matchConstructor,
@@ -220,6 +225,7 @@ fun FunMatcher(
     FunMatcherImpl(
         this.qualifier,
         this.name?.let { this.names + it } ?: this.names,
+        this.nameRegex,
         maxArgumentCount,
         this.arguments,
         this.definingSupertype,
