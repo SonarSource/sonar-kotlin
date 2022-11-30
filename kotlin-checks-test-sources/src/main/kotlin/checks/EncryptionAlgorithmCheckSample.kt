@@ -69,7 +69,7 @@ internal abstract class EncryptionAlgorithmCheckSample {
         var ecb2 = "ECB"
         val pck2 = "PKCS5Padding"
 
-        Cipher.getInstance(props.getProperty("myAlgo", "$aes/$ecb2/$pck")) // Compliant, ecb2 is 'var'
+        Cipher.getInstance(props.getProperty("myAlgo", "$aes/$ecb2/$pck")) // Noncompliant
 
         val s = "RSA/NONE/NoPadding" // Compliant
 
