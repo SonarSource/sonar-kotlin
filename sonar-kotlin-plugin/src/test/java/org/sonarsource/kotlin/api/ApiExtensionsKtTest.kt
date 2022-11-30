@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.api
 
-import org.assertj.core.api.AbstractAssert
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.ObjectAssert
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -30,23 +29,25 @@ import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtClassLikeDeclaration
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
+import org.jetbrains.kotlin.types.checker.findCorrespondingSupertype
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.converter.Environment
@@ -180,7 +181,10 @@ class ApiExtensionsKtDetermineTypeTest {
         class Foo {
             val prop: Int = 0
             val arr = arrayOf("a", "b")
-        
+            val numb: Number = 2
+            val any: Any = 3
+            val str = "string"
+            
             fun aFun(param: Float): Long {
                 stringReturning()
                 this.prop
@@ -191,7 +195,19 @@ class ApiExtensionsKtDetermineTypeTest {
             fun anotherFun(obj: Foo): Long {
                 obj.prop
             }
+            
+            fun testKtArgument(){
+                aFun( 1.2f )
+            }
+            
+            fun lambda() { 1 }
+            
         }
+        
+        class FooSon : Foo {
+            
+        }
+        
         """.trimIndent()
         )
         bindingContext = kotlinTree.bindingContext
@@ -216,6 +232,13 @@ class ApiExtensionsKtDetermineTypeTest {
     fun `determineType of KtParameter`() {
         val expr = ktFile.findDescendantOfType<KtParameter> { it.text == "param: Float" }!!
 
+        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("kotlin.Float")
+    }
+
+    @Test
+    fun `determineType of KtValueArgument`() {
+        val expr = ktFile.findDescendantOfType<KtValueArgument> { it.text == "1.2f" }!!
         assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
             .isEqualTo("kotlin.Float")
     }
@@ -269,11 +292,16 @@ class ApiExtensionsKtDetermineTypeTest {
     }
 
     @Test
-    fun `determineType else`() {
-        // Block - not supported for now and will return null
-        val expr = ktFile.findDescendantOfType<KtBlockExpression>()!!
+    fun `determineType of KtExpression`() {
+        val expr = ktFile.findDescendantOfType<KtBlockExpression>{ it.text == "{ 1 }" }!!
+        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("kotlin.Int")
+    }
 
-        assertThat(expr.determineType(bindingContext))
+    @Test
+    fun `determineType else`() {
+        val directive = ktFile.findDescendantOfType<KtPackageDirective>()!!
+        assertThat(directive.determineType(bindingContext))
             .isNull()
     }
 
@@ -289,6 +317,31 @@ class ApiExtensionsKtDetermineTypeTest {
 
         assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
             .isEqualTo("bar.Foo")
+    }
+
+    @Test
+    fun `isSuperType of standard kotlin types`() {
+        val intType = ktFile.findDescendantOfType<KtProperty> { it.text == "val prop: Int = 0" }.determineType(bindingContext)!!
+        val numType = ktFile.findDescendantOfType<KtProperty> { it.text == "val numb: Number = 2" }.determineType(bindingContext)!!
+        val anyType = ktFile.findDescendantOfType<KtProperty> { it.text == "val any: Any = 3" }.determineType(bindingContext)!!
+        val strType = ktFile.findDescendantOfType<KtProperty> { it.text == "val str = \"string\"" }.determineType(bindingContext)!!
+        assertThat(numType.isSupertypeOf(intType)).isTrue
+        assertThat(!intType.isSupertypeOf(numType)).isTrue
+        assertThat(anyType.isSupertypeOf(strType) && anyType.isSupertypeOf(numType) && anyType.isSupertypeOf(intType)).isTrue
+        assertThat(!intType.isSupertypeOf(anyType) && !strType.isSupertypeOf(anyType) && !numType.isSupertypeOf(anyType)).isTrue
+        assertThat(!strType.isSupertypeOf(intType) && !intType.isSupertypeOf(strType)).isTrue
+        assertThat(numType.isSupertypeOf(numType)).isFalse
+    }
+
+    @Test
+    fun `isSuperType of custom classes`() {
+        val anyType = ktFile.findDescendantOfType<KtProperty> { it.text == "val any: Any = 3" }.determineType(bindingContext)!!
+        val fooType = ktFile.findDescendantOfType<KtClass> { it.name == "Foo" }.determineType(bindingContext)!!
+        val fooSonType = ktFile.findDescendantOfType<KtClass> { it.name == "FooSon" }.determineType(bindingContext)!!
+        assertThat(fooType.isSupertypeOf(fooSonType) && !fooSonType.isSupertypeOf(fooType)).isTrue
+        assertThat(anyType.isSupertypeOf(fooType) && !fooType.isSupertypeOf(anyType)).isTrue
+        assertThat(anyType.isSupertypeOf(fooSonType)).isTrue
+        assertThat(anyType.isSupertypeOf(anyType)).isFalse
     }
 }
 

@@ -1,0 +1,52 @@
+<p>The Kotlin collections API has methods that allow developers to overcome type-safety restriction of the parameter, such as
+<code>Iterable.contains</code>. When the actual type of the object provided to these methods is not consistent with the target collection’s actual
+type, those methods will always return <code>false</code> or <code>null</code>. This is most likely unintended and hides a design problem.</p>
+<p>This rule raises an issue when the type of the argument of the following APIs is unrelated to the type used for the collection declaration:</p>
+<ul>
+  <li> <code>MutableCollection.remove</code> </li>
+  <li> <code>MutableCollection.removeAll</code> </li>
+  <li> <code>MutableCollection.retainAll</code> </li>
+  <li> <code>Array.contains</code> </li>
+  <li> <code>Array.indexOf</code> </li>
+  <li> <code>Array.lastIndexOf</code> </li>
+  <li> <code>Collection.containsAll</code> </li>
+  <li> <code>Iterable.contains</code> </li>
+  <li> <code>Iterable.indexOf</code> </li>
+  <li> <code>Iterable.lastIndexOf</code> </li>
+  <li> <code>List.indexOf</code> </li>
+  <li> <code>List.lastIndexOf</code> </li>
+  <li> <code>Map.contains</code> </li>
+  <li> <code>Map.containsKey</code> </li>
+  <li> <code>Map.containsValue</code> </li>
+  <li> <code>Map.get</code> </li>
+  <li> <code>MutableMap.remove</code> </li>
+</ul>
+<h2>Noncompliant Code Example</h2>
+<pre>
+fun main(args: Array&lt;String&gt;) {
+    val map: MutableMap&lt;Int, Any&gt; = mutableMapOf()
+    map.remove&lt;Any, Any&gt;("42") // Noncompliant; will return 'null' for sure because 'map' is handling only Integer keys
+
+    // ...
+    val list: MutableList&lt;String&gt; = mutableListOf()
+    val integer = Integer.valueOf(1)
+    if (list.contains&lt;Any&gt;(integer)) { // Noncompliant; always false.
+        list.remove&lt;Any&gt;(integer) // Noncompliant; list.add(integer) doesn't compile, so this will always return 'false'
+    }
+}
+</pre>
+<h2>Compliant Code Example</h2>
+<pre>
+fun main(args: Array&lt;String&gt;) {
+    val map: MutableMap&lt;Int, Any&gt; = mutableMapOf()
+    map.remove(42)
+
+    // ...
+    val list: MutableList&lt;String&gt; = mutableListOf()
+    val str = ""
+    if (list.contains(str)) {
+        list.remove(str)
+    }
+}
+</pre>
+

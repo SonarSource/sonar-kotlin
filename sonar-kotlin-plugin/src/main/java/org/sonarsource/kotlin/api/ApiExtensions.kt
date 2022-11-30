@@ -33,7 +33,6 @@ import org.jetbrains.kotlin.descriptors.ValueDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
-import org.jetbrains.kotlin.js.translate.callTranslator.getReturnType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtAnnotated
@@ -60,6 +59,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
@@ -73,6 +73,7 @@ import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedValueArgument
+import org.jetbrains.kotlin.resolve.calls.smartcasts.getKotlinTypeForComparison
 import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
@@ -88,6 +89,7 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.checker.TypeCheckingProcedure.findCorrespondingSupertype
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
 
@@ -146,10 +148,12 @@ internal fun KtExpression.predictRuntimeValueExpression(
 
             referenceTarget?.predictRuntimeValueExpression(bindingContext, declarations)
         }
+
         is KtParenthesizedExpression -> deparenthesized.expression?.predictRuntimeValueExpression(bindingContext, declarations)
         is KtBinaryExpressionWithTypeRHS -> deparenthesized.left.predictRuntimeValueExpression(bindingContext, declarations)
         is KtThisExpression -> bindingContext.get(BindingContext.REFERENCE_TARGET, deparenthesized.instanceReference)
             ?.findFunctionLiteral(deparenthesized, bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
+
         else -> deparenthesized.getCall(bindingContext)?.predictValueExpression(bindingContext)
     } ?: deparenthesized as? KtExpression
 } ?: this
@@ -209,6 +213,7 @@ private fun KtExpression.stringValue(
         }
         if (entries.all { it != null }) entries.joinToString("") else null
     }
+
     is KtNameReferenceExpression -> {
         val descriptor = bindingContext.get(BindingContext.REFERENCE_TARGET, this)
         descriptor?.let {
@@ -219,11 +224,13 @@ private fun KtExpression.stringValue(
             } else null
         }
     }
+
     is KtDotQualifiedExpression -> selectorExpression?.stringValue(bindingContext, declarations)
     is KtBinaryExpression ->
         if (operationToken == KtTokens.PLUS)
             left?.stringValue(bindingContext, declarations)?.plus(right?.stringValue(bindingContext, declarations))
         else null
+
     else -> null
 }
 
@@ -263,10 +270,12 @@ private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(bindingContext:
             in KOTLIN_CHAIN_CALL_CONSTRUCTS -> {
                 (larwCallCandidate.explicitReceiver as? ExpressionReceiver)?.expression?.predictRuntimeValueExpression(bindingContext)
             }
+
             "with" -> {
                 larwCallCandidate.getResolvedCall(bindingContext)?.getFirstArgumentExpression()
                     ?.predictRuntimeValueExpression(bindingContext)
             }
+
             else -> null
         }
     }
@@ -408,7 +417,7 @@ fun ResolvedCall<*>.simpleArgExpressionOrNull(index: Int) =
 fun KtNameReferenceExpression.findUsages(
     searchStartNode: KtExpression = this,
     allUsages: Boolean = false,
-    predicate: (KtNameReferenceExpression) -> Boolean = { _ -> true }
+    predicate: (KtNameReferenceExpression) -> Boolean = { _ -> true },
 ) =
     mutableListOf<KtNameReferenceExpression>().also { acc ->
         searchStartNode.getParentOfType<KtBlockExpression>(false)
@@ -430,7 +439,7 @@ fun KtNameReferenceExpression.findUsages(
  */
 fun KtProperty.findUsages(
     searchStartNode: KtExpression = this,
-    predicate: (KtNameReferenceExpression) -> Boolean = { _ -> true }
+    predicate: (KtNameReferenceExpression) -> Boolean = { _ -> true },
 ) =
     mutableListOf<KtNameReferenceExpression>().also { acc ->
         searchStartNode.getParentOfType<KtBlockExpression>(false)
@@ -462,6 +471,7 @@ fun KtExpression?.isLocalVariable(bindingContext: BindingContext) =
 fun KtExpression?.setterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
     is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
         (matcher.matches((bindingContext.get(BindingContext.REFERENCE_TARGET, this) as? PropertyDescriptor)?.unwrappedSetMethod))
+
     is KtQualifiedExpression -> selectorExpression.setterMatches(bindingContext, propertyName, matcher)
     else -> false
 }
@@ -469,6 +479,7 @@ fun KtExpression?.setterMatches(bindingContext: BindingContext, propertyName: St
 fun KtExpression?.getterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
     is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
         (matcher.matches((bindingContext.get(BindingContext.REFERENCE_TARGET, this) as? PropertyDescriptor)?.unwrappedGetMethod))
+
     is KtQualifiedExpression -> selectorExpression.getterMatches(bindingContext, propertyName, matcher)
     else -> false
 }
@@ -490,10 +501,16 @@ fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
             is KtReferenceExpression -> bindingContext.get(BindingContext.REFERENCE_TARGET, this).determineType()
             is KtFunction -> bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, this).determineType()
             is KtClass -> bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, this).determineType()
-            else -> bindingContext.get(BindingContext.VARIABLE, it)?.type
+            is KtExpression -> this.getKotlinTypeForComparison(bindingContext)
+            is KtValueArgument -> this.getArgumentExpression()?.predictRuntimeValueExpression(bindingContext)?.determineType(bindingContext)
+            else -> null
         }
 
     }
+
+fun KotlinType.isSupertypeOf(other: KotlinType): Boolean {
+    return findCorrespondingSupertype(other, this).let { it != null && it != other }
+}
 
 fun DeclarationDescriptor?.determineType(): KotlinType? =
     when (this) {
