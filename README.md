@@ -63,20 +63,19 @@ You can also run single ruling tests, e.g.:
 
 * By default, the SonarQube version used is LATEST_RELEASE, you can use the following property to set a different one:
 
-  -Dsonar.runtimeVersion=9.7.1.62043
+      -Dsonar.runtimeVersion=9.7.1.62043
 
 * By default, analyzed projects are built by gradle only if changed, but you can force a clean build by using:
 
-    -DcleanProjects=true
+      -DcleanProjects=true
 
 * To keep SonarQube running at the end of the analysis:
 
-    -DkeepSonarqubeRunning=true
+       -DkeepSonarqubeRunning=true
 
 * To see in SonarQube not only the issue differences but all the issues:
 
-    -DkeepSonarqubeRunning=true -DreportAll=true
-
+       -DkeepSonarqubeRunning=true -DreportAll=true
 
 ### Debugging ruling tests
 
@@ -102,13 +101,25 @@ The Gradle task `generateRuleMetadata` will download the rule metadata from the 
 For example, execute the following in the project root to fetch the metadata for rule `S42`:
 
     ./gradlew generateRuleMetadata -PruleKey=S42
-    
+
 If fetching from a branch:
 
     ./gradlew generateRuleMetadata -PruleKey=S4830 -Pbranch=a_branch
 
+Alternatively, you can let the tool auto-detect the branch. If you do not provide a branch, it will look at the PRs
+open in the RSPEC repository that contain the rule key in their name. If it finds any, you will be presented with a
+choice of which branch to fetch the metadata from. Points to note about this feature:
+
+* You can also add `-PautoSelectBranch` if you would like the script to automatically use the first branch it finds,
+  if any, instead of prompting you for an interactive decision.
+* You can specify `-Pbranch=master` to default to master.
+* Usually, this feature should work as-is. However, it is possible to run into GitHub's rate limiting, which is lower
+  for unauthenticated API requests. If you store a GitHub API token in the environment variable `GH_API_TOKEN`,
+  it will be used for all requests to GitHub. Make sure you give the token sufficient rights to fetch details about and
+  search pull requests in the RSPEC repository.
+
 If you want to update all rules' metadata, you can use:
-    
+
     ./gradlew updateRuleMetadata
 
 ### Implementing a new rule
@@ -122,7 +133,10 @@ rule `S42` in the class `AnswersEverythingCheck`, you can call the following in 
     ./gradlew setupRuleStubs -PruleKey=S42 -PclassName=AnswersEverythingCheck
 
 ### Updating external linter rule mappings
+
 See [this README in the utils](utils-kotlin/README.md).
 
 ### Visualizing ASTs
-If you want a graphical output of ASTs, see [this README in the utils](utils-kotlin/README.md) for more info on how to convert an AST into a DOT format.
+
+If you want a graphical output of ASTs, see [this README in the utils](utils-kotlin/README.md) for more info on how to convert an AST into a
+DOT format.
