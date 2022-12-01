@@ -87,7 +87,7 @@ class CollectionInappropriateCallsCheck : CallAbstractCheck() {
 
         val collectionType = callExpression.predictReceiverExpression(ctx).determineType(ctx) ?: return
         val collectionArgumentIndex = funMatcherToArgumentIndexMap[funMatcherImpl]!!
-        val collectionArgumentType = collectionType.arguments[collectionArgumentIndex].type.makeNotNullable()
+        val collectionArgumentType = collectionType.arguments[collectionArgumentIndex].type
 
         // for methods like removeAll, containsAll etc.. we pass a collection as argument,
         // and so we want to check the type of the collection<argument> instead

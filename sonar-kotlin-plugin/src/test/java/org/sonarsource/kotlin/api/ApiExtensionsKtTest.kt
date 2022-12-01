@@ -55,6 +55,7 @@ import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.util.TreeMap
+import kotlin.random.Random
 
 internal class ApiExtensionsKtTest {
 
