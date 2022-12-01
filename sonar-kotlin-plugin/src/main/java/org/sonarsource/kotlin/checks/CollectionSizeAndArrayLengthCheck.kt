@@ -19,9 +19,13 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.com.intellij.psi.tree.IElementType
+import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
@@ -51,23 +55,35 @@ class CollectionSizeAndArrayLengthCheck : AbstractCheck() {
 
         val leftIntValue = bet.left?.predictRuntimeIntValue(ctx)
         val rightIntValue = bet.right?.predictRuntimeIntValue(ctx)
-        if (!leftIntValue.isZeroOrNegative() && !rightIntValue.isZeroOrNegative()) return
 
-        val isLeftZero = leftIntValue.isZeroOrNegative()
-
-        val testedExpr = if (isLeftZero) bet.right else bet.left
-        val integerValue = if (isLeftZero) leftIntValue else rightIntValue
-        val opWithEq = if (isLeftZero) KtTokens.LTEQ else KtTokens.GTEQ
-        val opWithoutEq = if (isLeftZero) KtTokens.GT else KtTokens.LT
-
-        if (testedExpr is KtDotQualifiedExpression && MATCHERS.any { it.matches(testedExpr.getResolvedCall(ctx)) }) {
-            if (opToken == opWithEq) {
-                fileCtx.reportIssue(bet, ISSUE_MESSAGE_SIZE_ALWAYS_GTEQ)
-            } else if (opToken == opWithoutEq || (integerValue.isNegative() && opToken == KtTokens.EQEQ)) {
-                fileCtx.reportIssue(bet, ISSUE_MESSAGE_SIZE_NEVER_LT)
-            }
+        val msg = if(leftIntValue.isZeroOrNegative()){
+            checkConditionsAndSelectMessage(ctx, opToken, bet.right, leftIntValue, KtTokens.LTEQ, KtTokens.GT)
+        }else if(rightIntValue.isZeroOrNegative()){
+            checkConditionsAndSelectMessage(ctx, opToken, bet.left, rightIntValue, KtTokens.GTEQ, KtTokens.LT)
+        }else{
+            null
         }
 
+        msg?.let { fileCtx.reportIssue(bet, it) }
+
+    }
+
+    private fun checkConditionsAndSelectMessage(
+        ctx: BindingContext,
+        opToken: IElementType,
+        testedExpr: KtExpression?,
+        integerValue: Int?,
+        opWithEq: KtSingleValueToken,
+        opWithoutEq: KtSingleValueToken,
+    ): String? {
+        if (testedExpr is KtDotQualifiedExpression && MATCHERS.any { it.matches(testedExpr.getResolvedCall(ctx)) }) {
+            if (opToken == opWithEq) {
+                return ISSUE_MESSAGE_SIZE_ALWAYS_GTEQ
+            } else if (opToken == opWithoutEq || (integerValue.isNegative() && opToken == KtTokens.EQEQ)) {
+                return ISSUE_MESSAGE_SIZE_NEVER_LT
+            }
+        }
+        return null
     }
 
     fun Int?.isZeroOrNegative(): Boolean {
