@@ -52,6 +52,7 @@ import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.utils.kotlinTreeOf
+import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.util.TreeMap
 
@@ -177,8 +178,13 @@ class ApiExtensionsKtDetermineTypeTest {
         val kotlinTree = parse(
             """
         package bar
-        
+        import java.nio.charset.StandardCharsets
         class Foo {
+        
+            companion object {
+                const val feww = "test"    
+            }
+        
             val prop: Int = 0
             val arr = arrayOf("a", "b")
             val numb: Number = 2
@@ -188,6 +194,8 @@ class ApiExtensionsKtDetermineTypeTest {
             fun aFun(param: Float): Long {
                 stringReturning()
                 this.prop
+                println(Foo.feww)
+                StandardCharsets.US_ASCII
                 val localVal: Double
             }
             fun stringReturning(): String {}
@@ -262,9 +270,12 @@ class ApiExtensionsKtDetermineTypeTest {
     @Test
     fun `determineType of KtDotQualifiedExpression`() {
         val expr = ktFile.findDescendantOfType<KtDotQualifiedExpression> { it.text == "this.prop" }!!
-
+        val expr2 = ktFile.findDescendantOfType<KtDotQualifiedExpression> { it.text == "StandardCharsets.US_ASCII" }!!
         assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
             .isEqualTo("kotlin.Int")
+        assertThat(expr2.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("java.nio.charset.Charset")
+
     }
 
     @Test
