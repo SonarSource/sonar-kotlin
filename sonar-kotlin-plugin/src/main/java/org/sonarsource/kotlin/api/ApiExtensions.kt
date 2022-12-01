@@ -218,13 +218,9 @@ private fun KtExpression.stringValue(
             if (declaration is KtProperty && !declaration.isVar) {
                 declarations.add(declaration)
                 declaration.delegateExpressionOrInitializer?.stringValue(bindingContext, declarations)
-            } else if (declaration is KtProperty && declaration.isVar) {
-                declarations.add(declaration)
-                declaration.getStringValues()
             } else null
         }
     }
-
     is KtDotQualifiedExpression -> selectorExpression?.stringValue(bindingContext, declarations)
     is KtBinaryExpression ->
         if (operationToken == KtTokens.PLUS)
@@ -232,19 +228,6 @@ private fun KtExpression.stringValue(
         else null
 
     else -> null
-}
-
-private fun KtProperty.getStringValues(): String {
-    var value = ""
-    this.getParentOfType<KtBlockExpression>(false)
-        ?.collectDescendantsOfType<KtStringTemplateExpression>()
-        ?.let { usages ->
-            for (usage in usages) {
-                value += usage.entries.mapNotNull { it.text }
-                    .joinToString("")
-            }
-        }
-    return value
 }
 
 private fun Call.predictValueExpression(bindingContext: BindingContext) =
@@ -345,9 +328,6 @@ private fun KtTypeReference.determineType(bindingContext: BindingContext) =
     bindingContext.get(BindingContext.TYPE, this)
 
 fun KtTypeReference.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    determineType(bindingContext)?.getJetTypeFqName(printTypeArguments)
-
-fun KtExpression.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getJetTypeFqName(printTypeArguments)
 
 fun KtNamedFunction.returnTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =

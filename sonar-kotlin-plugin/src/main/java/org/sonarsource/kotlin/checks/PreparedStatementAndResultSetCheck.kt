@@ -25,9 +25,11 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.sonar.check.Rule
+import org.sonarsource.kotlin.api.ArgumentMatcher
 import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.determineTypeAsString
+import org.sonarsource.kotlin.api.FunMatcherImpl
+import org.sonarsource.kotlin.api.INT_TYPE
 import org.sonarsource.kotlin.api.predictReceiverExpression
 import org.sonarsource.kotlin.api.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.predictRuntimeStringValue
@@ -36,9 +38,14 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private val PREPARE_STATEMENT = FunMatcher(qualifier = "java.sql.Connection", name = "prepareStatement")
 
-private val PREPARE_STATEMENT_SET = FunMatcher(qualifier = "java.sql.PreparedStatement", nameRegex = """^set""".toRegex())
+private val PREPARE_STATEMENT_SET = FunMatcher(qualifier = "java.sql.PreparedStatement", nameRegex = """^set.*?""".toRegex()) {
+    withArguments(ArgumentMatcher(INT_TYPE), ArgumentMatcher.ANY)
+}
 
-private val RESULT_SET_GET = FunMatcher(qualifier = "java.sql.ResultSet", nameRegex = """^get""".toRegex())
+private val RESULT_SET_GET = FunMatcher(qualifier = "java.sql.ResultSet", nameRegex = """^get.*?""".toRegex()) {
+    withArguments(ArgumentMatcher(INT_TYPE))
+    withArguments(ArgumentMatcher(INT_TYPE), ArgumentMatcher.ANY)
+}
 
 @Rule(key = "S2695")
 class PreparedStatementAndResultSetCheck : CallAbstractCheck() {
@@ -48,40 +55,42 @@ class PreparedStatementAndResultSetCheck : CallAbstractCheck() {
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
         resolvedCall: ResolvedCall<*>,
+        matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext,
     ) {
         val bindingContext = kotlinFileContext.bindingContext
 
-        val firstArgument = callExpression.valueArguments[0].getArgumentExpression() ?: return
+        val firstArgument = callExpression.valueArguments[0].getArgumentExpression()!!
         val receiver = callExpression.predictReceiverExpression(bindingContext) ?: return
-
         val firstArgumentValue = firstArgument.predictRuntimeIntValue(bindingContext) ?: return
-        val isResultSet = receiver.determineTypeAsString(bindingContext).equals("java.sql.ResultSet")
 
-        if (isResultSet && firstArgumentValue == 0) {
+        if (matchedFun.qualifier.equals("java.sql.ResultSet") && firstArgumentValue == 0) {
             kotlinFileContext.reportIssue(firstArgument, "ResultSet indices start at 1.")
-        } else if (!isResultSet) {
+        }
+        if (matchedFun.qualifier.equals("java.sql.PreparedStatement")) {
             if (firstArgumentValue == 0) {
                 kotlinFileContext.reportIssue(firstArgument, "PreparedStatement indices start at 1.")
             } else {
-                val numberOfParameters = getNumberOfParameters(bindingContext, receiver, firstArgumentValue)
-                if (firstArgumentValue > numberOfParameters) {
-                    kotlinFileContext.reportIssue(
-                        firstArgument,
-                        "This \"PreparedStatement\" " + (if (numberOfParameters == 0) "has no" else "only has $numberOfParameters") + " parameters."
-                    )
+                getNumberOfParameters(bindingContext, receiver)?.let {
+                    if (firstArgumentValue > it) {
+                        kotlinFileContext.reportIssue(
+                            firstArgument,
+                            """This "PreparedStatement" ${if (it == 0) "has no" else "only has $it"} parameters."""
+                        )
+                    }
                 }
+
             }
         }
     }
 }
 
-private fun getNumberOfParameters(bindingContext: BindingContext, receiver: KtExpression, defaultValue: Int) =
+private fun getNumberOfParameters(bindingContext: BindingContext, receiver: KtExpression) =
     receiver.predictRuntimeValueExpression(bindingContext)
         .getCall(bindingContext)?.let {
             if (PREPARE_STATEMENT.matches(it, bindingContext)) {
                 it.valueArguments[0].getArgumentExpression()
                     ?.predictRuntimeStringValue(bindingContext)
                     ?.count { c -> c.toString() == "?" }
-            } else defaultValue
-        } ?: defaultValue
+            } else null
+        }

@@ -85,7 +85,7 @@ abstract class PreparedStatementAndResultSetCheckSample {
         var selectClause = ";"
         selectClause = "SELECT anything FROM somewhere " + selectClause
         val ps = connection.prepareStatement(selectClause)
-        ps.setString(1, "anything") // Noncompliant
+        ps.setString(1, "anything") // Compliant - do not check var
     }
 
     fun concatenation2(connection: Connection) {
@@ -96,7 +96,7 @@ abstract class PreparedStatementAndResultSetCheckSample {
         ps.setString(1, "anything") // Compliant
         ps.setString(2, "anything") // Compliant
         ps.setString(3, "anything") // Compliant
-        ps.setString(4, "anything") // Noncompliant
+        ps.setString(4, "anything") // Compliant - do not check var
     }
 
 }

@@ -119,8 +119,8 @@ class FunMatcherImpl(
         if (functionDescriptor is ConstructorDescriptor) {
             matchConstructor
         } else if (!matchConstructor) {
-            nameRegex?.containsMatchIn(functionDescriptor.name.asString())
-                ?: (names.isEmpty() || functionDescriptor.name.asString() in names)
+            val name = functionDescriptor.name.asString()
+            (nameRegex == null && names.isEmpty()) || name in names || (nameRegex != null && nameRegex.matches(name))
         } else false
 
     private fun checkCallParameters(descriptor: CallableDescriptor): Boolean {
