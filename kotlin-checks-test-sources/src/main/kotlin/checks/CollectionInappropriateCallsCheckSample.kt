@@ -3,11 +3,12 @@ package checks
 class CollectionInappropriateCallsCheckSample {
 
     val intMap = mutableMapOf<Int, String>()
-    val numMap = mutableMapOf<Number, Number>()
+    val numMap = mutableMapOf<Number?, Number>()
     val intArr = arrayOf<Int>()
     val intList = listOf<Int>(1, 2, 3)
     val strList = listOf<String>("1", "2", "3")
     val intMutableCollection = mutableListOf<Int>(2, 3, 4)
+    val nullableIntArray = arrayOf<Int?>()
 
     fun getListOfStrings() = listOf<String>()
 
@@ -19,8 +20,7 @@ class CollectionInappropriateCallsCheckSample {
 
     fun noncompliant(int: Int, number: Number, str: String) {
         intMap.containsValue<Int, Any>(1) // Noncompliant
-
-        numMap.remove<Any, Number>("string") // Noncompliant {{This key/object cannot ever be present in the collection}}
+        numMap.remove<Any?, Number>("string") // Noncompliant {{This key/object cannot ever be present in the collection}}
         with(intMap) {
             this.remove<Any, String>("2") // Noncompliant
         }
@@ -46,10 +46,12 @@ class CollectionInappropriateCallsCheckSample {
 
     }
 
-    fun compliant(int: Int, number: Number, any: Any) {
+    fun compliant(int: Int, number: Number, any: Any, nullable: Int?) {
+        intMap.remove(nullable)
+        nullableIntArray.indexOf(int)
         intMap.remove(number) // Compliant: Number might be an Int, and we want to avoid FPs
         intMap.remove<Any, String>(any)
-        numMap.remove<Any, Number>(int) // Compliant: we can use map key subtypes as arguments
+        numMap.remove<Any?, Number>(int) // Compliant: we can use map key subtypes as arguments
         var x = 2
         intMap.remove<Any, String>(x) // Compliant
 
