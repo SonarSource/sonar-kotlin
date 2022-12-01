@@ -76,6 +76,7 @@ import org.sonarsource.kotlin.checks.MainSafeCoroutinesCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
 import org.sonarsource.kotlin.checks.MobileDatabaseEncryptionKeysCheck
 import org.sonarsource.kotlin.checks.NestedMatchCheck
+import org.sonarsource.kotlin.checks.ObjectOutputStreamCheck
 import org.sonarsource.kotlin.checks.OneStatementPerLineCheck
 import org.sonarsource.kotlin.checks.ParsingErrorCheck
 import org.sonarsource.kotlin.checks.PseudoRandomCheck
@@ -183,6 +184,7 @@ val KOTLIN_CHECKS = listOf(
     MatchCaseTooBigCheck::class.java,
     MobileDatabaseEncryptionKeysCheck::class.java,
     NestedMatchCheck::class.java,
+    ObjectOutputStreamCheck::class.java,
     OneStatementPerLineCheck::class.java,
     ParsingErrorCheck::class.java,
     PseudoRandomCheck::class.java,
