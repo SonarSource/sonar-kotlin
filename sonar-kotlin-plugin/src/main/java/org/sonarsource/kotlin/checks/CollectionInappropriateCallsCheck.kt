@@ -21,6 +21,8 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
+import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.ArgumentMatcher
 import org.sonarsource.kotlin.api.CallAbstractCheck
@@ -85,13 +87,18 @@ class CollectionInappropriateCallsCheck : CallAbstractCheck() {
 
         val collectionType = callExpression.predictReceiverExpression(ctx).determineType(ctx) ?: return
         val collectionArgumentIndex = funMatcherToArgumentIndexMap[funMatcherImpl]!!
-        val collectionArgumentType = collectionType.arguments[collectionArgumentIndex].type
+        val collectionArgumentType = collectionType.arguments[collectionArgumentIndex].type.makeNotNullable()
 
         // for methods like removeAll, containsAll etc.. we pass a collection as argument,
         // and so we want to check the type of the collection<argument> instead
         if (funMatcherImpl == COLLECTION_ARGUMENT_EXTENSIONS_MATCHER) {
             argType = argType.arguments.first().type
         }
+
+        argType = argType.makeNotNullable()
+
+        // We avoid raising FPs for unresolved generic types.
+        if (argType.isTypeParameter() || collectionArgumentType.isTypeParameter()) return
 
         if (argType != collectionArgumentType
             && !collectionArgumentType.isSupertypeOf(argType)

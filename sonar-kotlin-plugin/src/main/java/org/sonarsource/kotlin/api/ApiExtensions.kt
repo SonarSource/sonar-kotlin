@@ -499,7 +499,7 @@ fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
             is KtParameter -> determineType(bindingContext)
             is KtTypeReference -> determineType(bindingContext)
             is KtProperty -> determineType(bindingContext)
-            is KtDotQualifiedExpression -> resolveReferenceTarget(bindingContext).determineType()
+            is KtDotQualifiedExpression -> getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
             is KtReferenceExpression -> bindingContext.get(BindingContext.REFERENCE_TARGET, this).determineType()
             is KtFunction -> bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, this).determineType()
             is KtClass -> bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, this).determineType()
