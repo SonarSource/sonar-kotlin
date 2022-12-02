@@ -43,7 +43,9 @@ class FunMatcherImpl(
     // so you just need to specify the package
     val qualifier: String? = null,
     val names: Set<String> = emptySet(),
-    private val nameRegex: Regex?,
+    // nameRegex is used when function name can be matched with regex,
+    // and can be used together with names argument
+    val nameRegex: Regex? = null,
     private val maxArgumentCount: Int = Int.MAX_VALUE,
     val arguments: List<List<ArgumentMatcher>> = emptyList(),
     val definingSupertype: String? = null,

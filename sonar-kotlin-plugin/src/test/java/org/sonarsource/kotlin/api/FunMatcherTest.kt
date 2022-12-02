@@ -142,10 +142,18 @@ class FunMatcherTest {
     }
 
     @Test
+    fun `Match method by name regex`() {
+        val funMatcher = FunMatcher(nameRegex = """^say.*+""".toRegex())
+
+        assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
+        assertThat(funMatcher.matches(ktCallExpression2, tree.bindingContext)).isTrue
+    }
+
+    @Test
     fun `Match method by type and name regex`() {
         val funMatcher = FunMatcher {
             qualifier = "sample.SampleClass"
-            nameRegex = """^say.*?""".toRegex()
+            nameRegex = """^say.*+""".toRegex()
         }
 
         assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
@@ -157,7 +165,7 @@ class FunMatcherTest {
         val funMatcher = FunMatcher {
             qualifier = "sample.SampleClass"
             name = "sayHello"
-            nameRegex = """^say.*?""".toRegex()
+            nameRegex = """^say.*+""".toRegex()
         }
 
         assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
@@ -169,7 +177,7 @@ class FunMatcherTest {
         val funMatcher = FunMatcher {
             qualifier = "sample.SampleClass"
             name = "anything"
-            nameRegex = """^say.*?""".toRegex()
+            nameRegex = """^say.*+""".toRegex()
         }
 
         assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isTrue
@@ -181,7 +189,7 @@ class FunMatcherTest {
         val funMatcher = FunMatcher {
             qualifier = "sample.SampleClass"
             name = "sayHello"
-            nameRegex = """^lala.*?""".toRegex()
+            nameRegex = """^lala.*+""".toRegex()
         }
 
         assertThat(funMatcher.matches(ktCallExpression1, tree.bindingContext)).isTrue

@@ -38,11 +38,11 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private val PREPARE_STATEMENT = FunMatcher(qualifier = "java.sql.Connection", name = "prepareStatement")
 
-private val PREPARE_STATEMENT_SET = FunMatcher(qualifier = "java.sql.PreparedStatement", nameRegex = """^set.*?""".toRegex()) {
+private val PREPARE_STATEMENT_SET = FunMatcher(qualifier = "java.sql.PreparedStatement", nameRegex = """^set.*+""".toRegex()) {
     withArguments(ArgumentMatcher(INT_TYPE), ArgumentMatcher.ANY)
 }
 
-private val RESULT_SET_GET = FunMatcher(qualifier = "java.sql.ResultSet", nameRegex = """^get.*?""".toRegex()) {
+private val RESULT_SET_GET = FunMatcher(qualifier = "java.sql.ResultSet", nameRegex = """^get.*+""".toRegex()) {
     withArguments(ArgumentMatcher(INT_TYPE))
     withArguments(ArgumentMatcher(INT_TYPE), ArgumentMatcher.ANY)
 }
@@ -64,24 +64,27 @@ class PreparedStatementAndResultSetCheck : CallAbstractCheck() {
         val receiver = callExpression.predictReceiverExpression(bindingContext) ?: return
         val firstArgumentValue = firstArgument.predictRuntimeIntValue(bindingContext) ?: return
 
-        if (matchedFun.qualifier.equals("java.sql.ResultSet") && firstArgumentValue == 0) {
-            kotlinFileContext.reportIssue(firstArgument, "ResultSet indices start at 1.")
-        }
-        if (matchedFun.qualifier.equals("java.sql.PreparedStatement")) {
-            if (firstArgumentValue == 0) {
-                kotlinFileContext.reportIssue(firstArgument, "PreparedStatement indices start at 1.")
-            } else {
-                getNumberOfParameters(bindingContext, receiver)?.let {
-                    if (firstArgumentValue > it) {
-                        kotlinFileContext.reportIssue(
-                            firstArgument,
-                            """This "PreparedStatement" ${if (it == 0) "has no" else "only has $it"} parameters."""
-                        )
+        when (matchedFun) {
+            RESULT_SET_GET -> {
+                if (firstArgumentValue == 0) kotlinFileContext.reportIssue(firstArgument, "ResultSet indices start at 1.")
+            }
+
+            PREPARE_STATEMENT_SET -> {
+                if (firstArgumentValue == 0) {
+                    kotlinFileContext.reportIssue(firstArgument, "PreparedStatement indices start at 1.")
+                } else {
+                    getNumberOfParameters(bindingContext, receiver)?.let {
+                        if (firstArgumentValue > it) {
+                            kotlinFileContext.reportIssue(
+                                firstArgument,
+                                """This "PreparedStatement" ${if (it == 0) "has no" else "only has $it"} parameters."""
+                            )
+                        }
                     }
                 }
-
             }
         }
+
     }
 }
 
