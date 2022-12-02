@@ -56,11 +56,11 @@ class CollectionSizeAndArrayLengthCheck : AbstractCheck() {
         val leftIntValue = bet.left?.predictRuntimeIntValue(ctx)
         val rightIntValue = bet.right?.predictRuntimeIntValue(ctx)
 
-        val msg = if(leftIntValue.isZeroOrNegative()){
+        val msg = if (leftIntValue.isZeroOrNegative()) {
             checkConditionsAndSelectMessage(ctx, opToken, bet.right, leftIntValue, KtTokens.LTEQ, KtTokens.GT)
-        }else if(rightIntValue.isZeroOrNegative()){
+        } else if (rightIntValue.isZeroOrNegative()) {
             checkConditionsAndSelectMessage(ctx, opToken, bet.left, rightIntValue, KtTokens.GTEQ, KtTokens.LT)
-        }else{
+        } else {
             null
         }
 
