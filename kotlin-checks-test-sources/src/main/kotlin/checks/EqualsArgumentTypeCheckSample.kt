@@ -1,0 +1,105 @@
+package checks
+
+abstract class EqualsArgumentTypeCheckSample {
+
+    class MyClass {
+        override fun equals(other: Any?): Boolean { // Noncompliant {{Add a type test to this method.}}
+            val mc = other as MyClass
+            // ...
+            return this == mc
+        }
+    }
+
+    class MyClass1 {
+        val a = 1
+        override fun equals(other: Any?): Boolean { // Compliant
+            if (other is MyClass1) {
+                val mc = other
+                mc.a
+                // ...
+                return this === mc
+            }
+            return false
+        }
+    }
+
+    class MyClass2 {
+        val a = 1
+        override fun equals(other: Any?): Boolean { // Compliant
+            if (other !is MyClass2)
+                return false
+            val mc = other
+            mc.a
+            // ...
+            return this === mc
+        }
+    }
+
+    class MyClass3 {
+        class Klas1 {
+            val a = 1
+        }
+
+        override fun equals(other: Any?): Boolean { // Compliant
+            if (other !is Klas1)
+                return false
+            val mc = other
+            mc.a
+            // ...
+            return this === mc
+        }
+    }
+
+    class MyClass4 {
+        override fun equals(other: Any?): Boolean { // Compliant
+            if (other?.javaClass != MyClass4::class.java)
+                return false
+            val mc = other as MyClass4
+            // ...
+            return this == mc
+        }
+    }
+
+    class MyClass5 {
+        override fun equals(other: Any?): Boolean { // Compliant
+            if (other?.javaClass != this.javaClass)
+                return false
+            val mc = other as MyClass5
+            // ...
+            return this == mc
+        }
+    }
+
+    class MyClass6 {
+        override fun equals(other: Any?): Boolean { // Compliant
+            if (this.javaClass != other?.javaClass)
+                return false
+            val mc = other as MyClass6
+            // ...
+            return this == mc
+        }
+    }
+
+    class MyClass7 {
+        override fun equals(other: Any?): Boolean { // Compliant
+            if (other?.javaClass == this.javaClass) {
+                val mc = other as MyClass7
+                // ...
+                return this == mc
+            }
+            return false
+        }
+    }
+
+    class MyClass8 {
+        override fun equals(other: Any?): Boolean { // Noncompliant
+            if (other != null) {
+                val mc = other as MyClass8
+                // ...
+                return this == mc
+            }
+            return false
+        }
+    }
+
+}
