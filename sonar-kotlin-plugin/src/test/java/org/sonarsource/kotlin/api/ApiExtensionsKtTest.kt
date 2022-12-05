@@ -191,11 +191,13 @@ class ApiExtensionsKtDetermineTypeTest {
             val numb: Number = 2
             val any: Any = 3
             val str = "string"
+            val lz by lazy { "str" }
             
             fun aFun(param: Float): Long {
                 stringReturning()
                 this.prop
                 println(Foo.feww)
+                println(lz)
                 StandardCharsets.US_ASCII
                 val localVal: Double
             }
@@ -250,6 +252,11 @@ class ApiExtensionsKtDetermineTypeTest {
         val expr = ktFile.findDescendantOfType<KtValueArgument> { it.text == "1.2f" }!!
         assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
             .isEqualTo("kotlin.Float")
+
+        val exprLazy = ktFile.findDescendantOfType<KtValueArgument> { it.text == "lz" }!!
+        assertThat(exprLazy.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("kotlin.String")
+
     }
 
     @Test

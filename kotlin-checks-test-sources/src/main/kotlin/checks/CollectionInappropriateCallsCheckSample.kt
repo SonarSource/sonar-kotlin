@@ -12,6 +12,19 @@ class CollectionInappropriateCallsCheckSample {
 
     fun getListOfStrings() = listOf<String>()
 
+    val lazy by lazy {
+        "return "
+    }
+
+    val actualLazy = lazy {
+        "asd"
+    }
+
+    fun testBy(){
+        strList.indexOf<Any>(lazy) // Compliant
+        strList.indexOf<Any>(actualLazy) // Noncompliant
+    }
+
     class StringListProvider {
         companion object {
             fun get() = listOf<String>()
