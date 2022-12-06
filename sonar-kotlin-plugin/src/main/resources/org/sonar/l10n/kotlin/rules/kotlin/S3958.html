@@ -1,0 +1,38 @@
+<p>There are two types of sequence and stream operations:</p>
+<ul>
+  <li> Intermediate operations, which return another sequence or stream </li>
+  <li> Terminal operations, which return something else </li>
+</ul>
+<p>Intermediate operations are lazy, meaning they aren’t actually executed until and unless a terminal sequence operation is performed on their
+results. Consequently, if the result of an intermediate sequence operation is not fed to a terminal operation, it serves no purpose, which is almost
+certainly an error.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+val sequence = sequenceOf("Hello", " ", "World")
+var totalLength = 0
+sequence.map { totalLength += it.length } // Noncompliant, do nothing, "map" is not a terminal operation
+// here totalLength == 0
+</pre>
+<pre>
+val stream = listOf("Hello", " ", "World").stream()
+stream.filter { it.isNotBlank() }  // Noncompliant, do nothing, "filter" is not a terminal operation
+// the following "forEach" throws an exception, only one method can operate on a stream instance
+// here "filter" has already operated on it.
+stream.forEach { println(it) }
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+val sequence = listOf("Hello", " ", "World").asSequence()
+var totalLength = sequence.map { it.length }.sum() // Compliant, the sequence ends with the terminal operation "sum"
+// here totalLength == 11
+</pre>
+<pre>
+listOf("Hello", " ", "World").stream()
+    .filter { it.isNotBlank() }
+    .forEach { println(it) } // Compliant, the stream ends with the terminal operation "forEach"
+</pre>
+<h2>See</h2>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/sequences.html#sequence-operations">Sequence operations</a> </li>
+</ul>
+

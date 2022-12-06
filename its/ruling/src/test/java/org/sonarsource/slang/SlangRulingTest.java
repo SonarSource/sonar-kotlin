@@ -161,7 +161,7 @@ public class SlangRulingTest {
   public void test_resources_sources() throws IOException {
     executeSonarScannerAndAssertDifferences("kotlin/test-resources-sources", Map.of(
       "sonar.inclusions", "ruling/src/test/resources/sources/kotlin/**/*.kt",
-      "sonar.java.libraries", System.getProperty("gradle.main.compile.classpath")
+      "sonar.java.libraries", System.getProperty("gradle.main.compile.classpath").replace(File.pathSeparatorChar, ',')
     ));
   }
 

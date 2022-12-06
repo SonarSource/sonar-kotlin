@@ -93,6 +93,7 @@ import org.sonarsource.kotlin.checks.RunFinalizersCheck
 import org.sonarsource.kotlin.checks.ScheduledThreadPoolExecutorZeroCheck
 import org.sonarsource.kotlin.checks.SelfAssignmentCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
+import org.sonarsource.kotlin.checks.StreamNotConsumedCheck
 import org.sonarsource.kotlin.checks.StringLiteralDuplicatedCheck
 import org.sonarsource.kotlin.checks.StrongCipherAlgorithmCheck
 import org.sonarsource.kotlin.checks.StructuredConcurrencyPrinciplesCheck
@@ -201,6 +202,7 @@ val KOTLIN_CHECKS = listOf(
     ScheduledThreadPoolExecutorZeroCheck::class.java,
     SelfAssignmentCheck::class.java,
     ServerCertificateCheck::class.java,
+    StreamNotConsumedCheck::class.java,
     StringLiteralDuplicatedCheck::class.java,
     StrongCipherAlgorithmCheck::class.java,
     StructuredConcurrencyPrinciplesCheck::class.java,

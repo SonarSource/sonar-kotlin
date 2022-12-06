@@ -1,0 +1,15 @@
+{
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "10min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-3958",
+  "sqKey": "S3958",
+  "scope": "All",
+  "quickfix": "unknown",
+  "title": "Intermediate Sequence and Stream functions should not be left unused"
+}
