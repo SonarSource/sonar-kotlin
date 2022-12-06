@@ -47,15 +47,12 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.types.checker.findCorrespondingSupertype
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.utils.kotlinTreeOf
-import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.util.TreeMap
-import kotlin.random.Random
 
 internal class ApiExtensionsKtTest {
 
