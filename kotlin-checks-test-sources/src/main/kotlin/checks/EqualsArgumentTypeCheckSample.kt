@@ -2,6 +2,36 @@ package checks
 
 abstract class EqualsArgumentTypeCheckSample {
 
+    open class NewClass {
+        override fun equals(other: Any?): Boolean { // Compliant
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as NewClass
+            // ...
+            return true
+        }
+    }
+
+    class NewClass2 : NewClass() {
+        override fun equals(other: Any?): Boolean { // Noncompliant
+            if (other !is NewClass) return false
+
+            // ...
+            return true
+        }
+    }
+
+    sealed class NewClass3 {
+        class Single : NewClass3() {
+            override fun equals(other: Any?): Boolean { // Compliant
+                if (other !is NewClass3.Single) return false
+                //...
+                return true
+            }
+        }
+    }
+
     class MyClass {
         override fun equals(other: Any?): Boolean { // Noncompliant {{Add a type test to this method.}}
             val mc = other as MyClass

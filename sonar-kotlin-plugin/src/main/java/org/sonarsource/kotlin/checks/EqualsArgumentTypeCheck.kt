@@ -56,7 +56,8 @@ class EqualsArgumentTypeCheck : AbstractCheck() {
 
         val hasIsExpression =
             equalsMethod.collectDescendantsOfType<KtIsExpression> { parameter.name == (it.leftHandSide as KtNameReferenceExpression).getReferencedName() }
-                .map { it.typeReference?.text }.any { it -> klassNames.contains(it) }
+                .flatMap { it.typeReference!!.text.split(".") } // class.childClass case
+                .any { it -> klassNames.contains(it) }
 
 
         val binaryExpressions =
@@ -69,8 +70,8 @@ class EqualsArgumentTypeCheck : AbstractCheck() {
                 val right = binaryExpression.right!!.collectDescendantsOfType<KtNameReferenceExpression>().map { it.getReferencedName() }
 
                 isContained =
-                    (left.contains(parameter.name) && (right.contains(klassName) || right.contains(THIS_KEYWORD.value))) ||
-                        ((left.contains(klassName) || left.contains(THIS_KEYWORD.value)) && right.contains(parameter.name))
+                    (left.contains(parameter.name) && (right.contains(klassName) || right.contains(THIS_KEYWORD.value))|| right.contains("javaClass"))
+                        ((left.contains(klassName) || left.contains(THIS_KEYWORD.value) || left.contains("javaClass")) && right.contains(parameter.name))
                 if (isContained)
                     return@lit
             }
