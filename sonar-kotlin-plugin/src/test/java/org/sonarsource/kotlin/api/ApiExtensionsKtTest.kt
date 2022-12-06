@@ -180,6 +180,8 @@ class ApiExtensionsKtDetermineTypeTest {
             """
         package bar
         import java.nio.charset.StandardCharsets
+        import whatever.Random
+        
         class Foo {
         
             companion object {
@@ -212,6 +214,10 @@ class ApiExtensionsKtDetermineTypeTest {
             }
             
             fun lambda() { 1 }
+            
+            fun nonResolving(){
+                println(Random.method())
+            }
             
         }
         
@@ -260,6 +266,23 @@ class ApiExtensionsKtDetermineTypeTest {
     }
 
     @Test
+    fun `determineType of KtValueArgument with parsing error`() {
+        val kotlinTree = """
+            package test
+            
+            class Test{
+                fun method(any: Any){
+                    method(,)
+                }
+            }
+        """.trimIndent()
+        val bindingContext = BindingContext.EMPTY
+        val ktFile = parseWithoutParsingExceptions(kotlinTree)
+        val expr = ktFile.findDescendantOfType<KtValueArgument>()
+        assertThat(expr.determineType(bindingContext)).isNull()
+    }
+
+    @Test
     fun `determineType of KtTypeReference`() {
         val expr = ktFile.findDescendantOfType<KtTypeReference> { it.text == "Int" }!!
 
@@ -284,6 +307,12 @@ class ApiExtensionsKtDetermineTypeTest {
         assertThat(expr2.determineType(bindingContext)!!.getJetTypeFqName(false))
             .isEqualTo("java.nio.charset.Charset")
 
+    }
+
+    @Test
+    fun `determineType of non resolving KtDotQualifiedExpression`() {
+        val expr = ktFile.findDescendantOfType<KtDotQualifiedExpression> { it.text == "Random.method()" }!!
+        assertThat(expr.determineType(bindingContext)).isNull()
     }
 
     @Test
@@ -312,7 +341,7 @@ class ApiExtensionsKtDetermineTypeTest {
 
     @Test
     fun `determineType of KtExpression`() {
-        val expr = ktFile.findDescendantOfType<KtBlockExpression>{ it.text == "{ 1 }" }!!
+        val expr = ktFile.findDescendantOfType<KtBlockExpression> { it.text == "{ 1 }" }!!
         assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
             .isEqualTo("kotlin.Int")
     }
@@ -524,6 +553,18 @@ private fun parse(code: String) = kotlinTreeOf(
         .initMetadata(code)
         .build()
 )
+
+private fun parseWithoutParsingExceptions(code: String): KtFile {
+    val environment = Environment(
+        listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(System.getProperty("path.separator")),
+        LanguageVersion.LATEST_STABLE
+    )
+    val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
+        .setCharset(StandardCharsets.UTF_8)
+        .initMetadata(code)
+        .build()
+    return environment.ktPsiFactory.createFile(inputFile.uri().path, code.replace("""\r\n?""".toRegex(), "\n"))
+}
 
 private class KtExpressionAssert(expression: KtExpression?) : ObjectAssert<KtExpression>(expression) {
     fun isConstantExpr(value: Int): KtExpressionAssert {
