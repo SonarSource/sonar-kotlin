@@ -504,7 +504,7 @@ fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
             is KtFunction -> bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, this).determineType()
             is KtClass -> bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, this).determineType()
             is KtExpression -> this.getKotlinTypeForComparison(bindingContext)
-            is KtValueArgument -> this.getArgumentExpression()?.predictRuntimeValueExpression(bindingContext)?.determineType(bindingContext)
+            is KtValueArgument -> this.getArgumentExpression()?.determineType(bindingContext)
             else -> null
         }
 

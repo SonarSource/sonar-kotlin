@@ -47,12 +47,10 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.types.checker.findCorrespondingSupertype
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.utils.kotlinTreeOf
-import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.util.TreeMap
 
@@ -179,6 +177,8 @@ class ApiExtensionsKtDetermineTypeTest {
             """
         package bar
         import java.nio.charset.StandardCharsets
+        import whatever.Random
+        
         class Foo {
         
             companion object {
@@ -190,11 +190,13 @@ class ApiExtensionsKtDetermineTypeTest {
             val numb: Number = 2
             val any: Any = 3
             val str = "string"
+            val lz by lazy { "str" }
             
             fun aFun(param: Float): Long {
                 stringReturning()
                 this.prop
                 println(Foo.feww)
+                println(lz)
                 StandardCharsets.US_ASCII
                 val localVal: Double
             }
@@ -209,6 +211,10 @@ class ApiExtensionsKtDetermineTypeTest {
             }
             
             fun lambda() { 1 }
+            
+            fun nonResolving(){
+                println(Random.method())
+            }
             
         }
         
@@ -249,6 +255,28 @@ class ApiExtensionsKtDetermineTypeTest {
         val expr = ktFile.findDescendantOfType<KtValueArgument> { it.text == "1.2f" }!!
         assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
             .isEqualTo("kotlin.Float")
+
+        val exprLazy = ktFile.findDescendantOfType<KtValueArgument> { it.text == "lz" }!!
+        assertThat(exprLazy.determineType(bindingContext)!!.getJetTypeFqName(false))
+            .isEqualTo("kotlin.String")
+
+    }
+
+    @Test
+    fun `determineType of KtValueArgument with parsing error`() {
+        val kotlinTree = """
+            package test
+            
+            class Test{
+                fun method(any: Any){
+                    method(,)
+                }
+            }
+        """.trimIndent()
+        val bindingContext = BindingContext.EMPTY
+        val ktFile = parseWithoutParsingExceptions(kotlinTree)
+        val expr = ktFile.findDescendantOfType<KtValueArgument>()
+        assertThat(expr.determineType(bindingContext)).isNull()
     }
 
     @Test
@@ -279,6 +307,12 @@ class ApiExtensionsKtDetermineTypeTest {
     }
 
     @Test
+    fun `determineType of non resolving KtDotQualifiedExpression`() {
+        val expr = ktFile.findDescendantOfType<KtDotQualifiedExpression> { it.text == "Random.method()" }!!
+        assertThat(expr.determineType(bindingContext)).isNull()
+    }
+
+    @Test
     fun `determineType of KtReferenceExpression`() {
         val expr = ktFile.findDescendantOfType<KtReferenceExpression> { it.text == "Int" }!!
 
@@ -304,7 +338,7 @@ class ApiExtensionsKtDetermineTypeTest {
 
     @Test
     fun `determineType of KtExpression`() {
-        val expr = ktFile.findDescendantOfType<KtBlockExpression>{ it.text == "{ 1 }" }!!
+        val expr = ktFile.findDescendantOfType<KtBlockExpression> { it.text == "{ 1 }" }!!
         assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
             .isEqualTo("kotlin.Int")
     }
@@ -516,6 +550,18 @@ private fun parse(code: String) = kotlinTreeOf(
         .initMetadata(code)
         .build()
 )
+
+private fun parseWithoutParsingExceptions(code: String): KtFile {
+    val environment = Environment(
+        listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(System.getProperty("path.separator")),
+        LanguageVersion.LATEST_STABLE
+    )
+    val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
+        .setCharset(StandardCharsets.UTF_8)
+        .initMetadata(code)
+        .build()
+    return environment.ktPsiFactory.createFile(inputFile.uri().path, code.replace("""\r\n?""".toRegex(), "\n"))
+}
 
 private class KtExpressionAssert(expression: KtExpression?) : ObjectAssert<KtExpression>(expression) {
     fun isConstantExpr(value: Int): KtExpressionAssert {
