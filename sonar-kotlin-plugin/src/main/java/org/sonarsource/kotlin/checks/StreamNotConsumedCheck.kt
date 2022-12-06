@@ -28,7 +28,9 @@ import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.FunMatcherImpl
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private const val MESSAGE = "Refactor the code so this stream pipeline is used."
+private const val STREAM_MESSAGE = "Refactor the code so this stream pipeline is used."
+
+private const val SEQUENCE_MESSAGE = "Refactor the code so this sequence pipeline is used."
 
 private val COMMON_NON_TERM = arrayOf("distinct", "dropWhile", "filter", "flatMap", "map", "sorted", "takeWhile")
 
@@ -36,18 +38,20 @@ private val COMMON_STREAM_NON_TERM = arrayOf("limit", "parallel", "peek", "seque
 
 private val COMMON_PRIMITIVE_STREAM_NON_TERM = arrayOf("boxed", "mapToObj").plus(COMMON_STREAM_NON_TERM)
 
+private val SEQUENCE_MATCHER = FunMatcher(qualifier = "kotlin.sequences") {
+    withNames(*COMMON_NON_TERM)
+    withNames(
+        "chunked", "distinctBy", "drop", "filterIndexed", "filterIsInstance", "filterNot", "filterNotNull", "flatMapIndexed",
+        "mapIndexed", "mapIndexedNotNull", "mapNotNull", "plus", "plusElement", "sortedBy", "sortedByDescending",
+        "sortedDescending", "sortedWith", "take", "zip", "zipWithNext"
+    )
+}
+
 @Rule(key = "S3958")
 class StreamNotConsumedCheck : CallAbstractCheck() {
 
     override val functionsToVisit = listOf(
-        FunMatcher(qualifier = "kotlin.sequences") {
-            withNames(*COMMON_NON_TERM)
-            withNames(
-                "chunked", "distinctBy", "drop", "filterIndexed", "filterIsInstance", "filterNot", "filterNotNull", "flatMapIndexed",
-                "mapIndexed", "mapIndexedNotNull", "mapNotNull", "plus", "plusElement", "sortedBy", "sortedByDescending",
-                "sortedDescending", "sortedWith", "take", "zip", "zipWithNext"
-            )
-        },
+        SEQUENCE_MATCHER,
         FunMatcher(definingSupertype = "kotlin.collections.List") {
             withNames("parallelStream", "stream")
         },
@@ -76,7 +80,8 @@ class StreamNotConsumedCheck : CallAbstractCheck() {
         kotlinFileContext: KotlinFileContext,
     ) {
         if (callExpression.isUsedAsStatement(kotlinFileContext.bindingContext)) {
-            kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
+            val message = if (matchedFun == SEQUENCE_MATCHER) SEQUENCE_MESSAGE else STREAM_MESSAGE;
+            kotlinFileContext.reportIssue(callExpression.calleeExpression!!, message)
         }
     }
 }

@@ -14,7 +14,7 @@ class StreamNotConsumedCheckSample {
         source.associateTo(mutableMapOf()) { it.length to it } // Compliant
         source.associateWith { it.length } // Compliant
         source.associateWithTo(mutableMapOf()) { it.length } // Compliant
-        source.chunked(12) // Noncompliant {{Refactor the code so this stream pipeline is used.}}
+        source.chunked(12) // Noncompliant {{Refactor the code so this sequence pipeline is used.}}
         //     ^^^^^^^
         source.chunked(12, { it }) // Noncompliant
         source.distinct() // Noncompliant
@@ -43,7 +43,7 @@ class StreamNotConsumedCheckSample {
         source.groupBy { it.length } // Compliant
         source.groupByTo(mutableMapOf()) { it.length } // Compliant
         source.groupingBy { it.length } // Compliant
-        source.map { it.uppercase() } // Noncompliant {{Refactor the code so this stream pipeline is used.}}
+        source.map { it.uppercase() } // Noncompliant {{Refactor the code so this sequence pipeline is used.}}
         source.mapIndexed { i, s -> i.toString() + s } // Noncompliant
         source.mapIndexedNotNull { i, s -> i.toString() + s } // Noncompliant
         source.mapIndexedTo(dest) { i, s -> i.toString() + s } // Compliant
@@ -71,7 +71,8 @@ class StreamNotConsumedCheckSample {
     }
 
     fun testList(source: List<String>, dest: MutableList<String>) {
-        source.stream() // Noncompliant
+        source.stream() // Noncompliant {{Refactor the code so this stream pipeline is used.}}
+        //     ^^^^^^
         source.parallelStream() // Noncompliant
         source.chunked(12) // Compliant
         source.chunked(12, { it }) // Compliant
@@ -128,7 +129,8 @@ class StreamNotConsumedCheckSample {
         longStream: LongStream,
         doubleStream: DoubleStream,
     ) {
-        stream.filter(String::isNotBlank) // Noncompliant
+        stream.filter(String::isNotBlank) // Noncompliant {{Refactor the code so this stream pipeline is used.}}
+        //     ^^^^^^
         stream.skip(2) // Noncompliant
         stream.limit(100) // Noncompliant
         stream.distinct() // Noncompliant
@@ -208,7 +210,8 @@ class StreamNotConsumedCheckSample {
         doubleStream.skip(5) // Noncompliant
         doubleStream.sorted() // Noncompliant
         doubleStream.takeWhile { it > 1000 } // Noncompliant
-        doubleStream.unordered() // Noncompliant
+        doubleStream.unordered() // Noncompliant {{Refactor the code so this stream pipeline is used.}}
+        //           ^^^^^^^^^
     }
 
 }
