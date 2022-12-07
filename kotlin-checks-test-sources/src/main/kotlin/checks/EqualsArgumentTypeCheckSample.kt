@@ -2,6 +2,40 @@ package checks
 
 abstract class EqualsArgumentTypeCheckSample {
 
+    class Foo0 {
+        val a = 1
+        override fun equals(other: Any?): Boolean { // Compliant
+            if ((other as? Foo0)?.a == 2) return true
+
+            return false
+        }
+    }
+
+    class Foo1 {
+        override fun equals(other: Any?): Boolean { // Compliant
+            return (other as? Foo1)?.let { true } ?: false
+        }
+    }
+
+    class Foo2 {
+        override fun equals(other: Any?): Boolean { // Compliant
+            return (other is Foo2).let {
+                // ...
+                true
+            }
+        }
+    }
+
+    override fun equals(other: Any?): Boolean { // Noncompliant
+        return 1 is Int
+    }
+
+    class Foo {
+        override fun equals(other: Any?): Boolean { // Noncompliant
+            return 1 is Int
+        }
+    }
+
     open class NewClass {
         override fun equals(other: Any?): Boolean { // Compliant
             if (this === other) return true
@@ -29,6 +63,23 @@ abstract class EqualsArgumentTypeCheckSample {
                 //...
                 return true
             }
+        }
+    }
+
+    class NewClass4 {
+        override fun equals(other: Any?): Boolean { // Noncompliant
+            val anyObject = null
+            if (anyObject is NewClass4) return false
+            //...
+            return true
+        }
+    }
+
+    class NewClass5 {
+        override fun equals(other: Any?): Boolean { // Noncompliant
+            if (other is NewClass4) return false
+            //...
+            return true
         }
     }
 
