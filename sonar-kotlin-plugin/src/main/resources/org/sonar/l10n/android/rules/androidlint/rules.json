@@ -129,7 +129,7 @@
   {
     "key": "AnnotationProcessorOnCompilePath",
     "name": "Annotation Processor on Compile Classpath",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThis dependency is identified as an annotation processor. Consider adding it\nto the processor path using annotationProcessor instead of including it to\nthe\ncompile path.\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThis dependency is identified as an annotation processor. Consider adding it\nto the processor path using annotationProcessor instead of including it to the\ncompile path.\n</p>\n<p>\n</p>\n",
     "tags": [
       "performance",
       "android"
@@ -228,6 +228,18 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "AssertionSideEffect",
+    "name": "Assertions with Side Effects",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nAssertion conditions can have side effects. This is risky because the behavior\ndepends on whether assertions are on or off. This is usually not intentional,\nand can lead to bugs where the production version differs from the version\ntested during development.\n</p>\n<p>\nGenerally, you'll want to perform the operation with the side effect before\nthe assertion, and then assert that the result was what you expected.\n</p>\n<p>\n</p>\n",
+    "tags": [
+      "performance",
+      "android"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "AuthLeak",
     "name": "Code might contain an auth leak",
     "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nStrings in java apps can be discovered by decompiling apps, this lint check\nlooks for code which looks like it may contain an url with a username and\npassword\n</p>\n<p>\n</p>\n",
@@ -254,7 +266,7 @@
   {
     "key": "BackButton",
     "name": "Back button",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable BackButton\n</p>\n<p>\nAccording to the Android Design Guide,\n</p>\n<p>\n&quot;Other platforms use an explicit back button with label to allow the user to\nnavigate up the application's hierarchy. Instead, Android uses the main action\nbar's app icon for hierarchical navigation and the navigation bar's back\nbutton for temporal navigation.&quot;\nThis check is not very sophisticated (it just looks for buttons with the label\n&quot;Back&quot;), so it is disabled by default to not trigger on common scenarios like\npairs of Back/Next buttons to paginate through screens.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://material.io/design/\">https://material.io/design/</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable BackButton\n</p>\n<p>\nAccording to the Android Design Guide,\n</p>\n<p>\n&quot;Other platforms use an explicit back button with label to allow the user to\nnavigate up the application's hierarchy. Instead, Android uses the main action\nbar's app icon for hierarchical navigation and the navigation bar's back\nbutton for temporal navigation.&quot;\n</p>\n<p>\nThis check is not very sophisticated (it just looks for buttons with the label\n&quot;Back&quot;), so it is disabled by default to not trigger on common scenarios like\npairs of Back/Next buttons to paginate through screens.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://material.io/design/\">https://material.io/design/</a><br />\n</p>\n",
     "tags": [
       "user-experience",
       "android"
@@ -562,6 +574,17 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "DefaultEncoding",
+    "name": "Using Default Character Encoding",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable DefaultEncoding\n</p>\n<p>\nSome APIs will implicitly use the default system character encoding instead of\nUTF-8 when converting to or from bytes, such as when creating a default\nFileReader.\n</p>\n<p>\nThis is usually not correct; you only want to do this if you need to read\nfiles created by other programs where they have deliberately written in the\nsame encoding. The default encoding varies from platform to platform and can\nvary from locale to locale, so this makes it difficult to interpret files\ncontaining non-ASCII characters.\n</p>\n<p>\nWe recommend using UTF-8 everywhere.\n</p>\n<p>\nNote that on Android, the default file encoding is always UTF-8 (see\nhttps://developer.android.com/reference/java/nio/charset/Charset#defaultCharse\nt() for more), so this lint check deliberately does not flag any problems in\nAndroid code, since it is always safe to rely on the default character\nencoding there.\n</p>\n<p>\n</p>\n",
+    "tags": [
+      "android"
+    ],
+    "type": "BUG",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "DefaultLocale",
     "name": "Implied default locale in case conversion",
     "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nCalling String#toLowerCase() or #toUpperCase() without specifying an explicit\nlocale is a common source of bugs. The reason for that is that those methods\nwill use the current locale on the user's device, and even though the code\nappears to work correctly when you are developing the app, it will fail in\nsome locales. For example, in the Turkish locale, the uppercase replacement\nfor i is not I.\n</p>\n<p>\nIf you want the methods to just perform ASCII replacement, for example to\nconvert an enum name, call String#toUpperCase(Locale.US) instead. If you\nreally want to use the current locale, call\nString#toUpperCase(Locale.getDefault()) instead.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/reference/java/util/Locale.html#default_locale\">https://developer.android.com/reference/java/util/Locale.html#default_locale</a><br />\n</p>\n",
@@ -601,6 +624,17 @@
     "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe BC provider has been deprecated and will not be provided when\ntargetSdkVersion is P or higher.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://android-developers.googleblog.com/2018/03/cryptography-changes-in-android-p.html\">https://android-developers.googleblog.com/2018/03/cryptography-changes-in-android-p.html</a><br />\n</p>\n",
     "tags": [
       "security",
+      "android"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "DeprecatedSinceApi",
+    "name": "Using a method deprecated in earlier SDK",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nSome backport methods are only necessary until a specific version of Android.\nThese have been annotated with @DeprecatedSinceApi, specifying the relevant\nAPI level and replacement suggestions. Calling these methods when the\nminSdkVersion is already at the deprecated API level or above is unnecessary.\n</p>\n<p>\n</p>\n",
+    "tags": [
       "android"
     ],
     "type": "CODE_SMELL",
@@ -801,6 +835,17 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "EmptySuperCall",
+    "name": "Calling an empty super method",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nFor methods annotated with @EmptySuper, overriding methods should not also\ncall the super implementation, either because it is empty, or perhaps it\ncontains code not intended to be run when the method is overridden.\n</p>\n<p>\n</p>\n",
+    "tags": [
+      "android"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "EnforceUTF8",
     "name": "Encoding used in resource files is not UTF-8",
     "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nXML supports encoding in a wide variety of character sets. However, not all\ntools handle the XML encoding attribute correctly, and nearly all Android apps\nuse UTF-8, so by using UTF-8 you can protect yourself against subtle bugs when\nusing non-ASCII characters.\n</p>\n<p>\nIn particular, the Android Gradle build system will merge resource XML files\nassuming the resource files are using UTF-8 encoding.\n</p>\n<p>\n</p>\n",
@@ -921,12 +966,12 @@
   {
     "key": "ExtraText",
     "name": "Extraneous text in resource files",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nLayout resource files should only contain elements and attributes. Any XML\ntext content found in the file is likely accidental (and potentially dangerous\nif the text resembles XML and the developer believes the text to be\nfunctional)\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nNon-value resource files should only contain elements and attributes. Any XML\ntext content found in the file is likely accidental (and potentially dangerous\nif the text resembles XML and the developer believes the text to be\nfunctional).\n</p>\n<p>\n</p>\n",
     "tags": [
       "android"
     ],
     "type": "CODE_SMELL",
-    "severity": "MINOR",
+    "severity": "MAJOR",
     "constantDebtMinutes": 5
   },
   {
@@ -943,7 +988,7 @@
   {
     "key": "FileEndsWithExt",
     "name": "File endsWith on file extensions",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe Kotlin extension method File.endsWith(suffix) checks whole path\ncomponents,\nnot just string suffixes. This means that File(&quot;foo.txt&quot;).endsWith(&quot;.txt&quot;)\nwill return\nfalse. Instead you might have intended file.path.endsWith or\nfile.extension.equals.\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe Kotlin extension method File.endsWith(suffix) checks whole path\ncomponents, not just string suffixes. This means that\nFile(&quot;foo.txt&quot;).endsWith(&quot;.txt&quot;) will return false. Instead you might have\nintended file.path.endsWith or file.extension.equals.\n</p>\n<p>\n</p>\n",
     "tags": [
       "android"
     ],
@@ -1404,7 +1449,7 @@
   {
     "key": "IgnoreWithoutReason",
     "name": "@Ignore without Reason",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nIgnoring a test without a reason makes it difficult to figure out the problem\nlater.\nPlease define an explicit reason why it is ignored, and when it can be\nresolved.\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nIgnoring a test without a reason makes it difficult to figure out the problem\nlater. Please define an explicit reason why it is ignored, and when it can be\nresolved.\n</p>\n<p>\n</p>\n",
     "tags": [
       "testing",
       "android"
@@ -1606,7 +1651,7 @@
   {
     "key": "IntentFilterUniqueDataAttributes",
     "name": "Data tags should only declare unique attributes",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\n</p>\n<p>\n</p>\n<p>\nFor example, the following two `&lt;intent-filter&gt;` declarations are the same:<br />\nxml\n&lt;intent-filter&gt;\n    &lt;data android:scheme=&quot;http&quot; android:host=&quot;example.com&quot; /&gt;\n    &lt;data android:scheme=&quot;https&quot; android:host=&quot;example.org&quot; /&gt;\n&lt;/intent-filter&gt;\n</p>\n<p>\nxml\n&lt;intent-filter&gt;\n    &lt;data android:scheme=&quot;http&quot;/&gt;\n    &lt;data android:scheme=&quot;https&quot;/&gt;\n    &lt;data android:host=&quot;example.com&quot; /&gt;\n    &lt;data android:host=&quot;example.org&quot; /&gt;\n&lt;/intent-filter&gt;\n`\n</p>\n<p>\nThey both handle all of the following:<br />\n* http://example.com\n* https://example.com\n* http://example.org\n* https://example.org\n</p>\n<p>\nThe second one better communicates the combining behavior and is clearer to an\nexternal reader that one should not rely on the scheme/host being self\ncontained. It is not obvious in the first that http://example.org is also\nmatched, which can lead to confusion (or incorrect behavior) with a more\ncomplex set of schemes/hosts.\n</p>\n<p>\nNote that this does not apply to host + port, as those must be declared in the\nsame &lt;data&gt; tag and are only associated with each other.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/guide/components/intents-filters\">https://developer.android.com/guide/components/intents-filters</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\n&lt;intent-filter&gt; &lt;data&gt; tags should only declare a single unique attribute\n(i.e. scheme OR host, but not both). This better matches the runtime behavior\nof intent filters, as they combine all of the declared data attributes into a\nsingle matcher which is allowed to handle any combination across attribute\ntypes.\n</p>\n<p>\nFor example, the following two &lt;intent-filter&gt; declarations are the same:<br />\n&lt;intent-filter&gt;\n    &lt;data android:scheme=&quot;http&quot; android:host=&quot;example.com&quot; /&gt;\n    &lt;data android:scheme=&quot;https&quot; android:host=&quot;example.org&quot; /&gt;\n&lt;/intent-filter&gt;\n</p>\n<p>\n&lt;intent-filter&gt;\n    &lt;data android:scheme=&quot;http&quot;/&gt;\n    &lt;data android:scheme=&quot;https&quot;/&gt;\n    &lt;data android:host=&quot;example.com&quot; /&gt;\n    &lt;data android:host=&quot;example.org&quot; /&gt;\n&lt;/intent-filter&gt;\n</p>\n<p>\nThey both handle all of the following:<br />\n* http://example.com\n* https://example.com\n* http://example.org\n* https://example.org\n</p>\n<p>\nThe second one better communicates the combining behavior and is clearer to an\nexternal reader that one should not rely on the scheme/host being self\ncontained. It is not obvious in the first that http://example.org is also\nmatched, which can lead to confusion (or incorrect behavior) with a more\ncomplex set of schemes/hosts.\n</p>\n<p>\nNote that this does not apply to host + port, as those must be declared in the\nsame &lt;data&gt; tag and are only associated with each other.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/guide/components/intents-filters\">https://developer.android.com/guide/components/intents-filters</a><br />\n</p>\n",
     "tags": [
       "android"
     ],
@@ -1618,6 +1663,17 @@
     "key": "IntentReset",
     "name": "Suspicious mix of setType and setData",
     "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nIntent provides the following APIs: setData(Uri) and setType(String).\nUnfortunately, setting one clears the other. If you want to set both, you\nshould call setDataAndType(Uri, String) instead.\n</p>\n<p>\n</p>\n",
+    "tags": [
+      "android"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "InternalInsetResource",
+    "name": "Using internal inset dimension resource",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe internal inset dimension resources are not a supported way to retrieve the\nrelevant insets for your application. The insets are dynamic values that can\nchange while your app is visible, and your app's window may not intersect with\nthe system UI. To get the relevant value for your app and listen to updates,\nuse androidx.core.view.WindowInsetsCompat and related APIs.\n</p>\n<p>\n</p>\n",
     "tags": [
       "android"
     ],
@@ -1706,7 +1762,7 @@
   {
     "key": "InvalidUsesTagAttribute",
     "name": "Invalid name attribute for uses element",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe &lt;uses&gt; element in &lt;automotiveApp&gt; should contain a valid value for the\nname attribute.\nValid values are media, notification, or sms.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/auto/start/index.html#auto-metadata\">https://developer.android.com/training/auto/start/index.html#auto-metadata</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe &lt;uses&gt; element in &lt;automotiveApp&gt; should contain a valid value for the\nname attribute. Valid values are media, notification, or sms.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/auto/start/index.html#auto-metadata\">https://developer.android.com/training/auto/start/index.html#auto-metadata</a><br />\n</p>\n",
     "tags": [
       "android"
     ],
@@ -1806,6 +1862,17 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "KotlinNullnessAnnotation",
+    "name": "Kotlin nullability annotation",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nIn Kotlin, nullness is part of the type system; s: String is never null and s:<br />\nString? is sometimes null, whether or not you add in additional annotations\nstating @NonNull or @Nullable. These are likely copy/paste mistakes, and are\nmisleading.\n</p>\n<p>\n</p>\n",
+    "tags": [
+      "android"
+    ],
+    "type": "BUG",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "KotlinPropertyAccess",
     "name": "Kotlin Property Access",
     "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable KotlinPropertyAccess\n</p>\n<p>\nFor a method to be represented as a property in Kotlin, strict &ldquo;bean&rdquo;-style\nprefixing must be used.\n</p>\n<p>\nAccessor methods require a get prefix or for boolean-returning methods an is\nprefix can be used.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://android.github.io/kotlin-guides/interop.html#property-prefixes\">https://android.github.io/kotlin-guides/interop.html#property-prefixes</a><br />\n</p>\n",
@@ -1844,7 +1911,7 @@
   {
     "key": "LambdaLast",
     "name": "Lambda Parameters Last",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable LambdaLast\n</p>\n<p>\nTo improve calling this code from Kotlin,\nparameter types eligible for SAM conversion should be last.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://android.github.io/kotlin-guides/interop.html#lambda-parameters-last\">https://android.github.io/kotlin-guides/interop.html#lambda-parameters-last</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable LambdaLast\n</p>\n<p>\nTo improve calling this code from Kotlin, parameter types eligible for SAM\nconversion should be last.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://android.github.io/kotlin-guides/interop.html#lambda-parameters-last\">https://android.github.io/kotlin-guides/interop.html#lambda-parameters-last</a><br />\n</p>\n",
     "tags": [
       "interoperability",
       "android"
@@ -1902,7 +1969,7 @@
   {
     "key": "LintDocExample",
     "name": "Missing Documentation Example",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable LintDocExample\n</p>\n<p>\nLint's tool for generating documentation for each issue has special support\nfor including a code example which shows how to trigger the report. It will\npick the first unit test it can find and pick out the source file referenced\nfrom the error message, but you can instead designate a unit test to be the\ndocumentation example, and in that case, all the files are included.\n</p>\n<p>\nTo designate a unit test as the documentation example for an issue, name the\ntest testDocumentationExample, or if your detector reports multiple issues,\ntestDocumentationExample&lt;Id&gt;, such as\ntestDocumentationExampleMyId.\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable LintDocExample\n</p>\n<p>\nLint's tool for generating documentation for each issue has special support\nfor including a code example which shows how to trigger the report. It will\npick the first unit test it can find and pick out the source file referenced\nfrom the error message, but you can instead designate a unit test to be the\ndocumentation example, and in that case, all the files are included.\n</p>\n<p>\nTo designate a unit test as the documentation example for an issue, name the\ntest testDocumentationExample, or if your detector reports multiple issues,\ntestDocumentationExample&lt;Id&gt;, such as testDocumentationExampleMyId.\n</p>\n<p>\n</p>\n",
     "tags": [
       "lint-implementation",
       "android"
@@ -1950,7 +2017,7 @@
   {
     "key": "LintImplPsiEquals",
     "name": "Comparing PsiElements with Equals",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable LintImplPsiEquals\n</p>\n<p>\nYou should never compare two PSI elements for equality with equals;\nuse isEquivalentTo(PsiElement) instead.\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable LintImplPsiEquals\n</p>\n<p>\nYou should never compare two PSI elements for equality with equals; use\nisEquivalentTo(PsiElement) instead.\n</p>\n<p>\n</p>\n",
     "tags": [
       "lint-implementation",
       "android"
@@ -2010,7 +2077,7 @@
   {
     "key": "LintImplUseUast",
     "name": "Using Wrong UAST Method",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nUAST is a library that sits on top of PSI, and in many cases PSI is part of\nthe UAST API; for example, UResolvable#resolve returns a PsiElement.\n</p>\n<p>\nAlso, for convenience, a UClass is a PsiClass, a UMethod is a PsiMethod, and\nso on.\n</p>\n<p>\nHowever, there are some parts of the PSI API that does not work correctly when\nused in this way. For example, if you call PsiMethod#getBody or\nPsiVariable#getInitializer, this will only work in Java, not for Kotlin (or\npotentially other languages).\n</p>\n<p>\nThere are UAST specific methods you need to call instead and lint will flag\nthese.\n</p>\n<p>\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nUAST is a library that sits on top of PSI, and in many cases PSI is part of\nthe UAST API; for example, UResolvable#resolve returns a PsiElement.\n</p>\n<p>\nAlso, for convenience, a UClass is a PsiClass, a UMethod is a PsiMethod, and\nso on.\n</p>\n<p>\nHowever, there are some parts of the PSI API that does not work correctly when\nused in this way. For example, if you call PsiMethod#getBody or\nPsiVariable#getInitializer, this will only work in Java, not for Kotlin (or\npotentially other languages).\n</p>\n<p>\nThere are UAST specific methods you need to call instead and lint will flag\nthese.\n</p>\n<p>\n</p>\n",
     "tags": [
       "lint-implementation",
       "android"
@@ -2133,7 +2200,7 @@
   {
     "key": "MenuTitle",
     "name": "Missing menu title",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nFrom the action bar documentation:<br />\n&quot;It's important that you always define android:title for each menu item &mdash; even\nif you don't declare that the title appear with the action item &mdash; for three\nreasons:<br />\n</p>\n<p>\n* If there's not enough room in the action bar for the action item, the menu\nitem appears in the overflow menu and only the title appears.\n* Screen readers for sight-impaired users read the menu item's title.\n* If the action item appears with only the icon, a user can long-press the\nitem to reveal a tool-tip that displays the action item's title.\nThe android:icon is always optional, but recommended.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/appbar\">https://developer.android.com/training/appbar</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nFrom the action bar documentation:<br />\n&quot;It's important that you always define android:title for each menu item &mdash; even\nif you don't declare that the title appear with the action item &mdash; for three\nreasons:<br />\n</p>\n<p>\n* If there's not enough room in the action bar for the action item, the menu\nitem appears in the overflow menu and only the title appears.\n* Screen readers for sight-impaired users read the menu item's title.\n* If the action item appears with only the icon, a user can long-press the\nitem to reveal a tool-tip that displays the action item's title.\n</p>\n<p>\nThe android:icon is always optional, but recommended.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/appbar\">https://developer.android.com/training/appbar</a><br />\n</p>\n",
     "tags": [
       "user-experience",
       "android"
@@ -2214,7 +2281,7 @@
   {
     "key": "MissingClass",
     "name": "Missing registered class",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nIf a class is referenced in the manifest or in a layout file, it must also\nexist in the project (or in one of the libraries included by the project. This\ncheck helps uncover typos in registration names, or attempts to rename or move\nclasses without updating the XML references\nproperly.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/guide/topics/manifest/manifest-intro.html\">https://developer.android.com/guide/topics/manifest/manifest-intro.html</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nIf a class is referenced in the manifest or in a layout file, it must also\nexist in the project (or in one of the libraries included by the project. This\ncheck helps uncover typos in registration names, or attempts to rename or move\nclasses without updating the XML references properly.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/guide/topics/manifest/manifest-intro.html\">https://developer.android.com/guide/topics/manifest/manifest-intro.html</a><br />\n</p>\n",
     "tags": [
       "android"
     ],
@@ -2258,7 +2325,7 @@
   {
     "key": "MissingId",
     "name": "Fragments should specify an id or tag",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nIf you do not specify an android:id or an android:tag attribute on a\n&lt;fragment&gt; element, then if the activity is restarted (for example for an\norientation rotation) you may lose state. From the fragment documentation:<br />\n</p>\n<p>\n&quot;Each fragment requires a unique identifier that the system can use to restore\nthe fragment if the activity is restarted (and which you can use to capture\nthe fragment to perform transactions, such as remove it).\n</p>\n<p>\n* Supply the android:id attribute with a unique ID.\n* Supply the android:tag attribute with a unique string.\nIf you provide neither of the previous two, the system uses the ID of the\ncontainer view.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/guide/components/fragments.html\">https://developer.android.com/guide/components/fragments.html</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nIf you do not specify an android:id or an android:tag attribute on a\n&lt;fragment&gt; element, then if the activity is restarted (for example for an\norientation rotation) you may lose state. From the fragment documentation:<br />\n</p>\n<p>\n&quot;Each fragment requires a unique identifier that the system can use to restore\nthe fragment if the activity is restarted (and which you can use to capture\nthe fragment to perform transactions, such as remove it).\n</p>\n<p>\n* Supply the android:id attribute with a unique ID.\n* Supply the android:tag attribute with a unique string.\n</p>\n<p>\nIf you provide neither of the previous two, the system uses the ID of the\ncontainer view.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/guide/components/fragments.html\">https://developer.android.com/guide/components/fragments.html</a><br />\n</p>\n",
     "tags": [
       "android"
     ],
@@ -2267,9 +2334,20 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "MissingInflatedId",
+    "name": "ID not found in inflated resource",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nChecks calls to layout inflation and makes sure that the referenced ids are\nfound in the corresponding layout (or at least one of them, if the layout has\nmultiple configurations.)\n</p>\n<p>\n</p>\n",
+    "tags": [
+      "android"
+    ],
+    "type": "BUG",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "MissingIntentFilterForMediaSearch",
     "name": "Missing MEDIA_PLAY_FROM_SEARCH intent-filter",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nTo support voice searches on Android Auto, you should also register an\nintent-filter for the action android.media.action.MEDIA_PLAY_FROM_SEARCH.\nTo do this, add\n`&lt;intent-filter&gt;`\n    `&lt;action android:name=&quot;android.media.action.MEDIA_PLAY_FROM_SEARCH&quot; /&gt;`\n`&lt;/intent-filter&gt;`\nto your &lt;activity&gt; or &lt;service&gt;.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/auto/audio/index.html#support_voice\">https://developer.android.com/training/auto/audio/index.html#support_voice</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nTo support voice searches on Android Auto, you should also register an\nintent-filter for the action android.media.action.MEDIA_PLAY_FROM_SEARCH.\n</p>\n<p>\nTo do this, add\n`&lt;intent-filter&gt;`\n    `&lt;action android:name=&quot;android.media.action.MEDIA_PLAY_FROM_SEARCH&quot; /&gt;`\n`&lt;/intent-filter&gt;`\nto your &lt;activity&gt; or &lt;service&gt;.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/auto/audio/index.html#support_voice\">https://developer.android.com/training/auto/audio/index.html#support_voice</a><br />\n</p>\n",
     "tags": [
       "android"
     ],
@@ -2291,7 +2369,7 @@
   {
     "key": "MissingLeanbackSupport",
     "name": "Missing Leanback Support",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe manifest should declare the use of the Leanback user interface required by\nAndroid TV.\nTo fix this, add\n`&lt;uses-feature android:name=&quot;android.software.leanback&quot;\n               android:required=&quot;false&quot; /&gt;`\nto your manifest.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/tv/start/start.html#leanback-req\">https://developer.android.com/training/tv/start/start.html#leanback-req</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe manifest should declare the use of the Leanback user interface required by\nAndroid TV.\n</p>\n<p>\nTo fix this, add\n`&lt;uses-feature android:name=&quot;android.software.leanback&quot;\n               android:required=&quot;false&quot; /&gt;`\nto your manifest.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/tv/start/start.html#leanback-req\">https://developer.android.com/training/tv/start/start.html#leanback-req</a><br />\n</p>\n",
     "tags": [
       "android"
     ],
@@ -2302,7 +2380,7 @@
   {
     "key": "MissingMediaBrowserServiceIntentFilter",
     "name": "Missing MediaBrowserService intent-filter",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nAn Automotive Media App requires an exported service that extends\nandroid.service.media.MediaBrowserService with an intent-filter for the action\nandroid.media.browse.MediaBrowserService to be able to browse and play media.\nTo do this, add\n`&lt;intent-filter&gt;`\n    `&lt;action android:name=&quot;android.media.browse.MediaBrowserService&quot; /&gt;`\n`&lt;/intent-filter&gt;`\nto the service that extends android.service.media.MediaBrowserService\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/auto/audio/index.html#config_manifest\">https://developer.android.com/training/auto/audio/index.html#config_manifest</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nAn Automotive Media App requires an exported service that extends\nandroid.service.media.MediaBrowserService with an intent-filter for the action\nandroid.media.browse.MediaBrowserService to be able to browse and play media.\n</p>\n<p>\nTo do this, add\n`&lt;intent-filter&gt;`\n    `&lt;action android:name=&quot;android.media.browse.MediaBrowserService&quot; /&gt;`\n`&lt;/intent-filter&gt;`\nto the service that extends android.service.media.MediaBrowserService\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/auto/audio/index.html#config_manifest\">https://developer.android.com/training/auto/audio/index.html#config_manifest</a><br />\n</p>\n",
     "tags": [
       "android"
     ],
@@ -2413,6 +2491,17 @@
     "key": "MotionLayoutInvalidSceneFileReference",
     "name": "layoutDescription must specify a scene file",
     "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nA motion scene file specifies the animations used in a MotionLayout. The\nlayoutDescription is required to specify a valid motion scene file.\n</p>\n<p>\n</p>\n",
+    "tags": [
+      "android"
+    ],
+    "type": "BUG",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "MotionLayoutMissingId",
+    "name": "Views inside MotionLayout require an android:id",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nViews inside MotionLayout require an android:id.\n</p>\n<p>\n</p>\n",
     "tags": [
       "android"
     ],
@@ -2546,7 +2635,7 @@
   {
     "key": "NoHardKeywords",
     "name": "No Hard Kotlin Keywords",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable NoHardKeywords\n</p>\n<p>\nDo not use Kotlin&rsquo;s hard keywords as the name of methods or fields.\nThese require the use of backticks to escape when calling from Kotlin.\nSoft keywords, modifier keywords, and special identifiers are allowed.\n</p>\n<p>\nFor example, Mockito&rsquo;s when function requires backticks when used from\nKotlin:<br />\n</p>\n<p>\n    val callable = Mockito.mock(Callable::class.java)\n    Mockito.`when`(callable.call()).thenReturn(/* &hellip; */)\n</p>\n<p>\nMore information: <br />\n<a href=\"https://android.github.io/kotlin-guides/interop.html#no-hard-keywords\">https://android.github.io/kotlin-guides/interop.html#no-hard-keywords</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable NoHardKeywords\n</p>\n<p>\nDo not use Kotlin&rsquo;s hard keywords as the name of methods or fields. These\nrequire the use of backticks to escape when calling from Kotlin. Soft\nkeywords, modifier keywords, and special identifiers are allowed.\n</p>\n<p>\nFor example, Mockito&rsquo;s when function requires backticks when used from\nKotlin:<br />\nval callable = Mockito.mock(Callable::class.java)\nMockito.\\`when\\`(callable.call()).thenReturn(/* &hellip; */)\n</p>\n<p>\nMore information: <br />\n<a href=\"https://android.github.io/kotlin-guides/interop.html#no-hard-keywords\">https://android.github.io/kotlin-guides/interop.html#no-hard-keywords</a><br />\n</p>\n",
     "tags": [
       "interoperability",
       "android"
@@ -2569,7 +2658,18 @@
   {
     "key": "NonResizeableActivity",
     "name": "Activity is set to be non resizeable",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe &lt;activity&gt; element should be allowed to be resized to allow users to take\nadvantage of the multi-window environments available on larger screen Android\ndevices.To fix the issue, consider declaring the corresponding activity\nelement with resizableActivity=&quot;true&quot; attribute.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/topic/arc/window-management\">https://developer.android.com/topic/arc/window-management</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe &lt;activity&gt; element should be allowed to be resized to allow users to take\nadvantage of the multi-window environments available on larger screen Android\ndevices.\n</p>\n<p>\nTo fix the issue, consider declaring the corresponding activity element with\nresizableActivity=&quot;true&quot; attribute.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/topic/arc/window-management\">https://developer.android.com/topic/arc/window-management</a><br />\n</p>\n",
+    "tags": [
+      "android"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "NotConstructor",
+    "name": "Not a Constructor",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThis check catches methods that look like they were intended to be\nconstructors, but aren't.\n</p>\n<p>\n</p>\n",
     "tags": [
       "android"
     ],
@@ -2608,6 +2708,17 @@
     ],
     "type": "CODE_SMELL",
     "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "NotificationId0",
+    "name": "Notification Id is 0",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe notification id cannot be 0; using 0 here can make the service not run in\nthe foreground.\n</p>\n<p>\n</p>\n",
+    "tags": [
+      "android"
+    ],
+    "type": "BUG",
+    "severity": "MAJOR",
     "constantDebtMinutes": 5
   },
   {
@@ -2688,6 +2799,17 @@
       "android"
     ],
     "type": "BUG",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "OpenForTesting",
+    "name": "Extending API only allowed from tests",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nClasses or methods annotated with @OpenForTesting are only allowed to be\nsubclassed or overridden from unit tests.\n</p>\n<p>\n</p>\n",
+    "tags": [
+      "android"
+    ],
+    "type": "CODE_SMELL",
     "severity": "MAJOR",
     "constantDebtMinutes": 5
   },
@@ -2874,7 +2996,7 @@
   {
     "key": "Proguard",
     "name": "Using obsolete ProGuard configuration",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nUsing -keepclasseswithmembernames in a proguard config file is not correct; it\ncan cause some symbols to be renamed which should not be.\nEarlier versions of ADT used to create proguard.cfg files with the wrong\nformat. Instead of -keepclasseswithmembernames use -keepclasseswithmembers,\nsince the old flags also implies &quot;allow shrinking&quot; which means symbols only\nreferred to from XML and not Java (such as possibly CustomViews) can get\ndeleted.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://issuetracker.google.com/36928077\">https://issuetracker.google.com/36928077</a><br />\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nUsing -keepclasseswithmembernames in a proguard config file is not correct; it\ncan cause some symbols to be renamed which should not be.\n</p>\n<p>\nEarlier versions of ADT used to create proguard.cfg files with the wrong\nformat. Instead of -keepclasseswithmembernames use -keepclasseswithmembers,\nsince the old flags also implies &quot;allow shrinking&quot; which means symbols only\nreferred to from XML and not Java (such as possibly CustomViews) can get\ndeleted.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://issuetracker.google.com/36928077\">https://issuetracker.google.com/36928077</a><br />\n</p>\n",
     "tags": [
       "android"
     ],
@@ -3144,6 +3266,17 @@
     "key": "RestrictedApi",
     "name": "Restricted API",
     "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThis API has been flagged with a restriction that has not been met.\n</p>\n<p>\nExamples of API restrictions:<br />\n* Method can only be invoked by a subclass\n* Method can only be accessed from within the same library (defined by the\nGradle library group id)\n* Method can only be accessed from tests.\n</p>\n<p>\nYou can add your own API restrictions with the @RestrictTo annotation.\n</p>\n<p>\n</p>\n",
+    "tags": [
+      "android"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ReturnThis",
+    "name": "Method must return this",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nMethods annotated with @ReturnThis (usually in the super method that this\nmethod is overriding) should also return this.\n</p>\n<p>\n</p>\n",
     "tags": [
       "android"
     ],
@@ -3432,7 +3565,7 @@
   {
     "key": "Slices",
     "name": "Slices",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThis check analyzes usages of the Slices API and offers suggestions based\non best practices.\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThis check analyzes usages of the Slices API and offers suggestions based on\nbest practices.\n</p>\n<p>\n</p>\n",
     "tags": [
       "android"
     ],
@@ -3466,7 +3599,7 @@
   {
     "key": "SourceLockedOrientationActivity",
     "name": "Incompatible setRequestedOrientation value",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe Activity should not be locked to a portrait orientation so that users\ncan take advantage of the multi-window environments and larger landscape-first\nscreens\nthat Android runs on such as Chrome OS. To fix the issue, consider calling\nsetRequestedOrientation with the ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR\nor\nActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED options or removing the call\nall together.\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe Activity should not be locked to a portrait orientation so that users can\ntake advantage of the multi-window environments and larger landscape-first\nscreens that Android runs on such as Chrome OS. To fix the issue, consider\ncalling setRequestedOrientation with the\nActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR or\nActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED options or removing the call all\ntogether.\n</p>\n<p>\n</p>\n",
     "tags": [
       "android"
     ],
@@ -3522,7 +3655,7 @@
   {
     "key": "StringEscaping",
     "name": "Invalid string escapes",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nApostrophes (') must always be escaped (with a \\), unless they appear in a\nstring which is itself escaped in double quotes (&quot;).\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nApostrophes (') must always be escaped (with a \\\\), unless they appear in a\nstring which is itself escaped in double quotes (&quot;).\n</p>\n<p>\n</p>\n",
     "tags": [
       "android"
     ],
@@ -3561,6 +3694,18 @@
     ],
     "type": "BUG",
     "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "StringFormatTrivial",
+    "name": "String.format string only contains trivial conversions",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable StringFormatTrivial\n</p>\n<p>\nEvery call to String.format creates a new Formatter instance, which will\ndecrease the performance of your app. String.format should only be used when\nnecessary--if the formatted string contains only trivial conversions (e.g. b,\ns, c) and there are no translation concerns, it will be more efficient to\nreplace them and concatenate with +.\n</p>\n<p>\n</p>\n",
+    "tags": [
+      "performance",
+      "android"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
     "constantDebtMinutes": 5
   },
   {
@@ -3605,6 +3750,17 @@
     ],
     "type": "CODE_SMELL",
     "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "SuspiciousIndentation",
+    "name": "Suspicious indentation",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThis check looks for cases where the indentation suggests a grouping that\nisn't actually there in the code. A common example of this would be something\nlike\nif (column &gt; width)\n    line++\n    column = 0\nHere, the column = 0 line will be executed every single time, not just if the\ncondition is true.\n</p>\n<p>\nAvailable options:<br />\n</p>\n<p>\nalways-run (default is false):<br />\nWhether this check should be included while editing.\n</p>\n<p>\nWhile you're editing, it's common to have a temporary situation where you have suspicious indentation scenarios -- e.g. you start typing an if statement on the line above something you want to make conditional, and you haven't indented it yet. It can be distracting and misleading to suddenly have both statements light up as errors. Therefore, lint will avoid including this check when running on the fly in the editor, unless it looks like the file has not been recently edited. With this option, you can turn it on in all cases.\n</p>\n<p>\nTo configure this option, use a lint.xml file with an &lt;option&gt; like this:<br />\n</p>\n<p>\n&lt;lint&gt;\n    &lt;issue id=&quot;SuspiciousIndentation&quot;&gt;\n        &lt;option name=&quot;always-run&quot; value=&quot;false&quot; /&gt;\n    &lt;/issue&gt;\n&lt;/lint&gt;\n</p>\n<p>\n</p>\n<p>\n</p>\n",
+    "tags": [
+      "android"
+    ],
+    "type": "BUG",
+    "severity": "MAJOR",
     "constantDebtMinutes": 5
   },
   {
@@ -3807,6 +3963,18 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "UastImplementation",
+    "name": "Avoid using UAST implementation",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nUse UAST interface whenever possible, and do not rely on UAST implementation,\nwhich is subject to change. If language-specific information is needed, the\nnext option is to use PSI directly (though these APIs are less stable and can\ndepend on compiler internals, especially in the case of Kotlin).\n</p>\n<p>\n</p>\n<p>\n</p>\n",
+    "tags": [
+      "lint-implementation",
+      "android"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "UniqueConstants",
     "name": "Overlapping Enumeration Constants",
     "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nThe @IntDef annotation allows you to create a light-weight &quot;enum&quot; or type\ndefinition. However, it's possible to accidentally specify the same value for\ntwo or more of the values, which can lead to hard-to-detect bugs. This check\nlooks for this scenario and flags any repeated constants.\n</p>\n<p>\nIn some cases, the repeated constant is intentional (for example, renaming a\nconstant to a more intuitive name, and leaving the old name in place for\ncompatibility purposes).  In that case, simply suppress this check by adding a\n@SuppressLint(&quot;UniqueConstants&quot;) annotation.\n</p>\n<p>\n</p>\n",
@@ -3853,7 +4021,7 @@
   {
     "key": "UnknownNullness",
     "name": "Unknown nullness",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable UnknownNullness\n</p>\n<p>\nTo improve referencing this code from Kotlin, consider adding\nexplicit nullness information here with either @NonNull or @Nullable.\n</p>\n<p>\nYou can set the environment variable\n    `ANDROID_LINT_NULLNESS_IGNORE_DEPRECATED=true`\nif you want lint to ignore classes and members that have been annotated with\n@Deprecated.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://android.github.io/kotlin-guides/interop.html#nullability-annotations\">https://android.github.io/kotlin-guides/interop.html#nullability-annotations</a><br />\n</p>\n<p>\nLint Implementation Issues\n==========================\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable UnknownNullness\n</p>\n<p>\nTo improve referencing this code from Kotlin, consider adding explicit\nnullness information here with either @NonNull or @Nullable.\n</p>\n<p>\nAvailable options:<br />\n</p>\n<p>\nignore-deprecated (default is false):<br />\nWhether to ignore classes and members that have been annotated with @Deprecated.\n</p>\n<p>\nNormally this lint check will flag all unannotated elements, but by setting this option to true it will skip any deprecated elements.\n</p>\n<p>\nTo configure this option, use a lint.xml file with an &lt;option&gt; like this:<br />\n</p>\n<p>\n&lt;lint&gt;\n    &lt;issue id=&quot;UnknownNullness&quot;&gt;\n        &lt;option name=&quot;ignore-deprecated&quot; value=&quot;false&quot; /&gt;\n    &lt;/issue&gt;\n&lt;/lint&gt;\n</p>\n<p>\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/kotlin/interop#nullability_annotations\">https://developer.android.com/kotlin/interop#nullability_annotations</a><br />\n</p>\n<p>\nLint Implementation Issues\n==========================\n</p>\n",
     "tags": [
       "interoperability",
       "android"
@@ -3867,18 +4035,6 @@
     "name": "SMS phone number missing country code",
     "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nSMS destination numbers must start with a country code or the application code\nmust ensure that the SMS is only sent when the user is in the same country as\nthe receiver.\n</p>\n<p>\n</p>\n",
     "tags": [
-      "android"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MINOR",
-    "constantDebtMinutes": 5
-  },
-  {
-    "key": "UnpackedNativeCode",
-    "name": "Missing android:extractNativeLibs=false",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\nNOTE: This issue is disabled by default!\nYou can enable it by adding --enable UnpackedNativeCode\n</p>\n<p>\nThis app loads native libraries using System.loadLibrary().\n</p>\n<p>\nConsider adding android:extractNativeLibs=&quot;false&quot; to the &lt;application&gt; tag in\nAndroidManifest.xml. Starting with Android 6.0, this will make installation\nfaster, the app will take up less space on the device and updates will have\nsmaller download sizes.\n</p>\n<p>\n</p>\n",
-    "tags": [
-      "performance",
       "android"
     ],
     "type": "CODE_SMELL",
@@ -3948,7 +4104,7 @@
   {
     "key": "UnsupportedChromeOsCameraSystemFeature",
     "name": "Looking for Rear Camera only feature",
-    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nYou should look for the FEATURE_CAMERA_ANY features to include all\npossible cameras that may be on the device. Looking for FEATURE_CAMERA\nonly looks for a rear facing camera, which certain tablets or Chrome OS\ndevices don't have, as well as newer device configurations and modes may place\nthe\ndevice in a state where the rear camera is not available. To fix the issue,\nlook for FEATURE_CAMERA_ANY instead.\n</p>\n<p>\n</p>\n",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nYou should look for the FEATURE_CAMERA_ANY features to include all possible\ncameras that may be on the device. Looking for FEATURE_CAMERA only looks for a\nrear facing camera, which certain tablets or Chrome OS devices don't have, as\nwell as newer device configurations and modes may place the device in a state\nwhere the rear camera is not available. To fix the issue, look for\nFEATURE_CAMERA_ANY instead.\n</p>\n<p>\n</p>\n",
     "tags": [
       "android"
     ],
@@ -4350,9 +4506,31 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "WatchFaceForAndroidX",
+    "name": "AndroidX watch faces must use action WATCH_FACE_EDITOR",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nIf the package depends on androidx.wear:wear-watchface, and an AndroidX watch\nface declares the wearableConfigurationAction metadata, its value should be\nandroidx.wear.watchface.editor.action.WATCH_FACE_EDITOR.\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/wearables/watch-faces/configuration\">https://developer.android.com/training/wearables/watch-faces/configuration</a><br />\n</p>\n",
+    "tags": [
+      "android"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "WearStandaloneAppFlag",
     "name": "Invalid or missing Wear standalone app flag",
     "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nWearable apps should specify whether they can work standalone, without a phone\napp. Add a valid meta-data entry for com.google.android.wearable.standalone to\nyour application element and set the value to true or false.\n&lt;meta-data android:name=&quot;com.google.android.wearable.standalone&quot;\n           android:value=&quot;true&quot;/&gt;`\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/wearables/apps/packaging.html\">https://developer.android.com/training/wearables/apps/packaging.html</a><br />\n</p>\n",
+    "tags": [
+      "android"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "WearableActionDuplicate",
+    "name": "Duplicate watch face configuration activities found",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nIf and only if a watch face service defines wearableConfigurationAction\nmetadata, with the value WATCH_FACE_EDITOR, there should be an activity in the\nsame package, which has an intent filter for WATCH_FACE_EDITOR (with\ncom.google.android.wearable.watchface.category.WEARABLE_CONFIGURATION if\nminSdkVersion is less than 30).\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/wearables/watch-faces/configuration\">https://developer.android.com/training/wearables/watch-faces/configuration</a><br />\n</p>\n",
     "tags": [
       "android"
     ],
@@ -4370,6 +4548,17 @@
     ],
     "type": "CODE_SMELL",
     "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "WearableConfigurationAction",
+    "name": "Wear configuration action metadata must match an activity",
+    "description": "<p>\nVendor: Android Open Source Project\nContact: https://groups.google.com/g/lint-dev\nFeedback: https://issuetracker.google.com/issues/new?component=192708\n</p>\n<p>\nOnly when a watch face service defines wearableConfigurationAction metadata,\nwith the value WATCH_FACE_EDITOR, there should be an activity in the same\npackage, which has an intent filter for WATCH_FACE_EDITOR (with\ncom.google.android.wearable.watchface.category.WEARABLE_CONFIGURATION if\nminSdkVersion is less than 30).\n</p>\n<p>\nMore information: <br />\n<a href=\"https://developer.android.com/training/wearables/watch-faces/configuration\">https://developer.android.com/training/wearables/watch-faces/configuration</a><br />\n</p>\n",
+    "tags": [
+      "android"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
     "constantDebtMinutes": 5
   },
   {
