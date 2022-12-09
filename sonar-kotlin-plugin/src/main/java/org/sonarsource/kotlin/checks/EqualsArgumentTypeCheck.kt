@@ -37,6 +37,8 @@ import org.sonarsource.kotlin.api.ANY_TYPE
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.EQUALS_METHOD_NAME
 import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.determineType
+import org.sonarsource.kotlin.api.isSupertypeOf
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private val EQUALS_MATCHER = FunMatcher {
@@ -48,19 +50,21 @@ private val EQUALS_MATCHER = FunMatcher {
 class EqualsArgumentTypeCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, ctx: KotlinFileContext) {
-        if (!EQUALS_MATCHER.matches(function, ctx.bindingContext)) return
+        val bindingContext = ctx.bindingContext
+        if (!EQUALS_MATCHER.matches(function, bindingContext)) return
         if (!function.hasBody()) return
 
         val klass = function.containingClass() ?: return
         val parameter = function.valueParameters.first()
-        val childNames = klass.collectDescendantsOfType<KtClass>().mapNotNull { it.name }
         val parentNames = klass.superTypeListEntries.mapNotNull { it.typeReference!!.nameForReceiverLabel() }
 
         if (function.collectDescendantsOfType<KtIsExpression> { parameter.name == (it.leftHandSide as? KtNameReferenceExpression)?.getReferencedName() }
                 .none {
                     // typeReference is always present
                     val name = it.typeReference!!.nameForReceiverLabel()
-                    childNames.contains(name) || parentNames.contains(name)
+                    klass.name == name || parentNames.contains(name) ||
+                        it.typeReference!!.determineType(bindingContext)
+                            ?.let { type -> klass.determineType(bindingContext)?.isSupertypeOf(type) } == true
                 } &&
 
             function.collectDescendantsOfType<KtBinaryExpression> { it.operationToken == KtTokens.EQEQ || it.operationToken == KtTokens.EXCLEQ }
@@ -80,12 +84,7 @@ class EqualsArgumentTypeCheck : AbstractCheck() {
     ): Boolean {
         val left = binaryExpression.left.collectDescendantsOfType<KtNameReferenceExpression>().map { it.getReferencedName() }
         val right = binaryExpression.right!!.collectDescendantsOfType<KtNameReferenceExpression>().map { it.getReferencedName() }
-        return (left.contains(parameter.name) && isTestedAgainstProperType(right, klass)) || (isTestedAgainstProperType(
-            left,
-            klass
-        ) && right.contains(
-            parameter.name
-        ))
+        return left.contains(parameter.name) && isTestedAgainstProperType(right, klass)
     }
 
     private fun isBinaryExpressionCorrect(binaryExpression: KtBinaryExpression, parameter: KtParameter, klass: KtClass): Boolean {

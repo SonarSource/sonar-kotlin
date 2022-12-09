@@ -9,6 +9,18 @@ fun equals(other: Any?): Boolean { // Compliant
 
 abstract class EqualsArgumentTypeCheckSample {
 
+    open class MyClass2 {
+        val a = 1
+        override fun equals(other: Any?): Boolean { // Compliant
+            if (other !is MyClass3)
+                return false
+            val mc = other
+            mc.a
+            // ...
+            return this === mc
+        }
+    }
+
     interface Test {
         override fun equals(other: Any?): Boolean // Compliant
     }
@@ -153,24 +165,13 @@ abstract class EqualsArgumentTypeCheckSample {
         }
     }
 
-    class MyClass2 {
-        val a = 1
-        override fun equals(other: Any?): Boolean { // Compliant
-            if (other !is MyClass2)
-                return false
-            val mc = other
-            mc.a
-            // ...
-            return this === mc
-        }
-    }
 
-    class MyClass3 {
+    class MyClass3 : MyClass2() {
         class Klas1 {
             val a = 1
         }
 
-        override fun equals(other: Any?): Boolean { // Compliant
+        override fun equals(other: Any?): Boolean { // Noncompliant
             if (other !is Klas1)
                 return false
             val mc = other
