@@ -24,9 +24,12 @@ import org.jetbrains.kotlin.lexer.KtTokens.THIS_KEYWORD
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.sonar.check.Rule
@@ -51,38 +54,50 @@ class EqualsArgumentTypeCheck : AbstractCheck() {
 
         val klass = function.containingClass() ?: return
         val parameter = function.valueParameters.first()
-        val klassNames = klass.collectDescendantsOfType<KtClass>().mapNotNull { it.name }
+        val childNames = klass.collectDescendantsOfType<KtClass>().mapNotNull { it.name }
+        val parentNames = klass.superTypeListEntries.mapNotNull { it.typeReference!!.nameForReceiverLabel() }
 
-        val hasIsExpression =
-            function.collectDescendantsOfType<KtIsExpression> { parameter.name == (it.leftHandSide as? KtNameReferenceExpression)?.getReferencedName() }
-                .any { klassNames.contains(it.typeReference!!.nameForReceiverLabel()) }
-        if (hasIsExpression) return
+        function.collectDescendantsOfType<KtIsExpression> { parameter.name == (it.leftHandSide as? KtNameReferenceExpression)?.getReferencedName() }
+            .any {
+                // typeReference is always present
+                val name = it.typeReference!!.nameForReceiverLabel()
+                childNames.contains(name) || parentNames.contains(name)
+            }
+            .let { if (it) return }
 
-        val binaryExpressions = function.collectDescendantsOfType<KtBinaryExpression> {
-            it.operationToken == KtTokens.EQEQ || it.operationToken == KtTokens.EXCLEQ
-        }
-        val isContained = binaryExpressions.any { binaryExpression ->
-            val left = binaryExpression.left!!.collectDescendantsOfType<KtNameReferenceExpression>().map { it.getReferencedName() }
-            val right = binaryExpression.right!!.collectDescendantsOfType<KtNameReferenceExpression>().map { it.getReferencedName() }
-            (left.contains(parameter.name) && isContainedInList(right, klass)) || (isContainedInList(left, klass) && right.contains(
-                parameter.name
-            ))
-        }
-        if (isContained) return
+        function.collectDescendantsOfType<KtBinaryExpression> { it.operationToken == KtTokens.EQEQ || it.operationToken == KtTokens.EXCLEQ }
+            .any { binaryExpression -> isBinaryExpressionCorrect(binaryExpression, parameter, klass) }
+            .let { if (it) return }
 
-        val binaryExpressionsWithType = function.collectDescendantsOfType<KtBinaryExpressionWithTypeRHS> {
-            it.operationReference.getReferencedName() == "as?"
-        }
-        val isContainedInExpressionWithType = binaryExpressionsWithType.any { binaryExpression ->
-            val left = binaryExpression.left.collectDescendantsOfType<KtNameReferenceExpression>().map { it.getReferencedName() }
-            val right = binaryExpression.right!!.collectDescendantsOfType<KtNameReferenceExpression>().map { it.getReferencedName() }
-            (left.contains(parameter.name) && isContainedInList(right, klass)) || (isContainedInList(left, klass) && right.contains(
-                parameter.name
-            ))
-        }
-        if (isContainedInExpressionWithType) return
+        function.collectDescendantsOfType<KtBinaryExpressionWithTypeRHS> { it.operationReference.getReferencedName() == "as?" }
+            .any { binaryExpression -> isBinaryExpressionWithTypeCorrect(binaryExpression, parameter, klass) }
+            .let { if (it) return }
 
-        ctx.reportIssue(function, "Add a type test to this method.")
+        ctx.reportIssue(function.nameIdentifier!!, "Add a type test to this method.")
+    }
+
+    private fun isBinaryExpressionWithTypeCorrect(
+        binaryExpression: KtBinaryExpressionWithTypeRHS,
+        parameter: KtParameter,
+        klass: KtClass,
+    ): Boolean {
+        val left = binaryExpression.left.collectDescendantsOfType<KtNameReferenceExpression>().map { it.getReferencedName() }
+        val right = binaryExpression.right!!.collectDescendantsOfType<KtNameReferenceExpression>().map { it.getReferencedName() }
+        return (left.contains(parameter.name) && isContainedInList(right, klass)) || (isContainedInList(left, klass) && right.contains(
+            parameter.name
+        ))
+    }
+
+    private fun isBinaryExpressionCorrect(binaryExpression: KtBinaryExpression, parameter: KtParameter, klass: KtClass): Boolean {
+        val left = binaryExpression.left!!.collectDescendantsOfType<KtNameReferenceExpression>()
+            .filterNot { (it.parent is KtDotQualifiedExpression || it.parent is KtSafeQualifiedExpression) && it.getReferencedName() == "javaClass" }
+            .map { it.getReferencedName() }
+        val right = binaryExpression.right!!.collectDescendantsOfType<KtNameReferenceExpression>()
+            .filterNot { (it.parent is KtDotQualifiedExpression || it.parent is KtSafeQualifiedExpression) && it.getReferencedName() == "javaClass" }
+            .map { it.getReferencedName() }
+        return (left.contains(parameter.name) && isContainedInList(right, klass)) || (isContainedInList(left, klass) && right.contains(
+            parameter.name
+        ))
     }
 
     private fun isContainedInList(list: List<String>, klass: KtClass) =

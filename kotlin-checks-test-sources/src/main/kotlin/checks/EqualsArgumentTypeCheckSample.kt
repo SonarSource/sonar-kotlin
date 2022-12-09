@@ -2,6 +2,47 @@ package checks
 
 abstract class EqualsArgumentTypeCheckSample {
 
+    open class Foo4 {
+        val a = 1
+        override fun equals(other: Any?): Boolean { // Noncompliant
+            val b = Any()
+            if (other?.javaClass == b?.javaClass) return true
+
+            return false
+        }
+    }
+
+    open class Foo6 {
+        val a = 1
+        override fun equals(other: Any?): Boolean { // Noncompliant
+            val b = Any()
+            if (other?.javaClass == b.javaClass) return true
+
+            return false
+        }
+    }
+
+    open class NewClass {
+        override fun equals(other: Any?): Boolean { // Compliant
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as NewClass
+            // ...
+            return true
+        }
+    }
+
+    class NewClass2 : NewClass() {
+        override fun equals(other: Any?): Boolean { // Compliant
+            if (other !is NewClass) return false
+
+            // ...
+            return true
+        }
+    }
+
+
     class Foo0 {
         val a = 1
         override fun equals(other: Any?): Boolean { // Compliant
@@ -27,6 +68,7 @@ abstract class EqualsArgumentTypeCheckSample {
     }
 
     override fun equals(other: Any?): Boolean { // Noncompliant
+//               ^^^^^^
         return 1 is Int
     }
 
@@ -36,25 +78,6 @@ abstract class EqualsArgumentTypeCheckSample {
         }
     }
 
-    open class NewClass {
-        override fun equals(other: Any?): Boolean { // Compliant
-            if (this === other) return true
-            if (javaClass != other?.javaClass) return false
-
-            other as NewClass
-            // ...
-            return true
-        }
-    }
-
-    class NewClass2 : NewClass() {
-        override fun equals(other: Any?): Boolean { // Noncompliant
-            if (other !is NewClass) return false
-
-            // ...
-            return true
-        }
-    }
 
     sealed class NewClass3 {
         class Single : NewClass3() {
@@ -68,6 +91,7 @@ abstract class EqualsArgumentTypeCheckSample {
 
     class NewClass4 {
         override fun equals(other: Any?): Boolean { // Noncompliant
+//                   ^^^^^^
             val anyObject = null
             if (anyObject is NewClass4) return false
             //...
