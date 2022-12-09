@@ -2,18 +2,18 @@
 implementation should not assume it will only be used to test objects of its own class type. It must instead check the parameter’s type.</p>
 <h2>Noncompliant Code Example</h2>
 <pre>
-override fun equals(other: Any?): Boolean {
-  val mc = other as MyClass  // Noncompliant
+override fun equals(other: Any?): Boolean {  // Noncompliant
+  val mc = other as MyClass
   // ...
 }
 </pre>
 <h2>Compliant Solution</h2>
 <pre>
 override fun equals(other: Any?): Boolean {
-  if (other?.class != this.class)
+  if (other?.javaClass != this.javaClass)
     return false
 
-  val mc = other as MyClass;
+  val mc = other as MyClass
   // ...
 }
 </pre>

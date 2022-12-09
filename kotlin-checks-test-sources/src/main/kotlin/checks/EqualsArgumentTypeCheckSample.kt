@@ -1,12 +1,30 @@
 package checks
 
+fun equals(other: Any?): Boolean { // Compliant
+    val b = Any()
+    if (other?.javaClass == b?.javaClass) return true
+
+    return false
+}
+
 abstract class EqualsArgumentTypeCheckSample {
+
+    interface Test {
+        override fun equals(other: Any?): Boolean // Compliant
+    }
 
     open class Foo4 {
         val a = 1
         override fun equals(other: Any?): Boolean { // Noncompliant
             val b = Any()
             if (other?.javaClass == b?.javaClass) return true
+
+            return false
+        }
+
+        fun equalsTesting(other: Any?): Boolean { // Compliant
+            val b = Any()
+            if (other?.javaClass == b.javaClass) return true
 
             return false
         }
@@ -39,6 +57,13 @@ abstract class EqualsArgumentTypeCheckSample {
 
             // ...
             return true
+        }
+    }
+
+    class FooNoncompliant {
+        val a = 1
+        override fun equals(other: Any?): Boolean { // Noncompliant
+            return (other as? String)?.let { true } ?: false
         }
     }
 

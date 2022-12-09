@@ -1,4 +1,5 @@
 {
+  "title": "\"equals(other: Any?)\" should test argument type",
   "type": "BUG",
   "status": "ready",
   "remediation": {
@@ -10,5 +11,5 @@
   "ruleSpecification": "RSPEC-2097",
   "sqKey": "S2097",
   "scope": "All",
-  "title": "\"equals(other: Any?)\" should test argument type"
+  "quickfix": "unknown"
 }
