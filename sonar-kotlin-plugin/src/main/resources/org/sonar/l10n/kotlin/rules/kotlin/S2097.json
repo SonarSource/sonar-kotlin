@@ -1,0 +1,15 @@
+{
+  "title": "\"equals(other: Any?)\" should test argument type",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Minor",
+  "ruleSpecification": "RSPEC-2097",
+  "sqKey": "S2097",
+  "scope": "All",
+  "quickfix": "unknown"
+}
