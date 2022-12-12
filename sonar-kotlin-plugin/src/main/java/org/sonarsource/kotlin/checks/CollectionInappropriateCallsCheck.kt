@@ -33,8 +33,10 @@ import org.sonarsource.kotlin.api.isSupertypeOf
 import org.sonarsource.kotlin.api.predictReceiverExpression
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
+const val qualifier = "kotlin.collections"
+
 val COLLECTION_EXTENSIONS_MATCHER = FunMatcher(
-    qualifier = "kotlin.collections",
+    qualifier = qualifier,
     extensionFunction = true
 ) {
     withNames(
@@ -44,7 +46,7 @@ val COLLECTION_EXTENSIONS_MATCHER = FunMatcher(
 }
 
 val COLLECTION_ARGUMENT_EXTENSIONS_MATCHER = FunMatcher(
-    qualifier = "kotlin.collections",
+    qualifier = qualifier,
     extensionFunction = true
 ) {
     withNames("removeAll", "retainAll", "containsAll")
@@ -52,7 +54,7 @@ val COLLECTION_ARGUMENT_EXTENSIONS_MATCHER = FunMatcher(
 }
 
 val CONTAINS_VALUE_MATCHER = FunMatcher(
-    qualifier = "kotlin.collections",
+    qualifier = qualifier,
     extensionFunction = true
 ) {
     withNames("containsValue")
