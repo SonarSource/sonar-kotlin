@@ -60,7 +60,7 @@ windows_4_cpu_15G_template: &WINDOWS_4_CPU_15G
     image: base-windows-jdk11-v*
     platform: windows
     region: eu-central-1
-    type: t2.xlarge
+    type: t3.xlarge
     subnet_id: ${CIRRUS_AWS_SUBNET}
     preemptible: false
     use_ssd: true
