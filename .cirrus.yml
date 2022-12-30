@@ -48,9 +48,10 @@ linux_3_5_cpu_7G_template: &LINUX_3_5_CPU_7G
     cpu: 3.5
     memory: 7G
 
-linux_6_cpu_12G_template: &LINUX_6_CPU_12G
+linux_6_cpu_12G_java_17_template: &LINUX_6_CPU_12G_JAVA_17
   eks_container:
     <<: *LINUX_IMAGE
+    image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-latest
     cpu: 6
     memory: 24G
 
@@ -168,7 +169,7 @@ qa_plug_pub_lin_task:
       - SQ_VERSION: "DEV"
       - SQ_VERSION: "LATEST_RELEASE[8.9]"
       - SQ_VERSION: "LATEST_RELEASE"
-  <<: *LINUX_6_CPU_12G
+  <<: *LINUX_6_CPU_12G_JAVA_17
   <<: *GRADLE_ITS_TEMPLATE
 
 qa_plug_pub_win_task:
@@ -187,7 +188,7 @@ qa_ruling_kotlin_task:
     GRADLE_TASK: ":its:ruling:test"
     ITS_PROJECT: "ruling"
     GIT_SUB_MODULE: "its/sources"
-  <<: *LINUX_6_CPU_12G
+  <<: *LINUX_6_CPU_12G_JAVA_17
   <<: *KOTLIN_ITS_TEMPLATE
 
 build_win_task:
