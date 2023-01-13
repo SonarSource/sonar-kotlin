@@ -78,10 +78,16 @@ abstract class FetchRuleMetadata : DefaultTask() {
 
                     var selection: Int? = null
                     while (selection == null || selection !in 0..optionsText.size) {
-                        println("\n\n\nRSPEC branches mentioning this rule were found. Please select which branch to update from:")
-                        println("  0. master")
-                        println(optionsText.joinToString("\n"))
-                        println("\nSelection [1]: ")
+                        println("""
+                            
+
+
+                            RSPEC branches mentioning this rule were found. Please select which branch to update from:
+                              0. master
+                            ${optionsText.joinToString("\n")}
+                            
+                            Selection [1]: 
+                        """.trimIndent())
 
                         val userInput = readLine()
 

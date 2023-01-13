@@ -4,6 +4,7 @@ import com.github.kittinunf.fuel.core.FuelError
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.core.Request
 import com.github.kittinunf.fuel.core.Response
+import com.github.kittinunf.fuel.core.awaitResult
 import com.github.kittinunf.fuel.gson.responseObject
 import com.github.kittinunf.result.Result
 
@@ -18,35 +19,34 @@ private const val PR_QUERY_STRING = "is:pr is:open repo:SonarSource/rspec label:
 
 internal object GitHubApi {
     fun getBranchCandidatesForRule(ruleKey: String) =
-        preparePrSearchQuery(ruleKey).getResponseObject<PrSearchResults>().let { (response, result) ->
-            val (searchResults, error) = result
-            error?.let {
-                System.err.println("Request: ${response.url}")
-                System.err.println("Response: ${response.data.decodeToString()}")
-                throw it
-            }
+        preparePrSearchQuery(ruleKey).getResponseObject<PrSearchResults>().let { (searchResults, error) ->
+            error?.logAndThrow()
             searchResults?.items ?: throw IllegalStateException("Got null response while searching PRs for rule key $ruleKey.")
         }.map { searchResult ->
-            preparePrDetailsQuery(searchResult.number).getResponseObject<Pr>().let { (response, result) ->
-                val (pr, error) = result
-                error?.let {
-                    System.err.println("Request: ${response.url}")
-                    System.err.println("Response: ${response.data.decodeToString()}")
-                    throw it
-                }
-                if (pr == null) throw IllegalStateException("Got null response while fetching PR #${searchResult.number} details.")
-                pr
+            // For every PR, we extract the branch name to suggest as alternative branch as metadata source.
+            preparePrDetailsQuery(searchResult.number).getResponseObject<Pr>().let { (pr, error) ->
+                error?.logAndThrow()
+                pr ?: throw IllegalStateException("Got null response while fetching PR #${searchResult.number} details.")
             }
         }
 
+    /**
+     * To find the PRs that contain the rule key in their title
+     */
     private fun preparePrSearchQuery(ruleKey: String) =
         Endpoints.PR_SEARCH.httpGet(listOf("q" to "$PR_QUERY_STRING $ruleKey"))
             .prepRequest()
 
+    /**
+     * To get details about a particular PR
+     */
     private fun preparePrDetailsQuery(prId: Int) =
         "${Endpoints.PR_DETAILS}/$prId".httpGet()
             .prepRequest()
 
+    /**
+     * Add common headers to requests
+     */
     private fun Request.prepRequest() =
         (GH_TOKEN?.let { token ->
             header("Authorization", "Bearer $token")
@@ -54,15 +54,14 @@ internal object GitHubApi {
             .header("Accept", "application/vnd.github+json")
 }
 
-private inline fun <reified T : Any> Request.getResponseObject(): Pair<Response, Result<T, FuelError>> {
-    var retResult: Result<T, FuelError>? = null
-    var retResponse: Response? = null
-    responseObject<T> { _, response, result ->
-        retResult = result
-        retResponse = response
-    }.join()
-    return retResponse!! to retResult!!
+private fun FuelError.logAndThrow() {
+    System.err.println("Request: ${response.url}")
+    System.err.println("Response: ${response.data.decodeToString()}")
+    throw this
 }
+
+private inline fun <reified T : Any> Request.getResponseObject(): Result<T, FuelError> =
+    responseObject<T>().third
 
 private object Endpoints {
     const val BASE_URL = "https://api.github.com"
