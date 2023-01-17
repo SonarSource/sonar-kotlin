@@ -55,9 +55,56 @@ abstract class FetchRuleMetadata : DefaultTask() {
         @get:Optional
         val branch: String? by project
 
+        @get:Input
+        @get:Optional
+        val autoSelectBranch: String? by project
+
         @TaskAction
-        fun downloadMetadata() =
-            executeRuleApi(listOf("generate", "-rule", ruleKey) + (branch?.let { listOf("-branch", it) } ?: emptyList()))
+        fun downloadMetadata() {
+            val finalRspecBranch = if (branch == null) {
+                kotlin.runCatching {
+                    GitHubApi.getBranchCandidatesForRule(ruleKey)
+                }.onFailure { e ->
+                    System.err.println("Cannot query GitHub for metadata branch candidates:\n$e")
+                }.getOrNull()?.let { prs ->
+                    if (prs.isEmpty()) return@let null
+                    else if (autoSelectBranch == "true" || autoSelectBranch == "yes" || autoSelectBranch?.isEmpty() == true) {
+                        return@let prs.first().head.ref
+                    }
+
+                    val optionsText = prs.mapIndexed { i, pr ->
+                        "  ${i + 1}. ${pr.head.ref} - #${pr.number}: ${pr.title} (${pr.html_url})"
+                    }
+
+                    var selection: Int? = null
+                    while (selection == null || selection !in 0..optionsText.size) {
+                        println("""
+                            
+
+
+                            RSPEC branches mentioning this rule were found. Please select which branch to update from:
+                              0. master
+                            ${optionsText.joinToString("\n")}
+                            
+                            Selection [1]: 
+                        """.trimIndent())
+
+                        val userInput = readLine()
+
+                        if (userInput.isNullOrBlank()) {
+                            selection = 1
+                        } else {
+                            selection = runCatching { userInput.toInt() }.getOrNull()
+                        }
+                    }
+
+                    if (selection > 0) prs[selection - 1].head.ref
+                    else null
+                }
+            } else branch
+
+            executeRuleApi(listOf("generate", "-rule", ruleKey) + (finalRspecBranch?.let { listOf("-branch", it) } ?: emptyList()))
+        }
     }
 
     abstract class FetchAllRulesMetadata : FetchRuleMetadata() {
