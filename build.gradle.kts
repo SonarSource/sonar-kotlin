@@ -99,6 +99,12 @@ allprojects {
     }
 }
 
+val ddTracerAgent by configurations.creating
+dependencies {
+    ddTracerAgent("com.datadoghq:dd-java-agent:1.6.0")
+}
+val ddTraceAgentAsPath: String = ddTracerAgent.asPath
+
 subprojects {
     val javadoc: Javadoc by tasks
 
@@ -138,7 +144,7 @@ subprojects {
     }
 
     if (!project.path.startsWith(":its") && !project.path.startsWith(":private:its")) {
-        tasks.test {
+        tasks.withType<Test>().configureEach {
             useJUnitPlatform()
         }
     }
@@ -148,6 +154,14 @@ subprojects {
             exceptionFormat =
                 org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL // log the full stack trace (default is the 1st line of the stack trace)
             events("skipped", "failed") // verbose log for failed and skipped tests (by default the name of the tests are not logged)
+        }
+
+        if (project.hasProperty("dd-civisibility")) {
+            jvmArgs = listOf(
+                "-javaagent:$ddTraceAgentAsPath",
+                "-Ddd.service=sonar-kotlin",
+                "-Ddd.civisibility.enabled=true"
+            )
         }
 
         systemProperties = System.getProperties().filterKeys {

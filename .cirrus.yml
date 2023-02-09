@@ -129,9 +129,17 @@ build_task:
     SONAR_HOST_URL: https://next.sonarqube.com/sonarqube
     #allow deployment of pull request artifacts to repox
     DEPLOY_PULL_REQUEST: true
+    DD_API_KEY: VAULT[development/team/languages/kv/data/datadog data.apikey]
+    DD_CIVISIBILITY_AGENTLESS_ENABLED: true
+    DD_SITE: datadoghq.eu
+    DD_ENV: ci
+    DD_GIT_REPOSITORY_URL: $CIRRUS_REPO_CLONE_URL
+    DD_GIT_COMMIT_SHA: $CIRRUS_CHANGE_IN_REPO
+    DD_GIT_BRANCH: $CIRRUS_BRANCH
+    DD_GIT_COMMIT_MESSAGE: $CIRRUS_CHANGE_MESSAGE
   build_script:
     - source cirrus-env BUILD-PRIVATE
-    - regular_gradle_build_deploy_analyze
+    - regular_gradle_build_deploy_analyze -Pdd-civisibility --rerun-tasks
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 ws_scan_task:
