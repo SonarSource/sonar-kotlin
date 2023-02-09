@@ -137,6 +137,7 @@ build_task:
     DD_GIT_COMMIT_SHA: $CIRRUS_CHANGE_IN_REPO
     DD_GIT_BRANCH: $CIRRUS_BRANCH
     DD_GIT_COMMIT_MESSAGE: $CIRRUS_CHANGE_MESSAGE
+    DD_TRACE_DEBUG: true
   build_script:
     - source cirrus-env BUILD-PRIVATE
     - regular_gradle_build_deploy_analyze -Pdd-civisibility --rerun-tasks
