@@ -51,6 +51,7 @@ import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.PERFORMANCE_MEASURE_
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.PERFORMANCE_MEASURE_DESTINATION_FILE
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_LIBRARIES
+import org.sonarsource.kotlin.plugin.caching.ContentHashCache
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
 import org.sonarsource.performance.measure.PerformanceMeasure
@@ -69,6 +70,8 @@ class KotlinSensor(
     val language: KotlinLanguage,
 ) : Sensor {
 
+    private var contentHashCache: ContentHashCache = ContentHashCache()
+
     val checks: Checks<AbstractCheck> = checkFactory.create<AbstractCheck>(KOTLIN_REPOSITORY_KEY).apply {
         addAnnotatedChecks(KOTLIN_CHECKS as Iterable<*>)
         all().forEach { it.initialize(ruleKey(it)!!) }
@@ -82,7 +85,7 @@ class KotlinSensor(
 
     override fun execute(sensorContext: SensorContext) {
         val sensorDuration = createPerformanceMeasureReport(sensorContext)
-
+        contentHashCache.init(sensorContext)
         val fileSystem: FileSystem = sensorContext.fileSystem()
         val mainFilePredicate = fileSystem.predicates().and(
             fileSystem.predicates().hasLanguage(language.key),
@@ -96,7 +99,7 @@ class KotlinSensor(
                 mainFiles
                     .filter {
                         totalFiles++
-                        it.status() != InputFile.Status.SAME
+                        fileHasChanged(it)
                     }.also {
                         LOG.info("Only analyzing ${it.size} changed Kotlin files out of ${totalFiles}.")
                     }
@@ -135,6 +138,22 @@ class KotlinSensor(
             } catch (_: IncompatibleClassChangeError) {
                 false
             }
+        }
+    }
+
+    private fun fileHasChanged(inputFile: InputFile): Boolean{
+        if(contentHashCache.isEnabled()){
+            val cacheContentIsDifferent = contentHashCache.hasDifferentContentCached(inputFile)
+            if(cacheContentIsDifferent){
+                LOG.info("Cache contained a different hash for file ${inputFile.filename()}")
+                contentHashCache.writeContentHash(inputFile)
+                return true
+            }
+            LOG.info("Cache contained same hash for file ${inputFile.filename()}")
+            return false
+        }else{
+            LOG.info("Cache disabled, checking InputFile.status for file ${inputFile.filename()}")
+            return inputFile.status() != InputFile.Status.SAME
         }
     }
 

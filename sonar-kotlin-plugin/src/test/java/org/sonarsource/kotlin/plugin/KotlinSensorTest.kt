@@ -45,11 +45,15 @@ import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.utils.log.LoggerLevel
 import org.sonar.check.Rule
+import org.sonarsource.kotlin.DummyReadCache
+import org.sonarsource.kotlin.DummyWriteCache
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.converter.Environment
+import org.sonarsource.kotlin.plugin.caching.ContentHashCache
 import org.sonarsource.kotlin.testing.AbstractSensorTest
 import org.sonarsource.kotlin.testing.assertTextRange
 import java.io.IOException
+import java.security.MessageDigest
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -527,6 +531,50 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertAnalysisIsNotIncremental()
 
         verify(exactly = 1) { context.canSkipUnchangedFiles() }
+    }
+
+    @Test
+    fun `test fileHasChanged with ContentHashCache enabled`(){
+        context.isCacheEnabled = true
+        val messageDigest = MessageDigest.getInstance("MD5")
+
+        context.setNextCache(DummyWriteCache())
+        context.setCanSkipUnchangedFiles(true)
+        val files = incrementalAnalysisFileSet()
+        val fileHash = messageDigest.digest(files[InputFile.Status.CHANGED]!!.contents().byteInputStream().readAllBytes())
+        context.setPreviousCache(DummyReadCache(mapOf("kotlin:contentHash:MD5:moduleKey:changed.kt" to fileHash)))
+        val addedFile = files[InputFile.Status.ADDED]
+        val changedFile = files[InputFile.Status.CHANGED]
+        files.values.forEach { context.fileSystem().add(it) }
+        val checkFactory = checkFactory("S1764")
+
+        sensor(checkFactory).execute(context)
+        assertThat(logTester.logs(LoggerLevel.INFO))
+            .contains("Content Hash Cache was initialized")
+        assertThat(logTester.logs(LoggerLevel.INFO))
+            .contains("Cache contained same hash for file changed.kt")
+
+    }
+
+    @Test
+    fun `test fileHasChanged with ContentHashCache disabled`(){
+        context.isCacheEnabled = false
+        context.setPreviousCache(DummyReadCache(mapOf()))
+        context.setNextCache(DummyWriteCache())
+        context.setCanSkipUnchangedFiles(true)
+        val files = incrementalAnalysisFileSet()
+        val addedFile = files[InputFile.Status.SAME]
+        val changedFile = files[InputFile.Status.CHANGED]
+        files.values.forEach { context.fileSystem().add(it) }
+        val checkFactory = checkFactory("S1764")
+
+        sensor(checkFactory).execute(context)
+        assertThat(logTester.logs(LoggerLevel.INFO))
+            .containsAll(listOf(
+                "Cache disabled, checking InputFile.status for file changed.kt",
+                "Cache disabled, checking InputFile.status for file added.kt",
+                "Cache disabled, checking InputFile.status for file unchanged.kt"
+            ))
     }
 
     private fun assertAnalysisIsIncremental() {
