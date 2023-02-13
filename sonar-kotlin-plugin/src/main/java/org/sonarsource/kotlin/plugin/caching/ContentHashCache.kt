@@ -31,6 +31,9 @@ private const val HASH_ALGORITHM = "MD5"
 private val messageDigest = MessageDigest.getInstance(HASH_ALGORITHM)
 private const val CONTENT_HASHES_KEY = "kotlin:contentHash:$HASH_ALGORITHM:"
 
+
+internal fun contentHashKey(inputFile: InputFile) = CONTENT_HASHES_KEY + inputFile.key().replace('\\', '/')
+
 class ContentHashCache private constructor(private val readCache: ReadCache, private val writeCache: WriteCache) {
 
     companion object {
@@ -84,7 +87,4 @@ class ContentHashCache private constructor(private val readCache: ReadCache, pri
 
     private fun getHash(inputFile: InputFile) =
         inputFile.contents().byteInputStream().use { it.readAllBytes() }.let { messageDigest.digest(it) }
-
-    private fun contentHashKey(inputFile: InputFile) = CONTENT_HASHES_KEY + inputFile.key().replace('\\', '/')
-
 }
