@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.plugin.caching
 
-import org.sonar.api.SonarProduct
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.cache.ReadCache
@@ -37,57 +36,70 @@ class ContentHashCache {
     private var enabled = false
     private var readCache: ReadCache? = null
     private var writeCache: WriteCache? = null
-    private var lastKeyChecked = ""
-    private var lastHashChecked = byteArrayOf()
+    private var computedHashes = mutableMapOf<String, ByteArray>()
 
-    fun init(readCache: ReadCache, writeCache: WriteCache){
-        LOG.info("Content Hash Cache was initialized")
-        this.readCache = readCache
-        this.writeCache = writeCache
-        this.enabled = true
-    }
-
-    fun init(sensorContext: SensorContext){
-        if(!sensorContext.runtime().product.equals(SonarProduct.SONARLINT) && sensorContext.isCacheEnabled){
-            init(sensorContext.previousCache(), sensorContext.nextCache())
-        }else{
-            this.enabled = false
+    constructor(sensorContext: SensorContext){
+        this.enabled = sensorContext.isCacheEnabled
+        if(this.enabled){
+            LOG.info("Content Hash Cache was initialized")
+            this.readCache = sensorContext.previousCache()
+            this.writeCache = sensorContext.nextCache()
         }
     }
 
+    fun isEnabled() = this.enabled
+
     fun hasDifferentContentCached(inputFile: InputFile): Boolean{
         val key = contentHashKey(inputFile)
+        val cachedFileHash = read(key) ?: return true
         val inputFileHash = getHash(inputFile)
-        storeLastKeyAndHashChecked(key, inputFileHash)
-        val cachedFileHash = read(key)
+        computedHashes[key] = inputFileHash
         return !MessageDigest.isEqual(inputFileHash, cachedFileHash)
     }
 
     fun writeContentHash(inputFile: InputFile){
         val key = contentHashKey(inputFile)
-        if(lastKeyChecked.equals(key)){
-            LOG.info("Using already processed hash for key: $key")
-            write(key, lastHashChecked)
+        if(computedHashes.contains(key)){
+            LOG.trace("Using already processed hash for key: $key")
+            write(key, computedHashes.remove(key)!!)
         }else{
             write(key, getHash(inputFile))
         }
     }
 
+    fun copyFromPreviousAnalysis(inputFile: InputFile){
+        if(isEnabled()){
+            val key = contentHashKey(inputFile)
+            if(readCache!!.contains(key)){
+                writeCache!!.copyFromPrevious(key)
+                LOG.trace("Copied file $key from previous cache.")
+            }else{
+                writeContentHash(inputFile)
+            }
+        }else{
+            LOG.trace("Cannot write to cache when disabled.")
+        }
+    }
+
     private fun write(key: String, hash: ByteArray){
-        LOG.debug("Storing file content hash for key: $key")
-        writeCache?.write(key, hash) ?: LOG.error("Cannot write to cache when disabled.")
+        if(isEnabled()){
+            LOG.trace("Storing file content hash for key: $key")
+            writeCache!!.write(key, hash)
+        }else{
+            LOG.trace("Cannot write to cache when disabled.")
+        }
     }
 
     private fun read(key: String): ByteArray? {
         if(enabled){
-            if( readCache!!.contains(key)){
+            if(readCache!!.contains(key)){
                 val stream = readCache!!.read(key)
                 return stream.readAllBytes().also { stream.close() }
             }else{
-                LOG.info("Key $key was not found in ContentHashCache")
+                LOG.trace("Key $key was not found in ContentHashCache")
             }
         }else{
-            LOG.error("Cannot read from cache when disabled.")
+            LOG.trace("Cannot read from cache when disabled.")
         }
         return null
     }
@@ -98,12 +110,5 @@ class ContentHashCache {
     }
 
     private fun contentHashKey(inputFile: InputFile) = CONTENT_HASHES_KEY + inputFile.key().replace('\\', '/')
-
-    private fun storeLastKeyAndHashChecked(key: String, hash: ByteArray){
-        lastKeyChecked = key
-        lastHashChecked = hash
-    }
-
-    fun isEnabled() = this.enabled
 
 }

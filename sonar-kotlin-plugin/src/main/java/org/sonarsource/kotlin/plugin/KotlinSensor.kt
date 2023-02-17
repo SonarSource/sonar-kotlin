@@ -70,8 +70,6 @@ class KotlinSensor(
     val language: KotlinLanguage,
 ) : Sensor {
 
-    private var contentHashCache: ContentHashCache = ContentHashCache()
-
     val checks: Checks<AbstractCheck> = checkFactory.create<AbstractCheck>(KOTLIN_REPOSITORY_KEY).apply {
         addAnnotatedChecks(KOTLIN_CHECKS as Iterable<*>)
         all().forEach { it.initialize(ruleKey(it)!!) }
@@ -85,7 +83,7 @@ class KotlinSensor(
 
     override fun execute(sensorContext: SensorContext) {
         val sensorDuration = createPerformanceMeasureReport(sensorContext)
-        contentHashCache.init(sensorContext)
+        val contentHashCache = ContentHashCache(sensorContext)
         val fileSystem: FileSystem = sensorContext.fileSystem()
         val mainFilePredicate = fileSystem.predicates().and(
             fileSystem.predicates().hasLanguage(language.key),
@@ -99,7 +97,7 @@ class KotlinSensor(
                 mainFiles
                     .filter {
                         totalFiles++
-                        fileHasChanged(it)
+                        fileHasChanged(it, contentHashCache)
                     }.also {
                         LOG.info("Only analyzing ${it.size} changed Kotlin files out of ${totalFiles}.")
                     }
@@ -141,18 +139,19 @@ class KotlinSensor(
         }
     }
 
-    private fun fileHasChanged(inputFile: InputFile): Boolean{
+    private fun fileHasChanged(inputFile: InputFile, contentHashCache: ContentHashCache): Boolean{
         if(contentHashCache.isEnabled()){
             val cacheContentIsDifferent = contentHashCache.hasDifferentContentCached(inputFile)
             if(cacheContentIsDifferent){
-                LOG.info("Cache contained a different hash for file ${inputFile.filename()}")
+                LOG.debug("Cache contained a different hash for file ${inputFile.filename()}")
                 contentHashCache.writeContentHash(inputFile)
                 return true
             }
-            LOG.info("Cache contained same hash for file ${inputFile.filename()}")
+            contentHashCache.copyFromPreviousAnalysis(inputFile)
+            LOG.debug("Cache contained same hash for file ${inputFile.filename()}")
             return false
         }else{
-            LOG.info("Cache disabled, checking InputFile.status for file ${inputFile.filename()}")
+            LOG.debug("Cache disabled, checking InputFile.status for file ${inputFile.filename()}")
             return inputFile.status() != InputFile.Status.SAME
         }
     }

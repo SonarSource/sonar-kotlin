@@ -21,7 +21,8 @@ package org.sonarsource.kotlin.plugin
 
 import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat
-import org.sonar.api.internal.SonarRuntimeImpl
+import org.sonar.api.batch.sensor.cache.ReadCache
+import org.sonar.api.batch.sensor.cache.WriteCache
 import org.sonar.api.utils.log.LoggerLevel
 import org.sonarsource.kotlin.DummyInputFile
 import org.sonarsource.kotlin.DummyReadCache
@@ -61,11 +62,14 @@ class ContentHashCacheTest: AbstractSensorTest() {
 
     @Test
     fun `test hashes are not computed twice`(){
-        val contentHashCache = emptyContentHashCache()
-        if(contentHashCache.hasDifferentContentCached(dummyFile)){
-            contentHashCache.writeContentHash(dummyFile)
+        logTester.setLevel(LoggerLevel.TRACE)
+        val contentHashCache = contentHashCacheOf(
+            "kotlin:contentHash:MD5:DummyFileChanged.kt"  to fileHash
+        )
+        if(contentHashCache.hasDifferentContentCached(dummyFileChanged)){
+            contentHashCache.writeContentHash(dummyFileChanged)
         }
-        assertThat(logTester.logs(LoggerLevel.INFO)).contains("Using already processed hash for key: kotlin:contentHash:MD5:DummyFile.kt")
+        assertThat(logTester.logs(LoggerLevel.TRACE)).contains("Using already processed hash for key: kotlin:contentHash:MD5:DummyFileChanged.kt")
     }
 
     @Test
@@ -78,54 +82,61 @@ class ContentHashCacheTest: AbstractSensorTest() {
     }
 
     @Test
-    fun `test sensor context`(){
-        val contentHashCacheEnabled = ContentHashCache()
-        context.isCacheEnabled = true
-        context.setPreviousCache(DummyReadCache(mapOf()))
-        context.setNextCache(DummyWriteCache())
-        contentHashCacheEnabled.init(context)
+    fun `contentHashCache state is consistent with sensor context`(){
+        val contentHashCacheEnabled = emptyContentHashCache()
         assertThat(contentHashCacheEnabled.isEnabled())
 
-        val contentHashCacheDisabled = ContentHashCache()
         context.isCacheEnabled=false
-        contentHashCacheDisabled.init(context)
+        val contentHashCacheDisabled = ContentHashCache(context)
         assertThat(!contentHashCacheDisabled.isEnabled())
-
-        val contentHashCacheSL = ContentHashCache()
-        context.isCacheEnabled=true
-        val runtime = SonarRuntimeImpl.forSonarLint(context.runtime().apiVersion)
-        context.setRuntime(runtime)
-        contentHashCacheSL.init(context)
-        assertThat(!contentHashCacheSL.isEnabled())
     }
 
     @Test
     fun `test operations on disabled cache`(){
-        val contentHashCacheDisabled = ContentHashCache()
         context.isCacheEnabled=false
-        contentHashCacheDisabled.init(context)
+        val contentHashCacheDisabled = ContentHashCache(context)
 
         contentHashCacheDisabled.writeContentHash(dummyFile)
-        assertThat(logTester.logs(LoggerLevel.ERROR)).containsOnly("Cannot write to cache when disabled.")
+        assertThat(logTester.logs(LoggerLevel.TRACE)).containsOnly("Cannot write to cache when disabled.")
 
         contentHashCacheDisabled.hasDifferentContentCached(dummyFile)
-        assertThat(logTester.logs(LoggerLevel.ERROR)).contains("Cannot read from cache when disabled.")
+        assertThat(logTester.logs(LoggerLevel.TRACE)).contains("Cannot read from cache when disabled.")
     }
 
-    fun emptyContentHashCache(): ContentHashCache{
-        val cache = ContentHashCache()
+    @Test
+    fun `test copyFromPrevious`(){
+        context.isCacheEnabled = false
+        val contentHashCacheDisabled = ContentHashCache(context)
+        contentHashCacheDisabled.copyFromPreviousAnalysis(dummyFile)
+        assertThat(logTester.logs(LoggerLevel.TRACE)).containsOnly("Cannot write to cache when disabled.")
+
+        val contentHashCache = contentHashCacheOf(
+            "kotlin:contentHash:MD5:DummyFileChanged.kt"  to fileHash
+        )
+        contentHashCache.copyFromPreviousAnalysis(dummyFile)
+        assertThat(logTester.logs(LoggerLevel.TRACE)).contains("Storing file content hash for key: kotlin:contentHash:MD5:DummyFile.kt")
+
+        contentHashCache.copyFromPreviousAnalysis(dummyFileChanged)
+        assertThat(logTester.logs(LoggerLevel.TRACE)).contains("Copied file kotlin:contentHash:MD5:DummyFileChanged.kt from previous cache.")
+    }
+
+    private fun emptyContentHashCache(): ContentHashCache{
         val readCache = DummyReadCache(mapOf())
-        val writeCache = DummyWriteCache()
-        cache.init(readCache, writeCache)
-        return cache
+        val writeCache = DummyWriteCache(readCache = readCache)
+        return cacheFromContextData(readCache, writeCache, true)
     }
 
-    fun contentHashCacheOf( previousValue: Pair<String, ByteArray> ): ContentHashCache{
-        val cache = ContentHashCache()
+    private fun contentHashCacheOf( previousValue: Pair<String, ByteArray> ): ContentHashCache{
         val readCache = DummyReadCache(mapOf( previousValue ))
-        val writeCache = DummyWriteCache()
-        cache.init(readCache, writeCache)
-        return cache
+        val writeCache = DummyWriteCache(readCache = readCache)
+        return cacheFromContextData(readCache, writeCache, true)
+    }
+
+    private fun cacheFromContextData(readCache: ReadCache, writeCache: WriteCache, isEnabled: Boolean): ContentHashCache{
+        context.setPreviousCache(readCache)
+        context.setNextCache(writeCache)
+        context.isCacheEnabled = isEnabled
+        return ContentHashCache(context)
     }
 
 }
