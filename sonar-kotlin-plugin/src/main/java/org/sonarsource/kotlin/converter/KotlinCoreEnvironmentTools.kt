@@ -100,7 +100,7 @@ fun bindingContext(
     else
         analyzeAndGetBindingContext(environment, files)
 
-private fun analyzeAndGetBindingContext(
+internal fun analyzeAndGetBindingContext(
     env: KotlinCoreEnvironment,
     ktFiles: List<KtFile>,
 ): BindingContext {
