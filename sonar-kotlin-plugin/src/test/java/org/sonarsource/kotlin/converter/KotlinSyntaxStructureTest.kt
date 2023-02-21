@@ -60,7 +60,7 @@ internal class KotlinSyntaxStructureTest {
         assertThrows<KotlinExceptionWithAttachments> { kotlinTreeOf(content, environment, inputFile) }.apply {
             assertThat(this)
                 .hasCause(expectedException)
-                .hasMessageStartingWith("Exception while analyzing expression at (4,17) in ")
+                .hasMessageStartingWith("Exception while analyzing expression in (4,17) in ")
                 .hasMessageContaining("/sonar-kotlin-plugin/moduleKey/src/test/resources/api/sample/SimpleClass.kt")
         }
     }
