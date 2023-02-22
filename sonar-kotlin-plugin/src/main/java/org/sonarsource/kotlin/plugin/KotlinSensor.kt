@@ -49,6 +49,7 @@ import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.KOTLIN_LANGUAGE_VERS
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.KOTLIN_REPOSITORY_KEY
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.PERFORMANCE_MEASURE_ACTIVATION_PROPERTY
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.PERFORMANCE_MEASURE_DESTINATION_FILE
+import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_ANDROID_DETECTED
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
@@ -147,7 +148,7 @@ class KotlinSensor(
     ): Boolean {
         val environment = environment(sensorContext)
         try {
-            val isInAndroidContext = isInAndroidContext(environment)
+            val isInAndroidContext = sensorContext.config().getBoolean(SONAR_ANDROID_DETECTED).orElse(false)
             val kotlinFiles = inputFiles.mapNotNull {
                 val inputFileContext = InputFileContextImpl(sensorContext, it, isInAndroidContext)
                 try {

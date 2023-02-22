@@ -25,7 +25,6 @@ import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.LanguageVersion
@@ -72,12 +71,12 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
         val issues = context.allIssues()
-        Assertions.assertThat(issues).hasSize(1)
+        assertThat(issues).hasSize(1)
         val issue = issues.iterator().next()
-        Assertions.assertThat(issue.ruleKey().rule()).isEqualTo("S1764")
+        assertThat(issue.ruleKey().rule()).isEqualTo("S1764")
         val location = issue.primaryLocation()
-        Assertions.assertThat(location.inputComponent()).isEqualTo(inputFile)
-        Assertions.assertThat(location.message())
+        assertThat(location.inputComponent()).isEqualTo(inputFile)
+        assertThat(location.message())
             .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
         assertTextRange(location.textRange()).hasRange(2, 12, 2, 13)
     }
@@ -104,12 +103,12 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val checkFactory = checkFactory("S125")
         sensor(checkFactory).execute(context)
         val issues = context.allIssues()
-        Assertions.assertThat(issues).hasSize(1)
+        assertThat(issues).hasSize(1)
         val issue = issues.iterator().next()
-        Assertions.assertThat(issue.ruleKey().rule()).isEqualTo("S125")
+        assertThat(issue.ruleKey().rule()).isEqualTo("S125")
         val location = issue.primaryLocation()
-        Assertions.assertThat(location.inputComponent()).isEqualTo(inputFile)
-        Assertions.assertThat(location.message()).isEqualTo("Remove this commented out code.")
+        assertThat(location.inputComponent()).isEqualTo(inputFile)
+        assertThat(location.message()).isEqualTo("Remove this commented out code.")
     }
 
     @Test
@@ -123,16 +122,16 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         )
         context.fileSystem().add(inputFile)
         sensor(checkFactory()).execute(context)
-        Assertions.assertThat(context.highlightingTypeAt(inputFile.key(), 1, 0)).containsExactly(TypeOfText.KEYWORD)
-        Assertions.assertThat(context.highlightingTypeAt(inputFile.key(), 1, 3)).isEmpty()
-        Assertions.assertThat(context.measure(inputFile.key(), CoreMetrics.NCLOC).value()).isEqualTo(3)
-        Assertions.assertThat(context.measure(inputFile.key(), CoreMetrics.COMMENT_LINES).value()).isZero
-        Assertions.assertThat(context.measure(inputFile.key(), CoreMetrics.FUNCTIONS).value()).isEqualTo(1)
-        Assertions.assertThat(context.measure(inputFile.key(), CoreMetrics.CLASSES).value()).isEqualTo(1)
-        Assertions.assertThat(context.cpdTokens(inputFile.key())!![1].value)
+        assertThat(context.highlightingTypeAt(inputFile.key(), 1, 0)).containsExactly(TypeOfText.KEYWORD)
+        assertThat(context.highlightingTypeAt(inputFile.key(), 1, 3)).isEmpty()
+        assertThat(context.measure(inputFile.key(), CoreMetrics.NCLOC).value()).isEqualTo(3)
+        assertThat(context.measure(inputFile.key(), CoreMetrics.COMMENT_LINES).value()).isZero
+        assertThat(context.measure(inputFile.key(), CoreMetrics.FUNCTIONS).value()).isEqualTo(1)
+        assertThat(context.measure(inputFile.key(), CoreMetrics.CLASSES).value()).isEqualTo(1)
+        assertThat(context.cpdTokens(inputFile.key())!![1].value)
             .isEqualTo("print(1==1);print(\"LITERAL\");}")
-        Assertions.assertThat(context.measure(inputFile.key(), CoreMetrics.COMPLEXITY).value()).isEqualTo(1)
-        Assertions.assertThat(context.measure(inputFile.key(), CoreMetrics.STATEMENTS).value()).isEqualTo(2)
+        assertThat(context.measure(inputFile.key(), CoreMetrics.COMPLEXITY).value()).isEqualTo(1)
+        assertThat(context.measure(inputFile.key(), CoreMetrics.STATEMENTS).value()).isEqualTo(2)
 
         // FIXME
         //assertThat(logTester.logs()).contains("1 source files to be analyzed");
@@ -154,7 +153,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
         val issues = context.allIssues()
-        Assertions.assertThat(issues).isEmpty()
+        assertThat(issues).isEmpty()
     }
 
     @Test
@@ -173,7 +172,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
         val issues = context.allIssues()
-        Assertions.assertThat(issues).hasSize(2)
+        assertThat(issues).hasSize(2)
     }
 
     @Test
@@ -221,15 +220,15 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
         val analysisErrors = context.allAnalysisErrors()
-        Assertions.assertThat(analysisErrors).hasSize(1)
+        assertThat(analysisErrors).hasSize(1)
         val analysisError = analysisErrors.iterator().next()
-        Assertions.assertThat(analysisError.inputFile()).isEqualTo(inputFile)
-        Assertions.assertThat(analysisError.message()).isEqualTo("Unable to parse file: file1.kt")
+        assertThat(analysisError.inputFile()).isEqualTo(inputFile)
+        assertThat(analysisError.message()).isEqualTo("Unable to parse file: file1.kt")
         val textPointer = analysisError.location()
-        Assertions.assertThat(textPointer).isNotNull
-        Assertions.assertThat(textPointer!!.line()).isEqualTo(1)
-        Assertions.assertThat(textPointer.lineOffset()).isEqualTo(14)
-        Assertions.assertThat(logTester.logs())
+        assertThat(textPointer).isNotNull
+        assertThat(textPointer!!.line()).isEqualTo(1)
+        assertThat(textPointer.lineOffset()).isEqualTo(14)
+        assertThat(logTester.logs())
             .contains(String.format("Unable to parse file: %s. Parse error at position 1:14", inputFile.uri()))
     }
 
@@ -243,14 +242,14 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
         val analysisErrors = context.allAnalysisErrors()
-        Assertions.assertThat(analysisErrors).hasSize(1)
+        assertThat(analysisErrors).hasSize(1)
         val analysisError = analysisErrors.iterator().next()
-        Assertions.assertThat(analysisError.inputFile()).isEqualTo(inputFile)
-        Assertions.assertThat(analysisError.message()).isEqualTo("Unable to parse file: file1.kt")
+        assertThat(analysisError.inputFile()).isEqualTo(inputFile)
+        assertThat(analysisError.message()).isEqualTo("Unable to parse file: file1.kt")
         val textPointer = analysisError.location()
-        Assertions.assertThat(textPointer).isNull()
+        assertThat(textPointer).isNull()
 
-        Assertions.assertThat(logTester.logs(LoggerLevel.ERROR)).contains("Cannot read 'file1.kt': Can't read")
+        assertThat(logTester.logs(LoggerLevel.ERROR)).contains("Cannot read 'file1.kt': Can't read")
     }
 
     @Test
@@ -263,7 +262,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
         val analysisErrors = context.allAnalysisErrors()
-        Assertions.assertThat(analysisErrors).isEmpty()
+        assertThat(analysisErrors).isEmpty()
     }
 
     @Test
@@ -276,7 +275,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
         val analysisErrors = context.allAnalysisErrors()
-        Assertions.assertThat(analysisErrors).isEmpty()
+        assertThat(analysisErrors).isEmpty()
     }
 
     private fun failFastSensorWithEnvironmentSetup(failFast: Boolean?): KotlinSensor {
@@ -474,6 +473,56 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             .contains("Using the default amount of threads")
     }
 
+    @Test
+    fun `setting android_detected property to true triggers AndroidOnly check`() {
+        val sensor = prepareSensorForAndroid(androidDetected = "true")
+
+        sensor.execute(context)
+
+        assertThat(context.allIssues()).hasSize(1)
+    }
+
+    @Test
+    fun `setting android_detected property to false doesn't trigger AndroidOnly check`() {
+        val sensor = prepareSensorForAndroid(androidDetected = "false")
+
+        sensor.execute(context)
+
+        assertThat(context.allIssues()).isEmpty()
+    }
+
+    @Test
+    fun `setting android_detected property to other value doesn't trigger AndroidOnly check`() {
+        val sensor = prepareSensorForAndroid(androidDetected = "other")
+
+        sensor.execute(context)
+
+        assertThat(context.allIssues()).isEmpty()
+    }
+
+    @Test
+    fun `setting no android_detected property doesn't trigger AndroidOnly check`() {
+        val sensor = prepareSensorForAndroid()
+
+        sensor.execute(context)
+
+        assertThat(context.allIssues()).isEmpty()
+    }
+
+    private fun prepareSensorForAndroid(androidDetected: String? = null): KotlinSensor {
+        mockkStatic("org.sonarsource.kotlin.plugin.KotlinCheckListKt")
+        every { KOTLIN_CHECKS } returns listOf(AndroidOnlyCheck::class.java)
+
+        context.apply {
+            setSettings(MapSettings().apply {
+                androidDetected?.let { setProperty(KotlinPlugin.SONAR_ANDROID_DETECTED, it) }
+            })
+
+            fileSystem().add(createInputFile("file1.kt", "class A { fun f() = TODO() }"))
+        }
+        return sensor(checkFactory("AndroidOnlyRule"))
+    }
+
 
     @Test
     fun `the kotlin sensor optimizes analyses in contexts where sonar-kotlin-skipUnchanged is true`() {
@@ -642,6 +691,15 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 internal class ExceptionThrowingCheck : AbstractCheck() {
     override fun visitNamedFunction(function: KtNamedFunction, data: KotlinFileContext?) {
         throw TestException("This is a test message")
+    }
+}
+
+@Rule(key = "AndroidOnlyRule")
+internal class AndroidOnlyCheck : AbstractCheck() {
+    override fun visitNamedFunction(function: KtNamedFunction, kfc: KotlinFileContext) {
+        if(kfc.isInAndroid()) {
+            kfc.reportIssue(function.nameIdentifier!!, "Boom!")
+        }
     }
 }
 
