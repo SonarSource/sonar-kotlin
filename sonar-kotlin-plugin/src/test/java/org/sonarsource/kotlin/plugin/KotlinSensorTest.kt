@@ -82,7 +82,6 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertTextRange(location.textRange()).hasRange(2, 12, 2, 13)
     }
 
-    @org.junit.jupiter.api.Disabled
     @Test
     fun test_commented_code() {
         val inputFile = createInputFile(
