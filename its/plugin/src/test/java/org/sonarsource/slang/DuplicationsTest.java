@@ -29,7 +29,7 @@ public class DuplicationsTest extends TestBase {
   @Test
   public void kotlin_duplications() {
     final String projectKey = "kotlinDuplications";
-    ORCHESTRATOR.executeBuild(getSonarScanner(projectKey, BASE_DIRECTORY, "kotlin"));
+    ORCHESTRATOR.executeBuild(getSonarScanner(projectKey, BASE_DIRECTORY, "kotlin", "norule-profile"));
 
     assertThat(getMeasureAsInt(projectKey, "duplicated_lines")).isEqualTo(77);
     assertThat(getMeasureAsInt(projectKey, "duplicated_blocks")).isEqualTo(5);

@@ -20,8 +20,10 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.sonar.api.utils.log.Loggers
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.externalreport.detekt.DetektSensor
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private const val IPV4_ALONE = """(?<ipv4>(?:\d{1,3}\.){3}\d{1,3})"""
@@ -40,6 +42,9 @@ private val LOCAL_IPV4_MAPPED_IPV6 = listOf("::ffff:0:127.", "::ffff:127.")
 
 private const val MESSAGE = "Make sure using this hardcoded IP address is safe here."
 
+
+private val LOG = Loggers.get(HardcodedIpCheck::class.java)
+
 @Rule(key = "S1313")
 class HardcodedIpCheck : AbstractCheck() {
 
@@ -57,8 +62,16 @@ class HardcodedIpCheck : AbstractCheck() {
                 .mapNotNull { pattern -> pattern.matchEntire(content) }
                 .firstOrNull()
                 ?.let { match ->
-                    val ipv6 = match.groups["ipv6"]!!.value
-                    val ipv4 = match.groups["ipv4"]?.value
+                    val groups = match.groups
+
+                    LOG.info("Content: ${content}$")
+                    LOG.info("Match Values: ${match.groupValues.joinToString("$$$")}$$$")
+                    LOG.info("Groups: ${groups.joinToString("$$$")}$$$")
+                    LOG.info("""Groups["ipv6"]: ${groups["ipv6"]}$$$""")
+                    LOG.info("""Groups["ipv6"]!!.value: ${groups["ipv6"]!!.value}$$$""")
+
+                    val ipv6 = groups["ipv6"]!!.value
+                    val ipv4 = groups["ipv4"]?.value
                     if (isValidIPV6(ipv6, ipv4) && !isIPV6Exception(ipv6)) context.reportIssue(expression, MESSAGE)
                 }
         }
