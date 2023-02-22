@@ -20,14 +20,12 @@
 package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.Assertions
-import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.Test
 import org.sonar.api.SonarEdition
 import org.sonar.api.SonarQubeSide
 import org.sonar.api.internal.PluginContextImpl
 import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
-import org.sonarsource.kotlin.converter.Environment
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -50,17 +48,4 @@ internal class KotlinPluginTest {
         Assertions.assertThat(context.extensions).hasSize(4)
     }
 
-    @Test
-    fun test_android_context() {
-        val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/java/main"), LanguageVersion.LATEST_STABLE)
-
-        Assertions.assertThat(isInAndroidContext(environment)).isTrue
-    }
-
-    @Test
-    fun test_non_android_context() {
-        val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
-
-        Assertions.assertThat(isInAndroidContext(environment)).isFalse
-    }
 }

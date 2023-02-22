@@ -20,15 +20,10 @@
 package org.sonarsource.kotlin.plugin
 
 import org.jetbrains.kotlin.config.LanguageVersion
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtProperty
 import org.sonar.api.Plugin
 import org.sonar.api.SonarProduct
 import org.sonar.api.config.PropertyDefinition
 import org.sonar.api.resources.Qualifiers
-import org.sonarsource.kotlin.api.determineTypeAsString
-import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.bindingContext
 import org.sonarsource.kotlin.externalreport.androidlint.AndroidLintRulesDefinition
 import org.sonarsource.kotlin.externalreport.androidlint.AndroidLintSensor
 import org.sonarsource.kotlin.externalreport.detekt.DetektRulesDefinition
@@ -59,6 +54,7 @@ class KotlinPlugin : Plugin {
         const val KOTLIN_FILE_SUFFIXES_DEFAULT_VALUE = ".kt"
         const val SONAR_JAVA_BINARIES = "sonar.java.binaries"
         const val SONAR_JAVA_LIBRARIES = "sonar.java.libraries"
+        const val SONAR_ANDROID_DETECTED = "sonar.android.detected"
         const val FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast"
         const val PERFORMANCE_MEASURE_ACTIVATION_PROPERTY = "sonar.kotlin.performance.measure"
         const val PERFORMANCE_MEASURE_DESTINATION_FILE = "sonar.kotlin.performance.measure.json"
@@ -123,23 +119,4 @@ class KotlinPlugin : Plugin {
             )
         }
     }
-}
-
-fun isInAndroidContext(environment: Environment): Boolean {
-    val content = """
-        |import android.app.Application
-        |
-        |val x: Application
-    """.trimMargin()
-
-    val psiFile: KtFile = environment.ktPsiFactory.createFile(content)
-
-    val bindingContext = bindingContext(
-        environment.env,
-        environment.classpath,
-        listOf(psiFile),
-    )
-
-    val ktProperty = psiFile.children[3] as KtProperty
-    return ktProperty.determineTypeAsString(bindingContext) == "android.app.Application"
 }
