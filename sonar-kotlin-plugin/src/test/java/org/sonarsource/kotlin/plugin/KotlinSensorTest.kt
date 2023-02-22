@@ -332,7 +332,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         val environment = environment(sensorContext)
 
-        val expectedKotlinVersion = LanguageVersion.KOTLIN_1_5
+        val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
         assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
         assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
@@ -372,7 +372,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         val environment = environment(sensorContext)
 
-        val expectedKotlinVersion = LanguageVersion.KOTLIN_1_5
+        val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
         assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
         assertThat(logTester.logs(LoggerLevel.WARN))
@@ -393,7 +393,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         val environment = environment(sensorContext)
 
-        val expectedKotlinVersion = LanguageVersion.KOTLIN_1_5
+        val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
         assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
         assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
