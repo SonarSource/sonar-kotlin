@@ -529,7 +529,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         context.setCanSkipUnchangedFiles(false)
 
         // Enable analysis property to override skipUnchanged setting
-        context.settings().setProperty("sonar.kotlin.skipUnchanged", "true")
+        context.setSettings(MapSettings().setProperty("sonar.kotlin.skipUnchanged", "true"))
 
         assertAnalysisIsIncremental()
     }
@@ -539,7 +539,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         context.setCanSkipUnchangedFiles(true)
 
         // Explicitly prevent the skipping of unchanged files
-        context.settings().setProperty("sonar.kotlin.skipUnchanged", "false")
+        context.setSettings(MapSettings().setProperty("sonar.kotlin.skipUnchanged", "false"))
 
         assertAnalysisIsNotIncremental()
     }
