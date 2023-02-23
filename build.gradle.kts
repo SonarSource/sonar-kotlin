@@ -1,4 +1,5 @@
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.sonarsource.kotlin.buildsrc.tasks.CreateRuleStubsTask
 import org.sonarsource.kotlin.buildsrc.tasks.FetchRuleMetadata
 
@@ -113,8 +114,12 @@ subprojects {
         options.release.set(java.sourceCompatibility.majorVersion.toInt())
     }
 
+    tasks.withType<KotlinCompile>().all {
+        kotlinOptions.jvmTarget = java.sourceCompatibility.toString()
+    }
+
     jacoco {
-        toolVersion = "0.8.7"
+        toolVersion = "0.8.8"
     }
 
     tasks.jacocoTestReport {

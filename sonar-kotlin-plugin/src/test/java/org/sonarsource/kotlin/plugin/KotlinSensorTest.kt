@@ -46,6 +46,7 @@ import org.sonar.api.utils.log.LoggerLevel
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.converter.Environment
+import org.sonarsource.kotlin.converter.analyzeAndGetBindingContext
 import org.sonarsource.kotlin.testing.AbstractSensorTest
 import org.sonarsource.kotlin.testing.assertTextRange
 import java.io.IOException
@@ -205,6 +206,9 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         mockkStatic("org.sonarsource.kotlin.plugin.KotlinSensorKt")
         every { environment(any()) } returns Environment(listOf("file1.kt"), LanguageVersion.LATEST_STABLE)
+
+        mockkStatic("org.sonarsource.kotlin.converter.KotlinCoreEnvironmentToolsKt")
+        every { analyzeAndGetBindingContext(any(),any()) } throws IOException("Boom!")
 
         val checkFactory = checkFactory("S1764")
         assertDoesNotThrow { sensor(checkFactory).execute(context) }

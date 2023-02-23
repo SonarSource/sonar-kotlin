@@ -36,10 +36,6 @@ tasks.withType<JavaCompile> {
     options.compilerArgs = options.compilerArgs + "-proc:none"
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
-}
-
 // The new version 11.0.17 of javadoc has a bug and does not handle package annotations correctly
 // Adding a "tag" option is a workaround to prevent javadoc errors
 // @see https://bugs.openjdk.org/browse/JDK-8295850
