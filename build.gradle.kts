@@ -1,4 +1,5 @@
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.sonarsource.kotlin.buildsrc.tasks.CreateRuleStubsTask
 import org.sonarsource.kotlin.buildsrc.tasks.FetchRuleMetadata
 
@@ -111,6 +112,10 @@ subprojects {
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
         options.release.set(java.sourceCompatibility.majorVersion.toInt())
+    }
+
+    tasks.withType<KotlinCompile>().all {
+        kotlinOptions.jvmTarget = java.sourceCompatibility.toString()
     }
 
     jacoco {
