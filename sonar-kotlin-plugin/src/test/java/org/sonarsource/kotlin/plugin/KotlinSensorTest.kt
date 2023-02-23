@@ -534,50 +534,28 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     @Test
-    fun `test fileHasChanged with ContentHashCache enabled`(){
+    fun `test sensor skips cached files`() {
         val messageDigest = MessageDigest.getInstance("MD5")
         val files = incrementalAnalysisFileSet()
         val fileHash = messageDigest.digest(files[InputFile.Status.CHANGED]!!.contents().byteInputStream().readAllBytes())
 
         val readCache = DummyReadCache(mapOf("kotlin:contentHash:MD5:moduleKey:changed.kt" to fileHash))
-        val writeCache = DummyWriteCache(readCache=readCache)
+        val writeCache = DummyWriteCache(readCache = readCache)
         context.setNextCache(writeCache)
         context.setPreviousCache(readCache)
         context.setCanSkipUnchangedFiles(true)
         context.isCacheEnabled = true
 
-        val addedFile = files[InputFile.Status.ADDED]
-        val changedFile = files[InputFile.Status.CHANGED]
         files.values.forEach { context.fileSystem().add(it) }
         val checkFactory = checkFactory("S1764")
 
         sensor(checkFactory).execute(context)
+        assertThat(logTester.logs(LoggerLevel.DEBUG))
+            .contains("Content hash cache was initialized")
         assertThat(logTester.logs(LoggerLevel.INFO))
-            .contains("Content Hash Cache was initialized")
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
-            .contains("Cache contained same hash for file changed.kt")
+            .contains("Only analyzing 2 changed Kotlin files out of 3.")
 
-    }
 
-    @Test
-    fun `test fileHasChanged with ContentHashCache disabled`(){
-        context.isCacheEnabled = false
-        context.setPreviousCache(DummyReadCache(mapOf()))
-        context.setNextCache(DummyWriteCache())
-        context.setCanSkipUnchangedFiles(true)
-        val files = incrementalAnalysisFileSet()
-        val addedFile = files[InputFile.Status.SAME]
-        val changedFile = files[InputFile.Status.CHANGED]
-        files.values.forEach { context.fileSystem().add(it) }
-        val checkFactory = checkFactory("S1764")
-
-        sensor(checkFactory).execute(context)
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
-            .containsAll(listOf(
-                "Cache disabled, checking InputFile.status for file changed.kt",
-                "Cache disabled, checking InputFile.status for file added.kt",
-                "Cache disabled, checking InputFile.status for file unchanged.kt"
-            ))
     }
 
     private fun assertAnalysisIsIncremental() {

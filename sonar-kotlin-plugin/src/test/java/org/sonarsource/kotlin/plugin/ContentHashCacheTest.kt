@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.plugin
 
 import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.assertThrows
 import org.sonar.api.batch.sensor.cache.ReadCache
 import org.sonar.api.batch.sensor.cache.WriteCache
 import org.sonar.api.utils.log.LoggerLevel
@@ -32,111 +33,78 @@ import org.sonarsource.kotlin.testing.AbstractSensorTest
 import java.nio.file.Path
 import java.security.MessageDigest
 
-class ContentHashCacheTest: AbstractSensorTest() {
+class ContentHashCacheTest : AbstractSensorTest() {
 
     private val pathToFile = Path.of("src", "test", "resources", "caching", "DummyFile.kt")
     private val pathToFileChanged = Path.of("src", "test", "resources", "caching", "DummyFileChanged.kt")
     private val dummyFile = DummyInputFile(pathToFile)
     private val dummyFileChanged = DummyInputFile(pathToFileChanged)
-    private val HASH_ALGORITHM = "MD5"
-    private val messageDigest = MessageDigest.getInstance(HASH_ALGORITHM)
+    private val hashAlgorithm = "MD5"
+    private val messageDigest = MessageDigest.getInstance(hashAlgorithm)
     private val fileHash = messageDigest.digest(dummyFile.contents().byteInputStream().readAllBytes())
 
     @Test
-    fun `test stored contents are present` (){
-        val contentHashCache = contentHashCacheOf( "kotlin:contentHash:MD5:DummyFile.kt" to fileHash )
-        assertThat(contentHashCache.hasDifferentContentCached(dummyFile)).isFalse
+    fun `test stored contents are present`() {
+        val contentHashCache = contentHashCacheOf("kotlin:contentHash:MD5:DummyFile.kt", fileHash)
+        assertThat(contentHashCache?.hasDifferentContentCached(dummyFile)).isFalse
     }
 
     @Test
-    fun `test non-stored contents are not present` (){
+    fun `test non-stored contents are not present`() {
         val contentHashCache = emptyContentHashCache()
-        assertThat(contentHashCache.hasDifferentContentCached(dummyFile)).isTrue
+        assertThat(contentHashCache?.hasDifferentContentCached(dummyFile)).isTrue
     }
 
     @Test
-    fun `test changed file detection` (){
-        val contentHashCache = contentHashCacheOf( "kotlin:contentHash:MD5:DummyFileChanged.kt" to fileHash )
-        assertThat(contentHashCache.hasDifferentContentCached(dummyFileChanged)).isTrue
+    fun `test changed file detection`() {
+        val key = "kotlin:contentHash:MD5:DummyFileChanged.kt"
+        val contentHashCache = contentHashCacheOf(key, fileHash)
+        assertThat(contentHashCache?.hasDifferentContentCached(dummyFileChanged)).isTrue
     }
 
     @Test
-    fun `test hashes are not computed twice`(){
-        logTester.setLevel(LoggerLevel.TRACE)
-        val contentHashCache = contentHashCacheOf(
-            "kotlin:contentHash:MD5:DummyFileChanged.kt"  to fileHash
-        )
-        if(contentHashCache.hasDifferentContentCached(dummyFileChanged)){
-            contentHashCache.writeContentHash(dummyFileChanged)
-        }
-        assertThat(logTester.logs(LoggerLevel.TRACE)).contains("Using already processed hash for key: kotlin:contentHash:MD5:DummyFileChanged.kt")
+    fun `test same key cannot be stored twice`() {
+        val readCache = DummyReadCache(mapOf())
+        val writeCache = DummyWriteCache()
+        writeCache.write("kotlin:contentHash:MD5:DummyFile.kt", fileHash)
+        val contentHashCache = cacheFromContextData(readCache, writeCache, true)
+        contentHashCache?.hasDifferentContentCached(dummyFile)
+        assertThat(logTester.logs(LoggerLevel.WARN)).contains("Cache already contains key kotlin:contentHash:MD5:DummyFile.kt")
     }
 
     @Test
-    fun `test hashes are computed when needed`(){
-        val contentHashCache = emptyContentHashCache()
-        if(contentHashCache.hasDifferentContentCached(dummyFile)){
-            contentHashCache.writeContentHash(dummyFileChanged)
-        }
-        assertThat(logTester.logs(LoggerLevel.INFO)).doesNotContain("Using already processed hash for key: kotlin:contentHash:MD5:DummyFileChanged.kt")
-    }
-
-    @Test
-    fun `contentHashCache state is consistent with sensor context`(){
+    fun `contentHashCache state is consistent with sensor context`() {
         val contentHashCacheEnabled = emptyContentHashCache()
-        assertThat(contentHashCacheEnabled.isEnabled())
-
-        context.isCacheEnabled=false
-        val contentHashCacheDisabled = ContentHashCache(context)
-        assertThat(!contentHashCacheDisabled.isEnabled())
-    }
-
-    @Test
-    fun `test operations on disabled cache`(){
-        context.isCacheEnabled=false
-        val contentHashCacheDisabled = ContentHashCache(context)
-
-        contentHashCacheDisabled.writeContentHash(dummyFile)
-        assertThat(logTester.logs(LoggerLevel.TRACE)).containsOnly("Cannot write to cache when disabled.")
-
-        contentHashCacheDisabled.hasDifferentContentCached(dummyFile)
-        assertThat(logTester.logs(LoggerLevel.TRACE)).contains("Cannot read from cache when disabled.")
-    }
-
-    @Test
-    fun `test copyFromPrevious`(){
+        assertThat(contentHashCacheEnabled != null).isTrue
         context.isCacheEnabled = false
-        val contentHashCacheDisabled = ContentHashCache(context)
-        contentHashCacheDisabled.copyFromPreviousAnalysis(dummyFile)
-        assertThat(logTester.logs(LoggerLevel.TRACE)).containsOnly("Cannot write to cache when disabled.")
-
-        val contentHashCache = contentHashCacheOf(
-            "kotlin:contentHash:MD5:DummyFileChanged.kt"  to fileHash
-        )
-        contentHashCache.copyFromPreviousAnalysis(dummyFile)
-        assertThat(logTester.logs(LoggerLevel.TRACE)).contains("Storing file content hash for key: kotlin:contentHash:MD5:DummyFile.kt")
-
-        contentHashCache.copyFromPreviousAnalysis(dummyFileChanged)
-        assertThat(logTester.logs(LoggerLevel.TRACE)).contains("Copied file kotlin:contentHash:MD5:DummyFileChanged.kt from previous cache.")
+        val contentHashCacheDisabled = ContentHashCache.of(context)
+        assertThat(contentHashCacheDisabled == null).isTrue
     }
 
-    private fun emptyContentHashCache(): ContentHashCache{
+    @Test
+    fun `test NullPointerException on context with cache disabled`() {
+        context.isCacheEnabled = false
+        val contentHashCacheDisabled = ContentHashCache.of(context)
+        assertThrows<NullPointerException> { contentHashCacheDisabled!!.hasDifferentContentCached(dummyFile) }
+    }
+
+    private fun emptyContentHashCache(): ContentHashCache? {
         val readCache = DummyReadCache(mapOf())
         val writeCache = DummyWriteCache(readCache = readCache)
         return cacheFromContextData(readCache, writeCache, true)
     }
 
-    private fun contentHashCacheOf( previousValue: Pair<String, ByteArray> ): ContentHashCache{
-        val readCache = DummyReadCache(mapOf( previousValue ))
+    private fun contentHashCacheOf(key: String, hash: ByteArray): ContentHashCache? {
+        val readCache = DummyReadCache(mapOf(key to hash))
         val writeCache = DummyWriteCache(readCache = readCache)
         return cacheFromContextData(readCache, writeCache, true)
     }
 
-    private fun cacheFromContextData(readCache: ReadCache, writeCache: WriteCache, isEnabled: Boolean): ContentHashCache{
+    private fun cacheFromContextData(readCache: ReadCache, writeCache: WriteCache, isEnabled: Boolean): ContentHashCache? {
         context.setPreviousCache(readCache)
         context.setNextCache(writeCache)
         context.isCacheEnabled = isEnabled
-        return ContentHashCache(context)
+        return ContentHashCache.of(context)
     }
 
 }

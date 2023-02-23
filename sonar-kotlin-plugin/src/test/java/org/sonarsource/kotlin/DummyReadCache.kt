@@ -23,8 +23,7 @@ import org.sonar.api.batch.sensor.cache.ReadCache
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
-class DummyReadCache(cache: Map<String, ByteArray>): ReadCache {
-    private val cache = cache
+class DummyReadCache(val cache: Map<String, ByteArray>): ReadCache {
 
     override fun read(key: String): InputStream {
         if (!cache.containsKey(key)) {

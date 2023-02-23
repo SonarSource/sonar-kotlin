@@ -83,7 +83,7 @@ class KotlinSensor(
 
     override fun execute(sensorContext: SensorContext) {
         val sensorDuration = createPerformanceMeasureReport(sensorContext)
-        val contentHashCache = ContentHashCache(sensorContext)
+        val contentHashCache = ContentHashCache.of(sensorContext)
         val fileSystem: FileSystem = sensorContext.fileSystem()
         val mainFilePredicate = fileSystem.predicates().and(
             fileSystem.predicates().hasLanguage(language.key),
@@ -139,21 +139,8 @@ class KotlinSensor(
         }
     }
 
-    private fun fileHasChanged(inputFile: InputFile, contentHashCache: ContentHashCache): Boolean{
-        if(contentHashCache.isEnabled()){
-            val cacheContentIsDifferent = contentHashCache.hasDifferentContentCached(inputFile)
-            if(cacheContentIsDifferent){
-                LOG.debug("Cache contained a different hash for file ${inputFile.filename()}")
-                contentHashCache.writeContentHash(inputFile)
-                return true
-            }
-            contentHashCache.copyFromPreviousAnalysis(inputFile)
-            LOG.debug("Cache contained same hash for file ${inputFile.filename()}")
-            return false
-        }else{
-            LOG.debug("Cache disabled, checking InputFile.status for file ${inputFile.filename()}")
-            return inputFile.status() != InputFile.Status.SAME
-        }
+    private fun fileHasChanged(inputFile: InputFile, contentHashCache: ContentHashCache?): Boolean {
+        return contentHashCache?.hasDifferentContentCached(inputFile) ?: (inputFile.status() != InputFile.Status.SAME)
     }
 
     private fun analyseFiles(
@@ -292,7 +279,7 @@ private fun toParseException(action: String, inputFile: InputFile, cause: Throwa
 
 fun environment(sensorContext: SensorContext) = Environment(
     sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
-            sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
+        sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
     determineKotlinLanguageVersion(sensorContext),
     numberOfThreads = determineNumberOfThreadsToUse(sensorContext)
 )
