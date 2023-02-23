@@ -33,13 +33,13 @@ By default, Integration Tests (ITs) are skipped during the build. If you want to
 which are used as input:
 
     git submodule update --init its/sources
+
+Then you need to switch to Java 8 and run the command to generate binaries for Ktor project:
+
     cd its/sources/kotlin/ktor
-
-Then you need to switch to Java8 and run the command to generate binaries for Ktor project:
-
     ./gradlew assemble
 
-Then build and run the Integration Tests using the `its` property:
+Go back to the project root directory and switch back to Java 17. Then build and run the Integration Tests using the `its` property:
 
     ./gradlew build -Pits --info --console=plain --no-daemon
 
