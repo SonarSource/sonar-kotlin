@@ -21,7 +21,6 @@ package org.sonarsource.kotlin.plugin
 
 import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.assertThrows
 import org.sonar.api.batch.sensor.cache.ReadCache
 import org.sonar.api.batch.sensor.cache.WriteCache
 import org.sonar.api.utils.log.LoggerLevel
@@ -79,13 +78,6 @@ class ContentHashCacheTest : AbstractSensorTest() {
         context.isCacheEnabled = false
         val contentHashCacheDisabled = ContentHashCache.of(context)
         assertThat(contentHashCacheDisabled == null).isTrue
-    }
-
-    @Test
-    fun `test NullPointerException on context with cache disabled`() {
-        context.isCacheEnabled = false
-        val contentHashCacheDisabled = ContentHashCache.of(context)
-        assertThrows<NullPointerException> { contentHashCacheDisabled!!.hasDifferentContentCached(dummyFile) }
     }
 
     private fun emptyContentHashCache(): ContentHashCache? {

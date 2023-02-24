@@ -40,7 +40,7 @@ class DummyWriteCache(
     }
 
     override fun copyFromPrevious(key: String) {
-        if (!readCache.contains(key)) {
+        if (!readCache.contains(key) || cache.contains(key)) {
             throw IllegalArgumentException()
         }
         cache[key] = readCache.read(key).readAllBytes()

@@ -34,7 +34,7 @@ private const val CONTENT_HASHES_KEY = "kotlin:contentHash:$HASH_ALGORITHM:"
 class ContentHashCache private constructor(private val readCache: ReadCache, private val writeCache: WriteCache) {
 
     companion object {
-        fun of(ctx: SensorContext) = if (ctx.isCacheEnabled) {
+        fun of(ctx: SensorContext): ContentHashCache? = if (ctx.isCacheEnabled) {
             LOG.debug("Content hash cache was initialized")
             ContentHashCache(ctx.previousCache(), ctx.nextCache())
         } else {
@@ -43,14 +43,23 @@ class ContentHashCache private constructor(private val readCache: ReadCache, pri
         }
     }
 
+    /**
+     * Checks if the inputFile has a different content hash cached.
+     * If that is the case, or the file has never been cached before, takes care of writing a new entry to the cache.
+     * Otherwise, it will copy the content hash from the previous cache.
+     */
     fun hasDifferentContentCached(inputFile: InputFile): Boolean {
         val key = contentHashKey(inputFile)
         read(key)?.let { cachedFileHash ->
             val inputFileHash = getHash(inputFile)
             val cacheContentIsEqual = MessageDigest.isEqual(inputFileHash, cachedFileHash)
             if (cacheContentIsEqual) {
-                writeCache.copyFromPrevious(key)
-                LOG.trace { "Cache contained same hash for file ${inputFile.filename()}" }
+                try {
+                    writeCache.copyFromPrevious(key)
+                    LOG.trace { "Cache contained same hash for file ${inputFile.filename()}" }
+                } catch (_: IllegalArgumentException) {
+                    LOG.warn("Cannot copy key $key from cache as it has already been written")
+                }
                 return false
             }
         }
