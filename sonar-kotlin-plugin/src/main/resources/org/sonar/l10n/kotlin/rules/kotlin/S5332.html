@@ -68,7 +68,7 @@ val spec: ConnectionSpec = ConnectionSpec.Builder(ConnectionSpec.CLEARTEXT) // S
   .build()
 </pre>
 <p>Android WebView can be configured to allow a secure origin to load content from any other origin, even if that origin is insecure (mixed
-content);</p>
+content):</p>
 <pre>
 import android.webkit.WebView
 
@@ -106,7 +106,7 @@ else {
 val spec: ConnectionSpec =ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
   .build()
 </pre>
-<p>The most secure mode for Android WebView is <code>MIXED_CONTENT_NEVER_ALLOW</code>;</p>
+<p>The most secure mode for Android WebView is <code>MIXED_CONTENT_NEVER_ALLOW</code>:</p>
 <pre>
 import android.webkit.WebView
 
