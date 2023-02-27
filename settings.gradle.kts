@@ -51,7 +51,7 @@ dependencyResolutionManagement {
         create("utilLibs") {
             val detekt = version("detekt", "1.22.0")
             val jcommander = version("jcommander", "1.81")
-            val ktlint = version("ktlint", "0.47.1")
+            val ktlint = version("ktlint", "0.48.2")
 
             library("detekt-api", "io.gitlab.arturbosch.detekt", "detekt-api").versionRef(detekt)
             library("detekt-cli", "io.gitlab.arturbosch.detekt", "detekt-cli").versionRef(detekt)
