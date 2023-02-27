@@ -26,7 +26,7 @@ public class WorkaroundForJarMinimization {
 
   /** Without this declaration JAR minimization can't detect that these classes should not be removed. */
   @SuppressWarnings("unused")
-  private static final List<Class<?>> classesToKeepWhenMinimizingJar = List.of(
+  static final List<Class<?>> CLASSES_TO_KEEP_WHEN_MINIMIZING_JAR = List.of(
           /** META-INF/services/org.jetbrains.kotlin.builtins.BuiltInsLoader */
           org.jetbrains.kotlin.serialization.deserialization.builtins.BuiltInsLoaderImpl.class,
           /** META-INF/services/org.jetbrains.kotlin.util.ModuleVisibilityHelper */
