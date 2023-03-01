@@ -52,6 +52,7 @@ import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.PERFORMANCE_MEASURE_
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_ANDROID_DETECTED
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_LIBRARIES
+import org.sonarsource.kotlin.plugin.caching.ContentHashCache
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
 import org.sonarsource.performance.measure.PerformanceMeasure
@@ -83,7 +84,7 @@ class KotlinSensor(
 
     override fun execute(sensorContext: SensorContext) {
         val sensorDuration = createPerformanceMeasureReport(sensorContext)
-
+        val contentHashCache = ContentHashCache.of(sensorContext)
         val fileSystem: FileSystem = sensorContext.fileSystem()
         val mainFilePredicate = fileSystem.predicates().and(
             fileSystem.predicates().hasLanguage(language.key),
@@ -97,7 +98,7 @@ class KotlinSensor(
                 mainFiles
                     .filter {
                         totalFiles++
-                        it.status() != InputFile.Status.SAME
+                        fileHasChanged(it, contentHashCache)
                     }.also {
                         LOG.info("Only analyzing ${it.size} changed Kotlin files out of ${totalFiles}.")
                     }
@@ -137,6 +138,10 @@ class KotlinSensor(
                 false
             }
         }
+    }
+
+    private fun fileHasChanged(inputFile: InputFile, contentHashCache: ContentHashCache?): Boolean {
+        return contentHashCache?.hasDifferentContentCached(inputFile) ?: (inputFile.status() != InputFile.Status.SAME)
     }
 
     private fun analyseFiles(
@@ -275,7 +280,7 @@ private fun toParseException(action: String, inputFile: InputFile, cause: Throwa
 
 fun environment(sensorContext: SensorContext) = Environment(
     sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
-            sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
+        sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
     determineKotlinLanguageVersion(sensorContext),
     numberOfThreads = determineNumberOfThreadsToUse(sensorContext)
 )

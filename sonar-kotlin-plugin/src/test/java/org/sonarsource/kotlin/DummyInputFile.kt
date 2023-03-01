@@ -33,6 +33,8 @@ import kotlin.io.path.readText
 
 class DummyInputFile(val path: Path? = null) : InputFile {
 
+    var status: InputFile.Status = InputFile.Status.CHANGED
+
     val content by lazy { path?.readText() ?: "" }
 
     val lines = content.split('\n')
@@ -61,7 +63,7 @@ class DummyInputFile(val path: Path? = null) : InputFile {
 
     override fun contents() = content
 
-    override fun status() = InputFile.Status.CHANGED
+    override fun status() = status
 
     override fun lines() = lines.size
 
