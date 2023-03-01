@@ -83,15 +83,15 @@ class KotlinSensor(
 
     override fun execute(sensorContext: SensorContext) {
         val sensorDuration = createPerformanceMeasureReport(sensorContext)
-        val contentHashCache = ContentHashCache.of(sensorContext)
         val fileSystem: FileSystem = sensorContext.fileSystem()
         val mainFilePredicate = fileSystem.predicates().and(
             fileSystem.predicates().hasLanguage(language.key),
             fileSystem.predicates().hasType(InputFile.Type.MAIN)
         )
 
-        val filesToAnalyze = fileSystem.inputFiles(mainFilePredicate).let { mainFiles ->
-            if (canSkipUnchangedFiles(sensorContext)) {
+        val filesToAnalyze: Iterable<InputFile> = fileSystem.inputFiles(mainFilePredicate).let { mainFiles ->
+            if (canSkipUnchangedFiles(sensorContext) && sensorContext.runtime().product != SonarProduct.SONARLINT) {
+                val contentHashCache = ContentHashCache.of(sensorContext)
                 LOG.debug("The Kotlin analyzer is running in a context where it can skip unchanged files.")
                 var totalFiles = 0
                 mainFiles
