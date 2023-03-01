@@ -41,7 +41,9 @@ import org.sonar.api.batch.sensor.highlighting.TypeOfText
 import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
 import org.sonar.api.config.internal.ConfigurationBridge
 import org.sonar.api.config.internal.MapSettings
+import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.measures.CoreMetrics
+import org.sonar.api.utils.Version
 import org.sonar.api.utils.log.LoggerLevel
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.DummyReadCache
@@ -645,6 +647,15 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
         assertThat(logTester.logs(LoggerLevel.WARN)).contains("Cannot copy key $key from cache as it has already been written")
+    }
+
+    @Test
+    fun `the kotlin sensor does not optimize analysis when running in SonarLint`() {
+        incrementalAnalysisFileSet()
+        context.setCanSkipUnchangedFiles(true)
+        val sonarLintRuntime = SonarRuntimeImpl.forSonarLint(Version.create(7, 0))
+        context.setRuntime(sonarLintRuntime)
+        assertAnalysisIsNotIncremental()
     }
 
     private fun assertAnalysisIsIncremental() {
