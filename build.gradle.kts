@@ -81,7 +81,7 @@ allprojects {
     // Replaces the version defined in sources, usually x.y-SNAPSHOT, by a version identifying the build.
     if (project.version.toString().endsWith("-SNAPSHOT") && buildNumber != null) {
         val versionSuffix =
-            if (project.version.toString().count { it == '.' } == 1) ".0.$buildNumber" else ".$buildNumber}"
+            if (project.version.toString().count { it == '.' } == 1) ".0.$buildNumber" else ".$buildNumber"
         project.version = project.version.toString().replace("-SNAPSHOT", versionSuffix)
     }
 
