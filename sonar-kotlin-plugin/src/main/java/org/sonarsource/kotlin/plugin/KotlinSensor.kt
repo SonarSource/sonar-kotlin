@@ -37,6 +37,7 @@ import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.InputFileContext
 import org.sonarsource.kotlin.api.ParseException
+import org.sonarsource.kotlin.api.hasCacheEnabled
 import org.sonarsource.kotlin.api.regex.RegexCache
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinSyntaxStructure
@@ -131,7 +132,7 @@ class KotlinSensor(
     }
 
     private fun reuseCPDTokens(inputFile: InputFile, sensorContext: SensorContext): Boolean {
-        if (!sensorContext.isCacheEnabled) {
+        if (!sensorContext.hasCacheEnabled()) {
             return false
         }
         val previousCache = sensorContext.previousCache()

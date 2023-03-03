@@ -24,6 +24,7 @@ import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.cache.ReadCache
 import org.sonar.api.batch.sensor.cache.WriteCache
 import org.sonar.api.utils.log.Loggers
+import org.sonarsource.kotlin.api.hasCacheEnabled
 import java.security.MessageDigest
 
 private val LOG = Loggers.get(ContentHashCache::class.java)
@@ -37,7 +38,7 @@ internal fun contentHashKey(inputFile: InputFile) = CONTENT_HASHES_KEY + inputFi
 class ContentHashCache private constructor(private val readCache: ReadCache, private val writeCache: WriteCache) {
 
     companion object {
-        fun of(ctx: SensorContext): ContentHashCache? = if (ctx.isCacheEnabled) {
+        fun of(ctx: SensorContext): ContentHashCache? = if (ctx.hasCacheEnabled()) {
             LOG.debug("Content hash cache was initialized")
             ContentHashCache(ctx.previousCache(), ctx.nextCache())
         } else {

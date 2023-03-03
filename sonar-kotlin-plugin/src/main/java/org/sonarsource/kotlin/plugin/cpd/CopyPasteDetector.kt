@@ -34,6 +34,7 @@ import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.TextRange
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.utils.log.Loggers
+import org.sonarsource.kotlin.api.hasCacheEnabled
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
@@ -57,7 +58,10 @@ class CopyPasteDetector : KotlinFileVisitor() {
         cacheTokensForNextAnalysis(sensorContext, kotlinFileContext.inputFileContext.inputFile, tokens)
     }
 
-    private fun collectCpdRelevantNodes(node: PsiElement, acc: MutableList<PsiElement> = mutableListOf()): List<PsiElement> {
+    private fun collectCpdRelevantNodes(
+        node: PsiElement,
+        acc: MutableList<PsiElement> = mutableListOf()
+    ): List<PsiElement> {
         if (!isExcludedFromCpd(node)) {
             if ((node is LeafPsiElement && node !is PsiWhiteSpace) || node is KtStringTemplateEntry) {
                 acc.add(node)
@@ -79,7 +83,7 @@ class CopyPasteDetector : KotlinFileVisitor() {
             node is KDoc
 
     private fun cacheTokensForNextAnalysis(sensorContext: SensorContext, inputFile: InputFile, tokens: List<CPDToken>) {
-        if (sensorContext.isCacheEnabled) {
+        if (sensorContext.hasCacheEnabled()) {
             LOG.trace("Caching ${tokens.size} CPD tokens for next analysis of input file ${inputFile.key()}.")
             val nextCache = sensorContext.nextCache()
             nextCache.storeCPDTokens(inputFile, tokens)
