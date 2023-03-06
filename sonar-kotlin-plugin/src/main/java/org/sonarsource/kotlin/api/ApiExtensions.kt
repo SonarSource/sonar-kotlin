@@ -91,6 +91,9 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.checker.TypeCheckingProcedure.findCorrespondingSupertype
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
+import org.sonar.api.SonarProduct
+import org.sonar.api.batch.sensor.SensorContext
+import org.sonar.api.utils.Version
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
 
 private val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
@@ -534,4 +537,11 @@ fun KtAnnotationEntry.annotatedElement(): KtAnnotated {
     var annotated = parent
     while (annotated !is KtAnnotated) annotated = annotated.parent
     return annotated
+}
+
+fun SensorContext.hasCacheEnabled(): Boolean {
+    val runtime = runtime()
+    return runtime.product != SonarProduct.SONARLINT &&
+        runtime.apiVersion.isGreaterThanOrEqual(Version.create(9, 4)) &&
+        isCacheEnabled
 }
