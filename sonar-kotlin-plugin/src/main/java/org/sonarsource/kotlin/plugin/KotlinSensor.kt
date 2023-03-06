@@ -37,6 +37,7 @@ import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.InputFileContext
 import org.sonarsource.kotlin.api.ParseException
+import org.sonarsource.kotlin.api.hasCacheEnabled
 import org.sonarsource.kotlin.api.regex.RegexCache
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinSyntaxStructure
@@ -53,6 +54,9 @@ import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_ANDROID_DETECT
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.plugin.caching.ContentHashCache
+import org.sonarsource.kotlin.plugin.cpd.CopyPasteDetector
+import org.sonarsource.kotlin.plugin.cpd.copyCPDTokensFromPrevious
+import org.sonarsource.kotlin.plugin.cpd.loadCPDTokens
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
 import org.sonarsource.performance.measure.PerformanceMeasure
@@ -95,13 +99,12 @@ class KotlinSensor(
                 val contentHashCache = ContentHashCache.of(sensorContext)
                 LOG.debug("The Kotlin analyzer is running in a context where it can skip unchanged files.")
                 var totalFiles = 0
-                mainFiles
-                    .filter {
-                        totalFiles++
-                        fileHasChanged(it, contentHashCache)
-                    }.also {
-                        LOG.info("Only analyzing ${it.size} changed Kotlin files out of ${totalFiles}.")
-                    }
+                mainFiles.filter {
+                    totalFiles++
+                    fileHasChanged(it, contentHashCache) || !reuseCPDTokens(it, sensorContext)
+                }.also {
+                    LOG.info("Only analyzing ${it.size} changed Kotlin files out of ${totalFiles}.")
+                }
             } else {
                 LOG.debug("The Kotlin analyzer is running in a context where unchanged files cannot be skipped.")
                 mainFiles
@@ -127,6 +130,26 @@ class KotlinSensor(
             }
         }
         sensorDuration?.stop()
+    }
+
+    private fun reuseCPDTokens(inputFile: InputFile, sensorContext: SensorContext): Boolean {
+        if (!sensorContext.hasCacheEnabled()) {
+            return false
+        }
+        val previousCache = sensorContext.previousCache()
+        return previousCache.loadCPDTokens(inputFile)?.let { previousTokens ->
+            sensorContext.newCpdTokens().onFile(inputFile).apply {
+                previousTokens.forEach { addToken(it.range, it.text) }
+                save()
+            }
+            val nextCache = sensorContext.nextCache()
+            try {
+                nextCache.copyCPDTokensFromPrevious(inputFile)
+            } catch (_: IllegalArgumentException) {
+                LOG.trace("Unable to save the CPD tokens of file ${inputFile} for the next analysis.")
+            }
+            true
+        } ?: false
     }
 
     @OptIn(ExperimentalStdlibApi::class)
