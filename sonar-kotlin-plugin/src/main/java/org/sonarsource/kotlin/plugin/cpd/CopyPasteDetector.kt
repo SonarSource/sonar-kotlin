@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.plugin
+package org.sonarsource.kotlin.plugin.cpd
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -30,23 +30,38 @@ import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
+import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.fs.TextRange
+import org.sonar.api.batch.sensor.SensorContext
+import org.sonar.api.utils.log.Loggers
+import org.sonarsource.kotlin.api.hasCacheEnabled
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
+
+private val LOG = Loggers.get(CopyPasteDetector::class.java)
 
 class CopyPasteDetector : KotlinFileVisitor() {
     override fun visit(kotlinFileContext: KotlinFileContext) {
-        val cpdTokens =
-            kotlinFileContext.inputFileContext.sensorContext.newCpdTokens().onFile(kotlinFileContext.inputFileContext.inputFile)
+        val sensorContext = kotlinFileContext.inputFileContext.sensorContext
+        val cpdTokens = sensorContext.newCpdTokens().onFile(kotlinFileContext.inputFileContext.inputFile)
 
-        collectCpdRelevantNodes(kotlinFileContext.ktFile).forEach { node ->
+        val tokens = collectCpdRelevantNodes(kotlinFileContext.ktFile).map { node ->
             val text = if (node is KtStringTemplateEntry) "LITERAL" else node.text
-            cpdTokens.addToken(kotlinFileContext.textRange(node), text)
+            val cpdToken = CPDToken(kotlinFileContext.textRange(node), text)
+            cpdTokens.addToken(cpdToken.range, cpdToken.text)
+            cpdToken
         }
 
         cpdTokens.save()
+
+        cacheTokensForNextAnalysis(sensorContext, kotlinFileContext.inputFileContext.inputFile, tokens)
     }
 
-    private fun collectCpdRelevantNodes(node: PsiElement, acc: MutableList<PsiElement> = mutableListOf()): List<PsiElement> {
+    private fun collectCpdRelevantNodes(
+        node: PsiElement,
+        acc: MutableList<PsiElement> = mutableListOf()
+    ): List<PsiElement> {
         if (!isExcludedFromCpd(node)) {
             if ((node is LeafPsiElement && node !is PsiWhiteSpace) || node is KtStringTemplateEntry) {
                 acc.add(node)
@@ -66,4 +81,16 @@ class CopyPasteDetector : KotlinFileVisitor() {
             node is PsiWhiteSpace ||
             node is PsiComment ||
             node is KDoc
+
+    private fun cacheTokensForNextAnalysis(sensorContext: SensorContext, inputFile: InputFile, tokens: List<CPDToken>) {
+        if (sensorContext.hasCacheEnabled()) {
+            LOG.trace("Caching ${tokens.size} CPD tokens for next analysis of input file ${inputFile.key()}.")
+            val nextCache = sensorContext.nextCache()
+            nextCache.storeCPDTokens(inputFile, tokens)
+        } else {
+            LOG.trace("No CPD tokens cached for next analysis of input file moduleKey:dummy.kt.")
+        }
+    }
 }
+
+data class CPDToken(val range: TextRange, val text: String)

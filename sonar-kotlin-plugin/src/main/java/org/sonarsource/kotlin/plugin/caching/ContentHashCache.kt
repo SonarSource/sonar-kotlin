@@ -24,6 +24,7 @@ import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.cache.ReadCache
 import org.sonar.api.batch.sensor.cache.WriteCache
 import org.sonar.api.utils.log.Loggers
+import org.sonarsource.kotlin.api.hasCacheEnabled
 import java.security.MessageDigest
 
 private val LOG = Loggers.get(ContentHashCache::class.java)
@@ -31,10 +32,13 @@ private const val HASH_ALGORITHM = "MD5"
 private val messageDigest = MessageDigest.getInstance(HASH_ALGORITHM)
 private const val CONTENT_HASHES_KEY = "kotlin:contentHash:$HASH_ALGORITHM:"
 
+
+internal fun contentHashKey(inputFile: InputFile) = CONTENT_HASHES_KEY + inputFile.key().replace('\\', '/')
+
 class ContentHashCache private constructor(private val readCache: ReadCache, private val writeCache: WriteCache) {
 
     companion object {
-        fun of(ctx: SensorContext): ContentHashCache? = if (ctx.isCacheEnabled) {
+        fun of(ctx: SensorContext): ContentHashCache? = if (ctx.hasCacheEnabled()) {
             LOG.debug("Content hash cache was initialized")
             ContentHashCache(ctx.previousCache(), ctx.nextCache())
         } else {
@@ -84,7 +88,4 @@ class ContentHashCache private constructor(private val readCache: ReadCache, pri
 
     private fun getHash(inputFile: InputFile) =
         inputFile.contents().byteInputStream().use { it.readAllBytes() }.let { messageDigest.digest(it) }
-
-    private fun contentHashKey(inputFile: InputFile) = CONTENT_HASHES_KEY + inputFile.key().replace('\\', '/')
-
 }
