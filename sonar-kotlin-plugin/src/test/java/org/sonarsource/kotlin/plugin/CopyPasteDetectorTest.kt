@@ -17,29 +17,33 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.plugin.cpd
+package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.ObjectAssert
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.api.io.TempDir
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.cpd.internal.TokensLine
 import org.sonar.api.batch.sensor.internal.SensorContextTester
-import org.sonar.api.utils.log.LogTesterJUnit5
-import org.sonar.api.utils.log.LoggerLevel
-import org.sonarsource.kotlin.DummyReadCache
-import org.sonarsource.kotlin.DummyWriteCache
 import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.plugin.InputFileContextImpl
+import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.nio.file.Path
 import kotlin.io.path.createFile
 import kotlin.io.path.name
 
-private val content = """
+class CopyPasteDetectorTest {
+
+    @JvmField
+    @TempDir
+    var tmpFolder: Path? = null
+
+    @Test
+    fun test() {
+        val tmpFile = tmpFolder!!.resolve("dummy.kt").createFile()
+        val content = """
         /*
          * some licence header for example
          */
@@ -53,20 +57,6 @@ private val content = """
             }
         }
         """.trimIndent()
-
-class CopyPasteDetectorTest {
-
-    @JvmField
-    @TempDir
-    var tmpFolder: Path? = null
-
-    @JvmField
-    @RegisterExtension
-    var logTester = LogTesterJUnit5()
-
-    @Test
-    fun test() {
-        val tmpFile = tmpFolder!!.resolve("dummy.kt").createFile()
 
         val sensorContext: SensorContextTester = SensorContextTester.create(tmpFolder!!.root)
         val inputFile = TestInputFileBuilder("moduleKey", tmpFile.name)
@@ -111,68 +101,7 @@ class CopyPasteDetectorTest {
             .hasStartUnit(16)
             .hasEndUnit(16)
     }
-
-
-    @Test
-    fun `cpd tokens are saved for the next analysis when the cache is enabled`() {
-        val tmpFile = tmpFolder!!.resolve("dummy.kt").createFile()
-
-        val sensorContext: SensorContextTester = SensorContextTester.create(tmpFolder!!.root)
-        val inputFile = TestInputFileBuilder("moduleKey", tmpFile.name)
-            .setContents(content)
-            .build()
-
-        val root = kotlinTreeOf(content, Environment(emptyList(), LanguageVersion.LATEST_STABLE), inputFile)
-        val ctx = InputFileContextImpl(sensorContext, inputFile, false)
-
-        val readCache = DummyReadCache(emptyMap())
-        val writeCache = DummyWriteCache(readCache = readCache)
-        sensorContext.isCacheEnabled = true
-        sensorContext.setPreviousCache(readCache)
-        sensorContext.setNextCache(writeCache)
-
-        Assertions.assertThat(writeCache.cache).isEmpty()
-        CopyPasteDetector().scan(ctx, root)
-        Assertions.assertThat(writeCache.cache)
-            .hasSize(1)
-
-        val logs = logTester.getLogs(LoggerLevel.TRACE).map { it.rawMsg }
-
-        Assertions.assertThat(logs)
-            .hasSize(1)
-            .containsExactly("Caching 16 CPD tokens for next analysis of input file moduleKey:dummy.kt.")
-    }
-
-    @Test
-    fun `cpd tokens are not saved for the next analysis when the cache is disabled`() {
-        val tmpFile = tmpFolder!!.resolve("dummy.kt").createFile()
-
-        val sensorContext: SensorContextTester = SensorContextTester.create(tmpFolder!!.root)
-        val inputFile = TestInputFileBuilder("moduleKey", tmpFile.name)
-            .setContents(content)
-            .build()
-
-        val root = kotlinTreeOf(content, Environment(emptyList(), LanguageVersion.LATEST_STABLE), inputFile)
-        val ctx = InputFileContextImpl(sensorContext, inputFile, false)
-
-        val readCache = DummyReadCache(emptyMap())
-        val writeCache = DummyWriteCache(readCache = readCache)
-        sensorContext.isCacheEnabled = false
-        sensorContext.setPreviousCache(readCache)
-        sensorContext.setNextCache(writeCache)
-
-        Assertions.assertThat(writeCache.cache).isEmpty()
-        CopyPasteDetector().scan(ctx, root)
-        Assertions.assertThat(writeCache.cache).isEmpty()
-
-        val logs = logTester.getLogs(LoggerLevel.TRACE).map { it.rawMsg }
-
-        Assertions.assertThat(logs)
-            .hasSize(1)
-            .containsExactly("No CPD tokens cached for next analysis of input file moduleKey:dummy.kt.")
-    }
 }
-
 
 private class TokensLineAssert(actual: TokensLine) : ObjectAssert<TokensLine>(actual) {
     fun hasValue(expected: String) = also {
