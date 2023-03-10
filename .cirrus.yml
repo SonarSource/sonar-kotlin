@@ -58,7 +58,7 @@ linux_6_cpu_12G_java_17_template: &LINUX_6_CPU_12G_JAVA_17
 windows_4_cpu_15G_template: &WINDOWS_4_CPU_15G
   ec2_instance:
     experimental: true # see https://github.com/cirruslabs/cirrus-ci-docs/issues/1051
-    image: base-windows-jdk11-v*
+    image: base-windows-jdk17-v*
     platform: windows
     region: eu-central-1
     type: t3.xlarge
