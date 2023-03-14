@@ -38,28 +38,18 @@ import org.junit.jupiter.api.assertThrows
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.CheckFactory
 import org.sonar.api.batch.sensor.SensorContext
-import org.sonar.api.batch.sensor.cache.WriteCache
 import org.sonar.api.batch.sensor.highlighting.TypeOfText
-import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
 import org.sonar.api.config.internal.ConfigurationBridge
 import org.sonar.api.config.internal.MapSettings
-import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.measures.CoreMetrics
-import org.sonar.api.utils.Version
 import org.sonar.api.utils.log.LoggerLevel
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.DummyReadCache
-import org.sonarsource.kotlin.DummyWriteCache
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.plugin.caching.contentHashKey
-import org.sonarsource.kotlin.plugin.cpd.computeCPDTokensCacheKey
 import org.sonarsource.kotlin.testing.AbstractSensorTest
 import org.sonarsource.kotlin.testing.assertTextRange
 import java.io.IOException
-import java.io.InputStream
-import java.security.MessageDigest
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -214,7 +204,6 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             InputFile.Status.SAME
         )
         context.fileSystem().add(inputFile)
-        populateCacheWithExpectedEntries(listOf(inputFile), context)
 
         mockkStatic("org.sonarsource.kotlin.plugin.KotlinSensorKt")
         every { environment(any()) } returns Environment(listOf("file1.kt"), LanguageVersion.LATEST_STABLE)
@@ -488,98 +477,34 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun `the kotlin sensor optimizes analyses in contexts where sonar-kotlin-skipUnchanged is true`() {
-        val files = incrementalAnalysisFileSet()
+        context.setCanSkipUnchangedFiles(false)
+
         // Enable analysis property to override skipUnchanged setting
         context.settings().setProperty("sonar.kotlin.skipUnchanged", "true")
-        context.setCanSkipUnchangedFiles(false)
-        assertAnalysisIsIncremental(files)
-    }
 
-    @Test
-    fun `the kotlin sensor does not optimize analysis when the cpd tokens of a file are missing because the cache is disabled`() {
-        val files = incrementalAnalysisFileSet()
-
-        // Disable the cache to make the analysis non-incremental
-        context.isCacheEnabled = false
-        logTester.setLevel(LoggerLevel.DEBUG)
-
-        assertAnalysisIsNotIncremental(files)
-    }
-
-    @Test
-    fun `the kotlin sensor does not optimize analysis when the cpd tokens of a file are missing from the previous analysis cache`() {
-        val files = incrementalAnalysisFileSet()
-
-        // Clear the cache from the expected CPD tokens
-        val emptyReadCache = DummyReadCache(emptyMap())
-        val writeCache = DummyWriteCache(readCache = emptyReadCache)
-        context.setPreviousCache(emptyReadCache)
-        context.setNextCache(writeCache)
-        logTester.setLevel(LoggerLevel.DEBUG)
-
-        assertAnalysisIsNotIncremental(files)
-    }
-
-    @Test
-    fun `the kotlin sensor does not optimize analysis when the cpd tokens cannot be copied from the previous cache to the next one`() {
-        val files = incrementalAnalysisFileSet()
-
-        // Clear the cache of CPD tokens
-        val emptyReadCache = DummyReadCache(emptyMap())
-        val writeCache = DummyWriteCache(readCache = emptyReadCache)
-        context.setPreviousCache(emptyReadCache)
-        context.setNextCache(writeCache)
-        logTester.setLevel(LoggerLevel.DEBUG)
-
-        // Mock exception throwing when copying the tokens from the cache of the previous analysis to the next one
-        val unchangedFile = files[InputFile.Status.SAME]!!
-        val cacheKey = computeCPDTokensCacheKey(unchangedFile)
-        val mockedWriteCache = mockk<WriteCache>()
-        every { mockedWriteCache.copyFromPrevious(cacheKey) } throws IllegalArgumentException()
-        every { mockedWriteCache.write(any(), any<InputStream>()) } returns Unit
-        every { mockedWriteCache.write(any(), any<ByteArray>()) } returns Unit
-        context.setNextCache(mockedWriteCache)
-
-        assertAnalysisIsNotIncremental(files)
-    }
-
-    @Test
-    fun `the kotlin sensor optimizes analysis when the cpd tokens cannot be loaded from the previous cache but cannot be copied to the next cache`() {
-        val files = incrementalAnalysisFileSet()
-
-        // Mock exception throwing when copying the tokens from the cache of the previous analysis to the next one
-        val unchangedFile = files[InputFile.Status.SAME]!!
-        val cpdCacheKey = computeCPDTokensCacheKey(unchangedFile)
-        val mockedWriteCache = mockk<WriteCache>()
-        every { mockedWriteCache.copyFromPrevious(any()) } throws IllegalArgumentException()
-        every { mockedWriteCache.copyFromPrevious(cpdCacheKey) } throws IllegalArgumentException()
-        every { mockedWriteCache.write(any(), any<ByteArray>()) } returns Unit
-        context.setNextCache(mockedWriteCache)
-
-        assertAnalysisIsIncremental(files)
-        // Check that the exception has been logged
-        assertThat(logTester.logs(LoggerLevel.TRACE)).contains("Unable to save the CPD tokens of file unchanged.kt for the next analysis.")
+        assertAnalysisIsIncremental()
     }
 
     @Test
     fun `the kotlin sensor does not optimize analyses in contexts when the sonar-kotlin-skipUnchanged is false`() {
-        val files = incrementalAnalysisFileSet()
+        context.setCanSkipUnchangedFiles(true)
+
         // Explicitly prevent the skipping of unchanged files
         context.settings().setProperty("sonar.kotlin.skipUnchanged", "false")
-        assertAnalysisIsNotIncremental(files)
+
+        assertAnalysisIsNotIncremental()
     }
 
     @Test
     fun `the kotlin sensor does not optimize analyses in contexts where it is not appropriate`() {
-        val files = incrementalAnalysisFileSet()
         context.setCanSkipUnchangedFiles(false)
-        assertAnalysisIsNotIncremental(files)
+        assertAnalysisIsNotIncremental()
     }
 
     @Test
     fun `the kotlin sensor optimizes analyses in contexts where this is appropriate`() {
-        val files = incrementalAnalysisFileSet()
-        assertAnalysisIsIncremental(files)
+        context.setCanSkipUnchangedFiles(true)
+        assertAnalysisIsIncremental()
     }
 
     @Test
@@ -588,8 +513,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             every { canSkipUnchangedFiles() } throws AbstractMethodError()
         }
 
-        val files = incrementalAnalysisFileSet()
-        assertAnalysisIsNotIncremental(files)
+        assertAnalysisIsNotIncremental()
 
         verify(exactly = 1) { context.canSkipUnchangedFiles() }
     }
@@ -600,76 +524,14 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             every { canSkipUnchangedFiles() } throws NoSuchMethodError()
         }
 
-        val files = incrementalAnalysisFileSet()
-        assertAnalysisIsNotIncremental(files)
+        assertAnalysisIsNotIncremental()
 
         verify(exactly = 1) { context.canSkipUnchangedFiles() }
     }
 
-    @Test
-    fun `test sensor skips cached files`() {
-        val files = incrementalAnalysisFileSet()
-        assertAnalysisIsIncremental(files)
-
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
-            .contains("Content hash cache was initialized")
-        assertThat(logTester.logs(LoggerLevel.INFO))
-            .contains("Only analyzing 2 changed Kotlin files out of 3.")
-
-    }
-
-    @Test
-    fun `hasFileChanged falls back on the InputFile status when cache is disabled`() {
-        val files = incrementalAnalysisFileSet()
-
-        context.isCacheEnabled = false
-        context.setCanSkipUnchangedFiles(true)
-
-        val unchangedFile = spyk(files[InputFile.Status.SAME]!!)
-        context.fileSystem().add(unchangedFile)
-        context.fileSystem().add(files[InputFile.Status.CHANGED]!!)
-        val checkFactory = checkFactory("S1764")
-        sensor(checkFactory).execute(context)
-
-        // The analysis is not incremental because a disabled cache prevents the reuse of CPD tokens
-        assertThat(logTester.logs(LoggerLevel.DEBUG)).contains("Content hash cache is disabled")
-        assertThat(logTester.logs(LoggerLevel.INFO)).contains("Only analyzing 2 changed Kotlin files out of 2.")
-        verify { unchangedFile.status() }
-    }
-
-    @Test
-    fun `test same file passed twice to content hash cache`() {
-        val files = incrementalAnalysisFileSet()
-        val key = contentHashKey(files[InputFile.Status.CHANGED]!!)
-        val messageDigest = MessageDigest.getInstance("MD5")
-        val readCache = files[InputFile.Status.CHANGED]!!.contents().byteInputStream().use {
-            DummyReadCache(mapOf(key to messageDigest.digest(it.readAllBytes())))
-        }
-        val writeCache = DummyWriteCache(readCache = readCache)
-        context.setNextCache(writeCache)
-        context.setPreviousCache(readCache)
-        val changedFile = files[InputFile.Status.CHANGED]!!
-        context.fileSystem().add(changedFile)
-        val sameKeyFile = spyk(files[InputFile.Status.SAME]!!)
-        every { sameKeyFile.key() } returns changedFile.key()
-        every { sameKeyFile.contents() } returns changedFile.contents()
-        context.fileSystem().add(sameKeyFile)
-        val checkFactory = checkFactory("S1764")
-        sensor(checkFactory).execute(context)
-        assertThat(logTester.logs(LoggerLevel.WARN)).contains("Cannot copy key $key from cache as it has already been written")
-    }
-
-    @Test
-    fun `the kotlin sensor does not optimize analysis when running in SonarLint`() {
-        val files = incrementalAnalysisFileSet()
-        context.setCanSkipUnchangedFiles(true)
-        val sonarLintRuntime = SonarRuntimeImpl.forSonarLint(Version.create(7, 0))
-        context.setRuntime(sonarLintRuntime)
-        assertAnalysisIsNotIncremental(files)
-    }
-
-    private fun assertAnalysisIsIncremental(files: Map<InputFile.Status, InputFile>) {
+    private fun assertAnalysisIsIncremental() {
         logTester.setLevel(LoggerLevel.DEBUG)
+        val files = incrementalAnalysisFileSet()
         val addedFile = files[InputFile.Status.ADDED]
         val changedFile = files[InputFile.Status.CHANGED]
         files.values.forEach { context.fileSystem().add(it) }
@@ -700,7 +562,8 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             .contains("Only analyzing 2 changed Kotlin files out of 3.")
     }
 
-    private fun assertAnalysisIsNotIncremental(files: Map<InputFile.Status, InputFile>) {
+    private fun assertAnalysisIsNotIncremental() {
+        val files = incrementalAnalysisFileSet()
         val addedFile = files[InputFile.Status.ADDED]
         val changedFile = files[InputFile.Status.CHANGED]
         val unchangedFile = files[InputFile.Status.SAME]
@@ -739,8 +602,6 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     private fun incrementalAnalysisFileSet(): Map<InputFile.Status, InputFile> {
-        context.setCanSkipUnchangedFiles(true)
-        context.isCacheEnabled = false
         val changedFile = createInputFile(
             "changed.kt",
             """
@@ -764,43 +625,11 @@ internal class KotlinSensorTest : AbstractSensorTest() {
                 """.trimIndent(),
             status = InputFile.Status.SAME
         )
-        val files = mapOf(
+        return mapOf(
             InputFile.Status.ADDED to addedFile,
             InputFile.Status.CHANGED to changedFile,
             InputFile.Status.SAME to unchangedFile,
         )
-        populateCacheWithExpectedEntries(files.values, context)
-        return files
-    }
-
-    private fun populateCacheWithExpectedEntries(files: Iterable<InputFile>, context: SensorContextTester) {
-        val cacheContentBeforeAnalysis = mutableMapOf <String, ByteArray>()
-        val messageDigest = MessageDigest.getInstance("MD5")
-        files
-            .filter { it.status() != InputFile.Status.ADDED }
-            .forEach {
-                // Add content hashes
-                val contentHashKey = contentHashKey(it)
-                if (it.status() == InputFile.Status.SAME) {
-                    val digest = messageDigest.digest(it.contents().byteInputStream().readAllBytes())
-                    cacheContentBeforeAnalysis[contentHashKey] = digest
-                } else if (it.status() == InputFile.Status.CHANGED) {
-                    cacheContentBeforeAnalysis[contentHashKey] = ByteArray(0)
-                }
-                // Add CPD tokens
-                cacheContentBeforeAnalysis["kotlin:cpdTokens:${it.key()}"] = ByteArray(0)
-            }
-
-        context.isCacheEnabled = true
-        if (context.previousCache() != null) {
-            val readCache = context.previousCache() as DummyReadCache
-            readCache.cache.entries.forEach { cacheContentBeforeAnalysis[it.key] = it.value }
-        }
-
-        val previousCache = DummyReadCache(cacheContentBeforeAnalysis)
-        val nextCache = DummyWriteCache(readCache=previousCache)
-        context.setPreviousCache(previousCache)
-        context.setNextCache(nextCache)
     }
 
 

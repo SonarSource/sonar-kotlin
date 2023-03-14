@@ -37,7 +37,6 @@ import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.InputFileContext
 import org.sonarsource.kotlin.api.ParseException
-import org.sonarsource.kotlin.api.hasCacheEnabled
 import org.sonarsource.kotlin.api.regex.RegexCache
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinSyntaxStructure
@@ -52,10 +51,6 @@ import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.PERFORMANCE_MEASURE_
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.PERFORMANCE_MEASURE_DESTINATION_FILE
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_LIBRARIES
-import org.sonarsource.kotlin.plugin.caching.ContentHashCache
-import org.sonarsource.kotlin.plugin.cpd.CopyPasteDetector
-import org.sonarsource.kotlin.plugin.cpd.copyCPDTokensFromPrevious
-import org.sonarsource.kotlin.plugin.cpd.loadCPDTokens
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
 import org.sonarsource.performance.measure.PerformanceMeasure
@@ -87,23 +82,24 @@ class KotlinSensor(
 
     override fun execute(sensorContext: SensorContext) {
         val sensorDuration = createPerformanceMeasureReport(sensorContext)
+
         val fileSystem: FileSystem = sensorContext.fileSystem()
         val mainFilePredicate = fileSystem.predicates().and(
             fileSystem.predicates().hasLanguage(language.key),
             fileSystem.predicates().hasType(InputFile.Type.MAIN)
         )
 
-        val filesToAnalyze: Iterable<InputFile> = fileSystem.inputFiles(mainFilePredicate).let { mainFiles ->
-            if (canSkipUnchangedFiles(sensorContext) && sensorContext.runtime().product != SonarProduct.SONARLINT) {
-                val contentHashCache = ContentHashCache.of(sensorContext)
+        val filesToAnalyze = fileSystem.inputFiles(mainFilePredicate).let { mainFiles ->
+            if (canSkipUnchangedFiles(sensorContext)) {
                 LOG.debug("The Kotlin analyzer is running in a context where it can skip unchanged files.")
                 var totalFiles = 0
-                mainFiles.filter {
-                    totalFiles++
-                    fileHasChanged(it, contentHashCache) || !reuseCPDTokens(it, sensorContext)
-                }.also {
-                    LOG.info("Only analyzing ${it.size} changed Kotlin files out of ${totalFiles}.")
-                }
+                mainFiles
+                    .filter {
+                        totalFiles++
+                        it.status() != InputFile.Status.SAME
+                    }.also {
+                        LOG.info("Only analyzing ${it.size} changed Kotlin files out of ${totalFiles}.")
+                    }
             } else {
                 LOG.debug("The Kotlin analyzer is running in a context where unchanged files cannot be skipped.")
                 mainFiles
@@ -131,26 +127,6 @@ class KotlinSensor(
         sensorDuration?.stop()
     }
 
-    private fun reuseCPDTokens(inputFile: InputFile, sensorContext: SensorContext): Boolean {
-        if (!sensorContext.hasCacheEnabled()) {
-            return false
-        }
-        val previousCache = sensorContext.previousCache()
-        return previousCache.loadCPDTokens(inputFile)?.let { previousTokens ->
-            sensorContext.newCpdTokens().onFile(inputFile).apply {
-                previousTokens.forEach { addToken(it.range, it.text) }
-                save()
-            }
-            val nextCache = sensorContext.nextCache()
-            try {
-                nextCache.copyCPDTokensFromPrevious(inputFile)
-            } catch (_: IllegalArgumentException) {
-                LOG.trace("Unable to save the CPD tokens of file ${inputFile} for the next analysis.")
-            }
-            true
-        } ?: false
-    }
-
     @OptIn(ExperimentalStdlibApi::class)
     private fun canSkipUnchangedFiles(sensorContext: SensorContext): Boolean {
         return sensorContext.config().getBoolean(KotlinPlugin.SKIP_UNCHANGED_FILES_OVERRIDE).getOrElse {
@@ -160,10 +136,6 @@ class KotlinSensor(
                 false
             }
         }
-    }
-
-    private fun fileHasChanged(inputFile: InputFile, contentHashCache: ContentHashCache?): Boolean {
-        return contentHashCache?.hasDifferentContentCached(inputFile) ?: (inputFile.status() != InputFile.Status.SAME)
     }
 
     private fun analyseFiles(
@@ -302,7 +274,7 @@ private fun toParseException(action: String, inputFile: InputFile, cause: Throwa
 
 fun environment(sensorContext: SensorContext) = Environment(
     sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
-        sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
+            sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
     determineKotlinLanguageVersion(sensorContext),
     numberOfThreads = determineNumberOfThreadsToUse(sensorContext)
 )

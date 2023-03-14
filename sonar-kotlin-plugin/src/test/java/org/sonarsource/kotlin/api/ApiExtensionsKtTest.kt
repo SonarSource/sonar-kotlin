@@ -48,17 +48,10 @@ import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.io.TempDir
-import org.sonar.api.SonarEdition
-import org.sonar.api.SonarQubeSide
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
-import org.sonar.api.batch.sensor.internal.SensorContextTester
-import org.sonar.api.internal.SonarRuntimeImpl
-import org.sonar.api.utils.Version
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.nio.charset.StandardCharsets
-import java.nio.file.Path
 import java.util.TreeMap
 
 internal class ApiExtensionsKtTest {
@@ -543,46 +536,6 @@ class ApiExtensionsScopeFunctionResolutionTest {
 
         assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
             .isInstanceOf(KtThisExpression::class.java)
-    }
-
-    @JvmField
-    @TempDir
-    var tempFolder: Path? = null
-
-    @Test
-    fun `SensorContext hasCacheEnabled() returns false when the product is sonarlint`() {
-        val sensorContext = SensorContextTester.create(tempFolder)
-        val sonarLintRuntime = SonarRuntimeImpl.forSonarLint(Version.create(9, 4))
-        sensorContext.setRuntime(sonarLintRuntime)
-        sensorContext.isCacheEnabled = true
-        assertThat(sensorContext.hasCacheEnabled()).isFalse()
-    }
-
-    @Test
-    fun `SensorContext hasCacheEnabled() returns false when the product has an API version below 9_4`() {
-        val sensorContext = SensorContextTester.create(tempFolder)
-        val incompatibleRuntime = SonarRuntimeImpl.forSonarQube(Version.create(9, 3), SonarQubeSide.SERVER, SonarEdition.DEVELOPER)
-        sensorContext.setRuntime(incompatibleRuntime)
-        sensorContext.isCacheEnabled = true
-        assertThat(sensorContext.hasCacheEnabled()).isFalse()
-    }
-
-    @Test
-    fun `SensorContext hasCacheEnabled() returns false when the product has an API version is 9_4 or greater but the cache is disabled`() {
-        val sensorContext = SensorContextTester.create(tempFolder)
-        val minimumCompatibleRuntime = SonarRuntimeImpl.forSonarQube(Version.create(9, 4), SonarQubeSide.SERVER, SonarEdition.DEVELOPER)
-        sensorContext.setRuntime(minimumCompatibleRuntime)
-        sensorContext.isCacheEnabled = false
-        assertThat(sensorContext.hasCacheEnabled()).isFalse()
-    }
-
-    @Test
-    fun `SensorContext hasCacheEnabled() returns true when the product has an API version is 9_4 or greater but the cache is enabled`() {
-        val sensorContext = SensorContextTester.create(tempFolder)
-        val minimumCompatibleRuntime = SonarRuntimeImpl.forSonarQube(Version.create(9, 4), SonarQubeSide.SERVER, SonarEdition.DEVELOPER)
-        sensorContext.setRuntime(minimumCompatibleRuntime)
-        sensorContext.isCacheEnabled = true
-        assertThat(sensorContext.hasCacheEnabled()).isTrue()
     }
 }
 
