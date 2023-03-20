@@ -74,6 +74,7 @@ import org.sonarsource.kotlin.checks.IgnoredOperationStatusCheck
 import org.sonarsource.kotlin.checks.InjectableDispatchersCheck
 import org.sonarsource.kotlin.checks.InvalidRegexCheck
 import org.sonarsource.kotlin.checks.IsInstanceMethodCheck
+import org.sonarsource.kotlin.checks.LiftReturnStatementCheck
 import org.sonarsource.kotlin.checks.MainSafeCoroutinesCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
 import org.sonarsource.kotlin.checks.MobileDatabaseEncryptionKeysCheck
@@ -185,6 +186,7 @@ val KOTLIN_CHECKS = listOf(
     InvalidRegexCheck::class.java,
     IsInstanceMethodCheck::class.java,
     JumpInFinallyCheck::class.java,
+    LiftReturnStatementCheck::class.java,
     MainSafeCoroutinesCheck::class.java,
     MatchCaseTooBigCheck::class.java,
     MobileDatabaseEncryptionKeysCheck::class.java,
