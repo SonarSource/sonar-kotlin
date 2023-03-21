@@ -1,0 +1,55 @@
+<h2>Why is this an issue?</h2>
+<p>In Kotlin, <code>==</code> means structural equality and <code>!=</code> structural inequality and both map to the left-side term’s
+<code>equals()</code> function. It is, therefore, redundant to call <code>equals()</code> as a function. Also, <code>==</code> and <code>!=</code> are
+more general than <code>equals()</code> and <code>!equals()</code> because it allows either of both operands to be <code>null</code>.</p>
+<p>Developers using <code>equals()</code> instead of <code>==</code> or <code>!=</code> is often the result of adapting styles from other languages
+like Java, where <code>==</code> means reference equality and <code>!=</code> means reference inequality.</p>
+<h3>What is the potential impact?</h3>
+<h4>Wrong logic</h4>
+<p><code>==</code> and <code>!=</code> allow either of both operands to be <code>null</code>, while <code>equals()</code> doesn’t.</p>
+<h4>Readability and Understanding</h4>
+<p>The <code>==</code> and <code>!=</code> operators are a more concise and elegant way to test structural equality than calling a function.</p>
+<h2>How to fix it</h2>
+<p>Replace <code>a.equals(b)</code> with <code>a == b</code>. Replace <code>!a.equals(b)</code> with <code>a != b</code>.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre>
+data class Person(
+    val name: String,
+    val firstName: String,
+    val age: Int,
+    val address: String
+)
+</pre>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+fun checkEquality() {
+    val personA = Person("Claus", "Santa", 200, "North Pole")
+    val personB = Person("Nicholas", "Saint", 1700, "Myra")
+    if (personA.name.equals(personB.name)) { // Noncompliant, should use `==` instead
+        // ...
+    }
+    if (!personA.equals(personB)) { // Noncompliant, should use `!=` instead
+        // ...
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+fun checkEquality() {
+    val personA = Person("Claus", "Santa", 200, "North Pole")
+    val personB = Person("Nicholas", "Saint", 1700, "Myra")
+    if (personA.name == personB.name) { // Compliant
+        // ...
+    }
+    if (personA != personB) { // Compliant
+        // ...
+    }
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/operator-overloading.html#equality-and-inequality-operators">Kotlin Docs, Equality and inequality
+  operators</a> </li>
+</ul>
+
