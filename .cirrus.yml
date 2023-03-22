@@ -58,7 +58,7 @@ linux_6_cpu_12G_java_17_template: &LINUX_6_CPU_12G_JAVA_17
 windows_4_cpu_15G_template: &WINDOWS_4_CPU_15G
   ec2_instance:
     experimental: true # see https://github.com/cirruslabs/cirrus-ci-docs/issues/1051
-    image: base-windows-jdk11-v*
+    image: base-windows-jdk17-v*
     platform: windows
     region: eu-central-1
     type: t3.xlarge
@@ -167,7 +167,7 @@ qa_plug_pub_lin_task:
     GRADLE_TASK: ":its:plugin:test"
     matrix:
       - SQ_VERSION: "DEV"
-      - SQ_VERSION: "LATEST_RELEASE[8.9]"
+      - SQ_VERSION: "LATEST_RELEASE[9.9]"
       - SQ_VERSION: "LATEST_RELEASE"
   <<: *LINUX_6_CPU_12G_JAVA_17
   <<: *GRADLE_ITS_TEMPLATE
@@ -175,7 +175,7 @@ qa_plug_pub_lin_task:
 qa_plug_pub_win_task:
   <<: *QA_TASK_FILTER
   env:
-    SQ_VERSION: LATEST_RELEASE[8.9]
+    SQ_VERSION: LATEST_RELEASE[9.9]
     GRADLE_TASK: ":its:plugin:test"
     ITS_PROJECT: "plugin"
   <<: *WINDOWS_4_CPU_15G
