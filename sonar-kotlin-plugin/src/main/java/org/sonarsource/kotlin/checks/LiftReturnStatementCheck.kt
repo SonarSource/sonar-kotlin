@@ -25,23 +25,20 @@ import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.isExhaustive
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 @Rule(key = "S6510")
 class LiftReturnStatementCheck : AbstractCheck() {
 
     override fun visitIfExpression(expression: KtIfExpression, context: KotlinFileContext) {
-        val thenBranch = expression.then
-        val elseBranch = expression.`else`
+        // `then` branch of an `if` statement can never be null
+        val thenBranch = expression.then!!
+        val elseBranch = expression.`else`?: return
 
-        if (thenBranch != null &&
-            elseBranch != null &&
-            isReturnOrReturnBlock(thenBranch) &&
-            isReturnOrReturnBlock(elseBranch)
-        ) {
+        if (isReturnOrReturnBlock(thenBranch) && isReturnOrReturnBlock(elseBranch)) {
             reportIssue(expression.ifKeyword, context)
         }
     }
@@ -52,7 +49,7 @@ class LiftReturnStatementCheck : AbstractCheck() {
             isReturnOrReturnBlock(it.expression!!)
         }
 
-        if (isAllBranchesReturn && isExhaustive(expression, context)) {
+        if (isAllBranchesReturn && expression.isExhaustive(context)) {
             reportIssue(expression.whenKeyword, context)
         }
     }
@@ -61,19 +58,12 @@ class LiftReturnStatementCheck : AbstractCheck() {
         val keyword = (keywordElement as LeafPsiElement).chars
         context.reportIssue(keywordElement, """Move "return" statements from all branches before "$keyword" statement.""")
     }
+}
 
-    companion object {
-
-        private fun isReturnOrReturnBlock(element: PsiElement): Boolean {
-            return when (element) {
-                is KtReturnExpression -> true
-                is KtBlockExpression -> element.statements.lastOrNull() is KtReturnExpression
-                else -> false
-            }
-        }
-
-        private fun isExhaustive(expression: KtWhenExpression, context: KotlinFileContext): Boolean {
-            return expression.entries.any { it.isElse } || context.bindingContext.get(BindingContext.EXHAUSTIVE_WHEN, expression) == true
-        }
+private fun isReturnOrReturnBlock(element: PsiElement): Boolean {
+    return when (element) {
+        is KtReturnExpression -> true
+        is KtBlockExpression -> element.statements.lastOrNull() is KtReturnExpression
+        else -> false
     }
 }

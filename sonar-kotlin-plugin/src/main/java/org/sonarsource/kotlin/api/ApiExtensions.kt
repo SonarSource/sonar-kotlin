@@ -60,6 +60,7 @@ import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtValueArgument
+import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
@@ -95,6 +96,7 @@ import org.sonar.api.SonarProduct
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.utils.Version
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
+import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
     qualifier = "java.util.Properties"
@@ -544,4 +546,8 @@ fun SensorContext.hasCacheEnabled(): Boolean {
     return runtime.product != SonarProduct.SONARLINT &&
         runtime.apiVersion.isGreaterThanOrEqual(Version.create(9, 4)) &&
         isCacheEnabled
+}
+
+fun KtWhenExpression.isExhaustive(context: KotlinFileContext): Boolean {
+    return entries.any { it.isElse } || context.bindingContext.get(BindingContext.EXHAUSTIVE_WHEN, this) == true
 }
