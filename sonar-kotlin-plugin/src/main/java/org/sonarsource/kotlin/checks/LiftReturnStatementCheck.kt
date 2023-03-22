@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
@@ -35,38 +36,44 @@ class LiftReturnStatementCheck : AbstractCheck() {
     override fun visitIfExpression(expression: KtIfExpression, context: KotlinFileContext) {
         val thenBranch = expression.then
         val elseBranch = expression.`else`
-        val isAllBranchesReturn = thenBranch != null &&
+
+        if (thenBranch != null &&
             elseBranch != null &&
             isReturnOrReturnBlock(thenBranch) &&
             isReturnOrReturnBlock(elseBranch)
-
-        if (isAllBranchesReturn) {
-            context.reportIssue(expression.ifKeyword, """Lift "return" statements from both branches before "if" statement.""")
+        ) {
+            reportIssue(expression.ifKeyword, context)
         }
     }
 
     override fun visitWhenExpression(expression: KtWhenExpression, context: KotlinFileContext) {
         val isAllBranchesReturn = expression.entries.all {
-            // Note: there is no known case when KtWhenEntry.expression could be `null`.
+            // There is no known case when KtWhenEntry.expression could be `null`.
             isReturnOrReturnBlock(it.expression!!)
         }
 
         if (isAllBranchesReturn && isExhaustive(expression, context)) {
-            context.reportIssue(expression.whenKeyword, """Lift "return" statements from all branches before "when" statement.""")
+            reportIssue(expression.whenKeyword, context)
         }
     }
 
-    private fun isReturnOrReturnBlock(element: PsiElement): Boolean {
-        return when (element) {
-            is KtReturnExpression -> true
-            is KtBlockExpression -> element.statements.lastOrNull() is KtReturnExpression
-            else -> false
-        }
+    private fun reportIssue(keywordElement: PsiElement, context: KotlinFileContext) {
+        val keyword = (keywordElement as LeafPsiElement).chars
+        context.reportIssue(keywordElement, """Move "return" statements from all branches before "$keyword" statement.""")
     }
 
-    private fun isExhaustive(expression: KtWhenExpression, context: KotlinFileContext): Boolean {
-        return expression.entries.any { it.isElse } ||
-            context.bindingContext.get(BindingContext.IMPLICIT_EXHAUSTIVE_WHEN, expression) == true ||
-            context.bindingContext.get(BindingContext.EXHAUSTIVE_WHEN, expression) == true
+    companion object {
+
+        private fun isReturnOrReturnBlock(element: PsiElement): Boolean {
+            return when (element) {
+                is KtReturnExpression -> true
+                is KtBlockExpression -> element.statements.lastOrNull() is KtReturnExpression
+                else -> false
+            }
+        }
+
+        private fun isExhaustive(expression: KtWhenExpression, context: KotlinFileContext): Boolean {
+            return expression.entries.any { it.isElse } || context.bindingContext.get(BindingContext.EXHAUSTIVE_WHEN, expression) == true
+        }
     }
 }

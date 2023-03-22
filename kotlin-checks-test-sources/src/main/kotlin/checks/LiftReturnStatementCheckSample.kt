@@ -3,7 +3,7 @@ package checks
 class LiftReturnStatementCheckSample {
 
     fun returnIfElseNoncompliant(value: Int): String {
-        if (value >= 0) { // Noncompliant {{Lift "return" statements from both branches before "if" statement.}}
+        if (value >= 0) { // Noncompliant {{Move "return" statements from all branches before "if" statement.}}
             return "positive"
         } else {
             return "negative"
@@ -19,7 +19,7 @@ class LiftReturnStatementCheckSample {
     }
 
     fun returnIfElseNoBlockNoncompliant(value: Int): String {
-        if (value >= 0) return "positive" // Noncompliant {{Lift "return" statements from both branches before "if" statement.}}
+        if (value >= 0) return "positive" // Noncompliant {{Move "return" statements from all branches before "if" statement.}}
         else return "negative"
     }
 
@@ -61,7 +61,7 @@ class LiftReturnStatementCheckSample {
     }
 
     fun returnWhenElseNoncompliant(a: Float): Int {
-        when { // Noncompliant {{Lift "return" statements from all branches before "when" statement.}}
+        when { // Noncompliant {{Move "return" statements from all branches before "when" statement.}}
             a < 0 -> return -1
             a > 0 -> return 1
             else -> return 0
@@ -86,7 +86,7 @@ class LiftReturnStatementCheckSample {
 
     fun returnIfInIfNoncompliant(value: Int): String {
         if (value >= -10) {
-            if (value >= 0) { // Noncompliant {{Lift "return" statements from both branches before "if" statement.}}
+            if (value >= 0) { // Noncompliant {{Move "return" statements from all branches before "if" statement.}}
                 return "positive"
             } else {
                 return "negative"
@@ -108,7 +108,7 @@ class LiftReturnStatementCheckSample {
 
     fun returnIfInWhenNoncompliant(value: Int): String {
         when (value) {
-            10 -> if (value >= 0) { // Noncompliant {{Lift "return" statements from both branches before "if" statement.}}
+            10 -> if (value >= 0) { // Noncompliant {{Move "return" statements from all branches before "if" statement.}}
                 return "positive"
             } else {
                 return "negative"
@@ -166,7 +166,7 @@ class LiftReturnStatementCheckSample {
     }
 
     fun returnWhenExhaustiveEnumWithElseNoncomplaint(color: Color): Int {
-        when (color) { // Noncompliant {{Lift "return" statements from all branches before "when" statement.}}
+        when (color) { // Noncompliant {{Move "return" statements from all branches before "when" statement.}}
             Color.RED, Color.GREEN -> return 3
             Color.BLUE -> return 4
             else -> return 0
@@ -174,14 +174,14 @@ class LiftReturnStatementCheckSample {
     }
 
     fun returnWhenNonExhaustiveEnumWithElseNoncomplaint(color: Color): Int {
-        when (color) { // Noncompliant {{Lift "return" statements from all branches before "when" statement.}}
+        when (color) { // Noncompliant {{Move "return" statements from all branches before "when" statement.}}
             Color.RED, Color.GREEN -> return 3
             else -> return 0
         }
     }
 
     fun returnWhenExhaustiveEnumWithoutElseNoncomplaint(color: Color): Int {
-        when (color) { // Noncompliant {{Lift "return" statements from all branches before "when" statement.}}
+        when (color) { // Noncompliant {{Move "return" statements from all branches before "when" statement.}}
             Color.RED, Color.GREEN -> return 3
             Color.BLUE -> return 4
         }
@@ -210,7 +210,7 @@ class LiftReturnStatementCheckSample {
     }
 
     fun returnWhenWithBlocks(color: Color): Int {
-        when (color) { // Noncompliant {{Lift "return" statements from all branches before "when" statement.}}
+        when (color) { // Noncompliant {{Move "return" statements from all branches before "when" statement.}}
             Color.RED, Color.GREEN -> {
                 return 3
             }
