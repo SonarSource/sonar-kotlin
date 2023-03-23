@@ -23,34 +23,31 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
+import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.ANY_TYPE
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.EQUALS_METHOD_NAME
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private val EQUALS_MATCHER = FunMatcher {
-    name = EQUALS_METHOD_NAME
-    withArguments(ANY_TYPE)
-}
-
 @Rule(key = "S6519")
-class EqualsMethodUsageCheck : AbstractCheck() {
-    override fun visitCallExpression(expression: KtCallExpression, ctx: KotlinFileContext) {
-        val bindingContext = ctx.bindingContext
+class EqualsMethodUsageCheck : CallAbstractCheck() {
+    override val functionsToVisit = setOf(FunMatcher { name = EQUALS_METHOD_NAME; withArguments(ANY_TYPE) })
+
+    override fun visitFunctionCall(expression: KtCallExpression, resolvedCall: ResolvedCall<*>, ctx: KotlinFileContext) {
         val parent = expression.parent
-        if (EQUALS_MATCHER.matches(expression, bindingContext) && parent is KtDotQualifiedExpression && parent.selectorExpression == expression) {
-            val grandParent = parent.parent
+        if (parent is KtDotQualifiedExpression && parent.selectorExpression == expression) {
+            val grandParent = parent.parent.skipParentParentheses()
+            val callee = expression.calleeExpression!!
             if (grandParent is KtPrefixExpression && grandParent.operationToken == KtTokens.EXCL) {
-                val secondaryLocations =  listOf(SecondaryLocation(ctx.textRange(grandParent.operationReference), "Negation"))
-                ctx.reportIssue(expression.calleeExpression!!, "Replace \"!\" and \"equals\" with binary operator \"!=\".", secondaryLocations)
+                val secondaryLocations = listOf(SecondaryLocation(ctx.textRange(grandParent.operationReference), "Negation"))
+                ctx.reportIssue(callee, """Replace "!" and "equals" with binary operator "!=".""", secondaryLocations)
             } else {
-                ctx.reportIssue(expression.calleeExpression!!, "Replace \"equals\" with binary operator \"==\".")
+                ctx.reportIssue(callee, """Replace "equals" with binary operator "==".""")
             }
         }
-        super.visitCallExpression(expression, ctx)
     }
 }

@@ -30,6 +30,22 @@ class EqualsMethodUsageCheckSample {
         if (-arg1.equals(arg2)) { // Noncompliant {{Replace "equals" with binary operator "==".}}
 //                ^^^^^^
         }
+        if (!(arg1.equals(arg2))) { // Noncompliant
+//          ^>     ^^^^^^
+        }
+        if (!((arg1.equals(arg2)))) { // Noncompliant
+//          ^>      ^^^^^^
+        }
+        if ((
+                arg1.equals(arg3) // Noncompliant
+//                   ^^^^^^
+            ).equals( // Noncompliant
+//            ^^^^^^
+                arg3.equals(arg1) // Noncompliant
+//                   ^^^^^^
+            )) {
+            // nested equals equivalent to (arg1 == arg3) == (arg3 == arg1)
+        }
     }
 
     fun equals(other: Int) = this.toString() == other.toString()
