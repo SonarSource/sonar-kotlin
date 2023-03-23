@@ -60,10 +60,9 @@ class LiftReturnStatementCheck : AbstractCheck() {
     }
 }
 
-private fun isReturnOrReturnBlock(element: PsiElement): Boolean {
-    return when (element) {
+private fun isReturnOrReturnBlock(element: PsiElement) =
+    when (element) {
         is KtReturnExpression -> true
         is KtBlockExpression -> element.statements.lastOrNull() is KtReturnExpression
         else -> false
     }
-}
