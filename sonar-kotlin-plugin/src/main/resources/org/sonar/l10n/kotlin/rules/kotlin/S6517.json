@@ -1,0 +1,15 @@
+{
+  "title": "Single function interfaces should be functional interfaces",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6517",
+  "sqKey": "S6517",
+  "scope": "All",
+  "quickfix": "unknown"
+}

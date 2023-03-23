@@ -1,0 +1,54 @@
+<h2>Why is this an issue?</h2>
+<p>An interface that declares only a single function should be marked as function interface. Function interfaces can be instantiated from lambda
+expressions directly and are, therefore, more comfortable to use.</p>
+<p>Also, consider using a function type instead of a function interface. In many situations, a function type is sufficient. A function interface is
+only required when the function must not be anonymous or when an object should implement multiple function interfaces at once.</p>
+<h3>What is the potential impact?</h3>
+<h4>Complexity</h4>
+<p>When an interface is declared <em>functional</em>, SAM conversion is enabled. This means that any lambda expression that matches the interface’s
+single function’s signature can be converted into an instance of the interface, without the need for an explicit class or singleton object to
+implement the interface.</p>
+<h4>Wrong logic</h4>
+<p>An interface can still be marked <code>@FunctionalInterface</code> in Kotlin, but this has no effect, and SAM conversion will not work. The
+annotation <code>java.lang.FunctionalInterface</code> is only a Java platform type with no special meaning in Kotlin.</p>
+<h2>How to fix it</h2>
+<p>Replace <code>interface</code> with <code>fun interface</code>. If the interface is annotated with <code>@FunctionalInterface</code>, remove the
+annotation.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+interface IntMapper&lt;T&gt; { // Noncompliant
+    fun map(value: Int): T
+}
+
+interface StringMapper&lt;T&gt; { // Noncompliant
+    fun map(value: String): T
+}
+
+@FunctionalInterface  // Noncompliant
+interface ProgressCallback {
+    fun progressChanged(percent: Double)
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+fun interface IntMapper&lt;T&gt; { // Compliant, function interface used
+    fun map(value: Int): T
+}
+
+typealias StringMapper&lt;T&gt; = (value: String) -&gt; T // Compliant, functional type used
+
+fun interface ProgressCallback { // Compliant, function interface used
+    fun progressChanged(percent: Double)
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/fun-interfaces.html">Kotlin Docs, Functional (SAM) interfaces</a> </li>
+</ul>
+<h3>Articles &amp; blog posts</h3>
+<ul>
+  <li> <a href="https://www.baeldung.com/kotlin/sam-conversions">Baeldung, SAM Conversions in Kotlin</a> </li>
+</ul>
+

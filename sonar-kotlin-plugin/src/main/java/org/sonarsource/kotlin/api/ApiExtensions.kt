@@ -492,8 +492,11 @@ fun KtExpression?.getterMatches(bindingContext: BindingContext, propertyName: St
 fun KtBinaryExpression.isPlus() =
     this.operationReference.operationSignTokenType?.let { OperatorConventions.BINARY_OPERATION_NAMES[it] }?.asString() == "plus"
 
-fun PsiElement?.getType(bindingContext: BindingContext) =
+fun PsiElement?.getVariableType(bindingContext: BindingContext) =
     this?.let { bindingContext.get(BindingContext.VARIABLE, it)?.type }
+
+fun KtTypeReference?.getType(bindingContext: BindingContext): KotlinType? =
+    this?.let { bindingContext?.get(BindingContext.TYPE, it) }
 
 fun KotlinType.simpleName(): String = getJetTypeFqName(false).substringAfterLast(".")
 
