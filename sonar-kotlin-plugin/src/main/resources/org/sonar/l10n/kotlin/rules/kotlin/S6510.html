@@ -1,0 +1,134 @@
+<h2>Why is this an issue?</h2>
+<p>In Kotlin, <code>if</code> and <code>when</code> statements are expressions that return a value. This allows for a more concise and functional
+programming style with less cognitive complexity, because it results in fewer return points and fewer variable assignments in a function.</p>
+<p>If both branches of an <code>if</code> statement end with a <code>return</code> statement, the <code>if</code> statement should be used instead as
+an expression for a <code>return</code> statement.</p>
+<p>If all branches of an exhaustive <code>when</code> statement end with a <code>return</code> statement, the <code>when</code> statement should be
+used instead as an expression for a <code>return</code> statement. A <code>when</code> statement is exhaustive when it covers all elements of an enum
+or features an <code>else</code> clause.</p>
+<h3>What is the potential impact?</h3>
+<h4>Readability and Understanding</h4>
+<p>This change makes it easier to understand a function because it will reduce its complexity. This is because the function now contains fewer return
+points that the developer needs to keep track of.</p>
+<h2>How to fix it</h2>
+<p>Use the <code>if</code> statement as an expression for a <code>return</code> statement. Lift the <code>return</code> keyword from the end of the
+<code>if</code> band <code>else</code> branch before the <code>if</code> keyword.</p>
+<p>Use the <code>when</code> statement as an expression for a <code>return</code> statement. Lift the <code>return</code> keyword from the end of all
+its case clauses before the <code>when</code> keyword.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+fun returnIfElse(value: Int): String {
+    // ...
+    if (value &gt;= 0) { // Noncompliant, every branch contains a return statement
+        return "positive"
+    } else {
+        return "negative"
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+fun returnIfElse(value: Int): String {
+    // ...
+    return if (value &gt;= 0) { // Compliant
+        "positive"
+    } else {
+        "negative"
+    }
+}
+</pre>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+fun returnWhenElse(a: Float): Int {
+    // ...
+    when { // Noncompliant, every branch of exhaustive `when` contains a return statement
+        a &lt; 0 -&gt; return -1
+        a &gt; 0 -&gt; return 1
+        else -&gt; return 0
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="2" data-diff-type="compliant">
+fun returnWhenElse(a: Float): Int {
+    // ...
+    return when { // Compliant
+        a &lt; 0 -&gt; -1
+        a &gt; 0 -&gt; 1
+        else -&gt; 0
+    }
+}
+</pre>
+<h4>Noncompliant code example</h4>
+<pre>
+enum class OneTwoThree {
+    ONE,
+    TWO,
+    THREE
+}
+</pre>
+<pre data-diff-id="3" data-diff-type="noncompliant">
+fun returnWhenEnum(oneTwoThree: OneTwoThree): String {
+    // ...
+    when(oneTwoThree) { // Noncompliant, every branch of exhaustive `when` contains a return statement
+        OneTwoThree.ONE -&gt; return "one"
+        OneTwoThree.TWO -&gt; return "two"
+        OneTwoThree.THREE -&gt; return "three"
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="3" data-diff-type="compliant">
+fun returnWhenEnum(oneTwoThree: OneTwoThree): String {
+    // ...
+    return when(oneTwoThree) { // Compliant
+        OneTwoThree.ONE -&gt; "one"
+        OneTwoThree.TWO -&gt; "two"
+        OneTwoThree.THREE -&gt; "three"
+    }
+}
+</pre>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="4" data-diff-type="noncompliant">
+fun returnIfElseWithSideEffects(a: Float, b: Float): Int {
+    // ...
+    if (a &lt; 0) { // Noncompliant, every branch contains a return statement
+        foo()
+        return -1
+    } else if (a &gt; b) {
+        bar()
+        return 1
+    } else {
+        return 0
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="4" data-diff-type="compliant">
+fun returnIfElseWithSideEffects(a: Float, b: Float): Int {
+    // ...
+    return if (a &lt; 0) { // Compliant
+        foo()
+        -1
+    } else if (a &gt; b) {
+        bar()
+        1
+    } else {
+        0
+    }
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/control-flow.html#if-expression">Kotlin Docs, If expression</a> </li>
+  <li> <a href="https://kotlinlang.org/docs/control-flow.html#when-expression">Kotlin Docs, When expression</a> </li>
+</ul>
+<h3>Articles &amp; blog posts</h3>
+<ul>
+  <li> <a href="https://www.baeldung.com/kotlin/if-else-expression">Baeldung, If-Else Expression in Kotlin</a> </li>
+  <li> <a href="https://www.baeldung.com/kotlin/when">Baeldung, Guide to the “when{}” Block in Kotlin</a> </li>
+  <li> <a href="https://www.sonarsource.com/resources/cognitive-complexity">G. Ann Campbell, Cognitive Complexity</a> </li>
+</ul>
+

@@ -1,0 +1,17 @@
+{
+'kotlin-corda-project:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/AggregatedList.kt':[
+132,
+],
+'kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/serialization/kryo/DefaultKryoCustomizer.kt':[
+215,
+],
+'kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/TransitionExecutorImpl.kt':[
+41,
+],
+'kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/SerializationHelper.kt':[
+34,
+],
+'kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/DriverDSLImpl.kt':[
+627,
+],
+}
