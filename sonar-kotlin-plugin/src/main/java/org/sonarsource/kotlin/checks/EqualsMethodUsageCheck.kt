@@ -41,7 +41,7 @@ class EqualsMethodUsageCheck : CallAbstractCheck() {
         val parent = expression.parent
         if (parent is KtDotQualifiedExpression && parent.selectorExpression == expression) {
             val grandParent = parent.parent.skipParentParentheses()
-            val callee = expression.calleeExpression!!
+            val callee = expression.calleeExpression!! // as this function was matched .calleeExpression can't be null
             if (grandParent is KtPrefixExpression && grandParent.operationToken == KtTokens.EXCL) {
                 val secondaryLocations = listOf(SecondaryLocation(ctx.textRange(grandParent.operationReference), "Negation"))
                 ctx.reportIssue(callee, """Replace "!" and "equals" with binary operator "!=".""", secondaryLocations)
