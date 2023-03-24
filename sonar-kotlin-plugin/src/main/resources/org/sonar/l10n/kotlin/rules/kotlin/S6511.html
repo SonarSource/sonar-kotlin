@@ -1,6 +1,6 @@
 <h2>Why is this an issue?</h2>
-<p>The Kotlin <code>when</code> statement is more powerful than the Java <code>switch</code> statement. It can be used to compare a selector against a
-list of values and select from a list of more complex conditions.</p>
+<p>The Kotlin <code>when</code> statement can not only be used to compare a selector against a list of values, but also to select from a list of
+conditions.</p>
 <p>This is a more readable and elegant alternative to a chain of <code>if</code> statements and should be used instead.</p>
 <h3>What is the potential impact?</h3>
 <h4>Readability and Understanding</h4>
@@ -11,6 +11,32 @@ has less cognitive complexity than multiple <code>if</code> statements, even if 
 must stay the same as in the <code>if</code> chain.</p>
 <h3>Code examples</h3>
 <h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+fun dispatchFunction(instance: Any) {
+    if (instance is Foo) {
+        instance.fooFunction()
+    } else if (instance is Bar) {
+        instance.barFunction()
+    } else if (instance is Boo) {
+        instance.booFunction()
+    } else {
+        throw IllegalArgumentException()
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+fun dispatchFunction(instance: Any) {
+    when (instance) {
+        is Foo -&gt; instance.fooFunction()
+        is Bar -&gt; instance.barFunction()
+        is Boo -&gt; instance.booFunction()
+        else -&gt; throw IllegalArgumentException()
+    }
+}
+</pre>
+<h4>Noncompliant code example</h4>
+<p>When <code>threshold = 2</code></p>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 fun compare(a: Int, b: Int): Int {
     // ...
@@ -31,31 +57,6 @@ fun compare(a: Int, b: Int): Int {
         a &gt; b -&gt; 1
         a &lt; b -&gt; -1
         else -&gt; 0
-    }
-}
-</pre>
-<h4>Noncompliant code example</h4>
-<pre data-diff-id="2" data-diff-type="noncompliant">
-fun chained(instance: Any) {
-    if (instance is Foo) { // Noncompliant
-        instance.fooFunction()
-    } else if (instance is Bar) {
-        instance.barFunction()
-    } else if (instance is Boo) {
-        instance.booFunction()
-    } else {
-        throw IllegalArgumentException()
-    }
-}
-</pre>
-<h4>Compliant solution</h4>
-<pre data-diff-id="2" data-diff-type="compliant">
-fun chained(instance: Any) {
-    when (instance) { // Compliant
-        is Foo -&gt; instance.fooFunction()
-        is Bar -&gt; instance.barFunction()
-        is Boo -&gt; instance.booFunction()
-        else -&gt; throw IllegalArgumentException()
     }
 }
 </pre>

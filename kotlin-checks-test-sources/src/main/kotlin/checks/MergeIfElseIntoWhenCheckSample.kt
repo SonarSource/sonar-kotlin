@@ -18,7 +18,7 @@ class MergeIfElseIntoWhenCheckSample {
     }
 
     fun returnTwoIfNoncompliant(value: Int): String {
-        return if (value > 0) { // Noncompliant {{Merge chained "if" statements into a single "when" statement.}}
+        return if (value > 0) { // Compliant
             "positive"
         } else if (value < 0) {
             "negative"
@@ -36,7 +36,7 @@ class MergeIfElseIntoWhenCheckSample {
     }
 
     fun returnTwoIfNoElseNoncompliant(value: Int): String {
-        if (value > 0) { // Noncompliant {{Merge chained "if" statements into a single "when" statement.}}
+        if (value > 0) { // Compliant
             return "positive"
         } else if (value < 0) {
             return "negative"
@@ -48,7 +48,6 @@ class MergeIfElseIntoWhenCheckSample {
         when { // Compliant
             value > 0 -> return "positive"
             value < 0 -> return "negative"
-
         }
         return "zero"
     }
@@ -92,76 +91,5 @@ class MergeIfElseIntoWhenCheckSample {
             value < 0 -> return "negative"
         }
         return "zero"
-    }
-
-    fun returnIfInIfWithoutElseNonCompliant(value: Int): String {
-        if (value >= 0) { // Compliant
-            if (value == 10) { // Noncompliant {{Merge chained "if" statements into a single "when" statement.}}
-                return "ten"
-            } else if (value == 0) {
-                return "zero"
-            }
-            return "positive"
-        }
-        return "negative"
-    }
-
-    fun returnIfInIfWithoutElseCompliant(value: Int): String {
-        if (value >= 0) { // Compliant
-            when { // Compliant
-                value == 10 -> return "ten"
-                value == 0 -> return "zero"
-            }
-            return "positive"
-        }
-        return "negative"
-    }
-
-    fun returnIfInIfWithElseNonCompliant(value: Int): String {
-        if (value >= 0) { // Noncompliant {{Merge chained "if" statements into a single "when" statement.}}
-            if (value == 10) { // Noncompliant {{Merge chained "if" statements into a single "when" statement.}}
-                return "ten"
-            } else if (value == 0) {
-                return "zero"
-            }
-            return "positive"
-        } else if (value < -10) {
-            return "below -10"
-        }
-        return "negative"
-    }
-
-    fun returnIfInIfWithElseCompliant(value: Int): String {
-        when {
-            value >= 0 -> { // Comliant
-                when { // Compliant
-                    value == 10 -> return "ten"
-                    value == 0 -> return "zero"
-                }
-                return "positive"
-            }
-            value < -10 -> {
-                return "below -10"
-            }
-        }
-        return "negative"
-    }
-
-    fun returnIfInIfWithElseNonCompliantX(value: Int): String {
-        if (value >= 0) { // Compliant
-            if (value == 10) { // Compliant
-                return "ten"
-            } else {
-                if (value == 0) {
-                    return "zero"
-                }
-            }
-            return "positive"
-        } else {
-            if (value < -10) {
-                return "below -10"
-            }
-        }
-        return "negative"
     }
 }

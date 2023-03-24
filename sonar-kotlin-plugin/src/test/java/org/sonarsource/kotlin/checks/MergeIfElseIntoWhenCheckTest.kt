@@ -19,12 +19,16 @@
  */
 package org.sonarsource.kotlin.checks
 
-internal class MergeIfElseIntoWhenCheckTest {
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.verifier.KotlinVerifier
 
-    class WithDefaultThreshold : CheckTest(MergeIfElseIntoWhenCheck())
+internal class MergeIfElseIntoWhenCheckTest : CheckTest(MergeIfElseIntoWhenCheck()) {
 
-    class WithThreshold3 : CheckTest(
-        MergeIfElseIntoWhenCheck().apply { threshold = 3 },
-        MergeIfElseIntoWhenCheck::class.simpleName + "Threshold3Sample.kt"
-    )
+    @Test
+    fun `with threshold 2`() {
+        KotlinVerifier(MergeIfElseIntoWhenCheck().apply { threshold = 2 }) {
+            this.fileName = MergeIfElseIntoWhenCheck::class.simpleName + "Threshold2Sample.kt"
+        }.verify()
+    }
+
 }

@@ -21,28 +21,26 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-const val DEFAULT_THRESHOLD = 2
+const val DEFAULT_THRESHOLD = 3
 
 @Rule(key = "S6511")
 class MergeIfElseIntoWhenCheck : AbstractCheck() {
 
     @RuleProperty(
         key = "threshold",
-        description = """Number of chained "if" statements after which should be merged.""",
+        description = """Number of "if" after which the chain should be replaced by a "when" statement.""",
         defaultValue = DEFAULT_THRESHOLD.toString(),
     )
     var threshold: Int = DEFAULT_THRESHOLD
 
     override fun visitIfExpression(expression: KtIfExpression, context: KotlinFileContext) {
-        val isHeadOfIfChain = !isElseElement(expression.parent)
-        if (isHeadOfIfChain && isIfChainLongerThanOrEqualThreshold(expression, threshold)) {
+        if (!isElseElement(expression.parent) && isIfChainLongerThanOrEqualThreshold(expression, threshold)) {
             context.reportIssue(expression.ifKeyword, """Merge chained "if" statements into a single "when" statement.""")
         }
     }
