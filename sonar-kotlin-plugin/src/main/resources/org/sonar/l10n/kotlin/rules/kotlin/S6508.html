@@ -1,0 +1,37 @@
+<h2>Why is this an issue?</h2>
+<p>Kotlin uses the data type <code>Unit</code> to represent the absence of a value in a function or an expression. It corresponds to the type
+<code>void</code> in Java or <code>unknown</code> in JavaScript. While <code>Void</code> is available in Kotlin, it is a Java platform type and not
+equivalent to Java <code>void</code> but <code>java.lang.Void</code>.</p>
+<p>Use <code>Unit</code> instead of <code>Void</code> because it represents the absence of a value in Kotlin.</p>
+<h3>What is the potential impact?</h3>
+<h4>Wrong logic</h4>
+<p><code>Void</code> is not equivalent to Java <code>void</code> but <code>java.lang.Void</code>.</p>
+<h4>Unnecessary platform dependency</h4>
+<p><code>Void</code> is a platform type available only in the Java Runtime Environment.</p>
+<h2>How to fix it</h2>
+<p>Replace <code>Void</code> with <code>Unit</code>.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+typealias NoValueFunction = () -&gt; Void // Noncompliant, `Void` used
+
+interface NoValueFunctions {
+    fun voidFunction1(): Void // Noncompliant, `Void` used
+    fun voidFunction2(): Void // Noncompliant, `Void` used
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+typealias NoValueFunction = () -&gt; Unit // Compliant, `Unit` used
+
+interface NoValueFunctions {
+    fun unitFunction1(): Unit // Compliant, `Unit` used
+    fun unitFunction2() // Compliant, `Unit` used implicitly
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/functions.html#single-expression-functions">Kotlin Docs, Unit-returning functions</a> </li>
+</ul>
+
