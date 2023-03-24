@@ -39,11 +39,11 @@ class InterfaceCouldBeFunctionalCheck : AbstractCheck() {
 
     private fun checkFunctionalInterface(klass: KtClass, context: KotlinFileContext) {
         val isNonFunctionalInterface = klass.isInterface() && klass.getFunKeyword() == null
-        if (isNonFunctionalInterface && hasOneFunctionAndNoProperties(klass)) {
+        if (isNonFunctionalInterface && hasExactlyOneFunctionAndNoProperties(klass)) {
             context.reportIssue(
-                // An interface has always a keyword, so the not-null assertion is safe here.
+                // As an interface has always a keyword, the not-null assertion is safe here.
                 klass.getClassOrInterfaceKeyword()!!,
-                "Interface should be functional or replaced with a functional type."
+                "Make this interface functional or replace it with a function type."
             )
         }
     }
@@ -57,7 +57,7 @@ class InterfaceCouldBeFunctionalCheck : AbstractCheck() {
     }
 }
 
-private fun hasOneFunctionAndNoProperties(klass: KtClass): Boolean {
+private fun hasExactlyOneFunctionAndNoProperties(klass: KtClass): Boolean {
     // Note: other possible declarations are KtClass (classes, interfaces) and
     //       KtObjectDeclaration (companion objects), but they are allowed inside function interfaces
     var functionCount = 0
