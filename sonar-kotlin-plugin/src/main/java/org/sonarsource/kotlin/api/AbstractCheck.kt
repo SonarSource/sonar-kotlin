@@ -112,6 +112,14 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
         return expr
     }
 
+    internal fun  PsiElement?.skipParentParentheses(): PsiElement? {
+        var expr = this
+        while (expr is KtParenthesizedExpression) {
+            expr = expr.parent
+        }
+        return expr
+    }
+
     internal fun PsiElement.hasComment(): Boolean {
         var result = false
         this.accept(object : KtTreeVisitorVoid() {

@@ -55,6 +55,7 @@ import org.sonarsource.kotlin.checks.EmptyLineRegexCheck
 import org.sonarsource.kotlin.checks.EmptyStringRepetitionCheck
 import org.sonarsource.kotlin.checks.EncryptionAlgorithmCheck
 import org.sonarsource.kotlin.checks.EqualsArgumentTypeCheck
+import org.sonarsource.kotlin.checks.EqualsMethodUsageCheck
 import org.sonarsource.kotlin.checks.EqualsOverriddenWithArrayFieldCheck
 import org.sonarsource.kotlin.checks.EqualsOverridenWithHashCodeCheck
 import org.sonarsource.kotlin.checks.ExposedMutableFlowCheck
@@ -167,6 +168,7 @@ val KOTLIN_CHECKS = listOf(
     EmptyStringRepetitionCheck::class.java,
     EncryptionAlgorithmCheck::class.java,
     EqualsArgumentTypeCheck::class.java,
+    EqualsMethodUsageCheck::class.java,
     EqualsOverriddenWithArrayFieldCheck::class.java,
     EqualsOverridenWithHashCodeCheck::class.java,
     ExposedMutableFlowCheck::class.java,
