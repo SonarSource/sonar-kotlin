@@ -1,0 +1,15 @@
+{
+  "title": "Functional interface implementations should use lambda expressions",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6516",
+  "sqKey": "S6516",
+  "scope": "All",
+  "quickfix": "unknown"
+}

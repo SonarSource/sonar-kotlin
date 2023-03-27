@@ -1,0 +1,54 @@
+<h2>Why is this an issue?</h2>
+<p>Functional interfaces can be instantiated from lambda expressions directly. If the only purpose of a class or a singleton object is to implement a
+functional interface, that class or object is redundant and should be replaced with a lambda expression.</p>
+<h3>What is the potential impact?</h3>
+<h4>Complexity</h4>
+<p>When an interface is declared <em>functional</em>, SAM conversion is enabled for that interface. This means that any lambda expression that matches
+the interface’s single function’s signature can be converted into an instance of the interface without the need for an explicit class or singleton
+object to implement the interface. This change makes the code more concise and easier to read.</p>
+<h2>How to fix it</h2>
+<p>Replace the class or singleton object with a lambda expression that implements the interface’s single function.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre>
+fun interface ProgressCallback {
+    fun progressChanged(percent: Double)
+}
+
+fun loadResource(callback: ProgressCallback) {
+    // ...
+}
+</pre>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+val resource = loadResource(object: ProgressCallback { // Noncompliant
+    override fun progressChanged(percent: Double) {
+        // ...
+    }
+})
+
+val callback = object: ProgressCallback {
+    override fun progressChanged(percent: Double) { // Noncompliant
+        // ...
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+val resource = loadResource() { // Compliant
+    // ...
+}
+
+val callback = ProgressCallback { // Compliant
+    // ...
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/fun-interfaces.html">Kotlin Docs, Functional (SAM) interfaces</a> </li>
+</ul>
+<h3>Articles &amp; blog posts</h3>
+<ul>
+  <li> <a href="https://www.baeldung.com/kotlin/sam-conversions">Baeldung, SAM Conversions in Kotlin</a> </li>
+</ul>
+

@@ -42,6 +42,7 @@ import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFunction
@@ -86,6 +87,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.constants.ArrayValue
 import org.jetbrains.kotlin.resolve.constants.KClassValue
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
+import org.jetbrains.kotlin.resolve.sam.getSingleAbstractMethodOrNull
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
@@ -96,6 +98,8 @@ import org.sonar.api.SonarProduct
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.utils.Version
 import org.sonarsource.kotlin.checks.EmptyCommentCheck
+import org.sonarsource.kotlin.converter.KotlinTextRanges.merge
+import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
@@ -496,7 +500,23 @@ fun PsiElement?.getVariableType(bindingContext: BindingContext) =
     this?.let { bindingContext.get(BindingContext.VARIABLE, it)?.type }
 
 fun KtTypeReference?.getType(bindingContext: BindingContext): KotlinType? =
-    this?.let { bindingContext?.get(BindingContext.TYPE, it) }
+    this?.let { bindingContext.get(BindingContext.TYPE, it) }
+
+fun KtClassOrObject.hasExactlyOneFunctionAndNoProperties(): Boolean {
+    // Note: other possible declarations are KtClass (classes, interfaces) and
+    //       KtObjectDeclaration (companion objects), but they are allowed inside function interfaces
+    var functionCount = 0
+    return declarations.all {
+        it !is KtProperty && (it !is KtNamedFunction || functionCount++ == 0)
+    } && functionCount > 0
+}
+
+fun KotlinType.isFunctionalInterface(): Boolean {
+    return getSingleAbstractMethodOrNull(constructor.declarationDescriptor as ClassDescriptor) != null
+}
+
+fun KotlinFileContext.merge(firstElement: PsiElement, lastElement: PsiElement) =
+    merge(listOf(textRange(firstElement),textRange(lastElement)))
 
 fun KotlinType.simpleName(): String = getJetTypeFqName(false).substringAfterLast(".")
 
