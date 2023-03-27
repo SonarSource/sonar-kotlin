@@ -1,0 +1,60 @@
+<h2>Why is this an issue?</h2>
+<p>Kotlin supports getters and setters for properties. Because this is a built-in language feature, it should be the idiom used to implement the
+getter and setter pattern instead of using custom idioms.</p>
+<h3>What is the potential impact?</h3>
+<h4>Readability and Understanding</h4>
+<p>This change makes it easier to understand the code because this is how delegation is to be used in Kotlin. When developers share common standards
+and idioms, they need to spend less effort understanding each other’s code.</p>
+<h4>Code Redundancy</h4>
+<p>Using a built-in language feature or a standard API is always better than a custom implementation, because the reimplementation of something that
+already exists is unnecessary.</p>
+<h2>How to fix it</h2>
+<p>Replace explicit functions that serve as getters and setters with property getters and setters.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+internal class GettersSetters {
+    private val length = 100
+    private var index: Int = 0
+    private var finished: Boolean = false
+
+    fun getIndex(): Int { // Noncomplient, use property getter
+        return min(max(0 ,index), length)
+    }
+
+    fun setIndex(value: Int) { // Noncompliant, use property setter
+        seek(value)
+        index = value
+        finished = value &gt;= length
+    }
+
+    fun isFinished(): Boolean { // Noncomplient, use property getter
+        return finished
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+internal class GettersSetters {
+    private val length = 100
+    private var _index: Int = 0
+    private var _finished: Boolean = false
+
+    var index: Int // Compliant
+        get() = min(max(0 ,index), length)
+        set(value: Int) {
+            seek(value)
+            _index = value
+            _finished = value &gt;= length
+        }
+
+    val finished: Boolean // Compliant
+        get() = _finished
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/properties.html#getters-and-setters">Kotlin Docs, Getters and setters</a> </li>
+</ul>
+

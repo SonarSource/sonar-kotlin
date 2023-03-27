@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import my.org.sonarsource.kotlin.checks.PropertyGetterAndSetterUsageCheck
 import org.sonarsource.kotlin.checks.AllBranchesIdenticalCheck
 import org.sonarsource.kotlin.checks.AnchorPrecedenceCheck
 import org.sonarsource.kotlin.checks.AndroidBroadcastingCheck
@@ -201,6 +202,7 @@ val KOTLIN_CHECKS = listOf(
     OneStatementPerLineCheck::class.java,
     ParsingErrorCheck::class.java,
     PreparedStatementAndResultSetCheck::class.java,
+    PropertyGetterAndSetterUsageCheck::class.java,
     PseudoRandomCheck::class.java,
     ReceivingIntentsCheck::class.java,
     RedundantParenthesesCheck::class.java,
