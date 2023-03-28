@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
+import org.jetbrains.kotlin.psi.KtSuperExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.ANY_TYPE
@@ -39,7 +40,7 @@ class EqualsMethodUsageCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(expression: KtCallExpression, resolvedCall: ResolvedCall<*>, ctx: KotlinFileContext) {
         val parent = expression.parent
-        if (parent is KtDotQualifiedExpression && parent.selectorExpression == expression) {
+        if (parent is KtDotQualifiedExpression && parent.selectorExpression == expression && parent.receiverExpression !is KtSuperExpression) {
             val grandParent = parent.parent.skipParentParentheses()
             val callee = expression.calleeExpression!! // as this function was matched .calleeExpression can't be null
             if (grandParent is KtPrefixExpression && grandParent.operationToken == KtTokens.EXCL) {

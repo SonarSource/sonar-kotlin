@@ -13,6 +13,8 @@ class EqualsMethodUsageCheckSample {
         if (this.equals(arg2)) { // Noncompliant {{Replace "equals" with binary operator "==".}}
 //               ^^^^^^
         }
+        if (super.equals(arg2)) { // Compliant, (super == arg2) is not equivalent and does not compile
+        }
         if (equals(arg2)) { // Compliant, do not ask to replace by "this == arg2"
         }
         if (this.equals(arg3)) { // Compliant, does not match "equals(other: Any?)" but "equals(other: Int)"
