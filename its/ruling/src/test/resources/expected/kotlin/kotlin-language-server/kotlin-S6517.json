@@ -1,0 +1,12 @@
+{
+'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/QuickFix.kt':[
+13,
+],
+'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/externalsources/SourceArchiveProvider.kt':[
+5,
+],
+'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/progress/Progress.kt':[
+7,
+20,
+],
+}
