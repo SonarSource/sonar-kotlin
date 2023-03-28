@@ -94,7 +94,6 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.checker.TypeCheckingProcedure.findCorrespondingSupertype
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
-import org.jetbrains.kotlin.types.typeUtil.isInterface
 import org.sonar.api.SonarProduct
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.utils.Version
