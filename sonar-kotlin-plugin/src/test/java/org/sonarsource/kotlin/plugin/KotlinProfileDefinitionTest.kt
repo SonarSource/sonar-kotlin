@@ -19,19 +19,32 @@
  */
 package org.sonarsource.kotlin.plugin
 
-import org.assertj.core.api.Assertions
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
 
+private const val MIN_RULE_COUNT = 80
+
 internal class KotlinProfileDefinitionTest {
+
+    @Test
+    fun `Sonar_way_profile is a valid json file`() {
+        val classLoader = KotlinProfileDefinition::class.java.classLoader
+        val jsonContent = classLoader.getResource(KotlinProfileDefinition.PATH_TO_JSON)?.readText()
+        val json = Gson().fromJson(jsonContent, JsonObject::class.java)
+        assertThat(json.get("name").asString).isEqualTo("Sonar way")
+        assertThat(json.get("ruleKeys").asJsonArray).hasSizeGreaterThan(MIN_RULE_COUNT)
+    }
 
     @Test
     fun profile() {
         val context = BuiltInQualityProfilesDefinition.Context()
         KotlinProfileDefinition().define(context)
         val profile = context.profile("kotlin", "Sonar way")
-        Assertions.assertThat(profile.rules().size).isGreaterThan(2)
-        Assertions.assertThat(profile.rules())
+        assertThat(profile.rules().size).isGreaterThan(MIN_RULE_COUNT)
+        assertThat(profile.rules())
             .extracting<String> { obj: BuiltInQualityProfilesDefinition.BuiltInActiveRule -> obj.ruleKey() }
             .contains("S1764")
     }
