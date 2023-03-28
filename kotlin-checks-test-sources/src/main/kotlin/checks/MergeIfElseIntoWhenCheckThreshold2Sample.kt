@@ -22,6 +22,7 @@ class MergeIfElseIntoWhenCheckThreshold2Sample {
 //             ^^
             "positive"
         } else if (value < 0) {
+//             ^^<
             "negative"
         } else {
             "zero"
@@ -57,10 +58,13 @@ class MergeIfElseIntoWhenCheckThreshold2Sample {
 
     fun returnThreeIfNoncompliant(value: Int): String {
         return if (value == 10) { // Noncompliant {{Merge chained "if" statements into a single "when" statement.}}
+//             ^^
             "ten"
         } else if (value > 0) {
+//             ^^<
             "positive"
         } else if (value < 0) {
+//             ^^<
             "negative"
         } else {
             "zero"

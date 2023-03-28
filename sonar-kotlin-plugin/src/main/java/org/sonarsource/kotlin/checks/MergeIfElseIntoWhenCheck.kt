@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.secondaryOf
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 const val DEFAULT_THRESHOLD = 3
@@ -41,7 +42,13 @@ class MergeIfElseIntoWhenCheck : AbstractCheck() {
 
     override fun visitIfExpression(expression: KtIfExpression, context: KotlinFileContext) {
         if (!isElseElement(expression.parent) && isIfChainLongerThanOrEqualThreshold(expression, threshold)) {
-            context.reportIssue(expression.ifKeyword, """Merge chained "if" statements into a single "when" statement.""")
+            context.reportIssue(
+                expression.ifKeyword,
+                """Merge chained "if" statements into a single "when" statement.""",
+                collectSecondaryIfStatements(expression).map {
+                    context.secondaryOf(it.ifKeyword, """Merge with first "if" statement.""")
+                }
+            )
         }
     }
 }
@@ -57,3 +64,37 @@ private fun isIfChainLongerThanOrEqualThreshold(expression: KtIfExpression, thre
     }
     return length >= threshold
 }
+
+private fun collectSecondaryIfStatements(expression: KtIfExpression) =
+    buildList {
+        var elseBranch = expression.`else`
+        while (elseBranch is KtIfExpression) {
+            add(elseBranch)
+            elseBranch = elseBranch.`else`
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

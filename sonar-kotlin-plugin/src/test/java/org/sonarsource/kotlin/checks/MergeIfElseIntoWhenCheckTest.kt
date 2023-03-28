@@ -27,7 +27,7 @@ internal class MergeIfElseIntoWhenCheckTest : CheckTest(MergeIfElseIntoWhenCheck
     @Test
     fun `with threshold 2`() {
         KotlinVerifier(MergeIfElseIntoWhenCheck().apply { threshold = 2 }) {
-            this.fileName = MergeIfElseIntoWhenCheck::class.simpleName + "Threshold2Sample.kt"
+            this.fileName = "${checkName}Threshold2Sample.kt"
         }.verify()
     }
 
