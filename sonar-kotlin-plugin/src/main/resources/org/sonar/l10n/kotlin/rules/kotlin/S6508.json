@@ -1,0 +1,15 @@
+{
+  "title": "\"Unit\" should be used instead of \"Void\"",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6508",
+  "sqKey": "S6508",
+  "scope": "All",
+  "quickfix": "unknown"
+}

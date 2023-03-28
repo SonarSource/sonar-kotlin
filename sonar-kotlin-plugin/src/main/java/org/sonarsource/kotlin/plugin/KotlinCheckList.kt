@@ -126,6 +126,7 @@ import org.sonarsource.kotlin.checks.UselessIncrementCheck
 import org.sonarsource.kotlin.checks.VariableAndParameterNameCheck
 import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
 import org.sonarsource.kotlin.checks.ViewModelSuspendingFunctionsCheck
+import org.sonarsource.kotlin.checks.VoidShouldBeUnitCheck
 import org.sonarsource.kotlin.checks.WeakSSLContextCheck
 import org.sonarsource.kotlin.checks.WebViewJavaScriptSupportCheck
 import org.sonarsource.kotlin.checks.WebViewsFileAccessCheck
@@ -239,6 +240,7 @@ val KOTLIN_CHECKS = listOf(
     VariableAndParameterNameCheck::class.java,
     VerifiedServerHostnamesCheck::class.java,
     ViewModelSuspendingFunctionsCheck::class.java,
+    VoidShouldBeUnitCheck::class.java,
     WeakSSLContextCheck::class.java,
     WebViewJavaScriptSupportCheck::class.java,
     WebViewsFileAccessCheck::class.java,
