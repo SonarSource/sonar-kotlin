@@ -104,44 +104,56 @@ public class SlangRulingTest {
   @Test
   public void test_kotlin_ktor() throws IOException {
     List<String> ktorDirs = Arrays.asList(
-      "ktor-client/ktor-client-apache/",
-      "ktor-client/ktor-client-cio/",
-      "ktor-client/ktor-client-core/",
-      "ktor-client/ktor-client-jetty/",
-      "ktor-client/ktor-client-tests/",
-      "ktor-features/ktor-auth/",
-      "ktor-features/ktor-auth-jwt/",
-      "ktor-features/ktor-auth-ldap/",
-      "ktor-features/ktor-freemarker/",
-      "ktor-features/ktor-gson/",
-      "ktor-features/ktor-html-builder/",
-      "ktor-features/ktor-jackson/",
-      "ktor-features/ktor-locations/",
-      "ktor-features/ktor-metrics/",
-      "ktor-features/ktor-server-sessios/",
-      "ktor-features/ktor-velocity/",
-      "ktor-features/ktor-websockets/",
-      "ktor-http/",
-      "ktor-http-cio/",
-      "ktor-network/",
-      "ktor-network-tls/",
-      "ktor-server/ktor-server-cio/",
-      "ktor-server/ktor-server-core/",
-      "ktor-server/ktor-server-host-common/",
-      "ktor-server/ktor-server-jetty/",
-      "ktor-server/ktor-server-netty/",
-      "ktor-server/ktor-server-servlet/",
-      "ktor-server/ktor-server-test-host/",
-      "ktor-server/ktor-server-tomcat/");
+            "",
+            "ktor-client/ktor-client-winhttp/",
+            "ktor-client/ktor-client-tests/",
+            "ktor-client/ktor-client-plugins/ktor-client-websockets/",
+            "ktor-client/ktor-client-plugins/ktor-client-tracing/",
+            "ktor-client/ktor-client-plugins/ktor-client-resources/",
+            "ktor-client/ktor-client-plugins/ktor-client-logging/",
+            "ktor-client/ktor-client-plugins/ktor-client-json/",
+            "ktor-client/ktor-client-plugins/ktor-client-encoding/",
+            "ktor-client/ktor-client-plugins/ktor-client-content-negotiation/",
+            "ktor-client/ktor-client-plugins/ktor-client-auth/",
+            "ktor-client/ktor-client-plugins/",
+            "ktor-client/ktor-client-okhttp/",
+            "ktor-client/ktor-client-mock/",
+            "ktor-client/ktor-client-js/",
+            "ktor-client/ktor-client-jetty-jakarta/",
+            "ktor-client/ktor-client-jetty/",
+            "ktor-client/ktor-client-java/",
+            "ktor-client/ktor-client-ios/",
+            "ktor-client/ktor-client-darwin-legacy/",
+            "ktor-client/ktor-client-darwin/",
+            "ktor-client/ktor-client-curl/",
+            "ktor-client/ktor-client-core/",
+            "ktor-client/ktor-client-cio/",
+            "ktor-client/ktor-client-apache5/",
+            "ktor-client/ktor-client-apache/",
+            "ktor-client/ktor-client-android/",
+            "ktor-client/",
+            "ktor-http/",
+            "ktor-io/",
+            "ktor-java-modules-test/",
+            "ktor-network/",
+            "ktor-server/",
+            "ktor-shared/",
+            "ktor-test-dispatcher/",
+            "ktor-utils/");
 
     String binaries = ktorDirs.stream().map(dir -> FileLocation.of("../sources/kotlin/ktor/" + dir + "build/classes"))
       .map(SlangRulingTest::getFileLocationAbsolutePath)
       .collect(Collectors.joining(","));
 
+    String libraries = ktorDirs.stream().map(dir -> FileLocation.of("../sources/kotlin/ktor/" + dir + "build/libs"))
+      .map(SlangRulingTest::getFileLocationAbsolutePath)
+      .collect(Collectors.joining(","));
+
     executeSonarScannerAndAssertDifferences("kotlin/ktor", Map.of(
       "sonar.inclusions", "sources/kotlin/ktor/**/*.kt",
-      "sonar.exclusions", "**/testData/**/*",
-      "sonar.java.binaries", binaries));
+      "sonar.exclusions", "**/testData/**/*,**/Win*.kt,**/PrimitiveArraysTest.kt,**/ContentTestSuite.kt",
+      "sonar.java.binaries", binaries,
+      "sonar.java.libraries", libraries));
   }
 
   @Test

@@ -34,12 +34,12 @@ which are used as input:
 
     git submodule update --init its/sources
 
-Then you need to switch to Java 8 and run the command to generate binaries for Ktor project:
+Then you need to build Ktor project:
 
     cd its/sources/kotlin/ktor
     ./gradlew assemble
 
-Go back to the project root directory and switch back to Java 17. Then build and run the Integration Tests using the `its` property:
+Go back to the project root directory. Then build and run the Integration Tests using the `its` property:
 
     ./gradlew build -Pits --info --console=plain --no-daemon
 

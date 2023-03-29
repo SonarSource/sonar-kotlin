@@ -1,0 +1,17 @@
+{
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-cio/jvmAndNix/src/io/ktor/client/engine/cio/utils.kt':[
+115,
+],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-okhttp/jvm/src/io/ktor/client/engine/okhttp/OkHttpWebsocketSession.kt':[
+85,
+],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-io/common/src/io/ktor/utils/io/core/PacketDirect.kt':[
+19,
+],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-io/jvm/src/io/ktor/utils/io/jvm/javaio/Blocking.kt':[
+103,
+],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-utils/posix/src/io/ktor/util/collections/LockFreeMPSCQueueNative.kt':[
+39,
+],
+}
