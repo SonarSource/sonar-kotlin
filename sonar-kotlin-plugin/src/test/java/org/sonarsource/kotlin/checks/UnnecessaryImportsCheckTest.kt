@@ -24,6 +24,13 @@ import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 class UnnecessaryImportsCheckTest : CheckTestWithNoSemantics(UnnecessaryImportsCheck(), shouldReport = true) {
     @Test
+    fun `Compose`() {
+        KotlinVerifier(check) {
+            this.fileName = "ComposeSample.kt"
+        }.verifyNoIssue()
+    }
+
+    @Test
     fun `with partial semantics`() {
         KotlinVerifier(check) {
             this.fileName = "${checkName}SamplePartialSemantics.kt"

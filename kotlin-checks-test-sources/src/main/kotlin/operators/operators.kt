@@ -11,6 +11,12 @@ operator fun OperatorsContainer.getValue(someClass: Any, property: KProperty<*>)
 operator fun OperatorsContainer.setValue(someClass: Any, property: KProperty<*>, value: String) {}
 
 
+inline operator fun <T> State<T>.getValue(thisObj: Any?, property: KProperty<*>): T = value
+interface State<out T> {
+    val value: T
+}
+
+
 operator fun OperatorsContainer.get(i: Int) = this
 operator fun OperatorsContainer.get(i: Int, j: Int) = this
 operator fun OperatorsContainer.set(i: Int, o: OperatorsContainer) = o

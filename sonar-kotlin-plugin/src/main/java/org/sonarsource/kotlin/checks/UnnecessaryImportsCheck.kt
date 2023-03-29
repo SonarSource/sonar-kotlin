@@ -19,8 +19,13 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.backend.jvm.ir.psiElement
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.descriptors.VariableDescriptorWithAccessors
+import org.jetbrains.kotlin.descriptors.accessors
+import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocLink
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtElement
@@ -40,11 +45,13 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi2ir.deparenthesize
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
 import org.jetbrains.kotlin.resolve.descriptorUtil.isCompanionObject
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
+import org.sonar.api.utils.log.Loggers
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
@@ -54,14 +61,28 @@ private const val MESSAGE_REDUNDANT = "Remove this redundant import."
 private val DELEGATES_IMPORTED_NAMES = setOf("getValue", "setValue", "provideDelegate")
 private val ARRAY_ACCESS_IMPORTED_NAMES = setOf("get", "set")
 
+private val LOG = Loggers.get(UnnecessaryImportsCheck::class.java)
+
 @Rule(key = "S1128")
 class UnnecessaryImportsCheck : AbstractCheck() {
+
+
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
 
         val (references, arrayAccesses, kDocLinks, delegateImports, calls) = collectReferences(file)
 
         val bindingContext = context.bindingContext
+
+        val sliceContents = bindingContext.getSliceContents(DELEGATED_PROPERTY_RESOLVED_CALL)
+        val keys = sliceContents.keys
+        keys.forEach { "Key: " + LOG.error(it.correspondingVariable.psiElement?.toString() ?: "***") }
+        LOG.error("Keys: " + keys.joinToString { it.correspondingVariable.psiElement?.text ?: "***"})
+        val fqNames = sliceContents.filter { (k, _) ->
+           k.correspondingVariable.psiElement?.containingFile == file
+        }.values.mapNotNull { it.resultingDescriptor.fqNameOrNull()}
+
+        LOG.error("DELEGATES: " + fqNames.joinToString { it.asString() })
 
         val unresolvedImports = context.diagnostics
             .mapNotNull { it.psiElement.getParentOfType<KtImportDirective>(false) }
@@ -74,11 +95,12 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         val delegatesImportsFilter by lazy { getDelegatesImportsFilter(delegateImports, bindingContext) }
         val invokeCallsFilter by lazy { getInvokeCallsImportsFilter(calls, bindingContext) }
 
-        analyzeImports(file, groupedReferences, kDocLinks, unresolvedImports, arrayAccessesImportsFilter, delegatesImportsFilter, invokeCallsFilter, context)
+        analyzeImports(file, emptyList(), groupedReferences, kDocLinks, unresolvedImports, arrayAccessesImportsFilter, delegatesImportsFilter, invokeCallsFilter, context)
     }
 
     private fun analyzeImports(
         file: KtFile,
+        delegates: List<FqName>,
         groupedReferences: Map<String?, List<KtReferenceExpression>>,
         kDocLinks: Collection<String>,
         unresolvedImports: List<KtImportDirective>,
@@ -109,6 +131,8 @@ class UnnecessaryImportsCheck : AbstractCheck() {
     }.filter {
         // 4. Filter 'get', 'set', 'invoke' and delegates imports
         arrayAccessesImportsFilter(it) && delegateImportsFilter(it) && invokeCallsFilter(it)
+    }.filter {
+        it.importedFqName !in delegates
     }.forEach { importDirective ->
         // We could not find any usages for anything remaining at this point. Hence, report!
         importDirective.importedReference?.let { context.reportIssue(it, MESSAGE_UNUSED) }
@@ -160,28 +184,49 @@ class UnnecessaryImportsCheck : AbstractCheck() {
             }
         }
 
-    private fun getDelegatesImportsFilter(propertyDelegates: Collection<KtPropertyDelegate>, bindingContext: BindingContext) =
+    private fun getDelegatesImportsFilter(propertyDelegates: Collection<KtPropertyDelegate>, bindingContext: BindingContext): (KtImportDirective) -> Boolean =
         if (bindingContext == BindingContext.EMPTY) {
-            { imp: KtImportDirective -> imp.importedName?.asString() !in DELEGATES_IMPORTED_NAMES }
+            { imp: KtImportDirective ->
+                imp.importedName?.asString() !in DELEGATES_IMPORTED_NAMES
+            }
         } else {
             propertyDelegates.flatMap { propDelegate ->
+                LOG.error("prop delegate: ${propDelegate.text}!!!")
+                LOG.error("prop delegate parent: ${propDelegate.parent.text}!!!")
+                val ktProperty1 = propDelegate.parent as? KtProperty
+                LOG.error("parent as KtProperty: $ktProperty1!!!")
+                val declarationDescriptor = bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, ktProperty1)
+                LOG.error("declaration to descriptor: $declarationDescriptor!!!")
+                val propertyDescriptor = declarationDescriptor as? VariableDescriptorWithAccessors
+                LOG.error("descriptor as variable descriptor: $propertyDescriptor!!!")
+                LOG.error("accessors: ${propertyDescriptor?.accessors}!!!")
+
                 bindingContext.get(BindingContext.DELEGATE_EXPRESSION_TO_PROVIDE_DELEGATE_CALL, propDelegate.expression)
+                    .apply { LOG.error("Expression: " + (propDelegate.expression?.text ?: "null")) }
+                    .apply { LOG.error("Provide delegate call: " + (this?.callType?.name ?: "null")) }
                     .getResolvedCall(bindingContext)
+                    .apply { LOG.error("Resolved call status: " + (this?.status ?: "null")) }
                     ?.resultingDescriptor
-                    ?.fqNameOrNull()?.let { listOf(it) }
+                    ?.fqNameOrNull()
+                    .apply { LOG.error("FQN: " + (this?.asString() ?: "null")) }
+                    ?.let { listOf(it) }
                     ?: (propDelegate.parent as? KtProperty)?.let { ktProperty ->
-                        (bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, ktProperty) as? PropertyDescriptor)?.let { propDescriptor ->
+                        val descriptor = bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, ktProperty)
+                        (descriptor as? VariableDescriptorWithAccessors)?.let { propDescriptor ->
                             propDescriptor
                                 .accessors
                                 .mapNotNull {
                                     bindingContext.get(BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL, it)
+                                        .apply { LOG.error("1Resolved call status: " + (this?.status ?: "null")) }
                                         ?.resultingDescriptor
                                         ?.fqNameOrNull()
+                                        .apply { LOG.error("1FQN: " + (this?.asString() ?: "null")) }
                                 }
                         }
                     } ?: emptyList()
             }.let { delegateImports ->
-                { imp: KtImportDirective ->
+                LOG.error("delegateImports: ${delegateImports.joinToString { it.asString() }}!!!")
+                return@let { imp: KtImportDirective ->
                     imp.importedFqName !in delegateImports
                 }
             }
