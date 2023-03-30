@@ -1,0 +1,15 @@
+{
+  "title": "Delegator pattern should use \"by\" clause",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6514",
+  "sqKey": "S6514",
+  "scope": "All",
+  "quickfix": "unknown"
+}
