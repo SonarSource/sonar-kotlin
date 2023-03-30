@@ -100,58 +100,48 @@ class PropertyGetterAndSetterUsageCheck : AbstractCheck() {
             }
         }
     }
-
-    companion object {
-        private fun isPrivateWithoutGetterAndSetter(prop: KtProperty): Boolean = prop.isPrivate() && prop.accessors.isEmpty()
-
-        private fun isGetterOrSetter(parameterCount: Int, functionName: String) =
-            (parameterCount == 0 && GETTER_PREFIX.find(functionName) != null) ||
-                (parameterCount == 1 && SETTER_PREFIX.find(functionName) != null)
-
-        private fun findJavaStyleGetterFuncIdentifier(
-            propName: String, propType: KotlinType, javaAccessors: Map<String, List<KtNamedFunction>>, bindingCtx: BindingContext
-        ): PsiElement? {
-            val capitalizedName = capitalize(propName)
-            val functionsPrefixedByIs = if (propType.matches("kotlin.Boolean")) {
-                javaAccessors.getOrElse("is${capitalizedName}") { emptyList() }
-            } else {
-                emptyList()
-            }
-            val matchingFunctions = (javaAccessors.getOrElse("get${capitalizedName}") { emptyList() } + functionsPrefixedByIs)
-                .filter { it.returnType(bindingCtx) == propType }
-            return unambiguousIdentifier(matchingFunctions)
-        }
-
-        private fun parameterMatchesType(parameter: KtParameter, type: KotlinType, bindingCtx: BindingContext): Boolean {
-            return !parameter.isVarArg && type == (parameter.typeReference?.let { bindingCtx.get(BindingContext.TYPE, it) })
-        }
-
-        private fun findJavaStyleSetterFuncIdentifier(
-            propName: String, propType: KotlinType, functions: Map<String, List<KtNamedFunction>>, bindingCtx: BindingContext
-        ): PsiElement? {
-            val capitalizedName = capitalize(propName)
-            val matchingFunctions =
-                functions.getOrElse("set${capitalizedName}") { emptyList() }
-                    .filter { it.returnType(bindingCtx).matches("kotlin.Unit") }
-                    .filter { parameterMatchesType(it.valueParameters[0], propType, bindingCtx) }
-            return unambiguousIdentifier(matchingFunctions)
-        }
-
-        private fun unambiguousIdentifier(matchingFunctions: List<KtNamedFunction>): PsiElement? {
-            if (matchingFunctions.size != 1) {
-                // empty or ambiguous
-                return null
-            }
-            return matchingFunctions[0].nameIdentifier
-        }
-
-        fun capitalize(name: String): String = name.replaceFirstChar { it.uppercase() }
-
-        fun KotlinType?.matches(qualifiedTypeName: String): Boolean = this?.let { type ->
-            when {
-                type.isNullable() -> false
-                else -> type.getJetTypeFqName(true) == qualifiedTypeName
-            }
-        } ?: false
-    }
 }
+
+private fun isPrivateWithoutGetterAndSetter(prop: KtProperty): Boolean = prop.isPrivate() && prop.accessors.isEmpty()
+
+private fun isGetterOrSetter(parameterCount: Int, functionName: String) =
+    (parameterCount == 0 && GETTER_PREFIX.find(functionName) != null) ||
+        (parameterCount == 1 && SETTER_PREFIX.find(functionName) != null)
+
+private fun findJavaStyleGetterFuncIdentifier(
+    propName: String, propType: KotlinType, javaAccessors: Map<String, List<KtNamedFunction>>, bindingCtx: BindingContext
+): PsiElement? {
+    val capitalizedName = capitalize(propName)
+    val functionsPrefixedByIs = if (propType.matches("kotlin.Boolean")) {
+        javaAccessors.getOrElse("is${capitalizedName}") { emptyList() }
+    } else {
+        emptyList()
+    }
+    return (javaAccessors.getOrElse("get${capitalizedName}") { emptyList() } + functionsPrefixedByIs)
+        .filter { it.returnType(bindingCtx) == propType }
+        .unambiguousIdentifier()
+}
+
+private fun parameterMatchesType(parameter: KtParameter, type: KotlinType, bindingCtx: BindingContext): Boolean {
+    return !parameter.isVarArg && type == (parameter.typeReference?.let { bindingCtx.get(BindingContext.TYPE, it) })
+}
+
+private fun findJavaStyleSetterFuncIdentifier(
+    propName: String, propType: KotlinType, javaAccessors: Map<String, List<KtNamedFunction>>, bindingCtx: BindingContext
+): PsiElement? =
+    javaAccessors.getOrElse("set${capitalize(propName)}") { emptyList() }
+        .filter { it.returnType(bindingCtx)?.matches("kotlin.Unit") ?: false }
+        // isGetterOrSetter ensures setters have: valueParameters.size == 1
+        .filter { parameterMatchesType(it.valueParameters[0], propType, bindingCtx) }
+        .unambiguousIdentifier()
+
+private fun List<KtNamedFunction>.unambiguousIdentifier() =
+    if (this.size == 1) this[0].nameIdentifier else null /* empty or ambiguous */
+
+private fun capitalize(name: String): String = name.replaceFirstChar { it.uppercase() }
+
+private fun KotlinType.matches(qualifiedTypeName: String) =
+    when {
+        isNullable() -> false
+        else -> getJetTypeFqName(true) == qualifiedTypeName
+    }

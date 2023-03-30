@@ -20,9 +20,6 @@
 package org.sonarsource.kotlin.checks
 
 import my.org.sonarsource.kotlin.checks.PropertyGetterAndSetterUsageCheck
-import my.org.sonarsource.kotlin.checks.PropertyGetterAndSetterUsageCheck.Companion.capitalize
-import my.org.sonarsource.kotlin.checks.PropertyGetterAndSetterUsageCheck.Companion.matches
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 
@@ -35,20 +32,6 @@ internal class PropertyGetterAndSetterUsageCheckTest : CheckTest(PropertyGetterA
         KotlinVerifier(check) {
             fileName = "PropertyGetterAndSetterUsageCheckSamplePublic.kt"
         }.verify()
-    }
-
-    @Test
-    fun `test capitalize`() {
-        assertThat(capitalize("")).isEqualTo("")
-        assertThat(capitalize("a")).isEqualTo("A")
-        assertThat(capitalize("A")).isEqualTo("A")
-        assertThat(capitalize("foo")).isEqualTo("Foo")
-        assertThat(capitalize("fooBar")).isEqualTo("FooBar")
-    }
-
-    @Test
-    fun `test matches when the type is null`() {
-        assertThat(null.matches("kotlin.Unit")).isFalse
     }
 
 }

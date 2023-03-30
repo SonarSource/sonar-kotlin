@@ -80,6 +80,51 @@ open class PropertyGetterAndSetterUsageCheckSample {
         fun isValue8(): Boolean = false // Compliant, property already has getter and setter
         fun isValue9(): Boolean = false // Compliant, property is not private but protected
     }
+
+    private open class PrivateClassWithGenerics {
+        private var value1: List<String> = listOf()
+        //          ^^^^^^>
+        fun getValue1(): List<String> = listOf() // Noncompliant
+        //  ^^^^^^^^^
+        fun setValue1(value: List<String>) {}
+        //  ^^^^^^^^^<
+
+        private var value2: List<String> = listOf()
+        fun getValue2(): List<Int> = listOf() // Compliant, return "List<Int>" instead of "List<String>"
+        fun setValue2(value: List<out String>) {} // Compliant, argument type is "List<out String>" instead of "List<String>"
+
+        private var value3: Array<in String> = arrayOf()
+        fun getValue3(): Array<String> = arrayOf() // Compliant, return "Array<String>" instead of "Array<in String>?"
+        fun setValue3(value: Array<String>) {} // Compliant, argument type is "Array<String>" instead of "Array<in String>"
+
+        private var value4: List<String>? = listOf()
+        fun getValue4(): List<String> = listOf() // Compliant, return "List<String>" instead of "List<String>?"
+        fun setValue4(value: List<String>) {} // Compliant, argument type is "List<String>" instead of "List<String>?"
+    }
+
+    private open class PrivateClassWithAnnotations {
+        @Target(AnnotationTarget.TYPE, AnnotationTarget.TYPE_PARAMETER)
+        @Retention(AnnotationRetention.RUNTIME)
+        annotation class MyAnnotation1
+
+        @Target(AnnotationTarget.TYPE, AnnotationTarget.TYPE_PARAMETER)
+        @Retention(AnnotationRetention.RUNTIME)
+        annotation class MyAnnotation2
+
+       // property getter and setter support annotations
+       var value1: String = ""
+           get(): @MyAnnotation1 String = field.uppercase()
+           set(value: @MyAnnotation2 String) { field = value.lowercase() }
+
+
+        private var value2: String = ""
+        //          ^^^^^^>
+        fun getValue2(): @MyAnnotation1 String = "" // Noncompliant
+        //  ^^^^^^^^^
+        fun setValue2(value: @MyAnnotation2 String) { }
+        //  ^^^^^^^^^<
+    }
+
     private class PrivateClassWithoutGetterAndSetter {
         fun foo() {}
     }
