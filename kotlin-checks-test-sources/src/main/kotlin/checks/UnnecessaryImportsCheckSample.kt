@@ -15,6 +15,9 @@ import com.google.common.collect.ImmutableSet.of as immutable_set_of
 // unused
 import com.google.common.io.Files // Noncompliant {{Remove this unused import.}}
 import com.google.common.io.Files.isFile
+import delegates.State
+import delegates.getValue
+import delegates.setValue
 import operators.OperatorsContainer
 import imports.ClassWithCompanionObject
 import imports.ClassWithNamedCompanionObject
@@ -185,3 +188,15 @@ class UnnecessaryImportsCheckSample {
 class ChildClass1A: java.util.Date()
 class ChildClass2A: Timer()
 class ClassInSameFileA
+
+fun ComposeSample() {
+
+    val y by remember { state() }
+
+    var x by object: State<String> {override val value = ""}
+}
+
+inline fun <T> remember(calculation: () -> T): T = TODO()
+private fun state() = object : State<String> {
+    override val value = "XY"
+}
