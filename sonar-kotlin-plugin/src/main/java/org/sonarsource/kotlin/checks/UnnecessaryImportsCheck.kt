@@ -19,8 +19,11 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.descriptors.VariableAccessorDescriptor
+import org.jetbrains.kotlin.descriptors.VariableDescriptorWithAccessors
+import org.jetbrains.kotlin.descriptors.accessors
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocLink
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtElement
@@ -138,7 +141,7 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         file.children.asSequence().filter {
             it !is KtPackageDirective && it !is KtImportList
         }.let { relevantTopLevelChildren ->
-            DataCollector(file).apply {
+            DataCollector().apply {
                 relevantTopLevelChildren
                     .filterIsInstance<KtElement>()
                     .forEach { ktElement -> ktElement.accept(this) }
@@ -160,8 +163,19 @@ class UnnecessaryImportsCheck : AbstractCheck() {
             }
         }
 
-    private fun getDelegatesImportsFilter(propertyDelegates: Collection<KtPropertyDelegate>, bindingContext: BindingContext) =
-        if (bindingContext == BindingContext.EMPTY) {
+    private fun getDelegatesImportsFilter(propertyDelegates: Collection<KtPropertyDelegate>, bindingContext: BindingContext): (KtImportDirective) -> Boolean {
+        fun getFqNameFromResolvedCall (variableAccessor: VariableAccessorDescriptor): FqName? =
+        bindingContext.get(BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL, variableAccessor)
+            ?.resultingDescriptor
+            ?.fqNameOrNull()
+
+        fun getFqNamesFromAccessor(ktProperty: KtProperty): List<FqName>? =
+            (bindingContext.get(
+                BindingContext.DECLARATION_TO_DESCRIPTOR,
+                ktProperty
+            ) as? VariableDescriptorWithAccessors)?.accessors?.mapNotNull(::getFqNameFromResolvedCall)
+
+        return if (bindingContext == BindingContext.EMPTY) {
             { imp: KtImportDirective -> imp.importedName?.asString() !in DELEGATES_IMPORTED_NAMES }
         } else {
             propertyDelegates.flatMap { propDelegate ->
@@ -169,24 +183,14 @@ class UnnecessaryImportsCheck : AbstractCheck() {
                     .getResolvedCall(bindingContext)
                     ?.resultingDescriptor
                     ?.fqNameOrNull()?.let { listOf(it) }
-                    ?: (propDelegate.parent as? KtProperty)?.let { ktProperty ->
-                        (bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, ktProperty) as? PropertyDescriptor)?.let { propDescriptor ->
-                            propDescriptor
-                                .accessors
-                                .mapNotNull {
-                                    bindingContext.get(BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL, it)
-                                        ?.resultingDescriptor
-                                        ?.fqNameOrNull()
-                                }
-                        }
-                    } ?: emptyList()
+                    ?: (propDelegate.parent as? KtProperty)?.let(::getFqNamesFromAccessor) ?: emptyList()
             }.let { delegateImports ->
                 { imp: KtImportDirective ->
                     imp.importedFqName !in delegateImports
                 }
             }
         }
-
+    }
     private fun getInvokeCallsImportsFilter(calls: Collection<KtCallExpression>, bindingContext: BindingContext) =
         if (bindingContext == BindingContext.EMPTY) {
             { imp: KtImportDirective -> imp.importedName?.asString() != "invoke" }
@@ -204,7 +208,7 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         }
 }
 
-private class DataCollector(val file: KtFile) : KtTreeVisitorVoid() {
+private class DataCollector() : KtTreeVisitorVoid() {
 
     data class DataCollectionResult(
         val references: Collection<KtReferenceExpression>,
