@@ -1,0 +1,15 @@
+{
+  "title": "\"when\" statements should be used instead of chained \"if\" statements",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6511",
+  "sqKey": "S6511",
+  "scope": "All",
+  "quickfix": "unknown"
+}
