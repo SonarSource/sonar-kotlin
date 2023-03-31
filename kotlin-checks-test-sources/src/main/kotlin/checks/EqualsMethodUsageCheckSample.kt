@@ -53,4 +53,13 @@ class EqualsMethodUsageCheckSample {
     fun equals(other: Int) = this.toString() == other.toString()
 
     operator fun Boolean.unaryMinus() = not()
+
+    class MyOuterClass {
+        inner class MyInnerClass {
+            fun test(arg: String) {
+                if (this.equals(arg)) { } // Noncompliant
+                if (this@MyOuterClass.equals(arg)) { } // Compliant, (this@MyOuterClass == arg) is not equivalent and does not compile
+            }
+        }
+    }
 }
