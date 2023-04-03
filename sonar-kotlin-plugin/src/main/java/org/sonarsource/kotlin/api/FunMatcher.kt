@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.api
 import org.jetbrains.kotlin.backend.common.descriptors.isSuspend
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
+import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.Call
@@ -53,6 +54,7 @@ class FunMatcherImpl(
     val dynamic: Boolean? = null,
     val extensionFunction: Boolean? = null,
     val suspending: Boolean? = null,
+    val operator: Boolean? = null,
     val returnType: String? = null,
 ) {
 
@@ -80,6 +82,7 @@ class FunMatcherImpl(
             checkIsDynamic(functionDescriptor) &&
             checkIsExtensionFunction(functionDescriptor) &&
             checkIsSuspending(functionDescriptor) &&
+            checkIsOperator(functionDescriptor) &&
             checkName(functionDescriptor) &&
             checkTypeOrSupertype(functionDescriptor) &&
             checkReturnType(functionDescriptor) &&
@@ -152,6 +155,9 @@ class FunMatcherImpl(
 
     private fun checkIsSuspending(descriptor: CallableDescriptor) =
         suspending?.let { it == descriptor.isSuspend } ?: true
+
+    private fun checkIsOperator(descriptor: CallableDescriptor) =
+        operator?.let { it == ((descriptor as? FunctionDescriptor)?.isOperator ?: false) } ?: true
 }
 
 class FunMatcherBuilderContext(
@@ -165,6 +171,7 @@ class FunMatcherBuilderContext(
     var dynamic: Boolean? = null,
     var extensionFunction: Boolean? = null,
     var suspending: Boolean? = null,
+    val operator: Boolean? = null,
     var returnType: String? = null,
 ) {
     var arguments: MutableList<List<ArgumentMatcher>> = arguments.toMutableList()
@@ -207,6 +214,7 @@ fun FunMatcher(
     dynamic: Boolean? = null,
     extensionFunction: Boolean? = null,
     suspending: Boolean? = null,
+    operator: Boolean? = null,
     returnType: String? = null,
     block: FunMatcherBuilderContext.() -> Unit = {},
 ) = FunMatcherBuilderContext(
@@ -220,6 +228,7 @@ fun FunMatcher(
     dynamic,
     extensionFunction,
     suspending,
+    operator,
     returnType,
 ).apply(block).run {
     val maxArgumentCount: Int =
@@ -235,6 +244,7 @@ fun FunMatcher(
         this.dynamic,
         this.extensionFunction,
         this.suspending,
+        this.operator,
         this.returnType,
     )
 }
