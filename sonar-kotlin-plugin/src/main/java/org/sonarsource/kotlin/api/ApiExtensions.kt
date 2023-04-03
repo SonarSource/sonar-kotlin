@@ -94,6 +94,7 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.checker.TypeCheckingProcedure.findCorrespondingSupertype
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
+import org.jetbrains.kotlin.types.typeUtil.isInterface
 import org.sonar.api.SonarProduct
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.utils.Version
@@ -503,17 +504,14 @@ fun KtTypeReference?.getType(bindingContext: BindingContext): KotlinType? =
     this?.let { bindingContext.get(BindingContext.TYPE, it) }
 
 fun KtClassOrObject.hasExactlyOneFunctionAndNoProperties(): Boolean {
-    // Note: other possible declarations are KtClass (classes, interfaces) and
-    //       KtObjectDeclaration (companion objects), but they are allowed inside function interfaces
     var functionCount = 0
     return declarations.all {
         it !is KtProperty && (it !is KtNamedFunction || functionCount++ == 0)
     } && functionCount > 0
 }
 
-fun KotlinType.isFunctionalInterface(): Boolean {
-    return getSingleAbstractMethodOrNull(constructor.declarationDescriptor as ClassDescriptor) != null
-}
+fun KotlinType.isFunctionalInterface(): Boolean =
+    (constructor.declarationDescriptor as? ClassDescriptor) ?.let(::getSingleAbstractMethodOrNull) != null
 
 fun KotlinFileContext.merge(firstElement: PsiElement, lastElement: PsiElement) =
     merge(listOf(textRange(firstElement),textRange(lastElement)))

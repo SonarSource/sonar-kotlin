@@ -55,6 +55,13 @@ class SamConversionCheckSample {
         }
     }
 
+    val nonInterfaceCallback = object : NonInterfaceProgressCallback() { // Compliant, interface is not a functional interface
+
+        override fun progressChanged(percent: Double) {
+            // ...
+        }
+    }
+
     object objectDeclaration : ProgressCallback { // Noncompliant {{Replace explicit functional interface implementation with lambda expression.}}
 //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -74,6 +81,10 @@ fun interface ProgressCallback {
 
 interface NonFunctionalProgressCallback {
     fun progressChanged(percent: Double)
+}
+
+abstract class NonInterfaceProgressCallback {
+    abstract fun progressChanged(percent: Double)
 }
 
 fun loadResource(callback: ProgressCallback) {

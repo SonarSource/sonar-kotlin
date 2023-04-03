@@ -20,7 +20,6 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
-import org.jetbrains.kotlin.types.SimpleType
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.getType
@@ -34,7 +33,7 @@ class SamConversionCheck : AbstractCheck() {
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration, context: KotlinFileContext) {
         val superTypeEntry = declaration.superTypeListEntries.singleOrNull() ?: return
-        val superType = superTypeEntry.typeReference?.getType(context.bindingContext) as? SimpleType ?: return
+        val superType = superTypeEntry.typeReference?.getType(context.bindingContext) ?: return
 
         if (superType.isFunctionalInterface() && declaration.hasExactlyOneFunctionAndNoProperties()) {
             val textRange = context.merge(declaration.getDeclarationKeyword()!!, superTypeEntry)
