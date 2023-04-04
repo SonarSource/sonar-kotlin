@@ -139,12 +139,8 @@ open class PropertyGetterAndSetterUsageCheckSample {
         private val value: Int = 42
         fun getValue(): Int = value // Noncompliant
     }
-    class NoIssueOnImplicitPublicClass {
+    class IssueOnPublicClass {
         private val value: Int = 42
-        fun getValue(): Int = value // Compliant
-    }
-    public class NoIssueOnExplicitPublicClass {
-        private val value: Int = 42
-        fun getValue(): Int = value // Compliant
+        fun getValue(): Int = value // Noncompliant
     }
 }

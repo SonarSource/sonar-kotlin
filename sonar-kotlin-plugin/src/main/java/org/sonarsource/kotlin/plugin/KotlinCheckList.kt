@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.plugin
 
-import my.org.sonarsource.kotlin.checks.PropertyGetterAndSetterUsageCheck
 import org.sonarsource.kotlin.checks.AllBranchesIdenticalCheck
 import org.sonarsource.kotlin.checks.AnchorPrecedenceCheck
 import org.sonarsource.kotlin.checks.AndroidBroadcastingCheck
@@ -77,6 +76,7 @@ import org.sonarsource.kotlin.checks.InjectableDispatchersCheck
 import org.sonarsource.kotlin.checks.InterfaceCouldBeFunctionalCheck
 import org.sonarsource.kotlin.checks.InvalidRegexCheck
 import org.sonarsource.kotlin.checks.IsInstanceMethodCheck
+import org.sonarsource.kotlin.checks.JumpInFinallyCheck
 import org.sonarsource.kotlin.checks.LiftReturnStatementCheck
 import org.sonarsource.kotlin.checks.MainSafeCoroutinesCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
@@ -85,12 +85,12 @@ import org.sonarsource.kotlin.checks.MobileDatabaseEncryptionKeysCheck
 import org.sonarsource.kotlin.checks.NestedMatchCheck
 import org.sonarsource.kotlin.checks.OneStatementPerLineCheck
 import org.sonarsource.kotlin.checks.ParsingErrorCheck
+import org.sonarsource.kotlin.checks.PreparedStatementAndResultSetCheck
+import org.sonarsource.kotlin.checks.PropertyGetterAndSetterUsageCheck
 import org.sonarsource.kotlin.checks.PseudoRandomCheck
 import org.sonarsource.kotlin.checks.ReceivingIntentsCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RedundantSuspendModifierCheck
-import org.sonarsource.kotlin.checks.JumpInFinallyCheck
-import org.sonarsource.kotlin.checks.PreparedStatementAndResultSetCheck
 import org.sonarsource.kotlin.checks.RegexComplexityCheck
 import org.sonarsource.kotlin.checks.ReluctantQuantifierCheck
 import org.sonarsource.kotlin.checks.ReplaceGuavaWithKotlinCheck

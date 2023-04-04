@@ -19,19 +19,8 @@
  */
 package org.sonarsource.kotlin.checks
 
-import my.org.sonarsource.kotlin.checks.PropertyGetterAndSetterUsageCheck
 import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.checks.PropertyGetterAndSetterUsageCheck
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 
-internal class PropertyGetterAndSetterUsageCheckTest : CheckTest(PropertyGetterAndSetterUsageCheck()) {
-
-    @Test
-    fun `also check public classes`() {
-        val check = PropertyGetterAndSetterUsageCheck()
-        check.checkPublicClasses = true
-        KotlinVerifier(check) {
-            fileName = "PropertyGetterAndSetterUsageCheckSamplePublic.kt"
-        }.verify()
-    }
-
-}
+internal class PropertyGetterAndSetterUsageCheckTest : CheckTest(PropertyGetterAndSetterUsageCheck())

@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package my.org.sonarsource.kotlin.checks
+package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
@@ -26,13 +26,12 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
-import org.jetbrains.kotlin.psi.psiUtil.isPublic
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.isNullable
 import org.sonar.check.Rule
-import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.api.returnType
 import org.sonarsource.kotlin.api.secondaryOf
 import org.sonarsource.kotlin.plugin.KotlinFileContext
@@ -43,26 +42,13 @@ private val SETTER_PREFIX = Regex("""^set\p{javaUpperCase}""")
 @Rule(key = "S6512")
 class PropertyGetterAndSetterUsageCheck : AbstractCheck() {
 
-    @RuleProperty(
-        key = "checkPublicClasses",
-        description = "Check getters and setters on public classes",
-        defaultValue = "false"
-    )
-    var checkPublicClasses = false
-
     override fun visitClass(klass: KtClass, ctx: KotlinFileContext) {
-        if (klass.isPublic && !checkPublicClasses) {
-            // avoid asking to change for property get() and set(value) to not break a public API
-            return
-        }
         val classBody = klass.body ?: return
         val javaAccessors = classBody.functions
             .filter { isGetterOrSetter(it.valueParameters.size, it.name ?: "") }
             .groupBy { it.name ?: "" }
 
-        if (javaAccessors.isEmpty()) {
-            return
-        }
+        if (javaAccessors.isEmpty()) return
         val bindingCtx = ctx.bindingContext
         classBody.properties
             .filter { isPrivateWithoutGetterAndSetter(it) }
@@ -74,31 +60,24 @@ class PropertyGetterAndSetterUsageCheck : AbstractCheck() {
     ) {
         prop.nameIdentifier?.let { propIdentifier ->
             prop.typeReference?.let { bindingCtx.get(BindingContext.TYPE, it) }?.let { propType ->
-                val getterIdentifier = findJavaStyleGetterFuncIdentifier(propIdentifier.text, propType, javaAccessors, bindingCtx)
+                val secondaries = mutableListOf(ctx.secondaryOf(propIdentifier, """Property "${propIdentifier.text}""""))
+                val getterIdentifier = findJavaStyleGetterFuncIdentifier(prop.name!!, propType, javaAccessors, bindingCtx)
                 val setterIdentifier = findJavaStyleSetterFuncIdentifier(propIdentifier.text, propType, javaAccessors, bindingCtx)
                 if (getterIdentifier != null) {
-                    val secondaries = when (setterIdentifier) {
-                        null -> listOf(ctx.secondaryOf(propIdentifier, """Property "${propIdentifier.text}""""))
-                        else -> listOf(
-                            ctx.secondaryOf(propIdentifier, """Property "${propIdentifier.text}""""),
-                            ctx.secondaryOf(setterIdentifier, """Setter to convert to a "set(value)"""")
-                        )
-                    }
-                    ctx.reportIssue(
-                        getterIdentifier,
-                        """Convert this getter to a "get()" on the property "${propIdentifier.text}".""",
-                        secondaries
-                    )
+                    setterIdentifier?.let { secondaries += ctx.secondaryOf(setterIdentifier, """Setter to convert to a "set(value)"""") }
+                    reportIssue(ctx, getterIdentifier, "getter", "get()", propIdentifier, secondaries)
                 } else if (setterIdentifier != null) {
-                    val secondaries = listOf(ctx.secondaryOf(propIdentifier, """Property "${propIdentifier.text}""""))
-                    ctx.reportIssue(
-                        setterIdentifier,
-                        """Convert this setter to a "set(value)" on the property "${propIdentifier.text}".""",
-                        secondaries
-                    )
+                    reportIssue(ctx, setterIdentifier, "setter", "set(value)", propIdentifier, secondaries)
                 }
             }
         }
+    }
+
+    private fun reportIssue(
+        ctx: KotlinFileContext, location: PsiElement, kind: String, replacement: String, propIdentifier: PsiElement,
+        secondaries: List<SecondaryLocation>
+    ) {
+        ctx.reportIssue(location, """Convert this $kind to a "$replacement" on the property "${propIdentifier.text}".""", secondaries)
     }
 }
 
@@ -140,8 +119,4 @@ private fun List<KtNamedFunction>.unambiguousIdentifier() =
 
 private fun capitalize(name: String): String = name.replaceFirstChar { it.uppercase() }
 
-private fun KotlinType.matches(qualifiedTypeName: String) =
-    when {
-        isNullable() -> false
-        else -> getJetTypeFqName(true) == qualifiedTypeName
-    }
+private fun KotlinType.matches(qualifiedTypeName: String) = !isNullable() && getJetTypeFqName(true) == qualifiedTypeName
