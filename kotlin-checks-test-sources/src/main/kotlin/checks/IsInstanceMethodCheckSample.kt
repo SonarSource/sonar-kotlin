@@ -2,7 +2,7 @@ package checks
 
 import kotlin.reflect.KClass
 
-fun foo(arg: Any, kotlinClass: KClass<*>, javaClass: Class<*>): Int = when {
+fun function1(arg: Any, kotlinClass: KClass<*>, javaClass: Class<*>): Int = when {
     String::class.isInstance(arg) -> 0 // Noncompliant {{Replace this usage of "isInstance" with "is String".}}
     //            ^^^^^^^^^^
     String::class.java.isInstance(arg) -> 1 // Noncompliant {{Replace this usage of "isInstance" with "is String".}}

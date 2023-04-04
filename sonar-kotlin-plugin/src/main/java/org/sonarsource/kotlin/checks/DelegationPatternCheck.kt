@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptorWithResolutionScopes
+import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -46,7 +47,6 @@ import org.sonarsource.kotlin.api.determineTypeAsString
 import org.sonarsource.kotlin.api.overrides
 import org.sonarsource.kotlin.api.returnType
 import org.sonarsource.kotlin.api.returnTypeAsString
-import org.sonarsource.kotlin.api.typeAsString
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 @Rule(key = "S6514")
@@ -54,14 +54,9 @@ class DelegationPatternCheck : AbstractCheck() {
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject, context: KotlinFileContext) {
         val classType = classOrObject.determineType(context.bindingContext) ?: return
+        if (classType.isInterface()) return
         val superInterfaces = getSuperInterfaces(classType).toSet()
-        superInterfaces.isEmpty() && return
-
-        /*
-        if (superInterfaces.isEmpty()) {
-            return
-        }
-        */
+        if (superInterfaces.isEmpty()) return
 
         classOrObject.declarations.forEach {
             if (it is KtNamedFunction) {
@@ -71,19 +66,14 @@ class DelegationPatternCheck : AbstractCheck() {
     }
 
     private fun checkNamedFunction(function: KtNamedFunction, superInterfaces: Set<KotlinType>, context: KotlinFileContext) {
-
-        /*if (!(function.isPublic && function.overrides())) {
-            return
-        }*/
-
-        !function.isPublic || !function.overrides() && return
+        if (!(function.isPublic && function.overrides())) return
         val bindingContext = context.bindingContext
         val delegeeType = getDelegeeOrNull(function, bindingContext)?.determineType(bindingContext) ?: return
 
         if (getCommonSuperInterfaces(superInterfaces, delegeeType).any {
             isFunctionInInterface(function, it, bindingContext)
         }) {
-            context.reportIssue(function, """Replace with interface delegation using "by" in the class header.""")
+            context.reportIssue(function.nameIdentifier!!, """Replace with interface delegation using "by" in the class header.""")
         }
     }
 }
@@ -100,16 +90,18 @@ private fun isEqualFunctionSignature(
     functionDescriptor: CallableMemberDescriptor,
     bindingContext: BindingContext,
 ) = function.name == functionDescriptor.name.identifier &&
-    function.returnTypeAsString(bindingContext) == functionDescriptor.returnTypeAsString(bindingContext) &&
+    function.returnTypeAsString(bindingContext) == functionDescriptor.returnType?.getJetTypeFqName(false) &&
     function.valueParameters.allPaired(functionDescriptor.valueParameters) { parameter, paramerterDescriptor ->
-        parameter.typeReference?.determineTypeAsString(bindingContext) == paramerterDescriptor.type.typeAsString(bindingContext)
+        parameter.typeReference?.determineTypeAsString(bindingContext) == paramerterDescriptor.type.getJetTypeFqName(false)
     }
 
 fun getCommonSuperInterfaces(superInterfaces: Set<KotlinType>, otherType: KotlinType) =
     getSuperInterfaces(otherType).intersect(superInterfaces)
 
 private fun getSuperInterfaces(kotlinType: KotlinType): List<KotlinType> =
-    kotlinType.supertypes().filter(KotlinType::isInterface)
+    kotlinType.supertypes().filter(KotlinType::isInterface).let {
+        if (kotlinType.isInterface()) it + kotlinType else it
+    }
 
 private fun getDelegeeOrNull(function: KtNamedFunction, bindingContext: BindingContext): KtNameReferenceExpression? {
     val qualifiedCallExpression = getFunctionSingleBodyElementOrNull(function) as? KtDotQualifiedExpression ?: return null
@@ -120,12 +112,7 @@ private fun getDelegeeOrNull(function: KtNamedFunction, bindingContext: BindingC
         function.returnType(bindingContext) == callExpression.determineType(bindingContext) &&
         function.valueParameters.allPaired(callExpression.valueArguments) { parameter, argument ->
             isDelegatedParameter(parameter, argument, bindingContext)
-        }
-    ) {
-        receiverExpression
-    } else {
-        null
-    }
+        }) receiverExpression else null
 }
 
 private fun isDelegatedParameter(parameter: KtParameter, arguments: KtValueArgument, bindingContext: BindingContext): Boolean {

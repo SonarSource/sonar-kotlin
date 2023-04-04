@@ -28,7 +28,6 @@ import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.descriptors.ParameterDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.ValueDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
@@ -340,17 +339,11 @@ private fun KtTypeReference.determineType(bindingContext: BindingContext) =
 fun KtTypeReference.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getJetTypeFqName(printTypeArguments)
 
-fun KotlinType.typeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    getJetTypeFqName(printTypeArguments)
-
 fun KtNamedFunction.returnTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     returnType(bindingContext)?.getJetTypeFqName(printTypeArguments)
 
 fun KtNamedFunction.returnType(bindingContext: BindingContext) =
     createTypeBindingForReturnType(bindingContext)?.type
-
-fun CallableDescriptor.returnTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    returnType?.getJetTypeFqName(false)
 
 fun KtLambdaArgument.isSuspending(
     bindingContext: BindingContext,
