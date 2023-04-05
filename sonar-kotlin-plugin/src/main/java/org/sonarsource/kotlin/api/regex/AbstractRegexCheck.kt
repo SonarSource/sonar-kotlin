@@ -50,7 +50,7 @@ import org.sonarsource.kotlin.api.isPlus as isConcat
 
 val PATTERN_COMPILE_MATCHER = FunMatcher(qualifier = "java.util.regex.Pattern", name = "compile")
 val REGEX_MATCHER = ConstructorMatcher(typeName = "kotlin.text.Regex")
-val TO_REGEX_MATCHER = FunMatcher(qualifier = "kotlin.text", name = "toRegex", extensionFunction = true)
+val TO_REGEX_MATCHER = FunMatcher(qualifier = "kotlin.text", name = "toRegex", isExtensionFunction = true)
 
 private fun argGetter(argIndex: Int) = { resolvedCall: ResolvedCall<*> ->
     resolvedCall.valueArgumentsByIndex?.getOrNull(argIndex)?.arguments?.getOrNull(0)?.getArgumentExpression()

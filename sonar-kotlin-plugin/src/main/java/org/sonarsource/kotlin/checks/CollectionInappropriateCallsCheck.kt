@@ -37,7 +37,7 @@ const val qualifier = "kotlin.collections"
 
 val COLLECTION_EXTENSIONS_MATCHER = FunMatcher(
     qualifier = qualifier,
-    extensionFunction = true
+    isExtensionFunction = true
 ) {
     withNames(
         "remove", "contains", "indexOf", "lastIndexOf", "containsKey", "get"
@@ -47,7 +47,7 @@ val COLLECTION_EXTENSIONS_MATCHER = FunMatcher(
 
 val COLLECTION_ARGUMENT_EXTENSIONS_MATCHER = FunMatcher(
     qualifier = qualifier,
-    extensionFunction = true
+    isExtensionFunction = true
 ) {
     withNames("removeAll", "retainAll", "containsAll")
     withArguments("kotlin.collections.Collection")
@@ -55,7 +55,7 @@ val COLLECTION_ARGUMENT_EXTENSIONS_MATCHER = FunMatcher(
 
 val CONTAINS_VALUE_MATCHER = FunMatcher(
     qualifier = qualifier,
-    extensionFunction = true
+    isExtensionFunction = true
 ) {
     withNames("containsValue")
     withArguments(ArgumentMatcher.ANY)

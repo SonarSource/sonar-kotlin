@@ -20,6 +20,8 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtSuperExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.CallAbstractCheck
@@ -31,7 +33,7 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 class IndexedAccessCheck : CallAbstractCheck() {
 
     override val functionsToVisit = listOf(
-        FunMatcher(names = setOf("get", "set"), operator = true)
+        FunMatcher(names = setOf("get", "set"), isOperator = true)
     )
 
     override fun visitFunctionCall(
@@ -40,6 +42,8 @@ class IndexedAccessCheck : CallAbstractCheck() {
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext,
     ) {
-        kotlinFileContext.reportIssue(callExpression, "Replace function call with indexed accessor.")
+        val dotExpression = callExpression.parent as? KtDotQualifiedExpression ?: return
+        if (dotExpression.receiverExpression is KtSuperExpression) return
+        kotlinFileContext.reportIssue(callExpression.calleeExpression!!, "Replace function call with indexed accessor.")
     }
 }

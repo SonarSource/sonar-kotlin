@@ -8,6 +8,7 @@ suspend fun main() {
     "".suspendExtFun()
     sampleClass.intAndVararg(42, "one")
     sampleClass.intAndVararg(42, "one", "two")
+    sampleClass.get(42)
 
     val mySampleClass = MySampleClass()
 }
