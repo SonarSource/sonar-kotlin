@@ -1,0 +1,16 @@
+{
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-core/common/src/io/ktor/client/plugins/cookies/HttpCookies.kt':[
+82,
+],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-http/common/src/io/ktor/http/UrlDecodedParametersBuilder.kt':[
+28,
+58,
+60,
+],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-network/ktor-network-tls/jvm/src/io/ktor/network/tls/TLSClientSessionJvm.kt':[
+87,
+],
+'kotlin-ktor-project:sources/kotlin/ktor/ktor-shared/ktor-websockets/common/src/io/ktor/websocket/DefaultWebSocketSession.kt':[
+144,
+],
+}

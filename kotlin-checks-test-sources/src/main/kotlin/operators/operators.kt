@@ -50,4 +50,4 @@ class ResourceDelegate<T> : ReadOnlyProperty<MyUI, T> {
     }
 }
 
-class ResourceLoader<T>(id: ResourceID<T>) {}
+class ResourceLoader<T>(id: ResourceID<T>)
