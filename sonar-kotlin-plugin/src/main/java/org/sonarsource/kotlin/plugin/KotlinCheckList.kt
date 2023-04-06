@@ -98,6 +98,7 @@ import org.sonarsource.kotlin.checks.ReluctantQuantifierCheck
 import org.sonarsource.kotlin.checks.ReplaceGuavaWithKotlinCheck
 import org.sonarsource.kotlin.checks.RobustCryptographicKeysCheck
 import org.sonarsource.kotlin.checks.RunFinalizersCheck
+import org.sonarsource.kotlin.checks.SamConversionCheck
 import org.sonarsource.kotlin.checks.ScheduledThreadPoolExecutorZeroCheck
 import org.sonarsource.kotlin.checks.SelfAssignmentCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
@@ -216,6 +217,7 @@ val KOTLIN_CHECKS = listOf(
     ReplaceGuavaWithKotlinCheck::class.java,
     RobustCryptographicKeysCheck::class.java,
     RunFinalizersCheck::class.java,
+    SamConversionCheck::class.java,
     ScheduledThreadPoolExecutorZeroCheck::class.java,
     SelfAssignmentCheck::class.java,
     ServerCertificateCheck::class.java,

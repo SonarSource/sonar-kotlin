@@ -164,9 +164,13 @@ internal class ApiExtensionsKtTest {
     }
 
     @Test
-    fun `PsiElement getType()`() {
+    fun `PsiElement getVariableType()`() {
         assertThat((null as PsiElement?).getVariableType(BindingContext.EMPTY)).isNull()
         assertThat(PsiWhiteSpaceImpl(" ").getVariableType(BindingContext.EMPTY)).isNull()
+    }
+
+    fun `test KtTypeReference getType with null`() {
+        assertThat((null as KtTypeReference?).getType(BindingContext.EMPTY)).isNull()
     }
 
     private fun walker(node: PsiElement, action: (PsiElement) -> Unit) {
