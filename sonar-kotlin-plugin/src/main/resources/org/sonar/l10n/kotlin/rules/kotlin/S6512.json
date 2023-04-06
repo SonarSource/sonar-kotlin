@@ -1,0 +1,15 @@
+{
+  "title": "Getter and setter pattern should use property getters and setters",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Minor",
+  "ruleSpecification": "RSPEC-6512",
+  "sqKey": "S6512",
+  "scope": "All",
+  "quickfix": "unknown"
+}
