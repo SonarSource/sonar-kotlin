@@ -13,6 +13,8 @@ class SampleClass {
     fun intAndVararg(one: Int, vararg two: String) {
         // empty
     }
+
+    operator fun get(index: Int) = 42
 }
 
 suspend fun String.suspendExtFun(): String = ""

@@ -70,7 +70,10 @@ class FunMatcherTest {
     // sampleClass.intAndVararg(42, "one", "two")
     val ktCallExpressionIntAndVararg2 = allCallExpressions[6]
 
-    private val testFunCalls = allCallExpressions.subList(1, 7)
+    // sampleClass.get(42)
+    val ktCallExpressionGet = allCallExpressions[7]
+
+    private val testFunCalls = allCallExpressions.subList(1, 8)
 
     @Test
     fun `match method by type and name`() {
@@ -513,66 +516,76 @@ class FunMatcherTest {
     }
 
     @Test
-    fun `Match only methods with non-nullable paramter`() {
+    fun `Match only methods with non-nullable parameter`() {
         check(FunMatcher {
             withArguments(ArgumentMatcher(nullability = TypeNullability.NOT_NULL))
-        }, true, true, false, false, false, false)
+        }, true, true, false, false, false, false, true)
     }
 
     @Test
     fun `Match only methods with nullable parameter`() {
         check(FunMatcher {
             withArguments(ArgumentMatcher(nullability = TypeNullability.NULLABLE))
-        }, false, false, true, false, false, false)
+        }, false, false, true, false, false, false, false)
     }
 
     @Test
     fun `Match methods with a parameter with any nullability`() {
         check(FunMatcher {
             withArguments(ArgumentMatcher(nullability = null))
-        }, true, true, true, false, false, false)
+        }, true, true, true, false, false, false, true)
     }
 
     @Test
     fun `Don't match methods without flexible nullability parameter`() {
         check(FunMatcher {
             withArguments(ArgumentMatcher(nullability = TypeNullability.FLEXIBLE))
-        }, false, false, false, false, false, false)
+        }, false, false, false, false, false, false, false)
     }
 
     @Test
     fun `Match only suspending methods`() {
-        check(FunMatcher(suspending = true), false, false, false, true, false, false)
+        check(FunMatcher(isSuspending = true), false, false, false, true, false, false, false)
     }
 
     @Test
     fun `Match only non-suspending methods`() {
-        check(FunMatcher(suspending = false), true, true, true, false, true, true)
+        check(FunMatcher(isSuspending = false), true, true, true, false, true, true, true)
+    }
+
+    @Test
+    fun `Match only operator functions`() {
+        check(FunMatcher(isOperator = true), false, false, false, false, false, false, true)
+    }
+
+    @Test
+    fun `Match only nun-operator functions`() {
+        check(FunMatcher(isOperator = false), true, true, true, true, true, true, false)
     }
 
     @Test
     fun `Match only extension methods`() {
-        check(FunMatcher(extensionFunction = true), false, false, false, true, false, false)
+        check(FunMatcher(isExtensionFunction = true), false, false, false, true, false, false, false)
     }
 
     @Test
     fun `Match only non-extension methods`() {
-        check(FunMatcher(extensionFunction = false), true, true, true, false, true, true)
+        check(FunMatcher(isExtensionFunction = false), true, true, true, false, true, true, true)
     }
 
     @Test
     fun `Match only methods returning String`() {
-        check(FunMatcher(returnType = "kotlin.String"), false, false, false, true, false, false)
+        check(FunMatcher(returnType = "kotlin.String"), false, false, false, true, false, false, false)
     }
 
     @Test
     fun `Match only methods returning int`() {
-        check(FunMatcher(returnType = "kotlin.Int"), false, false, true, false, false, false)
+        check(FunMatcher(returnType = "kotlin.Int"), false, false, true, false, false, false, true)
     }
 
     @Test
     fun `Match only methods returning Unit`() {
-        check(FunMatcher(returnType = "kotlin.Unit"), true, true, false, false, true, true)
+        check(FunMatcher(returnType = "kotlin.Unit"), true, true, false, false, true, true, false)
     }
 
     private fun check(funMatcher: FunMatcherImpl, vararg expected: Boolean?) {

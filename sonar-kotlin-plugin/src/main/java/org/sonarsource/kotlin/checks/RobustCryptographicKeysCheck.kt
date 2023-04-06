@@ -46,7 +46,7 @@ private val ASYMMETRIC_INITIALIZE_MATCHER = FunMatcher {
 private val ASYMMETRIC_GENERATOR_GET_INSTANCE_MATCHER = FunMatcher {
     qualifier = "java.security.KeyPairGenerator"
     withNames("getInstance")
-    dynamic = false
+    isDynamic = false
 }
 private val ASYMMETRIC_ALGORITHMS = setOf("dsa", "rsa", "dh", "diffiehellman")
 private const val ASYMMETRIC_MIN_KEY_SIZE = 2048
@@ -61,7 +61,7 @@ private val SYMMETRIC_INIT_MATCHER = FunMatcher {
 private val SYMMETRIC_GENERATOR_GET_INSTANCE_MATCHER = FunMatcher {
     qualifier = "javax.crypto.KeyGenerator"
     withNames("getInstance")
-    dynamic = false
+    isDynamic = false
 }
 private val SYMMETRIC_ALGORITHMS = setOf("aes")
 private const val SYMMETRIC_MIN_KEY_SIZE = 128

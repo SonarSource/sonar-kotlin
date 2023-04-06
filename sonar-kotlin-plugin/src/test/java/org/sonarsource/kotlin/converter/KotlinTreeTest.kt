@@ -45,7 +45,7 @@ class KotlinTreeTest {
     val tree = kotlinTreeOf(content, environment, inputFile)
     assertThat(tree.psiFile.children).hasSize(9)
 
-    assertThat(tree.bindingContext.getSliceContents(BindingContext.RESOLVED_CALL)).hasSize(19)
+    assertThat(tree.bindingContext.getSliceContents(BindingContext.RESOLVED_CALL)).hasSize(22)
 
     val ktCallExpression = tree.psiFile.children[3].children[2].children[1].children[1].children[0] as KtElement
     val call = tree.bindingContext.get(BindingContext.CALL, ktCallExpression)

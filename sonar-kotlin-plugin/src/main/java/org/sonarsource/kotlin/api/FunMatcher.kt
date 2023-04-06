@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.api
 import org.jetbrains.kotlin.backend.common.descriptors.isSuspend
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
+import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.Call
@@ -50,9 +51,10 @@ class FunMatcherImpl(
     val arguments: List<List<ArgumentMatcher>> = emptyList(),
     val definingSupertype: String? = null,
     private val matchConstructor: Boolean = false,
-    val dynamic: Boolean? = null,
-    val extensionFunction: Boolean? = null,
-    val suspending: Boolean? = null,
+    val isDynamic: Boolean? = null,
+    val isExtensionFunction: Boolean? = null,
+    val isSuspending: Boolean? = null,
+    val isOperator: Boolean? = null,
     val returnType: String? = null,
 ) {
 
@@ -80,6 +82,7 @@ class FunMatcherImpl(
             checkIsDynamic(functionDescriptor) &&
             checkIsExtensionFunction(functionDescriptor) &&
             checkIsSuspending(functionDescriptor) &&
+            checkIsOperator(functionDescriptor) &&
             checkName(functionDescriptor) &&
             checkTypeOrSupertype(functionDescriptor) &&
             checkReturnType(functionDescriptor) &&
@@ -138,10 +141,10 @@ class FunMatcherImpl(
     }
 
     private fun checkIsDynamic(descriptor: CallableDescriptor): Boolean =
-        dynamic?.let { it == descriptor.isDynamic() } ?: true
+        isDynamic?.let { it == descriptor.isDynamic() } ?: true
 
     private fun checkIsExtensionFunction(descriptor: CallableDescriptor): Boolean =
-        extensionFunction?.let { it == descriptor.isExtension } ?: true
+        isExtensionFunction?.let { it == descriptor.isExtension } ?: true
 
     private fun checkReturnType(descriptor: CallableDescriptor) =
         returnType?.let {
@@ -151,7 +154,10 @@ class FunMatcherImpl(
         } ?: true
 
     private fun checkIsSuspending(descriptor: CallableDescriptor) =
-        suspending?.let { it == descriptor.isSuspend } ?: true
+        isSuspending?.let { it == descriptor.isSuspend } ?: true
+
+    private fun checkIsOperator(descriptor: CallableDescriptor) =
+        isOperator?.let { it == ((descriptor as? FunctionDescriptor)?.isOperator ?: false) } ?: true
 }
 
 class FunMatcherBuilderContext(
@@ -162,9 +168,10 @@ class FunMatcherBuilderContext(
     arguments: List<List<ArgumentMatcher>> = listOf(),
     var definingSupertype: String? = null,
     var matchConstructor: Boolean = false,
-    var dynamic: Boolean? = null,
-    var extensionFunction: Boolean? = null,
-    var suspending: Boolean? = null,
+    var isDynamic: Boolean? = null,
+    var isExtensionFunction: Boolean? = null,
+    var isSuspending: Boolean? = null,
+    val isOperator: Boolean? = null,
     var returnType: String? = null,
 ) {
     var arguments: MutableList<List<ArgumentMatcher>> = arguments.toMutableList()
@@ -204,9 +211,10 @@ fun FunMatcher(
     arguments: List<List<ArgumentMatcher>> = listOf(),
     definingSupertype: String? = null,
     matchConstructor: Boolean = false,
-    dynamic: Boolean? = null,
-    extensionFunction: Boolean? = null,
-    suspending: Boolean? = null,
+    isDynamic: Boolean? = null,
+    isExtensionFunction: Boolean? = null,
+    isSuspending: Boolean? = null,
+    isOperator: Boolean? = null,
     returnType: String? = null,
     block: FunMatcherBuilderContext.() -> Unit = {},
 ) = FunMatcherBuilderContext(
@@ -217,9 +225,10 @@ fun FunMatcher(
     arguments,
     definingSupertype,
     matchConstructor,
-    dynamic,
-    extensionFunction,
-    suspending,
+    isDynamic,
+    isExtensionFunction,
+    isSuspending,
+    isOperator,
     returnType,
 ).apply(block).run {
     val maxArgumentCount: Int =
@@ -232,9 +241,10 @@ fun FunMatcher(
         this.arguments,
         this.definingSupertype,
         this.matchConstructor,
-        this.dynamic,
-        this.extensionFunction,
-        this.suspending,
+        this.isDynamic,
+        this.isExtensionFunction,
+        this.isSuspending,
+        this.isOperator,
         this.returnType,
     )
 }

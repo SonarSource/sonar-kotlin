@@ -1,0 +1,51 @@
+<h2>Why is this an issue?</h2>
+<p>The primary purpose of classes that implement indexed access operators is that of element access, like this is the case for arrays, lists, maps, or
+sets. When a class implements indexed access operators, they should be used as operators instead of calling them as functions, because this is the
+intention of the designer of the API.</p>
+<h3>What is the potential impact?</h3>
+<h4>Readability and Understanding</h4>
+<p>This change makes it easier to understand what a function does, because the semantics of indexed access operators is evident to the reader, while
+for a function call, the reader would need to know what the called function does.</p>
+<h2>How to fix it</h2>
+<p>Replace <code>instance.get(index)</code> with <code>instance[index]</code>.</p>
+<p>Replace <code>instance.set(index, value)</code> with <code>instance[index] = value</code>.</p>
+<p>This also works with multi-index access operators.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre>
+interface Grid {
+    operator fun get(row: Int, column: Int): Int
+    operator fun set(row: Int, column: Int, value: Int)
+}
+</pre>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+fun indexedAccess(list: MutableList&lt;Int&gt;, map: MutableMap&lt;String, Int&gt;, grid: Grid) {
+    list.get(1) // Noncompliant
+    list.set(1, 42) // Noncompliant
+    map.get("b") // Noncompliant
+    map.set("b", 42) // Noncompliant
+    grid.get(1, 2) // Noncompliant
+    grid.set(1, 2, 42) // Noncompliant
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+fun indexedAccess(list: MutableList&lt;Int&gt;, map: MutableMap&lt;String, Int&gt;, grid: Grid) {
+    list[1] // Compliant
+    list[1] = 42 // Compliant
+    map["b"] // Compliant
+    map["b"] = 42 // Compliant
+    grid[1, 2] // Compliant
+    grid[1, 2] = 42 // Compliant
+    list.getOrNull(2) // Compliant, because function is not an operator
+    list.getOrElse(3) {42} // Compliant, because function is not an operator
+    map.getValue("a") // Compliant, because function is not an operator
+    map.getOrElse("c") {42} // Compliant, because function is not an operator
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/operator-overloading.html#indexed-access-operator">Kotlin Docs, Indexed access operator</a> </li>
+</ul>
+
