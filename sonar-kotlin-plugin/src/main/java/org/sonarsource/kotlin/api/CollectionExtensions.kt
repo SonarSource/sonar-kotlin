@@ -24,7 +24,9 @@ package org.sonarsource.kotlin.api
  * This implies that both lists must have the same size.
  */
 inline fun <T, U> List<T>.allPaired(other: List<U>, predicate: (T, U) -> Boolean) =
-    size == other.size && run {
+    size == other.size
+        &&
+        run {
         forEachIndexed { index, value ->
             if (!predicate(value, other[index])) {
                 return false
