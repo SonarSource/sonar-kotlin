@@ -19,19 +19,24 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
+import org.jetbrains.kotlin.psi.psiUtil.isProtected
+import org.jetbrains.kotlin.psi.psiUtil.isPublic
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.isNullable
+import org.jetbrains.kotlin.util.isAnnotated
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.api.isAbstract
+import org.sonarsource.kotlin.api.overrides
 import org.sonarsource.kotlin.api.returnType
 import org.sonarsource.kotlin.api.secondaryOf
 import org.sonarsource.kotlin.plugin.KotlinFileContext
@@ -51,7 +56,7 @@ class PropertyGetterAndSetterUsageCheck : AbstractCheck() {
         if (javaAccessors.isEmpty()) return
         val bindingCtx = ctx.bindingContext
         classBody.properties
-            .filter { isPrivateWithoutGetterAndSetter(it) }
+            .filter { it.isReadyForAccessorsConversion() }
             .forEach { checkProperty(it, javaAccessors, ctx, bindingCtx) }
     }
 
@@ -60,36 +65,31 @@ class PropertyGetterAndSetterUsageCheck : AbstractCheck() {
     ) {
         prop.nameIdentifier?.let { propIdentifier ->
             prop.typeReference?.let { bindingCtx.get(BindingContext.TYPE, it) }?.let { propType ->
-                val secondaries = mutableListOf(ctx.secondaryOf(propIdentifier, """Property "${propIdentifier.text}""""))
-                val getterIdentifier = findJavaStyleGetterFuncIdentifier(prop.name!!, propType, javaAccessors, bindingCtx)
-                val setterIdentifier = findJavaStyleSetterFuncIdentifier(propIdentifier.text, propType, javaAccessors, bindingCtx)
-                if (getterIdentifier != null) {
-                    setterIdentifier?.let { secondaries += ctx.secondaryOf(setterIdentifier, """Setter to convert to a "set(value)"""") }
-                    reportIssue(ctx, getterIdentifier, "getter", "get()", propIdentifier, secondaries)
-                } else if (setterIdentifier != null) {
-                    reportIssue(ctx, setterIdentifier, "setter", "set(value)", propIdentifier, secondaries)
+                val propName = prop.name!!
+                val getterFunc = findJavaStyleGetterFunc(propName, propType, javaAccessors, bindingCtx)
+                val getterName = getterFunc?.nameIdentifier
+                if (getterName == null || getterFunc.isIncompatiblePropertyAccessor()) return
+                val secondaries = mutableListOf(ctx.secondaryOf(propIdentifier, """Property "$propName""""))
+                val setterFunc = findJavaStyleSetterFunc(propName, propType, javaAccessors, bindingCtx)
+                if (setterFunc != null) {
+                    if (setterFunc.isIncompatiblePropertyAccessor() || getterFunc.isLessVisibleThan(setterFunc)) return
+                    setterFunc.nameIdentifier?.let { secondaries += ctx.secondaryOf(it, """Setter to convert to a "set(value)"""") }
                 }
+                ctx.reportIssue(getterName, """Convert this getter to a "get()" on the property "$propName".""", secondaries)
             }
         }
     }
-
-    private fun reportIssue(
-        ctx: KotlinFileContext, location: PsiElement, kind: String, replacement: String, propIdentifier: PsiElement,
-        secondaries: List<SecondaryLocation>
-    ) {
-        ctx.reportIssue(location, """Convert this $kind to a "$replacement" on the property "${propIdentifier.text}".""", secondaries)
-    }
 }
 
-private fun isPrivateWithoutGetterAndSetter(prop: KtProperty): Boolean = prop.isPrivate() && prop.accessors.isEmpty()
+private fun KtProperty.isReadyForAccessorsConversion(): Boolean = isPrivate() && accessors.isEmpty() && !isAnnotated
 
 private fun isGetterOrSetter(parameterCount: Int, functionName: String) =
     (parameterCount == 0 && GETTER_PREFIX.find(functionName) != null) ||
         (parameterCount == 1 && SETTER_PREFIX.find(functionName) != null)
 
-private fun findJavaStyleGetterFuncIdentifier(
+private fun findJavaStyleGetterFunc(
     propName: String, propType: KotlinType, javaAccessors: Map<String, List<KtNamedFunction>>, bindingCtx: BindingContext
-): PsiElement? {
+): KtNamedFunction? {
     val capitalizedName = capitalize(propName)
     val functionsPrefixedByIs = if (propType.matches("kotlin.Boolean")) {
         javaAccessors.getOrElse("is${capitalizedName}") { emptyList() }
@@ -98,25 +98,36 @@ private fun findJavaStyleGetterFuncIdentifier(
     }
     return (javaAccessors.getOrElse("get${capitalizedName}") { emptyList() } + functionsPrefixedByIs)
         .filter { it.returnType(bindingCtx) == propType }
-        .unambiguousIdentifier()
+        .unambiguousFunction()
 }
 
 private fun parameterMatchesType(parameter: KtParameter, type: KotlinType, bindingCtx: BindingContext): Boolean {
     return !parameter.isVarArg && type == (parameter.typeReference?.let { bindingCtx.get(BindingContext.TYPE, it) })
 }
 
-private fun findJavaStyleSetterFuncIdentifier(
+private fun findJavaStyleSetterFunc(
     propName: String, propType: KotlinType, javaAccessors: Map<String, List<KtNamedFunction>>, bindingCtx: BindingContext
-): PsiElement? =
+): KtNamedFunction? =
     javaAccessors.getOrElse("set${capitalize(propName)}") { emptyList() }
         .filter { it.returnType(bindingCtx)?.matches("kotlin.Unit") ?: false }
         // isGetterOrSetter ensures setters have: valueParameters.size == 1
         .filter { parameterMatchesType(it.valueParameters[0], propType, bindingCtx) }
-        .unambiguousIdentifier()
+        .unambiguousFunction()
 
-private fun List<KtNamedFunction>.unambiguousIdentifier() =
-    if (this.size == 1) this[0].nameIdentifier else null /* empty or ambiguous */
+private fun List<KtNamedFunction>.unambiguousFunction() = if (this.size == 1) this[0] else null /* empty or ambiguous */
 
 private fun capitalize(name: String): String = name.replaceFirstChar { it.uppercase() }
 
 private fun KotlinType.matches(qualifiedTypeName: String) = !isNullable() && getJetTypeFqName(true) == qualifiedTypeName
+
+private fun KtNamedFunction.isIncompatiblePropertyAccessor(): Boolean = isAbstract() || overrides() || isAnnotated
+
+private fun KtNamedFunction.isLessVisibleThan(other: KtNamedFunction): Boolean = when {
+    isInternal() -> other.isPublic || other.isProtected()
+    isProtected() -> other.isPublic || other.isInternal()
+    isPrivate() -> !other.isPrivate()
+    // isPublic
+    else -> false
+}
+
+private fun KtModifierListOwner.isInternal(): Boolean = hasModifier(KtTokens.INTERNAL_KEYWORD)
