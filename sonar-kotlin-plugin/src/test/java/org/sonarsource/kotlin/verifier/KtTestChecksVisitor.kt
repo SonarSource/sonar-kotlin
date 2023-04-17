@@ -20,6 +20,9 @@
 package org.sonarsource.kotlin.verifier
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.descriptors.runtime.structure.ReflectJavaLiteralAnnotationArgument
+import org.jetbrains.kotlin.descriptors.runtime.structure.findAnnotation
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtElement
 import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.api.AbstractCheck
@@ -28,7 +31,14 @@ import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 
 class KtTestChecksVisitor(private val checks: List<AbstractCheck>) : KotlinFileVisitor() {
     init {
-        checks.forEach { it.initialize(RuleKey.of("Kotlin", "Dummy")) }
+        checks.forEach { check ->
+            val key = (check.javaClass.annotations.findAnnotation(FqName("org.sonar.check.Rule"))
+                ?.arguments
+                ?.find { it.name?.asString() == "key" } as? ReflectJavaLiteralAnnotationArgument)
+                ?.value as? String
+
+            check.initialize(RuleKey.of("kotlin", key ?: "Dummy"))
+        }
     }
 
     override fun visit(kotlinFileContext: KotlinFileContext) {

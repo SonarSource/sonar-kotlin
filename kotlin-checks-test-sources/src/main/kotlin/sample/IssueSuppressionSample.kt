@@ -1,6 +1,15 @@
 package sample
 
-@Suppress("Kotlin:Dummy")
+
+@Deprecated("")
+class D
+
+@Suppress("DEPRECATION")
+fun f() {
+    D() // Compliant
+}
+
+@Suppress("UNUSED", "kotlin:S101")
 class issueSuppressionSample1 { // Compliant
     fun someFun() {
         val unused = "foo" // Compliant (suppressed @ class level)
@@ -8,20 +17,20 @@ class issueSuppressionSample1 { // Compliant
 }
 
 class Foo1 {
-    @SuppressWarnings("Kotlin:Dummy")
+    @SuppressWarnings("kotlin:S100")
     fun _not_a_good_fun_name1_() { // Compliant
 
     }
 
-    @SuppressWarnings(value = ["Kotlin:Dummy"])
+    @SuppressWarnings(value = ["kotlin:S100"])
     fun _not_a_good_fun_name2_() { // Compliant
 
     }
 
-    fun someFun(@Suppress("Foo", "Kotlin:Dummy") ParameterWithBadName: String) { // Compliant
+    fun someFun(@Suppress("Foo", "kotlin:S117") ParameterWithBadName: String) { // Compliant
         val unusedAndReported = "bar" // Noncompliant
 
-        @Suppress(names = ["Kotlin:Dummy"])
+        @Suppress(names = ["kotlin:S1481"])
         val alsoUnused = "foo" // Compliant
 
         println("Hello Universe")
@@ -34,7 +43,7 @@ class Foo1 {
 
 private fun S1479(values: List<Int>): List<String> {
     return values.map { value ->
-        @Suppress("Kotlin:Dummy")
+        @Suppress("kotlin:S1479")
         when (value) { // suppressed therefore compliant
             0 -> "0"
             1 -> "0"

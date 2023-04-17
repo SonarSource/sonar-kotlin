@@ -1,6 +1,14 @@
 package sample
 
-@Suppress("Kotlin:Dummy")
+@Deprecated("")
+class DD
+
+@Suppress("DEPRECATION")
+fun ff() {
+    DD() // Noncompliant
+}
+
+@Suppress("UNUSED", "kotlin:S101")
 class issueSuppressionSample2 { // Noncompliant
     fun someFun() {
         val unused = "foo" // Noncompliant
@@ -8,20 +16,20 @@ class issueSuppressionSample2 { // Noncompliant
 }
 
 class Foo2 {
-    @SuppressWarnings("Kotlin:Dummy")
+    @SuppressWarnings("kotlin:S100")
     fun _not_a_good_fun_name1_() { // Noncompliant
 
     }
 
-    @SuppressWarnings(value = ["Kotlin:Dummy"])
+    @SuppressWarnings(value = ["kotlin:S100"])
     fun _not_a_good_fun_name2_() { // Noncompliant
 
     }
 
-    fun someFun(@Suppress("Foo", "Kotlin:Dummy") ParameterWithBadName: String) { // Noncompliant
+    fun someFun(@Suppress("Foo", "kotlin:S117") ParameterWithBadName: String) { // Noncompliant
         val unusedAndReported = "bar" // Noncompliant
 
-        @Suppress(names = ["Kotlin:Dummy"])
+        @Suppress(names = ["kotlin:S1481"])
         val alsoUnused = "foo" // Noncompliant
 
         println("Hello Universe")
@@ -34,7 +42,7 @@ class Foo2 {
 
 private fun S1479(values: List<Int>): List<String> {
     return values.map { value ->
-        @Suppress("Kotlin:Dummy")
+        @Suppress("kotlin:S1479")
         when (value) { // Noncompliant
             0 -> "0"
             1 -> "0"
