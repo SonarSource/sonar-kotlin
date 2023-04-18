@@ -1,0 +1,52 @@
+<h2>Why is this an issue?</h2>
+<p>Kotlin provides the operators <code>as</code> and <code>as?</code> to cast an expression to a specific type, and <code>is</code> to check the
+assignment compatibility with a type. These operators are used for downcasts, smart casts, and run-time type checking.</p>
+<p>In case the <code>as</code> or <code>as?</code> operator is used for upcasting from a subtype to a supertype, the cast is redundant as it has no
+effect and can never fail. If a specific type is expected, an expression of a subtype can always be inserted without casting (Substitution Principle
+and Assignment Compatibility).</p>
+<p>Likewise, the <code>is</code> operator is redundant and will always return <code>true</code> if the type of the expression on the left side is
+assignment compatible with the type on the right.</p>
+<h3>What is the potential impact?</h3>
+<h4>Code redundancy</h4>
+<p>Since the operation will always succeed and has no side effects, it is pointless to use it. Conditions with <code>is</code> will lead to dead code
+branches because they will always or never be satisfied.</p>
+<h2>How to fix it</h2>
+<p>Remove the operator and all dead code branches that result from it, or investigate why the expression that is cast or checked has an unexpected
+compile-time type.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+fun types(value: Int, elements: List&lt;Number&gt;) {
+    val a: Number = value as Number // Noncompliant, Int instance is always a Number
+    val b: Number = value as? Number // Noncompliant, Int instance is always a Number
+
+    val text = if (value is Number) { // Noncomplient, else-branch is dead code
+        "happens always"
+    } else {
+        "impossible"
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+fun types(value: Number, elements: List&lt;Number&gt;) {
+    val a: Int = value as Int // Compliant, Number instance could be an Int
+    val b: Int = value as? Int // Compliant, Number instance could be an Int
+
+    val text = if (value is Int) { // Compliant, both branches reachable
+        "impossible"
+    } else {
+        "happens always"
+    }
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/typecasts.html">Kotlin API Docs, Type checks and casts</a> </li>
+</ul>
+<h3>Articles &amp; blog posts</h3>
+<ul>
+  <li> <a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle">Wikipedia, Liskov substitution principle</a> </li>
+</ul>
+
