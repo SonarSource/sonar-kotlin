@@ -1,0 +1,15 @@
+{
+  "title": "Redundant type casts and type checks should be removed",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6531",
+  "sqKey": "S6531",
+  "scope": "All",
+  "quickfix": "unknown"
+}

@@ -94,6 +94,7 @@ import org.sonarsource.kotlin.checks.ReasonableTypeCastsCheck
 import org.sonarsource.kotlin.checks.ReceivingIntentsCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RedundantSuspendModifierCheck
+import org.sonarsource.kotlin.checks.RedundantTypeCastsCheck
 import org.sonarsource.kotlin.checks.RegexComplexityCheck
 import org.sonarsource.kotlin.checks.ReluctantQuantifierCheck
 import org.sonarsource.kotlin.checks.ReplaceGuavaWithKotlinCheck
@@ -214,6 +215,7 @@ val KOTLIN_CHECKS = listOf(
     ReceivingIntentsCheck::class.java,
     RedundantParenthesesCheck::class.java,
     RedundantSuspendModifierCheck::class.java,
+    RedundantTypeCastsCheck::class.java,
     RegexComplexityCheck::class.java,
     ReluctantQuantifierCheck::class.java,
     ReplaceGuavaWithKotlinCheck::class.java,

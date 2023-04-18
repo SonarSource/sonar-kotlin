@@ -42,6 +42,8 @@ private val COMPILER_KEY_TO_SONAR_KEYS = mapOf(
     "DEPRECATION" to sequenceOf("kotlin:S1874"),
     "UNCHECKED_CAST" to sequenceOf("kotlin:S6530"),
     "CAST_NEVER_SUCCEEDS" to sequenceOf("kotlin:S6530"),
+    "USELESS_CAST" to sequenceOf("kotlin:S6531"),
+    "USELESS_IS_CHECK" to sequenceOf("kotlin:S6531"),
 )
 
 class IssueSuppressionVisitor : KotlinFileVisitor() {
