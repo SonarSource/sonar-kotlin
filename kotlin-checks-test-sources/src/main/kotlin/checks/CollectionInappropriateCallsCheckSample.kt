@@ -103,4 +103,9 @@ class CollectionInappropriateCallsCheckSample {
         myMap.contains(element)
     }
 
+    fun noCrashWithoutTypeArguments() {
+        val intArray = IntArray(4)
+        intArray.lastIndexOf(10)
+    }
+
 }

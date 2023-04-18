@@ -67,7 +67,7 @@ val funMatcherToArgumentIndexMap = mapOf(
     CONTAINS_VALUE_MATCHER to 1
 )
 
-val ISSUE_MESSAGE = "This key/object cannot ever be present in the collection"
+const val ISSUE_MESSAGE = "This key/object cannot ever be present in the collection"
 
 @Rule(key = "S2175")
 class CollectionInappropriateCallsCheck : CallAbstractCheck() {
@@ -78,7 +78,7 @@ class CollectionInappropriateCallsCheck : CallAbstractCheck() {
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
         resolvedCall: ResolvedCall<*>,
-        funMatcherImpl: FunMatcherImpl,
+        matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext,
     ) {
         val ctx = kotlinFileContext.bindingContext
@@ -88,12 +88,15 @@ class CollectionInappropriateCallsCheck : CallAbstractCheck() {
         var argType = arg.determineType(ctx) ?: return
 
         val collectionType = callExpression.predictReceiverExpression(ctx).determineType(ctx) ?: return
-        val collectionArgumentIndex = funMatcherToArgumentIndexMap[funMatcherImpl]!!
+        // If collection type arguments aren't present, this rule shouldn't be triggered
+        if (collectionType.arguments.isEmpty()) return
+
+        val collectionArgumentIndex = funMatcherToArgumentIndexMap[matchedFun]!!
         val collectionArgumentType = collectionType.arguments[collectionArgumentIndex].type.makeNotNullable()
 
         // for methods like removeAll, containsAll etc.. we pass a collection as argument,
         // and so we want to check the type of the collection<argument> instead
-        if (funMatcherImpl == COLLECTION_ARGUMENT_EXTENSIONS_MATCHER) {
+        if (matchedFun == COLLECTION_ARGUMENT_EXTENSIONS_MATCHER) {
             argType = argType.arguments.first().type
         }
 
