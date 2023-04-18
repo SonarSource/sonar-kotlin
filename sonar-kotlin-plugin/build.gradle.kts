@@ -83,7 +83,8 @@ tasks.jar {
                 "Plugin-Version" to project.version,
                 "Sonar-Version" to "6.7",
                 "SonarLint-Supported" to "true",
-                "Version" to project.version.toString()
+                "Version" to project.version.toString(),
+                "Jre-Min-Version" to java.sourceCompatibility.majorVersion
             )
         )
     }
