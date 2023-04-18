@@ -29,12 +29,15 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
 import org.junit.jupiter.params.provider.ArgumentsSource
 import org.sonar.api.rule.RuleKey
+import org.sonar.check.Rule
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 import java.util.stream.Stream
 
 class AbstractCheckTest {
+
+    @Rule(key = "Dummy")
     class DummyCheck(val reportingFunction: (DummyCheck, KotlinFileContext, PsiElement) -> Unit) : AbstractCheck() {
         override fun visitNamedFunction(node: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
             reportingFunction(this, kotlinFileContext, node)

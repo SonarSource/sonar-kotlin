@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.api.regex
 
 import org.junit.jupiter.api.Test
+import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassTree
@@ -46,12 +47,14 @@ class AbstractRegexCheckTest {
     }
 }
 
+@Rule(key = "Dummy")
 private class ReportEveryRegexDummyCheck : AbstractRegexCheck() {
     override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {
         regexContext.reportIssue(regex.result, "Flags: ${regex.result.activeFlags().mask}")
     }
 }
 
+@Rule(key = "Dummy")
 private class ReportEveryRegexDummyCheck2 : AbstractRegexCheck() {
     private var counter = 0
 
@@ -67,6 +70,7 @@ private class ReportEveryRegexDummyCheck2 : AbstractRegexCheck() {
 
 }
 
+@Rule(key = "Dummy")
 private class ReportCharacterClassRegexDummyCheck : AbstractRegexCheck() {
     override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {
         val trees = mutableListOf<CharacterClassTree>()

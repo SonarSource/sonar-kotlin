@@ -37,7 +37,9 @@ class KtTestChecksVisitor(private val checks: List<AbstractCheck>) : KotlinFileV
                 ?.find { it.name?.asString() == "key" } as? ReflectJavaLiteralAnnotationArgument)
                 ?.value as? String
 
-            check.initialize(RuleKey.of("kotlin", key ?: "Dummy"))
+            requireNotNull(key) { "Rule key is missing for ${check.javaClass.canonicalName}." }
+
+            check.initialize(RuleKey.of("kotlin", key))
         }
     }
 
