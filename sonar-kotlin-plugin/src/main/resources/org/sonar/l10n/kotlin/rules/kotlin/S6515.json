@@ -1,0 +1,15 @@
+{
+  "title": "Singleton pattern should use object declarations or expressions",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6515",
+  "sqKey": "S6515",
+  "scope": "All",
+  "quickfix": "unknown"
+}
