@@ -30,11 +30,11 @@ dependencyResolutionManagement {
 
         val kotlinVersion: String by extra
         val analyzerCommonsVersionStr = "2.3.0.1263"
+        val sonarPluginApi = "9.15.0.435"
 
         create("libs") {
             val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
             val gson = version("gson", "2.9.0")
-            val sonarPluginApi = version("sonarPluginApi", "9.12.0.310")
             val staxmate = version("staxmate", "2.4.0")
 
             library("gson", "com.google.code.gson", "gson").versionRef(gson)
@@ -42,7 +42,7 @@ dependencyResolutionManagement {
             library("sonar-analyzer-commons", "org.sonarsource.analyzer-commons", "sonar-analyzer-commons").versionRef(analyzerCommons)
             library("sonar-analyzer-commons-recognizers", "org.sonarsource.analyzer-commons", "sonar-analyzer-recognizers").versionRef(analyzerCommons)
             library("sonar-performance-measure", "org.sonarsource.analyzer-commons", "sonar-performance-measure").versionRef(analyzerCommons)
-            library("sonar-plugin-api", "org.sonarsource.api.plugin", "sonar-plugin-api").versionRef(sonarPluginApi)
+            library("sonar-plugin-api", "org.sonarsource.api.plugin", "sonar-plugin-api").version(sonarPluginApi)
             library("sonar-regex-parsing", "org.sonarsource.analyzer-commons", "sonar-regex-parsing").versionRef(analyzerCommons)
             library("sonar-xml-parsing", "org.sonarsource.analyzer-commons", "sonar-xml-parsing").versionRef(analyzerCommons)
             library("staxmate", "com.fasterxml.staxmate", "staxmate").versionRef(staxmate)
@@ -74,8 +74,8 @@ dependencyResolutionManagement {
             val mockito = version("mockito", "4.6.1")
             val mockk = version("mockk", "1.12.4")
             val orchestrator = version("orchestrator", "3.40.0.183")
-            val sonarlint = version("sonarlint", "7.0.0.37656")
-            val sonarqube = version("sonarqube", "9.7.1.62043")
+            val sonarlint = version("sonarlint", "8.16.0.67686")
+            val sonarqube = version("sonarqube", "10.0.0.68432")
 
             library("assertj-core", "org.assertj", "assertj-core").versionRef(assertj)
             library("classgraph", "io.github.classgraph", "classgraph").versionRef(classgraph)
@@ -87,6 +87,7 @@ dependencyResolutionManagement {
             library("sonar-analyzer-test-commons", "org.sonarsource.analyzer-commons", "sonar-analyzer-test-commons").versionRef(analyzerCommons)
             library("sonar-orchestrator", "org.sonarsource.orchestrator", "sonar-orchestrator").versionRef(orchestrator)
             library("sonar-plugin-api-impl", "org.sonarsource.sonarqube", "sonar-plugin-api-impl").versionRef(sonarqube)
+            library("sonar-plugin-api-test-fixtures", "org.sonarsource.api.plugin", "sonar-plugin-api-test-fixtures").version(sonarPluginApi)
             library("sonar-ws", "org.sonarsource.sonarqube", "sonar-ws").versionRef(sonarqube)
             library("sonarlint-core", "org.sonarsource.sonarlint.core", "sonarlint-core").versionRef(sonarlint)
         }

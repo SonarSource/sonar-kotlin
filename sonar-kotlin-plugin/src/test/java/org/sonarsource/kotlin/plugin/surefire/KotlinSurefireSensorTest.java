@@ -55,7 +55,7 @@ class KotlinSurefireSensorTest {
     fs.add(kotlinFile);
     context = SensorContextTester.create(new File(""));
     context.setFileSystem(fs);
-    
+
     kotlinResourcesLocator = mock(KotlinResourcesLocator.class);
     when(kotlinResourcesLocator.findResourceByClassName(anyString())).thenAnswer(invocation -> Optional.of(resource((String) invocation.getArguments()[0])));
 
@@ -135,6 +135,7 @@ class KotlinSurefireSensorTest {
 
   @Test
   void shouldSupportLongAttributeValues() throws URISyntaxException {
+    // We don't support file keys with length > 400 characters anymore (SONAR-14584).
     SensorContextTester context = SensorContextTester.create(new File(""));
     collect(context, "/org/sonarsource/kotlin/plugin/surefire/KotlinSurefireSensorTest/should_support_long_attribute_values/");
     assertThat(context.allAnalysisErrors()).isEmpty();
@@ -205,7 +206,7 @@ class KotlinSurefireSensorTest {
     assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_ERRORS).value()).isZero();
     assertThat(context.measure(":org.sonar.Foo", CoreMetrics.SKIPPED_TESTS).value()).isEqualTo(2);
   }
-  
+
   @Test
   void testToStringMethod() {
     assertThat(surefireSensor).hasToString("KotlinSurefireSensor");

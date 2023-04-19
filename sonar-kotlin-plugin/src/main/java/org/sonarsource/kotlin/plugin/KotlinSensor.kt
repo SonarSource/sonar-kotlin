@@ -146,7 +146,7 @@ class KotlinSensor(
             try {
                 nextCache.copyCPDTokensFromPrevious(inputFile)
             } catch (_: IllegalArgumentException) {
-                LOG.trace("Unable to save the CPD tokens of file ${inputFile} for the next analysis.")
+                LOG.trace { "Unable to save the CPD tokens of file $inputFile for the next analysis." }
             }
             true
         } ?: false
@@ -303,7 +303,7 @@ private fun toParseException(action: String, inputFile: InputFile, cause: Throwa
 
 fun environment(sensorContext: SensorContext) = Environment(
     sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
-        sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
+            sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
     determineKotlinLanguageVersion(sensorContext),
     numberOfThreads = determineNumberOfThreadsToUse(sensorContext)
 )
@@ -326,7 +326,7 @@ private fun determineNumberOfThreadsToUse(sensorContext: SensorContext) =
             }
         }
     }.orElse(null).also {
-        LOG.debug("Using ${it ?: "the default amount of"} threads")
+        LOG.debug { "Using ${it ?: "the default amount of"} threads" }
     }
 
 private fun determineKotlinLanguageVersion(sensorContext: SensorContext) =

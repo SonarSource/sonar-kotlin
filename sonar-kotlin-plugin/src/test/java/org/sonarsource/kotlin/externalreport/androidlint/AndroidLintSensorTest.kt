@@ -23,13 +23,13 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import org.slf4j.event.Level
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor
 import org.sonar.api.batch.sensor.issue.ExternalIssue
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rules.RuleType
-import org.sonar.api.utils.log.LogTesterJUnit5
-import org.sonar.api.utils.log.LoggerLevel
+import org.sonar.api.testfixtures.log.LogTesterJUnit5
 import org.sonarsource.kotlin.externalreport.ExternalReportTestUtils
 import org.sonarsource.kotlin.externalreport.ExternalReporting
 import java.io.IOException
@@ -113,7 +113,7 @@ internal class AndroidLintSensorTest {
     fun no_issues_with_invalid_report_path() {
         val externalIssues = executeSensorImporting("invalid-path.txt")
         assertThat(externalIssues).isEmpty()
-        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(LoggerLevel.WARN)))
+        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(Level.WARN)))
             .startsWith("Unable to import Android Lint report file(s):")
             .contains("invalid-path.txt")
             .endsWith("The report file(s) can not be found. Check that the property 'sonar.androidLint.reportPaths' is correctly configured.")
@@ -128,7 +128,7 @@ internal class AndroidLintSensorTest {
     fun no_issues_with_invalid_checkstyle_file() {
         val externalIssues = executeSensorImporting("not-android-lint-file.xml")
         assertThat(externalIssues).isEmpty()
-        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
+        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(Level.ERROR)))
             .startsWith("No issues information will be saved as the report file '")
             .endsWith("not-android-lint-file.xml' can't be read.")
     }
@@ -138,7 +138,7 @@ internal class AndroidLintSensorTest {
     fun no_issues_with_invalid_xml_report() {
         val externalIssues = executeSensorImporting("invalid-file.xml")
         assertThat(externalIssues).isEmpty()
-        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
+        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(Level.ERROR)))
             .startsWith("No issues information will be saved as the report file '")
             .endsWith("invalid-file.xml' can't be read.")
     }
@@ -146,6 +146,8 @@ internal class AndroidLintSensorTest {
     @Test
     @Throws(IOException::class)
     fun issues_when_xml_file_has_errors() {
+        logTester.setLevel(Level.DEBUG)
+
         val externalIssues = executeSensorImporting("lint-results-with-errors.xml")
         assertThat(externalIssues).hasSize(1)
         val first = externalIssues[0]
@@ -156,11 +158,11 @@ internal class AndroidLintSensorTest {
         assertThat(first.severity()).isEqualTo(Severity.MAJOR)
         assertThat(first.primaryLocation().message()).isEqualTo("Unknown rule.")
         assertThat(first.primaryLocation().textRange()).isNull()
-        assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty()
-        assertThat(logTester.logs(LoggerLevel.WARN)).containsExactlyInAnyOrder(
+        assertThat(logTester.logs(Level.ERROR)).isEmpty()
+        assertThat(logTester.logs(Level.WARN)).containsExactlyInAnyOrder(
             "No input file found for unknown-file.xml. No android lint issues will be imported on this file."
         )
-        assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactlyInAnyOrder(
+        assertThat(logTester.logs(Level.DEBUG)).containsExactlyInAnyOrder(
             "Missing information or unsupported file type for id:'', file:'AndroidManifest.xml', message:'Missing rule key.'",
             "Missing information or unsupported file type for id:'UnusedAttribute', file:'binary-file.gif', message:'Valid rule key with binary file.'",
             "Missing information or unsupported file type for id:'UnusedAttribute', file:'', message:'Valid rule key without file path.'",

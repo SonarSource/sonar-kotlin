@@ -23,12 +23,12 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import org.slf4j.event.Level
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor
 import org.sonar.api.batch.sensor.issue.ExternalIssue
 import org.sonar.api.rules.RuleType
-import org.sonar.api.utils.log.LogTesterJUnit5
-import org.sonar.api.utils.log.LoggerLevel
+import org.sonar.api.testfixtures.log.LogTesterJUnit5
 import org.sonarsource.kotlin.externalreport.ExternalReportTestUtils
 import org.sonarsource.kotlin.externalreport.ExternalReporting
 import java.nio.file.Paths
@@ -100,7 +100,7 @@ internal class DetektSensorTest {
         assertThat(fourth.primaryLocation().message()).isEqualTo("Custom rule")
         assertThat(fourth.primaryLocation().textRange()!!.start().line()).isEqualTo(3)
 
-        assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty()
+        assertThat(logTester.logs(Level.ERROR)).isEmpty()
     }
 
     @Test
@@ -114,7 +114,7 @@ internal class DetektSensorTest {
     fun invalid_report_path_triggers_warnings_in_SQ_UI_and_error_log() {
         val externalIssues = executeSensorImporting("invalid-path.txt")
         assertThat(externalIssues).isEmpty()
-        val warnings = logTester.logs(LoggerLevel.WARN)
+        val warnings = logTester.logs(Level.WARN)
         assertThat(warnings)
             .hasSize(1)
             .hasSameSizeAs(analysisWarnings)
@@ -136,10 +136,10 @@ internal class DetektSensorTest {
         detektSensor.execute(context)
         val externalIssues = context.allExternalIssues()
         assertThat(externalIssues).hasSize(4)
-        assertThat(logTester.logs(LoggerLevel.INFO))
+        assertThat(logTester.logs(Level.INFO))
             .hasSize(1)
             .allMatch { info: String -> info.startsWith("Importing") && info.endsWith("detekt-checkstyle.xml") }
-        val warnings = logTester.logs(LoggerLevel.WARN)
+        val warnings = logTester.logs(Level.WARN)
         assertThat(warnings)
             .hasSize(1)
             .hasSameSizeAs(analysisWarnings)
@@ -157,7 +157,7 @@ internal class DetektSensorTest {
     fun no_issues_with_invalid_checkstyle_file() {
         val externalIssues = executeSensorImporting("not-checkstyle-file.xml")
         assertThat(externalIssues).isEmpty()
-        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
+        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(Level.ERROR)))
             .startsWith("No issue information will be saved as the report file '")
             .endsWith("not-checkstyle-file.xml' can't be read.")
     }
@@ -166,13 +166,15 @@ internal class DetektSensorTest {
     fun no_issues_with_invalid_xml_report() {
         val externalIssues = executeSensorImporting("invalid-file.xml")
         assertThat(externalIssues).isEmpty()
-        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
+        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(Level.ERROR)))
             .startsWith("No issue information will be saved as the report file '")
             .endsWith("invalid-file.xml' can't be read.")
     }
 
     @Test
     fun issues_when_xml_file_has_errors() {
+        logTester.setLevel(Level.DEBUG)
+
         val externalIssues = executeSensorImporting("detekt-checkstyle-with-errors.xml")
         assertThat(externalIssues).hasSize(1)
         val first = externalIssues[0]
@@ -182,11 +184,11 @@ internal class DetektSensorTest {
         assertThat(first.severity()).isEqualTo(Severity.MAJOR)
         assertThat(first.primaryLocation().message()).isEqualTo("Error at file level with an unknown rule key.")
         assertThat(first.primaryLocation().textRange()).isNull()
-        assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty()
-        assertThat(logTester.logs(LoggerLevel.WARN)).containsExactlyInAnyOrder(
+        assertThat(logTester.logs(Level.ERROR)).isEmpty()
+        assertThat(logTester.logs(Level.WARN)).containsExactlyInAnyOrder(
             "No input file found for not-existing-file.kt. No detekt issues will be imported on this file."
         )
-        assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactlyInAnyOrder(
+        assertThat(logTester.logs(Level.DEBUG)).containsExactlyInAnyOrder(
             "Unexpected error without any message for rule: 'detekt.EmptyIfBlock'",
             "Unexpected rule key without 'detekt.' suffix: 'invalid-format'"
         )

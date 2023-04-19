@@ -25,7 +25,6 @@ import org.sonar.api.batch.fs.TextPointer
 import org.sonar.api.batch.fs.TextRange
 import org.sonar.api.batch.fs.internal.DefaultTextPointer
 import org.sonar.api.batch.fs.internal.DefaultTextRange
-import java.net.URI
 import java.nio.file.Path
 import kotlin.io.path.absolute
 import kotlin.io.path.isRegularFile
@@ -82,4 +81,8 @@ class DummyInputFile(val path: Path? = null) : InputFile {
     }
 
     override fun charset() = Charsets.UTF_8
+
+    override fun md5Hash(): String {
+        throw UnsupportedOperationException()
+    }
 }
