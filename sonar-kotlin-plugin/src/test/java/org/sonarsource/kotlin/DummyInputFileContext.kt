@@ -25,6 +25,7 @@ import org.sonar.api.batch.fs.TextRange
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.api.InputFileContext
+import org.sonarsource.kotlin.api.Message
 import org.sonarsource.kotlin.api.SecondaryLocation
 
 class DummyInputFileContext : InputFileContext {
@@ -39,7 +40,7 @@ class DummyInputFileContext : InputFileContext {
     override fun reportIssue(
         ruleKey: RuleKey,
         textRange: TextRange?,
-        message: String,
+        message: Message,
         secondaryLocations: List<SecondaryLocation>,
         gap: Double?
     ) {
@@ -59,7 +60,7 @@ class DummyInputFileContext : InputFileContext {
 data class ReportedIssue(
     val ruleKey: RuleKey,
     val textRange: TextRange?,
-    val message: String,
+    val message: Message,
     val secondaryLocations: List<SecondaryLocation>,
     val gap: Double?
 )

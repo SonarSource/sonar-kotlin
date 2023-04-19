@@ -19,27 +19,22 @@
  */
 package org.sonarsource.kotlin.api
 
-import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.TextPointer
-import org.sonar.api.batch.fs.TextRange
-import org.sonar.api.batch.sensor.SensorContext
-import org.sonar.api.rule.RuleKey
+class Message(text: String = "", ranges: List<Pair<Int, Int>> = mutableListOf()) {
+    var text: String = text
+        private set
+    private val _ranges: MutableList<Pair<Int, Int>> = ranges.toMutableList()
 
-interface InputFileContext {
-    var filteredRules: Map<String, Set<TextRange>>
-    val inputFile: InputFile
-    val sensorContext: SensorContext
-    val isAndroid: Boolean
+    val ranges
+        get() = _ranges.toList()
 
-    fun reportIssue(
-        ruleKey: RuleKey,
-        textRange: TextRange?,
-        message: Message,
-        secondaryLocations: List<SecondaryLocation>,
-        gap: Double?,
-    )
+    operator fun String.unaryPlus() {
+        text += this
+    }
 
-    fun reportAnalysisParseError(repositoryKey: String, inputFile: InputFile, location: TextPointer?)
-
-    fun reportAnalysisError(message: String?, location: TextPointer?)
+    fun code(code: String) {
+        _ranges.add(text.length to text.length + code.length)
+        text += code
+    }
 }
+
+fun message(block: Message.() -> Unit) = Message().apply(block)
