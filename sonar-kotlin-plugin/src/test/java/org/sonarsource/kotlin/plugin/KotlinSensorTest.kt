@@ -34,6 +34,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
+import org.slf4j.event.Level
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.CheckFactory
 import org.sonar.api.batch.sensor.SensorContext
@@ -46,7 +47,6 @@ import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.utils.Version
-import org.sonar.api.utils.log.LoggerLevel
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.DummyReadCache
 import org.sonarsource.kotlin.DummyWriteCache
@@ -189,14 +189,14 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     fun `Ensure compiler crashes during BindingContext generation don't crash engine`() {
         context.setCanSkipUnchangedFiles(false)
         executeAnalysisWithInvalidBindingContext()
-        assertThat(logTester.logs(LoggerLevel.ERROR)).containsExactly("Could not generate binding context. Proceeding without semantics.")
+        assertThat(logTester.logs(Level.ERROR)).containsExactly("Could not generate binding context. Proceeding without semantics.")
     }
 
     @Test
     fun `BindingContext generation does not crash when there are no files to analyze`() {
         context.setCanSkipUnchangedFiles(true)
         executeAnalysisWithInvalidBindingContext()
-        assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty()
+        assertThat(logTester.logs(Level.ERROR)).isEmpty()
     }
 
     private fun executeAnalysisWithInvalidBindingContext() {
@@ -219,7 +219,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         every { environment(any()) } returns Environment(listOf("file1.kt"), LanguageVersion.LATEST_STABLE)
 
         mockkStatic("org.sonarsource.kotlin.converter.KotlinCoreEnvironmentToolsKt")
-        every { analyzeAndGetBindingContext(any(),any()) } throws IOException("Boom!")
+        every { analyzeAndGetBindingContext(any(), any()) } throws IOException("Boom!")
 
         val checkFactory = checkFactory("S1764")
         assertDoesNotThrow { sensor(checkFactory).execute(context) }
@@ -263,7 +263,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val textPointer = analysisError.location()
         assertThat(textPointer).isNull()
 
-        assertThat(logTester.logs(LoggerLevel.ERROR)).contains("Cannot read 'file1.kt': Can't read")
+        assertThat(logTester.logs(Level.ERROR)).contains("Cannot read 'file1.kt': Can't read")
     }
 
     @Test
@@ -316,7 +316,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             assertThat(this).hasCause(TestException("This is a test message"))
         }
 
-        assertThat(logTester.logs(LoggerLevel.ERROR))
+        assertThat(logTester.logs(Level.ERROR))
             .containsExactly("Cannot analyse 'file1.kt' with 'KtChecksVisitor': This is a test message")
     }
 
@@ -324,7 +324,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     fun `ensure failFast is not triggering when set to false`() {
         val sensor = failFastSensorWithEnvironmentSetup(false)
         assertDoesNotThrow { sensor.execute(context) }
-        assertThat(logTester.logs(LoggerLevel.ERROR))
+        assertThat(logTester.logs(Level.ERROR))
             .containsExactly("Cannot analyse 'file1.kt' with 'KtChecksVisitor': This is a test message")
     }
 
@@ -332,13 +332,13 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     fun `ensure failFast is not triggered when not set at all`() {
         val sensor = failFastSensorWithEnvironmentSetup(null)
         assertDoesNotThrow { sensor.execute(context) }
-        assertThat(logTester.logs(LoggerLevel.ERROR))
+        assertThat(logTester.logs(Level.ERROR))
             .containsExactly("Cannot analyse 'file1.kt' with 'KtChecksVisitor': This is a test message")
     }
 
     @Test
     fun `not setting the kotlin version analyzer property results in Environment with the default Kotlin version`() {
-        logTester.setLevel(LoggerLevel.DEBUG)
+        logTester.setLevel(Level.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
             every { config() } returns ConfigurationBridge(MapSettings())
@@ -349,14 +349,14 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
         assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
-        assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
+        assertThat(logTester.logs(Level.WARN)).isEmpty()
+        assertThat(logTester.logs(Level.DEBUG))
             .contains("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
     }
 
     @Test
     fun `setting the kotlin version analyzer property to a valid value is reflected in the Environment`() {
-        logTester.setLevel(LoggerLevel.DEBUG)
+        logTester.setLevel(Level.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
             every { config() } returns ConfigurationBridge(MapSettings().apply {
@@ -369,14 +369,14 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val expectedKotlinVersion = LanguageVersion.KOTLIN_1_3
 
         assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
-        assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
+        assertThat(logTester.logs(Level.WARN)).isEmpty()
+        assertThat(logTester.logs(Level.DEBUG))
             .contains("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
     }
 
     @Test
     fun `setting the kotlin version analyzer property to an invalid value results in log message and the default version to be used`() {
-        logTester.setLevel(LoggerLevel.DEBUG)
+        logTester.setLevel(Level.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
             every { config() } returns ConfigurationBridge(MapSettings().apply {
@@ -389,15 +389,15 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
         assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
-        assertThat(logTester.logs(LoggerLevel.WARN))
+        assertThat(logTester.logs(Level.WARN))
             .containsExactly("Failed to find Kotlin version 'foo'. Defaulting to ${expectedKotlinVersion.versionString}")
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
+        assertThat(logTester.logs(Level.DEBUG))
             .contains("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
     }
 
     @Test
     fun `setting the kotlin version analyzer property to whitespaces only results in the default version to be used`() {
-        logTester.setLevel(LoggerLevel.DEBUG)
+        logTester.setLevel(Level.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
             every { config() } returns ConfigurationBridge(MapSettings().apply {
@@ -410,14 +410,14 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
         assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
-        assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
+        assertThat(logTester.logs(Level.WARN)).isEmpty()
+        assertThat(logTester.logs(Level.DEBUG))
             .contains("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
     }
 
     @Test
     fun `not setting the amount of threads to use explicitly will not set anything in the environment`() {
-        logTester.setLevel(LoggerLevel.DEBUG)
+        logTester.setLevel(Level.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
             every { config() } returns ConfigurationBridge(MapSettings())
@@ -426,14 +426,14 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val environment = environment(sensorContext)
 
         assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
-        assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
+        assertThat(logTester.logs(Level.WARN)).isEmpty()
+        assertThat(logTester.logs(Level.DEBUG))
             .contains("Using the default amount of threads")
     }
 
     @Test
     fun `setting the amount of threads to use is reflected in the environment`() {
-        logTester.setLevel(LoggerLevel.DEBUG)
+        logTester.setLevel(Level.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
             every { config() } returns ConfigurationBridge(MapSettings().apply {
@@ -444,14 +444,14 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val environment = environment(sensorContext)
 
         assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isEqualTo(42)
-        assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
+        assertThat(logTester.logs(Level.WARN)).isEmpty()
+        assertThat(logTester.logs(Level.DEBUG))
             .contains("Using 42 threads")
     }
 
     @Test
     fun `setting the amount of threads to use to an invalid integer value produces warning`() {
-        logTester.setLevel(LoggerLevel.DEBUG)
+        logTester.setLevel(Level.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
             every { config() } returns ConfigurationBridge(MapSettings().apply {
@@ -462,15 +462,15 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val environment = environment(sensorContext)
 
         assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
-        assertThat(logTester.logs(LoggerLevel.WARN))
+        assertThat(logTester.logs(Level.WARN))
             .containsExactly("Invalid amount of threads specified for ${KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY}: '0'.")
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
+        assertThat(logTester.logs(Level.DEBUG))
             .contains("Using the default amount of threads")
     }
 
     @Test
     fun `setting the amount of threads to use to an invalid non-integer value produces warning`() {
-        logTester.setLevel(LoggerLevel.DEBUG)
+        logTester.setLevel(Level.DEBUG)
 
         val sensorContext = mockk<SensorContext> {
             every { config() } returns ConfigurationBridge(MapSettings().apply {
@@ -481,9 +481,9 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val environment = environment(sensorContext)
 
         assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
-        assertThat(logTester.logs(LoggerLevel.WARN))
+        assertThat(logTester.logs(Level.WARN))
             .containsExactly("${KotlinPlugin.COMPILER_THREAD_COUNT_PROPERTY} needs to be set to an integer value. Could not interpret 'foo' as integer.")
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
+        assertThat(logTester.logs(Level.DEBUG))
             .contains("Using the default amount of threads")
     }
 
@@ -540,6 +540,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun `the kotlin sensor optimizes analyses in contexts where sonar-kotlin-skipUnchanged is true`() {
+        logTester.setLevel(Level.DEBUG)
         val files = incrementalAnalysisFileSet()
         // Enable analysis property to override skipUnchanged setting
         context.settings().setProperty("sonar.kotlin.skipUnchanged", "true")
@@ -553,7 +554,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         // Disable the cache to make the analysis non-incremental
         context.isCacheEnabled = false
-        logTester.setLevel(LoggerLevel.DEBUG)
+        logTester.setLevel(Level.DEBUG)
 
         assertAnalysisIsNotIncremental(files)
     }
@@ -567,7 +568,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val writeCache = DummyWriteCache(readCache = emptyReadCache)
         context.setPreviousCache(emptyReadCache)
         context.setNextCache(writeCache)
-        logTester.setLevel(LoggerLevel.DEBUG)
+        logTester.setLevel(Level.DEBUG)
 
         assertAnalysisIsNotIncremental(files)
     }
@@ -581,7 +582,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val writeCache = DummyWriteCache(readCache = emptyReadCache)
         context.setPreviousCache(emptyReadCache)
         context.setNextCache(writeCache)
-        logTester.setLevel(LoggerLevel.DEBUG)
+        logTester.setLevel(Level.DEBUG)
 
         // Mock exception throwing when copying the tokens from the cache of the previous analysis to the next one
         val unchangedFile = files[InputFile.Status.SAME]!!
@@ -597,6 +598,8 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun `the kotlin sensor optimizes analysis when the cpd tokens cannot be loaded from the previous cache but cannot be copied to the next cache`() {
+        logTester.setLevel(Level.TRACE)
+
         val files = incrementalAnalysisFileSet()
 
         // Mock exception throwing when copying the tokens from the cache of the previous analysis to the next one
@@ -610,7 +613,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         assertAnalysisIsIncremental(files)
         // Check that the exception has been logged
-        assertThat(logTester.logs(LoggerLevel.TRACE)).contains("Unable to save the CPD tokens of file unchanged.kt for the next analysis.")
+        assertThat(logTester.logs(Level.TRACE)).contains("Unable to save the CPD tokens of file unchanged.kt for the next analysis.")
     }
 
     @Test
@@ -630,6 +633,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun `the kotlin sensor optimizes analyses in contexts where this is appropriate`() {
+        logTester.setLevel(Level.DEBUG)
         val files = incrementalAnalysisFileSet()
         assertAnalysisIsIncremental(files)
     }
@@ -660,18 +664,22 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun `test sensor skips cached files`() {
+        logTester.setLevel(Level.DEBUG)
+
         val files = incrementalAnalysisFileSet()
         assertAnalysisIsIncremental(files)
 
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
+        assertThat(logTester.logs(Level.DEBUG))
             .contains("Content hash cache was initialized")
-        assertThat(logTester.logs(LoggerLevel.INFO))
+        assertThat(logTester.logs(Level.INFO))
             .contains("Only analyzing 2 changed Kotlin files out of 3.")
 
     }
 
     @Test
     fun `hasFileChanged falls back on the InputFile status when cache is disabled`() {
+        logTester.setLevel(Level.DEBUG)
+
         val files = incrementalAnalysisFileSet()
 
         context.isCacheEnabled = false
@@ -684,8 +692,8 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         sensor(checkFactory).execute(context)
 
         // The analysis is not incremental because a disabled cache prevents the reuse of CPD tokens
-        assertThat(logTester.logs(LoggerLevel.DEBUG)).contains("Content hash cache is disabled")
-        assertThat(logTester.logs(LoggerLevel.INFO)).contains("Only analyzing 2 changed Kotlin files out of 2.")
+        assertThat(logTester.logs(Level.DEBUG)).contains("Content hash cache is disabled")
+        assertThat(logTester.logs(Level.INFO)).contains("Only analyzing 2 changed Kotlin files out of 2.")
         verify { unchangedFile.status() }
     }
 
@@ -708,7 +716,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         context.fileSystem().add(sameKeyFile)
         val checkFactory = checkFactory("S1764")
         sensor(checkFactory).execute(context)
-        assertThat(logTester.logs(LoggerLevel.WARN)).contains("Cannot copy key $key from cache as it has already been written")
+        assertThat(logTester.logs(Level.WARN)).contains("Cannot copy key $key from cache as it has already been written")
     }
 
     @Test
@@ -721,7 +729,6 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     private fun assertAnalysisIsIncremental(files: Map<InputFile.Status, InputFile>) {
-        logTester.setLevel(LoggerLevel.DEBUG)
         val addedFile = files[InputFile.Status.ADDED]
         val changedFile = files[InputFile.Status.CHANGED]
         files.values.forEach { context.fileSystem().add(it) }
@@ -746,9 +753,9 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertThat(locationOfSecondIssue.message())
             .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
 
-        assertThat(logTester.logs(LoggerLevel.DEBUG))
+        assertThat(logTester.logs(Level.DEBUG))
             .contains("The Kotlin analyzer is running in a context where it can skip unchanged files.")
-        assertThat(logTester.logs(LoggerLevel.INFO))
+        assertThat(logTester.logs(Level.INFO))
             .contains("Only analyzing 2 changed Kotlin files out of 3.")
     }
 
@@ -826,7 +833,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     private fun populateCacheWithExpectedEntries(files: Iterable<InputFile>, context: SensorContextTester) {
-        val cacheContentBeforeAnalysis = mutableMapOf <String, ByteArray>()
+        val cacheContentBeforeAnalysis = mutableMapOf<String, ByteArray>()
         val messageDigest = MessageDigest.getInstance("MD5")
         files
             .filter { it.status() != InputFile.Status.ADDED }
@@ -850,7 +857,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         }
 
         val previousCache = DummyReadCache(cacheContentBeforeAnalysis)
-        val nextCache = DummyWriteCache(readCache=previousCache)
+        val nextCache = DummyWriteCache(readCache = previousCache)
         context.setPreviousCache(previousCache)
         context.setNextCache(nextCache)
     }
@@ -871,7 +878,7 @@ internal class ExceptionThrowingCheck : AbstractCheck() {
 @Rule(key = "AndroidOnlyRule")
 internal class AndroidOnlyCheck : AbstractCheck() {
     override fun visitNamedFunction(function: KtNamedFunction, kfc: KotlinFileContext) {
-        if(kfc.isInAndroid()) {
+        if (kfc.isInAndroid()) {
             kfc.reportIssue(function.nameIdentifier!!, "Boom!")
         }
     }

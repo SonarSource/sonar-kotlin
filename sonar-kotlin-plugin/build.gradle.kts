@@ -29,6 +29,7 @@ dependencies {
     testImplementation(testLibs.classgraph)
     testImplementation(testLibs.sonar.analyzer.test.commons)
     testImplementation(testLibs.sonar.plugin.api.impl)
+    testImplementation(testLibs.sonar.plugin.api.test.fixtures)
 }
 
 tasks.withType<JavaCompile> {

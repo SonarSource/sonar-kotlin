@@ -25,10 +25,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import org.slf4j.event.Level
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.cache.ReadCache
-import org.sonar.api.utils.log.LogTesterJUnit5
-import org.sonar.api.utils.log.LoggerLevel
+import org.sonar.api.testfixtures.log.LogTesterJUnit5
 import org.sonarsource.kotlin.DummyInputFile
 import org.sonarsource.kotlin.DummyReadCache
 import org.sonarsource.kotlin.DummyWriteCache
@@ -90,7 +90,7 @@ class CachingTest {
         assertThat(writeCache.storeCPDTokens(file, tokens)).isEqualTo(key)
         assertThat(writeCache.cache).hasSize(1)
 
-        val logs = logTester.getLogs(LoggerLevel.WARN).map { it.rawMsg }
+        val logs = logTester.getLogs(Level.WARN).map { it.rawMsg }
         assertThat(logs)
             .contains("Could not write CPD tokens under key $key in cache.")
     }
@@ -120,7 +120,7 @@ class CachingTest {
         assertThatThrownBy { (writeCache.copyCPDTokensFromPrevious(file)) }
             .isExactlyInstanceOf(IllegalArgumentException::class.java)
 
-        val logs = logTester.getLogs(LoggerLevel.WARN).map { it.rawMsg }
+        val logs = logTester.getLogs(Level.WARN).map { it.rawMsg }
         assertThat(logs)
             .contains("Could not copy CPD tokens from previous analysis for key $key.")
     }
@@ -143,8 +143,10 @@ class CachingTest {
 
     @Test
     fun `deserialize returns an empty list when trying to deserialize an empty byte array`() {
+        logTester.setLevel(Level.TRACE)
+
         assertThat(deserialize(file, ByteArray(0))).isEmpty()
-        val logs = logTester.getLogs(LoggerLevel.TRACE).map { it.formattedMsg }
+        val logs = logTester.getLogs(Level.TRACE).map { it.formattedMsg }
         assertThat(logs).contains("0 out of 1 CPD token(s) were successfully deserialized for file MyFile.kt.")
     }
 
@@ -183,7 +185,7 @@ class CachingTest {
 
         assertThat(deserialize(mockInputFile, "1,1,1,10,fun foo(){".encodeToByteArray())).isEmpty()
 
-        val logs = logTester.getLogs(LoggerLevel.WARN).map { it.formattedMsg }
+        val logs = logTester.getLogs(Level.WARN).map { it.formattedMsg }
 
         assertThat(logs).contains("An unexpected RuntimeException was caught when trying to deserialize a CPD token of MyMockedFile.kt: A fake exception for testing purposes")
     }

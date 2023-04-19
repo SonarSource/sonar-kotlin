@@ -30,14 +30,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.Severity;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.ExternalIssue;
 import org.sonar.api.rules.RuleType;
-import org.sonar.api.utils.log.LogTesterJUnit5;
-import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,7 +82,7 @@ class CheckstyleFormatImporterTest {
     assertThat(third.primaryLocation().message()).isEqualTo("A class should always override hashCode when overriding equals and the other way around.");
     assertThat(third.primaryLocation().textRange().start().line()).isEqualTo(3);
 
-    assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
+    assertThat(logTester.logs(Level.ERROR)).isEmpty();
   }
 
   @Test
@@ -98,7 +98,7 @@ class CheckstyleFormatImporterTest {
     assertThat(first.primaryLocation().message()).isEqualTo("`three` is unused");
     assertThat(first.primaryLocation().textRange().start().line()).isEqualTo(4);
 
-    assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
+    assertThat(logTester.logs(Level.ERROR)).isEmpty();
   }
 
   @ParameterizedTest
@@ -110,13 +110,15 @@ class CheckstyleFormatImporterTest {
   void no_issues_for_file_with_path(String file) throws IOException {
     List<ExternalIssue> externalIssues = importIssues(file);
     assertThat(externalIssues).isEmpty();
-    assertThat(onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
+    assertThat(onlyOneLogElement(logTester.logs(Level.ERROR)))
       .startsWith("No issue information will be saved as the report file '")
       .endsWith(file + "' can't be read.");
   }
 
   @Test
   void issues_when_xml_file_has_errors() throws IOException {
+    logTester.setLevel(Level.DEBUG);
+
     List<ExternalIssue> externalIssues = importIssues("detekt-checkstyle-with-errors.xml");
     assertThat(externalIssues).hasSize(2);
 
@@ -128,10 +130,10 @@ class CheckstyleFormatImporterTest {
     assertThat(first.primaryLocation().message()).isEqualTo("Error at file level with an unknown rule key.");
     assertThat(first.primaryLocation().textRange()).isNull();
 
-    assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty();
-    assertThat(logTester.logs(LoggerLevel.WARN)).containsExactlyInAnyOrder(
+    assertThat(logTester.logs(Level.ERROR)).isEmpty();
+    assertThat(logTester.logs(Level.WARN)).containsExactlyInAnyOrder(
       "No input file found for not-existing-file.kt. No test-linter issues will be imported on this file.");
-    assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactlyInAnyOrder(
+    assertThat(logTester.logs(Level.DEBUG)).containsExactlyInAnyOrder(
       "Unexpected error without any message for rule: 'detekt.EmptyIfBlock'");
   }
 

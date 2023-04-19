@@ -25,12 +25,12 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import org.slf4j.event.Level
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor
 import org.sonar.api.batch.sensor.issue.ExternalIssue
 import org.sonar.api.rules.RuleType
-import org.sonar.api.utils.log.LogTesterJUnit5
-import org.sonar.api.utils.log.LoggerLevel
+import org.sonar.api.testfixtures.log.LogTesterJUnit5
 import org.sonarsource.kotlin.externalreport.ExternalReportTestUtils
 import java.nio.file.Paths
 
@@ -107,7 +107,7 @@ class KtlintSensorTest {
         assertThat(fifth.primaryLocation().message()).isEqualTo("""Custom rule""")
         assertThat(fifth.primaryLocation().textRange()!!.start().line()).isEqualTo(8)
 
-        assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty()
+        assertThat(logTester.logs(Level.ERROR)).isEmpty()
     }
 
     @Test
@@ -121,7 +121,7 @@ class KtlintSensorTest {
     fun `invalid report path triggers warnings in SQ UI and error log`() {
         val externalIssues = executeSensorImporting("invalid-path.txt")
         assertThat(externalIssues).isEmpty()
-        val warnings = logTester.logs(LoggerLevel.WARN)
+        val warnings = logTester.logs(Level.WARN)
         assertThat(warnings)
             .hasSize(1)
             .hasSameSizeAs(analysisWarnings)
@@ -145,10 +145,10 @@ class KtlintSensorTest {
         ktlintSensor.execute(context)
         val externalIssues = context.allExternalIssues()
         assertThat(externalIssues).hasSize(5)
-        assertThat(logTester.logs(LoggerLevel.INFO))
+        assertThat(logTester.logs(Level.INFO))
             .hasSize(1)
             .allMatch { info: String -> info.startsWith("Importing") && info.endsWith("foo-report.xml") }
-        val warnings = logTester.logs(LoggerLevel.WARN)
+        val warnings = logTester.logs(Level.WARN)
         assertThat(warnings)
             .hasSize(1)
             .hasSameSizeAs(analysisWarnings)
@@ -166,7 +166,7 @@ class KtlintSensorTest {
     fun `no issues with invalid checkstyle file`() {
         val externalIssues = executeSensorImporting("invalid-checkstyle-file.xml")
         assertThat(externalIssues).isEmpty()
-        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
+        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(Level.ERROR)))
             .startsWith("No issue information will be saved as the report file '")
             .endsWith("invalid-checkstyle-file.xml' can't be read.")
     }
@@ -176,7 +176,7 @@ class KtlintSensorTest {
     fun `no issues with invalid JSON file`(fileName: String) {
         val externalIssues = executeSensorImporting(fileName)
         assertThat(externalIssues).isEmpty()
-        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
+        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(Level.ERROR)))
             .startsWith("No issue information will be saved as the report file '")
             .contains("$fileName' cannot be read. JSON parsing failed: JsonSyntaxException (java.lang.IllegalStateException:")
     }
@@ -185,7 +185,7 @@ class KtlintSensorTest {
     fun `no issues with invalid file extension`() {
         val externalIssues = executeSensorImporting("invalid-report-format.bin")
         assertThat(externalIssues).isEmpty()
-        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
+        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(Level.ERROR)))
             .startsWith("The ktlint report file '")
             .endsWith("invalid-report-format.bin' has an unsupported extension/format. Expected 'json' or 'xml', got 'bin'.")
     }
@@ -194,19 +194,21 @@ class KtlintSensorTest {
     fun `no issues with invalid xml report`() {
         val externalIssues = executeSensorImporting("invalid-file.xml")
         assertThat(externalIssues).isEmpty()
-        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(LoggerLevel.ERROR)))
+        assertThat(ExternalReportTestUtils.onlyOneLogElement(logTester.logs(Level.ERROR)))
             .startsWith("No issue information will be saved as the report file '")
             .endsWith("invalid-file.xml' can't be read.")
     }
 
     @Test
     fun `issues when checkstyle report file has errors`() {
+        logTester.setLevel(Level.DEBUG)
+
         val externalIssues = executeSensorImporting("foo-report-with-errors.xml")
         assertThat(externalIssues).hasSize(4)
-        assertThat(logTester.logs(LoggerLevel.WARN)).containsExactlyInAnyOrder(
+        assertThat(logTester.logs(Level.WARN)).containsExactlyInAnyOrder(
             "No input file found for non-existent-file.kt. No ktlint issues will be imported on this file."
         )
-        assertThat(logTester.logs(LoggerLevel.DEBUG)).containsExactlyInAnyOrder(
+        assertThat(logTester.logs(Level.DEBUG)).containsExactlyInAnyOrder(
             "Unexpected error without any message for rule: ''",
             "Unexpected error without any message for rule: 'some-rule-key'"
         )

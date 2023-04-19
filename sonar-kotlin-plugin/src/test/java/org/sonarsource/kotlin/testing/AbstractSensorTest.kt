@@ -34,7 +34,7 @@ import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.FileLinesContext
 import org.sonar.api.measures.FileLinesContextFactory
 import org.sonar.api.rule.RuleKey
-import org.sonar.api.utils.log.LogTesterJUnit5
+import org.sonar.api.testfixtures.log.LogTesterJUnit5
 import org.sonarsource.kotlin.plugin.KotlinLanguage
 import org.sonarsource.kotlin.plugin.KotlinPlugin
 import java.nio.charset.StandardCharsets

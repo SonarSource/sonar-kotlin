@@ -25,11 +25,11 @@ import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.api.io.TempDir
+import org.slf4j.event.Level
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.cpd.internal.TokensLine
 import org.sonar.api.batch.sensor.internal.SensorContextTester
-import org.sonar.api.utils.log.LogTesterJUnit5
-import org.sonar.api.utils.log.LoggerLevel
+import org.sonar.api.testfixtures.log.LogTesterJUnit5
 import org.sonarsource.kotlin.DummyReadCache
 import org.sonarsource.kotlin.DummyWriteCache
 import org.sonarsource.kotlin.converter.Environment
@@ -115,6 +115,8 @@ class CopyPasteDetectorTest {
 
     @Test
     fun `cpd tokens are saved for the next analysis when the cache is enabled`() {
+        logTester.setLevel(Level.TRACE)
+
         val tmpFile = tmpFolder!!.resolve("dummy.kt").createFile()
 
         val sensorContext: SensorContextTester = SensorContextTester.create(tmpFolder!!.root)
@@ -136,7 +138,7 @@ class CopyPasteDetectorTest {
         Assertions.assertThat(writeCache.cache)
             .hasSize(1)
 
-        val logs = logTester.getLogs(LoggerLevel.TRACE).map { it.rawMsg }
+        val logs = logTester.getLogs(Level.TRACE).map { it.rawMsg }
 
         Assertions.assertThat(logs)
             .hasSize(1)
@@ -145,6 +147,8 @@ class CopyPasteDetectorTest {
 
     @Test
     fun `cpd tokens are not saved for the next analysis when the cache is disabled`() {
+        logTester.setLevel(Level.TRACE)
+
         val tmpFile = tmpFolder!!.resolve("dummy.kt").createFile()
 
         val sensorContext: SensorContextTester = SensorContextTester.create(tmpFolder!!.root)
@@ -165,7 +169,7 @@ class CopyPasteDetectorTest {
         CopyPasteDetector().scan(ctx, root)
         Assertions.assertThat(writeCache.cache).isEmpty()
 
-        val logs = logTester.getLogs(LoggerLevel.TRACE).map { it.rawMsg }
+        val logs = logTester.getLogs(Level.TRACE).map { it.rawMsg }
 
         Assertions.assertThat(logs)
             .hasSize(1)
