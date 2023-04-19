@@ -23,8 +23,11 @@ import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.TextPointer
 import org.sonar.api.batch.fs.TextRange
 import org.sonar.api.batch.sensor.SensorContext
+import org.sonar.api.batch.sensor.issue.MessageFormatting
+import org.sonar.api.batch.sensor.issue.NewIssueLocation
 import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.api.InputFileContext
+import org.sonarsource.kotlin.api.Message
 import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.converter.KotlinTextRanges.contains
 
@@ -41,7 +44,7 @@ class InputFileContextImpl(
     override fun reportIssue(
         ruleKey: RuleKey,
         textRange: TextRange?,
-        message: String,
+        message: Message,
         secondaryLocations: List<SecondaryLocation>,
         gap: Double?,
     ) {
@@ -72,6 +75,20 @@ class InputFileContextImpl(
 
             save()
         }
+    }
+
+    private fun NewIssueLocation.message(message: Message): NewIssueLocation {
+        val formatting = message.ranges.map { (start, end) ->
+            newMessageFormatting().apply {
+                start(start)
+                end(end)
+                type(MessageFormatting.Type.CODE)
+            }
+        }
+
+        message(message.text, formatting)
+
+        return this
     }
 
     override fun reportAnalysisParseError(repositoryKey: String, inputFile: InputFile, location: TextPointer?) {

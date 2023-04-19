@@ -28,6 +28,7 @@ import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
 import org.sonarsource.kotlin.DummyInputFile
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.InputFileContext
+import org.sonarsource.kotlin.api.Message
 import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.converter.KotlinTextRanges.contains
 import org.sonarsource.kotlin.converter.KotlinTree
@@ -53,7 +54,7 @@ internal class TestContext(
     override fun reportIssue(
         ruleKey: RuleKey,
         textRange: TextRange?,
-        message: String,
+        message: Message,
         secondaryLocations: List<SecondaryLocation>,
         gap: Double?,
     ) {
@@ -67,9 +68,9 @@ internal class TestContext(
         val issue = textRange?.let {
             val start = textRange.start()
             val end = textRange.end()
-            verifier.reportIssue(message)
+            verifier.reportIssue(message.asStringWithBackticks())
                 .onRange(start.line(), start.lineOffset() + 1, end.line(), end.lineOffset())
-        } ?: verifier.reportIssue(message).onFile()
+        } ?: verifier.reportIssue(message.asStringWithBackticks()).onFile()
         issue.withGap(gap)
         secondaryLocations.forEach(Consumer { secondary: SecondaryLocation ->
             issue.addSecondary(
@@ -77,7 +78,8 @@ internal class TestContext(
                 secondary.textRange.start().lineOffset() + 1,
                 secondary.textRange.end().line(),
                 secondary.textRange.end().lineOffset(),
-                secondary.message)
+                secondary.message
+            )
         })
     }
 
@@ -88,4 +90,19 @@ internal class TestContext(
     override fun reportAnalysisError(message: String?, location: TextPointer?) {
         throw NotImplementedError()
     }
+}
+
+/**
+ * For easier testing, we format messages such that code is wrapped with backticks
+ */
+private fun Message.asStringWithBackticks(): String {
+    var subStringStart = 0
+    val formatted = ranges.sortedBy { it.first }
+        .flatMap { (first, second) -> sequenceOf(first, second) }
+        .fold("") { acc, index ->
+            val newAcc = (acc + (text.substring(subStringStart, index))) + '`'
+            subStringStart = index
+            newAcc
+        }
+    return formatted + text.substring(subStringStart)
 }

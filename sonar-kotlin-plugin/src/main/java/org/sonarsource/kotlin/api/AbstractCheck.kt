@@ -60,15 +60,29 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
      */
     internal fun KotlinFileContext.reportIssue(
         textRange: TextRange? = null,
-        message: String,
+        message: Message,
         secondaryLocations: List<SecondaryLocation> = emptyList(),
         gap: Double? = null,
     ) = inputFileContext.reportIssue(ruleKey, textRange, message, secondaryLocations, gap)
+
+    internal fun KotlinFileContext.reportIssue(
+        textRange: TextRange? = null,
+        message: String,
+        secondaryLocations: List<SecondaryLocation> = emptyList(),
+        gap: Double? = null,
+    ) = reportIssue(textRange, Message(message), secondaryLocations, gap)
 
     internal fun KotlinFileContext.locationListOf(vararg nodesForSecondaryLocations: Pair<PsiElement, String>) =
         nodesForSecondaryLocations.map { (psiElement, msg) ->
             SecondaryLocation(textRange(psiElement), msg)
         }
+
+    internal fun KotlinFileContext.reportIssue(
+        psiElement: PsiElement,
+        message: Message,
+        secondaryLocations: List<SecondaryLocation> = emptyList(),
+        gap: Double? = null,
+    ) = reportIssue(textRange(psiElement), message, secondaryLocations, gap)
 
     internal fun KotlinFileContext.reportIssue(
         psiElement: PsiElement,
