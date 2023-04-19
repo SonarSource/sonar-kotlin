@@ -1,0 +1,15 @@
+{
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6207",
+  "sqKey": "S6207",
+  "scope": "Main",
+  "quickfix": "unknown",
+  "title": "Redundant methods should be avoided in data classes"
+}
