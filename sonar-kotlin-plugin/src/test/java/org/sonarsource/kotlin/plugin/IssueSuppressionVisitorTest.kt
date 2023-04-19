@@ -26,15 +26,14 @@ import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.checks.BadClassNameCheck
 import org.sonarsource.kotlin.checks.BadFunctionNameCheck
+import org.sonarsource.kotlin.checks.DeprecatedCodeUsedCheck
 import org.sonarsource.kotlin.checks.TooManyCasesCheck
 import org.sonarsource.kotlin.checks.UnusedLocalVariableCheck
 import org.sonarsource.kotlin.checks.VariableAndParameterNameCheck
 import org.sonarsource.kotlin.converter.Comment
 import org.sonarsource.kotlin.converter.CommentAnnotationsAndTokenVisitor
 import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.utils.kotlinTreeOf
-import org.sonarsource.kotlin.verifier.KotlinVerifier
 import org.sonarsource.kotlin.verifier.TestContext
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -54,10 +53,10 @@ class IssueSuppressionVisitorTest {
     }
 
     private fun scanWithSuppression(path: Path) =
-        scanFile(path, true, BadClassNameCheck(), BadFunctionNameCheck(), VariableAndParameterNameCheck(), UnusedLocalVariableCheck(), TooManyCasesCheck())
+        scanFile(path, true, BadClassNameCheck(), BadFunctionNameCheck(), VariableAndParameterNameCheck(), UnusedLocalVariableCheck(), TooManyCasesCheck(), DeprecatedCodeUsedCheck())
 
     private fun scanWithoutSuppression(path: Path) =
-        scanFile(path, false, BadClassNameCheck(), BadFunctionNameCheck(), VariableAndParameterNameCheck(), UnusedLocalVariableCheck(), TooManyCasesCheck())
+        scanFile(path, false, BadClassNameCheck(), BadFunctionNameCheck(), VariableAndParameterNameCheck(), UnusedLocalVariableCheck(), TooManyCasesCheck(), DeprecatedCodeUsedCheck())
 
     private fun scanFile(path: Path, suppress: Boolean, check: AbstractCheck, vararg checks: AbstractCheck): SingleFileVerifier {
         val env = Environment(DEFAULT_KOTLIN_CLASSPATH, LanguageVersion.LATEST_STABLE)

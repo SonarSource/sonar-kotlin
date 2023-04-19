@@ -20,9 +20,11 @@
 package org.sonarsource.kotlin.checks.testing
 
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
+@Rule(key = "Dummy")
 class DummyKotlinCheck : AbstractCheck() {
     override fun visitNamedFunction(node: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         kotlinFileContext.reportIssue(psiElement = node, message = "Hello World!")

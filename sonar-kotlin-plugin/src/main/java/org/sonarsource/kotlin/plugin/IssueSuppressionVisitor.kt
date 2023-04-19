@@ -38,7 +38,8 @@ private val COMPILER_KEY_TO_SONAR_KEYS = mapOf(
     "UNUSED_PARAMETER" to sequenceOf("kotlin:S1172"),
     "UNUSED_VARIABLE" to sequenceOf("kotlin:S1481"),
     "UNUSED" to sequenceOf("kotlin:S1172", "kotlin:S1481"),
-    "TOO_MANY_ARGUMENTS" to sequenceOf("kotlin:S107")
+    "TOO_MANY_ARGUMENTS" to sequenceOf("kotlin:S107"),
+    "DEPRECATION" to sequenceOf("kotlin:S1874"),
 )
 
 class IssueSuppressionVisitor : KotlinFileVisitor() {
