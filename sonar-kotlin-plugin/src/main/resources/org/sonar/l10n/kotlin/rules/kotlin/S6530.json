@@ -1,0 +1,15 @@
+{
+  "title": "Type casts and type checks that can never succeed should be removed",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6530",
+  "sqKey": "S6530",
+  "scope": "All",
+  "quickfix": "unknown"
+}
