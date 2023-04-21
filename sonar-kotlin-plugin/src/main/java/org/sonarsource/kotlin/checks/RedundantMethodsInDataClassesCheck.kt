@@ -62,8 +62,8 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
 
         klass.body?.functions?.forEach {
             when {
-                hashCodeMethod == null && hashCodeMatcher.matches(it, context.bindingContext) -> hashCodeMethod = it
-                equalsMethod == null && equalsMatcher.matches(it, context.bindingContext) -> equalsMethod = it
+                equalsMatcher.matches(it, context.bindingContext) -> equalsMethod = it
+                hashCodeMatcher.matches(it, context.bindingContext) -> hashCodeMethod = it
             }
         }
 
@@ -83,17 +83,17 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
     private fun KtNamedFunction.hashCodeHasDefaultImpl(klassParameters: List<KtParameter>): Boolean {
         val hashExpression =
             this.findDescendantOfType<KtCallExpression> { (it.calleeExpression as KtNameReferenceExpression).getReferencedName() == "hash" }
-        val valueArguments = hashExpression?.valueArgumentList?.collectDescendantsOfType<KtNameReferenceExpression>() ?: return false
-        if (klassParameters.size != valueArguments.size) {
+        val arguments = hashExpression?.valueArgumentList?.collectDescendantsOfType<KtNameReferenceExpression>() ?: return false
+        if (klassParameters.size != arguments.size) {
             return false
         }
-        valueArguments.forEach { findParameter(it, klassParameters) ?: return false }
+        arguments.forEach { findParameter(it, klassParameters) ?: return false }
         return true
     }
 
     private fun KtNamedFunction.equalsHasDefaultImpl(
         klassParameters: List<KtParameter>,
-        valueParameters: MutableList<KtParameter>,
+        methodParameters: MutableList<KtParameter>,
     ): Boolean {
         val equalsExpressions = this.collectDescendantsOfType<KtBinaryExpression> { it.operationToken == KtTokens.EQEQ }
         if (equalsExpressions.size != klassParameters.size) {
@@ -107,8 +107,8 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
         equalsExpressions.forEach {
             val left = it.left
             val right = it.right
-            checkExpression(left, right, klassParameters, valueParameters, map)
-            checkExpression(right, left, klassParameters, valueParameters, map)
+            checkExpression(left, right, klassParameters, methodParameters, map)
+            checkExpression(right, left, klassParameters, methodParameters, map)
         }
         return !map.values.contains(false)
     }
@@ -117,12 +117,12 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
         first: KtExpression?,
         second: KtExpression?,
         klassParameters: List<KtParameter>,
-        valueParameters: MutableList<KtParameter>,
+        methodParameters: MutableList<KtParameter>,
         map: MutableMap<KtParameter, Boolean>,
     ) {
         val parameter = findParameter(first, klassParameters) ?: return
         when {
-            checkDotExpression(second, parameter, valueParameters) -> {
+            checkDotExpression(second, parameter, methodParameters) -> {
                 map[parameter] = true
             }
         }
@@ -140,12 +140,12 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
 
     private fun checkDotExpression(
         expression: KtExpression?,
-        parameter: KtParameter,
-        valueParameters: MutableList<KtParameter>,
+        klassParameter: KtParameter,
+        methodParameters: MutableList<KtParameter>,
     ): Boolean {
         if (expression is KtDotQualifiedExpression) {
-            return ((expression.receiverExpression as KtNameReferenceExpression).getReferencedName() == valueParameters[0].name
-                && (expression.selectorExpression as KtNameReferenceExpression).getReferencedName() == parameter.name)
+            return ((expression.receiverExpression as KtNameReferenceExpression).getReferencedName() == methodParameters[0].name
+                && (expression.selectorExpression as KtNameReferenceExpression).getReferencedName() == klassParameter.name)
         }
         return false
     }
