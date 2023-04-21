@@ -83,7 +83,7 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
     private fun KtNamedFunction.hashCodeHasDefaultImpl(klassParameters: List<KtParameter>): Boolean {
         val hashExpression =
             this.findDescendantOfType<KtCallExpression> { (it.calleeExpression as KtNameReferenceExpression).getReferencedName() == "hash" }
-        val arguments = hashExpression?.valueArgumentList?.collectDescendantsOfType<KtNameReferenceExpression>() ?: return false
+        val arguments = hashExpression!!.valueArgumentList?.collectDescendantsOfType<KtNameReferenceExpression>() ?: return false
         if (klassParameters.size != arguments.size) {
             return false
         }
