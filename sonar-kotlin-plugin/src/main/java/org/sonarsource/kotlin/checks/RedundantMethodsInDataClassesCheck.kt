@@ -56,7 +56,7 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
         if (!klass.isData()) {
             return
         }
-        val klassParameters = klass.primaryConstructor?.valueParameters ?: return
+        val klassParameters = klass.primaryConstructor!!.valueParameters
         var equalsMethod: KtNamedFunction? = null
         var hashCodeMethod: KtNamedFunction? = null
 
@@ -78,7 +78,6 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
                 context.reportIssue(it, issueMessage)
             }
         }
-
     }
 
     private fun KtNamedFunction.hashCodeHasDefaultImpl(klassParameters: List<KtParameter>): Boolean {
@@ -145,8 +144,8 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
         valueParameters: MutableList<KtParameter>,
     ): Boolean {
         if (expression is KtDotQualifiedExpression) {
-            return ((expression.receiverExpression as? KtNameReferenceExpression)?.getReferencedName() == valueParameters[0].name
-                && (expression.selectorExpression as? KtNameReferenceExpression)?.getReferencedName() == parameter.name)
+            return ((expression.receiverExpression as KtNameReferenceExpression).getReferencedName() == valueParameters[0].name
+                && (expression.selectorExpression as KtNameReferenceExpression).getReferencedName() == parameter.name)
         }
         return false
     }

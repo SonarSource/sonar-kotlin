@@ -1,8 +1,9 @@
 package checks
 
-import java.util.*
+import java.util.Objects
 
 class RedundantMethodsInDataClassesCheckSample {
+
     data class Person1(val name: String, val age: Int) {
         override fun equals(other: Any?): Boolean { // Noncompliant
             return other is Person1 && other.name == name && other.age == age
@@ -36,4 +37,41 @@ class RedundantMethodsInDataClassesCheckSample {
 
         override fun hashCode() = Objects.hash(age, name) // Noncompliant
     }
+
+    data class Person6(val name: String, val age: Int) {
+        override fun equals(other: Any?): Boolean { // Compliant
+            return other is Person6 && other.name == name && age.dec() == age
+        }
+
+        override fun hashCode() = Objects.hash(name.lowercase(), age.dec()) // Compliant
+    }
+
+    data class Person7(val name: String, val age: Int) {
+        override fun equals(other: Any?): Boolean { // Compliant
+            return other is Person7 && other.name == name
+        }
+
+        override fun hashCode() = Objects.hash(4) // Compliant
+    }
+
+    data class Person8(val name: String, val age: Int) {
+        val a = 5
+    }
+
+    data class Person9(val name: String, val age: Int) { // Compliant
+        fun equals(other: Any?, a: Int, b: Int): Boolean { // Compliant
+            return other is Person7 && other.name == name
+        }
+
+        fun hashCode(a: Int) = Objects.hash(4) // Compliant
+    }
+
+    data class Person10(val name: String, val age: Int) {
+        override fun equals(other: Any?): Boolean { // Compliant
+            return other is Person10 && age == 2 && name.lowercase().uppercase() == other.name
+        }
+
+        override fun hashCode() = Objects.hash(name.lowercase(), age.dec()) // Compliant
+    }
+
 }
