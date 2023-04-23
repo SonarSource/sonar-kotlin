@@ -84,7 +84,7 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
         val hashExpression =
             this.findDescendantOfType<KtCallExpression> { (it.calleeExpression as KtNameReferenceExpression).getReferencedName() == "hash" }
         // hash expression in this case is always not null
-        val arguments = hashExpression!!.valueArgumentList?.collectDescendantsOfType<KtNameReferenceExpression>() ?: return false
+        val arguments = hashExpression?.valueArgumentList?.collectDescendantsOfType<KtNameReferenceExpression>() ?: return false
         if (klassParameters.size != arguments.size) {
             return false
         }
