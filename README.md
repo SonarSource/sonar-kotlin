@@ -37,9 +37,10 @@ which are used as input:
 Then you need to build Ktor project:
 
     cd its/sources/kotlin/ktor
-    ./gradlew assemble
 
-Go back to the project root directory. Then build and run the Integration Tests using the `its` property:
+Follow the instructions to [build the project](https://github.com/ktorio/ktor/blob/main/CONTRIBUTING.md#building-the-project) and go back to the project root directory.
+
+Then build and run the Integration Tests using the `its` property:
 
     ./gradlew build -Pits --info --console=plain --no-daemon
 
