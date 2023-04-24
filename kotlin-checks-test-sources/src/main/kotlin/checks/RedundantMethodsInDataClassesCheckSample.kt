@@ -5,11 +5,13 @@ import java.util.Objects
 class RedundantMethodsInDataClassesCheckSample {
 
     data class Person1(val name: String, val age: Int) {
-        override fun equals(other: Any?): Boolean { // Noncompliant
+        override fun equals(other: Any?): Boolean { // Noncompliant {{Remove this redundant method which is the same as a default one.}}
+//                   ^^^^^^
             return other is Person1 && other.name == name && other.age == age
         }
 
-        override fun hashCode() = Objects.hash(name, age) // Noncompliant
+        override fun hashCode() = Objects.hash(name, age) // Noncompliant {{Remove this redundant method which is the same as a default one.}}
+//                   ^^^^^^^^
     }
 
     data class Person2(val name: String, val age: Int) // Compliant

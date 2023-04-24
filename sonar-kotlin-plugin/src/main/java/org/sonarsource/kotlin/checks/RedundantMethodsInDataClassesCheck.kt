@@ -69,13 +69,13 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
 
         equalsMethod?.let {
             if (it.equalsHasDefaultImpl(klassParameters, it.valueParameters)) {
-                context.reportIssue(it, issueMessage)
+                context.reportIssue(it.nameIdentifier!!, issueMessage)
             }
         }
 
         hashCodeMethod?.let {
             if (it.hashCodeHasDefaultImpl(klassParameters)) {
-                context.reportIssue(it, issueMessage)
+                context.reportIssue(it.nameIdentifier!!, issueMessage)
             }
         }
     }
