@@ -47,6 +47,17 @@ class SingletonPatternCheckSample {
         }
     }
 
+    class Tripleton private constructor() {
+
+        companion object {
+            val instance1 = Tripleton() // Compliant, not a singleton
+            val instance2 by lazy {
+                Tripleton() // Compliant, not a singleton
+            }
+            val instance3 = Tripleton() // Compliant, not a singleton
+        }
+    }
+
     class PublicConstructor constructor() {
 
         companion object {
@@ -117,6 +128,10 @@ class SingletonPatternCheckSample {
     }
 
 }
+
+private class TldSingletonInstance constructor()
+
+private val tldSingletonInstance = TldSingletonInstance() // Noncompliant {{Singleton pattern should use object declarations or expressions}}
 
 fun foo(): String = TODO()
 
