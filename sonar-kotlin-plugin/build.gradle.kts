@@ -3,6 +3,9 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.jar.JarInputStream
 
+repositories {
+    maven { url = uri("https://repo.gradle.org/gradle/libs-releases") }
+}
 
 plugins {
     id("com.github.johnrengelman.shadow") version "7.1.0"
@@ -19,6 +22,7 @@ dependencies {
     implementation(libs.staxmate)
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
+    implementation(libs.gradle.tooling.api)
 
     testImplementation(testLibs.junit.api)
     testImplementation(testLibs.junit.params)

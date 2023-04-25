@@ -19,8 +19,11 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import org.gradle.tooling.GradleConnector
+import org.gradle.tooling.model.kotlin.dsl.KotlinDslScriptsModel
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.api.SonarProduct
 import org.sonar.api.batch.fs.FileSystem
@@ -39,10 +42,7 @@ import org.sonarsource.kotlin.api.InputFileContext
 import org.sonarsource.kotlin.api.ParseException
 import org.sonarsource.kotlin.api.hasCacheEnabled
 import org.sonarsource.kotlin.api.regex.RegexCache
-import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.KotlinSyntaxStructure
-import org.sonarsource.kotlin.converter.KotlinTree
-import org.sonarsource.kotlin.converter.bindingContext
+import org.sonarsource.kotlin.converter.*
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.COMPILER_THREAD_COUNT_PROPERTY
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.DEFAULT_KOTLIN_LANGUAGE_VERSION
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.FAIL_FAST_PROPERTY_NAME
@@ -60,6 +60,7 @@ import org.sonarsource.kotlin.plugin.cpd.loadCPDTokens
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
 import org.sonarsource.performance.measure.PerformanceMeasure
+import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.jvm.optionals.getOrElse
 import kotlin.time.ExperimentalTime
@@ -89,6 +90,31 @@ class KotlinSensor(
     override fun execute(sensorContext: SensorContext) {
         val sensorDuration = createPerformanceMeasureReport(sensorContext)
         val fileSystem: FileSystem = sensorContext.fileSystem()
+
+        val projectConnection = GradleConnector.newConnector()
+            //.forProjectDirectory(File("/Users/marharytanedzelska/Projects/sonar-kotlin/its/plugin/projects/gradle-example"))
+            .forProjectDirectory(File("/Users/marharytanedzelska/Projects/gradle-example"))
+            .connect()
+
+        //projectConnection.newBuild().forTasks("prepareKotlinBuildScriptModel").run()
+
+        val models = projectConnection.getModel(KotlinDslScriptsModel::class.java).scriptModels
+        models.forEach { println(it.value.classPath) }
+
+        val environment = environment(sensorContext)
+
+        val ktFiles = models.map { (k, v) -> environment.ktPsiFactory.createFile(k.name, k.readText()) to v }
+
+        val pairs = ktFiles.map { (k, v) ->
+            k to
+                    try {
+                        bindingContext(environment.env, v.classPath.map { it.path }, listOf(k))
+                    } catch (e: Exception) {
+                        println("Exception: ${e.message}.")
+                    }
+        }
+
+
         val mainFilePredicate = fileSystem.predicates().and(
             fileSystem.predicates().hasLanguage(language.key),
             fileSystem.predicates().hasType(InputFile.Type.MAIN)
