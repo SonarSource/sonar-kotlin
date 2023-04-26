@@ -39,9 +39,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequenc
 
 private const val VARARG_PREFIX = "vararg ";
 
-private fun Set<String>.addOptional(optionalString: String?): Set<String> =
-    if (optionalString.isNullOrEmpty()) this else this + optionalString
-
 class FunMatcherImpl(
     // In case of Top Level function there is no type there,
     // so you just need to specify the package
@@ -61,7 +58,7 @@ class FunMatcherImpl(
     val isOperator: Boolean? = null,
     val returnType: String? = null,
 ) {
-    private val qualifiersOrDefiningSupertype: Set<String> = qualifiers.addOptional(qualifier).addOptional(definingSupertype)
+    private val qualifiersOrDefiningSupertype: Set<String> = qualifiers.addIfNotNullOrEmpty(qualifier).addIfNotNullOrEmpty(definingSupertype)
 
     fun matches(node: KtCallExpression, bindingContext: BindingContext): Boolean {
         val call = node.getCall(bindingContext)
@@ -260,3 +257,6 @@ fun ConstructorMatcher(
 ) = FunMatcher(qualifier = typeName, qualifiers = typeNames, arguments = arguments, matchConstructor = true, block = block)
 
 infix fun ResolvedCall<*>?.matches(funMatcher: FunMatcherImpl): Boolean = funMatcher.matches(this)
+
+private fun Set<String>.addIfNotNullOrEmpty(optionalString: String?): Set<String> =
+    if (optionalString.isNullOrEmpty()) this else this + optionalString

@@ -37,12 +37,19 @@ import org.jetbrains.kotlin.psi.allConstructors
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getCall
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
+import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.kotlin.visiting.KtTreeVisitor
+
+private val lazyInitializationMatcher = FunMatcher(
+    name = "lazy",
+    definingSupertype = "kotlin"
+)
 
 @Rule(key = "S6515")
 class SingletonPatternCheck : AbstractCheck() {
@@ -82,8 +89,9 @@ private class SingletonClassCandidateExtractor : KtTreeVisitor() {
 
 private fun isSingletonClassCandidate(klass: KtClass): Boolean {
     val constructors = klass.allConstructors
-    return klass.isPrivate() || (constructors.isNotEmpty() && constructors.all(KtModifierListOwner::isPrivate))
+    return klass.isPrivate() || (constructors.isNotEmpty() && constructors.all { it.isPrivate() } )
 }
+
 
 private class SingleConstructorCallExtractor(
     private val singletonClassCandidates: MutableSet<String>,
@@ -123,9 +131,7 @@ private fun isLazyInitializingCall(callExpression: KtCallExpression, bindingCont
         ?.parent as? KtCallExpression ?: return false
 
     val property = (call.parent as? KtPropertyDelegate)?.parent as? KtProperty ?: return false
-    if (call.valueArguments.size != 1 || !isStaticProperty(property)) return false
-    val calleeReference = call.calleeExpression as? KtReferenceExpression ?: return false
-    return bindingContext[BindingContext.REFERENCE_TARGET, calleeReference]?.name?.toString() == "lazy"
+    return isStaticProperty(property) && lazyInitializationMatcher.matches(call.getResolvedCall(bindingContext))
 }
 
 private fun isStaticProperty(property: KtProperty): Boolean =
