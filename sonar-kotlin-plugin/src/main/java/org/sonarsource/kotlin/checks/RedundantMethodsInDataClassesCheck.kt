@@ -76,13 +76,12 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
     }
 
     private fun KtNamedFunction.hashCodeHasDefaultImpl(klassParameters: List<KtParameter>, bindingContext: BindingContext): Boolean {
-        if (hasBlockBody()) {
+        return if (hasBlockBody()) {
             val returnExpressions = collectDescendantsOfType<KtReturnExpression>()
             if (returnExpressions.size > 1 || returnExpressions.isEmpty()) return false
-
-            return checkHashExpression(returnExpressions[0], bindingContext, klassParameters)
+            checkHashExpression(returnExpressions[0], bindingContext, klassParameters)
         } else {
-            return checkHashExpression(this, bindingContext, klassParameters)
+            checkHashExpression(this, bindingContext, klassParameters)
         }
     }
 
@@ -116,13 +115,13 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
             methodParameters: MutableList<KtParameter>,
             className: String?
     ): Boolean {
-        if (hasBlockBody()) {
+        return if (hasBlockBody()) {
             val returnExpressions = collectDescendantsOfType<KtReturnExpression>()
             if (returnExpressions.size > 1 || returnExpressions.isEmpty()) return false
-            return checkEqualsExpression(returnExpressions[0], klassParameters, methodParameters, className)
+            checkEqualsExpression(returnExpressions[0], klassParameters, methodParameters, className)
         } else {
             val expression = findDescendantOfType<KtBinaryExpression>() ?: return false
-            return checkEqualsExpression(expression, klassParameters, methodParameters, className)
+            checkEqualsExpression(expression, klassParameters, methodParameters, className)
         }
     }
 
