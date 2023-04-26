@@ -31,10 +31,12 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 private val EQUALS_MATCHER = FunMatcher {
     name = EQUALS_METHOD_NAME
     withArguments(ANY_TYPE)
+    returnType = BOOLEAN_TYPE
 }
 private val HASHCODE_MATCHER = FunMatcher {
     name = HASHCODE_METHOD_NAME
     withNoArguments()
+    returnType = INT_TYPE
 }
 
 private val OBJECT_ARRAY_HASH_MATCHER = listOf(
@@ -78,7 +80,7 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
     private fun KtNamedFunction.hashCodeHasDefaultImpl(klassParameters: List<KtParameter>, bindingContext: BindingContext): Boolean {
         return if (hasBlockBody()) {
             val returnExpressions = collectDescendantsOfType<KtReturnExpression>()
-            if (returnExpressions.size > 1 || returnExpressions.isEmpty()) return false
+            if (returnExpressions.size > 1) return false
             checkHashExpression(returnExpressions[0], bindingContext, klassParameters)
         } else {
             checkHashExpression(this, bindingContext, klassParameters)
@@ -117,7 +119,7 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
     ): Boolean {
         return if (hasBlockBody()) {
             val returnExpressions = collectDescendantsOfType<KtReturnExpression>()
-            if (returnExpressions.size > 1 || returnExpressions.isEmpty()) return false
+            if (returnExpressions.size > 1) return false
             checkEqualsExpression(returnExpressions[0], klassParameters, methodParameters, className)
         } else {
             val expression = findDescendantOfType<KtBinaryExpression>() ?: return false

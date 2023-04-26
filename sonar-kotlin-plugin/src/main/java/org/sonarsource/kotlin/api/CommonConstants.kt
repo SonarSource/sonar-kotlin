@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.api
 
 const val INT_TYPE = "kotlin.Int"
 const val STRING_TYPE = "kotlin.String"
+const val BOOLEAN_TYPE = "kotlin.Boolean"
 const val ANY_TYPE = "kotlin.Any"
 const val GET_INSTANCE = "getInstance"
 const val WITH_CONTEXT = "withContext"
