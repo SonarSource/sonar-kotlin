@@ -22,7 +22,6 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.*
@@ -38,11 +37,8 @@ private val HASHCODE_MATCHER = FunMatcher {
     withNoArguments()
     returnType = INT_TYPE
 }
-
-private val OBJECT_ARRAY_HASH_MATCHER = listOf(
-        FunMatcher(qualifier = "java.util.Objects", name = "hash"),
-        FunMatcher(qualifier = "java.util.Arrays", name = "hashCode")
-)
+private val OBJECTS_HASH_MATCHER = FunMatcher(qualifier = "java.util.Objects", name = "hash")
+private val ARRAYS_HASHCODE_MATCHER = FunMatcher(qualifier = "java.util.Arrays", name = "hashCode")
 
 @Rule(key = "S6207")
 class RedundantMethodsInDataClassesCheck : AbstractCheck() {
@@ -81,31 +77,27 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
         return if (hasBlockBody()) {
             val returnExpressions = collectDescendantsOfType<KtReturnExpression>()
             if (returnExpressions.size > 1) return false
-            checkHashExpression(returnExpressions[0], bindingContext, klassParameters)
+            checkHashExpression(returnExpressions[0].returnedExpression, bindingContext, klassParameters)
         } else {
-            checkHashExpression(this, bindingContext, klassParameters)
+            checkHashExpression(this.bodyExpression, bindingContext, klassParameters)
         }
     }
 
-    private fun checkHashExpression(expression: KtExpression, bindingContext: BindingContext, klassParameters: List<KtParameter>): Boolean {
-        val callExpressions = expression.collectDescendantsOfType<KtCallExpression> {
-            OBJECT_ARRAY_HASH_MATCHER.any { e ->
-                e.matches(it, bindingContext)
-            }
-        }
-        if (callExpressions.size > 1 || callExpressions.isEmpty()) return false
+    private fun checkHashExpression(expression: KtExpression?, bindingContext: BindingContext, klassParameters: List<KtParameter>): Boolean {
+        if (expression !is KtDotQualifiedExpression) return false
+        if (expression.selectorExpression !is KtCallExpression) return false
 
-        if ((callExpressions[0].calleeExpression as KtNameReferenceExpression).getReferencedName() == "hash") {
-            if (callExpressions[0].valueArguments.size != klassParameters.size) return false
-            callExpressions[0].valueArguments.forEach {
+        val callExpression = expression.selectorExpression as KtCallExpression
+        if (OBJECTS_HASH_MATCHER.matches(callExpression, bindingContext)) {
+            if (callExpression.valueArguments.size != klassParameters.size) return false
+            callExpression.valueArguments.forEach {
                 findParameter(it.getArgumentExpression(), klassParameters) ?: return false
             }
-        } else {
-            val arguments = callExpressions[0].valueArguments[0].collectDescendantsOfType<KtValueArgumentList>()
-            if (arguments.isEmpty() || arguments.size > 1) return false
-
-            if (arguments[0].arguments.size != klassParameters.size) return false
-            arguments[0].arguments.forEach {
+        }
+        if (ARRAYS_HASHCODE_MATCHER.matches(callExpression, bindingContext)) {
+            val arguments = (callExpression.valueArguments[0].getArgumentExpression() as KtCallExpression).valueArguments
+            if (arguments.size != klassParameters.size) return false
+            arguments.forEach {
                 findParameter(it.getArgumentExpression(), klassParameters) ?: return false
             }
         }
@@ -120,37 +112,35 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
         return if (hasBlockBody()) {
             val returnExpressions = collectDescendantsOfType<KtReturnExpression>()
             if (returnExpressions.size > 1) return false
-            checkEqualsExpression(returnExpressions[0], klassParameters, methodParameters, className)
+            checkEqualsExpression(returnExpressions[0].returnedExpression, klassParameters, methodParameters, className)
         } else {
-            val expression = findDescendantOfType<KtBinaryExpression>() ?: return false
-            checkEqualsExpression(expression, klassParameters, methodParameters, className)
+            checkEqualsExpression(this.bodyExpression, klassParameters, methodParameters, className)
         }
     }
 
-    private fun checkEqualsExpression(expression: KtExpression, klassParameters: List<KtParameter>, methodParameters: MutableList<KtParameter>, className: String?): Boolean {
-        val notEqualsExpressions = expression.collectDescendantsOfType<KtBinaryExpression> { it.operationToken == KtTokens.EXCLEQ }
-        if (notEqualsExpressions.isNotEmpty()) return false
-
-        val isExpressions = expression.collectDescendantsOfType<KtIsExpression>()
-        if (isExpressions.size > 1 || isExpressions.isEmpty()) return false
-        if (isExpressions[0].isNegated || isExpressions[0].typeReference?.nameForReceiverLabel() != className) return false
-
-        val equalsExpressions = expression.collectDescendantsOfType<KtBinaryExpression> { it.operationToken == KtTokens.EQEQ }
-        if (equalsExpressions.size != klassParameters.size) return false
-
+    private fun checkEqualsExpression(expression: KtExpression?, klassParameters: List<KtParameter>, methodParameters: MutableList<KtParameter>, className: String?): Boolean {
         val map = mutableMapOf<KtParameter, Boolean>()
         klassParameters.forEach {
             map[it] = false
         }
+        return visitExpression(expression, klassParameters, methodParameters, map, className) && !map.values.contains(false)
+    }
 
-        equalsExpressions.forEach {
-            val left = it.left
-            val right = it.right
-            checkIfExpressionHasParameter(left, right, klassParameters, methodParameters, map)
-            checkIfExpressionHasParameter(right, left, klassParameters, methodParameters, map)
+    private fun visitExpression(expression: KtExpression?, klassParameters: List<KtParameter>, methodParameters: MutableList<KtParameter>, map: MutableMap<KtParameter, Boolean>, className: String?): Boolean {
+        if (expression is KtBinaryExpression) {
+            if (expression.operationToken == KtTokens.ANDAND) {
+                return visitExpression(expression.right, klassParameters, methodParameters, map, className) && visitExpression(expression.left, klassParameters, methodParameters, map, className)
+            }
+            if (expression.operationToken == KtTokens.EQEQ) {
+                checkIfExpressionHasParameter(expression.left, expression.right, klassParameters, methodParameters, map)
+                checkIfExpressionHasParameter(expression.right, expression.left, klassParameters, methodParameters, map)
+                return true
+            }
         }
-
-        return !map.values.contains(false)
+        if (expression is KtIsExpression) {
+            return !(expression.isNegated || expression.typeReference?.nameForReceiverLabel() != className)
+        }
+        return false
     }
 
     private fun checkIfExpressionHasParameter(

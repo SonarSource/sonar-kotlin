@@ -35,8 +35,10 @@ class RedundantMethodsInDataClassesCheckSample {
 
     data class Person5(val name: String, val age: Int) {
         override fun equals(other: Any?): Boolean { // Compliant
-            return other is Person5 && other.name == name && age.dec() == age
+            return other is Person5 && other.name == name && age.dec() == age || a()
         }
+
+        fun a() = false
 
         override fun hashCode() = Objects.hash(age, name) + Objects.hash(name, age)// Compliant
     }
