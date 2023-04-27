@@ -1,0 +1,130 @@
+<h2>Why is this an issue?</h2>
+<p>It is a common pattern to validate required preconditions at the beginning of a function or block. There are two different kinds of
+preconditions:</p>
+<ul>
+  <li> Preconditions about argument values. An example is the assertion that a function argument lies within a specific range. An
+  <code>IllegalArgumentException</code> should be thrown if these preconditions are violated. </li>
+  <li> Preconditions about the state of the owner or the execution context of the function. An example is when a specific method, such as
+  <code>open</code>, <code>init</code> or <code>prepare</code>, must be called before the current method can be executed. An
+  <code>IllegalStateException</code> should be thrown if these preconditions are violated. </li>
+</ul>
+<p>The Kotlin standard library provides the functions <code>check()</code>, <code>require()</code>, <code>checkNotNull()</code> and
+<code>requireNotNull()</code> for this purpose. They should be used instead of directly throwing an <code>IllegalArgumentException</code> or an
+<code>IllegalStateException</code>.</p>
+<h3>What is the potential impact?</h3>
+<h4>Readability and Understanding</h4>
+<p>This change makes it easier to understand the code because the semantics of <code>check()</code>, <code>require()</code>,
+<code>checkNotNull()</code> and <code>requireNotNull()</code>, as well as the fact that this is a preconditions check, are evident to the reader. When
+developers share common standards and idioms, they need to spend less effort understanding each other’s code.</p>
+<h4>Code Redundancy</h4>
+<p>Using a built-in language feature or a standard API is always better than a custom implementation, because the reimplementation of something that
+already exists is unnecessary.</p>
+<h4>Consistency</h4>
+<p>When <code>check()</code>, <code>require()</code>, <code>checkNotNull()</code> and <code>requireNotNull()</code> are used in an idiomatic way,
+there is more consistency in what kind of exception is thrown in which situation.</p>
+<h2>How to fix it</h2>
+<table>
+  <colgroup>
+    <col style="width: 60%;">
+    <col style="width: 40%;">
+  </colgroup>
+  <tbody>
+    <tr>
+      <td><p><strong>Replace</strong></p></td>
+      <td><p><strong>With</strong></p></td>
+    </tr>
+    <tr>
+      <td><p><code>if (!condition) throw IllegalArgumentException()</code></p></td>
+      <td><p><code>require(condition)</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>if (reference == null) throw IllegalArgumentException()</code></p></td>
+      <td><p><code>requireNotNull(reference)</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>require(reference != null)</code></p></td>
+      <td><p><code>requireNotNull(reference)</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>if (!condition) throw IllegalStateExceptionException()</code></p></td>
+      <td><p><code>check(condition)</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>if (reference == null) throw IllegalStateException()</code></p></td>
+      <td><p><code>checkNotNull(reference)</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>check(reference != null)</code></p></td>
+      <td><p><code>checkNotNull(reference)</code></p></td>
+    </tr>
+    <tr>
+      <td><p><code>throw IllegalStateException()</code></p></td>
+      <td><p><code>error()</code></p></td>
+    </tr>
+  </tbody>
+</table>
+<p>A constructor function for the exception message can be provided as an optional argument for <code>check()</code>, <code>require()</code>,
+<code>checkNotNull()</code> and <code>requireNotNull()</code>. This means the message is constructed only if the exception is thrown. For the
+<code>error()</code> function, an optional error message parameter can be provided directly. That is, without a parameter, because an exception is
+unconditionally thrown by <code>error()</code>.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+fun argumentPreconditions(argument: Int?, limit: Int?) {
+    if (argument == null) throw IllegalArgumentException() // Noncompliant, replace with requireNotNull
+    require(limit != null)  // Noncompliant, replace with requireNotNull
+    if (argument &lt; 0) throw IllegalArgumentException()  // Noncompliant, replace with require
+    if (argument &gt;= 0) throw IllegalArgumentException("Argument &lt; $limit") // Noncompliant, replace with require
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+fun argumentPreconditions(argument: Int?, limit: Int?) {
+    requireNotNull(argument) // Compliant
+    requireNotNull(limit) // Compliant
+    require(argument &gt;= 0) // Compliant
+    require(argument &lt; limit) {"Argument &lt; $limit"} // Compliant
+}
+</pre>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+fun statePreconditions() {
+    if (state == null) throw IllegalStateException() // Noncompliant, replace with checkNotNull
+    check(ioBuffer != null)  // Noncompliant, replace with checkNotNull
+    if (state &lt; 0) throw IllegalStateException()  // Noncompliant, replace with check
+    if (state == 42) throw IllegalStateException("Unknown question") // Noncompliant, replace with check
+
+    when(state) {
+        0..10 -&gt; processState1()
+        11..1000 -&gt; processState2()
+        else -&gt; throw IllegalStateException("Unexpected state $state") // Noncompliant, replace with error
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="2" data-diff-type="compliant">
+fun statePreconditions() {
+    checkNotNull(state) // Compliant
+    checkNotNull(ioBuffer) // Compliant
+    check(state &gt;= 0) // Compliant
+    check(state != 42) {"Unknown question"} // Compliant
+
+    when(state) {
+        0..10 -&gt; processState1()
+        11..1000 -&gt; processState2()
+        else -&gt; error("Unexpected state $state") // Compliant
+    }
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/require.html">Kotlin API Docs, require</a> </li>
+  <li> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/check.html">Kotlin API Docs, check</a> </li>
+</ul>
+<h3>Articles &amp; blog posts</h3>
+<ul>
+  <li> <a href="https://bignerdranch.com/blog/write-better-code-using-kotlins-require-check-and-assert/">Jeremy W. Sherman, Write Better Code Using
+  Kotlin’s Require, Check and Assert</a> </li>
+</ul>
+
