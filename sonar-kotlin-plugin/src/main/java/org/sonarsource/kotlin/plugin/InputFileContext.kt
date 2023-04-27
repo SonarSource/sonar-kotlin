@@ -35,6 +35,10 @@ import org.sonarsource.kotlin.converter.KotlinTextRanges.contains
 private const val PARSING_ERROR_RULE_KEY = "ParsingError"
 
 private val LOG = Loggers.get(InputFileContextImpl::class.java)
+
+// To avoid many duplicate log messages when reporting issues with message code highlighting, we statically remember when we've already
+// logged this message and can refrain from logging it again. Mutable static state is not a great pattern in general. Here, however, it is
+// acceptable and will eventually be removed when we remove the entire API version guard.
 private var alreadyLoggedIssueMessageWithHighlightingFailed = false
 
 class InputFileContextImpl(
