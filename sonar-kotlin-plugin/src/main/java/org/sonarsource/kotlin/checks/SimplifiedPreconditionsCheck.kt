@@ -32,6 +32,7 @@ import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.KtWhenConditionWithExpression
 import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -127,21 +128,21 @@ private fun KtThrowExpression.getErrorMessage() =
 
 private fun KtThrowExpression.isOnlyStatementInThen() =
     findIfExpression()
-        .let {
-            (it?.then is KtThrowExpression && it.then == this) ||
-                (it?.then is KtBlockExpression
+        ?.let {
+            (it.then is KtThrowExpression && it.then == this) ||
+                (it.then is KtBlockExpression
                     && (it.then as KtBlockExpression).statements.size == 1
                     && it.then == parent)
-        }
+        } ?: false
 
 private fun KtThrowExpression.isOnlyStatementInElse() =
     findIfExpression()
-        .let {
-            (it?.`else` is KtThrowExpression && it.`else` == this) ||
-                (it?.`else` is KtBlockExpression
+        ?.let {
+            (it.`else` is KtThrowExpression && it.`else` == this) ||
+                (it.`else` is KtBlockExpression
                     && (it.`else` as KtBlockExpression).statements.size == 1
                     && it.`else` == parent)
-        }
+        } ?: false
 
 private fun KtThrowExpression.findIfExpression(): KtIfExpression? {
     return when {
@@ -158,7 +159,8 @@ private fun KtThrowExpression.isOnlyStatementInWhenEntry() =
     (parent is KtWhenEntry && parent.children.size == 1) ||
         (parent.parent is KtWhenEntry
             && parent is KtBlockExpression
-            && (parent as KtBlockExpression).statements.size == 1)
+            && (parent as KtBlockExpression).statements.size == 1
+            && parent.parent.children[0] !is KtWhenConditionWithExpression)
 
 private fun buildReportMessage(statementToReplace: String, statememntType: String, replacementCode: String) =
     message {

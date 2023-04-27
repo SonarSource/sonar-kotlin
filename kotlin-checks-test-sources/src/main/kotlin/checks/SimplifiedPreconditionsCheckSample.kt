@@ -34,10 +34,20 @@ class SimplifiedPreconditionsCheckSample {
         if (f(55)) throw IllegalCallerException() // Compliant, different exception
         else { throw IllegalStateException("message") } // Noncompliant {{Replace this `throw` expression with `error("message")`.}}
 
+        if(x == 2) { f(1) }
+        else { f(0) }
+
         if (state == -3) {
             println()
             throw IllegalStateException("compliant ise")
         }
+        else {
+            println()
+            throw IllegalStateException("compliant ise")
+        }
+
+        if(true) throw IllegalStateException("") // Noncompliant
+        else { println("") }
 
         when (state) {
             0..10 -> check(state == null)
@@ -50,6 +60,15 @@ class SimplifiedPreconditionsCheckSample {
         when {
             state == null -> throw IllegalStateException("when check") // Compliant
             else -> { throw IllegalStateException() } // Noncompliant {{Replace this `throw` expression with `error("")`.}}
+        }
+
+        when(x) {
+            0..10 -> { f(0) }
+            11..100 -> { throw IllegalStateException() }
+            else -> {
+                f(0)
+                throw IllegalStateException()
+            }
         }
 
         require(null != x) // Noncompliant {{Replace this `require` function call with `requireNotNull(x)`.}}
