@@ -43,6 +43,7 @@ class FunMatcherImpl(
     // In case of Top Level function there is no type there,
     // so you just need to specify the package
     val qualifier: String? = null,
+    val qualifiers: Set<String> = emptySet(),
     val names: Set<String> = emptySet(),
     // nameRegex is used when function name can be matched with regex,
     // and can be used together with names argument
@@ -57,6 +58,7 @@ class FunMatcherImpl(
     val isOperator: Boolean? = null,
     val returnType: String? = null,
 ) {
+    private val qualifiersOrDefiningSupertype: Set<String> = qualifiers.addIfNotNullOrEmpty(qualifier).addIfNotNullOrEmpty(definingSupertype)
 
     fun matches(node: KtCallExpression, bindingContext: BindingContext): Boolean {
         val call = node.getCall(bindingContext)
@@ -89,19 +91,13 @@ class FunMatcherImpl(
             checkCallParameters(functionDescriptor)
 
     private fun checkTypeOrSupertype(functionDescriptor: CallableDescriptor) =
-        qualifier.isNullOrEmpty() && definingSupertype.isNullOrEmpty() ||
-            checkType(functionDescriptor) ||
-            qualifier.isNullOrEmpty() && checkSubType(functionDescriptor)
-
-    private fun checkType(functionDescriptor: CallableDescriptor): Boolean =
-        (qualifier ?: definingSupertype)?.let {
-            when (functionDescriptor) {
-                is ConstructorDescriptor ->
-                    functionDescriptor.constructedClass.fqNameSafe.asString() == it
-                else ->
-                    functionDescriptor.fqNameSafe.asString().substringBeforeLast(".") == it
+        qualifiersOrDefiningSupertype.isEmpty() || qualifiersOrDefiningSupertype.contains(
+            if (functionDescriptor is ConstructorDescriptor) {
+                functionDescriptor.constructedClass.fqNameSafe.asString()
+            } else {
+                functionDescriptor.fqNameSafe.asString().substringBeforeLast(".")
             }
-        } ?: false
+        ) || !definingSupertype.isNullOrEmpty() && checkSubType(functionDescriptor)
 
     private fun checkSubType(functionDescriptor: CallableDescriptor): Boolean =
         when (functionDescriptor) {
@@ -162,6 +158,7 @@ class FunMatcherImpl(
 
 class FunMatcherBuilderContext(
     var qualifier: String? = null,
+    var qualifiers: Set<String> = emptySet(),
     var name: String? = null,
     var names: Set<String> = mutableSetOf(),
     var nameRegex: Regex?,
@@ -205,6 +202,7 @@ class FunMatcherBuilderContext(
 
 fun FunMatcher(
     qualifier: String? = null,
+    qualifiers: Set<String> = emptySet(),
     name: String? = null,
     names: Set<String> = mutableSetOf(),
     nameRegex: Regex? = null,
@@ -219,6 +217,7 @@ fun FunMatcher(
     block: FunMatcherBuilderContext.() -> Unit = {},
 ) = FunMatcherBuilderContext(
     qualifier,
+    qualifiers,
     name,
     names,
     nameRegex,
@@ -235,6 +234,7 @@ fun FunMatcher(
         if (this.arguments.isEmpty()) Int.MAX_VALUE else this.arguments.maxOf { if (it.any { arg -> arg.isVararg }) Int.MAX_VALUE else it.size }
     FunMatcherImpl(
         this.qualifier,
+        this.qualifiers,
         this.name?.let { this.names + it } ?: this.names,
         this.nameRegex,
         maxArgumentCount,
@@ -251,8 +251,12 @@ fun FunMatcher(
 
 fun ConstructorMatcher(
     typeName: String? = null,
+    typeNames: Set<String> = emptySet(),
     arguments: List<List<ArgumentMatcher>> = listOf(),
     block: FunMatcherBuilderContext.() -> Unit = {}
-) = FunMatcher(qualifier = typeName, arguments = arguments, matchConstructor = true, block = block)
+) = FunMatcher(qualifier = typeName, qualifiers = typeNames, arguments = arguments, matchConstructor = true, block = block)
 
 infix fun ResolvedCall<*>?.matches(funMatcher: FunMatcherImpl): Boolean = funMatcher.matches(this)
+
+private fun Set<String>.addIfNotNullOrEmpty(optionalString: String?): Set<String> =
+    if (optionalString.isNullOrEmpty()) this else this + optionalString

@@ -1,0 +1,91 @@
+<h2>Why is this an issue?</h2>
+<p>In Kotlin, object declarations and object expressions are the designed way to implement the singleton pattern. Because this is a built-in language
+feature, it should be used as an idiom instead of resorting to custom idioms.</p>
+<p>An alternative is to declare private constructors and to provide a single class instance within a companion object. However, this idiom is adopted
+from other languages like Java which do not feature the direct declaration of objects. It should not be used in Kotlin.</p>
+<h3>What is the potential impact?</h3>
+<h4>Readability and Understanding</h4>
+<p>This change makes it easier to understand the code because this is how singletons are intended to be used in Kotlin. When developers share common
+standards and idioms, they need to spend less effort on understanding each other’s code.</p>
+<h4>Code Redundancy</h4>
+<p>Using a built-in language feature or a standard API is always better than a custom implementation, because the reimplementation of something that
+already exists is unnecessary.</p>
+<h2>How to fix it</h2>
+<p>Remove the private constructor of the class and remove the companion object or the variable that provides the single instance from the class.
+Replace the class declaration with an object declaration if a name is required for the singleton. Replace the class declaration with an object
+expression if the singleton instance can be anonymous.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+class DeviceManager private constructor() {
+    fun instanceMethod() {
+        // ...
+    }
+
+    companion object { // Noncompliant, explicit class instance provided
+        val instance = DeviceManager()
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+object DeviceManager { // Compliant, object declaration used
+    fun instanceMethod() {
+        // ...
+    }
+}
+</pre>
+<h4>Noncompliant code example</h4>
+<pre>
+interface LayoutStrategy {
+    val instanceProperty: String
+    fun instanceMethod()
+}
+</pre>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+class CustomLayoutStrategy private constructor(): LayoutStrategy  {
+
+    override val instanceProperty = "Hello, world!"
+
+    override fun instanceMethod() {
+        // ...
+    }
+
+    companion object { // Noncompliant, explicit class instance provided
+        private val instance by lazy {
+            CustomLayoutStrategy()
+        }
+
+        fun getInstance(): LayoutStrategy = instance
+    }
+}
+
+fun createUI() {
+    val component = Container()
+    component.setLayoutStrategy(CustomLayoutStrategy.getInstance())
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="2" data-diff-type="compliant">
+fun createUI() {
+    val component = Container()
+    component.setLayoutStrategy(object: LayoutStrategy { // Compliant, object expression used
+
+        override val instanceProperty = "Hello, world!"
+
+        override fun instanceMethod() {
+            // ...
+        }
+    })
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/object-declarations.html">Kotlin Docs, Object expressions and declarations</a> </li>
+</ul>
+<h3>Articles &amp; blog posts</h3>
+<ul>
+  <li> <a href="https://in-kotlin.com/design-patterns/singleton">In Kotlin, Singleton class / Object class / Companion object</a> </li>
+</ul>
+
