@@ -90,18 +90,18 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
         val callExpression = expression.selectorExpression as KtCallExpression
         if (OBJECTS_HASH_MATCHER.matches(callExpression, bindingContext)) {
             if (callExpression.valueArguments.size != klassParameters.size) return false
-            callExpression.valueArguments.forEach {
-                findParameter(it.getArgumentExpression(), klassParameters) ?: return false
+            return callExpression.valueArguments.all {
+                findParameter(it.getArgumentExpression(), klassParameters) != null
             }
         }
         if (ARRAYS_HASHCODE_MATCHER.matches(callExpression, bindingContext)) {
             val arguments = (callExpression.valueArguments[0].getArgumentExpression() as KtCallExpression).valueArguments
             if (arguments.size != klassParameters.size) return false
-            arguments.forEach {
-                findParameter(it.getArgumentExpression(), klassParameters) ?: return false
+            return arguments.all {
+                findParameter(it.getArgumentExpression(), klassParameters) != null
             }
         }
-        return true
+        return false
     }
 
     private fun KtNamedFunction.equalsHasDefaultImpl(
