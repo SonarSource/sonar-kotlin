@@ -1,0 +1,15 @@
+{
+  "title": "Check for preconditions should be simplified",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6532",
+  "sqKey": "S6532",
+  "scope": "All",
+  "quickfix": "unknown"
+}
