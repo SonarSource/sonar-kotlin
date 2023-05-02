@@ -1,9 +1,12 @@
 package checks
 
-typealias Action = () -> Void // Noncompliant {{Replace this usage of "Void" type with "Unit".}}
+private typealias TypeAlias = () -> Map<*, Void>  // Noncompliant {{Replace this usage of `Void` type with `Unit`.}}
+//                                         ^^^^
+
+typealias Action = () -> Void // Noncompliant {{Replace this usage of `Void` type with `Unit`.}}
 //                       ^^^^
 
-typealias LLAction = List<Function1<List<String>, Function2<Set<Int>, List<List<List<Void>>>, otherpackage.Void>>> // Noncompliant {{Replace this usage of "Void" type with "Unit".}}
+typealias LLAction = List<Function1<List<String>, Function2<Set<Int>, List<List<List<Void>>>, otherpackage.Void>>> // Noncompliant {{Replace this usage of `Void` type with `Unit`.}}
 //                                                                                   ^^^^
 
 fun myFun(a: Action) {
@@ -32,7 +35,7 @@ class TestF : TestA<Void?> { // Noncompliant
     override fun foo(): Void? { return null } // Compliant, overridden function
 }
 
-fun s() : TestA<Void?> = TODO() // Noncompliant {{Replace this usage of "Void" type with "Unit".}}
+fun s() : TestA<Void?> = TODO() // Noncompliant {{Replace this usage of `Void` type with `Unit`.}}
 
 
 typealias ActionUnit = () -> Unit
@@ -44,7 +47,7 @@ enum class C {
 
 class VoidShouldBeUnitCheckSample {
 
-    fun f(c: C): Void? { // Noncompliant {{Replace this usage of "Void" type with "Unit".}}
+    fun f(c: C): Void? { // Noncompliant {{Replace this usage of `Void` type with `Unit`.}}
 //               ^^^^^
         when (val x = c) {
             C.A -> println()

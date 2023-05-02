@@ -19,25 +19,31 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTypeAlias
 import org.jetbrains.kotlin.psi.KtTypeArgumentList
 import org.jetbrains.kotlin.psi.KtTypeReference
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.KotlinType
-
+import org.jetbrains.kotlin.types.TypeProjection
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.determineType
 import org.sonarsource.kotlin.api.isAbstract
+import org.sonarsource.kotlin.api.message
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-private const val MESSAGE = """Replace this usage of "Void" type with "Unit"."""
+private val message = message {
+    +"Replace this usage of "
+    code("Void")
+    +" type with "
+    code("Unit")
+    +"."
+}
 
 @Rule(key = "S6508")
 class VoidShouldBeUnitCheck : AbstractCheck() {
@@ -50,7 +56,7 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
         ) {
             kotlinFileContext.reportIssue(
                 typeReference,
-                MESSAGE
+                message
             )
         }
     }
@@ -59,7 +65,8 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
     // So we check argument types of a typealias separately
     override fun visitTypeAlias(typeAlias: KtTypeAlias, kotlinFileContext: KotlinFileContext) {
 
-        val ktTypeReferences = typeAlias.collectDescendantsOfType<KtTypeReference>()
+        val ktTypeReferences =
+            flattenTypeRefs(typeAlias.getTypeReference()?.typeElement?.typeArgumentsAsTypes ?: return)
 
         kotlinFileContext.bindingContext.get(BindingContext.TYPE_ALIAS, typeAlias)
             ?.underlyingType
@@ -67,22 +74,42 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
             ?.forEachIndexed { i, type ->
                 if (type.isJavaLangVoid()) {
                     kotlinFileContext.reportIssue(
-                        ktTypeReferences[i],
-                        MESSAGE
+                        // ktTypeReferences[i] can only be null in case of a type <*>, however to reach this line,
+                        // the type must be <Void> and hence ktTypeReferences[i] must also be `Void`.
+                        ktTypeReferences[i]!!,
+                        message
                     )
                 }
             }
     }
 }
 
-private fun KotlinType.flattenTypeArguments(): Sequence<KotlinType> =
-     arguments.asSequence().flatMap { it.type.flattenTypeArguments() } + sequenceOf(this)
+private tailrec fun flattenTypeRefs(
+    typeRefs: List<KtTypeReference?>,
+    acc: MutableList<KtTypeReference?> = mutableListOf()
+): List<KtTypeReference?> =
+    if (typeRefs.isEmpty()) acc
+    else flattenTypeRefs(
+        typeRefs = typeRefs.flatMap { it?.typeElement?.typeArgumentsAsTypes ?: emptyList() },
+        acc = acc.apply { addAll(typeRefs) })
 
-private fun KtTypeReference.isVoidTypeRef(bindingContext: BindingContext) = determineType(bindingContext).isJavaLangVoid()
+private tailrec fun flattenTypeProjections(
+    typeProjections: List<TypeProjection>,
+    acc: MutableList<TypeProjection> = mutableListOf()
+): List<TypeProjection> =
+    if (typeProjections.isEmpty()) acc
+    else flattenTypeProjections(
+        typeProjections = typeProjections.flatMap { it.type.arguments },
+        acc = acc.apply { addAll(typeProjections) })
 
-private fun KotlinType?.isJavaLangVoid() = this?.getJetTypeFqName(false) == "java.lang.Void"
+private fun KotlinType.flattenTypeArguments(): List<KotlinType> = flattenTypeProjections(arguments).map { it.type }
 
-private fun isATypeArgumentOfAnInheritableClass(typeReference: KtTypeReference) : Boolean {
+private fun KtTypeReference.isVoidTypeRef(bindingContext: BindingContext) =
+    determineType(bindingContext).isJavaLangVoid()
+
+private fun KotlinType?.isJavaLangVoid() = this?.getKotlinTypeFqName(false) == "java.lang.Void"
+
+private fun isATypeArgumentOfAnInheritableClass(typeReference: KtTypeReference): Boolean {
     // The idea is to filter out classes or interfaces, parametrized with <Void>,
     // that could be extended from Java. As usage of Void is justified due to this issue:
     // https://youtrack.jetbrains.com/issue/KT-15964
