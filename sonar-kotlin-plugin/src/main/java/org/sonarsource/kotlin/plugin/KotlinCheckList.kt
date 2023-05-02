@@ -92,6 +92,7 @@ import org.sonarsource.kotlin.checks.PropertyGetterAndSetterUsageCheck
 import org.sonarsource.kotlin.checks.PseudoRandomCheck
 import org.sonarsource.kotlin.checks.ReasonableTypeCastsCheck
 import org.sonarsource.kotlin.checks.ReceivingIntentsCheck
+import org.sonarsource.kotlin.checks.RedundantMethodsInDataClassesCheck
 import org.sonarsource.kotlin.checks.RedundantParenthesesCheck
 import org.sonarsource.kotlin.checks.RedundantSuspendModifierCheck
 import org.sonarsource.kotlin.checks.RedundantTypeCastsCheck
@@ -216,6 +217,7 @@ val KOTLIN_CHECKS = listOf(
     PseudoRandomCheck::class.java,
     ReasonableTypeCastsCheck::class.java,
     ReceivingIntentsCheck::class.java,
+    RedundantMethodsInDataClassesCheck::class.java,
     RedundantParenthesesCheck::class.java,
     RedundantSuspendModifierCheck::class.java,
     RedundantTypeCastsCheck::class.java,
