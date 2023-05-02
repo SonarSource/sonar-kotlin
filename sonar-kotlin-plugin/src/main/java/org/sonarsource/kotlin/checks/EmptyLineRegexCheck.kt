@@ -63,7 +63,7 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private const val MESSAGE = "Remove MULTILINE mode or change the regex."
 
-private val STRING_REPLACE = FunMatcher(qualifier = KOTLIN_TEXT, names = setOf("replace", "replaceFirst"))
+private val STRING_REPLACE = FunMatcher(qualifier = KOTLIN_TEXT) { withNames("replace", "replaceFirst") }
 private val PATTERN_MATCHER = FunMatcher(qualifier = JAVA_UTIL_PATTERN, name = "matcher")
 private val PATTERN_FIND = FunMatcher(qualifier = "java.util.regex.Matcher", name = "find")
 private val STRING_IS_EMPTY = FunMatcher(qualifier = KOTLIN_TEXT, name = "isEmpty")

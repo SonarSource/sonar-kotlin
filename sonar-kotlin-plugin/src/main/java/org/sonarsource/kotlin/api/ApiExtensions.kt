@@ -442,6 +442,9 @@ fun KtNameReferenceExpression.findUsages(
             }
     }
 
+fun KtReferenceExpression.getContainingDeclaration(bindingContext: BindingContext) =
+    bindingContext[BindingContext.REFERENCE_TARGET, this]?.containingDeclaration
+
 /**
  * Will try to find all the usages of this property. You can provide a searchStartNode to define the scope of the search (will
  * use the closest block statement going up the AST). You can also provide a predicate to filter findings.

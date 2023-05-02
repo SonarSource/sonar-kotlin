@@ -36,9 +36,15 @@ import org.sonarsource.kotlin.api.overrides
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private val EXPECTED_OVERRIDES = listOf(
-    FunMatcher(name = "equals", returnType = "kotlin.Boolean", arguments = listOf(listOf(ArgumentMatcher("kotlin.Any")))),
-    FunMatcher(name = "hashCode", returnType = "kotlin.Int", arguments = listOf(emptyList())),
-    FunMatcher(name = "toString", returnType = "kotlin.String", arguments = listOf(emptyList()))
+    FunMatcher(name = "equals", returnType = "kotlin.Boolean") {
+        withArguments(ArgumentMatcher("kotlin.Any"))
+    },
+    FunMatcher(name = "hashCode", returnType = "kotlin.Int") {
+        withNoArguments()
+    },
+    FunMatcher(name = "toString", returnType = "kotlin.String") {
+        withNoArguments()
+    }
 )
 
 @Rule(key = "S6218")

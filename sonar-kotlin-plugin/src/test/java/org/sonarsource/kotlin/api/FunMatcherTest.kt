@@ -544,6 +544,20 @@ class FunMatcherTest {
     }
 
     @Test
+    fun `Match multiple qualifiers`() {
+        check(FunMatcher {
+            withQualifiers("sample.SampleClass", "sample")
+        },true, true, true, true, true, true, true)
+    }
+
+    @Test
+    fun `Match multiple defining supertypes`() {
+        check(FunMatcher {
+            withDefiningSupertypes("sample.SampleClass", "sample")
+        }, true, true, true, true, true, true, true)
+    }
+
+    @Test
     fun `Match only suspending methods`() {
         check(FunMatcher(isSuspending = true), false, false, false, true, false, false, false)
     }

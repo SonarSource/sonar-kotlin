@@ -1,0 +1,15 @@
+{
+  "title": "Expression should be simplified with \"isEmpty\", \"isNotEmpty\" or \"isNullOrEmpty\"",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6529",
+  "sqKey": "S6529",
+  "scope": "All",
+  "quickfix": "unknown"
+}
