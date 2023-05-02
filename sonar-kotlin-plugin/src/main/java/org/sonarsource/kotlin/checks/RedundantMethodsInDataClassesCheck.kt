@@ -20,11 +20,26 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtIsExpression
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.*
+import org.sonarsource.kotlin.api.ANY_TYPE
+import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.BOOLEAN_TYPE
+import org.sonarsource.kotlin.api.EQUALS_METHOD_NAME
+import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.HASHCODE_METHOD_NAME
+import org.sonarsource.kotlin.api.INT_TYPE
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 private val EQUALS_MATCHER = FunMatcher {
@@ -72,105 +87,130 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
             }
         }
     }
-
-    private fun KtNamedFunction.hashCodeHasDefaultImpl(klassParameters: List<KtParameter>, bindingContext: BindingContext): Boolean {
-        return if (hasBlockBody()) {
-            val returnExpressions = collectDescendantsOfType<KtReturnExpression>()
-            if (returnExpressions.size > 1) return false
-            checkHashExpression(returnExpressions[0].returnedExpression, bindingContext, klassParameters)
-        } else {
-            checkHashExpression(this.bodyExpression, bindingContext, klassParameters)
-        }
-    }
-
-    private fun checkHashExpression(expression: KtExpression?, bindingContext: BindingContext, klassParameters: List<KtParameter>): Boolean {
-        if (expression !is KtDotQualifiedExpression) return false
-        if (expression.selectorExpression !is KtCallExpression) return false
-
-        val callExpression = expression.selectorExpression as KtCallExpression
-        if (OBJECTS_HASH_MATCHER.matches(callExpression, bindingContext)) {
-            if (callExpression.valueArguments.size != klassParameters.size) return false
-            return callExpression.valueArguments.all {
-                findParameter(it.getArgumentExpression(), klassParameters) != null
-            }
-        }
-        if (ARRAYS_HASHCODE_MATCHER.matches(callExpression, bindingContext)) {
-            val arguments = (callExpression.valueArguments[0].getArgumentExpression() as KtCallExpression).valueArguments
-            if (arguments.size != klassParameters.size) return false
-            return arguments.all {
-                findParameter(it.getArgumentExpression(), klassParameters) != null
-            }
-        }
-        return false
-    }
-
-    private fun KtNamedFunction.equalsHasDefaultImpl(
-            klassParameters: List<KtParameter>,
-            methodParameters: MutableList<KtParameter>,
-            className: String?
-    ): Boolean {
-        return if (hasBlockBody()) {
-            val returnExpressions = collectDescendantsOfType<KtReturnExpression>()
-            if (returnExpressions.size > 1) return false
-            checkEqualsExpression(returnExpressions[0].returnedExpression, klassParameters, methodParameters, className)
-        } else {
-            checkEqualsExpression(this.bodyExpression, klassParameters, methodParameters, className)
-        }
-    }
-
-    private fun checkEqualsExpression(expression: KtExpression?, klassParameters: List<KtParameter>, methodParameters: MutableList<KtParameter>, className: String?): Boolean {
-        val map = mutableMapOf<KtParameter, Boolean>()
-        klassParameters.forEach {
-            map[it] = false
-        }
-        return visitExpression(expression, klassParameters, methodParameters, map, className) && !map.values.contains(false)
-    }
-
-    private fun visitExpression(expression: KtExpression?, klassParameters: List<KtParameter>, methodParameters: MutableList<KtParameter>, map: MutableMap<KtParameter, Boolean>, className: String?): Boolean {
-        if (expression is KtBinaryExpression) {
-            if (expression.operationToken == KtTokens.ANDAND) {
-                return visitExpression(expression.right, klassParameters, methodParameters, map, className) && visitExpression(expression.left, klassParameters, methodParameters, map, className)
-            }
-            if (expression.operationToken == KtTokens.EQEQ) {
-                checkIfExpressionHasParameter(expression.left, expression.right, klassParameters, methodParameters, map)
-                checkIfExpressionHasParameter(expression.right, expression.left, klassParameters, methodParameters, map)
-                return true
-            }
-        }
-        if (expression is KtIsExpression) {
-            return !(expression.isNegated || expression.typeReference?.nameForReceiverLabel() != className)
-        }
-        return false
-    }
-
-    private fun checkIfExpressionHasParameter(
-            first: KtExpression?,
-            second: KtExpression?,
-            klassParameters: List<KtParameter>,
-            methodParameters: MutableList<KtParameter>,
-            map: MutableMap<KtParameter, Boolean>,
-    ) {
-        val parameter = findParameter(first, klassParameters) ?: return
-        if (checkDotExpression(second, parameter, methodParameters))
-            map[parameter] = true
-    }
-
-    private fun findParameter(
-            expression: KtExpression?,
-            klassParameters: List<KtParameter>,
-    ): KtParameter? =
-            if (expression is KtNameReferenceExpression)
-                klassParameters.find { klassParameter -> klassParameter.name == expression.getReferencedName() }
-            else null
-
-    private fun checkDotExpression(
-            expression: KtExpression?,
-            klassParameter: KtParameter,
-            methodParameters: MutableList<KtParameter>,
-    ): Boolean =
-            if (expression is KtDotQualifiedExpression) {
-                ((expression.receiverExpression as KtNameReferenceExpression).getReferencedName() == methodParameters[0].name
-                        && (expression.selectorExpression as KtNameReferenceExpression).getReferencedName() == klassParameter.name)
-            } else false
-
 }
+
+private fun KtNamedFunction.hashCodeHasDefaultImpl(
+    klassParameters: List<KtParameter>,
+    bindingContext: BindingContext
+): Boolean {
+    return if (hasBlockBody()) {
+        val returnExpressions = collectDescendantsOfType<KtReturnExpression>()
+        if (returnExpressions.size > 1) return false
+        checkHashExpression(returnExpressions[0].returnedExpression, bindingContext, klassParameters)
+    } else {
+        checkHashExpression(this.bodyExpression, bindingContext, klassParameters)
+    }
+}
+
+private fun checkHashExpression(
+    expression: KtExpression?,
+    bindingContext: BindingContext,
+    klassParameters: List<KtParameter>
+): Boolean {
+    if (expression !is KtDotQualifiedExpression) return false
+    if (expression.selectorExpression !is KtCallExpression) return false
+
+    val callExpression = expression.selectorExpression as KtCallExpression
+    if (OBJECTS_HASH_MATCHER.matches(callExpression, bindingContext)) {
+        if (callExpression.valueArguments.size != klassParameters.size) return false
+        return callExpression.valueArguments.all {
+            findParameter(it.getArgumentExpression(), klassParameters) != null
+        }
+    }
+    if (ARRAYS_HASHCODE_MATCHER.matches(callExpression, bindingContext)) {
+        val arguments = (callExpression.valueArguments[0].getArgumentExpression() as KtCallExpression).valueArguments
+        if (arguments.size != klassParameters.size) return false
+        return arguments.all {
+            findParameter(it.getArgumentExpression(), klassParameters) != null
+        }
+    }
+    return false
+}
+
+private fun KtNamedFunction.equalsHasDefaultImpl(
+    klassParameters: List<KtParameter>,
+    methodParameters: MutableList<KtParameter>,
+    className: String?
+): Boolean {
+    return if (hasBlockBody()) {
+        val returnExpressions = collectDescendantsOfType<KtReturnExpression>()
+        if (returnExpressions.size > 1) return false
+        checkEqualsExpression(returnExpressions[0].returnedExpression, klassParameters, methodParameters, className)
+    } else {
+        checkEqualsExpression(this.bodyExpression, klassParameters, methodParameters, className)
+    }
+}
+
+private fun checkEqualsExpression(
+    expression: KtExpression?,
+    klassParameters: List<KtParameter>,
+    methodParameters: MutableList<KtParameter>,
+    className: String?
+): Boolean {
+    val map = mutableMapOf<KtParameter, Boolean>()
+    klassParameters.forEach {
+        map[it] = false
+    }
+    return visitExpression(expression, klassParameters, methodParameters, map, className) && !map.values.contains(false)
+}
+
+private fun visitExpression(
+    expression: KtExpression?,
+    klassParameters: List<KtParameter>,
+    methodParameters: MutableList<KtParameter>,
+    map: MutableMap<KtParameter, Boolean>,
+    className: String?
+): Boolean {
+    if (expression is KtBinaryExpression) {
+        if (expression.operationToken == KtTokens.ANDAND) {
+            return visitExpression(
+                expression.right,
+                klassParameters,
+                methodParameters,
+                map,
+                className
+            ) && visitExpression(expression.left, klassParameters, methodParameters, map, className)
+        }
+        if (expression.operationToken == KtTokens.EQEQ) {
+            checkIfExpressionHasParameter(expression.left, expression.right, klassParameters, methodParameters, map)
+            checkIfExpressionHasParameter(expression.right, expression.left, klassParameters, methodParameters, map)
+            return true
+        }
+    }
+    if (expression is KtIsExpression) {
+        return !(expression.isNegated || expression.typeReference?.nameForReceiverLabel() != className)
+    }
+    return false
+}
+
+private fun checkIfExpressionHasParameter(
+    first: KtExpression?,
+    second: KtExpression?,
+    klassParameters: List<KtParameter>,
+    methodParameters: MutableList<KtParameter>,
+    map: MutableMap<KtParameter, Boolean>,
+) {
+    val parameter = findParameter(first, klassParameters) ?: return
+    if (checkDotExpression(second, parameter, methodParameters))
+        map[parameter] = true
+}
+
+private fun findParameter(
+    expression: KtExpression?,
+    klassParameters: List<KtParameter>,
+): KtParameter? =
+    if (expression is KtNameReferenceExpression)
+        klassParameters.find { klassParameter -> klassParameter.name == expression.getReferencedName() }
+    else null
+
+private fun checkDotExpression(
+    expression: KtExpression?,
+    klassParameter: KtParameter,
+    methodParameters: MutableList<KtParameter>,
+): Boolean =
+    if (expression is KtDotQualifiedExpression) {
+        ((expression.receiverExpression as KtNameReferenceExpression).getReferencedName() == methodParameters[0].name
+                && (expression.selectorExpression as KtNameReferenceExpression).getReferencedName() == klassParameter.name)
+    } else false
+
+
