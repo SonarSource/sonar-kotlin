@@ -12,7 +12,7 @@ class SingletonPatternCheckSample {
         }
 
         companion object {
-            val instance = SimpleSingleton() // Noncompliant {{Singleton pattern should use object declarations or expressions}}
+            val instance = SimpleSingleton() // Noncompliant {{Singleton pattern should use object declarations or expressions.}}
 //                         ^^^^^^^^^^^^^^^^^
             val x = foo() // Compliant, not a constructor call
         }
@@ -22,7 +22,7 @@ class SingletonPatternCheckSample {
 
         companion object {
             val instance by lazy {
-                LazyInitializationSingleton() // Noncompliant {{Singleton pattern should use object declarations or expressions}}
+                LazyInitializationSingleton() // Noncompliant {{Singleton pattern should use object declarations or expressions.}}
 //              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             }
         }
@@ -71,7 +71,7 @@ class SingletonPatternCheckSample {
         private constructor(): this(42)
 
         companion object {
-            val defaultInstance = ReuseConstructorForDelegation(23) // Noncompliant {{Singleton pattern should use object declarations or expressions}}
+            val defaultInstance = ReuseConstructorForDelegation(23) // Noncompliant {{Singleton pattern should use object declarations or expressions.}}
         }
     }
 
@@ -81,7 +81,7 @@ class SingletonPatternCheckSample {
         private constructor(): this(42)
 
         companion object {
-            val defaultInstance = UseNonDefaultConstructor() // Noncompliant {{Singleton pattern should use object declarations or expressions}}
+            val defaultInstance = UseNonDefaultConstructor() // Noncompliant {{Singleton pattern should use object declarations or expressions.}}
         }
     }
 
@@ -98,7 +98,7 @@ class SingletonPatternCheckSample {
     private class PublicConstructorInPrivateClass constructor()
 
     companion object {
-        private val publicConstructorInPrivateClassInstance = PublicConstructorInPrivateClass() // Noncompliant {{Singleton pattern should use object declarations or expressions}}
+        private val publicConstructorInPrivateClassInstance = PublicConstructorInPrivateClass() // Noncompliant {{Singleton pattern should use object declarations or expressions.}}
     }
 
     private class InstanceNotInCompanionObject constructor()
@@ -122,7 +122,7 @@ class SingletonPatternCheckSample {
         companion object {
             val instance by lazy {
                 val id = 42
-                NotFakeInstanceField(id) // Noncompliant {{Singleton pattern should use object declarations or expressions}}
+                NotFakeInstanceField(id) // Noncompliant {{Singleton pattern should use object declarations or expressions.}}
             }
         }
     }
@@ -131,8 +131,8 @@ class SingletonPatternCheckSample {
 
 private class TldSingletonInstance constructor()
 
-private val tldSingletonInstance = TldSingletonInstance() // Noncompliant {{Singleton pattern should use object declarations or expressions}}
+private val tldSingletonInstance = TldSingletonInstance() // Noncompliant {{Singleton pattern should use object declarations or expressions.}}
 
-fun foo(): String = TODO()
+private fun foo(): String = TODO()
 
 fun <T> guarded(initializer: () -> T): ReadWriteProperty<Any?, T> = TODO()

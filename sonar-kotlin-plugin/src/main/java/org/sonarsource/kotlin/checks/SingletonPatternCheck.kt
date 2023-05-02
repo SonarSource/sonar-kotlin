@@ -67,7 +67,7 @@ class SingletonPatternCheck : AbstractCheck() {
         singleConstructorCallByClass.values.stream().filter {
             isInitializingCall(it) || isLazyInitializingCall(it, kotlinFileContext.bindingContext)
         }.forEach {
-            kotlinFileContext.reportIssue(it, "Singleton pattern should use object declarations or expressions")
+            kotlinFileContext.reportIssue(it, "Singleton pattern should use object declarations or expressions.")
         }
     }
 }
@@ -98,7 +98,7 @@ private class SingleConstructorCallExtractor(
 
     val singleConstructorCallByClass: MutableMap<String, KtCallExpression> = mutableMapOf()
 
-    private val constructorMatcher = ConstructorMatcher(typeNames = singletonClassCandidates)
+    private var constructorMatcher = ConstructorMatcher { withTypeNames(*singletonClassCandidates.toTypedArray()) }
 
     override fun visitCallExpression(expression: KtCallExpression) {
         if (!constructorMatcher.matches(expression, bindingContext)) return
@@ -111,6 +111,7 @@ private class SingleConstructorCallExtractor(
         singleConstructorCallByClass.put(fqName, expression)?.let {
             singleConstructorCallByClass.remove(fqName)
             singletonClassCandidates.remove(fqName)
+            constructorMatcher = ConstructorMatcher { withTypeNames(*singletonClassCandidates.toTypedArray()) }
         }
     }
 }

@@ -33,7 +33,9 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 class IndexedAccessCheck : CallAbstractCheck() {
 
     override val functionsToVisit = listOf(
-        FunMatcher(names = setOf("get", "set"), isOperator = true)
+        FunMatcher(isOperator = true) {
+            withNames("get", "set")
+        }
     )
 
     override fun visitFunctionCall(

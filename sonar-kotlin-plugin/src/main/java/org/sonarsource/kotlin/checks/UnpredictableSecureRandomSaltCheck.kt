@@ -44,7 +44,9 @@ private const val SECURE_RANDOM = "java.security.SecureRandom"
 class UnpredictableSecureRandomSaltCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(
         FunMatcher(qualifier = SECURE_RANDOM, name = "setSeed"),
-        ConstructorMatcher(SECURE_RANDOM, arguments = listOf(listOf(ArgumentMatcher.ANY)))
+        ConstructorMatcher(SECURE_RANDOM) {
+            withArguments(ArgumentMatcher.ANY)
+        }
     )
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {

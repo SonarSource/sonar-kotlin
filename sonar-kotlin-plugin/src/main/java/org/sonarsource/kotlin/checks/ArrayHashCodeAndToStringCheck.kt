@@ -49,7 +49,7 @@ private val PRIMITIVE_ARRAY_MATCHERS = listOf(
     }
 }
 
-private val ARRAY_QUALIFIERS: Set<String> = setOf(OBJECT_ARRAY_MATCHER.qualifier!!) + PRIMITIVE_ARRAY_MATCHERS.map { it.qualifier!! }
+private val ARRAY_QUALIFIERS: Set<String> = OBJECT_ARRAY_MATCHER.qualifiers + PRIMITIVE_ARRAY_MATCHERS.flatMap { it.qualifiers }
 
 private val PRIMITIVE_ARRAY_REPLACEMENT = mapOf("hashCode" to "contentHashCode", "toString" to "contentToString")
 private val OBJECT_ARRAY_REPLACEMENT = mapOf("hashCode" to "contentDeepHashCode", "toString" to "contentDeepToString")
