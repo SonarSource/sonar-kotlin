@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -123,6 +124,7 @@ fun compilerConfiguration(
         put(CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS, versionSettings)
         put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
         put(JVMConfigurationKeys.JDK_HOME, File(System.getProperty("java.home")))
+        put(ScriptingConfigurationKeys.DISABLE_SCRIPTING_PLUGIN_OPTION, false)
         numberOfThreads?.let { put(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS, it) }
         addJvmClasspathRoots(classpathFiles)
     }

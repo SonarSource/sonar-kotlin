@@ -1,3 +1,7 @@
+repositories {
+    maven { url = uri("https://repo.gradle.org/gradle/libs-releases") }
+}
+
 plugins {
     java
     application
@@ -11,6 +15,7 @@ dependencies {
     implementation(utilLibs.bundles.detekt)
     // detekt needs "kotlin-compiler-embeddable:{strictly 1.7.21}", to fix this we can specify a version explicitly:
     implementation(libs.kotlin.compiler.embeddable)
+    implementation(libs.gradle.tooling.api)
 
     implementation(utilLibs.bundles.ktlint)
 

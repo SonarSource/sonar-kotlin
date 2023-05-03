@@ -67,7 +67,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @AfterEach
     fun cleanupMocks() {
-        unmockkAll()
+        //unmockkAll()
     }
 
     @Test

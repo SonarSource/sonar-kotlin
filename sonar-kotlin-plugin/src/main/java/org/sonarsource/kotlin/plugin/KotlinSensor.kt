@@ -93,13 +93,19 @@ class KotlinSensor(
 
         val projectConnection = GradleConnector.newConnector()
             //.forProjectDirectory(File("/Users/marharytanedzelska/Projects/sonar-kotlin/its/plugin/projects/gradle-example"))
-            .forProjectDirectory(File("/Users/marharytanedzelska/Projects/gradle-example"))
+            .forProjectDirectory(File("/Users/margarita/Projects/sonar-kotlin"))
             .connect()
 
-        //projectConnection.newBuild().forTasks("prepareKotlinBuildScriptModel").run()
+        projectConnection.newBuild()
+            .forTasks("prepareKotlinBuildScriptModel")
+            .withArguments("--warning-mode", "all")
+            .run()
 
         val models = projectConnection.getModel(KotlinDslScriptsModel::class.java).scriptModels
         models.forEach { println(it.value.classPath) }
+        val reports = models.map { (k, v) ->
+            v.editorReports
+        }
 
         val environment = environment(sensorContext)
 
