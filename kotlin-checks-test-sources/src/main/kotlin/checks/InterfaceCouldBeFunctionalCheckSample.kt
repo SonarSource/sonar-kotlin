@@ -2,6 +2,10 @@ package checks
 
 class InterfaceCouldBeFunctionalCheckSample {
 
+    interface FunFoo : BarParent { // Compliant
+        fun doSomething(args: String): String
+    }
+
     interface IntMapper<T> { // Noncompliant {{Make this interface functional or replace it with a function type.}}
 //  ^^^^^^^^^
         fun map(value: Int): T
@@ -124,4 +128,12 @@ class InterfaceCouldBeFunctionalCheckSample {
             val size = 42
         }
     }
+
+
+    interface BarParent {
+        fun parentFun1()
+        fun parentFun2()
+    }
+
+
 }
