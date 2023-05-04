@@ -322,7 +322,7 @@ fun KtQualifiedExpression.resolveReferenceTarget(bindingContext: BindingContext)
 fun DeclarationDescriptor.scope() = fqNameSafe.asString().substringBeforeLast(".")
 
 fun KtCallExpression.expressionTypeFqn(bindingContext: BindingContext) =
-    bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, this)?.type?.getKotlinTypeFqName(false)
+    bindingContext[BindingContext.EXPRESSION_TYPE_INFO, this]?.type?.getKotlinTypeFqName(false)
 
 private fun KtProperty.determineType(bindingContext: BindingContext) =
     (typeReference?.let { bindingContext.get(BindingContext.TYPE, it) }

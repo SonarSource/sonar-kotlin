@@ -552,7 +552,7 @@ class ApiExtensionsScopeFunctionResolutionTest {
 
     @JvmField
     @TempDir
-    var tempFolder: Path?  = null
+    var tempFolder: Path? = null
 
     @Test
     fun `SensorContext hasCacheEnabled() returns false when the product is sonarlint`() {
