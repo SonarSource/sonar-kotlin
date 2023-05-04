@@ -1,0 +1,15 @@
+{
+  "title": "\"It\" shouldn\u0027t be used as a lambda parameter name",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6558",
+  "sqKey": "S6558",
+  "scope": "All",
+  "quickfix": "unknown"
+}
