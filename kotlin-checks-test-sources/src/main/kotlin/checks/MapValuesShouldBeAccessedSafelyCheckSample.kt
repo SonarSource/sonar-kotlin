@@ -3,7 +3,7 @@ package checks
 class MapValuesShouldBeAccessedSafelyCheckSample {
     val l1 = mapOf(1 to "one", 2 to "two", 3 to "five").get(1) // Compliant
     val l2 = mapOf(1 to "one", 2 to "two", 3 to "five")
-    val a = l2[123]!! // Noncompliant {{"Map" values should be accessed safely. Using the non-null assertion operator here can throw an unexpected NullPointerException.}}
+    val a = l2[123]!! // Noncompliant {{`Map` values should be accessed safely. Using the non-null assertion operator here can throw a NullPointerException.}}
 //          ^^^^^^^^^
 
     fun test() {
@@ -11,7 +11,7 @@ class MapValuesShouldBeAccessedSafelyCheckSample {
         m[3]!! // Compliant
         m.get(3) // Compliant
         val l = mapOf(1 to "one", 2 to "two", 3 to "five")
-        l.get(123)!! // Noncompliant {{"Map" values should be accessed safely. Using the non-null assertion operator here can throw an unexpected NullPointerException.}}
+        l.get(123)!! // Noncompliant {{`Map` values should be accessed safely. Using the non-null assertion operator here can throw a NullPointerException.}}
 //      ^^^^^^^^^^^^
         l[123]!! // Noncompliant
 

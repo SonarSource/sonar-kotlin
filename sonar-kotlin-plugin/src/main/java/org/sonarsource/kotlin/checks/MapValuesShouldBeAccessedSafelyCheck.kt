@@ -30,22 +30,25 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.message
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 @Rule(key = "S6611")
 class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
 
     override val functionsToVisit = listOf(
-            FunMatcher {
-                withQualifiers("kotlin.collections.Map", "kotlin.collections.MutableMap")
-                withNames("get", "getValue", "getOrElse", "getOrDefault", "null")
+            FunMatcher(name = "get") {
+                withDefiningSupertypes("kotlin.collections.Map", "kotlin.collections.MutableMap")
             }
     )
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         val sibling = callExpression.getParentOfType<KtDotQualifiedExpression>(true)?.getNextSiblingIgnoringWhitespace()
         if (sibling is KtOperationReferenceExpression && sibling.operationSignTokenType == KtTokens.EXCLEXCL) {
-            kotlinFileContext.reportIssue(callExpression.parent.parent, "\"Map\" values should be accessed safely. Using the non-null assertion operator here can throw an unexpected NullPointerException.")
+            kotlinFileContext.reportIssue(callExpression.parent.parent, message {
+                code("Map")
+                +" values should be accessed safely. Using the non-null assertion operator here can throw a NullPointerException."
+            })
         }
     }
 
@@ -58,7 +61,10 @@ class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
         arrayAccessExpressions.forEach {
             val sibling = it.getNextSiblingIgnoringWhitespace()
             if (sibling is KtOperationReferenceExpression && sibling.operationSignTokenType == KtTokens.EXCLEXCL)
-                context.reportIssue(it.parent, "\"Map\" values should be accessed safely. Using the non-null assertion operator here can throw an unexpected NullPointerException.")
+                context.reportIssue(it.parent, message {
+                    code("Map")
+                    +" values should be accessed safely. Using the non-null assertion operator here can throw a NullPointerException."
+                })
         }
     }
 
