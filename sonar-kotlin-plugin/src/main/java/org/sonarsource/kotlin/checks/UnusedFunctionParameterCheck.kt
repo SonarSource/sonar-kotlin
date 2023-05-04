@@ -30,7 +30,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.SecondaryLocation
-import org.sonarsource.kotlin.api.isAnonymous
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 

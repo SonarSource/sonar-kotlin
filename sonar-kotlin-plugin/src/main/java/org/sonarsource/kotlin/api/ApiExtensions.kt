@@ -361,9 +361,9 @@ fun KtLambdaArgument.isSuspending(
     ?: false
 
 fun CallableDescriptor.throwsExceptions(exceptions: Collection<String>) =
-    annotations.any {
-        it.fqName?.asString() == THROWS_FQN &&
-            (it.allValueArguments.asSequence()
+    annotations.any { annotation ->
+        annotation.fqName?.asString() == THROWS_FQN &&
+            (annotation.allValueArguments.asSequence()
                 .find { (k, _) -> k.asString() == "exceptionClasses" }
                 ?.value as? ArrayValue)
                 ?.value
@@ -374,8 +374,6 @@ fun CallableDescriptor.throwsExceptions(exceptions: Collection<String>) =
     }
 
 fun KtNamedFunction.isInfix() = hasModifier(KtTokens.INFIX_KEYWORD)
-
-fun KtNamedFunction.isAnonymous() = nameIdentifier == null
 
 fun Call.findCallInPrecedingCallChain(matcher: FunMatcherImpl, bindingContext: BindingContext): Pair<Call, ResolvedCall<*>>? {
     var receiver = this

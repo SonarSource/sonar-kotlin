@@ -40,16 +40,16 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 class EqualsMethodUsageCheck : CallAbstractCheck() {
     override val functionsToVisit = setOf(FunMatcher { name = EQUALS_METHOD_NAME; withArguments(ANY_TYPE) })
 
-    override fun visitFunctionCall(expression: KtCallExpression, resolvedCall: ResolvedCall<*>, ctx: KotlinFileContext) {
-        val parent = expression.parent
-        if (parent is KtDotQualifiedExpression && parent.selectorExpression == expression && !parent.receiverExpression.isSuperOrOuterClass()) {
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
+        val parent = callExpression.parent
+        if (parent is KtDotQualifiedExpression && parent.selectorExpression == callExpression && !parent.receiverExpression.isSuperOrOuterClass()) {
             val grandParent = parent.parent.skipParentParentheses()
-            val callee = expression.calleeExpression!! // as this function was matched .calleeExpression can't be null
+            val callee = callExpression.calleeExpression!! // as this function was matched .calleeExpression can't be null
             if (grandParent is KtPrefixExpression && grandParent.operationToken == KtTokens.EXCL) {
-                val secondaryLocations = listOf(SecondaryLocation(ctx.textRange(grandParent.operationReference), "Negation"))
-                ctx.reportIssue(callee, """Replace "!" and "equals" with binary operator "!=".""", secondaryLocations)
+                val secondaryLocations = listOf(SecondaryLocation(kotlinFileContext.textRange(grandParent.operationReference), "Negation"))
+                kotlinFileContext.reportIssue(callee, """Replace "!" and "equals" with binary operator "!=".""", secondaryLocations)
             } else {
-                ctx.reportIssue(callee, """Replace "equals" with binary operator "==".""")
+                kotlinFileContext.reportIssue(callee, """Replace "equals" with binary operator "==".""")
             }
         }
     }

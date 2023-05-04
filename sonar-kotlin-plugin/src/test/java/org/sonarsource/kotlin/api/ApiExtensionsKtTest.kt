@@ -169,6 +169,7 @@ internal class ApiExtensionsKtTest {
         assertThat(PsiWhiteSpaceImpl(" ").getVariableType(BindingContext.EMPTY)).isNull()
     }
 
+    @Test
     fun `test KtTypeReference getType with null`() {
         assertThat((null as KtTypeReference?).getType(BindingContext.EMPTY)).isNull()
     }
@@ -551,11 +552,11 @@ class ApiExtensionsScopeFunctionResolutionTest {
 
     @JvmField
     @TempDir
-    var tempFolder: Path? = null
+    var tempFolder: Path?  = null
 
     @Test
     fun `SensorContext hasCacheEnabled() returns false when the product is sonarlint`() {
-        val sensorContext = SensorContextTester.create(tempFolder)
+        val sensorContext = SensorContextTester.create(tempFolder!!)
         val sonarLintRuntime = SonarRuntimeImpl.forSonarLint(Version.create(9, 4))
         sensorContext.setRuntime(sonarLintRuntime)
         sensorContext.isCacheEnabled = true
@@ -564,7 +565,7 @@ class ApiExtensionsScopeFunctionResolutionTest {
 
     @Test
     fun `SensorContext hasCacheEnabled() returns false when the product has an API version below 9_4`() {
-        val sensorContext = SensorContextTester.create(tempFolder)
+        val sensorContext = SensorContextTester.create(tempFolder!!)
         val incompatibleRuntime = SonarRuntimeImpl.forSonarQube(Version.create(9, 3), SonarQubeSide.SERVER, SonarEdition.DEVELOPER)
         sensorContext.setRuntime(incompatibleRuntime)
         sensorContext.isCacheEnabled = true
@@ -573,7 +574,7 @@ class ApiExtensionsScopeFunctionResolutionTest {
 
     @Test
     fun `SensorContext hasCacheEnabled() returns false when the product has an API version is 9_4 or greater but the cache is disabled`() {
-        val sensorContext = SensorContextTester.create(tempFolder)
+        val sensorContext = SensorContextTester.create(tempFolder!!)
         val minimumCompatibleRuntime = SonarRuntimeImpl.forSonarQube(Version.create(9, 4), SonarQubeSide.SERVER, SonarEdition.DEVELOPER)
         sensorContext.setRuntime(minimumCompatibleRuntime)
         sensorContext.isCacheEnabled = false
@@ -582,7 +583,7 @@ class ApiExtensionsScopeFunctionResolutionTest {
 
     @Test
     fun `SensorContext hasCacheEnabled() returns true when the product has an API version is 9_4 or greater but the cache is enabled`() {
-        val sensorContext = SensorContextTester.create(tempFolder)
+        val sensorContext = SensorContextTester.create(tempFolder!!)
         val minimumCompatibleRuntime = SonarRuntimeImpl.forSonarQube(Version.create(9, 4), SonarQubeSide.SERVER, SonarEdition.DEVELOPER)
         sensorContext.setRuntime(minimumCompatibleRuntime)
         sensorContext.isCacheEnabled = true
