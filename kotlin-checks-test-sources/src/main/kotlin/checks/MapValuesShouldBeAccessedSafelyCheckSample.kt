@@ -14,6 +14,10 @@ class MapValuesShouldBeAccessedSafelyCheckSample {
         l.get(123)!! // Noncompliant {{"Map" values should be accessed safely. Using the non-null assertion operator here can throw an unexpected NullPointerException.}}
 //      ^^^^^^^^^^^^
         l[123]!! // Noncompliant
+
+        val a = l.get(123) ?: ""
+
+        l.get(123)!!.get(1) // Noncompliant
     }
 
     fun test2() {
@@ -26,8 +30,13 @@ class MapValuesShouldBeAccessedSafelyCheckSample {
         l[123] ?: "empty" // Compliant, has default
     }
 
-    fun test3(map: Map<Int, String>) {
+    fun test3(map: Map<Int, String>, mutableMap: MutableMap<Int, String>) {
         map.get(123)!! // Noncompliant
         map[0]!! // Noncompliant
+
+        mutableMap.get(1)!! // Noncompliant
+        mutableMap.get(1) // Compliant
+        mutableMap[1]!! // Noncompliant
+        mutableMap[1] // Compliant
     }
 }
