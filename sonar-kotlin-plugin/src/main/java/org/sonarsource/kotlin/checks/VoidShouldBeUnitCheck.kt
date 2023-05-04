@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.StarProjectionImpl
 import org.jetbrains.kotlin.types.TypeProjection
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
@@ -66,7 +67,7 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
     override fun visitTypeAlias(typeAlias: KtTypeAlias, kotlinFileContext: KotlinFileContext) {
 
         val ktTypeReferences =
-            flattenTypeRefs(typeAlias.getTypeReference()?.typeElement?.typeArgumentsAsTypes ?: return)
+            flattenTypeRefs(typeAlias.getTypeReference().nonNullTypeArguments() ?: return)
 
         kotlinFileContext.bindingContext.get(BindingContext.TYPE_ALIAS, typeAlias)
             ?.underlyingType
@@ -74,9 +75,7 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
             ?.forEachIndexed { i, type ->
                 if (type.isJavaLangVoid()) {
                     kotlinFileContext.reportIssue(
-                        // ktTypeReferences[i] can only be null in case of a type <*>, however to reach this line,
-                        // the type must be <Void> and hence ktTypeReferences[i] must also be `Void`.
-                        ktTypeReferences[i]!!,
+                        ktTypeReferences[i],
                         message
                     )
                 }
@@ -86,12 +85,14 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
 
 private tailrec fun flattenTypeRefs(
     typeRefs: List<KtTypeReference?>,
-    acc: MutableList<KtTypeReference?> = mutableListOf()
-): List<KtTypeReference?> =
+    acc: MutableList<KtTypeReference> = mutableListOf()
+): List<KtTypeReference> =
     if (typeRefs.isEmpty()) acc
     else flattenTypeRefs(
-        typeRefs = typeRefs.flatMap { it?.typeElement?.typeArgumentsAsTypes ?: emptyList() },
-        acc = acc.apply { addAll(typeRefs) })
+        typeRefs = typeRefs.flatMap { it.nonNullTypeArguments() ?: emptyList() },
+        acc = acc.apply { addAll(typeRefs.filterNotNull()) })
+
+private fun KtTypeReference?.nonNullTypeArguments() = this?.typeElement?.typeArgumentsAsTypes?.filterNotNull()
 
 private tailrec fun flattenTypeProjections(
     typeProjections: List<TypeProjection>,
@@ -99,8 +100,10 @@ private tailrec fun flattenTypeProjections(
 ): List<TypeProjection> =
     if (typeProjections.isEmpty()) acc
     else flattenTypeProjections(
-        typeProjections = typeProjections.flatMap { it.type.arguments },
-        acc = acc.apply { addAll(typeProjections) })
+        typeProjections = typeProjections.flatMap { it.type.arguments.withoutStarProjection() },
+        acc = acc.apply { addAll(typeProjections.withoutStarProjection()) })
+
+private fun List<TypeProjection>.withoutStarProjection() = filter { projection -> projection !is StarProjectionImpl }
 
 private fun KotlinType.flattenTypeArguments(): List<KotlinType> = flattenTypeProjections(arguments).map { it.type }
 

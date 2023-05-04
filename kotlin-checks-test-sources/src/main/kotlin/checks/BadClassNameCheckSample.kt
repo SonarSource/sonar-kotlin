@@ -18,7 +18,7 @@ class MyClassC{} // Compliant
 
 class MyClass_{} // Noncompliant {{Rename class "MyClass_" to match the regular expression ^[A-Z][a-zA-Z0-9]*$}}
 
-enum class Enum {
+private enum class Enum {
     MY_ENUM_1, // Compliant
     MY_ENUM_2, // Compliant
 }

@@ -1,5 +1,7 @@
 package checks
 
+typealias RecursiveTypeAlias = (value: Enum<*>?) -> Unit? // Compliant
+
 private typealias TypeAlias = () -> Map<*, Void>  // Noncompliant {{Replace this usage of `Void` type with `Unit`.}}
 //                                         ^^^^
 
