@@ -19,11 +19,11 @@
  */
 package org.sonarsource.kotlin.plugin
 
-import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.slf4j.event.Level
 import org.sonar.api.batch.sensor.cache.ReadCache
 import org.sonar.api.batch.sensor.cache.WriteCache
-import org.sonar.api.utils.log.LoggerLevel
 import org.sonarsource.kotlin.DummyInputFile
 import org.sonarsource.kotlin.DummyReadCache
 import org.sonarsource.kotlin.DummyWriteCache
@@ -68,7 +68,7 @@ class ContentHashCacheTest : AbstractSensorTest() {
         writeCache.write("kotlin:contentHash:MD5:DummyFile.kt", fileHash)
         val contentHashCache = cacheFromContextData(readCache, writeCache, true)
         contentHashCache?.hasDifferentContentCached(dummyFile)
-        assertThat(logTester.logs(LoggerLevel.WARN)).contains("Cache already contains key kotlin:contentHash:MD5:DummyFile.kt")
+        assertThat(logTester.logs(Level.WARN)).contains("Cache already contains key kotlin:contentHash:MD5:DummyFile.kt")
     }
 
     @Test

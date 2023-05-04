@@ -19,14 +19,14 @@
  */
 package org.sonarsource.kotlin.externalreport.ktlint
 
+import org.slf4j.LoggerFactory
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.notifications.AnalysisWarnings
-import org.sonar.api.utils.log.Loggers
 import org.sonarsource.kotlin.externalreport.ExternalReporting
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintRulesDefinition.Companion.EXPERIMENTAL_RULE_PREFIX
 import java.io.File
 
-internal val LOG = Loggers.get(ReportImporter::class.java)
+internal val LOG = LoggerFactory.getLogger(ReportImporter::class.java)
 
 internal class ReportImporter(val analysisWarnings: AnalysisWarnings, val context: SensorContext) {
     fun importFile(reportFile: File) {

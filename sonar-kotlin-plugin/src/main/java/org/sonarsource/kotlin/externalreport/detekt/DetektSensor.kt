@@ -19,10 +19,10 @@
  */
 package org.sonarsource.kotlin.externalreport.detekt
 
+import org.slf4j.LoggerFactory
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.notifications.AnalysisWarnings
 import org.sonar.api.rule.RuleKey
-import org.sonar.api.utils.log.Loggers
 import org.sonarsource.kotlin.externalreport.ExternalReporting
 import org.sonarsource.kotlin.plugin.AbstractPropertyHandlerSensor
 import org.sonarsource.kotlin.plugin.KotlinPlugin
@@ -37,7 +37,7 @@ class DetektSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandler
     KotlinPlugin.KOTLIN_LANGUAGE_KEY,
 ) {
     companion object {
-        private val LOG = Loggers.get(DetektSensor::class.java)
+        private val LOG = LoggerFactory.getLogger(DetektSensor::class.java)
         const val LINTER_KEY = "detekt"
         const val LINTER_NAME = "detekt"
         private const val DETEKT_PREFIX = "detekt."
