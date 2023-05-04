@@ -19,15 +19,15 @@
  */
 package org.sonarsource.kotlin.plugin.cpd
 
+import org.slf4j.LoggerFactory
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.cache.ReadCache
 import org.sonar.api.batch.sensor.cache.WriteCache
-import org.sonar.api.utils.log.Loggers
 import org.sonarsource.kotlin.plugin.KotlinSensor
 
 private const val DELIMITER: Char = 31.toChar() // ASCII unit delimiter
 
-private val LOG = Loggers.get(KotlinSensor::class.java)
+private val LOG = LoggerFactory.getLogger(KotlinSensor::class.java)
 
 /**
  * Load the CPD tokens stored in the cache during a previous analysis.

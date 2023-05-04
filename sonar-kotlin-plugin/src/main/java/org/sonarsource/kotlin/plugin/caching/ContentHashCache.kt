@@ -19,15 +19,16 @@
  */
 package org.sonarsource.kotlin.plugin.caching
 
+import org.slf4j.LoggerFactory
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.cache.ReadCache
 import org.sonar.api.batch.sensor.cache.WriteCache
-import org.sonar.api.utils.log.Loggers
 import org.sonarsource.kotlin.api.hasCacheEnabled
+import org.sonarsource.kotlin.api.trace
 import java.security.MessageDigest
 
-private val LOG = Loggers.get(ContentHashCache::class.java)
+private val LOG = LoggerFactory.getLogger(ContentHashCache::class.java)
 private const val HASH_ALGORITHM = "MD5"
 private val messageDigest = MessageDigest.getInstance(HASH_ALGORITHM)
 private const val CONTENT_HASHES_KEY = "kotlin:contentHash:$HASH_ALGORITHM:"

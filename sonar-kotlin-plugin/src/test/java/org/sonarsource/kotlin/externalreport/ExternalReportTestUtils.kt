@@ -20,11 +20,11 @@
 package org.sonarsource.kotlin.externalreport
 
 import org.assertj.core.api.Assertions.assertThat
+import org.slf4j.event.Level
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonar.api.testfixtures.log.LogTesterJUnit5
-import org.sonar.api.utils.log.LoggerLevel
 import org.sonarsource.kotlin.plugin.KotlinPlugin
 import java.io.IOException
 import java.nio.charset.StandardCharsets
@@ -43,9 +43,9 @@ object ExternalReportTestUtils {
     }
 
     fun assertNoErrorWarnDebugLogs(logTester: LogTesterJUnit5) {
-        assertThat(logTester.logs(LoggerLevel.ERROR)).isEmpty()
-        assertThat(logTester.logs(LoggerLevel.WARN)).isEmpty()
-        assertThat(logTester.logs(LoggerLevel.DEBUG)).isEmpty()
+        assertThat(logTester.logs(Level.ERROR)).isEmpty()
+        assertThat(logTester.logs(Level.WARN)).isEmpty()
+        assertThat(logTester.logs(Level.DEBUG)).isEmpty()
     }
 
     fun onlyOneLogElement(elements: List<String>): String {

@@ -19,7 +19,7 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.typeUtil.supertypes
@@ -42,8 +42,8 @@ class CoroutineScopeFunSuspendingCheck : AbstractCheck() {
         val resolvedReceiverType = kotlinFileContext.bindingContext.get(BindingContext.TYPE, receiverType) ?: return
 
         if (
-            (resolvedReceiverType.getJetTypeFqName(false) == COROUTINE_SCOPE ||
-                resolvedReceiverType.supertypes().any { it.getJetTypeFqName(false) == COROUTINE_SCOPE })
+            (resolvedReceiverType.getKotlinTypeFqName(false) == COROUTINE_SCOPE ||
+                resolvedReceiverType.supertypes().any { it.getKotlinTypeFqName(false) == COROUTINE_SCOPE })
         ) {
             val secondaries = listOf(SecondaryLocation(kotlinFileContext.textRange(receiverType)))
             kotlinFileContext.reportIssue(suspendModifier, MESSAGE, secondaries)

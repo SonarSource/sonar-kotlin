@@ -19,16 +19,16 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import org.slf4j.LoggerFactory
 import org.sonar.api.batch.sensor.Sensor
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.config.Configuration
 import org.sonar.api.notifications.AnalysisWarnings
-import org.sonar.api.utils.log.Loggers
 import org.sonarsource.analyzer.commons.ExternalReportProvider
 import java.io.File
 
-private val LOG = Loggers.get(AbstractPropertyHandlerSensor::class.java)
+private val LOG = LoggerFactory.getLogger(AbstractPropertyHandlerSensor::class.java)
 
 abstract class AbstractPropertyHandlerSensor protected constructor(
     private val analysisWarnings: AnalysisWarnings,

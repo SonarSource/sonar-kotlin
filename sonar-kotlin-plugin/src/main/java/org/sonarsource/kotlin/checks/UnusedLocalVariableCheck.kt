@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.diagnostics.Errors
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.sonar.check.Rule
@@ -35,7 +35,7 @@ class UnusedLocalVariableCheck : AbstractCheck() {
         context.diagnostics
             .filter {
                 it.factory == Errors.UNUSED_VARIABLE &&
-                    it.psiElement.getVariableType(context.bindingContext)?.getJetTypeFqName(false) != "kotlin.Nothing"
+                    it.psiElement.getVariableType(context.bindingContext)?.getKotlinTypeFqName(false) != "kotlin.Nothing"
             }
             .map { it.psiElement as KtNamedDeclaration }
             .forEach {

@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.plugin
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.slf4j.LoggerFactory
 import org.sonar.api.SonarProduct
 import org.sonar.api.batch.fs.FileSystem
 import org.sonar.api.batch.fs.InputFile
@@ -32,13 +33,14 @@ import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContextFactory
-import org.sonar.api.utils.log.Loggers
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.AbstractCheck
 import org.sonarsource.kotlin.api.InputFileContext
 import org.sonarsource.kotlin.api.ParseException
+import org.sonarsource.kotlin.api.debug
 import org.sonarsource.kotlin.api.hasCacheEnabled
 import org.sonarsource.kotlin.api.regex.RegexCache
+import org.sonarsource.kotlin.api.trace
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinSyntaxStructure
 import org.sonarsource.kotlin.converter.KotlinTree
@@ -62,12 +64,10 @@ import org.sonarsource.kotlin.visiting.KtChecksVisitor
 import org.sonarsource.performance.measure.PerformanceMeasure
 import java.util.concurrent.TimeUnit
 import kotlin.jvm.optionals.getOrElse
-import kotlin.time.ExperimentalTime
 
-private val LOG = Loggers.get(KotlinSensor::class.java)
+private val LOG = LoggerFactory.getLogger(KotlinSensor::class.java)
 private val EMPTY_FILE_CONTENT_PATTERN = Regex("""\s*+""")
 
-@OptIn(ExperimentalTime::class)
 class KotlinSensor(
     checkFactory: CheckFactory,
     private val fileLinesContextFactory: FileLinesContextFactory,
@@ -152,7 +152,6 @@ class KotlinSensor(
         } ?: false
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     private fun canSkipUnchangedFiles(sensorContext: SensorContext): Boolean {
         return sensorContext.config().getBoolean(KotlinPlugin.SKIP_UNCHANGED_FILES_OVERRIDE).getOrElse {
             try {

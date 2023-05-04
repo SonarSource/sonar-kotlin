@@ -19,19 +19,20 @@
  */
 package org.sonarsource.kotlin.plugin.surefire;
 
-import java.io.File;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonarsource.kotlin.plugin.surefire.api.SurefireUtils;
 
+import java.io.File;
+import java.util.List;
+
 public class KotlinSurefireSensor implements Sensor {
-  private static final Logger LOGGER = Loggers.get(KotlinSurefireSensor.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(KotlinSurefireSensor.class);
 
   private final KotlinSurefireParser kotlinSurefireParser;
   private final Configuration settings;

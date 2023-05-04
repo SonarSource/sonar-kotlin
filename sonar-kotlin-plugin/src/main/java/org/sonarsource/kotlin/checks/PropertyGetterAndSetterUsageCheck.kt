@@ -19,7 +19,7 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtModifierListOwner
@@ -118,7 +118,7 @@ private fun List<KtNamedFunction>.unambiguousFunction() = if (this.size == 1) th
 
 private fun capitalize(name: String): String = name.replaceFirstChar { it.uppercase() }
 
-private fun KotlinType.matches(qualifiedTypeName: String) = !isNullable() && getJetTypeFqName(true) == qualifiedTypeName
+private fun KotlinType.matches(qualifiedTypeName: String) = !isNullable() && getKotlinTypeFqName(true) == qualifiedTypeName
 
 private fun KtNamedFunction.isIncompatiblePropertyAccessor(): Boolean = isAbstract() || overrides() || isAnnotated
 

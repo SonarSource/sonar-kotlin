@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -148,7 +148,7 @@ class FunMatcherImpl(
     private fun checkReturnType(descriptor: CallableDescriptor) =
         returnType?.let {
             val kotlinType = descriptor.returnType
-            if (kotlinType?.constructor?.declarationDescriptor != null) it == kotlinType.getJetTypeFqName(false)
+            if (kotlinType?.constructor?.declarationDescriptor != null) it == kotlinType.getKotlinTypeFqName(false)
             else null
         } ?: true
 

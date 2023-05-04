@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import org.slf4j.LoggerFactory
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.TextPointer
 import org.sonar.api.batch.fs.TextRange
@@ -26,7 +27,6 @@ import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.issue.MessageFormatting
 import org.sonar.api.batch.sensor.issue.NewIssueLocation
 import org.sonar.api.rule.RuleKey
-import org.sonar.api.utils.log.Loggers
 import org.sonarsource.kotlin.api.InputFileContext
 import org.sonarsource.kotlin.api.Message
 import org.sonarsource.kotlin.api.SecondaryLocation
@@ -34,7 +34,7 @@ import org.sonarsource.kotlin.converter.KotlinTextRanges.contains
 
 private const val PARSING_ERROR_RULE_KEY = "ParsingError"
 
-private val LOG = Loggers.get(InputFileContextImpl::class.java)
+private val LOG = LoggerFactory.getLogger(InputFileContextImpl::class.java)
 
 // To avoid many duplicate log messages when reporting issues with message code highlighting, we statically remember when we've already
 // logged this message and can refrain from logging it again. Mutable static state is not a great pattern in general. Here, however, it is
