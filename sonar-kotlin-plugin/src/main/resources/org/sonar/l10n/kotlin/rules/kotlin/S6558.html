@@ -1,0 +1,41 @@
+<h2>Why is this an issue?</h2>
+<p><code>it</code> is a special identifier that allows you to refer to the current parameter being passed to a lambda expression without explicitly
+naming the parameter.</p>
+<h2>How to fix it</h2>
+<p>Lambda expressions are a concise way of writing anonymous functions. Many lambda expressions have only one parameter, when this is true the
+compiler can determine the parameter type by context. Thus when using <code>it</code> with single parameter lambda expressions, you do not need to
+declare the type.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<p>This lambda expression uses a single parameter so we do not need to explicitly declare the <code>it</code> parameter.</p>
+<pre>
+listOf(1, 2, 3).forEach { it -&gt; it.and(6) } // Noncompliant
+</pre>
+<h4>Compliant solution</h4>
+<p>Instead, we can write this lambda expression without using <code>→</code> because the compiler assumes that you want to use the implicit
+<code>it</code> parameter to refer to the current element being iterated over.</p>
+<pre>
+listOf(1, 2, 3).forEach { it.and(6) } // Compliant
+</pre>
+<h4>Noncompliant code example</h4>
+<pre>
+val l1: (Int) -&gt; Int = { it -&gt; it + 5 } // Noncompliant
+</pre>
+<h4>Compliant solution</h4>
+<p>In the first example, since since the expression to the left of the arrow is a lambda parameter declaration it, 'it' should be removed. In the
+second example, you must use the lambda parameter to be able to declare the parameter type because it can not be inferred from the context.</p>
+<pre>
+val l3: (Int) -&gt; Int = { it + 5 } // Compliant
+val l3 = {it: Int -&gt; it + 5 } // Compliant, need to know the type
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/lambdas.html#lambda-expression-syntax">Kotlin Documentation - Lambdas</a> </li>
+  <li> <a href="https://kotlinlang.org/docs/lambdas.html#it-implicit-name-of-a-single-parameter">Kotlin Documentation - "it" parameter</a> </li>
+</ul>
+<h3>Articles &amp; blog posts</h3>
+<ul>
+  <li> <a href="https://blog.logrocket.com/a-complete-guide-to-kotlin-lambda-expressions/">A complete guide to Kotlin lambda expressions</a> </li>
+</ul>
+
