@@ -19,7 +19,7 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -70,5 +70,5 @@ private fun hasExactlyOneFunctionAndNoProperties(klass: KtClass): Boolean {
 
 private fun isFunctionalInterfaceAnnotation(annotation: KtAnnotationEntry, context: KotlinFileContext): Boolean {
     val annotationType = annotation.typeReference.getType(context.bindingContext)
-    return (annotationType?.getJetTypeFqName(false) == "java.lang.FunctionalInterface")
+    return (annotationType?.getKotlinTypeFqName(false) == "java.lang.FunctionalInterface")
 }

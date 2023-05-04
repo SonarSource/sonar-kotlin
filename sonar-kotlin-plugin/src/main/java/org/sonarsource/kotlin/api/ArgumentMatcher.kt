@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.api
 
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.TypeNullability
@@ -50,9 +50,9 @@ class ArgumentMatcher(
         nullability?.let { it == descriptor.type.nullability() } ?: true
 
     private fun matchesQualifiedName(kotlinType: KotlinType?) =
-        // Note that getJetTypeFqName(...) is from the kotlin.js package. We use it anyway,
+        // Note that getKotlinTypeFqName(...) is from the kotlin.js package. We use it anyway,
         // as it seems to be the best option to get a type's fully qualified name
-        typeName?.let { it == kotlinType?.getJetTypeFqName(false) } ?: true
+        typeName?.let { it == kotlinType?.getKotlinTypeFqName(false) } ?: true
 
     private fun matchesUnqualifiedName(kotlinType: KotlinType?) =
         // Note that nameIfStandardType is from the kotlin.js package. We use it anyway,

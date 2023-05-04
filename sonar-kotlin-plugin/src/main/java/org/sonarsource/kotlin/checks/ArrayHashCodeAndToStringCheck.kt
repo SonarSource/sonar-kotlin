@@ -19,7 +19,7 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
@@ -82,7 +82,7 @@ class ArrayHashCodeAndToStringCheck : CallAbstractCheck() {
     private fun receiverIsArrayOfArray(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext): Boolean {
         val bindingContext = kotlinFileContext.bindingContext
         return callExpression.predictReceiverExpression(bindingContext)?.determineType(bindingContext)?.arguments
-                ?.any { ARRAY_QUALIFIERS.contains(it.type.getJetTypeFqName(false)) }
+                ?.any { ARRAY_QUALIFIERS.contains(it.type.getKotlinTypeFqName(false)) }
             ?: false
     }
 

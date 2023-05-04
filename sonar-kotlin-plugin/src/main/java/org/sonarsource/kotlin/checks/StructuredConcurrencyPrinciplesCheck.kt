@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -87,7 +87,7 @@ private fun MutableList<KtAnnotationEntry>?.isAnnotatedWithOptInDelicateApi(bind
                 (typeFqn == "kotlin.OptIn"
                     && annotation.valueArguments.any { valueArgument ->
                     valueArgument.getArgumentExpression()?.getType(bindingContext)
-                        ?.getJetTypeFqName(true) == DELICATE_API_CLASS_TYPE
+                        ?.getKotlinTypeFqName(true) == DELICATE_API_CLASS_TYPE
                 })
         }
     } ?: false

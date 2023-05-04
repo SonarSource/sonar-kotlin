@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
@@ -244,12 +244,12 @@ class ApiExtensionsKtDetermineTypeTest {
         val expr1 = ktFile.findDescendantOfType<KtCallExpression> { it.text == "stringReturning()" }!!
         val expr2 = ktFile.findDescendantOfType<KtCallExpression> { it.text == "arrayOf(\"a\", \"b\")" }!!
 
-        assertThat(expr1.determineType(bindingContext)!!.getJetTypeFqName(false))
+        assertThat(expr1.determineType(bindingContext)!!.getKotlinTypeFqName(false))
             .isEqualTo("kotlin.String")
         val expr2Type = expr2.determineType(bindingContext)!!
-        assertThat(expr2Type.getJetTypeFqName(false))
+        assertThat(expr2Type.getKotlinTypeFqName(false))
             .isEqualTo("kotlin.Array")
-        assertThat(expr2Type.arguments[0].type.getJetTypeFqName(false))
+        assertThat(expr2Type.arguments[0].type.getKotlinTypeFqName(false))
             .isEqualTo("kotlin.String")
     }
 
@@ -257,18 +257,18 @@ class ApiExtensionsKtDetermineTypeTest {
     fun `determineType of KtParameter`() {
         val expr = ktFile.findDescendantOfType<KtParameter> { it.text == "param: Float" }!!
 
-        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
             .isEqualTo("kotlin.Float")
     }
 
     @Test
     fun `determineType of KtValueArgument`() {
         val expr = ktFile.findDescendantOfType<KtValueArgument> { it.text == "1.2f" }!!
-        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
             .isEqualTo("kotlin.Float")
 
         val exprLazy = ktFile.findDescendantOfType<KtValueArgument> { it.text == "lz" }!!
-        assertThat(exprLazy.determineType(bindingContext)!!.getJetTypeFqName(false))
+        assertThat(exprLazy.determineType(bindingContext)!!.getKotlinTypeFqName(false))
             .isEqualTo("kotlin.String")
 
     }
@@ -294,7 +294,7 @@ class ApiExtensionsKtDetermineTypeTest {
     fun `determineType of KtTypeReference`() {
         val expr = ktFile.findDescendantOfType<KtTypeReference> { it.text == "Int" }!!
 
-        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
             .isEqualTo("kotlin.Int")
     }
 
@@ -302,7 +302,7 @@ class ApiExtensionsKtDetermineTypeTest {
     fun `determineType of KtProperty`() {
         val expr = ktFile.findDescendantOfType<KtProperty> { it.text == "val prop: Int = 0" }!!
 
-        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
             .isEqualTo("kotlin.Int")
     }
 
@@ -310,9 +310,9 @@ class ApiExtensionsKtDetermineTypeTest {
     fun `determineType of KtDotQualifiedExpression`() {
         val expr = ktFile.findDescendantOfType<KtDotQualifiedExpression> { it.text == "this.prop" }!!
         val expr2 = ktFile.findDescendantOfType<KtDotQualifiedExpression> { it.text == "StandardCharsets.US_ASCII" }!!
-        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
             .isEqualTo("kotlin.Int")
-        assertThat(expr2.determineType(bindingContext)!!.getJetTypeFqName(false))
+        assertThat(expr2.determineType(bindingContext)!!.getKotlinTypeFqName(false))
             .isEqualTo("java.nio.charset.Charset")
 
     }
@@ -327,7 +327,7 @@ class ApiExtensionsKtDetermineTypeTest {
     fun `determineType of KtReferenceExpression`() {
         val expr = ktFile.findDescendantOfType<KtReferenceExpression> { it.text == "Int" }!!
 
-        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
             .isEqualTo("kotlin.Int")
     }
 
@@ -335,7 +335,7 @@ class ApiExtensionsKtDetermineTypeTest {
     fun `determineType of KtFunction`() {
         val expr = ktFile.findDescendantOfType<KtFunction> { it.name == "stringReturning" }!!
 
-        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
             .isEqualTo("kotlin.String")
     }
 
@@ -343,14 +343,14 @@ class ApiExtensionsKtDetermineTypeTest {
     fun `determineType of KtClass`() {
         val expr = ktFile.findDescendantOfType<KtClass> { it.name == "Foo" }!!
 
-        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
             .isEqualTo("bar.Foo")
     }
 
     @Test
     fun `determineType of KtExpression`() {
         val expr = ktFile.findDescendantOfType<KtBlockExpression> { it.text == "{ 1 }" }!!
-        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
             .isEqualTo("kotlin.Int")
     }
 
@@ -371,7 +371,7 @@ class ApiExtensionsKtDetermineTypeTest {
     fun `determineType of ValueDescriptor`() {
         val expr = ktFile.findDescendantOfType<KtReferenceExpression> { it.text == "obj" }!!
 
-        assertThat(expr.determineType(bindingContext)!!.getJetTypeFqName(false))
+        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
             .isEqualTo("bar.Foo")
     }
 

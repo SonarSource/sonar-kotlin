@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -96,12 +96,12 @@ class ServerCertificateCheck : AbstractCheck() {
 
         override fun visitThrowExpression(expression: KtThrowExpression) {
             throwFound =
-                throwFound || CERTIFICATE_EXCEPTION == expression.thrownExpression.determineType(bindingContext)?.getJetTypeFqName(false)
+                throwFound || CERTIFICATE_EXCEPTION == expression.thrownExpression.determineType(bindingContext)?.getKotlinTypeFqName(false)
         }
 
         override fun visitCatchSection(catchClause: KtCatchClause) {
             catchFound =
-                catchFound || CERTIFICATE_EXCEPTION == catchClause.catchParameter.determineType(bindingContext)?.getJetTypeFqName(false)
+                catchFound || CERTIFICATE_EXCEPTION == catchClause.catchParameter.determineType(bindingContext)?.getKotlinTypeFqName(false)
         }
 
         fun throwsCertificateExceptionWithoutCatching(): Boolean {
