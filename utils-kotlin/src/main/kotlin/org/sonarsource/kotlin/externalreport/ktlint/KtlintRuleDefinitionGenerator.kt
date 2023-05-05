@@ -20,14 +20,13 @@
 package org.sonarsource.kotlin.externalreport.ktlint
 
 import com.google.gson.GsonBuilder
-import com.pinterest.ktlint.ruleset.experimental.ExperimentalRuleSetProvider
+import com.pinterest.ktlint.rule.engine.core.api.Rule
 import com.pinterest.ktlint.ruleset.standard.StandardRuleSetProvider
 import org.sonarsource.kotlin.externalreport.ExternalReporting
 import org.sonarsource.kotlin.externalreport.ExternalRule
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import com.pinterest.ktlint.core.Rule as KtlintRule
 
 internal val DEFAULT_RULES_FILE = Paths.get("sonar-kotlin-plugin", "src", "main", "resources")
     .resolve(Path.of(KtlintRulesDefinition.RULES_FILE))
@@ -57,7 +56,7 @@ fun generateRuleDefinitionsJson(): String {
     }.also {
         println("Importing ${it.size} standard rules")
     }
-    val experimentalRules = ExperimentalRuleSetProvider().getRuleProviders().map {
+    val experimentalRules = StandardRuleSetProvider().getRuleProviders().map {
         ktlintToExternalRule(it.createNewRuleInstance())
     }.also {
         println("Importing ${it.size} experimental rules")
@@ -81,9 +80,9 @@ fun generateRuleDefinitionsJson(): String {
         }
 }
 
-fun ktlintToExternalRule(ktLintRule: KtlintRule) =
+fun ktlintToExternalRule(ktLintRule: Rule) =
     ExternalRule(
-        key = ktLintRule.id,
+        key = ktLintRule.ruleId.value,
         name = generateRuleName(ktLintRule),
         description = null,
         url = KTLINT_RULES_WEBPAGE,
@@ -93,5 +92,5 @@ fun ktlintToExternalRule(ktLintRule: KtlintRule) =
         constantDebtMinutes = DEFAULT_DEBT,
     )
 
-private fun generateRuleName(rule: KtlintRule): String =
+private fun generateRuleName(rule: Rule): String =
     rule.javaClass.simpleName.removeSuffix("Rule").replace("([^A-Z])([A-Z])".toRegex(), "$1 $2")

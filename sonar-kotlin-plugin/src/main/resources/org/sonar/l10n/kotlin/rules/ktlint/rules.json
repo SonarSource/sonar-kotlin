@@ -1,6 +1,6 @@
 [
   {
-    "key": "annotation",
+    "key": "standard:annotation",
     "name": "Annotation",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
@@ -12,7 +12,7 @@
     "constantDebtMinutes": 0
   },
   {
-    "key": "annotation-spacing",
+    "key": "standard:annotation-spacing",
     "name": "Annotation Spacing",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
@@ -24,7 +24,7 @@
     "constantDebtMinutes": 0
   },
   {
-    "key": "argument-list-wrapping",
+    "key": "standard:argument-list-wrapping",
     "name": "Argument List Wrapping",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
@@ -36,547 +36,7 @@
     "constantDebtMinutes": 0
   },
   {
-    "key": "chain-wrapping",
-    "name": "Chain Wrapping",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "comment-spacing",
-    "name": "Comment Spacing",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "enum-entry-name-case",
-    "name": "Enum Entry Name Case",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "filename",
-    "name": "Filename",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "final-newline",
-    "name": "Final Newline",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "import-ordering",
-    "name": "Import Ordering",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "indent",
-    "name": "Indentation",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "max-line-length",
-    "name": "Max Line Length",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "modifier-order",
-    "name": "Modifier Order",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "multiline-if-else",
-    "name": "Multi Line If Else",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "no-blank-line-before-rbrace",
-    "name": "No Blank Line Before Rbrace",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "no-blank-lines-in-chained-method-calls",
-    "name": "No Blank Lines In Chained Method Calls",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "no-consecutive-blank-lines",
-    "name": "No Consecutive Blank Lines",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "no-empty-class-body",
-    "name": "No Empty Class Body",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "no-empty-first-line-in-method-block",
-    "name": "No Empty First Line In Method Block",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "no-line-break-after-else",
-    "name": "No Line Break After Else",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "no-line-break-before-assignment",
-    "name": "No Line Break Before Assignment",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "no-multi-spaces",
-    "name": "No Multiple Spaces",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "no-semi",
-    "name": "No Semicolons",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "no-trailing-spaces",
-    "name": "No Trailing Spaces",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "no-unit-return",
-    "name": "No Unit Return",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "no-unused-imports",
-    "name": "No Unused Imports",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "no-wildcard-imports",
-    "name": "No Wildcard Imports",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "package-name",
-    "name": "Package Name",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "parameter-list-wrapping",
-    "name": "Parameter List Wrapping",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "spacing-around-angle-brackets",
-    "name": "Spacing Around Angle Brackets",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "colon-spacing",
-    "name": "Spacing Around Colon",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "comma-spacing",
-    "name": "Spacing Around Comma",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "curly-spacing",
-    "name": "Spacing Around Curly",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "dot-spacing",
-    "name": "Spacing Around Dot",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "double-colon-spacing",
-    "name": "Spacing Around Double Colon",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "keyword-spacing",
-    "name": "Spacing Around Keyword",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "op-spacing",
-    "name": "Spacing Around Operators",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "paren-spacing",
-    "name": "Spacing Around Parens",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "range-spacing",
-    "name": "Spacing Around Range Operator",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "unary-op-spacing",
-    "name": "Spacing Around Unary Operator",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "spacing-between-declarations-with-annotations",
-    "name": "Spacing Between Declarations With Annotations",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "spacing-between-declarations-with-comments",
-    "name": "Spacing Between Declarations With Comments",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "string-template",
-    "name": "String Template",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "trailing-comma-on-call-site",
-    "name": "Trailing Comma On Call Site",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "trailing-comma-on-declaration-site",
-    "name": "Trailing Comma On Declaration Site",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "wrapping",
-    "name": "Wrapping",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:unnecessary-parentheses-before-trailing-lambda",
-    "name": "Unnecessary Parentheses Before Trailing Lambda",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:type-parameter-list-spacing",
-    "name": "Type Parameter List Spacing",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:type-argument-list-spacing",
-    "name": "Type Argument List Spacing",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:block-comment-initial-star-alignment",
+    "key": "standard:block-comment-initial-star-alignment",
     "name": "Block Comment Initial Star Alignment",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
@@ -588,8 +48,8 @@
     "constantDebtMinutes": 0
   },
   {
-    "key": "experimental:discouraged-comment-location",
-    "name": "Discouraged Comment Location",
+    "key": "standard:chain-wrapping",
+    "name": "Chain Wrapping",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -600,151 +60,7 @@
     "constantDebtMinutes": 0
   },
   {
-    "key": "experimental:fun-keyword-spacing",
-    "name": "Fun Keyword Spacing",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:function-type-reference-spacing",
-    "name": "Function Type Reference Spacing",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:modifier-list-spacing",
-    "name": "Modifier List Spacing",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:comment-wrapping",
-    "name": "Comment Wrapping",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:kdoc-wrapping",
-    "name": "Kdoc Wrapping",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:spacing-between-function-name-and-opening-parenthesis",
-    "name": "Spacing Between Function Name And Opening Parenthesis",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:parameter-list-spacing",
-    "name": "Parameter List Spacing",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:function-return-type-spacing",
-    "name": "Function Return Type Spacing",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:function-start-of-body-spacing",
-    "name": "Function Start Of Body Spacing",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:nullable-type-spacing",
-    "name": "Nullable Type Spacing",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:function-signature",
-    "name": "Function Signature",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:context-receiver-wrapping",
-    "name": "Context Receiver Wrapping",
-    "url": "https://ktlint.github.io/#rules",
-    "tags": [
-      "ktlint",
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "MAJOR",
-    "constantDebtMinutes": 0
-  },
-  {
-    "key": "experimental:class-naming",
+    "key": "standard:class-naming",
     "name": "Class Naming",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
@@ -756,7 +72,103 @@
     "constantDebtMinutes": 0
   },
   {
-    "key": "experimental:function-naming",
+    "key": "standard:comment-spacing",
+    "name": "Comment Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:comment-wrapping",
+    "name": "Comment Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:context-receiver-wrapping",
+    "name": "Context Receiver Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:discouraged-comment-location",
+    "name": "Discouraged Comment Location",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:enum-entry-name-case",
+    "name": "Enum Entry Name Case",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:enum-wrapping",
+    "name": "Enum Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:filename",
+    "name": "Filename",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:final-newline",
+    "name": "Final Newline",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:function-naming",
     "name": "Function Naming",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
@@ -768,8 +180,1640 @@
     "constantDebtMinutes": 0
   },
   {
-    "key": "experimental:property-naming",
+    "key": "standard:function-return-type-spacing",
+    "name": "Function Return Type Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:function-signature",
+    "name": "Function Signature",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:function-start-of-body-spacing",
+    "name": "Function Start Of Body Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:function-type-reference-spacing",
+    "name": "Function Type Reference Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:fun-keyword-spacing",
+    "name": "Fun Keyword Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:if-else-bracing",
+    "name": "If Else Bracing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:if-else-wrapping",
+    "name": "If Else Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:import-ordering",
+    "name": "Import Ordering",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:indent",
+    "name": "Indentation",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:kdoc-wrapping",
+    "name": "Kdoc Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:max-line-length",
+    "name": "Max Line Length",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:modifier-list-spacing",
+    "name": "Modifier List Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:modifier-order",
+    "name": "Modifier Order",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:multiline-if-else",
+    "name": "Multi Line If Else",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:multiline-expression-wrapping",
+    "name": "Multiline Expression Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-blank-line-before-rbrace",
+    "name": "No Blank Line Before Rbrace",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-blank-line-in-list",
+    "name": "No Blank Line In List",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-blank-lines-in-chained-method-calls",
+    "name": "No Blank Lines In Chained Method Calls",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-consecutive-blank-lines",
+    "name": "No Consecutive Blank Lines",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-consecutive-comments",
+    "name": "No Consecutive Comments",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-empty-class-body",
+    "name": "No Empty Class Body",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-empty-first-line-in-class-body",
+    "name": "No Empty First Line In Class Body",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-empty-first-line-in-method-block",
+    "name": "No Empty First Line In Method Block",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-line-break-after-else",
+    "name": "No Line Break After Else",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-line-break-before-assignment",
+    "name": "No Line Break Before Assignment",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-multi-spaces",
+    "name": "No Multiple Spaces",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-semi",
+    "name": "No Semicolons",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-trailing-spaces",
+    "name": "No Trailing Spaces",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-unit-return",
+    "name": "No Unit Return",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-unused-imports",
+    "name": "No Unused Imports",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-wildcard-imports",
+    "name": "No Wildcard Imports",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:nullable-type-spacing",
+    "name": "Nullable Type Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:package-name",
+    "name": "Package Name",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:parameter-list-spacing",
+    "name": "Parameter List Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:parameter-list-wrapping",
+    "name": "Parameter List Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:parameter-wrapping",
+    "name": "Parameter Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:property-naming",
     "name": "Property Naming",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:property-wrapping",
+    "name": "Property Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:spacing-around-angle-brackets",
+    "name": "Spacing Around Angle Brackets",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:colon-spacing",
+    "name": "Spacing Around Colon",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:comma-spacing",
+    "name": "Spacing Around Comma",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:curly-spacing",
+    "name": "Spacing Around Curly",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:dot-spacing",
+    "name": "Spacing Around Dot",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:double-colon-spacing",
+    "name": "Spacing Around Double Colon",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:keyword-spacing",
+    "name": "Spacing Around Keyword",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:op-spacing",
+    "name": "Spacing Around Operators",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:paren-spacing",
+    "name": "Spacing Around Parens",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:range-spacing",
+    "name": "Spacing Around Range Operator",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:unary-op-spacing",
+    "name": "Spacing Around Unary Operator",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:spacing-between-declarations-with-annotations",
+    "name": "Spacing Between Declarations With Annotations",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:spacing-between-declarations-with-comments",
+    "name": "Spacing Between Declarations With Comments",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:spacing-between-function-name-and-opening-parenthesis",
+    "name": "Spacing Between Function Name And Opening Parenthesis",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:string-template",
+    "name": "String Template",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:string-template-indent",
+    "name": "String Template Indent",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:trailing-comma-on-call-site",
+    "name": "Trailing Comma On Call Site",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:trailing-comma-on-declaration-site",
+    "name": "Trailing Comma On Declaration Site",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:try-catch-finally-spacing",
+    "name": "Try Catch Finally Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:type-argument-list-spacing",
+    "name": "Type Argument List Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:type-parameter-list-spacing",
+    "name": "Type Parameter List Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:unnecessary-parentheses-before-trailing-lambda",
+    "name": "Unnecessary Parentheses Before Trailing Lambda",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:wrapping",
+    "name": "Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:annotation",
+    "name": "Annotation",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:annotation-spacing",
+    "name": "Annotation Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:argument-list-wrapping",
+    "name": "Argument List Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:block-comment-initial-star-alignment",
+    "name": "Block Comment Initial Star Alignment",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:chain-wrapping",
+    "name": "Chain Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:class-naming",
+    "name": "Class Naming",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:comment-spacing",
+    "name": "Comment Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:comment-wrapping",
+    "name": "Comment Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:context-receiver-wrapping",
+    "name": "Context Receiver Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:discouraged-comment-location",
+    "name": "Discouraged Comment Location",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:enum-entry-name-case",
+    "name": "Enum Entry Name Case",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:enum-wrapping",
+    "name": "Enum Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:filename",
+    "name": "Filename",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:final-newline",
+    "name": "Final Newline",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:function-naming",
+    "name": "Function Naming",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:function-return-type-spacing",
+    "name": "Function Return Type Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:function-signature",
+    "name": "Function Signature",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:function-start-of-body-spacing",
+    "name": "Function Start Of Body Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:function-type-reference-spacing",
+    "name": "Function Type Reference Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:fun-keyword-spacing",
+    "name": "Fun Keyword Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:if-else-bracing",
+    "name": "If Else Bracing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:if-else-wrapping",
+    "name": "If Else Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:import-ordering",
+    "name": "Import Ordering",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:indent",
+    "name": "Indentation",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:kdoc-wrapping",
+    "name": "Kdoc Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:max-line-length",
+    "name": "Max Line Length",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:modifier-list-spacing",
+    "name": "Modifier List Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:modifier-order",
+    "name": "Modifier Order",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:multiline-if-else",
+    "name": "Multi Line If Else",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:multiline-expression-wrapping",
+    "name": "Multiline Expression Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-blank-line-before-rbrace",
+    "name": "No Blank Line Before Rbrace",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-blank-line-in-list",
+    "name": "No Blank Line In List",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-blank-lines-in-chained-method-calls",
+    "name": "No Blank Lines In Chained Method Calls",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-consecutive-blank-lines",
+    "name": "No Consecutive Blank Lines",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-consecutive-comments",
+    "name": "No Consecutive Comments",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-empty-class-body",
+    "name": "No Empty Class Body",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-empty-first-line-in-class-body",
+    "name": "No Empty First Line In Class Body",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-empty-first-line-in-method-block",
+    "name": "No Empty First Line In Method Block",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-line-break-after-else",
+    "name": "No Line Break After Else",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-line-break-before-assignment",
+    "name": "No Line Break Before Assignment",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-multi-spaces",
+    "name": "No Multiple Spaces",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-semi",
+    "name": "No Semicolons",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-trailing-spaces",
+    "name": "No Trailing Spaces",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-unit-return",
+    "name": "No Unit Return",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-unused-imports",
+    "name": "No Unused Imports",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-wildcard-imports",
+    "name": "No Wildcard Imports",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:nullable-type-spacing",
+    "name": "Nullable Type Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:package-name",
+    "name": "Package Name",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:parameter-list-spacing",
+    "name": "Parameter List Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:parameter-list-wrapping",
+    "name": "Parameter List Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:parameter-wrapping",
+    "name": "Parameter Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:property-naming",
+    "name": "Property Naming",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:property-wrapping",
+    "name": "Property Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:spacing-around-angle-brackets",
+    "name": "Spacing Around Angle Brackets",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:colon-spacing",
+    "name": "Spacing Around Colon",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:comma-spacing",
+    "name": "Spacing Around Comma",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:curly-spacing",
+    "name": "Spacing Around Curly",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:dot-spacing",
+    "name": "Spacing Around Dot",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:double-colon-spacing",
+    "name": "Spacing Around Double Colon",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:keyword-spacing",
+    "name": "Spacing Around Keyword",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:op-spacing",
+    "name": "Spacing Around Operators",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:paren-spacing",
+    "name": "Spacing Around Parens",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:range-spacing",
+    "name": "Spacing Around Range Operator",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:unary-op-spacing",
+    "name": "Spacing Around Unary Operator",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:spacing-between-declarations-with-annotations",
+    "name": "Spacing Between Declarations With Annotations",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:spacing-between-declarations-with-comments",
+    "name": "Spacing Between Declarations With Comments",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:spacing-between-function-name-and-opening-parenthesis",
+    "name": "Spacing Between Function Name And Opening Parenthesis",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:string-template",
+    "name": "String Template",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:string-template-indent",
+    "name": "String Template Indent",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:trailing-comma-on-call-site",
+    "name": "Trailing Comma On Call Site",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:trailing-comma-on-declaration-site",
+    "name": "Trailing Comma On Declaration Site",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:try-catch-finally-spacing",
+    "name": "Try Catch Finally Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:type-argument-list-spacing",
+    "name": "Type Argument List Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:type-parameter-list-spacing",
+    "name": "Type Parameter List Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:unnecessary-parentheses-before-trailing-lambda",
+    "name": "Unnecessary Parentheses Before Trailing Lambda",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:wrapping",
+    "name": "Wrapping",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
