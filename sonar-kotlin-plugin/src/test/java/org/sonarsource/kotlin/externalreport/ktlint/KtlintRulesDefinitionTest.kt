@@ -36,14 +36,14 @@ class KtlintRulesDefinitionTest {
         assertThat(repository.name()).isEqualTo("ktlint")
         assertThat(repository.language()).isEqualTo("kotlin")
         assertThat(repository.isExternal).isTrue
-        assertThat(repository.rules().size).isEqualTo(66)
-        val modifierOrder = repository.rule("modifier-order")!!
+        assertThat(repository.rules().size).isEqualTo(77)
+        val modifierOrder = repository.rule("standard:modifier-order")!!
         assertThat(modifierOrder).isNotNull
         assertThat(modifierOrder.name()).isEqualTo("Modifier Order")
         assertThat(modifierOrder.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(modifierOrder.severity()).isEqualTo("MAJOR")
         assertThat(modifierOrder.htmlDescription())
-            .isEqualTo("""See description of ktlint rule <code>modifier-order</code> at the <a href="https://ktlint.github.io/#rules">ktlint website</a>.""")
+            .isEqualTo("""See description of ktlint rule <code>standard:modifier-order</code> at the <a href="https://ktlint.github.io/#rules">ktlint website</a>.""")
         assertThat(modifierOrder.tags()).containsExactlyInAnyOrder("ktlint", "style")
         assertThat(modifierOrder.debtRemediationFunction()?.baseEffort()).isEqualTo("0min")
     }

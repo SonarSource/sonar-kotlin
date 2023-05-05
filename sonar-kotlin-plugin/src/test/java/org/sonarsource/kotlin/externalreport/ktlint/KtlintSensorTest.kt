@@ -69,7 +69,7 @@ class KtlintSensorTest {
 
         val first = externalIssues[0]
         assertThat(first.primaryLocation().inputComponent().key()).isEqualTo("ktlint-project:Foo.kt")
-        assertThat(first.ruleKey().rule()).isEqualTo("no-wildcard-imports")
+        assertThat(first.ruleKey().rule()).isEqualTo("standard:no-wildcard-imports")
         assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(first.severity()).isEqualTo(Severity.MAJOR)
         assertThat(first.primaryLocation().message()).isEqualTo("Wildcard import (cannot be auto-corrected)")
@@ -77,7 +77,7 @@ class KtlintSensorTest {
 
         val second = externalIssues[1]
         assertThat(second.primaryLocation().inputComponent().key()).isEqualTo("ktlint-project:Foo.kt")
-        assertThat(second.ruleKey().rule()).isEqualTo("no-empty-first-line-in-method-block")
+        assertThat(second.ruleKey().rule()).isEqualTo("standard:no-empty-first-line-in-method-block")
         assertThat(second.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(second.severity()).isEqualTo(Severity.MAJOR)
         assertThat(second.primaryLocation().message()).isEqualTo("First line in a method block should not be empty")
@@ -85,7 +85,7 @@ class KtlintSensorTest {
 
         val third = externalIssues[2]
         assertThat(third.primaryLocation().inputComponent().key()).isEqualTo("ktlint-project:Foo.kt")
-        assertThat(third.ruleKey().rule()).isEqualTo("no-semi")
+        assertThat(third.ruleKey().rule()).isEqualTo("standard:no-semi")
         assertThat(third.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(third.severity()).isEqualTo(Severity.MAJOR)
         assertThat(third.primaryLocation().message()).isEqualTo("Unnecessary semicolon")
@@ -93,7 +93,7 @@ class KtlintSensorTest {
 
         val fourth = externalIssues[3]
         assertThat(fourth.primaryLocation().inputComponent().key()).isEqualTo("ktlint-project:Foo.kt")
-        assertThat(fourth.ruleKey().rule()).isEqualTo("no-blank-line-before-rbrace")
+        assertThat(fourth.ruleKey().rule()).isEqualTo("standard:no-blank-line-before-rbrace")
         assertThat(fourth.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(fourth.severity()).isEqualTo(Severity.MAJOR)
         assertThat(fourth.primaryLocation().message()).isEqualTo("""Unexpected blank line(s) before "}"""")
