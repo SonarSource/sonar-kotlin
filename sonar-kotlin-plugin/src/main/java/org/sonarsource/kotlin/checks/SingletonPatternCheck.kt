@@ -101,7 +101,7 @@ private class SingleConstructorCallExtractor(
     private var constructorMatcher = ConstructorMatcher { withTypeNames(*singletonClassCandidates.toTypedArray()) }
 
     override fun visitCallExpression(expression: KtCallExpression) {
-        if (!constructorMatcher.matches(expression, bindingContext)) return
+        if (singletonClassCandidates.isEmpty() || !constructorMatcher.matches(expression, bindingContext)) return
 
         val constructorDescriptor =
             bindingContext[BindingContext.RESOLVED_CALL, expression.getCall(bindingContext)]?.resultingDescriptor as? ConstructorDescriptor
