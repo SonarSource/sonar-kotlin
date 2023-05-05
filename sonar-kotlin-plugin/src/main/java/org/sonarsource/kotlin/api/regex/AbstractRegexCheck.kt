@@ -175,7 +175,7 @@ private fun KtExpression?.extractRegexFlags(bindingContext: BindingContext): Fla
         this?.collectDescendantsOfType<KtReferenceExpression>()
             ?.map { it.predictRuntimeValueExpression(bindingContext) }
             ?.flatMap { it.collectDescendantsOfType<KtNameReferenceExpression>() }
-            ?.mapNotNull { bindingContext.get(BindingContext.REFERENCE_TARGET, it) }
+            ?.mapNotNull { bindingContext[BindingContext.REFERENCE_TARGET, it] }
             ?.mapNotNull { FLAGS[it.name.asString()] }
             ?.fold(0, Int::or)
             ?: 0

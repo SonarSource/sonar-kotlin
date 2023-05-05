@@ -39,7 +39,7 @@ class CoroutineScopeFunSuspendingCheck : AbstractCheck() {
         // Only applicable for suspending extension functions
         val suspendModifier = function.suspendModifier() ?: return
         val receiverType = function.receiverTypeReference ?: return
-        val resolvedReceiverType = kotlinFileContext.bindingContext.get(BindingContext.TYPE, receiverType) ?: return
+        val resolvedReceiverType = kotlinFileContext.bindingContext[BindingContext.TYPE, receiverType] ?: return
 
         if (
             (resolvedReceiverType.getKotlinTypeFqName(false) == COROUTINE_SCOPE ||

@@ -126,14 +126,14 @@ class WeakSSLContextCheck : AbstractCheck() {
     ): String? = when (this) {
         is KtStringTemplateExpression -> asConstant()
         is KtNameReferenceExpression -> {
-            val descriptor = bindingContext.get(REFERENCE_TARGET, this)
+            val descriptor = bindingContext[REFERENCE_TARGET, this]
             if (descriptor is PropertyDescriptor) descriptor.compileTimeInitializer?.boxedValue().toString()
             else null
         }
         is KtDotQualifiedExpression -> {
             val selectorExpression = selectorExpression
             if (selectorExpression is KtNameReferenceExpression)
-                bindingContext.get(REFERENCE_TARGET, selectorExpression)?.fqNameOrNull()?.asString()
+                bindingContext[REFERENCE_TARGET, selectorExpression]?.fqNameOrNull()?.asString()
             else null
         }
         else -> null

@@ -64,7 +64,7 @@ class PropertyGetterAndSetterUsageCheck : AbstractCheck() {
         prop: KtProperty, javaAccessors: Map<String, List<KtNamedFunction>>, ctx: KotlinFileContext, bindingCtx: BindingContext
     ) {
         prop.nameIdentifier?.let { propIdentifier ->
-            prop.typeReference?.let { bindingCtx.get(BindingContext.TYPE, it) }?.let { propType ->
+            prop.typeReference?.let { bindingCtx[BindingContext.TYPE, it] }?.let { propType ->
                 val propName = prop.name!!
                 val getterFunc = findJavaStyleGetterFunc(propName, propType, javaAccessors, bindingCtx)
                 val getterName = getterFunc?.nameIdentifier
@@ -102,7 +102,7 @@ private fun findJavaStyleGetterFunc(
 }
 
 private fun parameterMatchesType(parameter: KtParameter, type: KotlinType, bindingCtx: BindingContext): Boolean {
-    return !parameter.isVarArg && type == (parameter.typeReference?.let { bindingCtx.get(BindingContext.TYPE, it) })
+    return !parameter.isVarArg && type == (parameter.typeReference?.let { bindingCtx[BindingContext.TYPE, it] })
 }
 
 private fun findJavaStyleSetterFunc(

@@ -71,7 +71,7 @@ class ExternalAndroidStorageAccessCheck : CallAbstractCheck() {
 
     override fun visitReferenceExpression(expression: KtReferenceExpression, kotlinFileContext: KotlinFileContext) {
         if (expression is KtNameReferenceExpression && expression.getReferencedName() in HOTSPOT_PROPS) {
-            val prop = kotlinFileContext.bindingContext.get(BindingContext.REFERENCE_TARGET, expression) as? PropertyDescriptor
+            val prop = kotlinFileContext.bindingContext[BindingContext.REFERENCE_TARGET, expression] as? PropertyDescriptor
             if (prop != null && HOTSPOT_FUNS.any { it.matches(prop.unwrappedGetMethod) }) {
                 kotlinFileContext.reportIssue(expression, MESSAGE)
             }

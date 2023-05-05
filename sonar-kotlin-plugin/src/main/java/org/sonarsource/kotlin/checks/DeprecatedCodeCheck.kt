@@ -35,7 +35,7 @@ import org.sonarsource.kotlin.plugin.KotlinFileContext
 class DeprecatedCodeCheck : AbstractCheck() {
     
     override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry, context: KotlinFileContext) {
-        val descriptor = context.bindingContext.get(BindingContext.ANNOTATION, annotationEntry)
+        val descriptor = context.bindingContext[BindingContext.ANNOTATION, annotationEntry]
         if ("kotlin.Deprecated" == descriptor?.fqName?.asString()) {
             context.reportIssue(annotationEntry.elementToReport(), "Do not forget to remove this deprecated code someday.")
         }

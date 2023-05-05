@@ -56,22 +56,26 @@ class CommentAnnotationsAndTokenVisitor(
     val tokens = mutableListOf<Token>()
 
     override fun visitElement(element: PsiElement) {
-        if (element is PsiComment) {
-            allComments.add(createComment(element))
-        } else if (element is LeafPsiElement && element !is PsiWhiteSpace) {
-            when {
-                element.elementType is KtKeywordToken -> Token.Type.KEYWORD
-                element.elementType === KtTokens.REGULAR_STRING_PART -> Token.Type.STRING_LITERAL
-                else -> Token.Type.OTHER
-            }.let { type ->
-                tokens.add(Token(range(element), element.text, type))
+        when {
+            element is PsiComment -> {
+                allComments.add(createComment(element))
             }
-        } else if (element is KtAnnotationEntry) {
-            element.shortName?.let { shortName ->
-                val argumentsText = element.valueArguments
-                    .filterIsInstance<KtValueArgument>()
-                    .map { obj: KtValueArgument -> obj.text }
-                allAnnotations.add(Annotation(shortName.asString(), argumentsText, range(element)))
+            element is LeafPsiElement && element !is PsiWhiteSpace -> {
+                when {
+                    element.elementType is KtKeywordToken -> Token.Type.KEYWORD
+                    element.elementType === KtTokens.REGULAR_STRING_PART -> Token.Type.STRING_LITERAL
+                    else -> Token.Type.OTHER
+                }.let { type ->
+                    tokens.add(Token(range(element), element.text, type))
+                }
+            }
+            element is KtAnnotationEntry -> {
+                element.shortName?.let { shortName ->
+                    val argumentsText = element.valueArguments
+                        .filterIsInstance<KtValueArgument>()
+                        .map { obj: KtValueArgument -> obj.text }
+                    allAnnotations.add(Annotation(shortName.asString(), argumentsText, range(element)))
+                }
             }
         }
         super.visitElement(element)
@@ -82,15 +86,20 @@ class CommentAnnotationsAndTokenVisitor(
         val tokenType = element.tokenType
         val length = text.length
         val (prefixLength: Int, suffixLength: Int) =
-            if (KtTokens.BLOCK_COMMENT == tokenType && length >= MIN_BLOCK_COMMENT_LENGTH) {
-                BLOCK_COMMENT_PREFIX_LENGTH to BLOCK_COMMENT_SUFFIX_LENGTH
-            } else if (KtTokens.DOC_COMMENT == tokenType && length >= MIN_DOC_COMMENT_LENGTH) {
-                DOC_COMMENT_PREFIX_LENGTH to DOC_COMMENT_SUFFIX_LENGTH
-            } else if ((KtTokens.EOL_COMMENT == tokenType || KtTokens.SHEBANG_COMMENT == tokenType) && length >= MIN_LINE_COMMENT_LENGTH) {
-                LINE_COMMENT_PREFIX_LENGTH to 0
-            } else {
-                // FIXME error message: unknown comment type
-                0 to 0
+            when {
+                KtTokens.BLOCK_COMMENT == tokenType && length >= MIN_BLOCK_COMMENT_LENGTH -> {
+                    BLOCK_COMMENT_PREFIX_LENGTH to BLOCK_COMMENT_SUFFIX_LENGTH
+                }
+                KtTokens.DOC_COMMENT == tokenType && length >= MIN_DOC_COMMENT_LENGTH -> {
+                    DOC_COMMENT_PREFIX_LENGTH to DOC_COMMENT_SUFFIX_LENGTH
+                }
+                (KtTokens.EOL_COMMENT == tokenType || KtTokens.SHEBANG_COMMENT == tokenType) && length >= MIN_LINE_COMMENT_LENGTH -> {
+                    LINE_COMMENT_PREFIX_LENGTH to 0
+                }
+                else -> {
+                    // FIXME error message: unknown comment type
+                    0 to 0
+                }
             }
         val contentText = text.substring(prefixLength, length - suffixLength)
         val range = range(element)

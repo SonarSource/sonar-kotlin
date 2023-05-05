@@ -42,8 +42,7 @@ class SuspendingFunCallerDispatcherCheck : CallAbstractCheck() {
         val bindingContext = kotlinFileContext.bindingContext
 
         val arguments = resolvedCall.valueArgumentsByIndex
-        if (arguments == null
-            || arguments.isEmpty()
+        if (arguments.isNullOrEmpty()
             || arguments[0] == null
             || arguments[0] !is ExpressionValueArgument
         ) return

@@ -71,14 +71,18 @@ internal class AndroidLintXmlReportReader private constructor(private val consum
     }
 
     private fun onElement(element: StartElement) {
-        if (level == 1 && ISSUES_ELEMENT != element.name) {
-            throw IOException("Unexpected document root '" + element.name.localPart + "' instead of 'issues'.")
-        } else if (level == 2 && ISSUE_ELEMENT == element.name) {
-            id = getAttributeValue(element, ID_ATTRIBUTE)
-            message = getAttributeValue(element, MESSAGE_ATTRIBUTE)
-        } else if (level == 3 && LOCATION_ELEMENT == element.name && file.isEmpty()) {
-            file = getAttributeValue(element, FILE_ATTRIBUTE)
-            line = getAttributeValue(element, LINE_ATTRIBUTE)
+        when {
+            level == 1 && ISSUES_ELEMENT != element.name -> {
+                throw IOException("Unexpected document root '" + element.name.localPart + "' instead of 'issues'.")
+            }
+            level == 2 && ISSUE_ELEMENT == element.name -> {
+                id = getAttributeValue(element, ID_ATTRIBUTE)
+                message = getAttributeValue(element, MESSAGE_ATTRIBUTE)
+            }
+            level == 3 && LOCATION_ELEMENT == element.name && file.isEmpty() -> {
+                file = getAttributeValue(element, FILE_ATTRIBUTE)
+                line = getAttributeValue(element, LINE_ATTRIBUTE)
+            }
         }
     }
 

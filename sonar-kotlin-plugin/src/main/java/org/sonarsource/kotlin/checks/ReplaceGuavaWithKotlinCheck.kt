@@ -126,14 +126,14 @@ class ReplaceGuavaWithKotlinCheck : CallAbstractCheck() {
     }
 
     private fun KtParameter.hasReferencesIn(ctx: KotlinFileContext, elementToVisit: KtElement?): Boolean {
-        val parameterDeclaration = ctx.bindingContext.get(BindingContext.VALUE_PARAMETER, this) ?: return false
+        val parameterDeclaration = ctx.bindingContext[BindingContext.VALUE_PARAMETER, this] ?: return false
         return elementToVisit?.collectDescendantsOfType<KtReferenceExpression>() { expression ->
-            ctx.bindingContext.get(BindingContext.REFERENCE_TARGET, expression) == parameterDeclaration
+            ctx.bindingContext[BindingContext.REFERENCE_TARGET, expression] == parameterDeclaration
         }?.isNotEmpty() ?: false
     }
 
     private fun KtTypeReference.ifTypeReplacement(ctx: KotlinFileContext, action: (String) -> Unit) {
-        ctx.bindingContext.get(BindingContext.TYPE, this)
+        ctx.bindingContext[BindingContext.TYPE, this]
             ?.getKotlinTypeFqName(false)
             ?.let { REPLACEMENT_TYPES[it]?.let(action) }
     }
