@@ -39,4 +39,48 @@ class MapValuesShouldBeAccessedSafelyCheckSample {
         mutableMap[1]!! // Noncompliant
         mutableMap[1] // Compliant
     }
+
+    fun test4(customMap: CustomMap) {
+        customMap.get(1)!! // Noncompliant
+        customMap[2]!! // Noncompliant
+        customMap.get(2) // Compliant
+        customMap[2] // Compliant
+        customMap.getValue(123) // Compliant
+    }
+
+    fun test5(hashMap: HashMap<Int, Int>) {
+        hashMap.get(1)!! // Noncompliant
+        hashMap[2]!! // Noncompliant
+        hashMap.get(2) // Compliant
+        hashMap[2] // Compliant
+        hashMap.getValue(123) // Compliant
+    }
+}
+
+class CustomMap : Map<Int, Int> {
+    override val entries: Set<Map.Entry<Int, Int>>
+        get() = TODO("Not yet implemented")
+    override val keys: Set<Int>
+        get() = TODO("Not yet implemented")
+    override val size: Int
+        get() = TODO("Not yet implemented")
+    override val values: Collection<Int>
+        get() = TODO("Not yet implemented")
+
+    override fun isEmpty(): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun get(key: Int): Int? {
+        TODO("Not yet implemented")
+    }
+
+    override fun containsValue(value: Int): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun containsKey(key: Int): Boolean {
+        TODO("Not yet implemented")
+    }
+
 }

@@ -19,22 +19,30 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.codegen.kotlinType
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getNextSiblingIgnoringWhitespace
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.typeUtil.supertypes
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.determineType
 import org.sonarsource.kotlin.api.message
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
 @Rule(key = "S6611")
 class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
+
+    private val issueMessage = message {
+        code("Map")
+        +" values should be accessed safely. Using the non-null assertion operator here can throw a NullPointerException."
+    }
 
     override val functionsToVisit = listOf(
             FunMatcher(name = "get") {
@@ -45,27 +53,31 @@ class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         val sibling = callExpression.getParentOfType<KtDotQualifiedExpression>(true)?.getNextSiblingIgnoringWhitespace()
         if (sibling is KtOperationReferenceExpression && sibling.operationSignTokenType == KtTokens.EXCLEXCL) {
-            kotlinFileContext.reportIssue(callExpression.parent.parent, message {
-                code("Map")
-                +" values should be accessed safely. Using the non-null assertion operator here can throw a NullPointerException."
-            })
+            kotlinFileContext.reportIssue(callExpression.parent.parent, issueMessage)
         }
     }
 
     override fun visitClass(klass: KtClass, context: KotlinFileContext) {
         val arrayAccessExpressions = klass.collectDescendantsOfType<KtArrayAccessExpression> {
-            it.arrayExpression.kotlinType(context.bindingContext)?.getKotlinTypeFqName(false) == "kotlin.collections.Map"
-                    || it.arrayExpression.kotlinType(context.bindingContext)?.getKotlinTypeFqName(false) == "kotlin.collections.MutableMap"
+            checkSuperType(it, context.bindingContext)
         }
 
         arrayAccessExpressions.forEach {
             val sibling = it.getNextSiblingIgnoringWhitespace()
             if (sibling is KtOperationReferenceExpression && sibling.operationSignTokenType == KtTokens.EXCLEXCL)
-                context.reportIssue(it.parent, message {
-                    code("Map")
-                    +" values should be accessed safely. Using the non-null assertion operator here can throw a NullPointerException."
-                })
+                context.reportIssue(it.parent, issueMessage)
         }
     }
+
+    private fun checkSuperType(arrayAccessExpression: KtArrayAccessExpression, bindingContext: BindingContext): Boolean {
+        val type = arrayAccessExpression.arrayExpression.determineType(bindingContext) ?: return false
+        if (checkIfSubtype(type)) return true
+        return type.supertypes().any {
+            checkIfSubtype(it)
+        }
+    }
+
+    private fun checkIfSubtype(type: KotlinType) = type.getKotlinTypeFqName(false) == "kotlin.collections.Map"
+            || type.getKotlinTypeFqName(false) == "kotlin.collections.MutableMap"
 
 }
