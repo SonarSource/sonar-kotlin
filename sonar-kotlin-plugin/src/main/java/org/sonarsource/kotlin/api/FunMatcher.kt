@@ -64,16 +64,16 @@ class FunMatcherImpl(
     fun matches(node: KtCallExpression, bindingContext: BindingContext): Boolean {
         val call = node.getCall(bindingContext)
         return preCheckArgumentCount(call) &&
-            matches(bindingContext.get(RESOLVED_CALL, call)?.resultingDescriptor)
+            matches(bindingContext[RESOLVED_CALL, call]?.resultingDescriptor)
     }
 
     fun matches(node: KtNamedFunction, bindingContext: BindingContext): Boolean {
-        val functionDescriptor = bindingContext.get(BindingContext.FUNCTION, node)
+        val functionDescriptor = bindingContext[BindingContext.FUNCTION, node]
         return matches(functionDescriptor)
     }
 
     fun matches(call: Call, bindingContext: BindingContext) = preCheckArgumentCount(call) &&
-        matches(bindingContext.get(RESOLVED_CALL, call)?.resultingDescriptor)
+        matches(bindingContext[RESOLVED_CALL, call]?.resultingDescriptor)
 
     fun matches(resolvedCall: ResolvedCall<*>?) = preCheckArgumentCount(resolvedCall?.call) &&
         matches(resolvedCall?.resultingDescriptor)

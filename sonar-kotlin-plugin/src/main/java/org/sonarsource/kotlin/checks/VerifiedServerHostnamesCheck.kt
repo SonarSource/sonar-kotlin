@@ -82,6 +82,6 @@ class VerifiedServerHostnamesCheck : AbstractCheck() {
     private fun KtExpression.isTrueConstant(
         bindingContext: BindingContext,
     ) = getType(bindingContext)?.let {
-        bindingContext.get(BindingContext.COMPILE_TIME_VALUE, this)?.getValue(it) == true
+        bindingContext[BindingContext.COMPILE_TIME_VALUE, this]?.getValue(it) == true
     } ?: false
 }

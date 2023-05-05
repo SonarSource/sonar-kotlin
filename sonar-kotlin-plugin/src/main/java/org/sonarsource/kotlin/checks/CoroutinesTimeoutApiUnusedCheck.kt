@@ -93,7 +93,7 @@ class CoroutinesTimeoutApiUnusedCheck : CallAbstractCheck() {
         targetInitializer: DeclarationDescriptor,
         bindingContext: BindingContext,
     ): KtExpression? {
-        if (element is KtProperty && bindingContext.get(BindingContext.VARIABLE, element) === targetInitializer) {
+        if (element is KtProperty && bindingContext[BindingContext.VARIABLE, element] === targetInitializer) {
             val initializer = element.initializer as? KtCallExpression ?: return null
             if (initializer.getResolvedCall(bindingContext) matches LAUNCH_ASYNC_MATCHER) {
                 return initializer.calleeExpression

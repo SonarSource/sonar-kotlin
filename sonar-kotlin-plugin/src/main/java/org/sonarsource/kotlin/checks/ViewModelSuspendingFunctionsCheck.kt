@@ -48,7 +48,7 @@ class ViewModelSuspendingFunctionsCheck : AbstractCheck() {
 }
 
 private fun KtNamedFunction.extendsViewModel(bindingContext: BindingContext): Boolean {
-    val classDescriptor = bindingContext.get(FUNCTION, this)?.containingDeclaration as? ClassDescriptor
+    val classDescriptor = bindingContext[FUNCTION, this]?.containingDeclaration as? ClassDescriptor
     return classDescriptor?.getAllSuperClassifiers()?.any {
         it.fqNameOrNull()?.asString() == "androidx.lifecycle.ViewModel"
     } ?: false

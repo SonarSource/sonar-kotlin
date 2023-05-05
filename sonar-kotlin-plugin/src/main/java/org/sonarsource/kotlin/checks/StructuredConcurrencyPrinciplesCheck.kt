@@ -81,7 +81,7 @@ private fun KtExpression.checkOptInDelicateApi(bindingContext: BindingContext): 
 private fun MutableList<KtAnnotationEntry>?.isAnnotatedWithOptInDelicateApi(bindingContext: BindingContext) =
     this?.let {
         it.any { annotation ->
-            bindingContext.get(TYPE, annotation.typeReference)
+            bindingContext[TYPE, annotation.typeReference]
             val typeFqn = annotation.typeReference?.determineTypeAsString(bindingContext)
             typeFqn == "kotlinx.coroutines.DelicateCoroutinesApi" ||
                 (typeFqn == "kotlin.OptIn"

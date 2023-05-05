@@ -37,6 +37,7 @@ import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonarsource.kotlin.plugin.surefire.api.SurefireUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -80,7 +81,11 @@ class KotlinSurefireSensorTest {
     settings.setProperty(SurefireUtils.SUREFIRE_REPORT_PATHS_PROPERTY, "unknown");
 
     KotlinSurefireSensor surefireSensor = new KotlinSurefireSensor(mock(KotlinSurefireParser.class), settings.asConfig(), pathResolver);
-    surefireSensor.execute(context);
+    try {
+      surefireSensor.execute(context);
+    } catch (Throwable t) {
+      fail("Failed when no reports found!");
+    }
   }
 
   @Test

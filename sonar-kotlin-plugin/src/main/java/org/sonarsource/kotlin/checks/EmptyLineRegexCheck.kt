@@ -219,8 +219,7 @@ private fun getStringInRegexFind(ref: KtElement, bindingContext: BindingContext)
 
 private fun extractArgument(resolvedCall: ResolvedCall<out CallableDescriptor>): KtExpression? {
     val arguments = resolvedCall.valueArgumentsByIndex
-    return if (arguments == null
-        || arguments.isEmpty()
+    return if (arguments.isNullOrEmpty()
         || arguments[0] == null
         || arguments[0] !is ExpressionValueArgument
     ) null

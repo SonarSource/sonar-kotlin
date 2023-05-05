@@ -308,7 +308,7 @@ fun environment(sensorContext: SensorContext) = Environment(
 )
 
 private fun determineNumberOfThreadsToUse(sensorContext: SensorContext) =
-    sensorContext.config().get(COMPILER_THREAD_COUNT_PROPERTY).map { stringInput ->
+    sensorContext.config()[COMPILER_THREAD_COUNT_PROPERTY].map { stringInput ->
         runCatching {
             stringInput.trim().toInt()
         }.getOrElse {
@@ -329,7 +329,7 @@ private fun determineNumberOfThreadsToUse(sensorContext: SensorContext) =
     }
 
 private fun determineKotlinLanguageVersion(sensorContext: SensorContext) =
-    (sensorContext.config().get(KOTLIN_LANGUAGE_VERSION).map { versionString ->
+    (sensorContext.config()[KOTLIN_LANGUAGE_VERSION].map { versionString ->
         LanguageVersion.fromVersionString(versionString).also { langVersion ->
             if (langVersion == null && versionString.isNotBlank()) {
                 LOG.warn("Failed to find Kotlin version '$versionString'. Defaulting to ${DEFAULT_KOTLIN_LANGUAGE_VERSION.versionString}")

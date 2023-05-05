@@ -62,7 +62,7 @@ class AuthorisingNonAuthenticatedUsersCheck : CallAbstractCheck() {
             if (KEY_GEN_BUILDER_SET_AUTH_MATCHER.matches(receiver, bindingContext)) {
                 val argumentExpression = receiver.valueArguments[0]?.getArgumentExpression()!!
                 argumentExpression.getType(bindingContext)?.let {
-                    val argValue = bindingContext.get(BindingContext.COMPILE_TIME_VALUE, argumentExpression)
+                    val argValue = bindingContext[BindingContext.COMPILE_TIME_VALUE, argumentExpression]
                         ?.getValue(it) as? Boolean
                     if (argValue != false) return
                     secondaryLocations.add(SecondaryLocation(kotlinFileContext.textRange(callElement.calleeExpression!!)))

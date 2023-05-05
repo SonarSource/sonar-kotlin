@@ -94,7 +94,7 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
     internal fun KotlinFileContext.isInAndroid() = inputFileContext.isAndroid
 
     internal fun KtParameter.typeAsString(bindingContext: BindingContext) =
-        bindingContext.get(BindingContext.VALUE_PARAMETER, this)?.type.toString()
+        bindingContext[BindingContext.VALUE_PARAMETER, this]?.type.toString()
 
     internal fun KtExpression.throwsException(bindingContext: BindingContext) =
         when (this) {

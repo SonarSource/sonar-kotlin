@@ -128,14 +128,14 @@ internal fun KtExpression.predictRuntimeStringValueWithSecondaries(bindingContex
 internal fun KtExpression.predictRuntimeIntValue(bindingContext: BindingContext) =
     predictRuntimeValueExpression(bindingContext).let { runtimeValueExpression ->
         runtimeValueExpression.getType(bindingContext)?.let {
-            bindingContext.get(BindingContext.COMPILE_TIME_VALUE, runtimeValueExpression)?.getValue(it) as? Int
+            bindingContext[BindingContext.COMPILE_TIME_VALUE, runtimeValueExpression]?.getValue(it) as? Int
         }
     }
 
 internal fun KtExpression.predictRuntimeBooleanValue(bindingContext: BindingContext) =
     predictRuntimeValueExpression(bindingContext).let { runtimeValueExpression ->
         runtimeValueExpression.getType(bindingContext)?.let {
-            bindingContext.get(BindingContext.COMPILE_TIME_VALUE, runtimeValueExpression)?.getValue(it) as? Boolean
+            bindingContext[BindingContext.COMPILE_TIME_VALUE, runtimeValueExpression]?.getValue(it) as? Boolean
         }
     }
 
@@ -160,7 +160,7 @@ internal fun KtExpression.predictRuntimeValueExpression(
 
         is KtParenthesizedExpression -> deparenthesized.expression?.predictRuntimeValueExpression(bindingContext, declarations)
         is KtBinaryExpressionWithTypeRHS -> deparenthesized.left.predictRuntimeValueExpression(bindingContext, declarations)
-        is KtThisExpression -> bindingContext.get(BindingContext.REFERENCE_TARGET, deparenthesized.instanceReference)
+        is KtThisExpression -> bindingContext[BindingContext.REFERENCE_TARGET, deparenthesized.instanceReference]
             ?.findFunctionLiteral(deparenthesized, bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
 
         else -> deparenthesized.getCall(bindingContext)?.predictValueExpression(bindingContext)
@@ -224,7 +224,7 @@ private fun KtExpression.stringValue(
     }
 
     is KtNameReferenceExpression -> {
-        val descriptor = bindingContext.get(BindingContext.REFERENCE_TARGET, this)
+        val descriptor = bindingContext[BindingContext.REFERENCE_TARGET, this]
         descriptor?.let {
             val declaration = DescriptorToSourceUtils.descriptorToDeclaration(descriptor)
             if (declaration is KtProperty && !declaration.isVar) {
@@ -252,7 +252,7 @@ private fun KtReferenceExpression.extractFromInitializer(
     bindingContext: BindingContext,
     declarations: MutableList<PsiElement> = mutableListOf(),
 ) =
-    bindingContext.get(BindingContext.REFERENCE_TARGET, this)?.let {
+    bindingContext[BindingContext.REFERENCE_TARGET, this]?.let {
         DescriptorToSourceUtils.descriptorToDeclaration(it) as? KtProperty
     }?.let { declaration ->
         if (!declaration.isVar) {
@@ -290,7 +290,7 @@ private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(bindingContext:
     }
 
 private fun KtReferenceExpression.findReceiverScopeFunctionLiteral(bindingContext: BindingContext): KtFunctionLiteral? =
-    (bindingContext.get(BindingContext.REFERENCE_TARGET, this) as? ValueParameterDescriptor)?.containingDeclaration
+    (bindingContext[BindingContext.REFERENCE_TARGET, this] as? ValueParameterDescriptor)?.containingDeclaration
         ?.findFunctionLiteral(this, bindingContext)
 
 private fun ImplicitReceiver.findReceiverScopeFunctionLiteral(startNode: PsiElement, bindingContext: BindingContext): KtFunctionLiteral? =
@@ -303,7 +303,7 @@ private fun DeclarationDescriptor.findFunctionLiteral(
     var curNode: PsiElement? = startNode
     for (i in 0 until MAX_AST_PARENT_TRAVERSALS) {
         curNode = curNode?.parent ?: break
-        if (curNode is KtFunctionLiteral && bindingContext.get(BindingContext.FUNCTION, curNode) === this) {
+        if (curNode is KtFunctionLiteral && bindingContext[BindingContext.FUNCTION, curNode] === this) {
             return curNode
         }
     }
@@ -317,7 +317,7 @@ fun KtNamedFunction.isAbstract() = modifierList?.hasModifier(KtTokens.ABSTRACT_K
 fun KtNamedFunction.suspendModifier() = modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD)
 
 fun KtQualifiedExpression.resolveReferenceTarget(bindingContext: BindingContext) =
-    this.selectorExpression?.referenceExpression()?.let { bindingContext.get(BindingContext.REFERENCE_TARGET, it) }
+    this.selectorExpression?.referenceExpression()?.let { bindingContext[BindingContext.REFERENCE_TARGET, it] }
 
 fun DeclarationDescriptor.scope() = fqNameSafe.asString().substringBeforeLast(".")
 
@@ -325,20 +325,20 @@ fun KtCallExpression.expressionTypeFqn(bindingContext: BindingContext) =
     bindingContext[BindingContext.EXPRESSION_TYPE_INFO, this]?.type?.getKotlinTypeFqName(false)
 
 private fun KtProperty.determineType(bindingContext: BindingContext) =
-    (typeReference?.let { bindingContext.get(BindingContext.TYPE, it) }
-        ?: bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, initializer)?.type)
+    (typeReference?.let { bindingContext[BindingContext.TYPE, it] }
+        ?: bindingContext[BindingContext.EXPRESSION_TYPE_INFO, initializer]?.type)
 
 fun KtProperty.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
 private fun KtParameter.determineType(bindingContext: BindingContext) =
-    bindingContext.get(BindingContext.TYPE, typeReference)
+    bindingContext[BindingContext.TYPE, typeReference]
 
 fun KtParameter.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
 private fun KtTypeReference.determineType(bindingContext: BindingContext) =
-    bindingContext.get(BindingContext.TYPE, this)
+    bindingContext[BindingContext.TYPE, this]
 
 fun KtTypeReference.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
@@ -396,7 +396,7 @@ fun ResolvedValueArgument.isNull(bindingContext: BindingContext) = (
 fun KtExpression.getCalleeOrUnwrappedGetMethod(bindingContext: BindingContext) =
     (this as? KtDotQualifiedExpression)?.let { dotQualifiedExpression ->
         (dotQualifiedExpression.selectorExpression as? KtNameReferenceExpression)?.let { nameSelector ->
-            (bindingContext.get(BindingContext.REFERENCE_TARGET, nameSelector) as? PropertyDescriptor)?.unwrappedGetMethod
+            (bindingContext[BindingContext.REFERENCE_TARGET, nameSelector] as? PropertyDescriptor)?.unwrappedGetMethod
         }
     } ?: this.getResolvedCall(bindingContext)?.resultingDescriptor
 
@@ -476,11 +476,11 @@ fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression, binding
  * Checks if an expression is a function local variable
  */
 fun KtExpression?.isLocalVariable(bindingContext: BindingContext) =
-    (this is KtNameReferenceExpression) && (bindingContext.get(BindingContext.REFERENCE_TARGET, this) is LocalVariableDescriptor)
+    (this is KtNameReferenceExpression) && (bindingContext[BindingContext.REFERENCE_TARGET, this] is LocalVariableDescriptor)
 
 fun KtExpression?.setterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
     is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
-        (matcher.matches((bindingContext.get(BindingContext.REFERENCE_TARGET, this) as? PropertyDescriptor)?.unwrappedSetMethod))
+        (matcher.matches((bindingContext[BindingContext.REFERENCE_TARGET, this] as? PropertyDescriptor)?.unwrappedSetMethod))
 
     is KtQualifiedExpression -> selectorExpression.setterMatches(bindingContext, propertyName, matcher)
     else -> false
@@ -488,7 +488,7 @@ fun KtExpression?.setterMatches(bindingContext: BindingContext, propertyName: St
 
 fun KtExpression?.getterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
     is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
-        (matcher.matches((bindingContext.get(BindingContext.REFERENCE_TARGET, this) as? PropertyDescriptor)?.unwrappedGetMethod))
+        (matcher.matches((bindingContext[BindingContext.REFERENCE_TARGET, this] as? PropertyDescriptor)?.unwrappedGetMethod))
 
     is KtQualifiedExpression -> selectorExpression.getterMatches(bindingContext, propertyName, matcher)
     else -> false
@@ -498,10 +498,10 @@ fun KtBinaryExpression.isPlus() =
     this.operationReference.operationSignTokenType?.let { OperatorConventions.BINARY_OPERATION_NAMES[it] }?.asString() == "plus"
 
 fun PsiElement?.getVariableType(bindingContext: BindingContext) =
-    this?.let { bindingContext.get(BindingContext.VARIABLE, it)?.type }
+    this?.let { bindingContext[BindingContext.VARIABLE, it]?.type }
 
 fun KtTypeReference?.getType(bindingContext: BindingContext): KotlinType? =
-    this?.let { bindingContext.get(BindingContext.TYPE, it) }
+    this?.let { bindingContext[BindingContext.TYPE, it] }
 
 fun KtClassOrObject.hasExactlyOneFunctionAndNoProperties(): Boolean {
     var functionCount = 0
@@ -526,9 +526,9 @@ fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
             is KtTypeReference -> determineType(bindingContext)
             is KtProperty -> determineType(bindingContext)
             is KtDotQualifiedExpression -> getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
-            is KtReferenceExpression -> bindingContext.get(BindingContext.REFERENCE_TARGET, this).determineType()
-            is KtFunction -> bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, this).determineType()
-            is KtClass -> bindingContext.get(BindingContext.DECLARATION_TO_DESCRIPTOR, this).determineType()
+            is KtReferenceExpression -> bindingContext[BindingContext.REFERENCE_TARGET, this].determineType()
+            is KtFunction -> bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this].determineType()
+            is KtClass -> bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this].determineType()
             is KtExpression -> this.getKotlinTypeForComparison(bindingContext)
             is KtValueArgument -> this.getArgumentExpression()?.determineType(bindingContext)
             else -> null
@@ -551,8 +551,8 @@ fun DeclarationDescriptor?.determineType(): KotlinType? =
 
 fun KtQualifiedExpression?.determineSignature(bindingContext: BindingContext): DeclarationDescriptor? =
     when (val selectorExpr = this?.selectorExpression) {
-        is KtCallExpression -> bindingContext.get(BindingContext.REFERENCE_TARGET, selectorExpr.getCallNameExpression())
-        is KtSimpleNameExpression -> bindingContext.get(BindingContext.REFERENCE_TARGET, selectorExpr)
+        is KtCallExpression -> bindingContext[BindingContext.REFERENCE_TARGET, selectorExpr.getCallNameExpression()]
+        is KtSimpleNameExpression -> bindingContext[BindingContext.REFERENCE_TARGET, selectorExpr]
         else -> null
     }
 

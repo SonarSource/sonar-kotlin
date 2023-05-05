@@ -124,7 +124,7 @@ class UnnecessaryImportsCheck : AbstractCheck() {
     ): List<KtImportDirective> {
         var relevantImports = importsWithSameName
         for (ref in relevantReferences) {
-            val refDescriptor = context.bindingContext.get(BindingContext.REFERENCE_TARGET, ref)?.getImportableDescriptor()
+            val refDescriptor = context.bindingContext[BindingContext.REFERENCE_TARGET, ref]?.getImportableDescriptor()
                 ?: return emptyList() // Discard all: over-estimate, resulting in less FPs and more FNs without binding ctx
             val refName = refDescriptor.fqNameOrNull() ?: return emptyList()
 
@@ -165,21 +165,18 @@ class UnnecessaryImportsCheck : AbstractCheck() {
 
     private fun getDelegatesImportsFilter(propertyDelegates: Collection<KtPropertyDelegate>, bindingContext: BindingContext): (KtImportDirective) -> Boolean {
         fun getFqNameFromResolvedCall (variableAccessor: VariableAccessorDescriptor): FqName? =
-        bindingContext.get(BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL, variableAccessor)
+        bindingContext[BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL, variableAccessor]
             ?.resultingDescriptor
             ?.fqNameOrNull()
 
         fun getFqNamesFromAccessor(ktProperty: KtProperty): List<FqName>? =
-            (bindingContext.get(
-                BindingContext.DECLARATION_TO_DESCRIPTOR,
-                ktProperty
-            ) as? VariableDescriptorWithAccessors)?.accessors?.mapNotNull(::getFqNameFromResolvedCall)
+            (bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, ktProperty] as? VariableDescriptorWithAccessors)?.accessors?.mapNotNull(::getFqNameFromResolvedCall)
 
         return if (bindingContext == BindingContext.EMPTY) {
             { imp: KtImportDirective -> imp.importedName?.asString() !in DELEGATES_IMPORTED_NAMES }
         } else {
             propertyDelegates.flatMap { propDelegate ->
-                bindingContext.get(BindingContext.DELEGATE_EXPRESSION_TO_PROVIDE_DELEGATE_CALL, propDelegate.expression)
+                bindingContext[BindingContext.DELEGATE_EXPRESSION_TO_PROVIDE_DELEGATE_CALL, propDelegate.expression]
                     .getResolvedCall(bindingContext)
                     ?.resultingDescriptor
                     ?.fqNameOrNull()?.let { listOf(it) }

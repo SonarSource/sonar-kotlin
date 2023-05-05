@@ -131,15 +131,18 @@ class CognitiveComplexity(val root: KtElement) {
             }
 
            for (element in ancestors) {
-               if (element is KtFunction) {
-                   if (isInsideFunction) nestingLevel++
-                   isInsideFunction = true
-               } else if (element is KtIfExpression && !isElseIfBranch(element.parent?.parent, element) ||
-                   element is KtWhenExpression || element is KtLoopExpression || element is KtCatchClause) {
-                   nestingLevel++
-               } else if (element is KtClass) {
-                   nestingLevel = 0
-                   isInsideFunction = false
+               when {
+                   element is KtFunction -> {
+                       if (isInsideFunction) nestingLevel++
+                       isInsideFunction = true
+                   }
+                   element is KtIfExpression && !isElseIfBranch(element.parent?.parent, element) || element is KtWhenExpression || element is KtLoopExpression || element is KtCatchClause -> {
+                       nestingLevel++
+                   }
+                   element is KtClass -> {
+                       nestingLevel = 0
+                       isInsideFunction = false
+                   }
                }
            }
             return nestingLevel

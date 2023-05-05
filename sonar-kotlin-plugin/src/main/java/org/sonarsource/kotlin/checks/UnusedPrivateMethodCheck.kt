@@ -79,7 +79,7 @@ class UnusedPrivateMethodCheck : AbstractCheck() {
             && (annotationEntries.isEmpty() || annotatedWithCommonAnnotations(bindingContext))
 
     private fun KtNamedFunction.annotatedWithCommonAnnotations(bindingContext: BindingContext) =
-        bindingContext.get(BindingContext.FUNCTION, this)
+        bindingContext[BindingContext.FUNCTION, this]
             ?.annotations
             ?.all { it.fqName?.asString() in COMMON_ANNOTATIONS }
             ?: false

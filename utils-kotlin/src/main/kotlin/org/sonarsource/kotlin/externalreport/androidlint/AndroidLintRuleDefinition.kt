@@ -41,11 +41,11 @@ private val WORDS = Regex("\\w+")
  */
 fun main(vararg args: String?) {
     val rulesFile =
-        if (args.isNotEmpty() && !args[0].isNullOrBlank()) Path.of(args[0])
+        if (args.isNotEmpty() && !args[0].isNullOrBlank()) Path.of(args[0]!!)
         else DEFAULT_RULES_FILE
 
     val androidLintHelpPath =
-        if (args.size > 1 && !args[1].isNullOrBlank()) Path.of(args[1])
+        if (args.size > 1 && !args[1].isNullOrBlank()) Path.of(args[1]!!)
         else ANDROID_LINT_HELP
 
 
@@ -117,8 +117,8 @@ private class AndroidLintHelp(androidLintHelpPath: Path) {
         } catch (e: IOException) {
             throw IllegalStateException("Can't load android-lint-help.txt", e)
         }
-        check(!(lines.isEmpty() || lines.get(0) != "Available issues:")) {
-            "Unexpected android-lint-help.txt first line: " + lines.get(0)
+        check(!(lines.isEmpty() || lines[0] != "Available issues:")) {
+            "Unexpected android-lint-help.txt first line: " + lines[0]
         }
         pos = 1
     }
@@ -183,14 +183,19 @@ private class AndroidLintHelp(androidLintHelpPath: Path) {
         var lastLineWasMoreInformation = false
         while (pos < lines.size && !isSection("=+|-+")) {
             val line = Translator.escapeHtml4(lines[pos])
-            if (line.isEmpty()) {
-                html.append(line).append("</p>\n<p>\n")
-            } else if (lastLineWasMoreInformation && line.startsWith("http") && line.matches(NON_SPACES)) {
-                html.append("<a href=\"").append(line).append("\">").append(line).append("</a><br />\n")
-            } else if (line.endsWith(":") || line.endsWith(": ")) {
-                html.append(line).append("<br />\n")
-            } else {
-                html.append(line).append("\n")
+            when {
+                line.isEmpty() -> {
+                    html.append(line).append("</p>\n<p>\n")
+                }
+                lastLineWasMoreInformation && line.startsWith("http") && line.matches(NON_SPACES) -> {
+                    html.append("<a href=\"").append(line).append("\">").append(line).append("</a><br />\n")
+                }
+                line.endsWith(":") || line.endsWith(": ") -> {
+                    html.append(line).append("<br />\n")
+                }
+                else -> {
+                    html.append(line).append("\n")
+                }
             }
             lastLineWasMoreInformation = line == "More information: "
             pos++
@@ -213,7 +218,7 @@ private fun mapSeverity(severity: String): String {
         AndroidLint.Severity.WARNING -> "MINOR"
         AndroidLint.Severity.ERROR -> "MAJOR"
         AndroidLint.Severity.FATAL -> "CRITICAL"
-        else -> throw IllegalStateException("Unexpected severity: $severity")
+        else -> error("Unexpected severity: $severity")
     }
 }
 
@@ -243,6 +248,6 @@ private fun mapTags(category: String): List<String> {
         category.startsWith(AndroidLint.Category.PRODUCTIVITY) -> listOf("productivity")
         category.startsWith(AndroidLint.Category.TESTING) -> listOf("testing")
         category.startsWith(AndroidLint.Category.LINT_IMPL) -> listOf("lint-implementation")
-        else -> throw IllegalStateException("Unexpected category: $category")
+        else -> error("Unexpected category: $category")
     }
 }

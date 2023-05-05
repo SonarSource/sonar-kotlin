@@ -44,7 +44,7 @@ class InjectableDispatchersCheck : CallAbstractCheck() {
         val bindingContext = kotlinFileContext.bindingContext
 
         val arguments = resolvedCall.valueArgumentsByIndex
-        if (arguments == null || arguments.isEmpty()) return
+        if (arguments.isNullOrEmpty()) return
 
         val argExpr = (arguments[0] as? ExpressionValueArgument)?.valueArgument?.getArgumentExpression() ?: return
         val argValueExpr = argExpr.predictRuntimeValueExpression(bindingContext) as? KtQualifiedExpression ?: return
