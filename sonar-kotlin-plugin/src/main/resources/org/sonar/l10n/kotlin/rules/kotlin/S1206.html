@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>In Kotlin, you must override either both or neither of the <code>equals(Any?)</code> and <code>hashCode()</code> methods in order to keep the
 contract between the two:</p>
 <ul>
@@ -7,7 +8,7 @@ contract between the two:</p>
   must produce the same integer result. </li>
 </ul>
 <p>By overriding only one of the two methods with a non-trivial implementation, this contract is almost certainly broken.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 class MyClass {    // Noncompliant - should also override "hashCode()"
 
@@ -17,7 +18,7 @@ class MyClass {    // Noncompliant - should also override "hashCode()"
 
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 class MyClass {    // Compliant
 
@@ -31,7 +32,7 @@ class MyClass {    // Compliant
 
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/hash-code.html"><code>hashCode</code> - kotlinlang.org</a> </li>
 </ul>

@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>Some functions return <code>kotlinx.coroutines.Deferred</code> to eventually communicate the result of an asynchronous operation. This is
 necessary, as callers do not wait for the result of an operation when it is launched asynchronously. Even if the result may be relevant later on,
 other tasks can be completed while waiting for the asynchronous operation’s result to become available. Hence, to avoid blocking the caller, functions
@@ -19,7 +20,7 @@ coroutine and returns its future result as an implementation of <code>Deferred</
 </ul>
 <p>This rule raises an issue when a function returning the type <code>kotlinx.coroutines.Deferred</code> is used without the result of the operation
 being retrieved.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <p>Here <code>coroutineScope</code> returns the <code>Deferred</code> instance initially returned by <code>async</code>. It is not used in any way
 afterwards, which could point to an issue in the business logic.</p>
 <pre>
@@ -32,7 +33,7 @@ suspend fun doSomething() {
     }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <p>Using <code>launch</code>:</p>
 <pre>
 suspend fun doSomething() {
@@ -56,7 +57,7 @@ suspend fun doSomething(): String {
     }
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://kotlinlang.org/docs/composing-suspending-functions.html#concurrent-using-async">Concurrent using async</a> </li>
 </ul>

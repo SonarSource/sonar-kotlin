@@ -1,8 +1,9 @@
+<h2>Why is this an issue?</h2>
 <p>Using <code>break</code>, <code>continue</code>, <code>return</code> and <code>throw</code> inside of a <code>finally</code> block suppresses the
 propagation of any unhandled <code>Throwable</code> thrown in the <code>try</code> or <code>catch</code> block.</p>
 <p>This rule raises an issue when a jump statement (<code>break</code>, <code>continue</code>, <code>return</code>, <code>throw</code>) would force
 control flow to leave a <code>finally</code> block.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 fun main() {
     try {
@@ -47,7 +48,7 @@ fun doSomethingThatAlsoThrowsException(q: Int) {
     }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 fun main() {
     try {

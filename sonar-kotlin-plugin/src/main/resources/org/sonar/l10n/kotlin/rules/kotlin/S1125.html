@@ -1,5 +1,6 @@
+<h2>Why is this an issue?</h2>
 <p>Redundant Boolean literals should be removed from expressions to improve readability.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 if (booleanMethod() || false) { /* ... */ }
 doSomething(!false);
@@ -10,7 +11,7 @@ booleanVariable = if (booleanMethod()) false else exp;
 booleanVariable = if (booleanMethod()) exp else true;
 booleanVariable = if (booleanMethod()) exp else false;
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 if (booleanMethod()) { /* ... */ }
 doSomething(true);

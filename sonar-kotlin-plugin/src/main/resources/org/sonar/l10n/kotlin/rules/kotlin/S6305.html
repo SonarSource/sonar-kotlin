@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p><code>MutableStateFlow</code> and <code>MutableSharedFlow</code> are very convenient for storing and adding updates of some data structures in
 event-driven paradigm. This is widely used in Android Views for handling updates. While it’s extremely useful to manage such objects inside some
 class, it’s not recommended to expose them outside of the class.</p>
@@ -8,7 +9,7 @@ issues and problems with maintainability, as well as increased error-proneness m
 <code>MutableSharedFlow</code> fields.</p>
 <p>This rule raises an issue when encountering a public or internal property of the type <code>MutableStateFlow</code> or
 <code>MutableSharedFlow</code>.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 class MyView : ViewModel() {
 
@@ -16,7 +17,7 @@ class MyView : ViewModel() {
 
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 class MyView : ViewModel() {
 
@@ -25,7 +26,7 @@ class MyView : ViewModel() {
 
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://developer.android.com/kotlin/coroutines/coroutines-best-practices#mutable-types">Android Coroutines Best Practices</a> </li>
 </ul>

@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>There are two ways to define asynchronous functions in Kotlin:</p>
 <ul>
   <li> using the modifier <code>suspend</code> in the function declaration </li>
@@ -11,7 +12,7 @@ functions should only return once all the work they are designed to perform is c
 <p>Functions returning <code>Flow</code> or <code>Channel</code> should return the result immediately and may start a new coroutine in the background.
 As a consequence, such functions should not be suspending and if they launch a coroutine in the background, they should be declared as extension
 functions on <code>CoroutineScope</code>.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 suspend fun f(): Flow&lt;Int&gt; {
     val flow = flow {
@@ -28,7 +29,7 @@ suspend fun f(): Channel&lt;Int&gt; {
     return ch
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 fun f(): Flow&lt;Int&gt; = flow {
     emit(1)
@@ -43,7 +44,7 @@ fun CoroutineScope.f(): Channel&lt;Int&gt; {
     return ch
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://elizarov.medium.com/coroutine-context-and-scope-c8b255d59055">Coroutine Context and Scope</a> </li>
 </ul>
