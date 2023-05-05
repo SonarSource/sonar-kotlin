@@ -19,4 +19,16 @@
  */
 package org.sonarsource.kotlin.checks
 
-internal class SingletonPatternCheckTest : CheckTest(SingletonPatternCheck())
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.verifier.KotlinVerifier
+
+internal class SingletonPatternCheckTest : CheckTest(SingletonPatternCheck()) {
+
+    @Test
+    fun `with empty function matcher`() {
+        KotlinVerifier(check) {
+            this.fileName =  "EmptyMatcherFP.kt"
+        }.verifyNoIssue()
+    }
+
+}
