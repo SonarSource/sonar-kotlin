@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtElement
@@ -134,7 +134,7 @@ class ReplaceGuavaWithKotlinCheck : CallAbstractCheck() {
 
     private fun KtTypeReference.ifTypeReplacement(ctx: KotlinFileContext, action: (String) -> Unit) {
         ctx.bindingContext.get(BindingContext.TYPE, this)
-            ?.getJetTypeFqName(false)
+            ?.getKotlinTypeFqName(false)
             ?.let { REPLACEMENT_TYPES[it]?.let(action) }
     }
 

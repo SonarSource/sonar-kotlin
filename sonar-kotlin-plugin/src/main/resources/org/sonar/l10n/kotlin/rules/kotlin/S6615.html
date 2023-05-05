@@ -1,0 +1,45 @@
+<h2>Why is this an issue?</h2>
+<p>It is common for code to have unnecessary variable assignments. Unnecessary variable assignments make code harder to read and maintain. By avoiding
+these redundant assignments, your code will be more efficient and understandable.</p>
+<h2>How to fix it</h2>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<p>In this example, <code>i</code> is declared and assigned a value of <code>0</code>. The value of <code>i</code> is immediately replaced with
+<code>1</code> and then again with <code>2</code>.</p>
+<pre>
+var i = 0 // Noncompliant, useless initializer, will be overwritten in the next line
+i = 1 // Noncompliant, the value will be overwritten in the next line
+i = 2
+</pre>
+<h4>Compliant solution</h4>
+<p>The code can be simplified by assigning <code>i</code> the value of <code>2</code> when it is declared.</p>
+<pre>
+var i = 2
+</pre>
+<h4>Noncompliant code example</h4>
+<p>To expand on the previous example, we have added a read-only variable <code>j</code>, which is assigned the value of <code>i`. Since `i</code> is
+the post-increment operator, the value of <code>i</code> is first used for the assignment, and then incremented by 1. Thus the value of <code>j</code>
+is 2.</p>
+<pre>
+var i = 2
+...
+val j = i++ // Noncompliant, result of 'i++' increment is never used
+
+println(j)
+</pre>
+<h4>Compliant solution</h4>
+<p>By removing the redundant post-increment operator you avoid introducing unnecessary operations. As a result, your code becomes easier to read.</p>
+<pre>
+var i = 2
+...
+val j = 2
+
+println(j)
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/basic-syntax.html">Basic syntax in Kotlin</a> </li>
+  <li> <a href="https://kotlinlang.org/docs/operator-overloading.html#increments-and-decrements">Increment and decrement operators</a> </li>
+</ul>
+

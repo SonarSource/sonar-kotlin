@@ -135,6 +135,7 @@ import org.sonarsource.kotlin.checks.UnusedDeferredResultCheck
 import org.sonarsource.kotlin.checks.UnusedFunctionParameterCheck
 import org.sonarsource.kotlin.checks.UnusedLocalVariableCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodCheck
+import org.sonarsource.kotlin.checks.UselessAssignmentsCheck
 import org.sonarsource.kotlin.checks.UselessIncrementCheck
 import org.sonarsource.kotlin.checks.VariableAndParameterNameCheck
 import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
@@ -262,6 +263,7 @@ val KOTLIN_CHECKS = listOf(
     UnusedFunctionParameterCheck::class.java,
     UnusedLocalVariableCheck::class.java,
     UnusedPrivateMethodCheck::class.java,
+    UselessAssignmentsCheck::class.java,
     UselessIncrementCheck::class.java,
     VariableAndParameterNameCheck::class.java,
     VerifiedServerHostnamesCheck::class.java,

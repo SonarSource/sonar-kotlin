@@ -19,10 +19,16 @@
  */
 package org.sonarsource.slang.externalreport;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.rule.Severity;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.rule.RuleKey;
+import org.sonar.api.rules.RuleType;
+import org.sonarsource.analyzer.commons.xml.SafeStaxParserFactory;
+
 import javax.annotation.Nullable;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -30,24 +36,17 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-import org.sonar.api.batch.fs.FilePredicates;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.rule.Severity;
-import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.issue.NewExternalIssue;
-import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.rule.RuleKey;
-import org.sonar.api.rules.RuleType;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
-import org.sonarsource.analyzer.commons.xml.SafeStaxParserFactory;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Import external linter reports having a "Checkstyle" xml format into SonarQube
  */
 public class CheckstyleFormatImporter {
 
-  private static final Logger LOG = Loggers.get(CheckstyleFormatImporter.class);
+  private static final Logger LOG = LoggerFactory.getLogger(CheckstyleFormatImporter.class);
 
   private static final Long DEFAULT_CONSTANT_DEBT_MINUTES = 5L;
 
@@ -120,8 +119,8 @@ public class CheckstyleFormatImporter {
     inputFile = context.fileSystem().inputFile(predicates.or(
       predicates.hasAbsolutePath(filePath),
       predicates.hasRelativePath(filePath)));
-    if (inputFile == null) {
-      LOG.warn("No input file found for {}. No " + linterKey + " issues will be imported on this file.", filePath);
+    if (inputFile == null && LOG.isWarnEnabled()) {
+      LOG.warn("No input file found for {}. No {} issues will be imported on this file.", filePath, linterKey);
     }
   }
 
@@ -135,7 +134,7 @@ public class CheckstyleFormatImporter {
       LOG.debug("Unexpected error without any message for rule: '{}'", source);
       return;
     }
-    RuleKey ruleKey = createRuleKey(source);
+    var ruleKey = createRuleKey(source);
     if (ruleKey != null) {
       saveIssue(ruleKey, line, severity, source, message);
     }
@@ -143,12 +142,12 @@ public class CheckstyleFormatImporter {
 
   private void saveIssue(RuleKey ruleRepoAndKey, String line, String severity, String source, String message) {
     String ruleKey = ruleRepoAndKey.rule();
-    NewExternalIssue newExternalIssue = context.newExternalIssue()
+    var newExternalIssue = context.newExternalIssue()
       .type(ruleType(ruleKey, severity, source))
       .severity(severity(ruleKey, severity))
       .remediationEffortMinutes(effort(ruleKey));
 
-    NewIssueLocation primaryLocation = newExternalIssue.newLocation()
+    var primaryLocation = newExternalIssue.newLocation()
       .message(message)
       .on(inputFile);
 

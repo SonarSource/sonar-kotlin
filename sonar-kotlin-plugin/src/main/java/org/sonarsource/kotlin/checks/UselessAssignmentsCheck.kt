@@ -20,26 +20,34 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.diagnostics.Errors
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.api.getVariableType
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 
-@Rule(key = "S1481")
-class UnusedLocalVariableCheck : AbstractCheck() {
+@Rule(key = "S6615")
+class UselessAssignmentsCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
         context.diagnostics
-            .filter {
-                it.factory == Errors.UNUSED_VARIABLE &&
-                    it.psiElement.getVariableType(context.bindingContext)?.getKotlinTypeFqName(false) != "kotlin.Nothing"
-            }
-            .map { it.psiElement as KtNamedDeclaration }
-            .forEach {
-                context.reportIssue(it.nameIdentifier!!, """Remove this unused "${it.name}" local variable.""")
-            }
+            .mapNotNull { diagnostic ->
+                when (diagnostic.factory) {
+                    Errors.VARIABLE_WITH_REDUNDANT_INITIALIZER ->
+                        diagnostic.psiElement to "Remove this useless initializer."
+
+                    Errors.ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE ->
+                        (diagnostic.psiElement as KtNamedDeclaration).identifyingElement!! to
+                        "Remove this variable, which is assigned but never accessed."
+
+                    Errors.UNUSED_VALUE ->
+                        diagnostic.psiElement to "The value assigned here is never used."
+
+                    Errors.UNUSED_CHANGED_VALUE ->
+                        diagnostic.psiElement to "The value changed here is never used."
+
+                    else -> null
+                }
+            }.forEach { (element, msg) -> context.reportIssue(element, msg) }
     }
 }

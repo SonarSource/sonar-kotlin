@@ -22,7 +22,7 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptorWithResolutionScopes
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -90,9 +90,9 @@ private fun isEqualFunctionSignature(
     functionDescriptor: CallableMemberDescriptor,
     bindingContext: BindingContext,
 ) = function.name == functionDescriptor.name.identifier &&
-    function.returnTypeAsString(bindingContext) == functionDescriptor.returnType?.getJetTypeFqName(false) &&
+    function.returnTypeAsString(bindingContext) == functionDescriptor.returnType?.getKotlinTypeFqName(false) &&
     function.valueParameters.allPaired(functionDescriptor.valueParameters) { parameter, paramerterDescriptor ->
-        parameter.typeReference?.determineTypeAsString(bindingContext) == paramerterDescriptor.type.getJetTypeFqName(false)
+        parameter.typeReference?.determineTypeAsString(bindingContext) == paramerterDescriptor.type.getKotlinTypeFqName(false)
     }
 
 fun getCommonSuperInterfaces(superInterfaces: Set<KotlinType>, otherType: KotlinType) =

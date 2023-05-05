@@ -30,16 +30,16 @@ import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
+import org.slf4j.LoggerFactory
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.TextRange
 import org.sonar.api.batch.sensor.SensorContext
-import org.sonar.api.utils.log.Loggers
 import org.sonarsource.kotlin.api.hasCacheEnabled
 import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.plugin.KotlinFileContext
 import org.sonarsource.kotlin.visiting.KotlinFileVisitor
 
-private val LOG = Loggers.get(CopyPasteDetector::class.java)
+private val LOG = LoggerFactory.getLogger(CopyPasteDetector::class.java)
 
 class CopyPasteDetector : KotlinFileVisitor() {
     override fun visit(kotlinFileContext: KotlinFileContext) {

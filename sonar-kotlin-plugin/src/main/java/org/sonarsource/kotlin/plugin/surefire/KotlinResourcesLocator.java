@@ -19,20 +19,21 @@
  */
 package org.sonarsource.kotlin.plugin.surefire;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @ScannerSide
 public class KotlinResourcesLocator {
-  private static final Logger LOGGER = Loggers.get(KotlinResourcesLocator.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(KotlinResourcesLocator.class);
   private final FileSystem fs;
 
   public KotlinResourcesLocator(FileSystem fs) {

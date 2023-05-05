@@ -27,20 +27,21 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.xml.stream.XMLStreamException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonarsource.kotlin.api.ParseException;
 import org.sonarsource.kotlin.plugin.surefire.data.UnitTestClassReport;
 import org.sonarsource.kotlin.plugin.surefire.data.UnitTestIndex;
 
 @ScannerSide
 public class KotlinSurefireParser {
-  private static final Logger LOGGER = Loggers.get(KotlinSurefireParser.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(KotlinSurefireParser.class);
   private final KotlinResourcesLocator kotlinResourcesLocator;
 
   public KotlinSurefireParser(KotlinResourcesLocator kotlinResourcesLocator) {
@@ -64,7 +65,7 @@ public class KotlinSurefireParser {
   private static File[] getReports(File dir, boolean reportDirSetByUser) {
     if (!dir.isDirectory()) {
       if (reportDirSetByUser) {
-        LOGGER.error("Reports path not found or is not a directory: " + dir.getAbsolutePath());
+        LOGGER.error("Reports path not found or is not a directory: {}", dir.getAbsolutePath());
       }
       return new File[0];
     }
@@ -74,7 +75,7 @@ public class KotlinSurefireParser {
       unitTestResultFiles = findXMLFilesStartingWith(dir, "TESTS-");
     }
     if (unitTestResultFiles.length == 0) {
-      LOGGER.warn("Reports path contains no files matching TEST-.*.xml : " + dir.getAbsolutePath());
+      LOGGER.warn("Reports path contains no files matching TEST-.*.xml : {}", dir.getAbsolutePath());
     }
     return unitTestResultFiles;
   }
@@ -84,14 +85,14 @@ public class KotlinSurefireParser {
   }
 
   private void parseFiles(SensorContext context, List<File> reports) {
-    UnitTestIndex index = new UnitTestIndex();
+    var index = new UnitTestIndex();
     parseFiles(reports, index);
     sanitize(index);
     save(index, context);
   }
 
   private static void parseFiles(List<File> reports, UnitTestIndex index) {
-    StaxParser parser = new StaxParser(index);
+    var parser = new StaxParser(index);
     for (File report : reports) {
       try {
         parser.parse(report);
@@ -105,7 +106,7 @@ public class KotlinSurefireParser {
     for (String classname : index.getClassnames()) {
       if (classname.contains("$")) {
         // Surefire reports classes whereas sonar supports files
-        String parentClassName = classname.substring(0, classname.indexOf('$'));
+        var parentClassName = classname.substring(0, classname.indexOf('$'));
         index.merge(classname, parentClassName);
       }
     }

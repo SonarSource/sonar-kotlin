@@ -19,18 +19,18 @@
  */
 package org.sonarsource.kotlin.externalreport.androidlint
 
+import org.slf4j.LoggerFactory
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.config.Configuration
 import org.sonar.api.notifications.AnalysisWarnings
-import org.sonar.api.utils.log.Loggers
 import org.sonarsource.kotlin.externalreport.ExternalReporting
 import org.sonarsource.kotlin.plugin.AbstractPropertyHandlerSensor
 import org.sonarsource.kotlin.plugin.KotlinPlugin
 import java.io.File
 import java.io.FileInputStream
 
-private val LOG = Loggers.get(AndroidLintSensor::class.java)
+private val LOG = LoggerFactory.getLogger(AndroidLintSensor::class.java)
 const val NO_ISSUES_ERROR_MESSAGE = "No issues information will be saved as the report file '{}' can't be read."
 
 class AndroidLintSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandlerSensor(

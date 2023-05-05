@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.ValueDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
+import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtAnnotated
@@ -322,29 +322,29 @@ fun KtQualifiedExpression.resolveReferenceTarget(bindingContext: BindingContext)
 fun DeclarationDescriptor.scope() = fqNameSafe.asString().substringBeforeLast(".")
 
 fun KtCallExpression.expressionTypeFqn(bindingContext: BindingContext) =
-    bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, this)?.type?.getJetTypeFqName(false)
+    bindingContext[BindingContext.EXPRESSION_TYPE_INFO, this]?.type?.getKotlinTypeFqName(false)
 
 private fun KtProperty.determineType(bindingContext: BindingContext) =
     (typeReference?.let { bindingContext.get(BindingContext.TYPE, it) }
         ?: bindingContext.get(BindingContext.EXPRESSION_TYPE_INFO, initializer)?.type)
 
 fun KtProperty.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    determineType(bindingContext)?.getJetTypeFqName(printTypeArguments)
+    determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
 private fun KtParameter.determineType(bindingContext: BindingContext) =
     bindingContext.get(BindingContext.TYPE, typeReference)
 
 fun KtParameter.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    determineType(bindingContext)?.getJetTypeFqName(printTypeArguments)
+    determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
 private fun KtTypeReference.determineType(bindingContext: BindingContext) =
     bindingContext.get(BindingContext.TYPE, this)
 
 fun KtTypeReference.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    determineType(bindingContext)?.getJetTypeFqName(printTypeArguments)
+    determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
 fun KtNamedFunction.returnTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    returnType(bindingContext)?.getJetTypeFqName(printTypeArguments)
+    returnType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
 fun KtNamedFunction.returnType(bindingContext: BindingContext) =
     createTypeBindingForReturnType(bindingContext)?.type
@@ -361,9 +361,9 @@ fun KtLambdaArgument.isSuspending(
     ?: false
 
 fun CallableDescriptor.throwsExceptions(exceptions: Collection<String>) =
-    annotations.any {
-        it.fqName?.asString() == THROWS_FQN &&
-            (it.allValueArguments.asSequence()
+    annotations.any { annotation ->
+        annotation.fqName?.asString() == THROWS_FQN &&
+            (annotation.allValueArguments.asSequence()
                 .find { (k, _) -> k.asString() == "exceptionClasses" }
                 ?.value as? ArrayValue)
                 ?.value
@@ -374,8 +374,6 @@ fun CallableDescriptor.throwsExceptions(exceptions: Collection<String>) =
     }
 
 fun KtNamedFunction.isInfix() = hasModifier(KtTokens.INFIX_KEYWORD)
-
-fun KtNamedFunction.isAnonymous() = nameIdentifier == null
 
 fun Call.findCallInPrecedingCallChain(matcher: FunMatcherImpl, bindingContext: BindingContext): Pair<Call, ResolvedCall<*>>? {
     var receiver = this
@@ -518,7 +516,7 @@ fun KotlinType.isFunctionalInterface(): Boolean =
 fun KotlinFileContext.merge(firstElement: PsiElement, lastElement: PsiElement) =
     merge(listOf(textRange(firstElement),textRange(lastElement)))
 
-fun KotlinType.simpleName(): String = getJetTypeFqName(false).substringAfterLast(".")
+fun KotlinType.simpleName(): String = getKotlinTypeFqName(false).substringAfterLast(".")
 
 fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
     this?.let {
