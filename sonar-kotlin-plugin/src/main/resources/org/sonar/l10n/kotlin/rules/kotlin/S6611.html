@@ -1,0 +1,48 @@
+<h2>Why is this an issue?</h2>
+<p>When accessing <code>Map</code> elements by key, you should handle the <code>null</code> value properly in case the value does not exist. It’s not
+always clear whether a variable is guaranteed to be non-null or not so it’s easy to misuse the non-null operator.</p>
+<p>In Kotlin if you pass a null when a null value is not expected, you will get a NullPointerException. However, if you have a Java interop then
+passing an expected null value can result in unexpected behavior.</p>
+<h2>How to fix it</h2>
+<p>You should avoid using the non-null assertion operator when accessing <code>Map</code> elements.</p>
+<p>Instead, you can:</p>
+<ul>
+  <li> return an instance of a nullable type. </li>
+  <li> use getValue. This will throw NoSuchElementException when an element is not present. </li>
+  <li> use either <code>getOrElse</code> or <code>getOrDefault</code> functions and explicitly specify the behavior in case of a null value. </li>
+  <li> use an elvis operator <code>?:</code> to specify the behavior in case of a null value. </li>
+</ul>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<p>This example will throw a NullPointerException at the <code>!!</code> operator because <code>map</code> doesn’t have a key <code>123</code> and the
+result of <code>get(123)</code> will be null.</p>
+<pre>
+val l = mapOf(1 to "one", 2 to "two", 3 to "five")
+l.get(123)!! // Noncompliant
+l[123]!! // Noncompliant
+</pre>
+<h4>Compliant solution</h4>
+<p>By removing the non-null assertion operator the result of the <code>get(123)</code> call will return an instance of a nullable type, and the user
+can handle the potential <code>null</code> value properly</p>
+<pre>
+val l = mapOf(1 to "one", 2 to "two", 3 to "five")
+l.get(123) // Compliant, returns nullable
+l[123] // Compliant, returns nullable
+l.getValue(123) // Compliant, throws NoSuchElementException
+l.getOrElse(123 ) { "empty" } // Compliant, has default
+l.getOrDefault(123, "empty") // Compliant, has default
+l[123] ?: "empty" // Compliant, has default
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/null-safety.html">Kotlin Documentation - Null safety</a> </li>
+  <li> <a href="https://kotlinlang.org/docs/map-operations.html">Kotlin Documentation - Map-specific operations</a> </li>
+  <li> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/get-or-else.html">Kotlin Documentation - getOrElse</a> </li>
+  <li> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/get-or-default.html">Kotlin Documentation - getOrDefault</a> </li>
+</ul>
+<h3>Articles &amp; blog posts</h3>
+<ul>
+  <li> <a href="https://medium.com/@igorwojda/kotlin-combating-non-null-assertions-5282d7b97205">Kotlin — combating non-null assertions (!!)</a> </li>
+</ul>
+

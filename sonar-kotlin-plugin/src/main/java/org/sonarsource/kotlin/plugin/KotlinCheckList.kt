@@ -82,6 +82,7 @@ import org.sonarsource.kotlin.checks.IsInstanceMethodCheck
 import org.sonarsource.kotlin.checks.JumpInFinallyCheck
 import org.sonarsource.kotlin.checks.LiftReturnStatementCheck
 import org.sonarsource.kotlin.checks.MainSafeCoroutinesCheck
+import org.sonarsource.kotlin.checks.MapValuesShouldBeAccessedSafelyCheck
 import org.sonarsource.kotlin.checks.MatchCaseTooBigCheck
 import org.sonarsource.kotlin.checks.MergeIfElseIntoWhenCheck
 import org.sonarsource.kotlin.checks.MobileDatabaseEncryptionKeysCheck
@@ -209,6 +210,7 @@ val KOTLIN_CHECKS = listOf(
     JumpInFinallyCheck::class.java,
     LiftReturnStatementCheck::class.java,
     MainSafeCoroutinesCheck::class.java,
+    MapValuesShouldBeAccessedSafelyCheck::class.java,
     MatchCaseTooBigCheck::class.java,
     MergeIfElseIntoWhenCheck::class.java,
     MobileDatabaseEncryptionKeysCheck::class.java,
