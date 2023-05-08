@@ -167,7 +167,7 @@ private class AndroidLintHelp(androidLintHelpPath: Path) {
         }
         var header = lines[pos].substring(lines[pos].indexOf(':') + 2)
         pos++
-        if (name == "Summary" && pos < lines.size && !lines[pos].isEmpty()) {
+        if (name == "Summary" && pos < lines.size && lines[pos].isNotEmpty()) {
             header += " " + lines[pos]
             pos++
         }

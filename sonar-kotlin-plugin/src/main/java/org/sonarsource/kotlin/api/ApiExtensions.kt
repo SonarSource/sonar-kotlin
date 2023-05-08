@@ -570,5 +570,5 @@ fun SensorContext.hasCacheEnabled(): Boolean {
 }
 
 fun KtWhenExpression.isExhaustive(context: KotlinFileContext): Boolean {
-    return entries.any { it.isElse } || context.bindingContext.get(BindingContext.EXHAUSTIVE_WHEN, this) == true
+    return entries.any { it.isElse } || context.bindingContext[BindingContext.EXHAUSTIVE_WHEN, this] == true
 }
