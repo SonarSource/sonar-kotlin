@@ -1,21 +1,22 @@
+<h2>Why is this an issue?</h2>
 <p>The <code>suspend</code> function modifier is used to mark a function which might take some time to execute and could suspend the caller coroutine.
 The location where such function is called is a "suspension point". Functions marked as <code>suspend</code> ("suspending functions") should
 themselves contain at least one suspension point, otherwise it makes no sense to mark it as <code>suspend</code></p>
 <p>This rule reports an issue if a function with <code>suspend</code> modifier has no calls to other <code>suspend</code> functions inside its
 body.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 suspend fun function() { // Noncompliant, redundant 'suspend' modifier
     println("Hello!")
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 fun function() {
     println("Hello!")
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://kotlinlang.org/docs/coroutines-guide.html">Coroutines guide</a> </li>
 </ul>

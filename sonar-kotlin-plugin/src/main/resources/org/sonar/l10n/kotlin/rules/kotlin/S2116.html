@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>While <code>hashCode</code> and <code>toString</code> are available on arrays, they are largely useless. <code>hashCode</code> returns the array’s
 "identity hash code", and <code>toString</code> returns nearly the same value. Neither method’s output actually reflects the array’s contents.
 Furthermore, <code>contentHashCode()</code> and <code>contentToString()</code> are also useless on arrays of array.</p>
@@ -6,7 +7,7 @@ Furthermore, <code>contentHashCode()</code> and <code>contentToString()</code> a
   <li> On array of objects or arrays: <code>contentDeepHashCode()</code> and <code>contentDeepToString()</code> </li>
   <li> On array of primitives: <code>contentHashCode()</code> and <code>contentToString()</code> </li>
 </ul>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 fun main() {
     val primitiveArray = intArrayOf(1, 2, 3)
@@ -23,7 +24,7 @@ fun main() {
     println(arrayOfArray.contentHashCode())  // Noncompliant, output: 586055243
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 fun main() {
     val primitiveArray = intArrayOf(1, 2, 3)

@@ -1,8 +1,9 @@
+<h2>Why is this an issue?</h2>
 <p>Nested <code>when</code> structures are difficult to understand because you can easily confuse the cases of an inner <code>when</code> as belonging
 to an outer statement. Therefore nested <code>when</code> statements should be avoided.</p>
 <p>Specifically, you should structure your code to avoid the need for nested <code>when</code> statements, but if you cannot, then consider moving the
 inner <code>when</code> to another function.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 fun foo(n: Int, m: Int) {
   when (n) {
@@ -15,7 +16,7 @@ fun foo(n: Int, m: Int) {
   }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 fun foo(n: Int, m: Int) {
   when (n) {

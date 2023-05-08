@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>By convention, calls to suspending functions should not block the thread, eliminating the requirement of calling suspending functions on background
 threads. Any long-running blocking operations should be moved to background threads within the suspending function that performs these operations. If
 suspending functions do block, this is breaking the Kotlin coroutines conventions (also see <a
@@ -12,7 +13,7 @@ developer to ensure the conventions are actually followed. If a suspending libra
 then calling it in a different thread can work around the issues caused by the poorly written suspending function. It should be preferred to fix the
 callee, however, and not make such workarounds common practice.</p>
 <p>This rule raises an issue when a suspending function is called in a way that executes the call in a new thread.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 suspend fun caller() = coroutineScope {
     async(Dispatchers.IO) {
@@ -24,7 +25,7 @@ suspend fun callee() {
     // Do some work
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 suspend fun caller() = coroutineScope {
     async {
@@ -36,7 +37,7 @@ suspend fun callee() {
     // Do some work
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://kotlinlang.org/docs/composing-suspending-functions.html">Composing suspending functions</a> in the Kotlin docs </li>
   <li> <a href="https://github.com/SonarSource/rspec/pull/173">{rule:kotlin:S6307}: Suspending functions should be main-safe</a> </li>

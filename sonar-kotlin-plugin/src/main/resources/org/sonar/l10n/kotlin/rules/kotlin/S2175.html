@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>The Kotlin collections API has methods that allow developers to overcome type-safety restriction of the parameter, such as
 <code>Iterable.contains</code>. When the actual type of the object provided to these methods is not consistent with the target collection’s actual
 type, those methods will always return <code>false</code> or <code>null</code>. This is most likely unintended and hides a design problem.</p>
@@ -21,7 +22,7 @@ type, those methods will always return <code>false</code> or <code>null</code>. 
   <li> <code>Map.get</code> </li>
   <li> <code>MutableMap.remove</code> </li>
 </ul>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 fun main(args: Array&lt;String&gt;) {
     val map: MutableMap&lt;Int, Any&gt; = mutableMapOf()
@@ -35,7 +36,7 @@ fun main(args: Array&lt;String&gt;) {
     }
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <pre>
 fun main(args: Array&lt;String&gt;) {
     val map: MutableMap&lt;Int, Any&gt; = mutableMapOf()

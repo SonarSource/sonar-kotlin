@@ -1,3 +1,4 @@
+<h2>Why is this an issue?</h2>
 <p>There are two ways to define asynchronous functions in Kotlin:</p>
 <ul>
   <li> using the modifier <code>suspend</code> in the function declaration </li>
@@ -8,7 +9,7 @@ suspended.</p>
 <p>Functions that return results immediately but start a coroutine in the background should be written as extension functions on
 <code>CoroutineScope</code>. At the same time, these functions should not be declared <code>suspend</code>, as suspending functions should not leave
 running background tasks behind.</p>
-<h2>Noncompliant Code Example</h2>
+<h3>Noncompliant code example</h3>
 <pre>
 suspend fun CoroutineScope.f(): Int {
     val resource1 = loadResource1()
@@ -16,7 +17,7 @@ suspend fun CoroutineScope.f(): Int {
     return resource1.size + resource2.size
 }
 </pre>
-<h2>Compliant Solution</h2>
+<h3>Compliant solution</h3>
 <p>Using <code>suspend</code>:</p>
 <pre>
 suspend fun f(): Int {
@@ -33,7 +34,7 @@ fun CoroutineScope.f(): Deferred&lt;Int&gt; = async {
     resource1.size + resource2.size
 }
 </pre>
-<h2>See</h2>
+<h2>Resources</h2>
 <ul>
   <li> <a href="https://elizarov.medium.com/coroutine-context-and-scope-c8b255d59055">Coroutine Context and Scope</a> </li>
 </ul>
