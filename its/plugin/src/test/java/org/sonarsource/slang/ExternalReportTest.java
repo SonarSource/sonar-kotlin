@@ -99,7 +99,7 @@ public class ExternalReportTest extends TestBase {
     List<Issue> issues = getExternalIssues(projectKey);
     assertThat(issues).hasSize(2);
 
-    Issue first = issues.stream().filter(issue -> issue.getRule().equals("external_ktlint:no-wildcard-imports")).findFirst().orElse(null);
+    Issue first = issues.stream().filter(issue -> issue.getRule().equals("external_ktlint:standard:no-wildcard-imports")).findFirst().orElse(null);
     assertThat(first.getComponent()).isEqualTo(projectKey + ":main.kt");
     assertThat(first.getLine()).isEqualTo(1);
     assertThat(first.getMessage()).isEqualTo("Wildcard import (cannot be auto-corrected)");

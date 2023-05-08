@@ -51,7 +51,7 @@ dependencyResolutionManagement {
         create("utilLibs") {
             val detekt = version("detekt", "1.22.0")
             val jcommander = version("jcommander", "1.81")
-            val ktlint = version("ktlint", "0.48.2")
+            val ktlint = version("ktlint", "0.49.0")
 
             library("detekt-api", "io.gitlab.arturbosch.detekt", "detekt-api").versionRef(detekt)
             library("detekt-cli", "io.gitlab.arturbosch.detekt", "detekt-cli").versionRef(detekt)
@@ -59,11 +59,10 @@ dependencyResolutionManagement {
             library("jcommander", "com.beust", "jcommander").versionRef(jcommander)
             library("ktlint", "com.pinterest", "ktlint").versionRef(ktlint)
             library("ktlint-core", "com.pinterest.ktlint", "ktlint-core").versionRef(ktlint)
-            library("ktlint-ruleset-experimental", "com.pinterest.ktlint", "ktlint-ruleset-experimental").versionRef(ktlint)
             library("ktlint-ruleset-standard", "com.pinterest.ktlint", "ktlint-ruleset-standard").versionRef(ktlint)
 
             bundle("detekt", listOf("detekt-cli", "detekt-core", "detekt-api"))
-            bundle("ktlint", listOf("ktlint", "ktlint-core", "ktlint-ruleset-standard", "ktlint-ruleset-experimental"))
+            bundle("ktlint", listOf("ktlint", "ktlint-core", "ktlint-ruleset-standard"))
         }
 
         create("testLibs") {

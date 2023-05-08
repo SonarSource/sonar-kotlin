@@ -76,6 +76,22 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 The BottomAppBar widget must be placed within a CoordinatorLayout.
 
 
+EmptySuperCall
+--------------
+Summary: Calling an empty super method
+
+Priority: 9 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+For methods annotated with @EmptySuper, overriding methods should not also
+call the super implementation, either because it is empty, or perhaps it
+contains code not intended to be run when the method is overridden.
+
+
 FindViewByIdCast
 ----------------
 Summary: Add Explicit Cast
@@ -378,8 +394,7 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 If a class is referenced in the manifest or in a layout file, it must also
 exist in the project (or in one of the libraries included by the project. This
 check helps uncover typos in registration names, or attempts to rename or move
-classes without updating the XML references
-properly.
+classes without updating the XML references properly.
 
 More information: 
 https://developer.android.com/guide/topics/manifest/manifest-intro.html
@@ -436,6 +451,20 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 A motion scene file specifies the animations used in a MotionLayout. The
 layoutDescription is required to specify a valid motion scene file.
+
+
+MotionLayoutMissingId
+---------------------
+Summary: Views inside MotionLayout require an android:id
+
+Priority: 8 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Views inside MotionLayout require an android:id.
 
 
 MotionSceneFileValidationError
@@ -516,6 +545,7 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Using -keepclasseswithmembernames in a proguard config file is not correct; it
 can cause some symbols to be renamed which should not be.
+
 Earlier versions of ADT used to create proguard.cfg files with the wrong
 format. Instead of -keepclasseswithmembernames use -keepclasseswithmembers,
 since the old flags also implies "allow shrinking" which means symbols only
@@ -795,6 +825,26 @@ Within a layout, id's should be unique since otherwise findViewById() can
 return an unexpected view.
 
 
+GestureBackNavigation
+---------------------
+Summary: Usage of KeyEvent.KEYCODE_BACK
+
+Priority: 7 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Starting in Android 13 (API 33+), the handling of back events is moving to an
+ahead-of-time callback model. Use
+OnBackInvokedDispatcher.registerOnBackInvokedCallback(...) and
+onBackInvokedCallback or AndroidX's OnBackPressedDispatcher with an
+implemented onBackPressedCallback to handle back gestures and key presses.
+
+More information: 
+https://developer.android.com/about/versions/13/features/predictive-back-gesture
+
 HalfFloat
 ---------
 Summary: Incorrect Half Float
@@ -1004,6 +1054,8 @@ Category: Correctness
 Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
+NOTE: This issue is disabled by default!
+You can enable it by adding --enable AppCompatMethod
 
 When using the appcompat library, there are some methods you should be calling
 instead of the normal ones; for example, getSupportActionBar() instead of
@@ -1512,6 +1564,24 @@ Unfortunately, setting one clears the other. If you want to set both, you
 should call setDataAndType(Uri, String) instead.
 
 
+InternalInsetResource
+---------------------
+Summary: Using internal inset dimension resource
+
+Priority: 6 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+The internal inset dimension resources are not a supported way to retrieve the
+relevant insets for your application. The insets are dynamic values that can
+change while your app is visible, and your app's window may not intersect with
+the system UI. To get the relevant value for your app and listen to updates,
+use androidx.core.view.WindowInsetsCompat and related APIs.
+
+
 InvalidAnalyticsName
 --------------------
 Summary: Invalid Analytics Name
@@ -1633,8 +1703,7 @@ Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The <uses> element in <automotiveApp> should contain a valid value for the
-name attribute.
-Valid values are media, notification, or sms.
+name attribute. Valid values are media, notification, or sms.
 
 More information: 
 https://developer.android.com/training/auto/start/index.html#auto-metadata
@@ -1672,6 +1741,23 @@ disallowed. A single APK for Wear and non-Wear devices is not supported.
 
 More information: 
 https://developer.android.com/training/wearables/apps/packaging.html
+
+KotlinNullnessAnnotation
+------------------------
+Summary: Kotlin nullability annotation
+
+Priority: 6 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+In Kotlin, nullness is part of the type system; s: String is never null and s:
+String? is sometimes null, whether or not you add in additional annotations
+stating @NonNull or @Nullable. These are likely copy/paste mistakes, and are
+misleading.
+
 
 LibraryCustomView
 -----------------
@@ -1837,6 +1923,7 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 To support voice searches on Android Auto, you should also register an
 intent-filter for the action android.media.action.MEDIA_PLAY_FROM_SEARCH.
+
 To do this, add
 `<intent-filter>`
     `<action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH" />`
@@ -1859,6 +1946,7 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The manifest should declare the use of the Leanback user interface required by
 Android TV.
+
 To fix this, add
 `<uses-feature android:name="android.software.leanback"
                android:required="false" />`
@@ -1881,6 +1969,7 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 An Automotive Media App requires an exported service that extends
 android.service.media.MediaBrowserService with an intent-filter for the action
 android.media.browse.MediaBrowserService to be able to browse and play media.
+
 To do this, add
 `<intent-filter>`
     `<action android:name="android.media.browse.MediaBrowserService" />`
@@ -2030,6 +2119,36 @@ below 5.0 (API 21). Note that the way Lint decides whether an icon is a
 notification icon is based on the filename prefix ic_stat_. This corresponds
 to the naming convention documented in
 https://material.io/design/iconography/
+
+
+NotificationId0
+---------------
+Summary: Notification Id is 0
+
+Priority: 6 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+The notification id cannot be 0; using 0 here can make the service not run in
+the foreground.
+
+
+NotificationPermission
+----------------------
+Summary: Notifications Without Permission
+
+Priority: 6 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+When targeting Android 13 and higher, posting permissions requires holding the
+runtime permission android.permission.POST_NOTIFICATIONS.
 
 
 OldTargetApi
@@ -2341,8 +2460,8 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-This check analyzes usages of the Slices API and offers suggestions based
-on best practices.
+This check analyzes usages of the Slices API and offers suggestions based on
+best practices.
 
 
 SoonBlockedPrivateApi
@@ -2382,6 +2501,43 @@ when sizing the children.
 However, if you use 0dp for the opposite dimension, the view will be
 invisible. This can happen if you change the orientation of a layout without
 also flipping the 0dp dimension in all the children.
+
+
+SuspiciousIndentation
+---------------------
+Summary: Suspicious indentation
+
+Priority: 6 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+This check looks for cases where the indentation suggests a grouping that
+isn't actually there in the code. A common example of this would be something
+like
+if (column > width)
+    line++
+    column = 0
+Here, the column = 0 line will be executed every single time, not just if the
+condition is true.
+
+Available options:
+
+always-run (default is false):
+Whether this check should be included while editing.
+
+While you're editing, it's common to have a temporary situation where you have suspicious indentation scenarios -- e.g. you start typing an if statement on the line above something you want to make conditional, and you haven't indented it yet. It can be distracting and misleading to suddenly have both statements light up as errors. Therefore, lint will avoid including this check when running on the fly in the editor, unless it looks like the file has not been recently edited. With this option, you can turn it on in all cases.
+
+To configure this option, use a lint.xml file with an <option> like this:
+
+<lint>
+    <issue id="SuspiciousIndentation">
+        <option name="always-run" value="false" />
+    </issue>
+</lint>
+
 
 
 UniquePermission
@@ -2780,8 +2936,42 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Starting in Android 12 (API 31+), the application's Launch Screen is provided
 by the system and the application should not create its own, otherwise the
-user will see two splashscreen. Please check the SplashScreen class to check
+user will see two splashscreens. Please check the SplashScreen class to check
 how the Splash Screen can be controlled and customized.
+
+More information: 
+https://developer.android.com/guide/topics/ui/splash-screen
+
+DefaultEncoding
+---------------
+Summary: Using Default Character Encoding
+
+Priority: 5 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+NOTE: This issue is disabled by default!
+You can enable it by adding --enable DefaultEncoding
+
+Some APIs will implicitly use the default system character encoding instead of
+UTF-8 when converting to or from bytes, such as when creating a default
+FileReader.
+
+This is usually not correct; you only want to do this if you need to read
+files created by other programs where they have deliberately written in the
+same encoding. The default encoding varies from platform to platform and can
+vary from locale to locale, so this makes it difficult to interpret files
+containing non-ASCII characters.
+
+We recommend using UTF-8 everywhere.
+
+Note that on Android, the default file encoding is always UTF-8 (see
+https://developer.android.com/reference/java/nio/charset/Charset#defaultCharse
+t() for more), so this lint check deliberately does not flag any problems in
+Android code, since it is always safe to rely on the default character
+encoding there.
 
 
 DuplicateActivity
@@ -2911,23 +3101,24 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
+<intent-filter> <data> tags should only declare a single unique attribute
+(i.e. scheme OR host, but not both). This better matches the runtime behavior
+of intent filters, as they combine all of the declared data attributes into a
+single matcher which is allowed to handle any combination across attribute
+types.
 
-
-For example, the following two `<intent-filter>` declarations are the same:
-xml
+For example, the following two <intent-filter> declarations are the same:
 <intent-filter>
     <data android:scheme="http" android:host="example.com" />
     <data android:scheme="https" android:host="example.org" />
 </intent-filter>
 
-xml
 <intent-filter>
     <data android:scheme="http"/>
     <data android:scheme="https"/>
     <data android:host="example.com" />
     <data android:host="example.org" />
 </intent-filter>
-`
 
 They both handle all of the following:
 * http://example.com
@@ -3096,11 +3287,28 @@ the fragment to perform transactions, such as remove it).
 
 * Supply the android:id attribute with a unique ID.
 * Supply the android:tag attribute with a unique string.
+
 If you provide neither of the previous two, the system uses the ID of the
 container view.
 
 More information: 
 https://developer.android.com/guide/components/fragments.html
+
+MissingInflatedId
+-----------------
+Summary: ID not found in inflated resource
+
+Priority: 5 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Checks calls to layout inflation and makes sure that the referenced ids are
+found in the corresponding layout (or at least one of them, if the layout has
+multiple configurations.)
+
 
 NetworkSecurityConfig
 ---------------------
@@ -3407,6 +3615,64 @@ allowed. The watch face will not be shown on the watch if it does not satisfy
 this requirement.
 
 
+WatchFaceForAndroidX
+--------------------
+Summary: AndroidX watch faces must use action WATCH_FACE_EDITOR
+
+Priority: 5 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+If the package depends on androidx.wear:wear-watchface, and an AndroidX watch
+face declares the wearableConfigurationAction metadata, its value should be
+androidx.wear.watchface.editor.action.WATCH_FACE_EDITOR.
+
+More information: 
+https://developer.android.com/training/wearables/watch-faces/configuration
+
+WearableActionDuplicate
+-----------------------
+Summary: Duplicate watch face configuration activities found
+
+Priority: 5 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+If and only if a watch face service defines wearableConfigurationAction
+metadata, with the value WATCH_FACE_EDITOR, there should be an activity in the
+same package, which has an intent filter for WATCH_FACE_EDITOR (with
+com.google.android.wearable.watchface.category.WEARABLE_CONFIGURATION if
+minSdkVersion is less than 30).
+
+More information: 
+https://developer.android.com/training/wearables/watch-faces/configuration
+
+WearableConfigurationAction
+---------------------------
+Summary: Wear configuration action metadata must match an activity
+
+Priority: 5 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Only when a watch face service defines wearableConfigurationAction metadata,
+with the value WATCH_FACE_EDITOR, there should be an activity in the same
+package, which has an intent filter for WATCH_FACE_EDITOR (with
+com.google.android.wearable.watchface.category.WEARABLE_CONFIGURATION if
+minSdkVersion is less than 30).
+
+More information: 
+https://developer.android.com/training/wearables/watch-faces/configuration
+
 XmlEscapeNeeded
 ---------------
 Summary: Missing XML Escape
@@ -3478,6 +3744,23 @@ for the UPDATE_INDEX intent to continue supporting indexing in your app.
 More information: 
 https://firebase.google.com/docs/app-indexing/android/personal-content#add-a-broadcast-receiver-to-your-app
 
+DeprecatedSinceApi
+------------------
+Summary: Using a method deprecated in earlier SDK
+
+Priority: 4 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Some backport methods are only necessary until a specific version of Android.
+These have been annotated with @DeprecatedSinceApi, specifying the relevant
+API level and replacement suggestions. Calling these methods when the
+minSdkVersion is already at the deprecated API level or above is unnecessary.
+
+
 DiffUtilEquals
 --------------
 Summary: Suspicious DiffUtil Equality
@@ -3527,11 +3810,9 @@ Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The Kotlin extension method File.endsWith(suffix) checks whole path
-components,
-not just string suffixes. This means that File("foo.txt").endsWith(".txt")
-will return
-false. Instead you might have intended file.path.endsWith or
-file.extension.equals.
+components, not just string suffixes. This means that
+File("foo.txt").endsWith(".txt") will return false. Instead you might have
+intended file.path.endsWith or file.extension.equals.
 
 
 GradleDependency
@@ -3727,11 +4008,28 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The <activity> element should be allowed to be resized to allow users to take
 advantage of the multi-window environments available on larger screen Android
-devices.To fix the issue, consider declaring the corresponding activity
-element with resizableActivity="true" attribute.
+devices.
+
+To fix the issue, consider declaring the corresponding activity element with
+resizableActivity="true" attribute.
 
 More information: 
 https://developer.android.com/topic/arc/window-management
+
+NotConstructor
+--------------
+Summary: Not a Constructor
+
+Priority: 4 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+This check catches methods that look like they were intended to be
+constructors, but aren't.
+
 
 ObjectAnimatorBinding
 ---------------------
@@ -3747,6 +4045,21 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 This check cross references properties referenced by String from
 ObjectAnimator and PropertyValuesHolder method calls and ensures that the
 corresponding setter methods exist and have the right signatures.
+
+
+OpenForTesting
+--------------
+Summary: Extending API only allowed from tests
+
+Priority: 4 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Classes or methods annotated with @OpenForTesting are only allowed to be
+subclassed or overridden from unit tests.
 
 
 RequiredSize
@@ -3792,6 +4105,21 @@ Gradle library group id)
 You can add your own API restrictions with the @RestrictTo annotation.
 
 
+ReturnThis
+----------
+Summary: Method must return this
+
+Priority: 4 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Methods annotated with @ReturnThis (usually in the super method that this
+method is overriding) should also return this.
+
+
 SourceLockedOrientationActivity
 -------------------------------
 Summary: Incompatible setRequestedOrientation value
@@ -3803,14 +4131,13 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-The Activity should not be locked to a portrait orientation so that users
-can take advantage of the multi-window environments and larger landscape-first
-screens
-that Android runs on such as Chrome OS. To fix the issue, consider calling
-setRequestedOrientation with the ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
-or
-ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED options or removing the call
-all together.
+The Activity should not be locked to a portrait orientation so that users can
+take advantage of the multi-window environments and larger landscape-first
+screens that Android runs on such as Chrome OS. To fix the issue, consider
+calling setRequestedOrientation with the
+ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR or
+ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED options or removing the call all
+together.
 
 
 UnsupportedChromeOsCameraSystemFeature
@@ -3824,13 +4151,12 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-You should look for the FEATURE_CAMERA_ANY features to include all
-possible cameras that may be on the device. Looking for FEATURE_CAMERA
-only looks for a rear facing camera, which certain tablets or Chrome OS
-devices don't have, as well as newer device configurations and modes may place
-the
-device in a state where the rear camera is not available. To fix the issue,
-look for FEATURE_CAMERA_ANY instead.
+You should look for the FEATURE_CAMERA_ANY features to include all possible
+cameras that may be on the device. Looking for FEATURE_CAMERA only looks for a
+rear facing camera, which certain tablets or Chrome OS devices don't have, as
+well as newer device configurations and modes may place the device in a state
+where the rear camera is not available. To fix the issue, look for
+FEATURE_CAMERA_ANY instead.
 
 
 VisibleForTests
@@ -3875,16 +4201,16 @@ ExtraText
 Summary: Extraneous text in resource files
 
 Priority: 3 / 10
-Severity: Warning
+Severity: Error
 Category: Correctness
 Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-Layout resource files should only contain elements and attributes. Any XML
+Non-value resource files should only contain elements and attributes. Any XML
 text content found in the file is likely accidental (and potentially dangerous
 if the text resembles XML and the developer believes the text to be
-functional)
+functional).
 
 
 InnerclassSeparator
@@ -4338,7 +4664,7 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-Apostrophes (') must always be escaped (with a \), unless they appear in a
+Apostrophes (') must always be escaped (with a \\), unless they appear in a
 string which is itself escaped in double quotes (").
 
 
@@ -4598,6 +4924,25 @@ getQuantityString() is called, even with 0 or 1.
 More information: 
 https://developer.android.com/guide/topics/resources/string-resource.html#Plurals
 
+UnusedTranslation
+-----------------
+Summary: Unused Translation
+
+Priority: 2 / 10
+Severity: Warning
+Category: Correctness:Messages
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+If an application defines a translation for a language which is not included
+in the app's localeConfig file (when declared in the manifest), that language
+will be "unused"; it will not be presented to the user. Usually this means you
+have forgotten to include it in the locale config file.
+
+More information: 
+https://developer.android.com/about/versions/13/features/app-languages
+
 Correctness:Chrome OS
 =====================
 
@@ -4852,30 +5197,6 @@ Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In general, you should not package private key files inside your app.
-
-
-RiskyLibrary
-------------
-Summary: Libraries with Privacy or Security Risks
-
-Priority: 8 / 10
-Severity: Error
-Category: Security
-Vendor: Android Open Source Project
-Contact: https://groups.google.com/g/lint-dev
-Feedback: https://issuetracker.google.com/issues/new?component=192708
-
-Your app is using a version of a library that has been identified by the
-library developer as a potential source of privacy and/or security risks. This
-may be a violation of Google Play policies (see
-https://play.google.com/about/monetization-ads/ads/) and/or affect your app’s
-visibility on the Play Store.
-
-When available, the individual error messages from lint will include details
-about the reasons for this advisory.
-
-Please try updating your app with an updated version of this library, or
-remove it from your app.
 
 
 UsingC2DM
@@ -5209,6 +5530,23 @@ only available when android:debuggable is set to "true".
 More information: 
 https://developer.android.com/training/articles/security-config#TrustingDebugCa
 
+CustomPermissionTypo
+--------------------
+Summary: Permission appears to be a custom permission with a typo
+
+Priority: 5 / 10
+Severity: Warning
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+This check looks for required permissions that look like custom permissions
+defined in the same manifest, but aren't, and may be typos.
+
+Please double check the permission value you have supplied.
+
+
 CustomX509TrustManager
 ----------------------
 Summary: Implements custom TLS trust manager
@@ -5365,6 +5703,69 @@ an invalid element, it is a no-op and ignored. Ensure that this permission
 attribute was set on the correct element to protect the correct component.
 
 
+KnownPermissionError
+--------------------
+Summary: Value specified for permission is a known error
+
+Priority: 5 / 10
+Severity: Error
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+This check looks for values specified in component permissions that are known
+errors, such as android:permission="true".
+
+ Please double check the permission value you have supplied. The value is
+expected to be a  permission string from the system, another app, or your own,
+NOT a boolean.
+
+
+PermissionNamingConvention
+--------------------------
+Summary: Permission name does not follow recommended convention
+
+Priority: 5 / 10
+Severity: Warning
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+NOTE: This issue is disabled by default!
+You can enable it by adding --enable PermissionNamingConvention
+
+Permissions should be prefixed with an app's package name, using
+reverse-domain-style naming. This prefix should be followed by .permission.,
+and then a description of the capability that the permission represents, in
+upper SNAKE_CASE. For example,
+com.example.myapp.permission.ENGAGE_HYPERSPACE.
+
+Following this recommendation avoids naming collisions, and helps clearly
+identify the owner and intention of a custom permission.
+
+
+ReservedSystemPermission
+------------------------
+Summary: Permission name is a reserved Android permission
+
+Priority: 5 / 10
+Severity: Error
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+This check looks for custom permission declarations whose names are reserved
+values for system or Android SDK permissions, or begin with the reserved
+string android.
+
+Please double check the permission name you have supplied. Attempting to
+redeclare a system or Android SDK permission will be ignored.  Using the
+prefix android. is a violation of the Android Compatibility Definition
+Document.
+
+
 SignatureOrSystemPermissions
 ----------------------------
 Summary: Declaring signatureOrSystem permissions
@@ -5381,6 +5782,24 @@ and works regardless of where applications are installed. The
 signatureOrSystem level is used for certain situations where multiple vendors
 have applications built into a system image and need to share specific
 features explicitly because they are being built together.
+
+
+SystemPermissionTypo
+--------------------
+Summary: Permission appears to be a standard permission with a typo
+
+Priority: 5 / 10
+Severity: Warning
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+This check looks for required permissions that look like well-known system
+permissions or permissions from the Android SDK, but aren't, and may be
+typos.
+
+Please double check the permission value you have supplied.
 
 
 UnspecifiedImmutableFlag
@@ -5414,6 +5833,32 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 This check looks for onReceivedSslError implementations that invoke
 SslErrorHandler#proceed.
 
+
+RiskyLibrary
+------------
+Summary: Libraries with Privacy or Security Risks
+
+Priority: 4 / 10
+Severity: Warning
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Your app is using a version of a library that has been identified by the
+library developer as a potential source of privacy and/or security risks. This
+may be a violation of Google Play policies (see
+https://play.google.com/about/monetization-ads/ads/) and/or affect your app’s
+visibility on the Play Store.
+
+When available, the individual error messages from lint will include details
+about the reasons for this advisory.
+
+Please try updating your app with an updated version of this library, or
+remove it from your app.
+
+More information: 
+https://play.google.com/sdks
 
 UnsafeDynamicallyLoadedCode
 ---------------------------
@@ -5615,9 +6060,9 @@ More information:
 https://support.google.com/googleplay/android-developer/answer/113469#targetsdk
 https://developer.android.com/distribute/best-practices/develop/target-sdk.html
 
-OutdatedLibrary
----------------
-Summary: Outdated Library
+PlaySdkIndexNonCompliant
+------------------------
+Summary: Library has policy issues in SDK Index
 
 Priority: 8 / 10
 Severity: Error
@@ -5626,14 +6071,11 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-Your app is using an outdated version of a library. This may cause violations
-of Google Play policies (see
-https://play.google.com/about/monetization-ads/ads/) and/or may affect your
-app’s visibility on the Play Store.
+This library version has policy issues that will block publishing in the
+Google Play Store.
 
-Please try updating your app with an updated version of this library, or
-remove it from your app.
-
+More information: 
+https://play.google.com/sdks
 
 QueryAllPackagesPermission
 --------------------------
@@ -5653,6 +6095,28 @@ apps on Google Play are not allowed to have this permission.
 
 More information: 
 https://g.co/dev/packagevisibility
+
+OutdatedLibrary
+---------------
+Summary: Outdated Library
+
+Priority: 5 / 10
+Severity: Warning
+Category: Compliance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Your app is using an outdated version of a library. This may cause violations
+of Google Play policies (see
+https://play.google.com/about/monetization-ads/ads/) and/or may affect your
+app’s visibility on the Play Store.
+
+Please try updating your app with an updated version of this library, or
+remove it from your app.
+
+More information: 
+https://play.google.com/sdks
 
 Performance
 ===========
@@ -5734,8 +6198,7 @@ Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This dependency is identified as an annotation processor. Consider adding it
-to the processor path using annotationProcessor instead of including it to
-the
+to the processor path using annotationProcessor instead of including it to the
 compile path.
 
 
@@ -5923,27 +6386,6 @@ longer running instances can cause leaks.
 ViewModel classes should never point to Views or non-application Contexts.
 
 
-UnpackedNativeCode
-------------------
-Summary: Missing android:extractNativeLibs=false
-
-Priority: 6 / 10
-Severity: Warning
-Category: Performance
-Vendor: Android Open Source Project
-Contact: https://groups.google.com/g/lint-dev
-Feedback: https://issuetracker.google.com/issues/new?component=192708
-NOTE: This issue is disabled by default!
-You can enable it by adding --enable UnpackedNativeCode
-
-This app loads native libraries using System.loadLibrary().
-
-Consider adding android:extractNativeLibs="false" to the <application> tag in
-AndroidManifest.xml. Starting with Android 6.0, this will make installation
-faster, the app will take up less space on the device and updates will have
-smaller download sizes.
-
-
 UseCompoundDrawables
 --------------------
 Summary: Node can be replaced by a TextView with compound drawables
@@ -6010,6 +6452,26 @@ suppress this warning with a @SuppressLint annotation for the intentional
 logging calls.
 
 
+StringFormatTrivial
+-------------------
+Summary: String.format string only contains trivial conversions
+
+Priority: 5 / 10
+Severity: Warning
+Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+NOTE: This issue is disabled by default!
+You can enable it by adding --enable StringFormatTrivial
+
+Every call to String.format creates a new Formatter instance, which will
+decrease the performance of your app. String.format should only be used when
+necessary--if the formatted string contains only trivial conversions (e.g. b,
+s, c) and there are no translation concerns, it will be more efficient to
+replace them and concatenate with +.
+
+
 VectorPath
 ----------
 Summary: Long vector paths
@@ -6066,6 +6528,26 @@ treated as internal only and get renamed to something shorter.
 
 This check will also flag other potential reflection problems it encounters,
 such as a missing property, wrong argument types, etc.
+
+
+AssertionSideEffect
+-------------------
+Summary: Assertions with Side Effects
+
+Priority: 4 / 10
+Severity: Warning
+Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Assertion conditions can have side effects. This is risky because the behavior
+depends on whether assertions are on or off. This is usually not intentional,
+and can lead to bugs where the production version differs from the version
+tested during development.
+
+Generally, you'll want to perform the operation with the side effect before
+the assertion, and then assert that the result was what you expected.
 
 
 DuplicateDivider
@@ -6310,14 +6792,16 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Unused resources make applications larger and slow down builds.
 
+
 The unused resource check can ignore tests. If you want to include resources
 that are only referenced from tests, consider packaging them in a test source
 set instead.
 
 You can include test sources in the unused resource check by setting the
-system property lint.unused-resources.include-tests=true, and to exclude them
-(usually for performance reasons), use
-lint.unused-resources.exclude-tests=true.
+system property lint.unused-resources.include-tests =true, and to exclude them
+(usually for performance reasons), use lint.unused-resources.exclude-tests
+=true.
+,
 
 
 UsableSpace
@@ -6497,14 +6981,15 @@ referenced from anywhere. Having id definitions, even if unused, is not
 necessarily a bad idea since they make working on layouts and menus easier, so
 there is not a strong reason to delete these.
 
+
 The unused resource check can ignore tests. If you want to include resources
 that are only referenced from tests, consider packaging them in a test source
 set instead.
 
 You can include test sources in the unused resource check by setting the
-system property lint.unused-resources.include-tests=true, and to exclude them
-(usually for performance reasons), use
-lint.unused-resources.exclude-tests=true.
+system property lint.unused-resources.include-tests =true, and to exclude them
+(usually for performance reasons), use lint.unused-resources.exclude-tests
+=true.
 
 
 UnusedNamespace
@@ -6755,6 +7240,44 @@ perspective as if viewed from above, so that users perceive some depth."
 
 The unique silhouette implies that your launcher icon should not be a filled
 square.
+
+
+MonochromeLauncherIcon
+----------------------
+Summary: Monochrome icon is not defined
+
+Priority: 6 / 10
+Severity: Warning
+Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+If android:roundIcon and android:icon are both in your manifest, you must
+either remove the reference to android:roundIcon if it is not needed; or,
+supply the monochrome icon in the drawable defined by the android:roundIcon
+and android:icon attribute.
+
+For example, if android:roundIcon and android:icon are both in the manifest, a
+launcher might choose to use android:roundIcon over android:icon to display
+the adaptive app icon. Therefore, your themed application iconwill not show if
+your monochrome attribute is not also specified in android:roundIcon.
+
+
+SquareAndRoundTilePreviews
+--------------------------
+Summary: TileProvider does not have round and square previews
+
+Priority: 6 / 10
+Severity: Warning
+Category: Usability:Icons
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Tile projects should specify preview resources for different screen shapes.
+The preview resource is specified in the manifest under tile service. And you
+have to make sure they have resources for different screen shapes.
 
 
 WebpUnsupported
@@ -7072,6 +7595,7 @@ According to the Android Design Guide,
 navigate up the application's hierarchy. Instead, Android uses the main action
 bar's app icon for hierarchical navigation and the navigation bar's back
 button for temporal navigation."
+
 This check is not very sophisticated (it just looks for buttons with the label
 "Back"), so it is disabled by default to not trigger on common scenarios like
 pairs of Back/Next buttons to paginate through screens.
@@ -7135,6 +7659,7 @@ item appears in the overflow menu and only the title appears.
 * Screen readers for sight-impaired users read the menu item's title.
 * If the action item appears with only the icon, a user can long-press the
 item to reveal a tool-tip that displays the action item's title.
+
 The android:icon is always optional, but recommended.
 
 More information: 
@@ -7665,9 +8190,24 @@ Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Ignoring a test without a reason makes it difficult to figure out the problem
-later.
-Please define an explicit reason why it is ignored, and when it can be
+later. Please define an explicit reason why it is ignored, and when it can be
 resolved.
+
+Available options:
+
+allow-comments (default is true):
+Whether to allow a comment next to the @Ignore tag to be considered providing a reason.
+
+Normally you have to specify an annotation argument to the @Ignore annotation, but with this option you can configure whether it should also allow ignore reasons to specified by a comment adjacent to the ignore tag.
+
+To configure this option, use a lint.xml file with an <option> like this:
+
+<lint>
+    <issue id="IgnoreWithoutReason">
+        <option name="allow-comments" value="true" />
+    </issue>
+</lint>
+
 
 
 Interoperability
@@ -7732,8 +8272,8 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable LambdaLast
 
-To improve calling this code from Kotlin,
-parameter types eligible for SAM conversion should be last.
+To improve calling this code from Kotlin, parameter types eligible for SAM
+conversion should be last.
 
 More information: 
 https://android.github.io/kotlin-guides/interop.html#lambda-parameters-last
@@ -7751,15 +8291,13 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable NoHardKeywords
 
-Do not use Kotlin’s hard keywords as the name of methods or fields.
-These require the use of backticks to escape when calling from Kotlin.
-Soft keywords, modifier keywords, and special identifiers are allowed.
+Do not use Kotlin’s hard keywords as the name of methods or fields. These
+require the use of backticks to escape when calling from Kotlin. Soft
+keywords, modifier keywords, and special identifiers are allowed.
 
-For example, Mockito’s when function requires backticks when used from
+For example, ActionEvent's getWhen() method requires backticks when used from
 Kotlin:
-
-    val callable = Mockito.mock(Callable::class.java)
-    Mockito.`when`(callable.call()).thenReturn(/* … */)
+val timestamp = event.`when`
 
 More information: 
 https://android.github.io/kotlin-guides/interop.html#no-hard-keywords
@@ -7777,16 +8315,27 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable UnknownNullness
 
-To improve referencing this code from Kotlin, consider adding
-explicit nullness information here with either @NonNull or @Nullable.
+To improve referencing this code from Kotlin, consider adding explicit
+nullness information here with either @NonNull or @Nullable.
 
-You can set the environment variable
-    `ANDROID_LINT_NULLNESS_IGNORE_DEPRECATED=true`
-if you want lint to ignore classes and members that have been annotated with
-@Deprecated.
+Available options:
+
+ignore-deprecated (default is false):
+Whether to ignore classes and members that have been annotated with @Deprecated.
+
+Normally this lint check will flag all unannotated elements, but by setting this option to true it will skip any deprecated elements.
+
+To configure this option, use a lint.xml file with an <option> like this:
+
+<lint>
+    <issue id="UnknownNullness">
+        <option name="ignore-deprecated" value="false" />
+    </issue>
+</lint>
+
 
 More information: 
-https://android.github.io/kotlin-guides/interop.html#nullability-annotations
+https://developer.android.com/kotlin/interop#nullability_annotations
 
 Lint Implementation Issues
 ==========================
@@ -7812,8 +8361,7 @@ documentation example, and in that case, all the files are included.
 
 To designate a unit test as the documentation example for an issue, name the
 test testDocumentationExample, or if your detector reports multiple issues,
-testDocumentationExample<Id>, such as
-testDocumentationExampleMyId.
+testDocumentationExample<Id>, such as testDocumentationExampleMyId.
 
 
 LintImplBadUrl
@@ -7945,8 +8493,8 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable LintImplPsiEquals
 
-You should never compare two PSI elements for equality with equals;
-use isEquivalentTo(PsiElement) instead.
+You should never compare two PSI elements for equality with equals; use
+isEquivalentTo(PsiElement) instead.
 
 
 LintImplTrimIndent
@@ -8021,5 +8569,22 @@ potentially other languages).
 
 There are UAST specific methods you need to call instead and lint will flag
 these.
+
+
+UastImplementation
+------------------
+Summary: Avoid using UAST implementation
+
+Priority: 4 / 10
+Severity: Warning
+Category: Lint Implementation Issues
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Use UAST interface whenever possible, and do not rely on UAST implementation,
+which is subject to change. If language-specific information is needed, the
+next option is to use PSI directly (though these APIs are less stable and can
+depend on compiler internals, especially in the case of Kotlin).
 
 
