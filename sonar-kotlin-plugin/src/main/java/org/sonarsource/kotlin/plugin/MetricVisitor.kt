@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
+import org.jetbrains.kotlin.kdoc.psi.api.KDoc
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -32,6 +33,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.sonar.api.batch.measure.Metric
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.CoreMetrics
@@ -127,6 +129,8 @@ private class KtMetricVisitor : KtTreeVisitorVoid() {
 
         // We don't want to count file headers as comment.
         file.children.dropWhile { it is PsiComment || it is PsiWhiteSpace }.forEach { it.accept(this) }
+
+        file.containingFile.collectDescendantsOfType<KDoc>().forEach { addCommentMetrics(it, commentLines, nosonarLines) }
     }
 
     override fun visitComment(comment: PsiComment) {
