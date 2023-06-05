@@ -130,6 +130,7 @@ private class KtMetricVisitor : KtTreeVisitorVoid() {
         // We don't want to count file headers as comment.
         file.children.dropWhile { it is PsiComment || it is PsiWhiteSpace }.forEach { it.accept(this) }
 
+        // Finding all multiline comments this way, as there is no an adequate visit method available in the visitor
         file.containingFile.collectDescendantsOfType<KDoc>().forEach { addCommentMetrics(it, commentLines, nosonarLines) }
     }
 
@@ -138,8 +139,6 @@ private class KtMetricVisitor : KtTreeVisitorVoid() {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        function.docComment?.let { addCommentMetrics(it, commentLines, nosonarLines) }
-
         if (function.hasBody() && function.name != null) {
             numberOfFunctions++
         }
