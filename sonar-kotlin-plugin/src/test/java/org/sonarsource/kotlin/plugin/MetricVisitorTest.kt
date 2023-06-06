@@ -239,7 +239,7 @@ internal class MetricVisitorTest {
     // NOSONAR comment
     """.trimIndent()
         )
-        assertThat(visitor.commentLines()).containsExactly(7, 8, 13, 14, 15, 16)
+        assertThat(visitor.commentLines()).containsExactly(7, 8, 16, 13, 14, 15)
         assertThat(visitor.nosonarLines()).containsExactly(11, 18)
     }
 
