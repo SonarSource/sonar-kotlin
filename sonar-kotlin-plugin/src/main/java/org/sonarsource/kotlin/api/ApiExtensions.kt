@@ -189,7 +189,9 @@ internal fun PsiElement.linesOfCode(): Set<Int> {
     val document = this.containingFile.viewProvider.document!!
     this.accept(object : KtTreeVisitorVoid() {
         override fun visitElement(element: PsiElement) {
-            super.visitElement(element)
+            if(element !is PsiComment) {
+                super.visitElement(element)
+            }
             if (element is LeafPsiElement && element !is PsiWhiteSpace && element !is PsiComment) {
                 lines.add(document.getLineNumber(element.textRange.startOffset) + 1)
             }
