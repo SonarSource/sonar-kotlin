@@ -59,7 +59,7 @@ import org.sonarsource.kotlin.api.regex.REGEX_MATCHER
 import org.sonarsource.kotlin.api.regex.RegexContext
 import org.sonarsource.kotlin.api.regex.TO_REGEX_MATCHER
 import org.sonarsource.kotlin.api.secondaryOf
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Remove MULTILINE mode or change the regex."
 

@@ -29,8 +29,8 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S1145")
 class IfConditionalAlwaysTrueOrFalseCheck : AbstractCheck() {

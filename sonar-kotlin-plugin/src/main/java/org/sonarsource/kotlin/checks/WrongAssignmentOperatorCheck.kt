@@ -24,10 +24,10 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.sonar.api.batch.fs.TextRange
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.KotlinTextRanges.merge
-import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.merge
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S2757")
 class WrongAssignmentOperatorCheck : AbstractCheck() {

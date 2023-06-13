@@ -40,14 +40,14 @@ import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.types.typeUtil.isInterface
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.allPaired
 import org.sonarsource.kotlin.api.determineType
 import org.sonarsource.kotlin.api.determineTypeAsString
 import org.sonarsource.kotlin.api.overrides
 import org.sonarsource.kotlin.api.returnType
 import org.sonarsource.kotlin.api.returnTypeAsString
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S6514")
 class DelegationPatternCheck : AbstractCheck() {

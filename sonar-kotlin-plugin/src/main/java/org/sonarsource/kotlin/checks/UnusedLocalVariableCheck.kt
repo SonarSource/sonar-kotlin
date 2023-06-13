@@ -24,9 +24,9 @@ import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.getVariableType
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S1481")
 class UnusedLocalVariableCheck : AbstractCheck() {

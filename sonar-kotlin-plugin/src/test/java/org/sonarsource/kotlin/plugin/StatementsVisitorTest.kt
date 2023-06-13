@@ -23,6 +23,7 @@ import org.assertj.core.api.Assertions
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.converter.Environment
+import org.sonarsource.kotlin.metrics.StatementsVisitor
 
 internal class StatementsVisitorTest {
 

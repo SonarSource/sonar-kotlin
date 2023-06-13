@@ -30,9 +30,9 @@ import org.sonarsource.kotlin.externalreport.detekt.DetektRulesDefinition
 import org.sonarsource.kotlin.externalreport.detekt.DetektSensor
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintRulesDefinition
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintSensor
-import org.sonarsource.kotlin.plugin.surefire.KotlinResourcesLocator
-import org.sonarsource.kotlin.plugin.surefire.KotlinSurefireParser
-import org.sonarsource.kotlin.plugin.surefire.KotlinSurefireSensor
+import org.sonarsource.kotlin.surefire.KotlinResourcesLocator
+import org.sonarsource.kotlin.surefire.KotlinSurefireParser
+import org.sonarsource.kotlin.surefire.KotlinSurefireSensor
 
 class KotlinPlugin : Plugin {
 

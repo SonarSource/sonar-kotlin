@@ -27,9 +27,9 @@ import org.jetbrains.kotlin.psi.KtPropertyAccessor
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.annotatedElement
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S1133")
 class DeprecatedCodeCheck : AbstractCheck() {

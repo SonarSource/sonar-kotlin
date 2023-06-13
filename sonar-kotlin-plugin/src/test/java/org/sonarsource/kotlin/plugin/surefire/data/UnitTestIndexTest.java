@@ -20,6 +20,9 @@
 package org.sonarsource.kotlin.plugin.surefire.data;
 
 import org.junit.jupiter.api.Test;
+import org.sonarsource.kotlin.surefire.data.UnitTestClassReport;
+import org.sonarsource.kotlin.surefire.data.UnitTestIndex;
+import org.sonarsource.kotlin.surefire.data.UnitTestResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

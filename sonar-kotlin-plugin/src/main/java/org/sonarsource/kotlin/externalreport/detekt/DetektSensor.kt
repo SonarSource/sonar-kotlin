@@ -23,10 +23,10 @@ import org.slf4j.LoggerFactory
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.notifications.AnalysisWarnings
 import org.sonar.api.rule.RuleKey
-import org.sonarsource.kotlin.externalreport.ExternalReporting
-import org.sonarsource.kotlin.plugin.AbstractPropertyHandlerSensor
-import org.sonarsource.kotlin.plugin.KotlinPlugin
-import org.sonarsource.slang.externalreport.CheckstyleFormatImporterWithRuleLoader
+import org.sonarsource.kotlin.api.frontend.AbstractPropertyHandlerSensor
+import org.sonarsource.kotlin.externalreport.common.RULE_REPOSITORY_LANGUAGE
+import org.sonarsource.kotlin.externalreport.common.CheckstyleFormatImporterWithRuleLoader
+import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import java.io.File
 
 class DetektSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandlerSensor(
@@ -34,7 +34,7 @@ class DetektSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandler
     LINTER_KEY,
     LINTER_NAME,
     REPORT_PROPERTY_KEY,
-    KotlinPlugin.KOTLIN_LANGUAGE_KEY,
+    RULE_REPOSITORY_LANGUAGE,
 ) {
     companion object {
         private val LOG = LoggerFactory.getLogger(DetektSensor::class.java)
@@ -58,7 +58,7 @@ class DetektSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandler
 
                 val ruleKey =
                     if (DetektRulesDefinition.RULE_LOADER.ruleKeys().contains(preliminaryRuleKey)) preliminaryRuleKey
-                    else ExternalReporting.FALLBACK_RULE_KEY
+                    else FALLBACK_RULE_KEY
 
                 return super.createRuleKey(ruleKey)
             }

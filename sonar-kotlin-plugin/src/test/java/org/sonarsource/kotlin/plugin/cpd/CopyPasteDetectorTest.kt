@@ -33,7 +33,7 @@ import org.sonar.api.testfixtures.log.LogTesterJUnit5
 import org.sonarsource.kotlin.DummyReadCache
 import org.sonarsource.kotlin.DummyWriteCache
 import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.plugin.InputFileContextImpl
+import org.sonarsource.kotlin.api.checks.InputFileContextImpl
 import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.nio.file.Path
 import kotlin.io.path.createFile

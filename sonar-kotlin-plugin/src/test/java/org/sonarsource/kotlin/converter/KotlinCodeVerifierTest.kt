@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.converter
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.api.frontend.KotlinCodeVerifier
 
 internal class KotlinCodeVerifierTest {
     @Test

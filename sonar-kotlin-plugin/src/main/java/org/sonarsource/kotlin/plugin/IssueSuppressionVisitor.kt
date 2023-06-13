@@ -25,11 +25,12 @@ import org.jetbrains.kotlin.psi.KtCollectionLiteralExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.ValueArgument
 import org.sonar.api.batch.fs.TextRange
-import org.sonarsource.kotlin.api.annotatedElement
-import org.sonarsource.kotlin.api.asString
-import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
-import org.sonarsource.kotlin.visiting.KotlinFileVisitor
-import org.sonarsource.kotlin.visiting.KtTreeVisitor
+import org.sonarsource.kotlin.api.checks.annotatedElement
+import org.sonarsource.kotlin.api.checks.asString
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
+import org.sonarsource.kotlin.api.visiting.KtTreeVisitor
 
 private val SUPPRESSION_ANNOTATION_NAMES = listOf("Suppress", "SuppressWarnings")
 

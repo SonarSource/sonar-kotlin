@@ -50,7 +50,8 @@ import org.sonar.api.utils.Version
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.DummyReadCache
 import org.sonarsource.kotlin.DummyWriteCache
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.analyzeAndGetBindingContext
 import org.sonarsource.kotlin.plugin.caching.contentHashKey

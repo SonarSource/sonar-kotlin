@@ -34,19 +34,19 @@ import org.sonar.api.batch.fs.TextRange
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet
-import org.sonarsource.kotlin.api.CallAbstractCheck
-import org.sonarsource.kotlin.api.ConstructorMatcher
-import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.FunMatcherImpl
-import org.sonarsource.kotlin.api.INT_TYPE
-import org.sonarsource.kotlin.api.JAVA_STRING
-import org.sonarsource.kotlin.api.STRING_TYPE
-import org.sonarsource.kotlin.api.SecondaryLocation
-import org.sonarsource.kotlin.api.predictRuntimeValueExpression
-import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.checks.CallAbstractCheck
+import org.sonarsource.kotlin.api.checks.ConstructorMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcherImpl
+import org.sonarsource.kotlin.api.checks.INT_TYPE
+import org.sonarsource.kotlin.api.checks.JAVA_STRING
+import org.sonarsource.kotlin.api.checks.STRING_TYPE
+import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.checks.isPlus as isConcat
+import org.sonarsource.kotlin.api.reporting.SecondaryLocation
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import java.util.regex.Pattern
-import org.sonarsource.kotlin.api.isPlus as isConcat
 
 val PATTERN_COMPILE_MATCHER = FunMatcher(qualifier = "java.util.regex.Pattern", name = "compile")
 val REGEX_MATCHER = ConstructorMatcher(typeName = "kotlin.text.Regex")

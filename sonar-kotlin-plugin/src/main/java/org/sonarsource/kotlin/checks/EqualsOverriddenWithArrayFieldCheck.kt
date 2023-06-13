@@ -28,12 +28,12 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.ArgumentMatcher
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.determineTypeAsString
 import org.sonarsource.kotlin.api.overrides
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val EXPECTED_OVERRIDES = listOf(
     FunMatcher(name = "equals", returnType = "kotlin.Boolean") {

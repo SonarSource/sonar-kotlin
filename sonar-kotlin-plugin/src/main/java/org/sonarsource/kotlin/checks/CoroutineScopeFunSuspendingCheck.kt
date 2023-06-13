@@ -24,11 +24,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.api.suspendModifier
-import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val COROUTINE_SCOPE = "kotlinx.coroutines.CoroutineScope"
 private const val MESSAGE = "Extension functions on CoroutineScope should not be suspending."

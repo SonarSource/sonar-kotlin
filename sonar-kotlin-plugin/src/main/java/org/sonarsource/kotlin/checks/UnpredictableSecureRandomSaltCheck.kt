@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.ArgumentMatcher
 import org.sonarsource.kotlin.api.BYTE_ARRAY_CONSTRUCTOR_SIZE_ARG_ONLY
-import org.sonarsource.kotlin.api.CallAbstractCheck
+import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.isBytesInitializedFromString
@@ -35,7 +35,7 @@ import org.sonarsource.kotlin.api.matches
 import org.sonarsource.kotlin.api.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.secondaryOf
 import org.sonarsource.kotlin.api.simpleArgExpressionOrNull
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Change this seed value to something unpredictable, or remove the seed."
 private const val SECURE_RANDOM = "java.security.SecureRandom"

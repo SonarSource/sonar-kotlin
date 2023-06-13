@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.CallAbstractCheck
+import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.ConstructorMatcher
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.INT_TYPE
@@ -34,8 +34,8 @@ import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.api.isBytesInitializedFromString
 import org.sonarsource.kotlin.api.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.predictRuntimeValueExpression
-import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val CIPHER_INIT_MATCHER = FunMatcher(qualifier = "javax.crypto.Cipher", name = "init") {
     withArguments(INT_TYPE, "java.security.Key", "java.security.spec.AlgorithmParameterSpec")

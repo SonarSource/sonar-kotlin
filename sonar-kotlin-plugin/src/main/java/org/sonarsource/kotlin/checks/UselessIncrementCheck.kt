@@ -26,9 +26,9 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.isLocalVariable
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val POSTFIX_INCREMENT_OPERATORS = listOf(KtTokens.PLUSPLUS, KtTokens.MINUSMINUS)
 private const val MESSAGE = "Remove this increment or correct the code not to waste it."

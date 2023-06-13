@@ -26,11 +26,11 @@ import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
 import org.sonarsource.kotlin.DummyInputFile
-import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.Comment
-import org.sonarsource.kotlin.converter.CommentAnnotationsAndTokenVisitor
-import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.KotlinTree
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.frontend.Environment
+import org.sonarsource.kotlin.api.frontend.KotlinTree
+import org.sonarsource.kotlin.api.visiting.Comment
+import org.sonarsource.kotlin.api.visiting.CommentAnnotationsAndTokenVisitor
 import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.io.IOException
 import java.nio.charset.StandardCharsets

@@ -24,12 +24,12 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.CallAbstractCheck
+import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.FunMatcherImpl
 import org.sonarsource.kotlin.api.SecondaryLocation
-import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val ANDROID_HARDWARE_AUTH = FunMatcher(qualifier = "android.hardware.biometrics.BiometricPrompt", name = "authenticate")
 private val ANDROIDX_AUTH = FunMatcher(qualifier = "androidx.biometric.BiometricPrompt", name = "authenticate")

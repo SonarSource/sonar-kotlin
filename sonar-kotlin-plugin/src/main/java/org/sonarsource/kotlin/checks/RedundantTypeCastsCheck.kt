@@ -22,10 +22,9 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtFile
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.Message
-import org.sonarsource.kotlin.api.message
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S6531")
 class RedundantTypeCastsCheck : AbstractCheck() {

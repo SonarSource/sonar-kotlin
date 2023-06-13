@@ -21,7 +21,7 @@ package org.sonarsource.kotlin.externalreport.ktlint
 
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonarsource.analyzer.commons.ExternalRuleLoader
-import org.sonarsource.kotlin.plugin.KotlinPlugin
+import org.sonarsource.kotlin.externalreport.common.RULE_REPOSITORY_LANGUAGE
 
 class KtlintRulesDefinition : RulesDefinition {
     companion object {
@@ -31,7 +31,8 @@ class KtlintRulesDefinition : RulesDefinition {
             KtlintSensor.LINTER_KEY,
             KtlintSensor.LINTER_NAME,
             RULES_FILE,
-            KotlinPlugin.KOTLIN_LANGUAGE_KEY)
+            RULE_REPOSITORY_LANGUAGE,
+        )
 
         internal const val EXPERIMENTAL_RULE_PREFIX = "experimental:"
     }

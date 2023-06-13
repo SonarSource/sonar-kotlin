@@ -24,8 +24,8 @@ import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.cache.ReadCache
 import org.sonar.api.batch.sensor.cache.WriteCache
-import org.sonarsource.kotlin.api.hasCacheEnabled
-import org.sonarsource.kotlin.api.trace
+import org.sonarsource.kotlin.api.checks.hasCacheEnabled
+import org.sonarsource.kotlin.api.logging.trace
 import java.security.MessageDigest
 
 private val LOG = LoggerFactory.getLogger(ContentHashCache::class.java)

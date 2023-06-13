@@ -21,8 +21,8 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S1186")
 class EmptyFunctionCheck : AbstractCheck() {

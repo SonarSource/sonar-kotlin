@@ -27,8 +27,8 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtSuperTypeCallEntry
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S1874")
 class DeprecatedCodeUsedCheck : AbstractCheck() {

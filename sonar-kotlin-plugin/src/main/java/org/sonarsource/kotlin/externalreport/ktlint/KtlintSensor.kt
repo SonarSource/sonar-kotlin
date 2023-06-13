@@ -21,15 +21,15 @@ package org.sonarsource.kotlin.externalreport.ktlint
 
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.notifications.AnalysisWarnings
-import org.sonarsource.kotlin.plugin.AbstractPropertyHandlerSensor
-import org.sonarsource.kotlin.plugin.KotlinPlugin
+import org.sonarsource.kotlin.api.frontend.AbstractPropertyHandlerSensor
+import org.sonarsource.kotlin.externalreport.common.RULE_REPOSITORY_LANGUAGE
 
 class KtlintSensor(val analysisWarnings: AnalysisWarnings) : AbstractPropertyHandlerSensor(
     analysisWarnings,
     LINTER_KEY,
     LINTER_NAME,
     REPORT_PROPERTY_KEY,
-    KotlinPlugin.KOTLIN_LANGUAGE_KEY,
+    RULE_REPOSITORY_LANGUAGE,
 ) {
     companion object {
         const val LINTER_KEY = "ktlint"

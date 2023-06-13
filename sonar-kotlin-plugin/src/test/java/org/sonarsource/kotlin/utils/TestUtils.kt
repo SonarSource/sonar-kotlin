@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.utils
 
 import org.sonar.api.batch.fs.InputFile
-import org.sonarsource.kotlin.api.regex.RegexCache
+import org.sonarsource.kotlin.api.frontend.RegexCache
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.converter.KotlinSyntaxStructure
 import org.sonarsource.kotlin.converter.KotlinTree

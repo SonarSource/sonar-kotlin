@@ -21,14 +21,14 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.COROUTINES_CHANNEL
 import org.sonarsource.kotlin.api.COROUTINES_FLOW
 import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.api.returnTypeAsString
 import org.sonarsource.kotlin.api.suspendModifier
-import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val FORBIDDEN_RETURN_TYPES = listOf(COROUTINES_FLOW, COROUTINES_CHANNEL)
 private const val MESSAGE = """Functions returning "Flow" or "Channel" should not be suspending"""

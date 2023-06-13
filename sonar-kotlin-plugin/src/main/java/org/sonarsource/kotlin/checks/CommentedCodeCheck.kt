@@ -23,12 +23,12 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.getContent
-import org.sonarsource.kotlin.converter.KotlinCodeVerifier
-import org.sonarsource.kotlin.converter.KotlinTextRanges.merge
-import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinCodeVerifier
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.merge
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S125")
 class CommentedCodeCheck : AbstractCheck() {

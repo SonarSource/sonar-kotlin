@@ -23,8 +23,8 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.sonar.api.rule.RuleKey
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
-import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S100")
 class BadFunctionNameCheck : AbstractCheck() {

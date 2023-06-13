@@ -21,8 +21,8 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val IPV4_ALONE = """(?<ipv4>(?:\d{1,3}\.){3}\d{1,3})"""
 private const val IPV6_NO_PREFIX_COMPRESSION = """(\p{XDigit}{1,4}::?){1,7}\p{XDigit}{1,4}(::)?"""

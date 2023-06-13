@@ -27,7 +27,7 @@ import org.sonarsource.kotlin.api.FunMatcherImpl
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.PATTERN_COMPILE_MATCHER
 import org.sonarsource.kotlin.api.regex.RegexContext
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S5867")
 class UnicodeAwareCharClassesCheck : AbstractRegexCheck() {

@@ -34,7 +34,10 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonarsource.kotlin.plugin.surefire.api.SurefireUtils;
+import org.sonarsource.kotlin.surefire.KotlinResourcesLocator;
+import org.sonarsource.kotlin.surefire.KotlinSurefireParser;
+import org.sonarsource.kotlin.surefire.KotlinSurefireSensor;
+import org.sonarsource.kotlin.surefire.api.SurefireUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;

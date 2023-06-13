@@ -34,13 +34,13 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.ANY_TYPE
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.BOOLEAN_TYPE
 import org.sonarsource.kotlin.api.EQUALS_METHOD_NAME
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.HASHCODE_METHOD_NAME
 import org.sonarsource.kotlin.api.INT_TYPE
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val EQUALS_MATCHER = FunMatcher {
     name = EQUALS_METHOD_NAME

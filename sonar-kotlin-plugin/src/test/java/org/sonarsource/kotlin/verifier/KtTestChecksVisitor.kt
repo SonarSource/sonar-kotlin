@@ -25,9 +25,9 @@ import org.jetbrains.kotlin.descriptors.runtime.structure.findAnnotation
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtElement
 import org.sonar.api.rule.RuleKey
-import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.kotlin.visiting.KotlinFileVisitor
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
 
 class KtTestChecksVisitor(private val checks: List<AbstractCheck>) : KotlinFileVisitor() {
     init {

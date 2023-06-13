@@ -26,11 +26,11 @@ import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.rule.RuleKey
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
 import org.sonarsource.kotlin.DummyInputFile
-import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.api.InputFileContext
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.Message
 import org.sonarsource.kotlin.api.SecondaryLocation
-import org.sonarsource.kotlin.converter.KotlinTextRanges.contains
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.contains
 import org.sonarsource.kotlin.converter.KotlinTree
 import java.util.function.Consumer
 

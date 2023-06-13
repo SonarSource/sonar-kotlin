@@ -34,17 +34,18 @@ import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContextFactory
 import org.sonarsource.analyzer.commons.ProgressReport
-import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.api.InputFileContext
-import org.sonarsource.kotlin.api.ParseException
-import org.sonarsource.kotlin.api.debug
-import org.sonarsource.kotlin.api.hasCacheEnabled
-import org.sonarsource.kotlin.api.regex.RegexCache
-import org.sonarsource.kotlin.api.trace
-import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.KotlinSyntaxStructure
-import org.sonarsource.kotlin.converter.KotlinTree
-import org.sonarsource.kotlin.converter.bindingContext
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.checks.InputFileContext
+import org.sonarsource.kotlin.api.checks.InputFileContextImpl
+import org.sonarsource.kotlin.api.checks.hasCacheEnabled
+import org.sonarsource.kotlin.api.frontend.Environment
+import org.sonarsource.kotlin.api.frontend.KotlinSyntaxStructure
+import org.sonarsource.kotlin.api.frontend.KotlinTree
+import org.sonarsource.kotlin.api.frontend.ParseException
+import org.sonarsource.kotlin.api.frontend.RegexCache
+import org.sonarsource.kotlin.api.frontend.bindingContext
+import org.sonarsource.kotlin.api.logging.trace
+import org.sonarsource.kotlin.api.logging.debug
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.COMPILER_THREAD_COUNT_PROPERTY
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.DEFAULT_KOTLIN_LANGUAGE_VERSION
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.FAIL_FAST_PROPERTY_NAME
@@ -59,8 +60,11 @@ import org.sonarsource.kotlin.plugin.caching.ContentHashCache
 import org.sonarsource.kotlin.plugin.cpd.CopyPasteDetector
 import org.sonarsource.kotlin.plugin.cpd.copyCPDTokensFromPrevious
 import org.sonarsource.kotlin.plugin.cpd.loadCPDTokens
-import org.sonarsource.kotlin.visiting.KotlinFileVisitor
-import org.sonarsource.kotlin.visiting.KtChecksVisitor
+import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
+import org.sonarsource.kotlin.metrics.MetricVisitor
+import org.sonarsource.kotlin.metrics.SyntaxHighlighter
+
+
 import org.sonarsource.performance.measure.PerformanceMeasure
 import java.util.concurrent.TimeUnit
 import kotlin.jvm.optionals.getOrElse

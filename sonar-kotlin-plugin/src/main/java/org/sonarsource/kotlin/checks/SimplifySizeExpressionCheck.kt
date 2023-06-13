@@ -41,12 +41,12 @@ import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.CallAbstractCheck
+import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.FieldMatcher
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.FunMatcherImpl
 import org.sonarsource.kotlin.api.predictRuntimeIntValue
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val PACKAGE_KOTLIN_COLLECTION = "kotlin.collections"
 private const val PACKAGE_KOTLIN_TEXT = "kotlin.text"

@@ -33,6 +33,7 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContext
 import org.sonar.api.measures.FileLinesContextFactory
+import org.sonarsource.kotlin.api.checks.InputFileContextImpl
 import org.sonarsource.kotlin.converter.Environment
 import org.sonarsource.kotlin.utils.kotlinTreeOf
 import java.nio.charset.StandardCharsets

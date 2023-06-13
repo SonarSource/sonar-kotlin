@@ -37,6 +37,7 @@ import org.sonar.api.batch.sensor.issue.NewMessageFormatting
 import org.sonar.api.rule.RuleKey
 import org.sonar.api.testfixtures.log.LogTesterJUnit5
 import org.sonarsource.kotlin.api.Message
+import org.sonarsource.kotlin.api.checks.InputFileContextImpl
 import org.sonarsource.kotlin.api.message
 
 class InputFileContextImplTest {

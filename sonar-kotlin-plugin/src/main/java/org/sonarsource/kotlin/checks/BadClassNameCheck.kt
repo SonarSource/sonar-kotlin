@@ -24,8 +24,8 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.sonar.api.rule.RuleKey
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
-import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S101")
 class BadClassNameCheck : AbstractCheck() {

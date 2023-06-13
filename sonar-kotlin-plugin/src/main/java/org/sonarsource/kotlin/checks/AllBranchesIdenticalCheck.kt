@@ -21,7 +21,7 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtElement
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S3923")
 class AllBranchesIdenticalCheck : AbstractBranchDuplication() {

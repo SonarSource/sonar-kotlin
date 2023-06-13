@@ -24,9 +24,9 @@ import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.config.Configuration
 import org.sonar.api.notifications.AnalysisWarnings
-import org.sonarsource.kotlin.externalreport.ExternalReporting
-import org.sonarsource.kotlin.plugin.AbstractPropertyHandlerSensor
-import org.sonarsource.kotlin.plugin.KotlinPlugin
+import org.sonarsource.kotlin.externalreport.common.RULE_REPOSITORY_LANGUAGE
+import org.sonarsource.kotlin.api.frontend.AbstractPropertyHandlerSensor
+import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import java.io.File
 import java.io.FileInputStream
 
@@ -38,7 +38,7 @@ class AndroidLintSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHa
     LINTER_KEY,
     LINTER_NAME,
     REPORT_PROPERTY_KEY,
-    KotlinPlugin.KOTLIN_LANGUAGE_KEY,
+    RULE_REPOSITORY_LANGUAGE,
 ) {
     companion object {
         const val LINTER_KEY = "android-lint"
@@ -87,7 +87,7 @@ private fun saveIssue(context: SensorContext, id: String, file: String, line: St
 
     val ruleKey =
         if (externalRuleLoader.ruleKeys().contains(id)) id
-        else ExternalReporting.FALLBACK_RULE_KEY
+        else FALLBACK_RULE_KEY
 
     val newExternalIssue = context.newExternalIssue()
     newExternalIssue

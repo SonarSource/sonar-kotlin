@@ -21,7 +21,7 @@ package org.sonarsource.kotlin.externalreport.androidlint
 
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonarsource.analyzer.commons.ExternalRuleLoader
-import org.sonarsource.kotlin.plugin.KotlinPlugin
+import org.sonarsource.kotlin.externalreport.common.RULE_REPOSITORY_LANGUAGE
 
 const val RULES_FILE = "org/sonar/l10n/android/rules/androidlint/rules.json"
 
@@ -30,7 +30,6 @@ const val RULES_FILE = "org/sonar/l10n/android/rules/androidlint/rules.json"
  * ( https://android.googlesource.com/platform/tools/base/+/studio-master-dev/lint/libs/lint-api/src/main/java/com/android/tools/lint/detector/api/Scope.kt )
  * This sensor won't report any issue on the given file if it wasn't located in our file system
  */
-private const val RULE_REPOSITORY_LANGUAGE = KotlinPlugin.KOTLIN_LANGUAGE_KEY
 private val TEXT_FILE_EXTENSIONS = listOf(".xml", ".java", ".kt", ".kts", ".properties", ".gradle", ".cfg", ".txt")
 
 val RULE_LOADER = ExternalRuleLoader(

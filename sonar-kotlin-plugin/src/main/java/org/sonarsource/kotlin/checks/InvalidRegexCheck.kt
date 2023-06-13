@@ -26,7 +26,7 @@ import org.sonarsource.kotlin.api.FunMatcherImpl
 import org.sonarsource.kotlin.api.SecondaryLocation
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.RegexContext
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE_MULTIPLE_ERRORS = "Fix the syntax errors inside this regex."
 

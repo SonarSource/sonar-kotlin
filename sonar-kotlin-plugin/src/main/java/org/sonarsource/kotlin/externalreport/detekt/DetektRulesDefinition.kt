@@ -21,7 +21,7 @@ package org.sonarsource.kotlin.externalreport.detekt
 
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonarsource.analyzer.commons.ExternalRuleLoader
-import org.sonarsource.kotlin.plugin.KotlinPlugin
+import org.sonarsource.kotlin.externalreport.common.RULE_REPOSITORY_LANGUAGE
 
 class DetektRulesDefinition : RulesDefinition {
 
@@ -32,7 +32,8 @@ class DetektRulesDefinition : RulesDefinition {
             DetektSensor.LINTER_KEY,
             DetektSensor.LINTER_NAME,
             RULES_FILE,
-            KotlinPlugin.KOTLIN_LANGUAGE_KEY)
+            RULE_REPOSITORY_LANGUAGE,
+        )
     }
 
     override fun define(context: RulesDefinition.Context) {

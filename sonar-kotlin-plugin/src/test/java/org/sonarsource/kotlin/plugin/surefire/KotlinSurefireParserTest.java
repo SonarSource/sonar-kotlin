@@ -37,6 +37,8 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.api.utils.log.LoggerLevel;
+import org.sonarsource.kotlin.surefire.KotlinResourcesLocator;
+import org.sonarsource.kotlin.surefire.KotlinSurefireParser;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;

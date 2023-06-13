@@ -23,8 +23,9 @@ import org.assertj.core.api.Assertions
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.dev.AstPrinter
-import org.sonarsource.kotlin.api.ParseException
+import org.sonarsource.kotlin.api.frontend.Environment
+import org.sonarsource.kotlin.api.frontend.ParseException
+import org.sonarsource.kotlin.tools.AstPrinter
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path

@@ -21,9 +21,9 @@ package org.sonarsource.kotlin.externalreport.ktlint
 
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.rule.RuleKey
-import org.sonarsource.kotlin.externalreport.ExternalReporting
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintRulesDefinition.Companion.EXPERIMENTAL_RULE_PREFIX
-import org.sonarsource.slang.externalreport.CheckstyleFormatImporterWithRuleLoader
+import org.sonarsource.kotlin.externalreport.common.CheckstyleFormatImporterWithRuleLoader
+import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 
 internal class CheckstyleReportParser(context: SensorContext) : CheckstyleFormatImporterWithRuleLoader(
     context,
@@ -37,7 +37,7 @@ internal class CheckstyleReportParser(context: SensorContext) : CheckstyleFormat
 
         val ruleKey =
             if (KtlintRulesDefinition.RULE_LOADER.ruleKeys().contains(preliminaryRuleKey)) preliminaryRuleKey
-            else ExternalReporting.FALLBACK_RULE_KEY
+            else FALLBACK_RULE_KEY
 
         return super.createRuleKey(ruleKey)
     }

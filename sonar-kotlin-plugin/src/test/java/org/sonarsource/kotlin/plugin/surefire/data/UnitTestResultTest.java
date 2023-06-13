@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.plugin.surefire.data;
 
 import org.assertj.core.api.AbstractAssert;
 import org.junit.jupiter.api.Test;
+import org.sonarsource.kotlin.surefire.data.UnitTestResult;
 
 import static org.assertj.core.api.Assertions.fail;
 import static org.sonarsource.kotlin.plugin.surefire.data.UnitTestResultTest.UnitTestResultAssert.assertThat;

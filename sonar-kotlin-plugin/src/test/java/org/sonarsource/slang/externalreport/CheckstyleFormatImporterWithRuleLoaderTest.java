@@ -33,6 +33,8 @@ import org.sonar.api.rules.RuleType;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.api.utils.log.LoggerLevel;
 import org.sonarsource.analyzer.commons.ExternalRuleLoader;
+import org.sonarsource.kotlin.externalreport.common.CheckstyleFormatImporter;
+import org.sonarsource.kotlin.externalreport.common.CheckstyleFormatImporterWithRuleLoader;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

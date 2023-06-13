@@ -25,13 +25,13 @@ import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
 import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.ArgumentMatcher
-import org.sonarsource.kotlin.api.CallAbstractCheck
+import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.FunMatcherImpl
 import org.sonarsource.kotlin.api.determineType
 import org.sonarsource.kotlin.api.isSupertypeOf
 import org.sonarsource.kotlin.api.predictReceiverExpression
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 const val qualifier = "kotlin.collections"
 

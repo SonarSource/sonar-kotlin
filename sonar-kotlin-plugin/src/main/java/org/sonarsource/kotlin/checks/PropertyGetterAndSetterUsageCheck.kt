@@ -34,12 +34,12 @@ import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.isNullable
 import org.jetbrains.kotlin.util.isAnnotated
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.isAbstract
 import org.sonarsource.kotlin.api.overrides
 import org.sonarsource.kotlin.api.returnType
 import org.sonarsource.kotlin.api.secondaryOf
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val GETTER_PREFIX = Regex("""^(get|is)\p{javaUpperCase}""")
 private val SETTER_PREFIX = Regex("""^set\p{javaUpperCase}""")

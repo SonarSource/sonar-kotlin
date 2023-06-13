@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.checks.BadClassNameCheck
 import org.sonarsource.kotlin.checks.BadFunctionNameCheck
 import org.sonarsource.kotlin.checks.DeprecatedCodeUsedCheck

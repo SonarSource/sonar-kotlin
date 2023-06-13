@@ -23,12 +23,12 @@ import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.CallAbstractCheck
+import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.FunMatcherImpl
 import org.sonarsource.kotlin.api.determineType
 import org.sonarsource.kotlin.api.predictReceiverExpression
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val OBJECT_ARRAY_MATCHER = FunMatcher(qualifier = "kotlin.Array") {
     withNames("hashCode", "toString")

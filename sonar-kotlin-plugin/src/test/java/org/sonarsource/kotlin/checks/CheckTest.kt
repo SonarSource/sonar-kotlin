@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.checks
 
 import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.verifier.KotlinVerifier
 
 private const val TEST_FILE_POSTFIX = "Sample.kt"

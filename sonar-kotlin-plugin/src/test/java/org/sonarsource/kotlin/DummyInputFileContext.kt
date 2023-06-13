@@ -24,7 +24,7 @@ import org.sonar.api.batch.fs.TextPointer
 import org.sonar.api.batch.fs.TextRange
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.rule.RuleKey
-import org.sonarsource.kotlin.api.InputFileContext
+import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.Message
 import org.sonarsource.kotlin.api.SecondaryLocation
 

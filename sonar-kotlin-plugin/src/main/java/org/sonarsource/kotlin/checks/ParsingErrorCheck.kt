@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.checks
 
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.AbstractCheck
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 
 @Rule(key = "ParsingError")
 class ParsingErrorCheck : AbstractCheck()

@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.ArgumentMatcher
-import org.sonarsource.kotlin.api.CallAbstractCheck
+import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.FunMatcher
 import org.sonarsource.kotlin.api.FunMatcherImpl
 import org.sonarsource.kotlin.api.INT_TYPE
@@ -34,7 +34,7 @@ import org.sonarsource.kotlin.api.predictReceiverExpression
 import org.sonarsource.kotlin.api.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.predictRuntimeValueExpression
-import org.sonarsource.kotlin.plugin.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val PREPARE_STATEMENT = FunMatcher(qualifier = "java.sql.Connection", name = "prepareStatement")
 

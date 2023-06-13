@@ -21,24 +21,10 @@ package org.sonarsource.kotlin.api.regex
 
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation
-import org.sonarsource.analyzer.commons.regex.RegexParseResult
-import org.sonarsource.analyzer.commons.regex.RegexParser
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement
-import org.sonarsource.kotlin.plugin.KotlinFileContext
-
-class RegexCache(
-    private val globalCache: MutableMap<Pair<List<KtStringTemplateEntry>, Int>, RegexParseResult> = mutableMapOf()
-) {
-    fun addIfAbsent(
-        stringTemplateEntries: Iterable<KtStringTemplateEntry>,
-        flags: FlagSet,
-        regexSource: KotlinAnalyzerRegexSource,
-    ) =
-        globalCache.computeIfAbsent(stringTemplateEntries.toList() to flags.mask) {
-            RegexParser(regexSource, flags).parse()
-        }
-}
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.RegexCache
 
 class RegexContext(
     private val stringTemplateEntries: Iterable<KtStringTemplateEntry>,
