@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.plugin
 import org.assertj.core.api.AssertionsForClassTypes
 import org.junit.jupiter.api.Test
 import org.sonar.api.config.internal.MapSettings
+import org.sonarsource.kotlin.api.common.KOTLIN_FILE_SUFFIXES_KEY
 import org.sonarsource.kotlin.api.common.KotlinLanguage
 
 internal class KotlinLanguageTest {
@@ -35,14 +36,14 @@ internal class KotlinLanguageTest {
     @Test
     fun test_suffixes_empty() {
         val kotlinLanguage =
-            KotlinLanguage(MapSettings().setProperty(KotlinPlugin.KOTLIN_FILE_SUFFIXES_KEY, "").asConfig())
+            KotlinLanguage(MapSettings().setProperty(KOTLIN_FILE_SUFFIXES_KEY, "").asConfig())
         AssertionsForClassTypes.assertThat(kotlinLanguage.fileSuffixes).containsExactly(".kt")
     }
 
     @Test
     fun test_suffixes_custom() {
         val kotlinLanguage =
-            KotlinLanguage(MapSettings().setProperty(KotlinPlugin.KOTLIN_FILE_SUFFIXES_KEY, ".foo, .bar").asConfig())
+            KotlinLanguage(MapSettings().setProperty(KOTLIN_FILE_SUFFIXES_KEY, ".foo, .bar").asConfig())
         AssertionsForClassTypes.assertThat(kotlinLanguage.fileSuffixes).containsExactly(".foo", ".bar")
     }
 

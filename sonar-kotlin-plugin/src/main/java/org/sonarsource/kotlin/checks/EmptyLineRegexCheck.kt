@@ -46,20 +46,20 @@ import org.sonarsource.analyzer.commons.regex.ast.NonCapturingGroupTree
 import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree
 import org.sonarsource.analyzer.commons.regex.ast.SequenceTree
-import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.FunMatcherImpl
-import org.sonarsource.kotlin.api.JAVA_UTIL_PATTERN
-import org.sonarsource.kotlin.api.KOTLIN_TEXT
-import org.sonarsource.kotlin.api.findUsages
-import org.sonarsource.kotlin.api.matches
-import org.sonarsource.kotlin.api.predictRuntimeStringValue
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcherImpl
+import org.sonarsource.kotlin.api.checks.JAVA_UTIL_PATTERN
+import org.sonarsource.kotlin.api.checks.KOTLIN_TEXT
+import org.sonarsource.kotlin.api.checks.findUsages
+import org.sonarsource.kotlin.api.checks.matches
+import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.PATTERN_COMPILE_MATCHER
 import org.sonarsource.kotlin.api.regex.REGEX_MATCHER
 import org.sonarsource.kotlin.api.regex.RegexContext
 import org.sonarsource.kotlin.api.regex.TO_REGEX_MATCHER
-import org.sonarsource.kotlin.api.secondaryOf
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.secondaryOf
 
 private const val MESSAGE = "Remove MULTILINE mode or change the regex."
 

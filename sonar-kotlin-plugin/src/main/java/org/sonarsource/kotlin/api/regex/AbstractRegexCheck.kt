@@ -43,6 +43,7 @@ import org.sonarsource.kotlin.api.checks.JAVA_STRING
 import org.sonarsource.kotlin.api.checks.STRING_TYPE
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.TextRangeTracker
 import org.sonarsource.kotlin.api.checks.isPlus as isConcat
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange

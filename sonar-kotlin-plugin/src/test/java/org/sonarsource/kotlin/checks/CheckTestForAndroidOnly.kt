@@ -21,7 +21,7 @@ package org.sonarsource.kotlin.checks
 
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.verifier.KotlinVerifier
+import org.sonarsource.kotlin.testapi.KotlinVerifier
 
 private const val NON_ANDROID_TEST_FILE_POSTFIX = "SampleNonAndroid.kt"
 

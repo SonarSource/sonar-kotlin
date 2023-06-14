@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getParentCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S5527")

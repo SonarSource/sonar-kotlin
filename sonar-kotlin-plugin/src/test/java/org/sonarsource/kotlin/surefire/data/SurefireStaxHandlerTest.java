@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.surefire.data;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.net.URL;
 import javax.xml.stream.XMLStreamException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -124,7 +125,8 @@ class SurefireStaxHandlerTest {
     StaxParser parser = new StaxParser(index);
     File xmlFile;
     try {
-      xmlFile = new File(getClass().getResource(getClass().getSimpleName() + "/" + path).toURI());
+      URL resource = getClass().getResource(getClass().getSimpleName() + "/" + path);
+      xmlFile = new File(resource.toURI());
     } catch (URISyntaxException e) {
       throw new IllegalStateException(e);
     }

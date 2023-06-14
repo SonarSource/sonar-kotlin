@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.isLocalVariable
+import org.sonarsource.kotlin.api.checks.isLocalVariable
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val POSTFIX_INCREMENT_OPERATORS = listOf(KtTokens.PLUSPLUS, KtTokens.MINUSMINUS)

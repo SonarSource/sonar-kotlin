@@ -22,7 +22,7 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 

@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.getContent
+import org.sonarsource.kotlin.api.checks.getContent
 import org.sonarsource.kotlin.api.frontend.KotlinCodeVerifier
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.merge
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange

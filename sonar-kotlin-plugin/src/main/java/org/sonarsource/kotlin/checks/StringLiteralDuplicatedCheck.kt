@@ -26,8 +26,8 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.SecondaryLocation
-import org.sonarsource.kotlin.api.asString
+import org.sonarsource.kotlin.api.checks.asString
+import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 

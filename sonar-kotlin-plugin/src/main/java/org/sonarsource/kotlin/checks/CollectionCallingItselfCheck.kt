@@ -23,9 +23,9 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.predictReceiverExpression
-import org.sonarsource.kotlin.api.predictRuntimeValueExpression
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.predictReceiverExpression
+import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val MUTABLE_COLLECTION_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections.MutableCollection") {

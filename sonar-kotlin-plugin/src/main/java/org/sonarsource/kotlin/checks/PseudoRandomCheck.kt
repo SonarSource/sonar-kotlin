@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Make sure that using this pseudorandom number generator is safe here."

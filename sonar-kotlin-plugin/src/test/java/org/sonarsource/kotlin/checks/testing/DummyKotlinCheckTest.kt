@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.checks.testing
 
 import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.KotlinVerifier
+import org.sonarsource.kotlin.testapi.KotlinVerifier
 
 internal class DummyKotlinCheckTest {
     @Test

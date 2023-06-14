@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet
 import org.sonarsource.analyzer.commons.regex.ast.RegexSyntaxElement
+import org.sonarsource.kotlin.api.frontend.KotlinAnalyzerRegexSource
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.RegexCache
 

@@ -27,13 +27,13 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.ConstructorMatcher
-import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.INT_TYPE
-import org.sonarsource.kotlin.api.SecondaryLocation
-import org.sonarsource.kotlin.api.isBytesInitializedFromString
-import org.sonarsource.kotlin.api.predictRuntimeIntValue
-import org.sonarsource.kotlin.api.predictRuntimeValueExpression
+import org.sonarsource.kotlin.api.checks.ConstructorMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.INT_TYPE
+import org.sonarsource.kotlin.api.checks.isBytesInitializedFromString
+import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
+import org.sonarsource.kotlin.api.reporting.SecondaryLocation
+import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 

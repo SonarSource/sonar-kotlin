@@ -24,7 +24,7 @@ import org.assertj.core.util.Files
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.sonarsource.kotlin.dev.DotNode
+import org.sonarsource.kotlin.tools.DotNode
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.readText

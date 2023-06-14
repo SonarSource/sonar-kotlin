@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val JAVA_CLASS_KEYWORDS = listOf("java", "javaClass")

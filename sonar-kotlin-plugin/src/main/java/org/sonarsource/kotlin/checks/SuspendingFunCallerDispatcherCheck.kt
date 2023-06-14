@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.FUNS_ACCEPTING_DISPATCHERS
+import org.sonarsource.kotlin.api.checks.FUNS_ACCEPTING_DISPATCHERS
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S6311")

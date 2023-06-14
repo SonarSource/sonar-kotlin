@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.isExhaustive
+import org.sonarsource.kotlin.api.checks.isExhaustive
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S6510")

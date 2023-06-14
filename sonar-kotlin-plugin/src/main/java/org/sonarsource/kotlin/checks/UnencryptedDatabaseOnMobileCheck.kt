@@ -24,9 +24,9 @@ import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.findCallInPrecedingCallChain
-import org.sonarsource.kotlin.api.matches
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.findCallInPrecedingCallChain
+import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val PROBLEMATIC_SIMPLE_CALLS = listOf(

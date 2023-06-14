@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.resolve.descriptorUtil.getAllSuperClassifiers
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.suspendModifier
+import org.sonarsource.kotlin.api.checks.suspendModifier
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S6313")

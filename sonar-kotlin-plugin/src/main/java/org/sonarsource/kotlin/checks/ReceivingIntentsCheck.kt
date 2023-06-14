@@ -23,8 +23,8 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.isNull
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.isNull
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S5322")

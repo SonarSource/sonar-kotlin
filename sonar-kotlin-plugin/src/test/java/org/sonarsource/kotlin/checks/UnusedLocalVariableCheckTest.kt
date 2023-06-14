@@ -20,8 +20,8 @@
 package org.sonarsource.kotlin.checks
 
 import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.verifier.DEFAULT_KOTLIN_CLASSPATH
-import org.sonarsource.kotlin.verifier.KotlinVerifier
+import org.sonarsource.kotlin.testapi.DEFAULT_KOTLIN_CLASSPATH
+import org.sonarsource.kotlin.testapi.KotlinVerifier
 
 class UnusedLocalVariableCheckTest : CheckTestWithNoSemantics(UnusedLocalVariableCheck()) {
 

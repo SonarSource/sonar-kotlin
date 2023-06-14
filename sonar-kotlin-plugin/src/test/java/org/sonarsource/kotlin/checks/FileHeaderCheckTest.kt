@@ -22,7 +22,7 @@ package org.sonarsource.kotlin.checks
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.sonarsource.kotlin.verifier.KotlinVerifier
+import org.sonarsource.kotlin.testapi.KotlinVerifier
 
 class FileHeaderCheckTest {
     @Test

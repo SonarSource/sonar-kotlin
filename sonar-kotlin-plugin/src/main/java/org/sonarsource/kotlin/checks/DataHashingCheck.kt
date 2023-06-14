@@ -23,14 +23,14 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.ANY
+import org.sonarsource.kotlin.api.checks.ANY
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.ArgumentMatcher
-import org.sonarsource.kotlin.api.ConstructorMatcher
-import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.GET_INSTANCE
-import org.sonarsource.kotlin.api.STRING_TYPE
-import org.sonarsource.kotlin.api.predictRuntimeStringValue
+import org.sonarsource.kotlin.api.checks.ArgumentMatcher
+import org.sonarsource.kotlin.api.checks.ConstructorMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.GET_INSTANCE
+import org.sonarsource.kotlin.api.checks.STRING_TYPE
+import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Make sure this weak hash algorithm is not used in a sensitive context here."

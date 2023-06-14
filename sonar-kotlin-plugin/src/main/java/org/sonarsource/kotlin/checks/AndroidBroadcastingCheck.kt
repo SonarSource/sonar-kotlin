@@ -25,8 +25,8 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedValueArgument
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.isNull
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.isNull
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Make sure that broadcasting intents is safe here."

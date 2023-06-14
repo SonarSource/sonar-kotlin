@@ -33,9 +33,9 @@ import org.jetbrains.kotlin.types.StarProjectionImpl
 import org.jetbrains.kotlin.types.TypeProjection
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.determineType
-import org.sonarsource.kotlin.api.isAbstract
-import org.sonarsource.kotlin.api.message
+import org.sonarsource.kotlin.api.checks.determineType
+import org.sonarsource.kotlin.api.checks.isAbstract
+import org.sonarsource.kotlin.api.reporting.message
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val message = message {

@@ -22,8 +22,8 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
-import org.sonarsource.kotlin.api.FunMatcherImpl
-import org.sonarsource.kotlin.api.SecondaryLocation
+import org.sonarsource.kotlin.api.checks.FunMatcherImpl
+import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.RegexContext
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext

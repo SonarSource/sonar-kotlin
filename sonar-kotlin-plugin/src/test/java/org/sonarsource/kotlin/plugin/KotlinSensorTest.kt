@@ -215,8 +215,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         mockkStatic("org.sonarsource.kotlin.plugin.KotlinSensorKt")
         every { environment(any()) } returns Environment(listOf("file1.kt"), LanguageVersion.LATEST_STABLE)
-
-        mockkStatic("org.sonarsource.kotlin.converter.KotlinCoreEnvironmentToolsKt")
+        mockkStatic("org.sonarsource.kotlin.api.frontend.KotlinCoreEnvironmentToolsKt")
         every { analyzeAndGetBindingContext(any(), any()) } throws IOException("Boom!")
 
         val checkFactory = checkFactory("S1764")

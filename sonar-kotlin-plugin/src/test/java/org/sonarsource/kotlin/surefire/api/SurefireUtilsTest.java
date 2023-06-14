@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class SurefireUtilsTest {
 
-  public static final String API_PATH = "src/test/resources/org/sonarsource/kotlin/plugin/surefire/api/";
+  public static final String API_PATH = "src/test/resources/org/sonarsource/kotlin/surefire/api/";
 
   @JvmField
   @RegisterExtension

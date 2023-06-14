@@ -20,8 +20,8 @@
 package org.sonarsource.kotlin.api.visiting
 
 import org.sonarsource.kotlin.api.checks.InputFileContext
-import org.sonarsource.kotlin.converter.KotlinTree
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinTree
 
 abstract class KotlinFileVisitor {
     fun scan(fileContext: InputFileContext, root: KotlinTree) {

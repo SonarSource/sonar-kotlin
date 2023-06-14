@@ -31,8 +31,9 @@ import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.determineType
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.reporting.message
+import org.sonarsource.kotlin.api.checks.determineType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S6611")

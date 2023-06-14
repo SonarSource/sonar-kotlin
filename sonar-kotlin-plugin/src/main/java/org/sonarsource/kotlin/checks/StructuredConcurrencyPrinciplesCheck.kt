@@ -33,11 +33,11 @@ import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.FUNS_ACCEPTING_DISPATCHERS
-import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.KOTLINX_COROUTINES_PACKAGE
-import org.sonarsource.kotlin.api.determineTypeAsString
-import org.sonarsource.kotlin.api.predictReceiverExpression
+import org.sonarsource.kotlin.api.checks.FUNS_ACCEPTING_DISPATCHERS
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.KOTLINX_COROUTINES_PACKAGE
+import org.sonarsource.kotlin.api.checks.determineTypeAsString
+import org.sonarsource.kotlin.api.checks.predictReceiverExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val JOB_CONSTRUCTOR = FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = "Job")

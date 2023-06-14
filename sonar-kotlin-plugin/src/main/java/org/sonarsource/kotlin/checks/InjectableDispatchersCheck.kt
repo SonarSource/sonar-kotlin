@@ -25,13 +25,13 @@ import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.FUNS_ACCEPTING_DISPATCHERS
-import org.sonarsource.kotlin.api.KOTLINX_COROUTINES_PACKAGE
-import org.sonarsource.kotlin.api.predictRuntimeValueExpression
-import org.sonarsource.kotlin.api.resolveReferenceTarget
-import org.sonarsource.kotlin.api.scope
-import org.sonarsource.kotlin.api.secondaryOf
+import org.sonarsource.kotlin.api.checks.FUNS_ACCEPTING_DISPATCHERS
+import org.sonarsource.kotlin.api.checks.KOTLINX_COROUTINES_PACKAGE
+import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
+import org.sonarsource.kotlin.api.checks.resolveReferenceTarget
+import org.sonarsource.kotlin.api.checks.scope
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.secondaryOf
 
 private const val MESSAGE = "Avoid hardcoded dispatchers."
 private const val DISPATCHERS_OBJECT = "$KOTLINX_COROUTINES_PACKAGE.Dispatchers"

@@ -28,9 +28,9 @@ import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.predictRuntimeBooleanValue
-import org.sonarsource.kotlin.api.setterMatches
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.predictRuntimeBooleanValue
+import org.sonarsource.kotlin.api.checks.setterMatches
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Make sure that enabling file access is safe here."

@@ -24,8 +24,8 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.SecondaryLocation
-import org.sonarsource.kotlin.api.determineSignature
+import org.sonarsource.kotlin.api.checks.determineSignature
+import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 

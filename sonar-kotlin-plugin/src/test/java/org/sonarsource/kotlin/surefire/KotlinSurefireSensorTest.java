@@ -96,7 +96,7 @@ class KotlinSurefireSensorTest {
       .add(resource("org.sonar.core.ExtensionsFinderTest2"))
       .add(resource("org.sonar.core.ExtensionsFinderTest3"));
 
-    collect(context, "/org/sonarsource/kotlin/plugin/surefire/KotlinSurefireSensorTest/shouldHandleTestSuiteDetails/");
+    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldHandleTestSuiteDetails/");
 
     assertThat(context.measures(":org.sonar.core.ExtensionsFinderTest")).hasSize(5);
     assertThat(context.measures(":org.sonar.core.ExtensionsFinderTest2")).hasSize(5);
@@ -130,7 +130,7 @@ class KotlinSurefireSensorTest {
       .add(resource("org.sonar.core.ExtensionsFinderTest2"))
       .add(resource("org.sonar.core.ExtensionsFinderTest3"));
 
-    collect(context, "/org/sonarsource/kotlin/plugin/surefire/KotlinSurefireSensorTest/shouldSaveErrorsAndFailuresInXML/");
+    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldSaveErrorsAndFailuresInXML/");
 
     // 1 classes, 5 measures by class
     assertThat(context.measures(":org.sonar.core.ExtensionsFinderTest")).hasSize(5);
@@ -142,7 +142,7 @@ class KotlinSurefireSensorTest {
   void shouldSupportLongAttributeValues() throws URISyntaxException {
     // We don't support file keys with length > 400 characters anymore (SONAR-14584).
     SensorContextTester context = SensorContextTester.create(new File(""));
-    collect(context, "/org/sonarsource/kotlin/plugin/surefire/KotlinSurefireSensorTest/should_support_long_attribute_values/");
+    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/should_support_long_attribute_values/");
     assertThat(context.allAnalysisErrors()).isEmpty();
   }
 
@@ -152,7 +152,7 @@ class KotlinSurefireSensorTest {
     context.fileSystem()
       .add(resource("NoPackagesTest"));
 
-    collect(context, "/org/sonarsource/kotlin/plugin/surefire/KotlinSurefireSensorTest/shouldManageClassesWithDefaultPackage/");
+    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldManageClassesWithDefaultPackage/");
 
     assertThat(context.measure(":NoPackagesTest", CoreMetrics.TESTS).value()).isEqualTo(2);
   }
@@ -163,7 +163,7 @@ class KotlinSurefireSensorTest {
     context.fileSystem()
       .add(resource("org.sonar.Foo"));
 
-    collect(context, "/org/sonarsource/kotlin/plugin/surefire/KotlinSurefireSensorTest/successRatioIsZeroWhenAllTestsFail/");
+    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/successRatioIsZeroWhenAllTestsFail/");
 
     assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isEqualTo(2);
     assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isEqualTo(1);
@@ -176,7 +176,7 @@ class KotlinSurefireSensorTest {
     context.fileSystem()
       .add(resource("org.sonar.Foo"));
 
-    collect(context, "/org/sonarsource/kotlin/plugin/surefire/KotlinSurefireSensorTest/measuresShouldNotIncludeSkippedTests/");
+    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/measuresShouldNotIncludeSkippedTests/");
 
     assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isEqualTo(2);
     assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isEqualTo(1);
@@ -190,7 +190,7 @@ class KotlinSurefireSensorTest {
     context.fileSystem()
       .add(resource("org.sonar.Foo"));
 
-    collect(context, "/org/sonarsource/kotlin/plugin/surefire/KotlinSurefireSensorTest/noSuccessRatioIfNoTests/");
+    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/noSuccessRatioIfNoTests/");
 
     assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isZero();
     assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isZero();
@@ -204,7 +204,7 @@ class KotlinSurefireSensorTest {
     context.fileSystem()
       .add(resource("org.sonar.Foo"));
 
-    collect(context, "/org/sonarsource/kotlin/plugin/surefire/KotlinSurefireSensorTest/should_support_reportNameSuffix/");
+    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/should_support_reportNameSuffix/");
 
     assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isEqualTo(4);
     assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isEqualTo(2);

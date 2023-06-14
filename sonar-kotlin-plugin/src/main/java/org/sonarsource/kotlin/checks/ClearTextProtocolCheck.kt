@@ -33,11 +33,11 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.ConstructorMatcher
-import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.FunMatcherImpl
-import org.sonarsource.kotlin.api.predictRuntimeIntValue
-import org.sonarsource.kotlin.api.setterMatches
+import org.sonarsource.kotlin.api.checks.ConstructorMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcherImpl
+import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
+import org.sonarsource.kotlin.api.checks.setterMatches
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.KtTreeVisitor
 

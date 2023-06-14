@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.finders.UnicodeUnawareCharClassFinder
-import org.sonarsource.kotlin.api.FunMatcherImpl
+import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.PATTERN_COMPILE_MATCHER
 import org.sonarsource.kotlin.api.regex.RegexContext

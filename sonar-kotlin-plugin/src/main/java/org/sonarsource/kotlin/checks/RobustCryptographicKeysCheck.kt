@@ -25,15 +25,15 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.ArgumentMatcher
-import org.sonarsource.kotlin.api.ConstructorMatcher
-import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.FunMatcherImpl
-import org.sonarsource.kotlin.api.INT_TYPE
-import org.sonarsource.kotlin.api.matches
-import org.sonarsource.kotlin.api.predictReceiverExpression
-import org.sonarsource.kotlin.api.predictRuntimeIntValue
-import org.sonarsource.kotlin.api.predictRuntimeStringValue
+import org.sonarsource.kotlin.api.checks.ArgumentMatcher
+import org.sonarsource.kotlin.api.checks.ConstructorMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcherImpl
+import org.sonarsource.kotlin.api.checks.INT_TYPE
+import org.sonarsource.kotlin.api.checks.matches
+import org.sonarsource.kotlin.api.checks.predictReceiverExpression
+import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
+import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val ASYMMETRIC_INITIALIZE_MATCHER = FunMatcher {

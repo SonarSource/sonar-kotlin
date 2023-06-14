@@ -22,10 +22,10 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.getType
-import org.sonarsource.kotlin.api.hasExactlyOneFunctionAndNoProperties
-import org.sonarsource.kotlin.api.isFunctionalInterface
-import org.sonarsource.kotlin.api.merge
+import org.sonarsource.kotlin.api.checks.getType
+import org.sonarsource.kotlin.api.checks.hasExactlyOneFunctionAndNoProperties
+import org.sonarsource.kotlin.api.checks.isFunctionalInterface
+import org.sonarsource.kotlin.api.checks.merge
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S6516")

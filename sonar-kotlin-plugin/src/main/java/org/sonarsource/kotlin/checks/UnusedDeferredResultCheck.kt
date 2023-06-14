@@ -23,8 +23,8 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsStatement
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.DEFERRED_FQN
-import org.sonarsource.kotlin.api.expressionTypeFqn
+import org.sonarsource.kotlin.api.checks.DEFERRED_FQN
+import org.sonarsource.kotlin.api.checks.expressionTypeFqn
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S6315")

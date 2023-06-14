@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
 import org.jetbrains.kotlin.psi.psiUtil.isTopLevelKtOrJavaMember
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.determineTypeAsString
+import org.sonarsource.kotlin.api.checks.determineTypeAsString
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val DISALLOWED_TYPES = listOf(

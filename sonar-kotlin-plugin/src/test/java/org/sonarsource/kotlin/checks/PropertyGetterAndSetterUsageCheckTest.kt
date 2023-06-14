@@ -21,6 +21,6 @@ package org.sonarsource.kotlin.checks
 
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.checks.PropertyGetterAndSetterUsageCheck
-import org.sonarsource.kotlin.verifier.KotlinVerifier
+import org.sonarsource.kotlin.testapi.KotlinVerifier
 
 internal class PropertyGetterAndSetterUsageCheckTest : CheckTest(PropertyGetterAndSetterUsageCheck())

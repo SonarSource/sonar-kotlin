@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.getType
+import org.sonarsource.kotlin.api.checks.getType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S6517")

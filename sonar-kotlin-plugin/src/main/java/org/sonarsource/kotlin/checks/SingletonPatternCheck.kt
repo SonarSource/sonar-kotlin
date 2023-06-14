@@ -39,8 +39,8 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.ConstructorMatcher
-import org.sonarsource.kotlin.api.FunMatcher
+import org.sonarsource.kotlin.api.checks.ConstructorMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.KtTreeVisitor
 

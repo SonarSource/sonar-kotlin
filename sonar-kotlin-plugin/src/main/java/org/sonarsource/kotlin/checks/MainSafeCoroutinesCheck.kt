@@ -35,15 +35,15 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.FUNS_ACCEPTING_DISPATCHERS
-import org.sonarsource.kotlin.api.FunMatcher
-import org.sonarsource.kotlin.api.KOTLINX_COROUTINES_PACKAGE
-import org.sonarsource.kotlin.api.isSuspending
-import org.sonarsource.kotlin.api.matches
-import org.sonarsource.kotlin.api.predictRuntimeValueExpression
-import org.sonarsource.kotlin.api.resolveReferenceTarget
-import org.sonarsource.kotlin.api.suspendModifier
-import org.sonarsource.kotlin.api.throwsExceptions
+import org.sonarsource.kotlin.api.checks.FUNS_ACCEPTING_DISPATCHERS
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.KOTLINX_COROUTINES_PACKAGE
+import org.sonarsource.kotlin.api.checks.isSuspending
+import org.sonarsource.kotlin.api.checks.matches
+import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
+import org.sonarsource.kotlin.api.checks.resolveReferenceTarget
+import org.sonarsource.kotlin.api.checks.suspendModifier
+import org.sonarsource.kotlin.api.checks.throwsExceptions
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 val THREAD_SLEEP_MATCHER = FunMatcher(qualifier = "java.lang.Thread", name = "sleep")
