@@ -13,6 +13,8 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
 
+    implementation(project(":sonar-kotlin-api"))
+
     testImplementation(testLibs.junit.api)
     testImplementation(testLibs.junit.params)
     testRuntimeOnly(testLibs.junit.engine)
@@ -23,6 +25,8 @@ dependencies {
     testImplementation(testLibs.sonar.analyzer.test.commons)
     testImplementation(testLibs.sonar.plugin.api.impl)
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
+
+    testImplementation(project(":sonar-kotlin-test-api"))
 }
 
 /* TODO: remove?

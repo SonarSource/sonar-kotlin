@@ -25,13 +25,6 @@ dependencies {
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
 }
 
-/* TODO: remove?
-tasks.withType<JavaCompile> {
-    // Prevent warning: Gradle 5.0 will ignore annotation processors
-    options.compilerArgs = options.compilerArgs + "-proc:none"
-}*/
-
-// TODO: check if it has been fixed + backported to JDK 11 (note: has been fixed for JDK 13)
 // The new version 11.0.17 of javadoc has a bug and does not handle package annotations correctly
 // Adding a "tag" option is a workaround to prevent javadoc errors
 // @see https://bugs.openjdk.org/browse/JDK-8295850

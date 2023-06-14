@@ -4,8 +4,8 @@
 
 - sonar-kotlin-plugin
   - sonar-kotlin-checks
-    - sonar-kotlin-api
-      - sonar-kotlin-frontend
+    - sonar-kotlin-api + sonar-kotlin-frontend
+      - sonar-kotlin-test-api
   - sonar-kotlin-external-linters
   - sonar-kotlin-surefire
   - sonar-kotlin-metrics

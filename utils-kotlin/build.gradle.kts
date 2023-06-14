@@ -6,21 +6,22 @@ plugins {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation(project(":sonar-kotlin-plugin"))
-
     implementation(utilLibs.bundles.detekt)
     // detekt needs "kotlin-compiler-embeddable:{strictly 1.7.21}", to fix this we can specify a version explicitly:
     implementation(libs.kotlin.compiler.embeddable)
-
     implementation(utilLibs.bundles.ktlint)
+
+    implementation(project(":sonar-kotlin-plugin"))
+    implementation(project(":sonar-kotlin-api"))
 
     implementation(libs.gson)
     implementation(utilLibs.jcommander)
 
     testImplementation(testLibs.junit.api)
-    testRuntimeOnly(testLibs.junit.engine)
     testImplementation(testLibs.assertj.core)
     testImplementation(libs.sonar.plugin.api)
+
+    testRuntimeOnly(testLibs.junit.engine)
 }
 
 tasks {

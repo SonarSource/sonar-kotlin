@@ -10,11 +10,10 @@ pluginManagement {
     }
 }
 
-
 rootProject.name = "kotlin"
 
-include("sonar-kotlin-frontend")
 include("sonar-kotlin-api")
+include("sonar-kotlin-test-api")
 include("sonar-kotlin-checks")
 include("sonar-kotlin-external-linters")
 include("sonar-kotlin-surefire")

@@ -19,6 +19,12 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
 
+    implementation(project(":sonar-kotlin-api"))
+    implementation(project(":sonar-kotlin-metrics"))
+    implementation(project(":sonar-kotlin-external-linters"))
+    implementation(project(":sonar-kotlin-surefire"))
+    implementation(project(":sonar-kotlin-checks"))
+
     testImplementation(testLibs.junit.api)
     testImplementation(testLibs.junit.params)
     testRuntimeOnly(testLibs.junit.engine)
@@ -29,6 +35,8 @@ dependencies {
     testImplementation(testLibs.sonar.analyzer.test.commons)
     testImplementation(testLibs.sonar.plugin.api.impl)
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
+
+    testImplementation(project(":sonar-kotlin-test-api"))
 }
 
 tasks.withType<JavaCompile> {
