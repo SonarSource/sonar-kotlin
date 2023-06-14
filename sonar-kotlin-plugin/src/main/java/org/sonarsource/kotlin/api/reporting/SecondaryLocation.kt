@@ -19,10 +19,6 @@
  */
 package org.sonarsource.kotlin.api.reporting
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.sonar.api.batch.fs.TextRange
-import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 
 data class SecondaryLocation(val textRange: TextRange, val message: String? = null)
-
