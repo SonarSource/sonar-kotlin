@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.plugin
 import org.assertj.core.api.AssertionsForClassTypes
 import org.junit.jupiter.api.Test
 import org.sonar.api.config.internal.MapSettings
+import org.sonarsource.kotlin.api.common.KotlinLanguage
 
 internal class KotlinLanguageTest {
 

@@ -29,8 +29,8 @@ import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor
 import org.sonar.api.batch.sensor.issue.ExternalIssue
 import org.sonar.api.rules.RuleType
 import org.sonar.api.testfixtures.log.LogTesterJUnit5
-import org.sonarsource.kotlin.externalreport.ExternalReportTestUtils
-import org.sonarsource.kotlin.externalreport.ExternalReporting
+import org.sonarsource.kotlin.externalreport.common.ExternalReportTestUtils
+import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import java.nio.file.Paths
 
 internal class DetektSensorTest {
@@ -94,7 +94,7 @@ internal class DetektSensorTest {
 
         val fourth = externalIssues[3]
         assertThat(fourth.primaryLocation().inputComponent().key()).isEqualTo("detekt-project:A.kt")
-        assertThat(fourth.ruleKey().rule()).isEqualTo(ExternalReporting.FALLBACK_RULE_KEY)
+        assertThat(fourth.ruleKey().rule()).isEqualTo(FALLBACK_RULE_KEY)
         assertThat(fourth.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(fourth.severity()).isEqualTo(Severity.MAJOR)
         assertThat(fourth.primaryLocation().message()).isEqualTo("Custom rule")
@@ -179,7 +179,7 @@ internal class DetektSensorTest {
         assertThat(externalIssues).hasSize(1)
         val first = externalIssues[0]
         assertThat(first.primaryLocation().inputComponent().key()).isEqualTo("detekt-project:main.kt")
-        assertThat(first.ruleKey().rule()).isEqualTo(ExternalReporting.FALLBACK_RULE_KEY)
+        assertThat(first.ruleKey().rule()).isEqualTo(FALLBACK_RULE_KEY)
         assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(first.severity()).isEqualTo(Severity.MAJOR)
         assertThat(first.primaryLocation().message()).isEqualTo("Error at file level with an unknown rule key.")

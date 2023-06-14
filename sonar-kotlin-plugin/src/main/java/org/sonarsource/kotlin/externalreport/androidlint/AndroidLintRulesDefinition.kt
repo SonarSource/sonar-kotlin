@@ -21,7 +21,7 @@ package org.sonarsource.kotlin.externalreport.androidlint
 
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonarsource.analyzer.commons.ExternalRuleLoader
-import org.sonarsource.kotlin.externalreport.common.RULE_REPOSITORY_LANGUAGE
+import org.sonarsource.kotlin.api.common.RULE_REPOSITORY_LANGUAGE
 
 const val RULES_FILE = "org/sonar/l10n/android/rules/androidlint/rules.json"
 

@@ -27,7 +27,7 @@ import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.testing.AbstractSensorTest
+import org.sonarsource.kotlin.testapi.AbstractSensorTest
 import kotlin.time.ExperimentalTime
 
 class CheckRegistrationTest : AbstractSensorTest() {

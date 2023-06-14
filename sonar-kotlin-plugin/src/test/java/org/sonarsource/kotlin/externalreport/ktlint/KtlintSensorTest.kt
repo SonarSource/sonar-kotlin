@@ -31,7 +31,7 @@ import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor
 import org.sonar.api.batch.sensor.issue.ExternalIssue
 import org.sonar.api.rules.RuleType
 import org.sonar.api.testfixtures.log.LogTesterJUnit5
-import org.sonarsource.kotlin.externalreport.ExternalReportTestUtils
+import org.sonarsource.kotlin.externalreport.common.ExternalReportTestUtils
 import java.nio.file.Paths
 
 private val PROJECT_DIR = Paths.get("src", "test", "resources", "org/sonarsource/slang/externalreport", "ktlint")

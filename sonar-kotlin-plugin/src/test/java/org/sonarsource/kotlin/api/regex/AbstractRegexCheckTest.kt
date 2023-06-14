@@ -25,7 +25,7 @@ import org.sonarsource.analyzer.commons.regex.RegexIssueLocation
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.ast.CharacterClassTree
 import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor
-import org.sonarsource.kotlin.verifier.KotlinVerifier
+import org.sonarsource.kotlin.testapi.KotlinVerifier
 
 class AbstractRegexCheckTest {
     @Test

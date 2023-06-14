@@ -21,6 +21,8 @@ package org.sonarsource.kotlin.plugin
 
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
 import org.sonarsource.analyzer.commons.BuiltInQualityProfileJsonLoader
+import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_KEY
+import org.sonarsource.kotlin.api.common.KOTLIN_REPOSITORY_KEY
 
 class KotlinProfileDefinition : BuiltInQualityProfilesDefinition {
     companion object {
@@ -28,8 +30,8 @@ class KotlinProfileDefinition : BuiltInQualityProfilesDefinition {
     }
 
     override fun define(context: BuiltInQualityProfilesDefinition.Context) {
-        context.createBuiltInQualityProfile(KotlinPlugin.PROFILE_NAME, KotlinPlugin.KOTLIN_LANGUAGE_KEY).let { profile ->
-            BuiltInQualityProfileJsonLoader.load(profile, KotlinPlugin.KOTLIN_REPOSITORY_KEY, PATH_TO_JSON)
+        context.createBuiltInQualityProfile(KotlinPlugin.PROFILE_NAME, KOTLIN_LANGUAGE_KEY).let { profile ->
+            BuiltInQualityProfileJsonLoader.load(profile, KOTLIN_REPOSITORY_KEY, PATH_TO_JSON)
             profile.done()
         }
     }

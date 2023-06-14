@@ -24,7 +24,7 @@ import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.config.Configuration
 import org.sonar.api.notifications.AnalysisWarnings
-import org.sonarsource.kotlin.externalreport.common.RULE_REPOSITORY_LANGUAGE
+import org.sonarsource.kotlin.api.common.RULE_REPOSITORY_LANGUAGE
 import org.sonarsource.kotlin.api.frontend.AbstractPropertyHandlerSensor
 import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import java.io.File

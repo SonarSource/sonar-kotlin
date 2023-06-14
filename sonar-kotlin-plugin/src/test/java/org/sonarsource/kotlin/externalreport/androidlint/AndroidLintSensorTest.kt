@@ -30,8 +30,8 @@ import org.sonar.api.batch.sensor.issue.ExternalIssue
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rules.RuleType
 import org.sonar.api.testfixtures.log.LogTesterJUnit5
-import org.sonarsource.kotlin.externalreport.ExternalReportTestUtils
-import org.sonarsource.kotlin.externalreport.ExternalReporting
+import org.sonarsource.kotlin.externalreport.common.ExternalReportTestUtils
+import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import java.io.IOException
 import java.nio.file.Paths
 
@@ -94,7 +94,7 @@ internal class AndroidLintSensorTest {
 
         val fifth = externalIssues[4]
         assertThat(fifth.primaryLocation().inputComponent().key()).isEqualTo("androidlint-project:B.kt")
-        assertThat(fifth.ruleKey()).hasToString("external_android-lint:${ExternalReporting.FALLBACK_RULE_KEY}")
+        assertThat(fifth.ruleKey()).hasToString("external_android-lint:${FALLBACK_RULE_KEY}")
         assertThat(fifth.primaryLocation().textRange()!!.start().line()).isEqualTo(1)
 
         ExternalReportTestUtils.assertNoErrorWarnDebugLogs(logTester)
@@ -153,7 +153,7 @@ internal class AndroidLintSensorTest {
         val first = externalIssues[0]
         assertThat(first.primaryLocation().inputComponent().key())
             .isEqualTo("androidlint-project:AndroidManifest.xml")
-        assertThat(first.ruleKey()).hasToString("external_android-lint:${ExternalReporting.FALLBACK_RULE_KEY}")
+        assertThat(first.ruleKey()).hasToString("external_android-lint:${FALLBACK_RULE_KEY}")
         assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(first.severity()).isEqualTo(Severity.MAJOR)
         assertThat(first.primaryLocation().message()).isEqualTo("Unknown rule.")

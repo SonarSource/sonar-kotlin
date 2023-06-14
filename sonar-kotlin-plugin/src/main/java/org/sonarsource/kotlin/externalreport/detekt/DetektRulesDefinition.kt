@@ -21,7 +21,7 @@ package org.sonarsource.kotlin.externalreport.detekt
 
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonarsource.analyzer.commons.ExternalRuleLoader
-import org.sonarsource.kotlin.externalreport.common.RULE_REPOSITORY_LANGUAGE
+import org.sonarsource.kotlin.api.common.RULE_REPOSITORY_LANGUAGE
 
 class DetektRulesDefinition : RulesDefinition {
 

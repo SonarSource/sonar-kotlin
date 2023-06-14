@@ -24,6 +24,9 @@ import org.sonar.api.Plugin
 import org.sonar.api.SonarProduct
 import org.sonar.api.config.PropertyDefinition
 import org.sonar.api.resources.Qualifiers
+import org.sonarsource.kotlin.api.common.KOTLIN_FILE_SUFFIXES_DEFAULT_VALUE
+import org.sonarsource.kotlin.api.common.KOTLIN_FILE_SUFFIXES_KEY
+import org.sonarsource.kotlin.api.common.KotlinLanguage
 import org.sonarsource.kotlin.externalreport.androidlint.AndroidLintRulesDefinition
 import org.sonarsource.kotlin.externalreport.androidlint.AndroidLintSensor
 import org.sonarsource.kotlin.externalreport.detekt.DetektRulesDefinition
@@ -45,13 +48,8 @@ class KotlinPlugin : Plugin {
         private const val KOTLIN_SUBCATEGORY = "Kotlin"
 
         // Global constants
-        const val KOTLIN_LANGUAGE_KEY = "kotlin"
-        const val KOTLIN_LANGUAGE_NAME = "Kotlin"
-        const val KOTLIN_REPOSITORY_KEY = "kotlin"
         const val REPOSITORY_NAME = "SonarAnalyzer"
         const val PROFILE_NAME = "Sonar way"
-        const val KOTLIN_FILE_SUFFIXES_KEY = "sonar.kotlin.file.suffixes"
-        const val KOTLIN_FILE_SUFFIXES_DEFAULT_VALUE = ".kt"
         const val SONAR_JAVA_BINARIES = "sonar.java.binaries"
         const val SONAR_JAVA_LIBRARIES = "sonar.java.libraries"
         const val SONAR_ANDROID_DETECTED = "sonar.android.detected"

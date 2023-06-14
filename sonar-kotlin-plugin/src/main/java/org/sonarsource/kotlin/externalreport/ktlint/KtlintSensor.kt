@@ -22,7 +22,7 @@ package org.sonarsource.kotlin.externalreport.ktlint
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.notifications.AnalysisWarnings
 import org.sonarsource.kotlin.api.frontend.AbstractPropertyHandlerSensor
-import org.sonarsource.kotlin.externalreport.common.RULE_REPOSITORY_LANGUAGE
+import org.sonarsource.kotlin.api.common.RULE_REPOSITORY_LANGUAGE
 
 class KtlintSensor(val analysisWarnings: AnalysisWarnings) : AbstractPropertyHandlerSensor(
     analysisWarnings,
