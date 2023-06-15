@@ -1,0 +1,38 @@
+[
+  {
+    "key": "detekt.EmptyIfBlock",
+    "name": "Empty If Block",
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://arturbosch.github.io/detekt/empty-blocks.html#emptyifblock",
+    "tags": [
+      "minor"
+    ],
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "detekt.MagicNumber",
+    "name": "Magic Number",
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "description": "Report magic numbers. Magic number is a numeric literal that is not defined as a constant and hence it\u0027s unclear what the purpose of this number is. It\u0027s better to declare such numbers as constants and give them a proper name. By default, -1, 0, 1, and 2 are not considered to be magic numbers.",
+    "url": "https://arturbosch.github.io/detekt/style.html#magicnumber",
+    "tags": [
+      "style"
+    ],
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "detekt.EqualsWithHashCodeExist",
+    "name": "Equals With Hash Code Exist",
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "description": "Always override hashCode when you override equals. All hash-based collections depend on objects meeting the equals-contract. Two equal objects must produce the same hashcode. When inheriting equals or hashcode, override the inherited and call the super method for clarification.",
+    "url": "https://arturbosch.github.io/detekt/potential-bugs.html#equalswithhashcodeexist",
+    "tags": [
+      "defect"
+    ],
+    "constantDebtMinutes": 5
+  }
+]

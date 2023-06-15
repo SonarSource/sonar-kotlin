@@ -1,0 +1,308 @@
+KtFile 1:0 … 44:0: [dummy.kt] val v = thenChain(        low … a39 then                a40)
+  KtPackageDirective 1:0 … 1:0: [] 
+  KtImportList 1:0 … 1:0: [] 
+  KtProperty 1:0 … 43:1: [] val v = thenChain(        low … a39 then                a40)
+    LeafPsiElement 1:0 … 1:3: [val] val
+    PsiWhiteSpaceImpl 1:3 … 1:4: [WHITE_SPACE] 
+    LeafPsiElement 1:4 … 1:5: [IDENTIFIER] v
+    PsiWhiteSpaceImpl 1:5 … 1:6: [WHITE_SPACE] 
+    LeafPsiElement 1:6 … 1:7: [EQ] =
+    PsiWhiteSpaceImpl 1:7 … 1:8: [WHITE_SPACE] 
+    KtCallExpression 1:8 … 43:1: [] thenChain(        lower = a1  … a39 then                a40)
+      KtNameReferenceExpression 1:8 … 1:17: [] thenChain
+        LeafPsiElement 1:8 … 1:17: [IDENTIFIER] thenChain
+      KtValueArgumentList 1:17 … 43:1: [] (        lower = a1 then     … a39 then                a40)
+        LeafPsiElement 1:17 … 1:18: [LPAR] (
+        PsiWhiteSpaceImpl 1:18 … 2:8: [WHITE_SPACE] 
+        KtValueArgument 2:8 … 42:19: [] lower = a1 then               …   a39 then                a40
+          KtValueArgumentName 2:8 … 2:13: [] lower
+            KtNameReferenceExpression 2:8 … 2:13: [] lower
+              LeafPsiElement 2:8 … 2:13: [IDENTIFIER] lower
+          PsiWhiteSpaceImpl 2:13 … 2:14: [WHITE_SPACE] 
+          LeafPsiElement 2:14 … 2:15: [EQ] =
+          PsiWhiteSpaceImpl 2:15 … 2:16: [WHITE_SPACE] 
+          KtBinaryExpression 2:16 … 42:19: [] a1 then                a2 the …   a39 then                a40
+            KtBinaryExpression 2:16 … 41:19: [] a1 then                a2 the …   a38 then                a39
+              KtBinaryExpression 2:16 … 40:19: [] a1 then                a2 the …   a37 then                a38
+                KtBinaryExpression 2:16 … 39:19: [] a1 then                a2 the …   a36 then                a37
+                  KtBinaryExpression 2:16 … 38:19: [] a1 then                a2 the …   a35 then                a36
+                    KtBinaryExpression 2:16 … 37:19: [] a1 then                a2 the …   a34 then                a35
+                      KtBinaryExpression 2:16 … 36:19: [] a1 then                a2 the …   a33 then                a34
+                        KtBinaryExpression 2:16 … 35:19: [] a1 then                a2 the …   a32 then                a33
+                          KtBinaryExpression 2:16 … 34:19: [] a1 then                a2 the …   a31 then                a32
+                            KtBinaryExpression 2:16 … 33:19: [] a1 then                a2 the …   a30 then                a31
+                              KtBinaryExpression 2:16 … 32:19: [] a1 then                a2 the …   a29 then                a30
+                                KtBinaryExpression 2:16 … 31:19: [] a1 then                a2 the …   a28 then                a29
+                                  KtBinaryExpression 2:16 … 30:19: [] a1 then                a2 the …   a27 then                a28
+                                    KtBinaryExpression 2:16 … 29:19: [] a1 then                a2 the …   a26 then                a27
+                                      KtBinaryExpression 2:16 … 28:19: [] a1 then                a2 the …   a25 then                a26
+                                        KtBinaryExpression 2:16 … 27:19: [] a1 then                a2 the …   a24 then                a25
+                                          KtBinaryExpression 2:16 … 26:19: [] a1 then                a2 the …   a23 then                a24
+                                            KtBinaryExpression 2:16 … 25:19: [] a1 then                a2 the …   a22 then                a23
+                                              KtBinaryExpression 2:16 … 24:19: [] a1 then                a2 the …   a21 then                a22
+                                                KtBinaryExpression 2:16 … 23:19: [] a1 then                a2 the …   a20 then                a21
+                                                  KtBinaryExpression 2:16 … 22:19: [] a1 then                a2 the …   a19 then                a20
+                                                    KtBinaryExpression 2:16 … 21:19: [] a1 then                a2 the …   a18 then                a19
+                                                      KtBinaryExpression 2:16 … 20:19: [] a1 then                a2 the …   a17 then                a18
+                                                        KtBinaryExpression 2:16 … 19:19: [] a1 then                a2 the …   a16 then                a17
+                                                          KtBinaryExpression 2:16 … 18:19: [] a1 then                a2 the …   a15 then                a16
+                                                            KtBinaryExpression 2:16 … 17:19: [] a1 then                a2 the …   a14 then                a15
+                                                              KtBinaryExpression 2:16 … 16:19: [] a1 then                a2 the …   a13 then                a14
+                                                                KtBinaryExpression 2:16 … 15:19: [] a1 then                a2 the …   a12 then                a13
+                                                                  KtBinaryExpression 2:16 … 14:19: [] a1 then                a2 the …   a11 then                a12
+                                                                    KtBinaryExpression 2:16 … 13:19: [] a1 then                a2 the …   a11 then                a11
+                                                                      KtBinaryExpression 2:16 … 12:19: [] a1 then                a2 the …   a10 then                a11
+                                                                        KtBinaryExpression 2:16 … 11:19: [] a1 then                a2 the …    a9 then                a10
+                                                                          KtBinaryExpression 2:16 … 10:18: [] a1 then                a2 the …     a8 then                a9
+                                                                            KtBinaryExpression 2:16 … 9:18: [] a1 then                a2 the …     a7 then                a8
+                                                                              KtBinaryExpression 2:16 … 8:18: [] a1 then                a2 the …     a6 then                a7
+                                                                                KtBinaryExpression 2:16 … 7:18: [] a1 then                a2 the …     a5 then                a6
+                                                                                  KtBinaryExpression 2:16 … 6:18: [] a1 then                a2 the …     a4 then                a5
+                                                                                    KtBinaryExpression 2:16 … 5:18: [] a1 then                a2 the …     a3 then                a4
+                                                                                      KtBinaryExpression 2:16 … 4:18: [] a1 then                a2 then                a3
+                                                                                        KtBinaryExpression 2:16 … 3:18: [] a1 then                a2
+                                                                                          KtNameReferenceExpression 2:16 … 2:18: [] a1
+                                                                                            LeafPsiElement 2:16 … 2:18: [IDENTIFIER] a1
+                                                                                          PsiWhiteSpaceImpl 2:18 … 2:19: [WHITE_SPACE] 
+                                                                                          KtOperationReferenceExpression 2:19 … 2:23: [] then
+                                                                                            LeafPsiElement 2:19 … 2:23: [IDENTIFIER] then
+                                                                                          PsiWhiteSpaceImpl 2:23 … 3:16: [WHITE_SPACE] 
+                                                                                          KtNameReferenceExpression 3:16 … 3:18: [] a2
+                                                                                            LeafPsiElement 3:16 … 3:18: [IDENTIFIER] a2
+                                                                                        PsiWhiteSpaceImpl 3:18 … 3:19: [WHITE_SPACE] 
+                                                                                        KtOperationReferenceExpression 3:19 … 3:23: [] then
+                                                                                          LeafPsiElement 3:19 … 3:23: [IDENTIFIER] then
+                                                                                        PsiWhiteSpaceImpl 3:23 … 4:16: [WHITE_SPACE] 
+                                                                                        KtNameReferenceExpression 4:16 … 4:18: [] a3
+                                                                                          LeafPsiElement 4:16 … 4:18: [IDENTIFIER] a3
+                                                                                      PsiWhiteSpaceImpl 4:18 … 4:19: [WHITE_SPACE] 
+                                                                                      KtOperationReferenceExpression 4:19 … 4:23: [] then
+                                                                                        LeafPsiElement 4:19 … 4:23: [IDENTIFIER] then
+                                                                                      PsiWhiteSpaceImpl 4:23 … 5:16: [WHITE_SPACE] 
+                                                                                      KtNameReferenceExpression 5:16 … 5:18: [] a4
+                                                                                        LeafPsiElement 5:16 … 5:18: [IDENTIFIER] a4
+                                                                                    PsiWhiteSpaceImpl 5:18 … 5:19: [WHITE_SPACE] 
+                                                                                    KtOperationReferenceExpression 5:19 … 5:23: [] then
+                                                                                      LeafPsiElement 5:19 … 5:23: [IDENTIFIER] then
+                                                                                    PsiWhiteSpaceImpl 5:23 … 6:16: [WHITE_SPACE] 
+                                                                                    KtNameReferenceExpression 6:16 … 6:18: [] a5
+                                                                                      LeafPsiElement 6:16 … 6:18: [IDENTIFIER] a5
+                                                                                  PsiWhiteSpaceImpl 6:18 … 6:19: [WHITE_SPACE] 
+                                                                                  KtOperationReferenceExpression 6:19 … 6:23: [] then
+                                                                                    LeafPsiElement 6:19 … 6:23: [IDENTIFIER] then
+                                                                                  PsiWhiteSpaceImpl 6:23 … 7:16: [WHITE_SPACE] 
+                                                                                  KtNameReferenceExpression 7:16 … 7:18: [] a6
+                                                                                    LeafPsiElement 7:16 … 7:18: [IDENTIFIER] a6
+                                                                                PsiWhiteSpaceImpl 7:18 … 7:19: [WHITE_SPACE] 
+                                                                                KtOperationReferenceExpression 7:19 … 7:23: [] then
+                                                                                  LeafPsiElement 7:19 … 7:23: [IDENTIFIER] then
+                                                                                PsiWhiteSpaceImpl 7:23 … 8:16: [WHITE_SPACE] 
+                                                                                KtNameReferenceExpression 8:16 … 8:18: [] a7
+                                                                                  LeafPsiElement 8:16 … 8:18: [IDENTIFIER] a7
+                                                                              PsiWhiteSpaceImpl 8:18 … 8:19: [WHITE_SPACE] 
+                                                                              KtOperationReferenceExpression 8:19 … 8:23: [] then
+                                                                                LeafPsiElement 8:19 … 8:23: [IDENTIFIER] then
+                                                                              PsiWhiteSpaceImpl 8:23 … 9:16: [WHITE_SPACE] 
+                                                                              KtNameReferenceExpression 9:16 … 9:18: [] a8
+                                                                                LeafPsiElement 9:16 … 9:18: [IDENTIFIER] a8
+                                                                            PsiWhiteSpaceImpl 9:18 … 9:19: [WHITE_SPACE] 
+                                                                            KtOperationReferenceExpression 9:19 … 9:23: [] then
+                                                                              LeafPsiElement 9:19 … 9:23: [IDENTIFIER] then
+                                                                            PsiWhiteSpaceImpl 9:23 … 10:16: [WHITE_SPACE] 
+                                                                            KtNameReferenceExpression 10:16 … 10:18: [] a9
+                                                                              LeafPsiElement 10:16 … 10:18: [IDENTIFIER] a9
+                                                                          PsiWhiteSpaceImpl 10:18 … 10:19: [WHITE_SPACE] 
+                                                                          KtOperationReferenceExpression 10:19 … 10:23: [] then
+                                                                            LeafPsiElement 10:19 … 10:23: [IDENTIFIER] then
+                                                                          PsiWhiteSpaceImpl 10:23 … 11:16: [WHITE_SPACE] 
+                                                                          KtNameReferenceExpression 11:16 … 11:19: [] a10
+                                                                            LeafPsiElement 11:16 … 11:19: [IDENTIFIER] a10
+                                                                        PsiWhiteSpaceImpl 11:19 … 11:20: [WHITE_SPACE] 
+                                                                        KtOperationReferenceExpression 11:20 … 11:24: [] then
+                                                                          LeafPsiElement 11:20 … 11:24: [IDENTIFIER] then
+                                                                        PsiWhiteSpaceImpl 11:24 … 12:16: [WHITE_SPACE] 
+                                                                        KtNameReferenceExpression 12:16 … 12:19: [] a11
+                                                                          LeafPsiElement 12:16 … 12:19: [IDENTIFIER] a11
+                                                                      PsiWhiteSpaceImpl 12:19 … 12:20: [WHITE_SPACE] 
+                                                                      KtOperationReferenceExpression 12:20 … 12:24: [] then
+                                                                        LeafPsiElement 12:20 … 12:24: [IDENTIFIER] then
+                                                                      PsiWhiteSpaceImpl 12:24 … 13:16: [WHITE_SPACE] 
+                                                                      KtNameReferenceExpression 13:16 … 13:19: [] a11
+                                                                        LeafPsiElement 13:16 … 13:19: [IDENTIFIER] a11
+                                                                    PsiWhiteSpaceImpl 13:19 … 13:20: [WHITE_SPACE] 
+                                                                    KtOperationReferenceExpression 13:20 … 13:24: [] then
+                                                                      LeafPsiElement 13:20 … 13:24: [IDENTIFIER] then
+                                                                    PsiWhiteSpaceImpl 13:24 … 14:16: [WHITE_SPACE] 
+                                                                    KtNameReferenceExpression 14:16 … 14:19: [] a12
+                                                                      LeafPsiElement 14:16 … 14:19: [IDENTIFIER] a12
+                                                                  PsiWhiteSpaceImpl 14:19 … 14:20: [WHITE_SPACE] 
+                                                                  KtOperationReferenceExpression 14:20 … 14:24: [] then
+                                                                    LeafPsiElement 14:20 … 14:24: [IDENTIFIER] then
+                                                                  PsiWhiteSpaceImpl 14:24 … 15:16: [WHITE_SPACE] 
+                                                                  KtNameReferenceExpression 15:16 … 15:19: [] a13
+                                                                    LeafPsiElement 15:16 … 15:19: [IDENTIFIER] a13
+                                                                PsiWhiteSpaceImpl 15:19 … 15:20: [WHITE_SPACE] 
+                                                                KtOperationReferenceExpression 15:20 … 15:24: [] then
+                                                                  LeafPsiElement 15:20 … 15:24: [IDENTIFIER] then
+                                                                PsiWhiteSpaceImpl 15:24 … 16:16: [WHITE_SPACE] 
+                                                                KtNameReferenceExpression 16:16 … 16:19: [] a14
+                                                                  LeafPsiElement 16:16 … 16:19: [IDENTIFIER] a14
+                                                              PsiWhiteSpaceImpl 16:19 … 16:20: [WHITE_SPACE] 
+                                                              KtOperationReferenceExpression 16:20 … 16:24: [] then
+                                                                LeafPsiElement 16:20 … 16:24: [IDENTIFIER] then
+                                                              PsiWhiteSpaceImpl 16:24 … 17:16: [WHITE_SPACE] 
+                                                              KtNameReferenceExpression 17:16 … 17:19: [] a15
+                                                                LeafPsiElement 17:16 … 17:19: [IDENTIFIER] a15
+                                                            PsiWhiteSpaceImpl 17:19 … 17:20: [WHITE_SPACE] 
+                                                            KtOperationReferenceExpression 17:20 … 17:24: [] then
+                                                              LeafPsiElement 17:20 … 17:24: [IDENTIFIER] then
+                                                            PsiWhiteSpaceImpl 17:24 … 18:16: [WHITE_SPACE] 
+                                                            KtNameReferenceExpression 18:16 … 18:19: [] a16
+                                                              LeafPsiElement 18:16 … 18:19: [IDENTIFIER] a16
+                                                          PsiWhiteSpaceImpl 18:19 … 18:20: [WHITE_SPACE] 
+                                                          KtOperationReferenceExpression 18:20 … 18:24: [] then
+                                                            LeafPsiElement 18:20 … 18:24: [IDENTIFIER] then
+                                                          PsiWhiteSpaceImpl 18:24 … 19:16: [WHITE_SPACE] 
+                                                          KtNameReferenceExpression 19:16 … 19:19: [] a17
+                                                            LeafPsiElement 19:16 … 19:19: [IDENTIFIER] a17
+                                                        PsiWhiteSpaceImpl 19:19 … 19:20: [WHITE_SPACE] 
+                                                        KtOperationReferenceExpression 19:20 … 19:24: [] then
+                                                          LeafPsiElement 19:20 … 19:24: [IDENTIFIER] then
+                                                        PsiWhiteSpaceImpl 19:24 … 20:16: [WHITE_SPACE] 
+                                                        KtNameReferenceExpression 20:16 … 20:19: [] a18
+                                                          LeafPsiElement 20:16 … 20:19: [IDENTIFIER] a18
+                                                      PsiWhiteSpaceImpl 20:19 … 20:20: [WHITE_SPACE] 
+                                                      KtOperationReferenceExpression 20:20 … 20:24: [] then
+                                                        LeafPsiElement 20:20 … 20:24: [IDENTIFIER] then
+                                                      PsiWhiteSpaceImpl 20:24 … 21:16: [WHITE_SPACE] 
+                                                      KtNameReferenceExpression 21:16 … 21:19: [] a19
+                                                        LeafPsiElement 21:16 … 21:19: [IDENTIFIER] a19
+                                                    PsiWhiteSpaceImpl 21:19 … 21:20: [WHITE_SPACE] 
+                                                    KtOperationReferenceExpression 21:20 … 21:24: [] then
+                                                      LeafPsiElement 21:20 … 21:24: [IDENTIFIER] then
+                                                    PsiWhiteSpaceImpl 21:24 … 22:16: [WHITE_SPACE] 
+                                                    KtNameReferenceExpression 22:16 … 22:19: [] a20
+                                                      LeafPsiElement 22:16 … 22:19: [IDENTIFIER] a20
+                                                  PsiWhiteSpaceImpl 22:19 … 22:20: [WHITE_SPACE] 
+                                                  KtOperationReferenceExpression 22:20 … 22:24: [] then
+                                                    LeafPsiElement 22:20 … 22:24: [IDENTIFIER] then
+                                                  PsiWhiteSpaceImpl 22:24 … 23:16: [WHITE_SPACE] 
+                                                  KtNameReferenceExpression 23:16 … 23:19: [] a21
+                                                    LeafPsiElement 23:16 … 23:19: [IDENTIFIER] a21
+                                                PsiWhiteSpaceImpl 23:19 … 23:20: [WHITE_SPACE] 
+                                                KtOperationReferenceExpression 23:20 … 23:24: [] then
+                                                  LeafPsiElement 23:20 … 23:24: [IDENTIFIER] then
+                                                PsiWhiteSpaceImpl 23:24 … 24:16: [WHITE_SPACE] 
+                                                KtNameReferenceExpression 24:16 … 24:19: [] a22
+                                                  LeafPsiElement 24:16 … 24:19: [IDENTIFIER] a22
+                                              PsiWhiteSpaceImpl 24:19 … 24:20: [WHITE_SPACE] 
+                                              KtOperationReferenceExpression 24:20 … 24:24: [] then
+                                                LeafPsiElement 24:20 … 24:24: [IDENTIFIER] then
+                                              PsiWhiteSpaceImpl 24:24 … 25:16: [WHITE_SPACE] 
+                                              KtNameReferenceExpression 25:16 … 25:19: [] a23
+                                                LeafPsiElement 25:16 … 25:19: [IDENTIFIER] a23
+                                            PsiWhiteSpaceImpl 25:19 … 25:20: [WHITE_SPACE] 
+                                            KtOperationReferenceExpression 25:20 … 25:24: [] then
+                                              LeafPsiElement 25:20 … 25:24: [IDENTIFIER] then
+                                            PsiWhiteSpaceImpl 25:24 … 26:16: [WHITE_SPACE] 
+                                            KtNameReferenceExpression 26:16 … 26:19: [] a24
+                                              LeafPsiElement 26:16 … 26:19: [IDENTIFIER] a24
+                                          PsiWhiteSpaceImpl 26:19 … 26:20: [WHITE_SPACE] 
+                                          KtOperationReferenceExpression 26:20 … 26:24: [] then
+                                            LeafPsiElement 26:20 … 26:24: [IDENTIFIER] then
+                                          PsiWhiteSpaceImpl 26:24 … 27:16: [WHITE_SPACE] 
+                                          KtNameReferenceExpression 27:16 … 27:19: [] a25
+                                            LeafPsiElement 27:16 … 27:19: [IDENTIFIER] a25
+                                        PsiWhiteSpaceImpl 27:19 … 27:20: [WHITE_SPACE] 
+                                        KtOperationReferenceExpression 27:20 … 27:24: [] then
+                                          LeafPsiElement 27:20 … 27:24: [IDENTIFIER] then
+                                        PsiWhiteSpaceImpl 27:24 … 28:16: [WHITE_SPACE] 
+                                        KtNameReferenceExpression 28:16 … 28:19: [] a26
+                                          LeafPsiElement 28:16 … 28:19: [IDENTIFIER] a26
+                                      PsiWhiteSpaceImpl 28:19 … 28:20: [WHITE_SPACE] 
+                                      KtOperationReferenceExpression 28:20 … 28:24: [] then
+                                        LeafPsiElement 28:20 … 28:24: [IDENTIFIER] then
+                                      PsiWhiteSpaceImpl 28:24 … 29:16: [WHITE_SPACE] 
+                                      KtNameReferenceExpression 29:16 … 29:19: [] a27
+                                        LeafPsiElement 29:16 … 29:19: [IDENTIFIER] a27
+                                    PsiWhiteSpaceImpl 29:19 … 29:20: [WHITE_SPACE] 
+                                    KtOperationReferenceExpression 29:20 … 29:24: [] then
+                                      LeafPsiElement 29:20 … 29:24: [IDENTIFIER] then
+                                    PsiWhiteSpaceImpl 29:24 … 30:16: [WHITE_SPACE] 
+                                    KtNameReferenceExpression 30:16 … 30:19: [] a28
+                                      LeafPsiElement 30:16 … 30:19: [IDENTIFIER] a28
+                                  PsiWhiteSpaceImpl 30:19 … 30:20: [WHITE_SPACE] 
+                                  KtOperationReferenceExpression 30:20 … 30:24: [] then
+                                    LeafPsiElement 30:20 … 30:24: [IDENTIFIER] then
+                                  PsiWhiteSpaceImpl 30:24 … 31:16: [WHITE_SPACE] 
+                                  KtNameReferenceExpression 31:16 … 31:19: [] a29
+                                    LeafPsiElement 31:16 … 31:19: [IDENTIFIER] a29
+                                PsiWhiteSpaceImpl 31:19 … 31:20: [WHITE_SPACE] 
+                                KtOperationReferenceExpression 31:20 … 31:24: [] then
+                                  LeafPsiElement 31:20 … 31:24: [IDENTIFIER] then
+                                PsiWhiteSpaceImpl 31:24 … 32:16: [WHITE_SPACE] 
+                                KtNameReferenceExpression 32:16 … 32:19: [] a30
+                                  LeafPsiElement 32:16 … 32:19: [IDENTIFIER] a30
+                              PsiWhiteSpaceImpl 32:19 … 32:20: [WHITE_SPACE] 
+                              KtOperationReferenceExpression 32:20 … 32:24: [] then
+                                LeafPsiElement 32:20 … 32:24: [IDENTIFIER] then
+                              PsiWhiteSpaceImpl 32:24 … 33:16: [WHITE_SPACE] 
+                              KtNameReferenceExpression 33:16 … 33:19: [] a31
+                                LeafPsiElement 33:16 … 33:19: [IDENTIFIER] a31
+                            PsiWhiteSpaceImpl 33:19 … 33:20: [WHITE_SPACE] 
+                            KtOperationReferenceExpression 33:20 … 33:24: [] then
+                              LeafPsiElement 33:20 … 33:24: [IDENTIFIER] then
+                            PsiWhiteSpaceImpl 33:24 … 34:16: [WHITE_SPACE] 
+                            KtNameReferenceExpression 34:16 … 34:19: [] a32
+                              LeafPsiElement 34:16 … 34:19: [IDENTIFIER] a32
+                          PsiWhiteSpaceImpl 34:19 … 34:20: [WHITE_SPACE] 
+                          KtOperationReferenceExpression 34:20 … 34:24: [] then
+                            LeafPsiElement 34:20 … 34:24: [IDENTIFIER] then
+                          PsiWhiteSpaceImpl 34:24 … 35:16: [WHITE_SPACE] 
+                          KtNameReferenceExpression 35:16 … 35:19: [] a33
+                            LeafPsiElement 35:16 … 35:19: [IDENTIFIER] a33
+                        PsiWhiteSpaceImpl 35:19 … 35:20: [WHITE_SPACE] 
+                        KtOperationReferenceExpression 35:20 … 35:24: [] then
+                          LeafPsiElement 35:20 … 35:24: [IDENTIFIER] then
+                        PsiWhiteSpaceImpl 35:24 … 36:16: [WHITE_SPACE] 
+                        KtNameReferenceExpression 36:16 … 36:19: [] a34
+                          LeafPsiElement 36:16 … 36:19: [IDENTIFIER] a34
+                      PsiWhiteSpaceImpl 36:19 … 36:20: [WHITE_SPACE] 
+                      KtOperationReferenceExpression 36:20 … 36:24: [] then
+                        LeafPsiElement 36:20 … 36:24: [IDENTIFIER] then
+                      PsiWhiteSpaceImpl 36:24 … 37:16: [WHITE_SPACE] 
+                      KtNameReferenceExpression 37:16 … 37:19: [] a35
+                        LeafPsiElement 37:16 … 37:19: [IDENTIFIER] a35
+                    PsiWhiteSpaceImpl 37:19 … 37:20: [WHITE_SPACE] 
+                    KtOperationReferenceExpression 37:20 … 37:24: [] then
+                      LeafPsiElement 37:20 … 37:24: [IDENTIFIER] then
+                    PsiWhiteSpaceImpl 37:24 … 38:16: [WHITE_SPACE] 
+                    KtNameReferenceExpression 38:16 … 38:19: [] a36
+                      LeafPsiElement 38:16 … 38:19: [IDENTIFIER] a36
+                  PsiWhiteSpaceImpl 38:19 … 38:20: [WHITE_SPACE] 
+                  KtOperationReferenceExpression 38:20 … 38:24: [] then
+                    LeafPsiElement 38:20 … 38:24: [IDENTIFIER] then
+                  PsiWhiteSpaceImpl 38:24 … 39:16: [WHITE_SPACE] 
+                  KtNameReferenceExpression 39:16 … 39:19: [] a37
+                    LeafPsiElement 39:16 … 39:19: [IDENTIFIER] a37
+                PsiWhiteSpaceImpl 39:19 … 39:20: [WHITE_SPACE] 
+                KtOperationReferenceExpression 39:20 … 39:24: [] then
+                  LeafPsiElement 39:20 … 39:24: [IDENTIFIER] then
+                PsiWhiteSpaceImpl 39:24 … 40:16: [WHITE_SPACE] 
+                KtNameReferenceExpression 40:16 … 40:19: [] a38
+                  LeafPsiElement 40:16 … 40:19: [IDENTIFIER] a38
+              PsiWhiteSpaceImpl 40:19 … 40:20: [WHITE_SPACE] 
+              KtOperationReferenceExpression 40:20 … 40:24: [] then
+                LeafPsiElement 40:20 … 40:24: [IDENTIFIER] then
+              PsiWhiteSpaceImpl 40:24 … 41:16: [WHITE_SPACE] 
+              KtNameReferenceExpression 41:16 … 41:19: [] a39
+                LeafPsiElement 41:16 … 41:19: [IDENTIFIER] a39
+            PsiWhiteSpaceImpl 41:19 … 41:20: [WHITE_SPACE] 
+            KtOperationReferenceExpression 41:20 … 41:24: [] then
+              LeafPsiElement 41:20 … 41:24: [IDENTIFIER] then
+            PsiWhiteSpaceImpl 41:24 … 42:16: [WHITE_SPACE] 
+            KtNameReferenceExpression 42:16 … 42:19: [] a40
+              LeafPsiElement 42:16 … 42:19: [IDENTIFIER] a40
+        PsiWhiteSpaceImpl 42:19 … 43:0: [WHITE_SPACE] 
+        LeafPsiElement 43:0 … 43:1: [RPAR] )
+  PsiWhiteSpaceImpl 43:1 … 44:0: [WHITE_SPACE] 

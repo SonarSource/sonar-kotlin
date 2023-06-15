@@ -1,0 +1,122 @@
+KtFile 1:0 … 9:1: [dummy.kt] package org.sonarsource.kotlin … ng from 1.4, this also works}
+  KtPackageDirective 1:0 … 1:44: [] package org.sonarsource.kotlin.converter.ast
+    LeafPsiElement 1:0 … 1:7: [package] package
+    PsiWhiteSpaceImpl 1:7 … 1:8: [WHITE_SPACE] 
+    KtDotQualifiedExpression 1:8 … 1:44: [] org.sonarsource.kotlin.converter.ast
+      KtDotQualifiedExpression 1:8 … 1:40: [] org.sonarsource.kotlin.converter
+        KtDotQualifiedExpression 1:8 … 1:30: [] org.sonarsource.kotlin
+          KtDotQualifiedExpression 1:8 … 1:23: [] org.sonarsource
+            KtNameReferenceExpression 1:8 … 1:11: [] org
+              LeafPsiElement 1:8 … 1:11: [IDENTIFIER] org
+            LeafPsiElement 1:11 … 1:12: [DOT] .
+            KtNameReferenceExpression 1:12 … 1:23: [] sonarsource
+              LeafPsiElement 1:12 … 1:23: [IDENTIFIER] sonarsource
+          LeafPsiElement 1:23 … 1:24: [DOT] .
+          KtNameReferenceExpression 1:24 … 1:30: [] kotlin
+            LeafPsiElement 1:24 … 1:30: [IDENTIFIER] kotlin
+        LeafPsiElement 1:30 … 1:31: [DOT] .
+        KtNameReferenceExpression 1:31 … 1:40: [] converter
+          LeafPsiElement 1:31 … 1:40: [IDENTIFIER] converter
+      LeafPsiElement 1:40 … 1:41: [DOT] .
+      KtNameReferenceExpression 1:41 … 1:44: [] ast
+        LeafPsiElement 1:41 … 1:44: [IDENTIFIER] ast
+  KtImportList 1:44 … 1:44: [] 
+  PsiWhiteSpaceImpl 1:44 … 3:0: [WHITE_SPACE] 
+  KtNamedFunction 3:0 … 3:43: [] fun highOrderFunction(func: () -> Unit) { }
+    LeafPsiElement 3:0 … 3:3: [fun] fun
+    PsiWhiteSpaceImpl 3:3 … 3:4: [WHITE_SPACE] 
+    LeafPsiElement 3:4 … 3:21: [IDENTIFIER] highOrderFunction
+    KtParameterList 3:21 … 3:39: [] (func: () -> Unit)
+      LeafPsiElement 3:21 … 3:22: [LPAR] (
+      KtParameter 3:22 … 3:38: [] func: () -> Unit
+        LeafPsiElement 3:22 … 3:26: [IDENTIFIER] func
+        LeafPsiElement 3:26 … 3:27: [COLON] :
+        PsiWhiteSpaceImpl 3:27 … 3:28: [WHITE_SPACE] 
+        KtTypeReference 3:28 … 3:38: [] () -> Unit
+          KtFunctionType 3:28 … 3:38: [] () -> Unit
+            KtParameterList 3:28 … 3:30: [] ()
+              LeafPsiElement 3:28 … 3:29: [LPAR] (
+              LeafPsiElement 3:29 … 3:30: [RPAR] )
+            PsiWhiteSpaceImpl 3:30 … 3:31: [WHITE_SPACE] 
+            LeafPsiElement 3:31 … 3:33: [ARROW] ->
+            PsiWhiteSpaceImpl 3:33 … 3:34: [WHITE_SPACE] 
+            KtTypeReference 3:34 … 3:38: [] Unit
+              KtUserType 3:34 … 3:38: [] Unit
+                KtNameReferenceExpression 3:34 … 3:38: [] Unit
+                  LeafPsiElement 3:34 … 3:38: [IDENTIFIER] Unit
+      LeafPsiElement 3:38 … 3:39: [RPAR] )
+    PsiWhiteSpaceImpl 3:39 … 3:40: [WHITE_SPACE] 
+    KtBlockExpression 3:40 … 3:43: [] { }
+      LeafPsiElement 3:40 … 3:41: [LBRACE] {
+      PsiWhiteSpaceImpl 3:41 … 3:42: [WHITE_SPACE] 
+      LeafPsiElement 3:42 … 3:43: [RBRACE] }
+  PsiWhiteSpaceImpl 3:43 … 4:0: [WHITE_SPACE] 
+  KtNamedFunction 4:0 … 4:43: [] fun helloString(): String = "Hello, World!"
+    LeafPsiElement 4:0 … 4:3: [fun] fun
+    PsiWhiteSpaceImpl 4:3 … 4:4: [WHITE_SPACE] 
+    LeafPsiElement 4:4 … 4:15: [IDENTIFIER] helloString
+    KtParameterList 4:15 … 4:17: [] ()
+      LeafPsiElement 4:15 … 4:16: [LPAR] (
+      LeafPsiElement 4:16 … 4:17: [RPAR] )
+    LeafPsiElement 4:17 … 4:18: [COLON] :
+    PsiWhiteSpaceImpl 4:18 … 4:19: [WHITE_SPACE] 
+    KtTypeReference 4:19 … 4:25: [] String
+      KtUserType 4:19 … 4:25: [] String
+        KtNameReferenceExpression 4:19 … 4:25: [] String
+          LeafPsiElement 4:19 … 4:25: [IDENTIFIER] String
+    PsiWhiteSpaceImpl 4:25 … 4:26: [WHITE_SPACE] 
+    LeafPsiElement 4:26 … 4:27: [EQ] =
+    PsiWhiteSpaceImpl 4:27 … 4:28: [WHITE_SPACE] 
+    KtStringTemplateExpression 4:28 … 4:43: [] "Hello, World!"
+      LeafPsiElement 4:28 … 4:29: [OPEN_QUOTE] "
+      KtLiteralStringTemplateEntry 4:29 … 4:42: [] Hello, World!
+        LeafPsiElement 4:29 … 4:42: [REGULAR_STRING_PART] Hello, World!
+      LeafPsiElement 4:42 … 4:43: [CLOSING_QUOTE] "
+  PsiWhiteSpaceImpl 4:43 … 6:0: [WHITE_SPACE] 
+  KtNamedFunction 6:0 … 9:1: [] fun main() {    highOrderFunc … ng from 1.4, this also works}
+    LeafPsiElement 6:0 … 6:3: [fun] fun
+    PsiWhiteSpaceImpl 6:3 … 6:4: [WHITE_SPACE] 
+    LeafPsiElement 6:4 … 6:8: [IDENTIFIER] main
+    KtParameterList 6:8 … 6:10: [] ()
+      LeafPsiElement 6:8 … 6:9: [LPAR] (
+      LeafPsiElement 6:9 … 6:10: [RPAR] )
+    PsiWhiteSpaceImpl 6:10 … 6:11: [WHITE_SPACE] 
+    KtBlockExpression 6:11 … 9:1: [] {    highOrderFunction { hell … ng from 1.4, this also works}
+      LeafPsiElement 6:11 … 6:12: [LBRACE] {
+      PsiWhiteSpaceImpl 6:12 … 7:4: [WHITE_SPACE] 
+      KtCallExpression 7:4 … 7:39: [] highOrderFunction { helloString() }
+        KtNameReferenceExpression 7:4 … 7:21: [] highOrderFunction
+          LeafPsiElement 7:4 … 7:21: [IDENTIFIER] highOrderFunction
+        PsiWhiteSpaceImpl 7:21 … 7:22: [WHITE_SPACE] 
+        KtLambdaArgument 7:22 … 7:39: [] { helloString() }
+          KtLambdaExpression 7:22 … 7:39: [] { helloString() }
+            KtFunctionLiteral 7:22 … 7:39: [] { helloString() }
+              LeafPsiElement 7:22 … 7:23: [LBRACE] {
+              PsiWhiteSpaceImpl 7:23 … 7:24: [WHITE_SPACE] 
+              KtBlockExpression 7:24 … 7:37: [] helloString()
+                KtCallExpression 7:24 … 7:37: [] helloString()
+                  KtNameReferenceExpression 7:24 … 7:35: [] helloString
+                    LeafPsiElement 7:24 … 7:35: [IDENTIFIER] helloString
+                  KtValueArgumentList 7:35 … 7:37: [] ()
+                    LeafPsiElement 7:35 … 7:36: [LPAR] (
+                    LeafPsiElement 7:36 … 7:37: [RPAR] )
+              PsiWhiteSpaceImpl 7:37 … 7:38: [WHITE_SPACE] 
+              LeafPsiElement 7:38 … 7:39: [RBRACE] }
+      PsiWhiteSpaceImpl 7:39 … 7:40: [WHITE_SPACE] 
+      PsiCommentImpl 7:40 … 7:85: [EOL_COMMENT] // this was the only way to do it  before 1.4
+      PsiWhiteSpaceImpl 7:85 … 8:4: [WHITE_SPACE] 
+      KtCallExpression 8:4 … 8:36: [] highOrderFunction(::helloString)
+        KtNameReferenceExpression 8:4 … 8:21: [] highOrderFunction
+          LeafPsiElement 8:4 … 8:21: [IDENTIFIER] highOrderFunction
+        KtValueArgumentList 8:21 … 8:36: [] (::helloString)
+          LeafPsiElement 8:21 … 8:22: [LPAR] (
+          KtValueArgument 8:22 … 8:35: [] ::helloString
+            KtCallableReferenceExpression 8:22 … 8:35: [] ::helloString
+              LeafPsiElement 8:22 … 8:24: [COLONCOLON] ::
+              KtNameReferenceExpression 8:24 … 8:35: [] helloString
+                LeafPsiElement 8:24 … 8:35: [IDENTIFIER] helloString
+          LeafPsiElement 8:35 … 8:36: [RPAR] )
+      PsiWhiteSpaceImpl 8:36 … 8:37: [WHITE_SPACE] 
+      PsiCommentImpl 8:37 … 8:74: [EOL_COMMENT] // starting from 1.4, this also works
+      PsiWhiteSpaceImpl 8:74 … 9:0: [WHITE_SPACE] 
+      LeafPsiElement 9:0 … 9:1: [RBRACE] }

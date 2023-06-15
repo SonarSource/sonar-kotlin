@@ -1,0 +1,83 @@
+KtFile 1:0 … 10:0: [dummy.kt] @JvmRecorddata class User(val …  class Password(val s: String)
+  KtPackageDirective 1:0 … 1:0: [] 
+  KtImportList 1:0 … 1:0: [] 
+  KtClass 1:0 … 2:47: [] @JvmRecorddata class User(val name: String, val age: Int)
+    KtDeclarationModifierList 1:0 … 2:4: [] @JvmRecorddata
+      KtAnnotationEntry 1:0 … 1:10: [] @JvmRecord
+        LeafPsiElement 1:0 … 1:1: [AT] @
+        KtConstructorCalleeExpression 1:1 … 1:10: [] JvmRecord
+          KtTypeReference 1:1 … 1:10: [] JvmRecord
+            KtUserType 1:1 … 1:10: [] JvmRecord
+              KtNameReferenceExpression 1:1 … 1:10: [] JvmRecord
+                LeafPsiElement 1:1 … 1:10: [IDENTIFIER] JvmRecord
+      PsiWhiteSpaceImpl 1:10 … 2:0: [WHITE_SPACE] 
+      LeafPsiElement 2:0 … 2:4: [data] data
+    PsiWhiteSpaceImpl 2:4 … 2:5: [WHITE_SPACE] 
+    LeafPsiElement 2:5 … 2:10: [class] class
+    PsiWhiteSpaceImpl 2:10 … 2:11: [WHITE_SPACE] 
+    LeafPsiElement 2:11 … 2:15: [IDENTIFIER] User
+    KtPrimaryConstructor 2:15 … 2:47: [] (val name: String, val age: Int)
+      KtParameterList 2:15 … 2:47: [] (val name: String, val age: Int)
+        LeafPsiElement 2:15 … 2:16: [LPAR] (
+        KtParameter 2:16 … 2:32: [] val name: String
+          LeafPsiElement 2:16 … 2:19: [val] val
+          PsiWhiteSpaceImpl 2:19 … 2:20: [WHITE_SPACE] 
+          LeafPsiElement 2:20 … 2:24: [IDENTIFIER] name
+          LeafPsiElement 2:24 … 2:25: [COLON] :
+          PsiWhiteSpaceImpl 2:25 … 2:26: [WHITE_SPACE] 
+          KtTypeReference 2:26 … 2:32: [] String
+            KtUserType 2:26 … 2:32: [] String
+              KtNameReferenceExpression 2:26 … 2:32: [] String
+                LeafPsiElement 2:26 … 2:32: [IDENTIFIER] String
+        LeafPsiElement 2:32 … 2:33: [COMMA] ,
+        PsiWhiteSpaceImpl 2:33 … 2:34: [WHITE_SPACE] 
+        KtParameter 2:34 … 2:46: [] val age: Int
+          LeafPsiElement 2:34 … 2:37: [val] val
+          PsiWhiteSpaceImpl 2:37 … 2:38: [WHITE_SPACE] 
+          LeafPsiElement 2:38 … 2:41: [IDENTIFIER] age
+          LeafPsiElement 2:41 … 2:42: [COLON] :
+          PsiWhiteSpaceImpl 2:42 … 2:43: [WHITE_SPACE] 
+          KtTypeReference 2:43 … 2:46: [] Int
+            KtUserType 2:43 … 2:46: [] Int
+              KtNameReferenceExpression 2:43 … 2:46: [] Int
+                LeafPsiElement 2:43 … 2:46: [IDENTIFIER] Int
+        LeafPsiElement 2:46 … 2:47: [RPAR] )
+  PsiWhiteSpaceImpl 2:47 … 4:0: [WHITE_SPACE] 
+  KtClass 4:0 … 4:24: [] sealed interface Polygon
+    KtDeclarationModifierList 4:0 … 4:6: [] sealed
+      LeafPsiElement 4:0 … 4:6: [sealed] sealed
+    PsiWhiteSpaceImpl 4:6 … 4:7: [WHITE_SPACE] 
+    LeafPsiElement 4:7 … 4:16: [interface] interface
+    PsiWhiteSpaceImpl 4:16 … 4:17: [WHITE_SPACE] 
+    LeafPsiElement 4:17 … 4:24: [IDENTIFIER] Polygon
+  PsiWhiteSpaceImpl 4:24 … 6:0: [WHITE_SPACE] 
+  KtClass 6:0 … 7:35: [] @JvmInlinevalue class Password(val s: String)
+    KtDeclarationModifierList 6:0 … 7:5: [] @JvmInlinevalue
+      KtAnnotationEntry 6:0 … 6:10: [] @JvmInline
+        LeafPsiElement 6:0 … 6:1: [AT] @
+        KtConstructorCalleeExpression 6:1 … 6:10: [] JvmInline
+          KtTypeReference 6:1 … 6:10: [] JvmInline
+            KtUserType 6:1 … 6:10: [] JvmInline
+              KtNameReferenceExpression 6:1 … 6:10: [] JvmInline
+                LeafPsiElement 6:1 … 6:10: [IDENTIFIER] JvmInline
+      PsiWhiteSpaceImpl 6:10 … 7:0: [WHITE_SPACE] 
+      LeafPsiElement 7:0 … 7:5: [value] value
+    PsiWhiteSpaceImpl 7:5 … 7:6: [WHITE_SPACE] 
+    LeafPsiElement 7:6 … 7:11: [class] class
+    PsiWhiteSpaceImpl 7:11 … 7:12: [WHITE_SPACE] 
+    LeafPsiElement 7:12 … 7:20: [IDENTIFIER] Password
+    KtPrimaryConstructor 7:20 … 7:35: [] (val s: String)
+      KtParameterList 7:20 … 7:35: [] (val s: String)
+        LeafPsiElement 7:20 … 7:21: [LPAR] (
+        KtParameter 7:21 … 7:34: [] val s: String
+          LeafPsiElement 7:21 … 7:24: [val] val
+          PsiWhiteSpaceImpl 7:24 … 7:25: [WHITE_SPACE] 
+          LeafPsiElement 7:25 … 7:26: [IDENTIFIER] s
+          LeafPsiElement 7:26 … 7:27: [COLON] :
+          PsiWhiteSpaceImpl 7:27 … 7:28: [WHITE_SPACE] 
+          KtTypeReference 7:28 … 7:34: [] String
+            KtUserType 7:28 … 7:34: [] String
+              KtNameReferenceExpression 7:28 … 7:34: [] String
+                LeafPsiElement 7:28 … 7:34: [IDENTIFIER] String
+        LeafPsiElement 7:34 … 7:35: [RPAR] )
+  PsiWhiteSpaceImpl 7:35 … 10:0: [WHITE_SPACE] 

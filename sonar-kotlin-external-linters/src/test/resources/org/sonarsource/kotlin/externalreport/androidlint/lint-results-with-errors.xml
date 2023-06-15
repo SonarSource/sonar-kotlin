@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="4" by="lint 26.1.1">
+
+    <issue
+        id="UnknownRuleKey"
+        message="Unknown rule.">
+        <location file="AndroidManifest.xml"/>
+        <location line="2" file="A.java"/>
+    </issue>
+
+    <issue
+        message="Missing rule key.">
+        <location file="AndroidManifest.xml"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Valid rule key with binary file.">
+        <location file="binary-file.gif"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        message="Valid rule key without file path.">
+        <location line="8" column="9"/>
+    </issue>
+
+    <issue
+        id="UnusedAttribute"
+        severity="Warning"
+        message="Valid rule key with invalid location.">
+        <location file="" line="" column=""/>
+    </issue>
+
+    <unsupported-node>
+        <unsupported-node />
+    </unsupported-node>
+
+    <issue
+        id="UnusedAttribute"
+        severity="Warning"
+        message="Valid rule key with invalid file path.">
+        <location file="unknown-file.xml" line="21" column="13"/>
+    </issue>
+
+</issues>

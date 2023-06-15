@@ -1,0 +1,71 @@
+KtFile 1:0 … 12:0: [dummy.kt] package Fooimport a.b.ccla … />"    }    fun test() {}}
+  KtPackageDirective 1:0 … 1:11: [] package Foo
+    LeafPsiElement 1:0 … 1:7: [package] package
+    PsiWhiteSpaceImpl 1:7 … 1:8: [WHITE_SPACE] 
+    KtNameReferenceExpression 1:8 … 1:11: [] Foo
+      LeafPsiElement 1:8 … 1:11: [IDENTIFIER] Foo
+  PsiWhiteSpaceImpl 1:11 … 3:0: [WHITE_SPACE] 
+  KtImportList 3:0 … 3:12: [] import a.b.c
+    KtImportDirective 3:0 … 3:12: [] import a.b.c
+      LeafPsiElement 3:0 … 3:6: [import] import
+      PsiWhiteSpaceImpl 3:6 … 3:7: [WHITE_SPACE] 
+      KtDotQualifiedExpression 3:7 … 3:12: [] a.b.c
+        KtDotQualifiedExpression 3:7 … 3:10: [] a.b
+          KtNameReferenceExpression 3:7 … 3:8: [] a
+            LeafPsiElement 3:7 … 3:8: [IDENTIFIER] a
+          LeafPsiElement 3:8 … 3:9: [DOT] .
+          KtNameReferenceExpression 3:9 … 3:10: [] b
+            LeafPsiElement 3:9 … 3:10: [IDENTIFIER] b
+        LeafPsiElement 3:10 … 3:11: [DOT] .
+        KtNameReferenceExpression 3:11 … 3:12: [] c
+          LeafPsiElement 3:11 … 3:12: [IDENTIFIER] c
+  PsiWhiteSpaceImpl 3:12 … 5:0: [WHITE_SPACE] 
+  KtClass 5:0 … 11:1: [] class TestClass {    companio … />"    }    fun test() {}}
+    LeafPsiElement 5:0 … 5:5: [class] class
+    PsiWhiteSpaceImpl 5:5 … 5:6: [WHITE_SPACE] 
+    LeafPsiElement 5:6 … 5:15: [IDENTIFIER] TestClass
+    PsiWhiteSpaceImpl 5:15 … 5:16: [WHITE_SPACE] 
+    KtClassBody 5:16 … 11:1: [] {    companion object {      … />"    }    fun test() {}}
+      LeafPsiElement 5:16 … 5:17: [LBRACE] {
+      PsiWhiteSpaceImpl 5:17 … 6:4: [WHITE_SPACE] 
+      KtObjectDeclaration 6:4 … 8:5: [] companion object {        const val x = "foo<br/>"    }
+        KtDeclarationModifierList 6:4 … 6:13: [] companion
+          LeafPsiElement 6:4 … 6:13: [companion] companion
+        PsiWhiteSpaceImpl 6:13 … 6:14: [WHITE_SPACE] 
+        LeafPsiElement 6:14 … 6:20: [object] object
+        PsiWhiteSpaceImpl 6:20 … 6:21: [WHITE_SPACE] 
+        KtClassBody 6:21 … 8:5: [] {        const val x = "foo<br/>"    }
+          LeafPsiElement 6:21 … 6:22: [LBRACE] {
+          PsiWhiteSpaceImpl 6:22 … 7:8: [WHITE_SPACE] 
+          KtProperty 7:8 … 7:32: [] const val x = "foo<br/>"
+            KtDeclarationModifierList 7:8 … 7:13: [] const
+              LeafPsiElement 7:8 … 7:13: [const] const
+            PsiWhiteSpaceImpl 7:13 … 7:14: [WHITE_SPACE] 
+            LeafPsiElement 7:14 … 7:17: [val] val
+            PsiWhiteSpaceImpl 7:17 … 7:18: [WHITE_SPACE] 
+            LeafPsiElement 7:18 … 7:19: [IDENTIFIER] x
+            PsiWhiteSpaceImpl 7:19 … 7:20: [WHITE_SPACE] 
+            LeafPsiElement 7:20 … 7:21: [EQ] =
+            PsiWhiteSpaceImpl 7:21 … 7:22: [WHITE_SPACE] 
+            KtStringTemplateExpression 7:22 … 7:32: [] "foo<br/>"
+              LeafPsiElement 7:22 … 7:23: [OPEN_QUOTE] "
+              KtLiteralStringTemplateEntry 7:23 … 7:31: [] foo<br/>
+                LeafPsiElement 7:23 … 7:31: [REGULAR_STRING_PART] foo<br/>
+              LeafPsiElement 7:31 … 7:32: [CLOSING_QUOTE] "
+          PsiWhiteSpaceImpl 7:32 … 8:4: [WHITE_SPACE] 
+          LeafPsiElement 8:4 … 8:5: [RBRACE] }
+      PsiWhiteSpaceImpl 8:5 … 10:4: [WHITE_SPACE] 
+      KtNamedFunction 10:4 … 10:17: [] fun test() {}
+        LeafPsiElement 10:4 … 10:7: [fun] fun
+        PsiWhiteSpaceImpl 10:7 … 10:8: [WHITE_SPACE] 
+        LeafPsiElement 10:8 … 10:12: [IDENTIFIER] test
+        KtParameterList 10:12 … 10:14: [] ()
+          LeafPsiElement 10:12 … 10:13: [LPAR] (
+          LeafPsiElement 10:13 … 10:14: [RPAR] )
+        PsiWhiteSpaceImpl 10:14 … 10:15: [WHITE_SPACE] 
+        KtBlockExpression 10:15 … 10:17: [] {}
+          LeafPsiElement 10:15 … 10:16: [LBRACE] {
+          LeafPsiElement 10:16 … 10:17: [RBRACE] }
+      PsiWhiteSpaceImpl 10:17 … 11:0: [WHITE_SPACE] 
+      LeafPsiElement 11:0 … 11:1: [RBRACE] }
+  PsiWhiteSpaceImpl 11:1 … 12:0: [WHITE_SPACE] 

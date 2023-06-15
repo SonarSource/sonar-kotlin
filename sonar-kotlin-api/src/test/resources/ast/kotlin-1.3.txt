@@ -1,0 +1,725 @@
+KtFile 1:0 … 78:0: [dummy.kt] import kotlinx.coroutines.*s … line class Name(val s: String)
+  KtPackageDirective 1:0 … 1:0: [] 
+  KtImportList 1:0 … 1:27: [] import kotlinx.coroutines.*
+    KtImportDirective 1:0 … 1:27: [] import kotlinx.coroutines.*
+      LeafPsiElement 1:0 … 1:6: [import] import
+      PsiWhiteSpaceImpl 1:6 … 1:7: [WHITE_SPACE] 
+      KtDotQualifiedExpression 1:7 … 1:25: [] kotlinx.coroutines
+        KtNameReferenceExpression 1:7 … 1:14: [] kotlinx
+          LeafPsiElement 1:7 … 1:14: [IDENTIFIER] kotlinx
+        LeafPsiElement 1:14 … 1:15: [DOT] .
+        KtNameReferenceExpression 1:15 … 1:25: [] coroutines
+          LeafPsiElement 1:15 … 1:25: [IDENTIFIER] coroutines
+      LeafPsiElement 1:25 … 1:26: [DOT] .
+      LeafPsiElement 1:26 … 1:27: [MUL] *
+  PsiWhiteSpaceImpl 1:27 … 3:0: [WHITE_SPACE] 
+  KtNamedFunction 3:0 … 12:1: [] suspend fun main() {    Globa … onds to keep JVM alive    }}
+    KtDeclarationModifierList 3:0 … 3:7: [] suspend
+      LeafPsiElement 3:0 … 3:7: [suspend] suspend
+    PsiWhiteSpaceImpl 3:7 … 3:8: [WHITE_SPACE] 
+    LeafPsiElement 3:8 … 3:11: [fun] fun
+    PsiWhiteSpaceImpl 3:11 … 3:12: [WHITE_SPACE] 
+    LeafPsiElement 3:12 … 3:16: [IDENTIFIER] main
+    KtParameterList 3:16 … 3:18: [] ()
+      LeafPsiElement 3:16 … 3:17: [LPAR] (
+      LeafPsiElement 3:17 … 3:18: [RPAR] )
+    PsiWhiteSpaceImpl 3:18 … 3:19: [WHITE_SPACE] 
+    KtBlockExpression 3:19 … 12:1: [] {    GlobalScope.launch { //  … onds to keep JVM alive    }}
+      LeafPsiElement 3:19 … 3:20: [LBRACE] {
+      PsiWhiteSpaceImpl 3:20 … 4:4: [WHITE_SPACE] 
+      KtDotQualifiedExpression 4:4 … 7:5: [] GlobalScope.launch { // launch …        println("World!")    }
+        KtNameReferenceExpression 4:4 … 4:15: [] GlobalScope
+          LeafPsiElement 4:4 … 4:15: [IDENTIFIER] GlobalScope
+        LeafPsiElement 4:15 … 4:16: [DOT] .
+        KtCallExpression 4:16 … 7:5: [] launch { // launch new corouti …        println("World!")    }
+          KtNameReferenceExpression 4:16 … 4:22: [] launch
+            LeafPsiElement 4:16 … 4:22: [IDENTIFIER] launch
+          PsiWhiteSpaceImpl 4:22 … 4:23: [WHITE_SPACE] 
+          KtLambdaArgument 4:23 … 7:5: [] { // launch new coroutine in b …        println("World!")    }
+            KtLambdaExpression 4:23 … 7:5: [] { // launch new coroutine in b …        println("World!")    }
+              KtFunctionLiteral 4:23 … 7:5: [] { // launch new coroutine in b …        println("World!")    }
+                LeafPsiElement 4:23 … 4:24: [LBRACE] {
+                PsiWhiteSpaceImpl 4:24 … 4:25: [WHITE_SPACE] 
+                KtBlockExpression 4:25 … 6:25: [] // launch new coroutine in bac … 00L)        println("World!")
+                  PsiCommentImpl 4:25 … 4:75: [EOL_COMMENT] // launch new coroutine in background and continue
+                  PsiWhiteSpaceImpl 4:75 … 5:8: [WHITE_SPACE] 
+                  KtCallExpression 5:8 … 5:20: [] delay(1000L)
+                    KtNameReferenceExpression 5:8 … 5:13: [] delay
+                      LeafPsiElement 5:8 … 5:13: [IDENTIFIER] delay
+                    KtValueArgumentList 5:13 … 5:20: [] (1000L)
+                      LeafPsiElement 5:13 … 5:14: [LPAR] (
+                      KtValueArgument 5:14 … 5:19: [] 1000L
+                        KtConstantExpression 5:14 … 5:19: [] 1000L
+                          LeafPsiElement 5:14 … 5:19: [INTEGER_LITERAL] 1000L
+                      LeafPsiElement 5:19 … 5:20: [RPAR] )
+                  PsiWhiteSpaceImpl 5:20 … 6:8: [WHITE_SPACE] 
+                  KtCallExpression 6:8 … 6:25: [] println("World!")
+                    KtNameReferenceExpression 6:8 … 6:15: [] println
+                      LeafPsiElement 6:8 … 6:15: [IDENTIFIER] println
+                    KtValueArgumentList 6:15 … 6:25: [] ("World!")
+                      LeafPsiElement 6:15 … 6:16: [LPAR] (
+                      KtValueArgument 6:16 … 6:24: [] "World!"
+                        KtStringTemplateExpression 6:16 … 6:24: [] "World!"
+                          LeafPsiElement 6:16 … 6:17: [OPEN_QUOTE] "
+                          KtLiteralStringTemplateEntry 6:17 … 6:23: [] World!
+                            LeafPsiElement 6:17 … 6:23: [REGULAR_STRING_PART] World!
+                          LeafPsiElement 6:23 … 6:24: [CLOSING_QUOTE] "
+                      LeafPsiElement 6:24 … 6:25: [RPAR] )
+                PsiWhiteSpaceImpl 6:25 … 7:4: [WHITE_SPACE] 
+                LeafPsiElement 7:4 … 7:5: [RBRACE] }
+      PsiWhiteSpaceImpl 7:5 … 8:4: [WHITE_SPACE] 
+      KtCallExpression 8:4 … 8:21: [] println("Hello,")
+        KtNameReferenceExpression 8:4 … 8:11: [] println
+          LeafPsiElement 8:4 … 8:11: [IDENTIFIER] println
+        KtValueArgumentList 8:11 … 8:21: [] ("Hello,")
+          LeafPsiElement 8:11 … 8:12: [LPAR] (
+          KtValueArgument 8:12 … 8:20: [] "Hello,"
+            KtStringTemplateExpression 8:12 … 8:20: [] "Hello,"
+              LeafPsiElement 8:12 … 8:13: [OPEN_QUOTE] "
+              KtLiteralStringTemplateEntry 8:13 … 8:19: [] Hello,
+                LeafPsiElement 8:13 … 8:19: [REGULAR_STRING_PART] Hello,
+              LeafPsiElement 8:19 … 8:20: [CLOSING_QUOTE] "
+          LeafPsiElement 8:20 … 8:21: [RPAR] )
+      PsiWhiteSpaceImpl 8:21 … 8:22: [WHITE_SPACE] 
+      PsiCommentImpl 8:22 … 8:63: [EOL_COMMENT] // main thread continues here immediately
+      PsiWhiteSpaceImpl 8:63 … 9:4: [WHITE_SPACE] 
+      KtCallExpression 9:4 … 11:5: [] runBlocking {     // but this  … econds to keep JVM alive    }
+        KtNameReferenceExpression 9:4 … 9:15: [] runBlocking
+          LeafPsiElement 9:4 … 9:15: [IDENTIFIER] runBlocking
+        PsiWhiteSpaceImpl 9:15 … 9:16: [WHITE_SPACE] 
+        KtLambdaArgument 9:16 … 11:5: [] {     // but this expression b … econds to keep JVM alive    }
+          KtLambdaExpression 9:16 … 11:5: [] {     // but this expression b … econds to keep JVM alive    }
+            KtFunctionLiteral 9:16 … 11:5: [] {     // but this expression b … econds to keep JVM alive    }
+              LeafPsiElement 9:16 … 9:17: [LBRACE] {
+              PsiWhiteSpaceImpl 9:17 … 9:22: [WHITE_SPACE] 
+              KtBlockExpression 9:22 … 10:75: [] // but this expression blocks  … or 2 seconds to keep JVM alive
+                PsiCommentImpl 9:22 … 9:67: [EOL_COMMENT] // but this expression blocks the main thread
+                PsiWhiteSpaceImpl 9:67 … 10:8: [WHITE_SPACE] 
+                KtCallExpression 10:8 … 10:20: [] delay(2000L)
+                  KtNameReferenceExpression 10:8 … 10:13: [] delay
+                    LeafPsiElement 10:8 … 10:13: [IDENTIFIER] delay
+                  KtValueArgumentList 10:13 … 10:20: [] (2000L)
+                    LeafPsiElement 10:13 … 10:14: [LPAR] (
+                    KtValueArgument 10:14 … 10:19: [] 2000L
+                      KtConstantExpression 10:14 … 10:19: [] 2000L
+                        LeafPsiElement 10:14 … 10:19: [INTEGER_LITERAL] 2000L
+                    LeafPsiElement 10:19 … 10:20: [RPAR] )
+                PsiWhiteSpaceImpl 10:20 … 10:22: [WHITE_SPACE] 
+                PsiCommentImpl 10:22 … 10:75: [EOL_COMMENT] // ... while we delay for 2 seconds to keep JVM alive
+              PsiWhiteSpaceImpl 10:75 … 11:4: [WHITE_SPACE] 
+              LeafPsiElement 11:4 … 11:5: [RBRACE] }
+      PsiWhiteSpaceImpl 11:5 … 12:0: [WHITE_SPACE] 
+      LeafPsiElement 12:0 … 12:1: [RBRACE] }
+  PsiWhiteSpaceImpl 12:1 … 14:0: [WHITE_SPACE] 
+  KtNamedFunction 14:0 … 21:1: [] fun main2() = runBlocking<Unit …  2 seconds to keep JVM alive}
+    LeafPsiElement 14:0 … 14:3: [fun] fun
+    PsiWhiteSpaceImpl 14:3 … 14:4: [WHITE_SPACE] 
+    LeafPsiElement 14:4 … 14:9: [IDENTIFIER] main2
+    KtParameterList 14:9 … 14:11: [] ()
+      LeafPsiElement 14:9 … 14:10: [LPAR] (
+      LeafPsiElement 14:10 … 14:11: [RPAR] )
+    PsiWhiteSpaceImpl 14:11 … 14:12: [WHITE_SPACE] 
+    LeafPsiElement 14:12 … 14:13: [EQ] =
+    PsiWhiteSpaceImpl 14:13 … 14:14: [WHITE_SPACE] 
+    KtCallExpression 14:14 … 21:1: [] runBlocking<Unit> { // start m …  2 seconds to keep JVM alive}
+      KtNameReferenceExpression 14:14 … 14:25: [] runBlocking
+        LeafPsiElement 14:14 … 14:25: [IDENTIFIER] runBlocking
+      KtTypeArgumentList 14:25 … 14:31: [] <Unit>
+        LeafPsiElement 14:25 … 14:26: [LT] <
+        KtTypeProjection 14:26 … 14:30: [] Unit
+          KtTypeReference 14:26 … 14:30: [] Unit
+            KtUserType 14:26 … 14:30: [] Unit
+              KtNameReferenceExpression 14:26 … 14:30: [] Unit
+                LeafPsiElement 14:26 … 14:30: [IDENTIFIER] Unit
+        LeafPsiElement 14:30 … 14:31: [GT] >
+      PsiWhiteSpaceImpl 14:31 … 14:32: [WHITE_SPACE] 
+      KtLambdaArgument 14:32 … 21:1: [] { // start main coroutine     …  2 seconds to keep JVM alive}
+        KtLambdaExpression 14:32 … 21:1: [] { // start main coroutine     …  2 seconds to keep JVM alive}
+          KtFunctionLiteral 14:32 … 21:1: [] { // start main coroutine     …  2 seconds to keep JVM alive}
+            LeafPsiElement 14:32 … 14:33: [LBRACE] {
+            PsiWhiteSpaceImpl 14:33 … 14:34: [WHITE_SPACE] 
+            KtBlockExpression 14:34 … 20:65: [] // start main coroutine    Gl … or 2 seconds to keep JVM alive
+              PsiCommentImpl 14:34 … 14:57: [EOL_COMMENT] // start main coroutine
+              PsiWhiteSpaceImpl 14:57 … 15:4: [WHITE_SPACE] 
+              KtDotQualifiedExpression 15:4 … 18:5: [] GlobalScope.launch { // launch …        println("World!")    }
+                KtNameReferenceExpression 15:4 … 15:15: [] GlobalScope
+                  LeafPsiElement 15:4 … 15:15: [IDENTIFIER] GlobalScope
+                LeafPsiElement 15:15 … 15:16: [DOT] .
+                KtCallExpression 15:16 … 18:5: [] launch { // launch new corouti …        println("World!")    }
+                  KtNameReferenceExpression 15:16 … 15:22: [] launch
+                    LeafPsiElement 15:16 … 15:22: [IDENTIFIER] launch
+                  PsiWhiteSpaceImpl 15:22 … 15:23: [WHITE_SPACE] 
+                  KtLambdaArgument 15:23 … 18:5: [] { // launch new coroutine in b …        println("World!")    }
+                    KtLambdaExpression 15:23 … 18:5: [] { // launch new coroutine in b …        println("World!")    }
+                      KtFunctionLiteral 15:23 … 18:5: [] { // launch new coroutine in b …        println("World!")    }
+                        LeafPsiElement 15:23 … 15:24: [LBRACE] {
+                        PsiWhiteSpaceImpl 15:24 … 15:25: [WHITE_SPACE] 
+                        KtBlockExpression 15:25 … 17:25: [] // launch new coroutine in bac … 00L)        println("World!")
+                          PsiCommentImpl 15:25 … 15:75: [EOL_COMMENT] // launch new coroutine in background and continue
+                          PsiWhiteSpaceImpl 15:75 … 16:8: [WHITE_SPACE] 
+                          KtCallExpression 16:8 … 16:20: [] delay(1000L)
+                            KtNameReferenceExpression 16:8 … 16:13: [] delay
+                              LeafPsiElement 16:8 … 16:13: [IDENTIFIER] delay
+                            KtValueArgumentList 16:13 … 16:20: [] (1000L)
+                              LeafPsiElement 16:13 … 16:14: [LPAR] (
+                              KtValueArgument 16:14 … 16:19: [] 1000L
+                                KtConstantExpression 16:14 … 16:19: [] 1000L
+                                  LeafPsiElement 16:14 … 16:19: [INTEGER_LITERAL] 1000L
+                              LeafPsiElement 16:19 … 16:20: [RPAR] )
+                          PsiWhiteSpaceImpl 16:20 … 17:8: [WHITE_SPACE] 
+                          KtCallExpression 17:8 … 17:25: [] println("World!")
+                            KtNameReferenceExpression 17:8 … 17:15: [] println
+                              LeafPsiElement 17:8 … 17:15: [IDENTIFIER] println
+                            KtValueArgumentList 17:15 … 17:25: [] ("World!")
+                              LeafPsiElement 17:15 … 17:16: [LPAR] (
+                              KtValueArgument 17:16 … 17:24: [] "World!"
+                                KtStringTemplateExpression 17:16 … 17:24: [] "World!"
+                                  LeafPsiElement 17:16 … 17:17: [OPEN_QUOTE] "
+                                  KtLiteralStringTemplateEntry 17:17 … 17:23: [] World!
+                                    LeafPsiElement 17:17 … 17:23: [REGULAR_STRING_PART] World!
+                                  LeafPsiElement 17:23 … 17:24: [CLOSING_QUOTE] "
+                              LeafPsiElement 17:24 … 17:25: [RPAR] )
+                        PsiWhiteSpaceImpl 17:25 … 18:4: [WHITE_SPACE] 
+                        LeafPsiElement 18:4 … 18:5: [RBRACE] }
+              PsiWhiteSpaceImpl 18:5 … 19:4: [WHITE_SPACE] 
+              KtCallExpression 19:4 … 19:21: [] println("Hello,")
+                KtNameReferenceExpression 19:4 … 19:11: [] println
+                  LeafPsiElement 19:4 … 19:11: [IDENTIFIER] println
+                KtValueArgumentList 19:11 … 19:21: [] ("Hello,")
+                  LeafPsiElement 19:11 … 19:12: [LPAR] (
+                  KtValueArgument 19:12 … 19:20: [] "Hello,"
+                    KtStringTemplateExpression 19:12 … 19:20: [] "Hello,"
+                      LeafPsiElement 19:12 … 19:13: [OPEN_QUOTE] "
+                      KtLiteralStringTemplateEntry 19:13 … 19:19: [] Hello,
+                        LeafPsiElement 19:13 … 19:19: [REGULAR_STRING_PART] Hello,
+                      LeafPsiElement 19:19 … 19:20: [CLOSING_QUOTE] "
+                  LeafPsiElement 19:20 … 19:21: [RPAR] )
+              PsiWhiteSpaceImpl 19:21 … 19:22: [WHITE_SPACE] 
+              PsiCommentImpl 19:22 … 19:66: [EOL_COMMENT] // main coroutine continues here immediately
+              PsiWhiteSpaceImpl 19:66 … 20:4: [WHITE_SPACE] 
+              KtCallExpression 20:4 … 20:16: [] delay(2000L)
+                KtNameReferenceExpression 20:4 … 20:9: [] delay
+                  LeafPsiElement 20:4 … 20:9: [IDENTIFIER] delay
+                KtValueArgumentList 20:9 … 20:16: [] (2000L)
+                  LeafPsiElement 20:9 … 20:10: [LPAR] (
+                  KtValueArgument 20:10 … 20:15: [] 2000L
+                    KtConstantExpression 20:10 … 20:15: [] 2000L
+                      LeafPsiElement 20:10 … 20:15: [INTEGER_LITERAL] 2000L
+                  LeafPsiElement 20:15 … 20:16: [RPAR] )
+              PsiWhiteSpaceImpl 20:16 … 20:22: [WHITE_SPACE] 
+              PsiCommentImpl 20:22 … 20:65: [EOL_COMMENT] // delaying for 2 seconds to keep JVM alive
+            PsiWhiteSpaceImpl 20:65 … 21:0: [WHITE_SPACE] 
+            LeafPsiElement 21:0 … 21:1: [RBRACE] }
+  PsiWhiteSpaceImpl 21:1 … 23:0: [WHITE_SPACE] 
+  KtNamedFunction 23:0 … 26:1: [] fun main3() = runBlocking {   … ld() }    println("Hello,")}
+    LeafPsiElement 23:0 … 23:3: [fun] fun
+    PsiWhiteSpaceImpl 23:3 … 23:4: [WHITE_SPACE] 
+    LeafPsiElement 23:4 … 23:9: [IDENTIFIER] main3
+    KtParameterList 23:9 … 23:11: [] ()
+      LeafPsiElement 23:9 … 23:10: [LPAR] (
+      LeafPsiElement 23:10 … 23:11: [RPAR] )
+    PsiWhiteSpaceImpl 23:11 … 23:12: [WHITE_SPACE] 
+    LeafPsiElement 23:12 … 23:13: [EQ] =
+    PsiWhiteSpaceImpl 23:13 … 23:14: [WHITE_SPACE] 
+    KtCallExpression 23:14 … 26:1: [] runBlocking {    launch { doWorld() }    println("Hello,")}
+      KtNameReferenceExpression 23:14 … 23:25: [] runBlocking
+        LeafPsiElement 23:14 … 23:25: [IDENTIFIER] runBlocking
+      PsiWhiteSpaceImpl 23:25 … 23:26: [WHITE_SPACE] 
+      KtLambdaArgument 23:26 … 26:1: [] {    launch { doWorld() }    println("Hello,")}
+        KtLambdaExpression 23:26 … 26:1: [] {    launch { doWorld() }    println("Hello,")}
+          KtFunctionLiteral 23:26 … 26:1: [] {    launch { doWorld() }    println("Hello,")}
+            LeafPsiElement 23:26 … 23:27: [LBRACE] {
+            PsiWhiteSpaceImpl 23:27 … 24:4: [WHITE_SPACE] 
+            KtBlockExpression 24:4 … 25:21: [] launch { doWorld() }    println("Hello,")
+              KtCallExpression 24:4 … 24:24: [] launch { doWorld() }
+                KtNameReferenceExpression 24:4 … 24:10: [] launch
+                  LeafPsiElement 24:4 … 24:10: [IDENTIFIER] launch
+                PsiWhiteSpaceImpl 24:10 … 24:11: [WHITE_SPACE] 
+                KtLambdaArgument 24:11 … 24:24: [] { doWorld() }
+                  KtLambdaExpression 24:11 … 24:24: [] { doWorld() }
+                    KtFunctionLiteral 24:11 … 24:24: [] { doWorld() }
+                      LeafPsiElement 24:11 … 24:12: [LBRACE] {
+                      PsiWhiteSpaceImpl 24:12 … 24:13: [WHITE_SPACE] 
+                      KtBlockExpression 24:13 … 24:22: [] doWorld()
+                        KtCallExpression 24:13 … 24:22: [] doWorld()
+                          KtNameReferenceExpression 24:13 … 24:20: [] doWorld
+                            LeafPsiElement 24:13 … 24:20: [IDENTIFIER] doWorld
+                          KtValueArgumentList 24:20 … 24:22: [] ()
+                            LeafPsiElement 24:20 … 24:21: [LPAR] (
+                            LeafPsiElement 24:21 … 24:22: [RPAR] )
+                      PsiWhiteSpaceImpl 24:22 … 24:23: [WHITE_SPACE] 
+                      LeafPsiElement 24:23 … 24:24: [RBRACE] }
+              PsiWhiteSpaceImpl 24:24 … 25:4: [WHITE_SPACE] 
+              KtCallExpression 25:4 … 25:21: [] println("Hello,")
+                KtNameReferenceExpression 25:4 … 25:11: [] println
+                  LeafPsiElement 25:4 … 25:11: [IDENTIFIER] println
+                KtValueArgumentList 25:11 … 25:21: [] ("Hello,")
+                  LeafPsiElement 25:11 … 25:12: [LPAR] (
+                  KtValueArgument 25:12 … 25:20: [] "Hello,"
+                    KtStringTemplateExpression 25:12 … 25:20: [] "Hello,"
+                      LeafPsiElement 25:12 … 25:13: [OPEN_QUOTE] "
+                      KtLiteralStringTemplateEntry 25:13 … 25:19: [] Hello,
+                        LeafPsiElement 25:13 … 25:19: [REGULAR_STRING_PART] Hello,
+                      LeafPsiElement 25:19 … 25:20: [CLOSING_QUOTE] "
+                  LeafPsiElement 25:20 … 25:21: [RPAR] )
+            PsiWhiteSpaceImpl 25:21 … 26:0: [WHITE_SPACE] 
+            LeafPsiElement 26:0 … 26:1: [RBRACE] }
+  PsiWhiteSpaceImpl 26:1 … 28:0: [WHITE_SPACE] 
+  KtNamedFunction 28:0 … 32:1: [] // this is your first suspendi … 1000L)    println("World!")}
+    PsiCommentImpl 28:0 … 28:41: [EOL_COMMENT] // this is your first suspending function
+    PsiWhiteSpaceImpl 28:41 … 29:0: [WHITE_SPACE] 
+    KtDeclarationModifierList 29:0 … 29:7: [] suspend
+      LeafPsiElement 29:0 … 29:7: [suspend] suspend
+    PsiWhiteSpaceImpl 29:7 … 29:8: [WHITE_SPACE] 
+    LeafPsiElement 29:8 … 29:11: [fun] fun
+    PsiWhiteSpaceImpl 29:11 … 29:12: [WHITE_SPACE] 
+    LeafPsiElement 29:12 … 29:19: [IDENTIFIER] doWorld
+    KtParameterList 29:19 … 29:21: [] ()
+      LeafPsiElement 29:19 … 29:20: [LPAR] (
+      LeafPsiElement 29:20 … 29:21: [RPAR] )
+    PsiWhiteSpaceImpl 29:21 … 29:22: [WHITE_SPACE] 
+    KtBlockExpression 29:22 … 32:1: [] {    delay(1000L)    println("World!")}
+      LeafPsiElement 29:22 … 29:23: [LBRACE] {
+      PsiWhiteSpaceImpl 29:23 … 30:4: [WHITE_SPACE] 
+      KtCallExpression 30:4 … 30:16: [] delay(1000L)
+        KtNameReferenceExpression 30:4 … 30:9: [] delay
+          LeafPsiElement 30:4 … 30:9: [IDENTIFIER] delay
+        KtValueArgumentList 30:9 … 30:16: [] (1000L)
+          LeafPsiElement 30:9 … 30:10: [LPAR] (
+          KtValueArgument 30:10 … 30:15: [] 1000L
+            KtConstantExpression 30:10 … 30:15: [] 1000L
+              LeafPsiElement 30:10 … 30:15: [INTEGER_LITERAL] 1000L
+          LeafPsiElement 30:15 … 30:16: [RPAR] )
+      PsiWhiteSpaceImpl 30:16 … 31:4: [WHITE_SPACE] 
+      KtCallExpression 31:4 … 31:21: [] println("World!")
+        KtNameReferenceExpression 31:4 … 31:11: [] println
+          LeafPsiElement 31:4 … 31:11: [IDENTIFIER] println
+        KtValueArgumentList 31:11 … 31:21: [] ("World!")
+          LeafPsiElement 31:11 … 31:12: [LPAR] (
+          KtValueArgument 31:12 … 31:20: [] "World!"
+            KtStringTemplateExpression 31:12 … 31:20: [] "World!"
+              LeafPsiElement 31:12 … 31:13: [OPEN_QUOTE] "
+              KtLiteralStringTemplateEntry 31:13 … 31:19: [] World!
+                LeafPsiElement 31:13 … 31:19: [REGULAR_STRING_PART] World!
+              LeafPsiElement 31:19 … 31:20: [CLOSING_QUOTE] "
+          LeafPsiElement 31:20 … 31:21: [RPAR] )
+      PsiWhiteSpaceImpl 31:21 … 32:0: [WHITE_SPACE] 
+      LeafPsiElement 32:0 … 32:1: [RBRACE] }
+  PsiWhiteSpaceImpl 32:1 … 34:0: [WHITE_SPACE] 
+  KtNamedFunction 34:0 … 39:1: [] fun String?.isNullOrEmpty(): B … rn this == null || isEmpty()}
+    LeafPsiElement 34:0 … 34:3: [fun] fun
+    PsiWhiteSpaceImpl 34:3 … 34:4: [WHITE_SPACE] 
+    KtTypeReference 34:4 … 34:11: [] String?
+      KtNullableType 34:4 … 34:11: [] String?
+        KtUserType 34:4 … 34:10: [] String
+          KtNameReferenceExpression 34:4 … 34:10: [] String
+            LeafPsiElement 34:4 … 34:10: [IDENTIFIER] String
+        LeafPsiElement 34:10 … 34:11: [QUEST] ?
+    LeafPsiElement 34:11 … 34:12: [DOT] .
+    LeafPsiElement 34:12 … 34:25: [IDENTIFIER] isNullOrEmpty
+    KtParameterList 34:25 … 34:27: [] ()
+      LeafPsiElement 34:25 … 34:26: [LPAR] (
+      LeafPsiElement 34:26 … 34:27: [RPAR] )
+    LeafPsiElement 34:27 … 34:28: [COLON] :
+    PsiWhiteSpaceImpl 34:28 … 34:29: [WHITE_SPACE] 
+    KtTypeReference 34:29 … 34:36: [] Boolean
+      KtUserType 34:29 … 34:36: [] Boolean
+        KtNameReferenceExpression 34:29 … 34:36: [] Boolean
+          LeafPsiElement 34:29 … 34:36: [IDENTIFIER] Boolean
+    PsiWhiteSpaceImpl 34:36 … 34:37: [WHITE_SPACE] 
+    KtBlockExpression 34:37 … 39:1: [] {    contract {        retur … rn this == null || isEmpty()}
+      LeafPsiElement 34:37 … 34:38: [LBRACE] {
+      PsiWhiteSpaceImpl 34:38 … 35:4: [WHITE_SPACE] 
+      KtCallExpression 35:4 … 37:5: [] contract {        returns(fal … s@isNullOrEmpty != null)    }
+        KtNameReferenceExpression 35:4 … 35:12: [] contract
+          LeafPsiElement 35:4 … 35:12: [IDENTIFIER] contract
+        PsiWhiteSpaceImpl 35:12 … 35:13: [WHITE_SPACE] 
+        KtLambdaArgument 35:13 … 37:5: [] {        returns(false) impli … s@isNullOrEmpty != null)    }
+          KtLambdaExpression 35:13 … 37:5: [] {        returns(false) impli … s@isNullOrEmpty != null)    }
+            KtFunctionLiteral 35:13 … 37:5: [] {        returns(false) impli … s@isNullOrEmpty != null)    }
+              LeafPsiElement 35:13 … 35:14: [LBRACE] {
+              PsiWhiteSpaceImpl 35:14 … 36:8: [WHITE_SPACE] 
+              KtBlockExpression 36:8 … 36:59: [] returns(false) implies (this@isNullOrEmpty != null)
+                KtBinaryExpression 36:8 … 36:59: [] returns(false) implies (this@isNullOrEmpty != null)
+                  KtCallExpression 36:8 … 36:22: [] returns(false)
+                    KtNameReferenceExpression 36:8 … 36:15: [] returns
+                      LeafPsiElement 36:8 … 36:15: [IDENTIFIER] returns
+                    KtValueArgumentList 36:15 … 36:22: [] (false)
+                      LeafPsiElement 36:15 … 36:16: [LPAR] (
+                      KtValueArgument 36:16 … 36:21: [] false
+                        KtConstantExpression 36:16 … 36:21: [] false
+                          LeafPsiElement 36:16 … 36:21: [false] false
+                      LeafPsiElement 36:21 … 36:22: [RPAR] )
+                  PsiWhiteSpaceImpl 36:22 … 36:23: [WHITE_SPACE] 
+                  KtOperationReferenceExpression 36:23 … 36:30: [] implies
+                    LeafPsiElement 36:23 … 36:30: [IDENTIFIER] implies
+                  PsiWhiteSpaceImpl 36:30 … 36:31: [WHITE_SPACE] 
+                  KtParenthesizedExpression 36:31 … 36:59: [] (this@isNullOrEmpty != null)
+                    LeafPsiElement 36:31 … 36:32: [LPAR] (
+                    KtBinaryExpression 36:32 … 36:58: [] this@isNullOrEmpty != null
+                      KtThisExpression 36:32 … 36:50: [] this@isNullOrEmpty
+                        KtNameReferenceExpression 36:32 … 36:36: [] this
+                          LeafPsiElement 36:32 … 36:36: [this] this
+                        KtContainerNode 36:36 … 36:50: [] @isNullOrEmpty
+                          KtLabelReferenceExpression 36:36 … 36:50: [] @isNullOrEmpty
+                            LeafPsiElement 36:36 … 36:37: [AT] @
+                            LeafPsiElement 36:37 … 36:50: [IDENTIFIER] isNullOrEmpty
+                      PsiWhiteSpaceImpl 36:50 … 36:51: [WHITE_SPACE] 
+                      KtOperationReferenceExpression 36:51 … 36:53: [] !=
+                        LeafPsiElement 36:51 … 36:53: [EXCLEQ] !=
+                      PsiWhiteSpaceImpl 36:53 … 36:54: [WHITE_SPACE] 
+                      KtConstantExpression 36:54 … 36:58: [] null
+                        LeafPsiElement 36:54 … 36:58: [null] null
+                    LeafPsiElement 36:58 … 36:59: [RPAR] )
+              PsiWhiteSpaceImpl 36:59 … 37:4: [WHITE_SPACE] 
+              LeafPsiElement 37:4 … 37:5: [RBRACE] }
+      PsiWhiteSpaceImpl 37:5 … 38:4: [WHITE_SPACE] 
+      KtReturnExpression 38:4 … 38:36: [] return this == null || isEmpty()
+        LeafPsiElement 38:4 … 38:10: [return] return
+        PsiWhiteSpaceImpl 38:10 … 38:11: [WHITE_SPACE] 
+        KtBinaryExpression 38:11 … 38:36: [] this == null || isEmpty()
+          KtBinaryExpression 38:11 … 38:23: [] this == null
+            KtThisExpression 38:11 … 38:15: [] this
+              KtNameReferenceExpression 38:11 … 38:15: [] this
+                LeafPsiElement 38:11 … 38:15: [this] this
+            PsiWhiteSpaceImpl 38:15 … 38:16: [WHITE_SPACE] 
+            KtOperationReferenceExpression 38:16 … 38:18: [] ==
+              LeafPsiElement 38:16 … 38:18: [EQEQ] ==
+            PsiWhiteSpaceImpl 38:18 … 38:19: [WHITE_SPACE] 
+            KtConstantExpression 38:19 … 38:23: [] null
+              LeafPsiElement 38:19 … 38:23: [null] null
+          PsiWhiteSpaceImpl 38:23 … 38:24: [WHITE_SPACE] 
+          KtOperationReferenceExpression 38:24 … 38:26: [] ||
+            LeafPsiElement 38:24 … 38:26: [OROR] ||
+          PsiWhiteSpaceImpl 38:26 … 38:27: [WHITE_SPACE] 
+          KtCallExpression 38:27 … 38:36: [] isEmpty()
+            KtNameReferenceExpression 38:27 … 38:34: [] isEmpty
+              LeafPsiElement 38:27 … 38:34: [IDENTIFIER] isEmpty
+            KtValueArgumentList 38:34 … 38:36: [] ()
+              LeafPsiElement 38:34 … 38:35: [LPAR] (
+              LeafPsiElement 38:35 … 38:36: [RPAR] )
+      PsiWhiteSpaceImpl 38:36 … 39:0: [WHITE_SPACE] 
+      LeafPsiElement 39:0 … 39:1: [RBRACE] }
+  PsiWhiteSpaceImpl 39:1 … 41:0: [WHITE_SPACE] 
+  KtNamedFunction 41:0 … 45:9: [] fun Request.getBody() =       … ion(response.status)        }
+    LeafPsiElement 41:0 … 41:3: [fun] fun
+    PsiWhiteSpaceImpl 41:3 … 41:4: [WHITE_SPACE] 
+    KtTypeReference 41:4 … 41:11: [] Request
+      KtUserType 41:4 … 41:11: [] Request
+        KtNameReferenceExpression 41:4 … 41:11: [] Request
+          LeafPsiElement 41:4 … 41:11: [IDENTIFIER] Request
+    LeafPsiElement 41:11 … 41:12: [DOT] .
+    LeafPsiElement 41:12 … 41:19: [IDENTIFIER] getBody
+    KtParameterList 41:19 … 41:21: [] ()
+      LeafPsiElement 41:19 … 41:20: [LPAR] (
+      LeafPsiElement 41:20 … 41:21: [RPAR] )
+    PsiWhiteSpaceImpl 41:21 … 41:22: [WHITE_SPACE] 
+    LeafPsiElement 41:22 … 41:23: [EQ] =
+    PsiWhiteSpaceImpl 41:23 … 42:8: [WHITE_SPACE] 
+    KtWhenExpression 42:8 … 45:9: [] when (val response = executeRe … ion(response.status)        }
+      LeafPsiElement 42:8 … 42:12: [when] when
+      PsiWhiteSpaceImpl 42:12 … 42:13: [WHITE_SPACE] 
+      LeafPsiElement 42:13 … 42:14: [LPAR] (
+      KtProperty 42:14 … 42:45: [] val response = executeRequest()
+        LeafPsiElement 42:14 … 42:17: [val] val
+        PsiWhiteSpaceImpl 42:17 … 42:18: [WHITE_SPACE] 
+        LeafPsiElement 42:18 … 42:26: [IDENTIFIER] response
+        PsiWhiteSpaceImpl 42:26 … 42:27: [WHITE_SPACE] 
+        LeafPsiElement 42:27 … 42:28: [EQ] =
+        PsiWhiteSpaceImpl 42:28 … 42:29: [WHITE_SPACE] 
+        KtCallExpression 42:29 … 42:45: [] executeRequest()
+          KtNameReferenceExpression 42:29 … 42:43: [] executeRequest
+            LeafPsiElement 42:29 … 42:43: [IDENTIFIER] executeRequest
+          KtValueArgumentList 42:43 … 42:45: [] ()
+            LeafPsiElement 42:43 … 42:44: [LPAR] (
+            LeafPsiElement 42:44 … 42:45: [RPAR] )
+      LeafPsiElement 42:45 … 42:46: [RPAR] )
+      PsiWhiteSpaceImpl 42:46 … 42:47: [WHITE_SPACE] 
+      LeafPsiElement 42:47 … 42:48: [LBRACE] {
+      PsiWhiteSpaceImpl 42:48 … 43:12: [WHITE_SPACE] 
+      KtWhenEntry 43:12 … 43:39: [] is Success -> response.body
+        KtWhenConditionIsPattern 43:12 … 43:22: [] is Success
+          LeafPsiElement 43:12 … 43:14: [is] is
+          PsiWhiteSpaceImpl 43:14 … 43:15: [WHITE_SPACE] 
+          KtTypeReference 43:15 … 43:22: [] Success
+            KtUserType 43:15 … 43:22: [] Success
+              KtNameReferenceExpression 43:15 … 43:22: [] Success
+                LeafPsiElement 43:15 … 43:22: [IDENTIFIER] Success
+        PsiWhiteSpaceImpl 43:22 … 43:23: [WHITE_SPACE] 
+        LeafPsiElement 43:23 … 43:25: [ARROW] ->
+        PsiWhiteSpaceImpl 43:25 … 43:26: [WHITE_SPACE] 
+        KtDotQualifiedExpression 43:26 … 43:39: [] response.body
+          KtNameReferenceExpression 43:26 … 43:34: [] response
+            LeafPsiElement 43:26 … 43:34: [IDENTIFIER] response
+          LeafPsiElement 43:34 … 43:35: [DOT] .
+          KtNameReferenceExpression 43:35 … 43:39: [] body
+            LeafPsiElement 43:35 … 43:39: [IDENTIFIER] body
+      PsiWhiteSpaceImpl 43:39 … 44:12: [WHITE_SPACE] 
+      KtWhenEntry 44:12 … 44:64: [] is HttpError -> throw HttpException(response.status)
+        KtWhenConditionIsPattern 44:12 … 44:24: [] is HttpError
+          LeafPsiElement 44:12 … 44:14: [is] is
+          PsiWhiteSpaceImpl 44:14 … 44:15: [WHITE_SPACE] 
+          KtTypeReference 44:15 … 44:24: [] HttpError
+            KtUserType 44:15 … 44:24: [] HttpError
+              KtNameReferenceExpression 44:15 … 44:24: [] HttpError
+                LeafPsiElement 44:15 … 44:24: [IDENTIFIER] HttpError
+        PsiWhiteSpaceImpl 44:24 … 44:25: [WHITE_SPACE] 
+        LeafPsiElement 44:25 … 44:27: [ARROW] ->
+        PsiWhiteSpaceImpl 44:27 … 44:28: [WHITE_SPACE] 
+        KtThrowExpression 44:28 … 44:64: [] throw HttpException(response.status)
+          LeafPsiElement 44:28 … 44:33: [throw] throw
+          PsiWhiteSpaceImpl 44:33 … 44:34: [WHITE_SPACE] 
+          KtCallExpression 44:34 … 44:64: [] HttpException(response.status)
+            KtNameReferenceExpression 44:34 … 44:47: [] HttpException
+              LeafPsiElement 44:34 … 44:47: [IDENTIFIER] HttpException
+            KtValueArgumentList 44:47 … 44:64: [] (response.status)
+              LeafPsiElement 44:47 … 44:48: [LPAR] (
+              KtValueArgument 44:48 … 44:63: [] response.status
+                KtDotQualifiedExpression 44:48 … 44:63: [] response.status
+                  KtNameReferenceExpression 44:48 … 44:56: [] response
+                    LeafPsiElement 44:48 … 44:56: [IDENTIFIER] response
+                  LeafPsiElement 44:56 … 44:57: [DOT] .
+                  KtNameReferenceExpression 44:57 … 44:63: [] status
+                    LeafPsiElement 44:57 … 44:63: [IDENTIFIER] status
+              LeafPsiElement 44:63 … 44:64: [RPAR] )
+      PsiWhiteSpaceImpl 44:64 … 45:8: [WHITE_SPACE] 
+      LeafPsiElement 45:8 … 45:9: [RBRACE] }
+  PsiWhiteSpaceImpl 45:9 … 47:0: [WHITE_SPACE] 
+  KtClass 47:0 … 57:1: [] interface Foo1 {    companion … lo, world!")        }    }}
+    LeafPsiElement 47:0 … 47:9: [interface] interface
+    PsiWhiteSpaceImpl 47:9 … 47:10: [WHITE_SPACE] 
+    LeafPsiElement 47:10 … 47:14: [IDENTIFIER] Foo1
+    PsiWhiteSpaceImpl 47:14 … 47:15: [WHITE_SPACE] 
+    KtClassBody 47:15 … 57:1: [] {    companion object {      … lo, world!")        }    }}
+      LeafPsiElement 47:15 … 47:16: [LBRACE] {
+      PsiWhiteSpaceImpl 47:16 … 48:4: [WHITE_SPACE] 
+      KtObjectDeclaration 48:4 … 56:5: [] companion object {        @Jv … ello, world!")        }    }
+        KtDeclarationModifierList 48:4 … 48:13: [] companion
+          LeafPsiElement 48:4 … 48:13: [companion] companion
+        PsiWhiteSpaceImpl 48:13 … 48:14: [WHITE_SPACE] 
+        LeafPsiElement 48:14 … 48:20: [object] object
+        PsiWhiteSpaceImpl 48:20 … 48:21: [WHITE_SPACE] 
+        KtClassBody 48:21 … 56:5: [] {        @JvmField        va … ello, world!")        }    }
+          LeafPsiElement 48:21 … 48:22: [LBRACE] {
+          PsiWhiteSpaceImpl 48:22 … 49:8: [WHITE_SPACE] 
+          KtProperty 49:8 … 50:28: [] @JvmField        val answer: Int = 42
+            KtDeclarationModifierList 49:8 … 49:17: [] @JvmField
+              KtAnnotationEntry 49:8 … 49:17: [] @JvmField
+                LeafPsiElement 49:8 … 49:9: [AT] @
+                KtConstructorCalleeExpression 49:9 … 49:17: [] JvmField
+                  KtTypeReference 49:9 … 49:17: [] JvmField
+                    KtUserType 49:9 … 49:17: [] JvmField
+                      KtNameReferenceExpression 49:9 … 49:17: [] JvmField
+                        LeafPsiElement 49:9 … 49:17: [IDENTIFIER] JvmField
+            PsiWhiteSpaceImpl 49:17 … 50:8: [WHITE_SPACE] 
+            LeafPsiElement 50:8 … 50:11: [val] val
+            PsiWhiteSpaceImpl 50:11 … 50:12: [WHITE_SPACE] 
+            LeafPsiElement 50:12 … 50:18: [IDENTIFIER] answer
+            LeafPsiElement 50:18 … 50:19: [COLON] :
+            PsiWhiteSpaceImpl 50:19 … 50:20: [WHITE_SPACE] 
+            KtTypeReference 50:20 … 50:23: [] Int
+              KtUserType 50:20 … 50:23: [] Int
+                KtNameReferenceExpression 50:20 … 50:23: [] Int
+                  LeafPsiElement 50:20 … 50:23: [IDENTIFIER] Int
+            PsiWhiteSpaceImpl 50:23 … 50:24: [WHITE_SPACE] 
+            LeafPsiElement 50:24 … 50:25: [EQ] =
+            PsiWhiteSpaceImpl 50:25 … 50:26: [WHITE_SPACE] 
+            KtConstantExpression 50:26 … 50:28: [] 42
+              LeafPsiElement 50:26 … 50:28: [INTEGER_LITERAL] 42
+          PsiWhiteSpaceImpl 50:28 … 52:8: [WHITE_SPACE] 
+          KtNamedFunction 52:8 … 55:9: [] @JvmStatic        fun sayHell … tln("Hello, world!")        }
+            KtDeclarationModifierList 52:8 … 52:18: [] @JvmStatic
+              KtAnnotationEntry 52:8 … 52:18: [] @JvmStatic
+                LeafPsiElement 52:8 … 52:9: [AT] @
+                KtConstructorCalleeExpression 52:9 … 52:18: [] JvmStatic
+                  KtTypeReference 52:9 … 52:18: [] JvmStatic
+                    KtUserType 52:9 … 52:18: [] JvmStatic
+                      KtNameReferenceExpression 52:9 … 52:18: [] JvmStatic
+                        LeafPsiElement 52:9 … 52:18: [IDENTIFIER] JvmStatic
+            PsiWhiteSpaceImpl 52:18 … 53:8: [WHITE_SPACE] 
+            LeafPsiElement 53:8 … 53:11: [fun] fun
+            PsiWhiteSpaceImpl 53:11 … 53:12: [WHITE_SPACE] 
+            LeafPsiElement 53:12 … 53:20: [IDENTIFIER] sayHello
+            KtParameterList 53:20 … 53:22: [] ()
+              LeafPsiElement 53:20 … 53:21: [LPAR] (
+              LeafPsiElement 53:21 … 53:22: [RPAR] )
+            PsiWhiteSpaceImpl 53:22 … 53:23: [WHITE_SPACE] 
+            KtBlockExpression 53:23 … 55:9: [] {            println("Hello, world!")        }
+              LeafPsiElement 53:23 … 53:24: [LBRACE] {
+              PsiWhiteSpaceImpl 53:24 … 54:12: [WHITE_SPACE] 
+              KtCallExpression 54:12 … 54:36: [] println("Hello, world!")
+                KtNameReferenceExpression 54:12 … 54:19: [] println
+                  LeafPsiElement 54:12 … 54:19: [IDENTIFIER] println
+                KtValueArgumentList 54:19 … 54:36: [] ("Hello, world!")
+                  LeafPsiElement 54:19 … 54:20: [LPAR] (
+                  KtValueArgument 54:20 … 54:35: [] "Hello, world!"
+                    KtStringTemplateExpression 54:20 … 54:35: [] "Hello, world!"
+                      LeafPsiElement 54:20 … 54:21: [OPEN_QUOTE] "
+                      KtLiteralStringTemplateEntry 54:21 … 54:34: [] Hello, world!
+                        LeafPsiElement 54:21 … 54:34: [REGULAR_STRING_PART] Hello, world!
+                      LeafPsiElement 54:34 … 54:35: [CLOSING_QUOTE] "
+                  LeafPsiElement 54:35 … 54:36: [RPAR] )
+              PsiWhiteSpaceImpl 54:36 … 55:8: [WHITE_SPACE] 
+              LeafPsiElement 55:8 … 55:9: [RBRACE] }
+          PsiWhiteSpaceImpl 55:9 … 56:4: [WHITE_SPACE] 
+          LeafPsiElement 56:4 … 56:5: [RBRACE] }
+      PsiWhiteSpaceImpl 56:5 … 57:0: [WHITE_SPACE] 
+      LeafPsiElement 57:0 … 57:1: [RBRACE] }
+  PsiWhiteSpaceImpl 57:1 … 59:0: [WHITE_SPACE] 
+  KtClass 59:0 … 68:1: [] annotation class Foo2 {    en …      val bar: Int = 42    }}
+    KtDeclarationModifierList 59:0 … 59:10: [] annotation
+      LeafPsiElement 59:0 … 59:10: [annotation] annotation
+    PsiWhiteSpaceImpl 59:10 … 59:11: [WHITE_SPACE] 
+    LeafPsiElement 59:11 … 59:16: [class] class
+    PsiWhiteSpaceImpl 59:16 … 59:17: [WHITE_SPACE] 
+    LeafPsiElement 59:17 … 59:21: [IDENTIFIER] Foo2
+    PsiWhiteSpaceImpl 59:21 … 59:22: [WHITE_SPACE] 
+    KtClassBody 59:22 … 68:1: [] {    enum class Direction { U …      val bar: Int = 42    }}
+      LeafPsiElement 59:22 … 59:23: [LBRACE] {
+      PsiWhiteSpaceImpl 59:23 … 60:4: [WHITE_SPACE] 
+      KtClass 60:4 … 60:50: [] enum class Direction { UP, DOWN, LEFT, RIGHT }
+        KtDeclarationModifierList 60:4 … 60:8: [] enum
+          LeafPsiElement 60:4 … 60:8: [enum] enum
+        PsiWhiteSpaceImpl 60:8 … 60:9: [WHITE_SPACE] 
+        LeafPsiElement 60:9 … 60:14: [class] class
+        PsiWhiteSpaceImpl 60:14 … 60:15: [WHITE_SPACE] 
+        LeafPsiElement 60:15 … 60:24: [IDENTIFIER] Direction
+        PsiWhiteSpaceImpl 60:24 … 60:25: [WHITE_SPACE] 
+        KtClassBody 60:25 … 60:50: [] { UP, DOWN, LEFT, RIGHT }
+          LeafPsiElement 60:25 … 60:26: [LBRACE] {
+          PsiWhiteSpaceImpl 60:26 … 60:27: [WHITE_SPACE] 
+          KtEnumEntry 60:27 … 60:30: [] UP,
+            LeafPsiElement 60:27 … 60:29: [IDENTIFIER] UP
+            LeafPsiElement 60:29 … 60:30: [COMMA] ,
+          PsiWhiteSpaceImpl 60:30 … 60:31: [WHITE_SPACE] 
+          KtEnumEntry 60:31 … 60:36: [] DOWN,
+            LeafPsiElement 60:31 … 60:35: [IDENTIFIER] DOWN
+            LeafPsiElement 60:35 … 60:36: [COMMA] ,
+          PsiWhiteSpaceImpl 60:36 … 60:37: [WHITE_SPACE] 
+          KtEnumEntry 60:37 … 60:42: [] LEFT,
+            LeafPsiElement 60:37 … 60:41: [IDENTIFIER] LEFT
+            LeafPsiElement 60:41 … 60:42: [COMMA] ,
+          PsiWhiteSpaceImpl 60:42 … 60:43: [WHITE_SPACE] 
+          KtEnumEntry 60:43 … 60:48: [] RIGHT
+            LeafPsiElement 60:43 … 60:48: [IDENTIFIER] RIGHT
+          PsiWhiteSpaceImpl 60:48 … 60:49: [WHITE_SPACE] 
+          LeafPsiElement 60:49 … 60:50: [RBRACE] }
+      PsiWhiteSpaceImpl 60:50 … 62:4: [WHITE_SPACE] 
+      KtClass 62:4 … 62:24: [] annotation class Bar
+        KtDeclarationModifierList 62:4 … 62:14: [] annotation
+          LeafPsiElement 62:4 … 62:14: [annotation] annotation
+        PsiWhiteSpaceImpl 62:14 … 62:15: [WHITE_SPACE] 
+        LeafPsiElement 62:15 … 62:20: [class] class
+        PsiWhiteSpaceImpl 62:20 … 62:21: [WHITE_SPACE] 
+        LeafPsiElement 62:21 … 62:24: [IDENTIFIER] Bar
+      PsiWhiteSpaceImpl 62:24 … 64:4: [WHITE_SPACE] 
+      KtObjectDeclaration 64:4 … 67:5: [] companion object {        fun …        val bar: Int = 42    }
+        KtDeclarationModifierList 64:4 … 64:13: [] companion
+          LeafPsiElement 64:4 … 64:13: [companion] companion
+        PsiWhiteSpaceImpl 64:13 … 64:14: [WHITE_SPACE] 
+        LeafPsiElement 64:14 … 64:20: [object] object
+        PsiWhiteSpaceImpl 64:20 … 64:21: [WHITE_SPACE] 
+        KtClassBody 64:21 … 67:5: [] {        fun foo(): Int = 42        val bar: Int = 42    }
+          LeafPsiElement 64:21 … 64:22: [LBRACE] {
+          PsiWhiteSpaceImpl 64:22 … 65:8: [WHITE_SPACE] 
+          KtNamedFunction 65:8 … 65:27: [] fun foo(): Int = 42
+            LeafPsiElement 65:8 … 65:11: [fun] fun
+            PsiWhiteSpaceImpl 65:11 … 65:12: [WHITE_SPACE] 
+            LeafPsiElement 65:12 … 65:15: [IDENTIFIER] foo
+            KtParameterList 65:15 … 65:17: [] ()
+              LeafPsiElement 65:15 … 65:16: [LPAR] (
+              LeafPsiElement 65:16 … 65:17: [RPAR] )
+            LeafPsiElement 65:17 … 65:18: [COLON] :
+            PsiWhiteSpaceImpl 65:18 … 65:19: [WHITE_SPACE] 
+            KtTypeReference 65:19 … 65:22: [] Int
+              KtUserType 65:19 … 65:22: [] Int
+                KtNameReferenceExpression 65:19 … 65:22: [] Int
+                  LeafPsiElement 65:19 … 65:22: [IDENTIFIER] Int
+            PsiWhiteSpaceImpl 65:22 … 65:23: [WHITE_SPACE] 
+            LeafPsiElement 65:23 … 65:24: [EQ] =
+            PsiWhiteSpaceImpl 65:24 … 65:25: [WHITE_SPACE] 
+            KtConstantExpression 65:25 … 65:27: [] 42
+              LeafPsiElement 65:25 … 65:27: [INTEGER_LITERAL] 42
+          PsiWhiteSpaceImpl 65:27 … 66:8: [WHITE_SPACE] 
+          KtProperty 66:8 … 66:25: [] val bar: Int = 42
+            LeafPsiElement 66:8 … 66:11: [val] val
+            PsiWhiteSpaceImpl 66:11 … 66:12: [WHITE_SPACE] 
+            LeafPsiElement 66:12 … 66:15: [IDENTIFIER] bar
+            LeafPsiElement 66:15 … 66:16: [COLON] :
+            PsiWhiteSpaceImpl 66:16 … 66:17: [WHITE_SPACE] 
+            KtTypeReference 66:17 … 66:20: [] Int
+              KtUserType 66:17 … 66:20: [] Int
+                KtNameReferenceExpression 66:17 … 66:20: [] Int
+                  LeafPsiElement 66:17 … 66:20: [IDENTIFIER] Int
+            PsiWhiteSpaceImpl 66:20 … 66:21: [WHITE_SPACE] 
+            LeafPsiElement 66:21 … 66:22: [EQ] =
+            PsiWhiteSpaceImpl 66:22 … 66:23: [WHITE_SPACE] 
+            KtConstantExpression 66:23 … 66:25: [] 42
+              LeafPsiElement 66:23 … 66:25: [INTEGER_LITERAL] 42
+          PsiWhiteSpaceImpl 66:25 … 67:4: [WHITE_SPACE] 
+          LeafPsiElement 67:4 … 67:5: [RBRACE] }
+      PsiWhiteSpaceImpl 67:5 … 68:0: [WHITE_SPACE] 
+      LeafPsiElement 68:0 … 68:1: [RBRACE] }
+  PsiWhiteSpaceImpl 68:1 … 70:0: [WHITE_SPACE] 
+  KtClass 70:0 … 74:1: [] interface Foo3 {    // Will b … ault    fun foo(): Int = 42}
+    LeafPsiElement 70:0 … 70:9: [interface] interface
+    PsiWhiteSpaceImpl 70:9 … 70:10: [WHITE_SPACE] 
+    LeafPsiElement 70:10 … 70:14: [IDENTIFIER] Foo3
+    PsiWhiteSpaceImpl 70:14 … 70:15: [WHITE_SPACE] 
+    KtClassBody 70:15 … 74:1: [] {    // Will be generated as  … ault    fun foo(): Int = 42}
+      LeafPsiElement 70:15 … 70:16: [LBRACE] {
+      PsiWhiteSpaceImpl 70:16 … 71:4: [WHITE_SPACE] 
+      KtNamedFunction 71:4 … 73:23: [] // Will be generated as 'defau … efault    fun foo(): Int = 42
+        PsiCommentImpl 71:4 … 71:44: [EOL_COMMENT] // Will be generated as 'default' method
+        PsiWhiteSpaceImpl 71:44 … 72:4: [WHITE_SPACE] 
+        KtDeclarationModifierList 72:4 … 72:15: [] @JvmDefault
+          KtAnnotationEntry 72:4 … 72:15: [] @JvmDefault
+            LeafPsiElement 72:4 … 72:5: [AT] @
+            KtConstructorCalleeExpression 72:5 … 72:15: [] JvmDefault
+              KtTypeReference 72:5 … 72:15: [] JvmDefault
+                KtUserType 72:5 … 72:15: [] JvmDefault
+                  KtNameReferenceExpression 72:5 … 72:15: [] JvmDefault
+                    LeafPsiElement 72:5 … 72:15: [IDENTIFIER] JvmDefault
+        PsiWhiteSpaceImpl 72:15 … 73:4: [WHITE_SPACE] 
+        LeafPsiElement 73:4 … 73:7: [fun] fun
+        PsiWhiteSpaceImpl 73:7 … 73:8: [WHITE_SPACE] 
+        LeafPsiElement 73:8 … 73:11: [IDENTIFIER] foo
+        KtParameterList 73:11 … 73:13: [] ()
+          LeafPsiElement 73:11 … 73:12: [LPAR] (
+          LeafPsiElement 73:12 … 73:13: [RPAR] )
+        LeafPsiElement 73:13 … 73:14: [COLON] :
+        PsiWhiteSpaceImpl 73:14 … 73:15: [WHITE_SPACE] 
+        KtTypeReference 73:15 … 73:18: [] Int
+          KtUserType 73:15 … 73:18: [] Int
+            KtNameReferenceExpression 73:15 … 73:18: [] Int
+              LeafPsiElement 73:15 … 73:18: [IDENTIFIER] Int
+        PsiWhiteSpaceImpl 73:18 … 73:19: [WHITE_SPACE] 
+        LeafPsiElement 73:19 … 73:20: [EQ] =
+        PsiWhiteSpaceImpl 73:20 … 73:21: [WHITE_SPACE] 
+        KtConstantExpression 73:21 … 73:23: [] 42
+          LeafPsiElement 73:21 … 73:23: [INTEGER_LITERAL] 42
+      PsiWhiteSpaceImpl 73:23 … 74:0: [WHITE_SPACE] 
+      LeafPsiElement 74:0 … 74:1: [RBRACE] }
+  PsiWhiteSpaceImpl 74:1 … 76:0: [WHITE_SPACE] 
+  KtClass 76:0 … 76:32: [] inline class Name(val s: String)
+    KtDeclarationModifierList 76:0 … 76:6: [] inline
+      LeafPsiElement 76:0 … 76:6: [inline] inline
+    PsiWhiteSpaceImpl 76:6 … 76:7: [WHITE_SPACE] 
+    LeafPsiElement 76:7 … 76:12: [class] class
+    PsiWhiteSpaceImpl 76:12 … 76:13: [WHITE_SPACE] 
+    LeafPsiElement 76:13 … 76:17: [IDENTIFIER] Name
+    KtPrimaryConstructor 76:17 … 76:32: [] (val s: String)
+      KtParameterList 76:17 … 76:32: [] (val s: String)
+        LeafPsiElement 76:17 … 76:18: [LPAR] (
+        KtParameter 76:18 … 76:31: [] val s: String
+          LeafPsiElement 76:18 … 76:21: [val] val
+          PsiWhiteSpaceImpl 76:21 … 76:22: [WHITE_SPACE] 
+          LeafPsiElement 76:22 … 76:23: [IDENTIFIER] s
+          LeafPsiElement 76:23 … 76:24: [COLON] :
+          PsiWhiteSpaceImpl 76:24 … 76:25: [WHITE_SPACE] 
+          KtTypeReference 76:25 … 76:31: [] String
+            KtUserType 76:25 … 76:31: [] String
+              KtNameReferenceExpression 76:25 … 76:31: [] String
+                LeafPsiElement 76:25 … 76:31: [IDENTIFIER] String
+        LeafPsiElement 76:31 … 76:32: [RPAR] )
+  PsiWhiteSpaceImpl 76:32 … 78:0: [WHITE_SPACE] 

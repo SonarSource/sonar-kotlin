@@ -1,0 +1,2441 @@
+[
+  {
+    "key": "AbsentOrWrongFileLicense",
+    "name": "Absent Or Wrong File License",
+    "description": "License text is absent or incorrect.",
+    "url": "https://detekt.github.io/detekt/comments.html#absentorwrongfilelicense",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "AlsoCouldBeApply",
+    "name": "Also Could Be Apply",
+    "description": "When an `also` block contains only `it`-started expressions, simplify it to the `apply` block.",
+    "url": "https://detekt.github.io/detekt/style.html#alsocouldbeapply",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ArrayPrimitive",
+    "name": "Array Primitive",
+    "description": "Using `Array\u0026lt;Primitive\u0026gt;` leads to implicit boxing and a performance hit.",
+    "url": "https://detekt.github.io/detekt/performance.html#arrayprimitive",
+    "tags": [
+      "performance"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "AvoidReferentialEquality",
+    "name": "Avoid Referential Equality",
+    "description": "Avoid using referential equality and prefer to use referential equality checks instead.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#avoidreferentialequality",
+    "tags": [
+      "warning"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "BooleanPropertyNaming",
+    "name": "Boolean Property Naming",
+    "description": "Boolean property name should follow the naming convention set in the projects configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#booleanpropertynaming",
+    "tags": [
+      "codesmell"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "CanBeNonNullable",
+    "name": "Can Be Non Nullable",
+    "description": "Variable can be changed to non-nullable, as it is never set to null.",
+    "url": "https://detekt.github.io/detekt/style.html#canbenonnullable",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "CascadingCallWrapping",
+    "name": "Cascading Call Wrapping",
+    "description": "If a chained call is wrapped to a new line, subsequent chained calls should be as well.",
+    "url": "https://detekt.github.io/detekt/style.html#cascadingcallwrapping",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "CastToNullableType",
+    "name": "Cast To Nullable Type",
+    "description": "Disallow to cast to nullable types.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#casttonullabletype",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ClassNaming",
+    "name": "Class Naming",
+    "description": "A class or object name should fit the naming pattern defined in the projects configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#classnaming",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ClassOrdering",
+    "name": "Class Ordering",
+    "description": "Class contents should be in this order: Property declarations/initializer blocks; secondary constructors; method declarations then companion objects.",
+    "url": "https://detekt.github.io/detekt/style.html#classordering",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "CognitiveComplexMethod",
+    "name": "Cognitive Complex Method",
+    "description": "Prefer splitting up complex methods into smaller, easier to understand methods.",
+    "url": "https://detekt.github.io/detekt/complexity.html#cognitivecomplexmethod",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "CollapsibleIfStatements",
+    "name": "Collapsible If Statements",
+    "description": "Two if statements which could be collapsed were detected. These statements can be merged to improve readability.",
+    "url": "https://detekt.github.io/detekt/style.html#collapsibleifstatements",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "CommentOverPrivateFunction",
+    "name": "Comment Over Private Function",
+    "description": "Comments for private functions should be avoided. Prefer giving the function an expressive name. Split it up in smaller, self-explaining functions if necessary.",
+    "url": "https://detekt.github.io/detekt/comments.html#commentoverprivatefunction",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "CommentOverPrivateProperty",
+    "name": "Comment Over Private Property",
+    "description": "Private properties should be named in a self-explanatory manner without the need for a  comment.",
+    "url": "https://detekt.github.io/detekt/comments.html#commentoverprivateproperty",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "ComplexCondition",
+    "name": "Complex Condition",
+    "description": "Complex conditions should be simplified and extracted into well-named methods if necessary.",
+    "url": "https://detekt.github.io/detekt/complexity.html#complexcondition",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "ComplexInterface",
+    "name": "Complex Interface",
+    "description": "An interface contains too many functions and properties. Large classes tend to handle many things at once. An interface should have one responsibility. Split up large interfaces into smaller ones that are easier to understand.",
+    "url": "https://detekt.github.io/detekt/complexity.html#complexinterface",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "ConstructorParameterNaming",
+    "name": "Constructor Parameter Naming",
+    "description": "Constructor parameter names should follow the naming convention set in the projects configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#constructorparameternaming",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "CouldBeSequence",
+    "name": "Could Be Sequence",
+    "description": "Several chained collection operations that should be a sequence.",
+    "url": "https://detekt.github.io/detekt/performance.html#couldbesequence",
+    "tags": [
+      "performance"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "CyclomaticComplexMethod",
+    "name": "Cyclomatic Complex Method",
+    "description": "Prefer splitting up complex methods into smaller, easier to test methods.",
+    "url": "https://detekt.github.io/detekt/complexity.html#cyclomaticcomplexmethod",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "DataClassContainsFunctions",
+    "name": "Data Class Contains Functions",
+    "description": "Data classes should mainly be used to store data and should not have any extra functions (Compiler will automatically generate equals, toString and hashCode functions).",
+    "url": "https://detekt.github.io/detekt/style.html#dataclasscontainsfunctions",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "DataClassShouldBeImmutable",
+    "name": "Data Class Should Be Immutable",
+    "description": "Data classes should mainly be immutable and should not have any side effects (To copy an object altering some of its properties use the copy function).",
+    "url": "https://detekt.github.io/detekt/style.html#dataclassshouldbeimmutable",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "DeprecatedBlockTag",
+    "name": "Deprecated Block Tag",
+    "description": "Do not use the `@deprecated` block tag, which is not supported by KDoc. Use the `@Deprecated` annotation instead.",
+    "url": "https://detekt.github.io/detekt/comments.html#deprecatedblocktag",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "Deprecation",
+    "name": "Deprecation",
+    "description": "Deprecated elements should not be used.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#deprecation",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "DestructuringDeclarationWithTooManyEntries",
+    "name": "Destructuring Declaration With Too Many Entries",
+    "description": "Too many entries in a destructuring declaration make the code hard to understand.",
+    "url": "https://detekt.github.io/detekt/style.html#destructuringdeclarationwithtoomanyentries",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "DontDowncastCollectionTypes",
+    "name": "Dont Downcast Collection Types",
+    "description": "Down-casting immutable collection types is breaking the collection contract.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#dontdowncastcollectiontypes",
+    "tags": [
+      "warning"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "DoubleMutabilityForCollection",
+    "name": "Double Mutability For Collection",
+    "description": "Using var with mutable collections or values leads to double mutability. Consider using val or immutable collection or value types.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#doublemutabilityforcollection",
+    "tags": [
+      "codesmell"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "DuplicateCaseInWhenExpression",
+    "name": "Duplicate Case In When Expression",
+    "description": "Duplicated `case` statements in a `when` expression detected. Both cases should be merged.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#duplicatecaseinwhenexpression",
+    "tags": [
+      "warning"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "ElseCaseInsteadOfExhaustiveWhen",
+    "name": "Else Case Instead Of Exhaustive When",
+    "description": "A `when` expression that has an exhaustive set of cases should not contain an `else` case.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#elsecaseinsteadofexhaustivewhen",
+    "tags": [
+      "warning"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptyCatchBlock",
+    "name": "Empty Catch Block",
+    "description": "Empty catch block detected. Empty catch blocks indicate that an exception is ignored and not handled.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptycatchblock",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptyClassBlock",
+    "name": "Empty Class Block",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyclassblock",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptyDefaultConstructor",
+    "name": "Empty Default Constructor",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptydefaultconstructor",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptyDoWhileBlock",
+    "name": "Empty Do While Block",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptydowhileblock",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptyElseBlock",
+    "name": "Empty Else Block",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyelseblock",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptyFinallyBlock",
+    "name": "Empty Finally Block",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyfinallyblock",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptyForBlock",
+    "name": "Empty For Block",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyforblock",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptyFunctionBlock",
+    "name": "Empty Function Block",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyfunctionblock",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptyIfBlock",
+    "name": "Empty If Block",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyifblock",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptyInitBlock",
+    "name": "Empty Init Block",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyinitblock",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptyKtFile",
+    "name": "Empty Kt File",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptyktfile",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptySecondaryConstructor",
+    "name": "Empty Secondary Constructor",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptysecondaryconstructor",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptyTryBlock",
+    "name": "Empty Try Block",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptytryblock",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptyWhenBlock",
+    "name": "Empty When Block",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptywhenblock",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EmptyWhileBlock",
+    "name": "Empty While Block",
+    "description": "Empty block of code detected. As they serve no purpose they should be removed.",
+    "url": "https://detekt.github.io/detekt/empty.html#emptywhileblock",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EndOfSentenceFormat",
+    "name": "End Of Sentence Format",
+    "description": "The first sentence in a KDoc comment should end with proper punctuation or with a correct URL.",
+    "url": "https://detekt.github.io/detekt/comments.html#endofsentenceformat",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EnumNaming",
+    "name": "Enum Naming",
+    "description": "Enum names should follow the naming convention set in the projects configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#enumnaming",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EqualsAlwaysReturnsTrueOrFalse",
+    "name": "Equals Always Returns True Or False",
+    "description": "Having an `equals()` method that always returns true or false is not a good idea. It does not follow the contract of this method. Consider a good default implementation (e.g. `this \u003d\u003d other`).",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#equalsalwaysreturnstrueorfalse",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "EqualsNullCall",
+    "name": "Equals Null Call",
+    "description": "Equals() method is called with null as parameter. Consider using \u003d\u003d to compare to null.",
+    "url": "https://detekt.github.io/detekt/style.html#equalsnullcall",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EqualsOnSignatureLine",
+    "name": "Equals On Signature Line",
+    "description": "Equals signs for expression style functions should be on the same line as the signature.",
+    "url": "https://detekt.github.io/detekt/style.html#equalsonsignatureline",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "EqualsWithHashCodeExist",
+    "name": "Equals With Hash Code Exist",
+    "description": "Always override hashCode when you override equals. All hash-based collections depend on objects meeting the equals-contract. Two equal objects must produce the same hashcode. When inheriting equals or hashcode, override the inherited and call the super method for clarification.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#equalswithhashcodeexist",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ExceptionRaisedInUnexpectedLocation",
+    "name": "Exception Raised In Unexpected Location",
+    "description": "This method is not expected to throw exceptions. This can cause weird behavior.",
+    "url": "https://detekt.github.io/detekt/exceptions.html#exceptionraisedinunexpectedlocation",
+    "tags": [
+      "codesmell"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "ExitOutsideMain",
+    "name": "Exit Outside Main",
+    "description": "Do not directly exit the process outside the `main` function. Throw an exception instead.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#exitoutsidemain",
+    "tags": [
+      "warning"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "ExplicitCollectionElementAccessMethod",
+    "name": "Explicit Collection Element Access Method",
+    "description": "Prefer usage of the indexed access operator [] for map element access or insert methods.",
+    "url": "https://detekt.github.io/detekt/style.html#explicitcollectionelementaccessmethod",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ExplicitGarbageCollectionCall",
+    "name": "Explicit Garbage Collection Call",
+    "description": "Don\u0027t try to be smarter than the JVM. Your code should work independently whether the garbage collector is disabled or not. If you face memory issues, try tuning the JVM options instead of relying on code itself.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#explicitgarbagecollectioncall",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "ExplicitItLambdaParameter",
+    "name": "Explicit It Lambda Parameter",
+    "description": "Declaring lambda parameters as `it` is redundant.",
+    "url": "https://detekt.github.io/detekt/style.html#explicititlambdaparameter",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ExpressionBodySyntax",
+    "name": "Expression Body Syntax",
+    "description": "Functions with exact one statement, the return statement, can be rewritten with ExpressionBodySyntax.",
+    "url": "https://detekt.github.io/detekt/style.html#expressionbodysyntax",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ForEachOnRange",
+    "name": "For Each On Range",
+    "description": "Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.",
+    "url": "https://detekt.github.io/detekt/performance.html#foreachonrange",
+    "tags": [
+      "performance"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ForbiddenClassName",
+    "name": "Forbidden Class Name",
+    "description": "Forbidden class name as per configuration detected.",
+    "url": "https://detekt.github.io/detekt/naming.html#forbiddenclassname",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ForbiddenComment",
+    "name": "Forbidden Comment",
+    "description": "Flags a forbidden comment.",
+    "url": "https://detekt.github.io/detekt/style.html#forbiddencomment",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "ForbiddenImport",
+    "name": "Forbidden Import",
+    "description": "Mark forbidden imports. A forbidden import could be an import for an unstable / experimental api and hence you might want to mark it as forbidden in order to get warned about the usage.",
+    "url": "https://detekt.github.io/detekt/style.html#forbiddenimport",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "ForbiddenMethodCall",
+    "name": "Forbidden Method Call",
+    "description": "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental method and hence you might want to mark it as forbidden in order to get warned about the usage.",
+    "url": "https://detekt.github.io/detekt/style.html#forbiddenmethodcall",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "ForbiddenSuppress",
+    "name": "Forbidden Suppress",
+    "description": "Suppressing a rule which is forbidden in current configuration.",
+    "url": "https://detekt.github.io/detekt/style.html#forbiddensuppress",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "ForbiddenVoid",
+    "name": "Forbidden Void",
+    "description": "`Unit` should be used instead of `Void`.",
+    "url": "https://detekt.github.io/detekt/style.html#forbiddenvoid",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "FunctionMaxLength",
+    "name": "Function Max Length",
+    "description": "Function names should not be longer than the maximum set in the project configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#functionmaxlength",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "FunctionMinLength",
+    "name": "Function Min Length",
+    "description": "Function names should not be shorter than the minimum defined in the configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#functionminlength",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "FunctionNaming",
+    "name": "Function Naming",
+    "description": "Function names should follow the naming convention set in the configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#functionnaming",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "FunctionOnlyReturningConstant",
+    "name": "Function Only Returning Constant",
+    "description": "A function that only returns a constant is misleading. Consider declaring a constant instead.",
+    "url": "https://detekt.github.io/detekt/style.html#functiononlyreturningconstant",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "FunctionParameterNaming",
+    "name": "Function Parameter Naming",
+    "description": "Function parameter names should follow the naming convention set in the projects configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#functionparameternaming",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "GlobalCoroutineUsage",
+    "name": "Global Coroutine Usage",
+    "description": "The usage of the `GlobalScope` instance is highly discouraged.",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "HasPlatformType",
+    "name": "Has Platform Type",
+    "description": "Platform types must be declared explicitly in public APIs.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#hasplatformtype",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "IgnoredReturnValue",
+    "name": "Ignored Return Value",
+    "description": "This call returns a value which is ignored",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#ignoredreturnvalue",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "ImplicitDefaultLocale",
+    "name": "Implicit Default Locale",
+    "description": "Implicit default locale used for string processing. Consider using explicit locale.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#implicitdefaultlocale",
+    "tags": [
+      "codesmell"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ImplicitUnitReturnType",
+    "name": "Implicit Unit Return Type",
+    "description": "Functions using expression statements have an implicit return type. Changing the type of the expression accidentally, changes the function return type. This may lead to backward incompatibility. Use a block statement to make clear this function will never return a value.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#implicitunitreturntype",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "InjectDispatcher",
+    "name": "Inject Dispatcher",
+    "description": "Don\u0027t hardcode dispatchers when creating new coroutines or calling `withContext`. Use dependency injection for dispatchers to make testing easier.",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "InstanceOfCheckForException",
+    "name": "Instance Of Check For Exception",
+    "description": "Instead of catching for a general exception type and checking for a specific exception type, use multiple catch blocks.",
+    "url": "https://detekt.github.io/detekt/exceptions.html#instanceofcheckforexception",
+    "tags": [
+      "codesmell"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "InvalidPackageDeclaration",
+    "name": "Invalid Package Declaration",
+    "description": "Kotlin source files should be stored in the directory corresponding to its package statement.",
+    "url": "https://detekt.github.io/detekt/naming.html#invalidpackagedeclaration",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "InvalidRange",
+    "name": "Invalid Range",
+    "description": "If a for loops condition is false before the first iteration, the loop will never get executed.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#invalidrange",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "IteratorHasNextCallsNextMethod",
+    "name": "Iterator Has Next Calls Next Method",
+    "description": "The `hasNext()` method of an Iterator implementation should not call the `next()` method. The state of the iterator should not be changed inside the `hasNext()` method. The `hasNext()` method is not supposed to have any side effects.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#iteratorhasnextcallsnextmethod",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "IteratorNotThrowingNoSuchElementException",
+    "name": "Iterator Not Throwing No Such Element Exception",
+    "description": "The `next()` method of an `Iterator` implementation should throw a `NoSuchElementException` when there are no more elements to return.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#iteratornotthrowingnosuchelementexception",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "KDocReferencesNonPublicProperty",
+    "name": "KDoc References Non Public Property",
+    "description": "KDoc comments should not refer to non-public properties.",
+    "url": "https://detekt.github.io/detekt/comments.html#kdocreferencesnonpublicproperty",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "LabeledExpression",
+    "name": "Labeled Expression",
+    "description": "Expression with labels increase complexity and affect maintainability.",
+    "url": "https://detekt.github.io/detekt/complexity.html#labeledexpression",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "LambdaParameterNaming",
+    "name": "Lambda Parameter Naming",
+    "description": "Lambda parameter names should follow the naming convention set in the projects configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#lambdaparameternaming",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "LargeClass",
+    "name": "Large Class",
+    "description": "One class should have one responsibility. Large classes tend to handle many things at once. Split up large classes into smaller classes that are easier to understand.",
+    "url": "https://detekt.github.io/detekt/complexity.html#largeclass",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "LateinitUsage",
+    "name": "Lateinit Usage",
+    "description": "Usage of `lateinit` detected. Using `lateinit` for property initialization is error prone, try using constructor injection or delegation.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#lateinitusage",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "LongMethod",
+    "name": "Long Method",
+    "description": "One method should have one responsibility. Long methods tend to handle many things at once. Prefer smaller methods to make them easier to understand.",
+    "url": "https://detekt.github.io/detekt/complexity.html#longmethod",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "LongParameterList",
+    "name": "Long Parameter List",
+    "description": "The more parameters a function has the more complex it is. Long parameter lists are often used to control complex algorithms and violate the Single Responsibility Principle. Prefer functions with short parameter lists.",
+    "url": "https://detekt.github.io/detekt/complexity.html#longparameterlist",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "LoopWithTooManyJumpStatements",
+    "name": "Loop With Too Many Jump Statements",
+    "description": "The loop contains more than one break or continue statement. The code should be refactored to increase readability.",
+    "url": "https://detekt.github.io/detekt/style.html#loopwithtoomanyjumpstatements",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "MagicNumber",
+    "name": "Magic Number",
+    "description": "Report magic numbers. Magic number is a numeric literal that is not defined as a constant and hence it\u0027s unclear what the purpose of this number is. It\u0027s better to declare such numbers as constants and give them a proper name. By default, -1, 0, 1, and 2 are not considered to be magic numbers.",
+    "url": "https://detekt.github.io/detekt/style.html#magicnumber",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "MandatoryBracesIfStatements",
+    "name": "Mandatory Braces If Statements",
+    "description": "Multi-line if statement was found that does not have braces. These braces should be added to improve readability.",
+    "url": "https://detekt.github.io/detekt/style.html#mandatorybracesifstatements",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "MandatoryBracesLoops",
+    "name": "Mandatory Braces Loops",
+    "description": "A multi-line loop was found that does not have braces. These should be added to improve readability.",
+    "url": "https://detekt.github.io/detekt/style.html#mandatorybracesloops",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "MapGetWithNotNullAssertionOperator",
+    "name": "Map Get With Not Null Assertion Operator",
+    "description": "map.get() with not-null assertion operator (!!) can result in a NullPointerException. Consider usage of map.getValue(), map.getOrDefault() or map.getOrElse() instead.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#mapgetwithnotnullassertionoperator",
+    "tags": [
+      "codesmell"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "MatchingDeclarationName",
+    "name": "Matching Declaration Name",
+    "description": "If a source file contains only a single non-private top-level class or object, the file name should reflect the case-sensitive name plus the .kt extension.",
+    "url": "https://detekt.github.io/detekt/naming.html#matchingdeclarationname",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "MaxChainedCallsOnSameLine",
+    "name": "Max Chained Calls On Same Line",
+    "description": "Chained calls beyond the maximum should be wrapped to a new line.",
+    "url": "https://detekt.github.io/detekt/style.html#maxchainedcallsonsameline",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "MaxLineLength",
+    "name": "Max Line Length",
+    "description": "Line detected, which is longer than the defined maximum line length in the code style.",
+    "url": "https://detekt.github.io/detekt/style.html#maxlinelength",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "MayBeConst",
+    "name": "May Be Const",
+    "description": "Usage of `vals` that can be `const val` detected.",
+    "url": "https://detekt.github.io/detekt/style.html#maybeconst",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "MemberNameEqualsClassName",
+    "name": "Member Name Equals Class Name",
+    "description": "A member should not be given the same name as its parent class or object.",
+    "url": "https://detekt.github.io/detekt/naming.html#membernameequalsclassname",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "MethodOverloading",
+    "name": "Method Overloading",
+    "description": "Methods which are overloaded often might be harder to maintain. Furthermore, these methods are tightly coupled. Refactor these methods and try to use optional parameters.",
+    "url": "https://detekt.github.io/detekt/complexity.html#methodoverloading",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "MissingPackageDeclaration",
+    "name": "Missing Package Declaration",
+    "description": "Kotlin source files should define a package.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#missingpackagedeclaration",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "MissingWhenCase",
+    "name": "Missing When Case",
+    "description": "Check usage of `when` used as a statement and don\u0027t compare all enum or sealed class cases.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#missingwhencase",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "ModifierOrder",
+    "name": "Modifier Order",
+    "description": "Modifiers are not in the correct order. Consider to reorder these modifiers.",
+    "url": "https://detekt.github.io/detekt/style.html#modifierorder",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "MultilineLambdaItParameter",
+    "name": "Multiline Lambda It Parameter",
+    "description": "Multiline lambdas should not use `it` as a parameter name.",
+    "url": "https://detekt.github.io/detekt/style.html#multilinelambdaitparameter",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "MultilineRawStringIndentation",
+    "name": "Multiline Raw String Indentation",
+    "description": "The indentation of the raw String should be consistent",
+    "url": "https://detekt.github.io/detekt/style.html#multilinerawstringindentation",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "NamedArguments",
+    "name": "Named Arguments",
+    "description": "Named arguments are required for function calls with many arguments.",
+    "url": "https://detekt.github.io/detekt/complexity.html#namedarguments",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "NestedBlockDepth",
+    "name": "Nested Block Depth",
+    "description": "Excessive nesting leads to hidden complexity. Prefer extracting code to make it easier to understand.",
+    "url": "https://detekt.github.io/detekt/complexity.html#nestedblockdepth",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "NestedClassesVisibility",
+    "name": "Nested Classes Visibility",
+    "description": "The explicit public modifier still results in an internal nested class.",
+    "url": "https://detekt.github.io/detekt/style.html#nestedclassesvisibility",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "NestedScopeFunctions",
+    "name": "Nested Scope Functions",
+    "description": "Over-using scope functions makes code confusing, hard to read and bug prone.",
+    "url": "https://detekt.github.io/detekt/complexity.html#nestedscopefunctions",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "NewLineAtEndOfFile",
+    "name": "New Line At End Of File",
+    "description": "Checks whether files end with a line separator.",
+    "url": "https://detekt.github.io/detekt/style.html#newlineatendoffile",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "NoNameShadowing",
+    "name": "No Name Shadowing",
+    "description": "Disallow shadowing variable declarations.",
+    "url": "https://detekt.github.io/detekt/naming.html#nonameshadowing",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "NoTabs",
+    "name": "No Tabs",
+    "description": "Checks if tabs are used in Kotlin files.",
+    "url": "https://detekt.github.io/detekt/style.html#notabs",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "NonBooleanPropertyPrefixedWithIs",
+    "name": "Non Boolean Property Prefixed With Is",
+    "description": "Only boolean property names can start with `is` prefix.",
+    "url": "https://detekt.github.io/detekt/naming.html#nonbooleanpropertyprefixedwithis",
+    "tags": [
+      "warning"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "NotImplementedDeclaration",
+    "name": "Not Implemented Declaration",
+    "description": "The NotImplementedDeclaration should only be used when a method stub is necessary. This defers the development of the functionality of this function. Hence, the `NotImplementedDeclaration` should only serve as a temporary declaration. Before releasing, this type of declaration should be removed.",
+    "url": "https://detekt.github.io/detekt/exceptions.html#notimplementeddeclaration",
+    "tags": [
+      "codesmell"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "NullCheckOnMutableProperty",
+    "name": "Null Check On Mutable Property",
+    "description": "Checking nullability on a mutable property is not useful because the property may be set to null afterwards.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#nullcheckonmutableproperty",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "NullableBooleanCheck",
+    "name": "Nullable Boolean Check",
+    "description": "Nullable boolean check should use `\u003d\u003d` rather than `?:`",
+    "url": "https://detekt.github.io/detekt/style.html#nullablebooleancheck",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "NullableToStringCall",
+    "name": "Nullable To String Call",
+    "description": "This call may return the string \u0026quot;null\u0026quot;",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#nullabletostringcall",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ObjectExtendsThrowable",
+    "name": "Object Extends Throwable",
+    "description": "An `object` should not extend and type of Throwable. Throwables are stateful and should be instantiated only when needed for when a specific error occurs. An `object`, being a singleton, that extends any type of Throwable consequently introduces a global singleton exception whose instance may be inadvertently reused from multiple places, thus introducing shared mutable state.",
+    "url": "https://detekt.github.io/detekt/exceptions.html#objectextendsthrowable",
+    "tags": [
+      "codesmell"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "ObjectLiteralToLambda",
+    "name": "Object Literal To Lambda",
+    "description": "Report object literals that can be changed to lambdas.",
+    "url": "https://detekt.github.io/detekt/style.html#objectliteraltolambda",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ObjectPropertyNaming",
+    "name": "Object Property Naming",
+    "description": "Property names inside objects should follow the naming convention set in the projects configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#objectpropertynaming",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "OptionalAbstractKeyword",
+    "name": "Optional Abstract Keyword",
+    "description": "Unnecessary abstract modifier in interface detected. This abstract modifier is unnecessary and thus can be removed.",
+    "url": "https://detekt.github.io/detekt/style.html#optionalabstractkeyword",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "OptionalUnit",
+    "name": "Optional Unit",
+    "description": "Return type of `Unit` is unnecessary and can be safely removed.",
+    "url": "https://detekt.github.io/detekt/style.html#optionalunit",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "OptionalWhenBraces",
+    "name": "Optional When Braces",
+    "description": "Optional braces in when expression detected.",
+    "url": "https://detekt.github.io/detekt/style.html#optionalwhenbraces",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "OutdatedDocumentation",
+    "name": "Outdated Documentation",
+    "description": "KDoc comments should match the actual function or class signature",
+    "url": "https://detekt.github.io/detekt/comments.html#outdateddocumentation",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "PackageNaming",
+    "name": "Package Naming",
+    "description": "Package names should match the naming convention set in the configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#packagenaming",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "PreferToOverPairSyntax",
+    "name": "Prefer To Over Pair Syntax",
+    "description": "Pair was created using the Pair constructor, using the to syntax is preferred.",
+    "url": "https://detekt.github.io/detekt/style.html#prefertooverpairsyntax",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "PrintStackTrace",
+    "name": "Print Stack Trace",
+    "description": "Do not print a stack trace. These debug statements should be removed or replaced with a logger.",
+    "url": "https://detekt.github.io/detekt/exceptions.html#printstacktrace",
+    "tags": [
+      "codesmell"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "ProtectedMemberInFinalClass",
+    "name": "Protected Member In Final Class",
+    "description": "Member with protected visibility in final class is private. Consider using private or internal as modifier.",
+    "url": "https://detekt.github.io/detekt/style.html#protectedmemberinfinalclass",
+    "tags": [
+      "warning"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "RedundantElseInWhen",
+    "name": "Redundant Else In When",
+    "description": "Check for redundant `else` case in `when` expression when used as statement.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#redundantelseinwhen",
+    "tags": [
+      "warning"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "RedundantExplicitType",
+    "name": "Redundant Explicit Type",
+    "description": "Type does not need to be stated explicitly and can be removed.",
+    "url": "https://detekt.github.io/detekt/style.html#redundantexplicittype",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "RedundantHigherOrderMapUsage",
+    "name": "Redundant Higher Order Map Usage",
+    "description": "Checks for redundant \u0027map\u0027 calls, which can be removed.",
+    "url": "https://detekt.github.io/detekt/style.html#redundanthigherordermapusage",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "RedundantSuspendModifier",
+    "name": "Redundant Suspend Modifier",
+    "description": "The `suspend` modifier is only needed for functions that contain suspending calls.",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "RedundantVisibilityModifierRule",
+    "name": "Redundant Visibility Modifier Rule",
+    "description": "Redundant visibility modifiers detected, which can be safely removed.",
+    "url": "https://detekt.github.io/detekt/style.html#redundantvisibilitymodifierrule",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ReplaceSafeCallChainWithRun",
+    "name": "Replace Safe Call Chain With Run",
+    "description": "Chains of safe calls on non-nullable types can be surrounded with `run {}`.",
+    "url": "https://detekt.github.io/detekt/complexity.html#replacesafecallchainwithrun",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "RethrowCaughtException",
+    "name": "Rethrow Caught Exception",
+    "description": "Do not rethrow a caught exception of the same type.",
+    "url": "https://detekt.github.io/detekt/exceptions.html#rethrowcaughtexception",
+    "tags": [
+      "codesmell"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ReturnCount",
+    "name": "Return Count",
+    "description": "Restrict the number of return statements in methods.",
+    "url": "https://detekt.github.io/detekt/style.html#returncount",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "ReturnFromFinally",
+    "name": "Return From Finally",
+    "description": "Do not return within a finally statement. This can discard exceptions.",
+    "url": "https://detekt.github.io/detekt/exceptions.html#returnfromfinally",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "SafeCast",
+    "name": "Safe Cast",
+    "description": "Prefer to use a safe cast instead of if-else-null.",
+    "url": "https://detekt.github.io/detekt/style.html#safecast",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "SerialVersionUIDInSerializableClass",
+    "name": "Serial Version UIDIn Serializable Class",
+    "description": "A class which implements the Serializable interface does not define a correct serialVersionUID field. The serialVersionUID field should be a constant long value inside a companion object.",
+    "url": "https://detekt.github.io/detekt/style.html#serialversionuidinserializableclass",
+    "tags": [
+      "warning"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "SleepInsteadOfDelay",
+    "name": "Sleep Instead Of Delay",
+    "description": "Usage of `Thread.sleep()` in coroutines can potentially halt multiple coroutines at once.",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "SpacingBetweenPackageAndImports",
+    "name": "Spacing Between Package And Imports",
+    "description": "Violation of the package declaration style detected.",
+    "url": "https://detekt.github.io/detekt/style.html#spacingbetweenpackageandimports",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "SpreadOperator",
+    "name": "Spread Operator",
+    "description": "In most cases using a spread operator causes a full copy of the array to be created before calling a method. This may result in a performance penalty.",
+    "url": "https://detekt.github.io/detekt/performance.html#spreadoperator",
+    "tags": [
+      "performance"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "StringLiteralDuplication",
+    "name": "String Literal Duplication",
+    "description": "Multiple occurrences of the same string literal within a single file detected. Prefer extracting the string literal into a property or constant.",
+    "url": "https://detekt.github.io/detekt/complexity.html#stringliteralduplication",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "SuspendFunWithCoroutineScopeReceiver",
+    "name": "Suspend Fun With Coroutine Scope Receiver",
+    "description": "The `suspend` modifier should not be used for functions that use a CoroutinesScope as receiver. You should use suspend functions without the receiver or use plain functions and use coroutineScope { } instead.",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "SuspendFunWithFlowReturnType",
+    "name": "Suspend Fun With Flow Return Type",
+    "description": "The `suspend` modifier should not be used for functions that return a Coroutines Flow type. Flows are cold streams and invoking a function that returns one should not produce any side effects.",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "SwallowedException",
+    "name": "Swallowed Exception",
+    "description": "The caught exception is swallowed. The original exception could be lost.",
+    "url": "https://detekt.github.io/detekt/exceptions.html#swallowedexception",
+    "tags": [
+      "codesmell"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "ThrowingExceptionFromFinally",
+    "name": "Throwing Exception From Finally",
+    "description": "Do not throw an exception within a finally statement. This can discard exceptions and is confusing.",
+    "url": "https://detekt.github.io/detekt/exceptions.html#throwingexceptionfromfinally",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "ThrowingExceptionInMain",
+    "name": "Throwing Exception In Main",
+    "description": "The main method should not throw an exception.",
+    "url": "https://detekt.github.io/detekt/exceptions.html#throwingexceptioninmain",
+    "tags": [
+      "codesmell"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "ThrowingExceptionsWithoutMessageOrCause",
+    "name": "Throwing Exceptions Without Message Or Cause",
+    "description": "A call to the default constructor of an exception was detected. Instead one of the constructor overloads should be called. This allows to provide more meaningful exceptions.",
+    "url": "https://detekt.github.io/detekt/exceptions.html#throwingexceptionswithoutmessageorcause",
+    "tags": [
+      "warning"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ThrowingNewInstanceOfSameException",
+    "name": "Throwing New Instance Of Same Exception",
+    "description": "Avoid catch blocks that rethrow a caught exception wrapped inside a new instance of the same exception.",
+    "url": "https://detekt.github.io/detekt/exceptions.html#throwingnewinstanceofsameexception",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ThrowsCount",
+    "name": "Throws Count",
+    "description": "Restrict the number of throw statements in methods.",
+    "url": "https://detekt.github.io/detekt/style.html#throwscount",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "TooGenericExceptionCaught",
+    "name": "Too Generic Exception Caught",
+    "description": "The caught exception is too generic. Prefer catching specific exceptions to the case that is currently handled.",
+    "url": "https://detekt.github.io/detekt/exceptions.html#toogenericexceptioncaught",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "TooGenericExceptionThrown",
+    "name": "Too Generic Exception Thrown",
+    "description": "The thrown exception is too generic. Prefer throwing project specific exceptions to handle error cases.",
+    "url": "https://detekt.github.io/detekt/exceptions.html#toogenericexceptionthrown",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "TooManyFunctions",
+    "name": "Too Many Functions",
+    "description": "Too many functions inside a/an file/class/object/interface always indicate a violation of the single responsibility principle. Maybe the file/class/object/interface wants to manage too many things at once. Extract functionality which clearly belongs together.",
+    "url": "https://detekt.github.io/detekt/complexity.html#toomanyfunctions",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "TopLevelPropertyNaming",
+    "name": "Top Level Property Naming",
+    "description": "Top level property names should follow the naming convention set in the projects configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#toplevelpropertynaming",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "TrailingWhitespace",
+    "name": "Trailing Whitespace",
+    "description": "Whitespaces at the end of a line are unnecessary and can be removed.",
+    "url": "https://detekt.github.io/detekt/style.html#trailingwhitespace",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "TrimMultilineRawString",
+    "name": "Trim Multiline Raw String",
+    "description": "Multiline raw strings should be followed by `trimMargin()` or `trimIndent()`.",
+    "url": "https://detekt.github.io/detekt/style.html#trimmultilinerawstring",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnconditionalJumpStatementInLoop",
+    "name": "Unconditional Jump Statement In Loop",
+    "description": "An unconditional jump statement in a loop is useless. The loop itself is only executed once.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unconditionaljumpstatementinloop",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "UnderscoresInNumericLiterals",
+    "name": "Underscores In Numeric Literals",
+    "description": "Report missing or invalid underscores in base 10 numbers. Numeric literals should be underscore separated to increase readability.",
+    "url": "https://detekt.github.io/detekt/style.html#underscoresinnumericliterals",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UndocumentedPublicClass",
+    "name": "Undocumented Public Class",
+    "description": "Public classes, interfaces and objects require documentation.",
+    "url": "https://detekt.github.io/detekt/comments.html#undocumentedpublicclass",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "UndocumentedPublicFunction",
+    "name": "Undocumented Public Function",
+    "description": "Public functions require documentation.",
+    "url": "https://detekt.github.io/detekt/comments.html#undocumentedpublicfunction",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "UndocumentedPublicProperty",
+    "name": "Undocumented Public Property",
+    "description": "Public properties require documentation.",
+    "url": "https://detekt.github.io/detekt/comments.html#undocumentedpublicproperty",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "UnnecessaryAbstractClass",
+    "name": "Unnecessary Abstract Class",
+    "description": "An abstract class is unnecessary. May be refactored to an interface or to a concrete class.",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessaryabstractclass",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnnecessaryAnnotationUseSiteTarget",
+    "name": "Unnecessary Annotation Use Site Target",
+    "description": "Unnecessary Annotation use-site Target. It can be removed.",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessaryannotationusesitetarget",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnnecessaryApply",
+    "name": "Unnecessary Apply",
+    "description": "The `apply` usage is unnecessary and can be removed.",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessaryapply",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnnecessaryBackticks",
+    "name": "Unnecessary Backticks",
+    "description": "Backticks are unnecessary.",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessarybackticks",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnnecessaryFilter",
+    "name": "Unnecessary Filter",
+    "description": "`filter()` with other collection operations may be simplified.",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessaryfilter",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnnecessaryInheritance",
+    "name": "Unnecessary Inheritance",
+    "description": "The extended super type is unnecessary.",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessaryinheritance",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnnecessaryInnerClass",
+    "name": "Unnecessary Inner Class",
+    "description": "The \u0027inner\u0027 qualifier is unnecessary.",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessaryinnerclass",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnnecessaryLet",
+    "name": "Unnecessary Let",
+    "description": "The `let` usage is unnecessary.",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessarylet",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnnecessaryNotNullCheck",
+    "name": "Unnecessary Not Null Check",
+    "description": "Remove unnecessary not-null checks on non-null types.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unnecessarynotnullcheck",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnnecessaryNotNullOperator",
+    "name": "Unnecessary Not Null Operator",
+    "description": "Unnecessary not-null unary operator (!!) detected.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unnecessarynotnulloperator",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnnecessaryParentheses",
+    "name": "Unnecessary Parentheses",
+    "description": "Unnecessary parentheses don\u0027t add any value to the code and should be removed.",
+    "url": "https://detekt.github.io/detekt/style.html#unnecessaryparentheses",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnnecessaryPartOfBinaryExpression",
+    "name": "Unnecessary Part Of Binary Expression",
+    "description": "Detects duplicate condition into binary expression and recommends to remove unnecessary checks",
+    "url": "https://detekt.github.io/detekt/performance.html#unnecessarypartofbinaryexpression",
+    "tags": [
+      "performance"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnnecessarySafeCall",
+    "name": "Unnecessary Safe Call",
+    "description": "Unnecessary safe call operator detected.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unnecessarysafecall",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnnecessaryTemporaryInstantiation",
+    "name": "Unnecessary Temporary Instantiation",
+    "description": "Avoid temporary objects when converting primitive types to `String`.",
+    "url": "https://detekt.github.io/detekt/performance.html#unnecessarytemporaryinstantiation",
+    "tags": [
+      "performance"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnreachableCatchBlock",
+    "name": "Unreachable Catch Block",
+    "description": "Unreachable catch block detected.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unreachablecatchblock",
+    "tags": [
+      "warning"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnreachableCode",
+    "name": "Unreachable Code",
+    "description": "Unreachable code detected. This code should be removed.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unreachablecode",
+    "tags": [
+      "warning"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "UnsafeCallOnNullableType",
+    "name": "Unsafe Call On Nullable Type",
+    "description": "Unsafe calls on nullable types detected. These calls will throw a NullPointerException in case the nullable value is null.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unsafecallonnullabletype",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "UnsafeCast",
+    "name": "Unsafe Cast",
+    "description": "Cast operator throws an exception if the cast is not possible.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unsafecast",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "UntilInsteadOfRangeTo",
+    "name": "Until Instead Of Range To",
+    "description": "A `..` call can be replaced with `until`.",
+    "url": "https://detekt.github.io/detekt/style.html#untilinsteadofrangeto",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnusedImports",
+    "name": "Unused Imports",
+    "description": "Unused Imports are dead code and should be removed.",
+    "url": "https://detekt.github.io/detekt/style.html#unusedimports",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnusedPrivateClass",
+    "name": "Unused Private Class",
+    "description": "Private class is unused and should be removed.",
+    "url": "https://detekt.github.io/detekt/style.html#unusedprivateclass",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnusedPrivateMember",
+    "name": "Unused Private Member",
+    "description": "Private member is unused and should be removed.",
+    "url": "https://detekt.github.io/detekt/style.html#unusedprivatemember",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnusedUnaryOperator",
+    "name": "Unused Unary Operator",
+    "description": "This unary operator is unused.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#unusedunaryoperator",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseAnyOrNoneInsteadOfFind",
+    "name": "Use Any Or None Instead Of Find",
+    "description": "Use `any` or `none` instead of `find` and `null` checks.",
+    "url": "https://detekt.github.io/detekt/style.html#useanyornoneinsteadoffind",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseArrayLiteralsInAnnotations",
+    "name": "Use Array Literals In Annotations",
+    "description": "Array literals [...] should be preferred as they are more readable than `arrayOf(...)` expressions.",
+    "url": "https://detekt.github.io/detekt/style.html#usearrayliteralsinannotations",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseCheckNotNull",
+    "name": "Use Check Not Null",
+    "description": "Use checkNotNull() instead of check() for checking not-null.",
+    "url": "https://detekt.github.io/detekt/style.html#usechecknotnull",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseCheckOrError",
+    "name": "Use Check Or Error",
+    "description": "Use check() or error() instead of throwing an IllegalStateException.",
+    "url": "https://detekt.github.io/detekt/style.html#usecheckorerror",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseDataClass",
+    "name": "Use Data Class",
+    "description": "Classes that do nothing but hold data should be replaced with a data class.",
+    "url": "https://detekt.github.io/detekt/style.html#usedataclass",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseEmptyCounterpart",
+    "name": "Use Empty Counterpart",
+    "description": "Instantiation of an object\u0027s \u0026quot;empty\u0026quot; state should use the object\u0027s \u0026quot;empty\u0026quot; initializer.",
+    "url": "https://detekt.github.io/detekt/style.html#useemptycounterpart",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseIfEmptyOrIfBlank",
+    "name": "Use If Empty Or If Blank",
+    "description": "Use `ifEmpty` or `ifBlank` instead of `isEmpty` or `isBlank` to assign a default value.",
+    "url": "https://detekt.github.io/detekt/style.html#useifemptyorifblank",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseIfInsteadOfWhen",
+    "name": "Use If Instead Of When",
+    "description": "Binary expressions are better expressed using an `if` expression than a `when` expression.",
+    "url": "https://detekt.github.io/detekt/style.html#useifinsteadofwhen",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseIsNullOrEmpty",
+    "name": "Use Is Null Or Empty",
+    "description": "Use `isNullOrEmpty()` call instead of `x \u003d\u003d null || x.isEmpty()`.",
+    "url": "https://detekt.github.io/detekt/style.html#useisnullorempty",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseOrEmpty",
+    "name": "Use Or Empty",
+    "description": "Use `orEmpty()` call instead of `?: emptyList()`",
+    "url": "https://detekt.github.io/detekt/style.html#useorempty",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseRequire",
+    "name": "Use Require",
+    "description": "Use require() instead of throwing an IllegalArgumentException.",
+    "url": "https://detekt.github.io/detekt/style.html#userequire",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseRequireNotNull",
+    "name": "Use Require Not Null",
+    "description": "Use requireNotNull() instead of require() for checking not-null.",
+    "url": "https://detekt.github.io/detekt/style.html#userequirenotnull",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UseSumOfInsteadOfFlatMapSize",
+    "name": "Use Sum Of Instead Of Flat Map Size",
+    "description": "Use `sumOf` instead of `flatMap` and `size/count` calls",
+    "url": "https://detekt.github.io/detekt/style.html#usesumofinsteadofflatmapsize",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UselessCallOnNotNull",
+    "name": "Useless Call On Not Null",
+    "description": "This call on a non-null reference may be reduced or removed. Some calls are intended to be called on nullable collection or text types (e.g. `String?`).When this call is used on a reference to a non-null type (e.g. `String`) it is redundant and will have no effect, so it can be removed.",
+    "url": "https://detekt.github.io/detekt/style.html#uselesscallonnotnull",
+    "tags": [
+      "performance"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UselessPostfixExpression",
+    "name": "Useless Postfix Expression",
+    "description": "The incremented or decremented value is unused. This value is replaced with the original value.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#uselesspostfixexpression",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 20
+  },
+  {
+    "key": "UtilityClassWithPublicConstructor",
+    "name": "Utility Class With Public Constructor",
+    "description": "The class declaration is unnecessary because it only contains utility functions. An object declaration should be used instead.",
+    "url": "https://detekt.github.io/detekt/style.html#utilityclasswithpublicconstructor",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "VarCouldBeVal",
+    "name": "Var Could Be Val",
+    "description": "Var declaration could be val.",
+    "url": "https://detekt.github.io/detekt/style.html#varcouldbeval",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "VariableMaxLength",
+    "name": "Variable Max Length",
+    "description": "Variable names should not be longer than the maximum set in the configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#variablemaxlength",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "VariableMinLength",
+    "name": "Variable Min Length",
+    "description": "Variable names should not be shorter than the minimum defined in the configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#variableminlength",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "VariableNaming",
+    "name": "Variable Naming",
+    "description": "Variable names should follow the naming convention set in the projects configuration.",
+    "url": "https://detekt.github.io/detekt/naming.html#variablenaming",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "WildcardImport",
+    "name": "Wildcard Import",
+    "description": "Wildcard imports should be replaced with imports using fully qualified class names. Wildcard imports can lead to naming conflicts. A library update can introduce naming clashes with your classes which results in compilation errors.",
+    "url": "https://detekt.github.io/detekt/style.html#wildcardimport",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "WrongEqualsTypeParameter",
+    "name": "Wrong Equals Type Parameter",
+    "description": "Wrong parameter type for `equals()` method found. To correctly override the `equals()` method use `Any?`.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#wrongequalstypeparameter",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 10
+  },
+  {
+    "key": "external.catchall",
+    "name": "Detekt Rule",
+    "description": "This reporting may be triggered by a custom Detekt rule or by a default Detekt rule that has not yet been added to the Sonar Kotlin plugin.",
+    "url": "https://detekt.github.io/detekt/",
+    "tags": [],
+    "type": "CODE_SMELL",
+    "constantDebtMinutes": 0
+  }
+]

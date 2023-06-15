@@ -1,0 +1,64 @@
+KtFile 1:0 … 6:0: [dummy.kt] class Simple(var a: String) { …  {        this.a = ""    }}
+  KtPackageDirective 1:0 … 1:0: [] 
+  KtImportList 1:0 … 1:0: [] 
+  KtClass 1:0 … 5:1: [] class Simple(var a: String) { …  {        this.a = ""    }}
+    LeafPsiElement 1:0 … 1:5: [class] class
+    PsiWhiteSpaceImpl 1:5 … 1:6: [WHITE_SPACE] 
+    LeafPsiElement 1:6 … 1:12: [IDENTIFIER] Simple
+    KtPrimaryConstructor 1:12 … 1:27: [] (var a: String)
+      KtParameterList 1:12 … 1:27: [] (var a: String)
+        LeafPsiElement 1:12 … 1:13: [LPAR] (
+        KtParameter 1:13 … 1:26: [] var a: String
+          LeafPsiElement 1:13 … 1:16: [var] var
+          PsiWhiteSpaceImpl 1:16 … 1:17: [WHITE_SPACE] 
+          LeafPsiElement 1:17 … 1:18: [IDENTIFIER] a
+          LeafPsiElement 1:18 … 1:19: [COLON] :
+          PsiWhiteSpaceImpl 1:19 … 1:20: [WHITE_SPACE] 
+          KtTypeReference 1:20 … 1:26: [] String
+            KtUserType 1:20 … 1:26: [] String
+              KtNameReferenceExpression 1:20 … 1:26: [] String
+                LeafPsiElement 1:20 … 1:26: [IDENTIFIER] String
+        LeafPsiElement 1:26 … 1:27: [RPAR] )
+    PsiWhiteSpaceImpl 1:27 … 1:28: [WHITE_SPACE] 
+    KtClassBody 1:28 … 5:1: [] {    fun b(a: String) {        this.a = ""    }}
+      LeafPsiElement 1:28 … 1:29: [LBRACE] {
+      PsiWhiteSpaceImpl 1:29 … 2:4: [WHITE_SPACE] 
+      KtNamedFunction 2:4 … 4:5: [] fun b(a: String) {        this.a = ""    }
+        LeafPsiElement 2:4 … 2:7: [fun] fun
+        PsiWhiteSpaceImpl 2:7 … 2:8: [WHITE_SPACE] 
+        LeafPsiElement 2:8 … 2:9: [IDENTIFIER] b
+        KtParameterList 2:9 … 2:20: [] (a: String)
+          LeafPsiElement 2:9 … 2:10: [LPAR] (
+          KtParameter 2:10 … 2:19: [] a: String
+            LeafPsiElement 2:10 … 2:11: [IDENTIFIER] a
+            LeafPsiElement 2:11 … 2:12: [COLON] :
+            PsiWhiteSpaceImpl 2:12 … 2:13: [WHITE_SPACE] 
+            KtTypeReference 2:13 … 2:19: [] String
+              KtUserType 2:13 … 2:19: [] String
+                KtNameReferenceExpression 2:13 … 2:19: [] String
+                  LeafPsiElement 2:13 … 2:19: [IDENTIFIER] String
+          LeafPsiElement 2:19 … 2:20: [RPAR] )
+        PsiWhiteSpaceImpl 2:20 … 2:21: [WHITE_SPACE] 
+        KtBlockExpression 2:21 … 4:5: [] {        this.a = ""    }
+          LeafPsiElement 2:21 … 2:22: [LBRACE] {
+          PsiWhiteSpaceImpl 2:22 … 3:8: [WHITE_SPACE] 
+          KtBinaryExpression 3:8 … 3:19: [] this.a = ""
+            KtDotQualifiedExpression 3:8 … 3:14: [] this.a
+              KtThisExpression 3:8 … 3:12: [] this
+                KtNameReferenceExpression 3:8 … 3:12: [] this
+                  LeafPsiElement 3:8 … 3:12: [this] this
+              LeafPsiElement 3:12 … 3:13: [DOT] .
+              KtNameReferenceExpression 3:13 … 3:14: [] a
+                LeafPsiElement 3:13 … 3:14: [IDENTIFIER] a
+            PsiWhiteSpaceImpl 3:14 … 3:15: [WHITE_SPACE] 
+            KtOperationReferenceExpression 3:15 … 3:16: [] =
+              LeafPsiElement 3:15 … 3:16: [EQ] =
+            PsiWhiteSpaceImpl 3:16 … 3:17: [WHITE_SPACE] 
+            KtStringTemplateExpression 3:17 … 3:19: [] ""
+              LeafPsiElement 3:17 … 3:18: [OPEN_QUOTE] "
+              LeafPsiElement 3:18 … 3:19: [CLOSING_QUOTE] "
+          PsiWhiteSpaceImpl 3:19 … 4:4: [WHITE_SPACE] 
+          LeafPsiElement 4:4 … 4:5: [RBRACE] }
+      PsiWhiteSpaceImpl 4:5 … 5:0: [WHITE_SPACE] 
+      LeafPsiElement 5:0 … 5:1: [RBRACE] }
+  PsiWhiteSpaceImpl 5:1 … 6:0: [WHITE_SPACE] 

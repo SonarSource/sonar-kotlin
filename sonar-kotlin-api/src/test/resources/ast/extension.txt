@@ -1,0 +1,74 @@
+KtFile 1:0 … 5:38: [dummy.kt] package org.sonarsource.kotlin … tensionFunction(): String = ""
+  KtPackageDirective 1:0 … 1:44: [] package org.sonarsource.kotlin.converter.ast
+    LeafPsiElement 1:0 … 1:7: [package] package
+    PsiWhiteSpaceImpl 1:7 … 1:8: [WHITE_SPACE] 
+    KtDotQualifiedExpression 1:8 … 1:44: [] org.sonarsource.kotlin.converter.ast
+      KtDotQualifiedExpression 1:8 … 1:40: [] org.sonarsource.kotlin.converter
+        KtDotQualifiedExpression 1:8 … 1:30: [] org.sonarsource.kotlin
+          KtDotQualifiedExpression 1:8 … 1:23: [] org.sonarsource
+            KtNameReferenceExpression 1:8 … 1:11: [] org
+              LeafPsiElement 1:8 … 1:11: [IDENTIFIER] org
+            LeafPsiElement 1:11 … 1:12: [DOT] .
+            KtNameReferenceExpression 1:12 … 1:23: [] sonarsource
+              LeafPsiElement 1:12 … 1:23: [IDENTIFIER] sonarsource
+          LeafPsiElement 1:23 … 1:24: [DOT] .
+          KtNameReferenceExpression 1:24 … 1:30: [] kotlin
+            LeafPsiElement 1:24 … 1:30: [IDENTIFIER] kotlin
+        LeafPsiElement 1:30 … 1:31: [DOT] .
+        KtNameReferenceExpression 1:31 … 1:40: [] converter
+          LeafPsiElement 1:31 … 1:40: [IDENTIFIER] converter
+      LeafPsiElement 1:40 … 1:41: [DOT] .
+      KtNameReferenceExpression 1:41 … 1:44: [] ast
+        LeafPsiElement 1:41 … 1:44: [IDENTIFIER] ast
+  PsiWhiteSpaceImpl 1:44 … 3:0: [WHITE_SPACE] 
+  KtImportList 3:0 … 3:45: [] import org.sonarsource.kotlin.converter.ast.B
+    KtImportDirective 3:0 … 3:45: [] import org.sonarsource.kotlin.converter.ast.B
+      LeafPsiElement 3:0 … 3:6: [import] import
+      PsiWhiteSpaceImpl 3:6 … 3:7: [WHITE_SPACE] 
+      KtDotQualifiedExpression 3:7 … 3:45: [] org.sonarsource.kotlin.converter.ast.B
+        KtDotQualifiedExpression 3:7 … 3:43: [] org.sonarsource.kotlin.converter.ast
+          KtDotQualifiedExpression 3:7 … 3:39: [] org.sonarsource.kotlin.converter
+            KtDotQualifiedExpression 3:7 … 3:29: [] org.sonarsource.kotlin
+              KtDotQualifiedExpression 3:7 … 3:22: [] org.sonarsource
+                KtNameReferenceExpression 3:7 … 3:10: [] org
+                  LeafPsiElement 3:7 … 3:10: [IDENTIFIER] org
+                LeafPsiElement 3:10 … 3:11: [DOT] .
+                KtNameReferenceExpression 3:11 … 3:22: [] sonarsource
+                  LeafPsiElement 3:11 … 3:22: [IDENTIFIER] sonarsource
+              LeafPsiElement 3:22 … 3:23: [DOT] .
+              KtNameReferenceExpression 3:23 … 3:29: [] kotlin
+                LeafPsiElement 3:23 … 3:29: [IDENTIFIER] kotlin
+            LeafPsiElement 3:29 … 3:30: [DOT] .
+            KtNameReferenceExpression 3:30 … 3:39: [] converter
+              LeafPsiElement 3:30 … 3:39: [IDENTIFIER] converter
+          LeafPsiElement 3:39 … 3:40: [DOT] .
+          KtNameReferenceExpression 3:40 … 3:43: [] ast
+            LeafPsiElement 3:40 … 3:43: [IDENTIFIER] ast
+        LeafPsiElement 3:43 … 3:44: [DOT] .
+        KtNameReferenceExpression 3:44 … 3:45: [] B
+          LeafPsiElement 3:44 … 3:45: [IDENTIFIER] B
+  PsiWhiteSpaceImpl 3:45 … 5:0: [WHITE_SPACE] 
+  KtNamedFunction 5:0 … 5:38: [] fun B.extensionFunction(): String = ""
+    LeafPsiElement 5:0 … 5:3: [fun] fun
+    PsiWhiteSpaceImpl 5:3 … 5:4: [WHITE_SPACE] 
+    KtTypeReference 5:4 … 5:5: [] B
+      KtUserType 5:4 … 5:5: [] B
+        KtNameReferenceExpression 5:4 … 5:5: [] B
+          LeafPsiElement 5:4 … 5:5: [IDENTIFIER] B
+    LeafPsiElement 5:5 … 5:6: [DOT] .
+    LeafPsiElement 5:6 … 5:23: [IDENTIFIER] extensionFunction
+    KtParameterList 5:23 … 5:25: [] ()
+      LeafPsiElement 5:23 … 5:24: [LPAR] (
+      LeafPsiElement 5:24 … 5:25: [RPAR] )
+    LeafPsiElement 5:25 … 5:26: [COLON] :
+    PsiWhiteSpaceImpl 5:26 … 5:27: [WHITE_SPACE] 
+    KtTypeReference 5:27 … 5:33: [] String
+      KtUserType 5:27 … 5:33: [] String
+        KtNameReferenceExpression 5:27 … 5:33: [] String
+          LeafPsiElement 5:27 … 5:33: [IDENTIFIER] String
+    PsiWhiteSpaceImpl 5:33 … 5:34: [WHITE_SPACE] 
+    LeafPsiElement 5:34 … 5:35: [EQ] =
+    PsiWhiteSpaceImpl 5:35 … 5:36: [WHITE_SPACE] 
+    KtStringTemplateExpression 5:36 … 5:38: [] ""
+      LeafPsiElement 5:36 … 5:37: [OPEN_QUOTE] "
+      LeafPsiElement 5:37 … 5:38: [CLOSING_QUOTE] "

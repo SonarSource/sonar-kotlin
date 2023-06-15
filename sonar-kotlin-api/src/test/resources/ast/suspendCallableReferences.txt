@@ -1,0 +1,114 @@
+KtFile 1:0 … 9:1: [dummy.kt] package org.sonarsource.kotlin … In Kotlin 1.4, it also works}
+  KtPackageDirective 1:0 … 1:44: [] package org.sonarsource.kotlin.converter.ast
+    LeafPsiElement 1:0 … 1:7: [package] package
+    PsiWhiteSpaceImpl 1:7 … 1:8: [WHITE_SPACE] 
+    KtDotQualifiedExpression 1:8 … 1:44: [] org.sonarsource.kotlin.converter.ast
+      KtDotQualifiedExpression 1:8 … 1:40: [] org.sonarsource.kotlin.converter
+        KtDotQualifiedExpression 1:8 … 1:30: [] org.sonarsource.kotlin
+          KtDotQualifiedExpression 1:8 … 1:23: [] org.sonarsource
+            KtNameReferenceExpression 1:8 … 1:11: [] org
+              LeafPsiElement 1:8 … 1:11: [IDENTIFIER] org
+            LeafPsiElement 1:11 … 1:12: [DOT] .
+            KtNameReferenceExpression 1:12 … 1:23: [] sonarsource
+              LeafPsiElement 1:12 … 1:23: [IDENTIFIER] sonarsource
+          LeafPsiElement 1:23 … 1:24: [DOT] .
+          KtNameReferenceExpression 1:24 … 1:30: [] kotlin
+            LeafPsiElement 1:24 … 1:30: [IDENTIFIER] kotlin
+        LeafPsiElement 1:30 … 1:31: [DOT] .
+        KtNameReferenceExpression 1:31 … 1:40: [] converter
+          LeafPsiElement 1:31 … 1:40: [IDENTIFIER] converter
+      LeafPsiElement 1:40 … 1:41: [DOT] .
+      KtNameReferenceExpression 1:41 … 1:44: [] ast
+        LeafPsiElement 1:41 … 1:44: [IDENTIFIER] ast
+  KtImportList 1:44 … 1:44: [] 
+  PsiWhiteSpaceImpl 1:44 … 3:0: [WHITE_SPACE] 
+  KtNamedFunction 3:0 … 3:13: [] fun call() {}
+    LeafPsiElement 3:0 … 3:3: [fun] fun
+    PsiWhiteSpaceImpl 3:3 … 3:4: [WHITE_SPACE] 
+    LeafPsiElement 3:4 … 3:8: [IDENTIFIER] call
+    KtParameterList 3:8 … 3:10: [] ()
+      LeafPsiElement 3:8 … 3:9: [LPAR] (
+      LeafPsiElement 3:9 … 3:10: [RPAR] )
+    PsiWhiteSpaceImpl 3:10 … 3:11: [WHITE_SPACE] 
+    KtBlockExpression 3:11 … 3:13: [] {}
+      LeafPsiElement 3:11 … 3:12: [LBRACE] {
+      LeafPsiElement 3:12 … 3:13: [RBRACE] }
+  PsiWhiteSpaceImpl 3:13 … 4:0: [WHITE_SPACE] 
+  KtNamedFunction 4:0 … 4:41: [] fun takeSuspend(f: suspend () -> Unit) {}
+    LeafPsiElement 4:0 … 4:3: [fun] fun
+    PsiWhiteSpaceImpl 4:3 … 4:4: [WHITE_SPACE] 
+    LeafPsiElement 4:4 … 4:15: [IDENTIFIER] takeSuspend
+    KtParameterList 4:15 … 4:38: [] (f: suspend () -> Unit)
+      LeafPsiElement 4:15 … 4:16: [LPAR] (
+      KtParameter 4:16 … 4:37: [] f: suspend () -> Unit
+        LeafPsiElement 4:16 … 4:17: [IDENTIFIER] f
+        LeafPsiElement 4:17 … 4:18: [COLON] :
+        PsiWhiteSpaceImpl 4:18 … 4:19: [WHITE_SPACE] 
+        KtTypeReference 4:19 … 4:37: [] suspend () -> Unit
+          KtDeclarationModifierList 4:19 … 4:26: [] suspend
+            LeafPsiElement 4:19 … 4:26: [suspend] suspend
+          PsiWhiteSpaceImpl 4:26 … 4:27: [WHITE_SPACE] 
+          KtFunctionType 4:27 … 4:37: [] () -> Unit
+            KtParameterList 4:27 … 4:29: [] ()
+              LeafPsiElement 4:27 … 4:28: [LPAR] (
+              LeafPsiElement 4:28 … 4:29: [RPAR] )
+            PsiWhiteSpaceImpl 4:29 … 4:30: [WHITE_SPACE] 
+            LeafPsiElement 4:30 … 4:32: [ARROW] ->
+            PsiWhiteSpaceImpl 4:32 … 4:33: [WHITE_SPACE] 
+            KtTypeReference 4:33 … 4:37: [] Unit
+              KtUserType 4:33 … 4:37: [] Unit
+                KtNameReferenceExpression 4:33 … 4:37: [] Unit
+                  LeafPsiElement 4:33 … 4:37: [IDENTIFIER] Unit
+      LeafPsiElement 4:37 … 4:38: [RPAR] )
+    PsiWhiteSpaceImpl 4:38 … 4:39: [WHITE_SPACE] 
+    KtBlockExpression 4:39 … 4:41: [] {}
+      LeafPsiElement 4:39 … 4:40: [LBRACE] {
+      LeafPsiElement 4:40 … 4:41: [RBRACE] }
+  PsiWhiteSpaceImpl 4:41 … 6:0: [WHITE_SPACE] 
+  KtNamedFunction 6:0 … 9:1: [] fun test() {    takeSuspend { … In Kotlin 1.4, it also works}
+    LeafPsiElement 6:0 … 6:3: [fun] fun
+    PsiWhiteSpaceImpl 6:3 … 6:4: [WHITE_SPACE] 
+    LeafPsiElement 6:4 … 6:8: [IDENTIFIER] test
+    KtParameterList 6:8 … 6:10: [] ()
+      LeafPsiElement 6:8 … 6:9: [LPAR] (
+      LeafPsiElement 6:9 … 6:10: [RPAR] )
+    PsiWhiteSpaceImpl 6:10 … 6:11: [WHITE_SPACE] 
+    KtBlockExpression 6:11 … 9:1: [] {    takeSuspend { call() } / … In Kotlin 1.4, it also works}
+      LeafPsiElement 6:11 … 6:12: [LBRACE] {
+      PsiWhiteSpaceImpl 6:12 … 7:4: [WHITE_SPACE] 
+      KtCallExpression 7:4 … 7:26: [] takeSuspend { call() }
+        KtNameReferenceExpression 7:4 … 7:15: [] takeSuspend
+          LeafPsiElement 7:4 … 7:15: [IDENTIFIER] takeSuspend
+        PsiWhiteSpaceImpl 7:15 … 7:16: [WHITE_SPACE] 
+        KtLambdaArgument 7:16 … 7:26: [] { call() }
+          KtLambdaExpression 7:16 … 7:26: [] { call() }
+            KtFunctionLiteral 7:16 … 7:26: [] { call() }
+              LeafPsiElement 7:16 … 7:17: [LBRACE] {
+              PsiWhiteSpaceImpl 7:17 … 7:18: [WHITE_SPACE] 
+              KtBlockExpression 7:18 … 7:24: [] call()
+                KtCallExpression 7:18 … 7:24: [] call()
+                  KtNameReferenceExpression 7:18 … 7:22: [] call
+                    LeafPsiElement 7:18 … 7:22: [IDENTIFIER] call
+                  KtValueArgumentList 7:22 … 7:24: [] ()
+                    LeafPsiElement 7:22 … 7:23: [LPAR] (
+                    LeafPsiElement 7:23 … 7:24: [RPAR] )
+              PsiWhiteSpaceImpl 7:24 … 7:25: [WHITE_SPACE] 
+              LeafPsiElement 7:25 … 7:26: [RBRACE] }
+      PsiWhiteSpaceImpl 7:26 … 7:27: [WHITE_SPACE] 
+      PsiCommentImpl 7:27 … 7:43: [EOL_COMMENT] // OK before 1.4
+      PsiWhiteSpaceImpl 7:43 … 8:4: [WHITE_SPACE] 
+      KtCallExpression 8:4 … 8:23: [] takeSuspend(::call)
+        KtNameReferenceExpression 8:4 … 8:15: [] takeSuspend
+          LeafPsiElement 8:4 … 8:15: [IDENTIFIER] takeSuspend
+        KtValueArgumentList 8:15 … 8:23: [] (::call)
+          LeafPsiElement 8:15 … 8:16: [LPAR] (
+          KtValueArgument 8:16 … 8:22: [] ::call
+            KtCallableReferenceExpression 8:16 … 8:22: [] ::call
+              LeafPsiElement 8:16 … 8:18: [COLONCOLON] ::
+              KtNameReferenceExpression 8:18 … 8:22: [] call
+                LeafPsiElement 8:18 … 8:22: [IDENTIFIER] call
+          LeafPsiElement 8:22 … 8:23: [RPAR] )
+      PsiWhiteSpaceImpl 8:23 … 8:24: [WHITE_SPACE] 
+      PsiCommentImpl 8:24 … 8:55: [EOL_COMMENT] // In Kotlin 1.4, it also works
+      PsiWhiteSpaceImpl 8:55 … 9:0: [WHITE_SPACE] 
+      LeafPsiElement 9:0 … 9:1: [RBRACE] }
