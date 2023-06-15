@@ -39,7 +39,7 @@ import java.util.EnumMap
 import java.util.ServiceLoader
 import kotlin.io.path.exists
 
-internal val DEFAULT_RULES_FILE = Path.of("sonar-kotlin-plugin", "src", "main", "resources")
+internal val DEFAULT_RULES_FILE = Path.of("sonar-kotlin-external-linters", "src", "main", "resources")
     .resolve(Path.of(DetektRulesDefinition.RULES_FILE))
 
 fun main(vararg args: String?) {

@@ -22,6 +22,7 @@ dependencies {
     testImplementation(libs.sonar.plugin.api)
 
     testRuntimeOnly(testLibs.junit.engine)
+    implementation(project(":sonar-kotlin-external-linters"))
 }
 
 tasks {

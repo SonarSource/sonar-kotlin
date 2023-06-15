@@ -4,6 +4,17 @@ plugins {
 
 dependencies {
     compileOnly(libs.sonar.plugin.api)
+    compileOnly(testLibs.junit.api)
+    compileOnly(testLibs.junit.params)
+    compileOnly(testLibs.assertj.core)
+    compileOnly(testLibs.mockito.core)
+    compileOnly(testLibs.mockk)
+    compileOnly(testLibs.classgraph)
+    compileOnly(testLibs.sonar.analyzer.test.commons)
+    compileOnly(testLibs.sonar.plugin.api.impl)
+    compileOnly(testLibs.sonar.plugin.api.test.fixtures)
+    compileOnly(project(":sonar-kotlin-api"))
+
     implementation(libs.sonar.analyzer.commons)
     implementation(libs.sonar.xml.parsing)
     implementation(libs.sonar.regex.parsing)
@@ -12,17 +23,6 @@ dependencies {
     implementation(libs.staxmate)
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
-
-    testImplementation(testLibs.junit.api)
-    testImplementation(testLibs.junit.params)
-    testRuntimeOnly(testLibs.junit.engine)
-    testImplementation(testLibs.assertj.core)
-    testImplementation(testLibs.mockito.core)
-    testImplementation(testLibs.mockk)
-    testImplementation(testLibs.classgraph)
-    testImplementation(testLibs.sonar.analyzer.test.commons)
-    testImplementation(testLibs.sonar.plugin.api.impl)
-    testImplementation(testLibs.sonar.plugin.api.test.fixtures)
 }
 
 // The new version 11.0.17 of javadoc has a bug and does not handle package annotations correctly

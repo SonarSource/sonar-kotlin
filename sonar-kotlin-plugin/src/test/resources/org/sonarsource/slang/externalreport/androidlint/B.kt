@@ -1,4 +1,0 @@
-class B() {
-    fun foo() {
-    }
-}

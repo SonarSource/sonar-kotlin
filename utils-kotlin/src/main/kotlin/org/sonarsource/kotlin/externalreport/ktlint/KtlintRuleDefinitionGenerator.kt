@@ -28,7 +28,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-internal val DEFAULT_RULES_FILE = Paths.get("sonar-kotlin-plugin", "src", "main", "resources")
+internal val DEFAULT_RULES_FILE = Paths.get("sonar-kotlin-external-linters", "src", "main", "resources")
     .resolve(Path.of(KtlintRulesDefinition.RULES_FILE))
 
 private val TAGS = setOf("ktlint", "style")

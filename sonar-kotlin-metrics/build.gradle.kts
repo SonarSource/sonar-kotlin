@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.sonar.analyzer.commons.recognizers)
 
     implementation(project(":sonar-kotlin-api"))
+    implementation(project(":sonar-kotlin-checks"))
 
     testImplementation(testLibs.junit.api)
     testImplementation(testLibs.junit.params)
@@ -27,6 +28,7 @@ dependencies {
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
 
     testImplementation(project(":sonar-kotlin-test-api"))
+    testImplementation(project(":sonar-kotlin-plugin"))
 }
 
 /* TODO: remove?
