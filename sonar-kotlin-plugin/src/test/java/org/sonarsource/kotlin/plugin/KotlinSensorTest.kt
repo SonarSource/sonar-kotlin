@@ -48,15 +48,13 @@ import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.utils.Version
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.DummyReadCache
-import org.sonarsource.kotlin.DummyWriteCache
-import org.sonarsource.kotlin.api.AbstractCheck
-import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.converter.analyzeAndGetBindingContext
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.frontend.Environment
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.analyzeAndGetBindingContext
 import org.sonarsource.kotlin.plugin.caching.contentHashKey
 import org.sonarsource.kotlin.plugin.cpd.computeCPDTokensCacheKey
-import org.sonarsource.kotlin.testing.AbstractSensorTest
-import org.sonarsource.kotlin.testing.assertTextRange
+import org.sonarsource.kotlin.testapi.AbstractSensorTest
 import java.io.IOException
 import java.io.InputStream
 import java.security.MessageDigest
@@ -217,8 +215,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         mockkStatic("org.sonarsource.kotlin.plugin.KotlinSensorKt")
         every { environment(any()) } returns Environment(listOf("file1.kt"), LanguageVersion.LATEST_STABLE)
-
-        mockkStatic("org.sonarsource.kotlin.converter.KotlinCoreEnvironmentToolsKt")
+        mockkStatic("org.sonarsource.kotlin.api.frontend.KotlinCoreEnvironmentToolsKt")
         every { analyzeAndGetBindingContext(any(), any()) } throws IOException("Boom!")
 
         val checkFactory = checkFactory("S1764")

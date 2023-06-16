@@ -22,6 +22,8 @@ package org.sonarsource.kotlin.plugin
 import org.sonar.api.SonarRuntime
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonarsource.analyzer.commons.RuleMetadataLoader
+import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_KEY
+import org.sonarsource.kotlin.api.common.KOTLIN_REPOSITORY_KEY
 
 class KotlinRulesDefinition(private val runtime: SonarRuntime) : RulesDefinition {
 
@@ -31,7 +33,7 @@ class KotlinRulesDefinition(private val runtime: SonarRuntime) : RulesDefinition
 
     override fun define(context: RulesDefinition.Context) {
         context
-            .createRepository(KotlinPlugin.KOTLIN_REPOSITORY_KEY, KotlinPlugin.KOTLIN_LANGUAGE_KEY)
+            .createRepository(KOTLIN_REPOSITORY_KEY, KOTLIN_LANGUAGE_KEY)
             .setName(KotlinPlugin.REPOSITORY_NAME).let { repository ->
                 val checks = KOTLIN_CHECKS
                 RuleMetadataLoader(RESOURCE_FOLDER, KotlinProfileDefinition.PATH_TO_JSON, runtime).addRulesByAnnotatedClass(repository, checks)

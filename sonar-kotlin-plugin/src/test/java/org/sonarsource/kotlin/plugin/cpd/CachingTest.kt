@@ -29,9 +29,9 @@ import org.slf4j.event.Level
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.cache.ReadCache
 import org.sonar.api.testfixtures.log.LogTesterJUnit5
-import org.sonarsource.kotlin.DummyInputFile
-import org.sonarsource.kotlin.DummyReadCache
-import org.sonarsource.kotlin.DummyWriteCache
+import org.sonarsource.kotlin.testapi.DummyInputFile
+import org.sonarsource.kotlin.plugin.DummyReadCache
+import org.sonarsource.kotlin.plugin.DummyWriteCache
 import java.nio.file.Path
 
 class CachingTest {

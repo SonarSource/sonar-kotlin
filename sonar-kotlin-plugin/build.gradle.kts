@@ -3,7 +3,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.jar.JarInputStream
 
-
 plugins {
     id("com.github.johnrengelman.shadow") version "7.1.0"
     kotlin("jvm")
@@ -20,6 +19,12 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
 
+    implementation(project(":sonar-kotlin-api"))
+    implementation(project(":sonar-kotlin-metrics"))
+    implementation(project(":sonar-kotlin-external-linters"))
+    implementation(project(":sonar-kotlin-surefire"))
+    implementation(project(":sonar-kotlin-checks"))
+
     testImplementation(testLibs.junit.api)
     testImplementation(testLibs.junit.params)
     testRuntimeOnly(testLibs.junit.engine)
@@ -30,6 +35,8 @@ dependencies {
     testImplementation(testLibs.sonar.analyzer.test.commons)
     testImplementation(testLibs.sonar.plugin.api.impl)
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
+
+    testImplementation(project(":sonar-kotlin-test-api"))
 }
 
 tasks.withType<JavaCompile> {
@@ -101,7 +108,7 @@ tasks.shadowJar {
     exclude("org/jetbrains/kotlin/org/jline/**")
     exclude("org/jetbrains/kotlin/net/jpountz/**")
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 37_500_000L, 38_000_000L)
+        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 37_400_000L, 37_900_000L)
     }
 }
 

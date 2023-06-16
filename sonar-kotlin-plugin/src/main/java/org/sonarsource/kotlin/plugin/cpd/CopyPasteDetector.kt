@@ -34,10 +34,10 @@ import org.slf4j.LoggerFactory
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.TextRange
 import org.sonar.api.batch.sensor.SensorContext
-import org.sonarsource.kotlin.api.hasCacheEnabled
-import org.sonarsource.kotlin.converter.KotlinTextRanges.textRange
-import org.sonarsource.kotlin.plugin.KotlinFileContext
-import org.sonarsource.kotlin.visiting.KotlinFileVisitor
+import org.sonarsource.kotlin.api.checks.hasCacheEnabled
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
 
 private val LOG = LoggerFactory.getLogger(CopyPasteDetector::class.java)
 

@@ -20,8 +20,8 @@
 package org.sonarsource.kotlin.externalreport.androidlint
 
 import com.google.gson.GsonBuilder
-import org.sonarsource.kotlin.externalreport.ExternalReporting
 import org.sonarsource.kotlin.externalreport.ExternalRule
+import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import org.sonarsource.kotlin.externalreport.common.Translator
 import java.io.IOException
 import java.nio.charset.StandardCharsets
@@ -29,7 +29,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-internal val DEFAULT_RULES_FILE = Path.of("sonar-kotlin-plugin", "src", "main", "resources")
+internal val DEFAULT_RULES_FILE = Path.of("sonar-kotlin-external-linters", "src", "main", "resources")
     .resolve(Path.of(RULES_FILE))
 private val ANDROID_LINT_HELP = Path.of("utils-kotlin", "src", "main", "resources", "android-lint-help.txt")
 
@@ -92,7 +92,7 @@ private object AndroidLintDefinitionGenerator {
         externalRules.sortBy { it.key }
 
         val fallbackRule = ExternalRule(
-            key = ExternalReporting.FALLBACK_RULE_KEY,
+            key = FALLBACK_RULE_KEY,
             name = "Android Lint Rule",
             description = "This reporting may be triggered by a custom Android Lint rule or by a default Android Lint rule that has " +
                 "not yet been added to the Sonar Kotlin plugin.",

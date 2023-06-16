@@ -22,13 +22,13 @@ package org.sonarsource.kotlin.externalreport.ktlint
 import com.google.gson.GsonBuilder
 import com.pinterest.ktlint.rule.engine.core.api.Rule
 import com.pinterest.ktlint.ruleset.standard.StandardRuleSetProvider
-import org.sonarsource.kotlin.externalreport.ExternalReporting
 import org.sonarsource.kotlin.externalreport.ExternalRule
+import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-internal val DEFAULT_RULES_FILE = Paths.get("sonar-kotlin-plugin", "src", "main", "resources")
+internal val DEFAULT_RULES_FILE = Paths.get("sonar-kotlin-external-linters", "src", "main", "resources")
     .resolve(Path.of(KtlintRulesDefinition.RULES_FILE))
 
 private val TAGS = setOf("ktlint", "style")
@@ -63,7 +63,7 @@ fun generateRuleDefinitionsJson(): String {
     }
 
     val fallbackRule = ExternalRule(
-        key = ExternalReporting.FALLBACK_RULE_KEY,
+        key = FALLBACK_RULE_KEY,
         name = "Ktlint Rule",
         description = "This reporting may be triggered by a custom ktlint rule or by a default ktlint rule that has not yet " +
             "been added to the Sonar Kotlin plugin.",

@@ -24,11 +24,9 @@ import org.junit.jupiter.api.Test
 import org.slf4j.event.Level
 import org.sonar.api.batch.sensor.cache.ReadCache
 import org.sonar.api.batch.sensor.cache.WriteCache
-import org.sonarsource.kotlin.DummyInputFile
-import org.sonarsource.kotlin.DummyReadCache
-import org.sonarsource.kotlin.DummyWriteCache
+import org.sonarsource.kotlin.testapi.DummyInputFile
 import org.sonarsource.kotlin.plugin.caching.ContentHashCache
-import org.sonarsource.kotlin.testing.AbstractSensorTest
+import org.sonarsource.kotlin.testapi.AbstractSensorTest
 import java.nio.file.Path
 import java.security.MessageDigest
 

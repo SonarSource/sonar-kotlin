@@ -24,17 +24,17 @@ import org.assertj.core.util.Files
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.sonarsource.kotlin.dev.DotNode
+import org.sonarsource.kotlin.tools.DotNode
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.readText
 
 private val INPUT_FILE =
-    Path.of("..", "sonar-kotlin-plugin", "src", "test", "resources", "ast-printing", "TestFileToPrintAstFor.kt").toAbsolutePath()
+    Path.of("..", "sonar-kotlin-api", "src", "test", "resources", "ast-printing", "TestFileToPrintAstFor.kt").toAbsolutePath()
 private val EXPECTED_DOT_OUTPUT =
-    Path.of("..", "sonar-kotlin-plugin", "src", "test", "resources", "ast-printing", "TestFileToPrintAstFor.dot")
+    Path.of("..", "sonar-kotlin-api", "src", "test", "resources", "ast-printing", "TestFileToPrintAstFor.dot")
 private val EXPECTED_TXT_OUTPUT =
-    Path.of("..", "sonar-kotlin-plugin", "src", "test", "resources", "ast-printing", "TestFileToPrintAstFor.txt")
+    Path.of("..", "sonar-kotlin-api", "src", "test", "resources", "ast-printing", "TestFileToPrintAstFor.txt")
 
 class AstPrinterTest {
     @BeforeEach

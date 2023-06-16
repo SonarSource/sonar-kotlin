@@ -30,11 +30,11 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.cpd.internal.TokensLine
 import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonar.api.testfixtures.log.LogTesterJUnit5
-import org.sonarsource.kotlin.DummyReadCache
-import org.sonarsource.kotlin.DummyWriteCache
-import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.plugin.InputFileContextImpl
-import org.sonarsource.kotlin.utils.kotlinTreeOf
+import org.sonarsource.kotlin.plugin.DummyReadCache
+import org.sonarsource.kotlin.plugin.DummyWriteCache
+import org.sonarsource.kotlin.api.checks.InputFileContextImpl
+import org.sonarsource.kotlin.api.frontend.Environment
+import org.sonarsource.kotlin.testapi.kotlinTreeOf
 import java.nio.file.Path
 import kotlin.io.path.createFile
 import kotlin.io.path.name

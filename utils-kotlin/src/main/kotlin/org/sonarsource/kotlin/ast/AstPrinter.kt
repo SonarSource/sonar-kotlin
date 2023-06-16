@@ -20,8 +20,8 @@
 package org.sonarsource.kotlin.ast
 
 import org.jetbrains.kotlin.config.LanguageVersion
-import org.sonarsource.kotlin.converter.Environment
-import org.sonarsource.kotlin.dev.AstPrinter
+import org.sonarsource.kotlin.api.frontend.Environment
+import org.sonarsource.kotlin.tools.AstPrinter
 import java.nio.file.Path
 import kotlin.io.path.readText
 
