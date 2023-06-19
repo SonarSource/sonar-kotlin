@@ -30,14 +30,14 @@ internal class KotlinLanguageTest {
     @Test
     fun test_suffixes_default() {
         val kotlinLanguage = KotlinLanguage(MapSettings().asConfig())
-        AssertionsForClassTypes.assertThat(kotlinLanguage.fileSuffixes).containsExactly(".kt")
+        AssertionsForClassTypes.assertThat(kotlinLanguage.fileSuffixes).containsExactlyInAnyOrder(".kt", ".kts")
     }
 
     @Test
     fun test_suffixes_empty() {
         val kotlinLanguage =
             KotlinLanguage(MapSettings().setProperty(KOTLIN_FILE_SUFFIXES_KEY, "").asConfig())
-        AssertionsForClassTypes.assertThat(kotlinLanguage.fileSuffixes).containsExactly(".kt")
+        AssertionsForClassTypes.assertThat(kotlinLanguage.fileSuffixes).containsExactlyInAnyOrder(".kt", ".kts")
     }
 
     @Test

@@ -25,4 +25,6 @@ const val KOTLIN_REPOSITORY_KEY = "kotlin"
 const val KOTLIN_LANGUAGE_KEY = "kotlin"
 const val KOTLIN_LANGUAGE_NAME = "Kotlin"
 const val KOTLIN_FILE_SUFFIXES_KEY = "sonar.kotlin.file.suffixes"
-const val KOTLIN_FILE_SUFFIXES_DEFAULT_VALUE = ".kt"
+
+const val KOTLIN_FILE_SUFFIXES_DEFAULT_VALUE = ".kt,.kts"
+

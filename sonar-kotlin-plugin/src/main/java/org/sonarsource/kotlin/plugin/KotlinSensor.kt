@@ -94,10 +94,11 @@ class KotlinSensor(
 
     override fun execute(sensorContext: SensorContext) {
         val sensorDuration = createPerformanceMeasureReport(sensorContext)
+
         val fileSystem: FileSystem = sensorContext.fileSystem()
         val mainFilePredicate = fileSystem.predicates().and(
             fileSystem.predicates().hasLanguage(language.key),
-            fileSystem.predicates().hasType(InputFile.Type.MAIN)
+            fileSystem.predicates().hasType(InputFile.Type.MAIN),
         )
 
         val filesToAnalyze: Iterable<InputFile> = fileSystem.inputFiles(mainFilePredicate).let { mainFiles ->
@@ -203,7 +204,8 @@ class KotlinSensor(
                     bindingContext(
                         environment.env,
                         environment.classpath,
-                        kotlinFiles.map { it.ktFile },
+                        kotlinFiles.map { it.ktFile }.
+                        filter { !it.isScript() },
                     )
                 }
             }.getOrElse { e ->

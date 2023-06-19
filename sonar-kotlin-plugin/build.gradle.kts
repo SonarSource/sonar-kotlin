@@ -8,6 +8,10 @@ plugins {
     kotlin("jvm")
 }
 
+repositories {
+    maven { url = uri("https://repo.gradle.org/gradle/libs-releases") }
+}
+
 dependencies {
     compileOnly(libs.sonar.plugin.api)
     implementation(libs.sonar.analyzer.commons)
@@ -22,6 +26,7 @@ dependencies {
     implementation(project(":sonar-kotlin-api"))
     implementation(project(":sonar-kotlin-metrics"))
     implementation(project(":sonar-kotlin-external-linters"))
+    implementation(project(":sonar-kotlin-gradle"))
     implementation(project(":sonar-kotlin-surefire"))
     implementation(project(":sonar-kotlin-checks"))
 
@@ -108,7 +113,7 @@ tasks.shadowJar {
     exclude("org/jetbrains/kotlin/org/jline/**")
     exclude("org/jetbrains/kotlin/net/jpountz/**")
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 37_400_000L, 37_900_000L)
+        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 39_500_000L, 41_000_000L)
     }
 }
 

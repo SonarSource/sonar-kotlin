@@ -52,6 +52,7 @@ dependencyResolutionManagement {
             library("sonar-regex-parsing", "org.sonarsource.analyzer-commons", "sonar-regex-parsing").versionRef(analyzerCommons)
             library("sonar-xml-parsing", "org.sonarsource.analyzer-commons", "sonar-xml-parsing").versionRef(analyzerCommons)
             library("staxmate", "com.fasterxml.staxmate", "staxmate").versionRef(staxmate)
+            library("gradle-tooling-api","org.gradle", "gradle-tooling-api").version("7.5.1")
         }
 
         create("utilLibs") {
@@ -98,3 +99,4 @@ dependencyResolutionManagement {
         }
     }
 }
+include("sonar-kotlin-gradle")
