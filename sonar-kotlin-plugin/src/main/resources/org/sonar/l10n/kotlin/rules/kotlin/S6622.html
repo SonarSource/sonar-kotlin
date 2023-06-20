@@ -1,0 +1,48 @@
+<h2>Why is this an issue?</h2>
+<p>In Kotlin DSL for Gradle build scripts <code>Provider.get()</code> is used to retrieve a value of a specific type. The best practice is to retrieve
+the value only when it is required, that is at the latest possible point, otherwise it can lead to ordering issues or to
+<code>java.lang.IllegalStateException</code> in case of a missing value.</p>
+<h2>How to fix it</h2>
+<p>In order to fix the issue you can:</p>
+<ul>
+  <li> move the <code>Provider.get()</code> inside the task action that requires it </li>
+  <li> or, in case the <code>Procider.get()</code> is required outside a task action, replace it with <code>Provider.map()</code> or
+  <code>Provider.flatMap()</code> </li>
+</ul>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+val x = Provider.get(value)
+
+tasks.register("logX") {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    description = "Logging x value."
+
+    doLast {
+        logger.quiet("x = $x")
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+tasks.register("logX") {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    description = "Logging x value."
+
+    doLast {
+        val x = Provider.get(value)
+        logger.quiet("x = $x")
+    }
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://docs.gradle.org/current/javadoc/org/gradle/api/provider/Provider.html">org.gradle.api.provider.Provider</a> </li>
+</ul>
+<h3>Standards</h3>
+<ul>
+  <li> <a href="https://github.com/liutikas/gradle-best-practices#dont-call-get-on-a-provider-outside-a-task-action">Don’t call get on a Provider
+  outside a task action</a> </li>
+</ul>
+

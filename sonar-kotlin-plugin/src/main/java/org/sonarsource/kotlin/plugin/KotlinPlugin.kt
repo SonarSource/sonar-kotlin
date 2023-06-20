@@ -51,14 +51,8 @@ class KotlinPlugin : Plugin {
         // Global constants
         const val REPOSITORY_NAME = "SonarAnalyzer"
         const val PROFILE_NAME = "Sonar way"
-        const val SONAR_JAVA_BINARIES = "sonar.java.binaries"
-        const val SONAR_JAVA_LIBRARIES = "sonar.java.libraries"
-        const val SONAR_ANDROID_DETECTED = "sonar.android.detected"
-        const val FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast"
         const val PERFORMANCE_MEASURE_ACTIVATION_PROPERTY = "sonar.kotlin.performance.measure"
         const val PERFORMANCE_MEASURE_DESTINATION_FILE = "sonar.kotlin.performance.measure.json"
-        const val KOTLIN_LANGUAGE_VERSION = "sonar.kotlin.source.version"
-        val DEFAULT_KOTLIN_LANGUAGE_VERSION = LanguageVersion.LATEST_STABLE
         const val COMPILER_THREAD_COUNT_PROPERTY = "sonar.kotlin.threads"
         const val SKIP_UNCHANGED_FILES_OVERRIDE = "sonar.kotlin.skipUnchanged"
     }

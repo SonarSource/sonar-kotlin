@@ -38,8 +38,15 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.checks.InputFileContextImpl
 import org.sonarsource.kotlin.api.checks.hasCacheEnabled
+import org.sonarsource.kotlin.api.common.DEFAULT_KOTLIN_LANGUAGE_VERSION
+import org.sonarsource.kotlin.api.common.FAIL_FAST_PROPERTY_NAME
+import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_VERSION
 import org.sonarsource.kotlin.api.common.KOTLIN_REPOSITORY_KEY
 import org.sonarsource.kotlin.api.common.KotlinLanguage
+import org.sonarsource.kotlin.api.common.SONAR_ANDROID_DETECTED
+import org.sonarsource.kotlin.api.common.SONAR_JAVA_BINARIES
+import org.sonarsource.kotlin.api.common.SONAR_JAVA_LIBRARIES
+import org.sonarsource.kotlin.api.common.measureDuration
 import org.sonarsource.kotlin.api.frontend.Environment
 import org.sonarsource.kotlin.api.frontend.KotlinSyntaxStructure
 import org.sonarsource.kotlin.api.frontend.KotlinTree
@@ -49,14 +56,8 @@ import org.sonarsource.kotlin.api.frontend.bindingContext
 import org.sonarsource.kotlin.api.logging.trace
 import org.sonarsource.kotlin.api.logging.debug
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.COMPILER_THREAD_COUNT_PROPERTY
-import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.DEFAULT_KOTLIN_LANGUAGE_VERSION
-import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.FAIL_FAST_PROPERTY_NAME
-import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.KOTLIN_LANGUAGE_VERSION
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.PERFORMANCE_MEASURE_ACTIVATION_PROPERTY
 import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.PERFORMANCE_MEASURE_DESTINATION_FILE
-import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_ANDROID_DETECTED
-import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_BINARIES
-import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.plugin.caching.ContentHashCache
 import org.sonarsource.kotlin.plugin.cpd.CopyPasteDetector
 import org.sonarsource.kotlin.plugin.cpd.copyCPDTokensFromPrevious
@@ -65,6 +66,7 @@ import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.metrics.IssueSuppressionVisitor
 import org.sonarsource.kotlin.metrics.MetricVisitor
 import org.sonarsource.kotlin.metrics.SyntaxHighlighter
+import org.sonarsource.kotlin.visiting.KtChecksVisitor
 
 
 import org.sonarsource.performance.measure.PerformanceMeasure
@@ -128,7 +130,7 @@ class KotlinSensor(
         var success = false
 
         try {
-            success = analyseFiles(sensorContext, filesToAnalyze, progressReport, visitors(sensorContext), filenames)
+            success = analyzeFiles(sensorContext, filesToAnalyze, progressReport, visitors(sensorContext), filenames)
         } finally {
             if (success) {
                 progressReport.stop()
@@ -173,7 +175,7 @@ class KotlinSensor(
         return contentHashCache?.hasDifferentContentCached(inputFile) ?: (inputFile.status() != InputFile.Status.SAME)
     }
 
-    private fun analyseFiles(
+    private fun analyzeFiles(
         sensorContext: SensorContext,
         inputFiles: Iterable<InputFile>,
         progressReport: ProgressReport,
@@ -225,7 +227,7 @@ class KotlinSensor(
                 val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
 
                 measureDuration(inputFile.filename()) {
-                    analyseFile(
+                    analyzeFile(
                         sensorContext,
                         inputFileContext,
                         visitors,
@@ -241,7 +243,7 @@ class KotlinSensor(
         return true
     }
 
-    private fun analyseFile(
+    private fun analyzeFile(
         sensorContext: SensorContext,
         inputFileContext: InputFileContext,
         visitors: List<KotlinFileVisitor>,

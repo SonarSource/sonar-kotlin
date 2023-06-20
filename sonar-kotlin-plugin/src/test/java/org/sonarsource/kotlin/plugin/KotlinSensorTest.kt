@@ -49,6 +49,10 @@ import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.utils.Version
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.common.FAIL_FAST_PROPERTY_NAME
+import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_VERSION
+import org.sonarsource.kotlin.api.common.SONAR_ANDROID_DETECTED
+import org.sonarsource.kotlin.api.common.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.api.frontend.Environment
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.analyzeAndGetBindingContext
@@ -266,7 +270,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     @Test
     fun test_with_classpath() {
         val settings = MapSettings()
-        settings.setProperty(KotlinPlugin.SONAR_JAVA_BINARIES, "classes/")
+        settings.setProperty(SONAR_JAVA_BINARIES, "classes/")
         context.setSettings(settings)
         val inputFile = createInputFile("file1.kt", "class A { fun f() = TODO() }")
         context.fileSystem().add(inputFile)
@@ -279,7 +283,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     @Test
     fun test_with_blank_classpath() {
         val settings = MapSettings()
-        settings.setProperty(KotlinPlugin.SONAR_JAVA_BINARIES, " ")
+        settings.setProperty(SONAR_JAVA_BINARIES, " ")
         context.setSettings(settings)
         val inputFile = createInputFile("file1.kt", "class A { fun f() = TODO() }")
         context.fileSystem().add(inputFile)
@@ -295,7 +299,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         context.apply {
             setSettings(MapSettings().apply {
-                failFast?.let { setProperty(KotlinPlugin.FAIL_FAST_PROPERTY_NAME, it) }
+                failFast?.let { setProperty(FAIL_FAST_PROPERTY_NAME, it) }
             })
 
             fileSystem().add(createInputFile("file1.kt", "class A { fun f() = TODO() }"))
@@ -357,7 +361,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         val sensorContext = mockk<SensorContext> {
             every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(KotlinPlugin.KOTLIN_LANGUAGE_VERSION, "1.3")
+                setProperty(KOTLIN_LANGUAGE_VERSION, "1.3")
             })
         }
 
@@ -377,7 +381,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         val sensorContext = mockk<SensorContext> {
             every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(KotlinPlugin.KOTLIN_LANGUAGE_VERSION, "foo")
+                setProperty(KOTLIN_LANGUAGE_VERSION, "foo")
             })
         }
 
@@ -398,7 +402,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         val sensorContext = mockk<SensorContext> {
             every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(KotlinPlugin.KOTLIN_LANGUAGE_VERSION, "  ")
+                setProperty(KOTLIN_LANGUAGE_VERSION, "  ")
             })
         }
 
@@ -526,7 +530,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         context.apply {
             setSettings(MapSettings().apply {
-                androidDetected?.let { setProperty(KotlinPlugin.SONAR_ANDROID_DETECTED, it) }
+                androidDetected?.let { setProperty(SONAR_ANDROID_DETECTED, it) }
             })
 
             fileSystem().add(createInputFile("file1.kt", "class A { fun f() = TODO() }"))
