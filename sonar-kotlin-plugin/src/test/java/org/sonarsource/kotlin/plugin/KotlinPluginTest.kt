@@ -36,7 +36,7 @@ internal class KotlinPluginTest {
         val context = PluginContextImpl.Builder().setSonarRuntime(runtime).build()
         val kotlinPlugin = KotlinPlugin()
         kotlinPlugin.define(context)
-        Assertions.assertThat(context.extensions).hasSize(17)
+        Assertions.assertThat(context.extensions).hasSize(18)
     }
 
     @Test
@@ -45,7 +45,7 @@ internal class KotlinPluginTest {
         val context = PluginContextImpl.Builder().setSonarRuntime(runtime).build()
         val kotlinPlugin = KotlinPlugin()
         kotlinPlugin.define(context)
-        Assertions.assertThat(context.extensions).hasSize(4)
+        Assertions.assertThat(context.extensions).hasSize(5)
     }
 
 }

@@ -19,7 +19,8 @@
  */
 package org.sonarsource.kotlin.gradle
 
-import org.sonarsource.kotlin.checks.ProviderGetOutsideTaskCheck
+import org.sonarsource.kotlin.gradle.checks.ProviderGetOutsideTaskCheck
+
 
 val KOTLIN_GRADLE_CHECKS = listOf(
     ProviderGetOutsideTaskCheck::class.java,
