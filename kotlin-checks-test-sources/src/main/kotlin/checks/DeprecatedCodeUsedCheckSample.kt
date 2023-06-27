@@ -34,7 +34,7 @@ class DeprecatedCodeUsedCheckSample {
 //      ^^^^^^^^^^^^^^^^^^
 
         return kStr - "" // Noncompliant
-//             ^^^^^^^^^
+//                  ^
     }
 
 }

@@ -17,8 +17,11 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+@file:OptIn(ExperimentalCompilerApi::class)
+
 package org.sonarsource.kotlin.api.frontend
 
+import org.jetbrains.kotlin.cli.common.CLICompiler
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
@@ -28,8 +31,11 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
+import org.jetbrains.kotlin.cli.jvm.plugins.PluginCliParser
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
+import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -123,6 +129,13 @@ fun compilerConfiguration(
         put(CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS, versionSettings)
         put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
         put(JVMConfigurationKeys.JDK_HOME, File(System.getProperty("java.home")))
+
+        //val pluginRegistrarClass = PluginCliParser::class.java.classLoader.loadClass(CLICompiler.SCRIPT_PLUGIN_REGISTRAR_NAME)
+        val pluginRegistrarClass = Class.forName(CLICompiler.SCRIPT_PLUGIN_REGISTRAR_NAME)
+        pluginRegistrarClass.getDeclaredConstructor().newInstance()?.let {
+            put(ComponentRegistrar.PLUGIN_COMPONENT_REGISTRARS, mutableListOf(it as ComponentRegistrar))
+        }
+
         numberOfThreads?.let { put(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS, it) }
         addJvmClasspathRoots(classpathFiles)
     }

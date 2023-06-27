@@ -97,6 +97,8 @@ class KotlinGradleSensor(
             fileSystem.inputFile(predicate)
         }.filterNotNull()
 
+        val classPath = models.values.flatMap { it.classPath.map { file -> file.absolutePath } }
+
         val fileNames = filesToAnalyze.map { it.toString() }
         if (fileNames.isEmpty()) return
         val progressReport = ProgressReport("Progress of the ${language.name} analysis", TimeUnit.SECONDS.toMillis(10))
