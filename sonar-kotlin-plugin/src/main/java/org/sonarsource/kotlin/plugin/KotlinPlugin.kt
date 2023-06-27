@@ -37,6 +37,7 @@ import org.sonarsource.kotlin.gradle.KotlinGradleSensor
 import org.sonarsource.kotlin.surefire.KotlinResourcesLocator
 import org.sonarsource.kotlin.surefire.KotlinSurefireParser
 import org.sonarsource.kotlin.surefire.KotlinSurefireSensor
+import kotlin.jvm.optionals.getOrNull
 
 class KotlinPlugin : Plugin {
 
@@ -55,16 +56,23 @@ class KotlinPlugin : Plugin {
         const val PERFORMANCE_MEASURE_DESTINATION_FILE = "sonar.kotlin.performance.measure.json"
         const val COMPILER_THREAD_COUNT_PROPERTY = "sonar.kotlin.threads"
         const val SKIP_UNCHANGED_FILES_OVERRIDE = "sonar.kotlin.skipUnchanged"
+        const val GRADLE_PROJECT_ROOT_PROPERTY = "sonar.kotlin.gradleProjectRoot"
     }
 
+    private fun doScanGradleFiles(context: Plugin.Context): Boolean = context.bootConfiguration[GRADLE_PROJECT_ROOT_PROPERTY].isPresent
+
     override fun define(context: Plugin.Context) {
+
         context.addExtensions(
             KotlinLanguage::class.java,
             KotlinSensor::class.java,
-            KotlinGradleSensor::class.java,
             KotlinRulesDefinition::class.java,
             KotlinProfileDefinition::class.java,
         )
+
+        if (doScanGradleFiles(context)) {
+            context.addExtension(KotlinGradleSensor::class.java)
+        }
 
         if (context.runtime.product != SonarProduct.SONARLINT) {
             context.addExtensions(
