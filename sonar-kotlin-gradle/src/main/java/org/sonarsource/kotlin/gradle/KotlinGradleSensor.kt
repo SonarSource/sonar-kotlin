@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.gradle
 
 import org.gradle.tooling.GradleConnector
+import org.gradle.tooling.model.kotlin.dsl.KotlinDslScriptModel
 import org.gradle.tooling.model.kotlin.dsl.KotlinDslScriptsModel
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.LanguageVersion
@@ -30,7 +31,6 @@ import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.Sensor
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
-import org.sonar.api.rule.RuleKey
 import org.sonar.api.batch.ScannerSide
 import org.sonar.api.batch.rule.CheckFactory
 import org.sonar.api.batch.rule.Checks
@@ -52,10 +52,12 @@ import org.sonarsource.kotlin.api.frontend.KotlinSyntaxStructure
 import org.sonarsource.kotlin.api.frontend.KotlinTree
 import org.sonarsource.kotlin.api.frontend.ParseException
 import org.sonarsource.kotlin.api.frontend.RegexCache
+import org.sonarsource.kotlin.api.frontend.bindingContext
 import org.sonarsource.kotlin.api.logging.debug
 import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
 import org.sonarsource.performance.measure.PerformanceMeasure
+import java.io.File
 
 import java.util.concurrent.TimeUnit
 
@@ -92,12 +94,12 @@ class KotlinGradleSensor(
             .run()
 
         val models = projectConnection.getModel(KotlinDslScriptsModel::class.java).scriptModels
-        val filesToAnalyze: Iterable<InputFile> = models.keys.map {file ->
-            val predicate = fileSystem.predicates().hasAbsolutePath(file.absolutePath)
+
+        val filesToAnalyze: Iterable<InputFile> = models.keys.map { file ->
+            val predicate = fileSystem.predicates().hasAbsolutePath(file.absolutePath.substringAfter("/private"))
             fileSystem.inputFile(predicate)
         }.filterNotNull()
 
-        val classPath = models.values.flatMap { it.classPath.map { file -> file.absolutePath } }
 
         val fileNames = filesToAnalyze.map { it.toString() }
         if (fileNames.isEmpty()) return
@@ -105,7 +107,14 @@ class KotlinGradleSensor(
 
         var success = false
         try {
-            success = analyzeFiles(sensorContext, filesToAnalyze, progressReport, listOf(KtChecksVisitor(checks)), fileNames)
+            success = analyzeFiles(
+                sensorContext,
+                filesToAnalyze,
+                progressReport,
+                listOf(KtChecksVisitor(checks)),
+                fileNames,
+                models,
+            )
         } finally {
             if (success) {
                 progressReport.stop()
@@ -121,10 +130,16 @@ class KotlinGradleSensor(
         inputFiles: Iterable<InputFile>,
         progressReport: ProgressReport,
         visitors: List<KotlinFileVisitor>,
-        fileNames: List<String>
+        fileNames: List<String>,
+        models: MutableMap<File, KotlinDslScriptModel>,
     ): Boolean {
         val environment = environment(sensorContext)
+
         try {
+
+
+            val classPath = models.values.flatMap { it.classPath.map { file -> file.absolutePath } }
+
             val isInAndroidContext = sensorContext.config().getBoolean(SONAR_ANDROID_DETECTED).orElse(false)
             val kotlinFiles = inputFiles.mapNotNull {
                 val inputFileContext = InputFileContextImpl(sensorContext, it, isInAndroidContext)
@@ -144,13 +159,15 @@ class KotlinGradleSensor(
 
             val regexCache = RegexCache()
 
+            val bindingContext = bindingContext(environment.env, classPath, kotlinFiles.map { it.ktFile })
+
             progressReport.start(fileNames)
             kotlinFiles.filter {
                 !EMPTY_FILE_CONTENT_PATTERN.matches(it.inputFile.contents())
             }.forEach { (ktFile, doc, inputFile) ->
                 if (sensorContext.isCancelled) return false
                 val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
-                val tree = KotlinTree(ktFile, doc, BindingContext.EMPTY, emptyList(), regexCache)
+                val tree = KotlinTree(ktFile, doc, bindingContext, emptyList(), regexCache)
 
                 measureDuration(inputFile.filename()) {
                     analyzeFile(sensorContext, inputFileContext, visitors, tree)
@@ -204,7 +221,7 @@ private fun toParseException(action: String, inputFile: InputFile, cause: Throwa
 
 fun environment(sensorContext: SensorContext) = Environment(
     sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
-        sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
+            sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
     determineKotlinLanguageVersion(sensorContext)
 )
 
