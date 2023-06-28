@@ -19,43 +19,66 @@
  */
 package org.sonarsource.kotlin.gradle
 
-import org.assertj.core.api.Assertions
+import io.mockk.every
+import io.mockk.mockkStatic
+import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.junit.jupiter.api.Test
-import org.slf4j.LoggerFactory
 import org.sonar.api.batch.ScannerSide
 import org.sonar.api.batch.rule.CheckFactory
-import org.sonarsource.kotlin.api.frontend.RegexCache
-import org.sonarsource.kotlin.api.frontend.bindingContext
-import org.sonarsource.kotlin.api.logging.debug
-import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
+import org.sonar.check.Rule
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.testapi.AbstractSensorTest
-import org.sonarsource.kotlin.visiting.KtChecksVisitor
-import org.sonarsource.performance.measure.PerformanceMeasure
-import java.io.File
-
-import java.util.concurrent.TimeUnit
 import kotlin.io.path.createFile
-
-private val LOG = LoggerFactory.getLogger(KotlinGradleSensor::class.java)
-private val EMPTY_FILE_CONTENT_PATTERN = Regex("""\s*+""")
 
 @ScannerSide
 class KotlinGradleSensorTest: AbstractSensorTest() {
 
     @Test
     fun test_one_rule() {
-        val inputFile = createInputFile(
+        mockkStatic("org.sonarsource.kotlin.gradle.KotlinGradleCheckListKt")
+        every { KOTLIN_GRADLE_CHECKS } returns listOf(GradleKotlinCheck::class.java)
+
+        val settingsFile = createInputFile(
             "settings.gradle.kts", """
-     fun main(args: Array<String>) {
-     print (1 == 1);}
-     """.trimIndent())
+            rootProject.name = "kotlin"
+            """.trimIndent())
+
+        val buildFile = createInputFile(
+            "build.gradle.kts", """
+            plugins {
+                application 
+            }
+            
+            repositories {
+                mavenCentral() 
+            }
+            
+            dependencies {
+                testImplementation("org.junit.jupiter:junit-jupiter:5.9.1") 
+            
+                implementation("com.google.guava:guava:31.1-jre") 
+            }
+            
+            application {
+                mainClass.set("demo.App") 
+            }
+            
+            tasks.named<Test>("test") {
+                useJUnitPlatform() 
+            }
+            """.trimIndent())
 
         baseDir.resolve("settings.gradle.kts").createFile()
+        baseDir.resolve("build.gradle.kts").createFile()
 
-        context.fileSystem().add(inputFile)
-        val checkFactory = checkFactory("S1764")
+        context.fileSystem().add(settingsFile).add(buildFile)
+        val checkFactory = checkFactory("GradleKotlinCheck")
         sensor(checkFactory).execute(context)
         val issues = context.allIssues()
+
+        assertThat(issues).hasSize(10)
     }
     private fun sensor(checkFactory: CheckFactory): KotlinGradleSensor {
         return KotlinGradleSensor(checkFactory, language())
@@ -63,3 +86,10 @@ class KotlinGradleSensorTest: AbstractSensorTest() {
 
 }
 
+@Rule(key = "GradleKotlinCheck")
+internal class GradleKotlinCheck : AbstractCheck() {
+    override fun visitCallExpression(expression: KtCallExpression, kfc: KotlinFileContext) {
+        kfc.bindingContext.diagnostics.noSuppression().forEach { println(it.factoryName) }
+        kfc.reportIssue(expression, "Boom!")
+    }
+}

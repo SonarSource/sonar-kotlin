@@ -96,7 +96,7 @@ class KotlinGradleSensor(
         val models = projectConnection.getModel(KotlinDslScriptsModel::class.java).scriptModels
 
         val filesToAnalyze: Iterable<InputFile> = models.keys.map { file ->
-            val predicate = fileSystem.predicates().hasAbsolutePath(file.absolutePath.substringAfter("/private"))
+            val predicate = fileSystem.predicates().hasAbsolutePath(file.absolutePath)
             fileSystem.inputFile(predicate)
         }.filterNotNull()
 
