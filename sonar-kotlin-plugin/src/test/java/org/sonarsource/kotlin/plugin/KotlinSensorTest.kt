@@ -168,7 +168,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertThat(issues).isEmpty()
     }
 
-    @Test
+    @Testœ
     fun test_issue_not_suppressed() {
         val inputFile = createInputFile(
             "file1.kt", """
