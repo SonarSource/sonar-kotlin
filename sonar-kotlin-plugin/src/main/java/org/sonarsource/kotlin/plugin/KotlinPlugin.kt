@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.plugin
 
-import org.jetbrains.kotlin.config.LanguageVersion
 import org.sonar.api.Plugin
 import org.sonar.api.SonarProduct
 import org.sonar.api.config.PropertyDefinition
@@ -33,6 +32,7 @@ import org.sonarsource.kotlin.externalreport.detekt.DetektRulesDefinition
 import org.sonarsource.kotlin.externalreport.detekt.DetektSensor
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintRulesDefinition
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintSensor
+import org.sonarsource.kotlin.gradle.KotlinGradleSensor
 import org.sonarsource.kotlin.surefire.KotlinResourcesLocator
 import org.sonarsource.kotlin.surefire.KotlinSurefireParser
 import org.sonarsource.kotlin.surefire.KotlinSurefireSensor
@@ -50,25 +50,24 @@ class KotlinPlugin : Plugin {
         // Global constants
         const val REPOSITORY_NAME = "SonarAnalyzer"
         const val PROFILE_NAME = "Sonar way"
-        const val SONAR_JAVA_BINARIES = "sonar.java.binaries"
-        const val SONAR_JAVA_LIBRARIES = "sonar.java.libraries"
-        const val SONAR_ANDROID_DETECTED = "sonar.android.detected"
-        const val FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast"
-        const val PERFORMANCE_MEASURE_ACTIVATION_PROPERTY = "sonar.kotlin.performance.measure"
-        const val PERFORMANCE_MEASURE_DESTINATION_FILE = "sonar.kotlin.performance.measure.json"
-        const val KOTLIN_LANGUAGE_VERSION = "sonar.kotlin.source.version"
-        val DEFAULT_KOTLIN_LANGUAGE_VERSION = LanguageVersion.LATEST_STABLE
-        const val COMPILER_THREAD_COUNT_PROPERTY = "sonar.kotlin.threads"
         const val SKIP_UNCHANGED_FILES_OVERRIDE = "sonar.kotlin.skipUnchanged"
+        const val GRADLE_PROJECT_ROOT_PROPERTY = "sonar.kotlin.gradleProjectRoot"
     }
 
+    private fun doScanGradleFiles(context: Plugin.Context): Boolean = context.bootConfiguration[GRADLE_PROJECT_ROOT_PROPERTY].isPresent
+
     override fun define(context: Plugin.Context) {
+
         context.addExtensions(
             KotlinLanguage::class.java,
             KotlinSensor::class.java,
             KotlinRulesDefinition::class.java,
             KotlinProfileDefinition::class.java,
         )
+
+        if (doScanGradleFiles(context)) {
+            context.addExtension(KotlinGradleSensor::class.java)
+        }
 
         if (context.runtime.product != SonarProduct.SONARLINT) {
             context.addExtensions(

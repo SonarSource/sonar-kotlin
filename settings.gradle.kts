@@ -19,6 +19,7 @@ include("sonar-kotlin-external-linters")
 include("sonar-kotlin-surefire")
 include("sonar-kotlin-metrics")
 include("sonar-kotlin-plugin")
+include("sonar-kotlin-gradle")
 
 include("its:plugin")
 include("its:ruling")
@@ -42,6 +43,7 @@ dependencyResolutionManagement {
             val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
             val gson = version("gson", "2.9.0")
             val staxmate = version("staxmate", "2.4.0")
+            val gradleToolingApi = version("gradle-tooling-api", "7.5.1")
 
             library("gson", "com.google.code.gson", "gson").versionRef(gson)
             library("kotlin-compiler-embeddable", "org.jetbrains.kotlin", "kotlin-compiler-embeddable").version(kotlinVersion)
@@ -52,6 +54,7 @@ dependencyResolutionManagement {
             library("sonar-regex-parsing", "org.sonarsource.analyzer-commons", "sonar-regex-parsing").versionRef(analyzerCommons)
             library("sonar-xml-parsing", "org.sonarsource.analyzer-commons", "sonar-xml-parsing").versionRef(analyzerCommons)
             library("staxmate", "com.fasterxml.staxmate", "staxmate").versionRef(staxmate)
+            library("gradle-tooling-api","org.gradle", "gradle-tooling-api").versionRef(gradleToolingApi)
         }
 
         create("utilLibs") {
