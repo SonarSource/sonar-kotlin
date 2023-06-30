@@ -21,31 +21,94 @@ package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
+import org.sonar.api.Plugin
 import org.sonar.api.SonarEdition
 import org.sonar.api.SonarQubeSide
+import org.sonar.api.SonarRuntime
 import org.sonar.api.internal.PluginContextImpl
 import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
 import kotlin.time.ExperimentalTime
+import org.sonar.api.config.Configuration
+import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.GRADLE_PROJECT_ROOT_PROPERTY
+import java.util.Optional
 
 @ExperimentalTime
 internal class KotlinPluginTest {
     @Test
-    fun test() {
-        val runtime = SonarRuntimeImpl.forSonarQube(Version.create(7, 9), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY)
-        val context = PluginContextImpl.Builder().setSonarRuntime(runtime).build()
-        val kotlinPlugin = KotlinPlugin()
-        kotlinPlugin.define(context)
-        Assertions.assertThat(context.extensions).hasSize(17)
+    fun testWithoutGradle() {
+        testSonarQube(17)
     }
 
     @Test
-    fun test_sonarlint() {
-        val runtime = SonarRuntimeImpl.forSonarLint(Version.create(3, 9))
-        val context = PluginContextImpl.Builder().setSonarRuntime(runtime).build()
-        val kotlinPlugin = KotlinPlugin()
-        kotlinPlugin.define(context)
-        Assertions.assertThat(context.extensions).hasSize(4)
+    fun testWithGradle() {
+        testSonarQube(18, mapOf(GRADLE_PROJECT_ROOT_PROPERTY to "../"))
     }
 
+    @Test
+    fun testSonarLint() {
+        testSonarLint(4)
+    }
+
+    @Test
+    fun testSonarLintWithGradle() {
+        testSonarLint(5, mapOf(GRADLE_PROJECT_ROOT_PROPERTY to "../"))
+    }
+
+    private fun testSonarQube(expectedExtensionsCount: Int, overrideProperties: Map<String, String> = emptyMap()) {
+        val runtime = SonarRuntimeImpl.forSonarQube(Version.create(7, 9), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY)
+        test(runtime, expectedExtensionsCount, overrideProperties)
+    }
+
+    private fun testSonarLint(expectedExtensionsCount: Int, overrideProperties: Map<String, String> = emptyMap()) {
+        val runtime = SonarRuntimeImpl.forSonarLint(Version.create(3, 9))
+        test(runtime, expectedExtensionsCount, overrideProperties)
+    }
+
+    private fun test(runtime: SonarRuntime, expectedExtensionsCount: Int, overrideProperties: Map<String, String>) {
+        val kotlinPlugin = KotlinPlugin()
+        val context = getPatchedContext(
+            PluginContextImpl.Builder().setSonarRuntime(runtime).build(),
+            overrideProperties
+        )
+        kotlinPlugin.define(context)
+        Assertions.assertThat(context.extensions).hasSize(expectedExtensionsCount)
+    }
+
+    private fun getPatchedContext(context: Plugin.Context, overrideProperties: Map<String, String>): Plugin.Context {
+        return if (overrideProperties.isEmpty()) {
+            context
+        } else {
+            val bootConfiguration = OverrideConfiguration(
+                context.bootConfiguration,
+                overrideProperties
+            )
+            PluginContextImpl.Builder().setSonarRuntime(context.runtime).setBootConfiguration(bootConfiguration).build()
+        }
+    }
+
+}
+
+private class OverrideConfiguration(
+    private val superConfiguration: Configuration,
+    private val overrides: Map<String, String>
+): Configuration {
+
+    override fun get(key: String): Optional<String> {
+        val overrideValue = overrides[key]
+        return if (overrideValue != null) {
+            Optional.of(overrideValue)
+        } else {
+            superConfiguration.get(key)
+        }
+    }
+
+    override fun hasKey(key: String): Boolean {
+        return overrides.keys.contains(key) || superConfiguration.hasKey(key)
+    }
+
+    override fun getStringArray(key: String): Array<String> {
+        // TODO
+        return superConfiguration.getStringArray(key)
+    }
 }

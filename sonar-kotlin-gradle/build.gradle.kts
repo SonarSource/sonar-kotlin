@@ -16,8 +16,10 @@ dependencies {
     implementation(libs.staxmate)
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
+    implementation(libs.gradle.tooling.api)
 
     implementation(project(":sonar-kotlin-api"))
+    implementation(project(":sonar-kotlin-surefire"))
     implementation(project(":sonar-kotlin-checks"))
 
     testImplementation(testLibs.junit.api)
@@ -32,7 +34,6 @@ dependencies {
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
 
     testImplementation(project(":sonar-kotlin-test-api"))
-    testImplementation(project(":sonar-kotlin-plugin"))
 }
 
 /* TODO: remove?

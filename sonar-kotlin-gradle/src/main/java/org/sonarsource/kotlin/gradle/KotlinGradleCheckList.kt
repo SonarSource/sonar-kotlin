@@ -17,13 +17,9 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.plugin
+package org.sonarsource.kotlin.gradle
 
-import org.sonarsource.performance.measure.PerformanceMeasure
+import org.sonarsource.kotlin.api.checks.KotlinCheck
 
-fun <T> measureDuration(what: String, action: () -> T): T {
-    val duration = PerformanceMeasure.start(what)
-    val res = action()
-    duration.stop()
-    return res
-}
+
+val KOTLIN_GRADLE_CHECKS: List<Class<out KotlinCheck>> = listOf()

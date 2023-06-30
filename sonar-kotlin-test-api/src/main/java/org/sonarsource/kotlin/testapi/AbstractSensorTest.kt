@@ -59,7 +59,7 @@ abstract class AbstractSensorTest {
     @BeforeEach
     fun setup() {
         baseDir = createTempDirectory(temp!!)
-        context = SensorContextTester.create(baseDir)
+        context = SensorContextTester.create(baseDir.toRealPath())
         val fileLinesContext = Mockito.mock(FileLinesContext::class.java)
         Mockito.`when`(
             fileLinesContextFactory.createFor(
