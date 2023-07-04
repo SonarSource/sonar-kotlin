@@ -133,6 +133,10 @@ rule `S42` in the class `AnswersEverythingCheck`, you can call the following in 
 
     ./gradlew setupRuleStubs -PruleKey=S42 -PclassName=AnswersEverythingCheck
 
+If you want this to be a Kotlin Gradle DSL rule, add `-PgradleRule=true`:
+
+    ./gradlew setupRuleStubs -PruleKey=S42 -PclassName=AnswersEverythingCheck -PgradleRule=true
+
 ### Updating external linter rule mappings
 
 See [this README in the utils](utils-kotlin/README.md).
