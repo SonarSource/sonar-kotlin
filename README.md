@@ -1,48 +1,33 @@
-# Code Quality and Security for Kotlin
+Code Quality and Security for Kotlin
+==========
 
 [![Build Status](https://api.cirrus-ci.com/github/SonarSource/sonar-kotlin.svg?branch=master)](https://cirrus-ci.com/github/SonarSource/sonar-kotlin) [![Quality Gate Status](https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.kotlin%3Akotlin&metric=alert_status)](https://next.sonarqube.com/sonarqube/dashboard?id=org.sonarsource.kotlin%3Akotlin) [![Coverage](https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.kotlin%3Akotlin&metric=coverage)](https://next.sonarqube.com/sonarqube/dashboard?id=org.sonarsource.kotlin%3Akotlin)
 
 This SonarSource project is a code analyzer for Kotlin projects.
 
-## Contents
-
-* [Features](#features)
-* [Useful links](#useful-links)
-* [Building and Testing](#building-and-testing)
-  * [Build](#build)
-  * [Integration Tests](#integration-tests)
-  * [Debugging ruling tests](#debugging-ruling-tests)
-* [Utilities and Developing](#utilities-and-developing)
-  * [Module Structure](#module-structure)
-  * [Module Responsibilities](#module-responsibilities)
-  * [Generating/downloading rule metadata](#generatingdownloading-rule-metadata)
-  * [Implementing a new rule](#implementing-a-new-rule)
-  * [Updating external linter rule mappings](#updating-external-linter-rule-mappings)
-  * [Visualizing ASTs](#visualizing-asts)
-
-## Features
+Features
+--------
 
 * 50+ rules (including 10+ security rules using semantic)
 * Metrics (cognitive complexity, cyclomatic complexity, number of lines etc.)
 * Import of [test coverage reports](https://docs.sonarqube.org/display/PLUG/Code+Coverage+by+Unit+Tests+for+Java+Project)
 * Import of [external linters](https://docs.sonarqube.org/latest/analysis/external-issues/): Detekt, ktLint, AndroidLint
 
-## Useful links
+Useful links
+------------
 
 * [Project homepage](https://redirect.sonarsource.com/plugins/kotlin.html)
 * [Issue tracking](https://jira.sonarsource.com/browse/SONARKT/)
 * [Available rules](https://rules.sonarsource.com/kotlin)
 * [Community Forum](https://community.sonarsource.com/)
 
-## Building and Testing
-
 ### Build
 
-Building and run Unit Tests:
+Build and run Unit Tests:
 
     ./gradlew build
 
-### Integration Tests
+## Integration Tests
 
 By default, Integration Tests (ITs) are skipped during the build. If you want to run them, you need first to retrieve the related projects
 which are used as input:
@@ -109,49 +94,6 @@ You can obviously do the same in the IDE and/or only run a particular test:
     :its:ruling:test -Pruling --info --console=plain --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_corda" -Dsonar.rulingDebugPort=5005
 
 ## Utilities and Developing
-
-### Module Structure
-
-This project is subdivided into modules.
-When contributing, make sure to put your code into the module with the right responsibilities.
-
-```
-  +-------------------------------------------------+
-  |               sonar-kotlin-api                  |
-  +------------------------+------------------------+
-  |  sonar-kotlin-checks   |     sonar-kotlin-      | 
-  +------------------------+    external-linters    |
-  |  sonar-kotlin-metrics  |                        |
-  +------------------------+------------------------+
-  |              sonar-kotlin-plugin                |
-  +-------------------------------------------------+
-```
-
-### Module Responsibilities
-
-**sonar-kotlin-api:**
-
-- Project-internal API that contains helper and utility functions for use by any other module.
-- Frontend layer to provide helpers and utilities for the Kotlin Compiler API.
-
-**sonar-kotlin-checks:**
-
-- Rule implementations and tests go here.
-- Also contains helper functions if they are too specific for the `sonar-kotlin-api` layer,
-  but are rather implementation details of a rule.
-
-**sonar-kotlin-metrics:**
-
-- Implementations for certain code metrics such as cyclomatic complexity.
-
-**sonar-kotlin-external-linters:**
-
-- Aggregation of external linter reports and integration into the SonarQube report.
-
-**sonar-kotlin-plugin:**
-
-- Orchestration of checks, metrics and reports.
-- Packaging into an actual SonarQube plugin.
 
 ### Generating/downloading rule metadata
 

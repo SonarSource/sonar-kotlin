@@ -17,13 +17,15 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.checks
+package org.sonarsource.kotlin.gradle.checks
 
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.testapi.KotlinVerifier
+import java.nio.file.Paths
 
-private const val TEST_FILE_POSTFIX = "Sample.kt"
+private const val TEST_FILE_POSTFIX = "Sample.kts"
+private val SAMPLES_BASE_DIR = Paths.get( "src", "test", "resources", "org", "sonarsource", "kotlin", "gradle", "checks")
 
 abstract class CheckTest(
     val check: AbstractCheck,
@@ -41,6 +43,7 @@ abstract class CheckTest(
             this@CheckTest.classpath?.let { this.classpath = it }
             this@CheckTest.dependencies?.let { this.deps = it }
             this.isAndroid = this@CheckTest.isAndroid
+            this.baseDir = SAMPLES_BASE_DIR
         }.verify()
     }
 }

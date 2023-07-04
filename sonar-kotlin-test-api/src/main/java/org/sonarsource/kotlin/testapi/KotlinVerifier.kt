@@ -39,6 +39,9 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
+import kotlin.io.path.extension
+import kotlin.io.path.pathString
+
 val KOTLIN_BASE_DIR = Paths.get("..", "kotlin-checks-test-sources", "src", "main", "kotlin", "checks")
 val DEFAULT_KOTLIN_CLASSPATH = listOf("../kotlin-checks-test-sources/build/classes/kotlin/main", "../kotlin-checks-test-sources/build/classes/java/main")
 private val DEFAULT_TEST_JARS_DIRECTORY = "../kotlin-checks-test-sources/build/test-jars"
@@ -46,41 +49,48 @@ private val DEFAULT_TEST_JARS_DIRECTORY = "../kotlin-checks-test-sources/build/t
 class KotlinVerifier(private val check: AbstractCheck) {
 
     var fileName: String = ""
+    var baseDir: Path = KOTLIN_BASE_DIR
     var classpath: List<String> = System.getProperty("java.class.path").split(System.getProperty("path.separator")) + DEFAULT_KOTLIN_CLASSPATH
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
     var isAndroid = false
 
     fun verify() {
-        val environment = Environment(classpath + deps, LanguageVersion.LATEST_STABLE)
-        val converter = { content: String ->
-            val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
-                .setCharset(StandardCharsets.UTF_8)
-                .initMetadata(content).build()
-            kotlinTreeOf(content, environment, inputFile) to inputFile
+        verifyFile {
+            assertOneOrMoreIssues()
         }
-        createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check, isAndroid)
-            .assertOneOrMoreIssues()
-        Disposer.dispose(environment.disposable)
     }
 
     fun verifyNoIssue() {
+        verifyFile {
+            assertNoIssues()
+        }
+    }
+    private fun verifyFile(verify: SingleFileVerifier.() -> Unit) {
+        val filePath = baseDir.resolve(fileName)
+        val isScriptFile = filePath.extension == "kts"
+
         val environment = Environment(classpath + deps, LanguageVersion.LATEST_STABLE)
         val converter = { content: String ->
-            val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
+           val inputFile = TestInputFileBuilder("moduleKey", filePath.fileName.pathString)
                 .setCharset(StandardCharsets.UTF_8)
                 .initMetadata(content).build()
-            kotlinTreeOf(content, environment, inputFile) to inputFile
+
+            if (isScriptFile) {
+                // TODO: Add logic here to create a Binding with Kotlin Script / Gradle DSL semantics.
+                //       Currently, we are just providing an empty context (`doResolve = false`)
+                kotlinTreeOf(content, environment, inputFile, false) to inputFile
+            } else {
+                kotlinTreeOf(content, environment, inputFile, true) to inputFile
+            }
         }
-        createVerifier(converter, KOTLIN_BASE_DIR.resolve(fileName), check, isAndroid)
-            .assertNoIssues()
+        createVerifier(converter, filePath).verify()
         Disposer.dispose(environment.disposable)
     }
 
+
     private fun createVerifier(
         converter: (String) -> Pair<KotlinTree, InputFile>,
-        path: Path,
-        check: AbstractCheck,
-        isAndroid: Boolean,
+        path: Path
     ): SingleFileVerifier {
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
 
