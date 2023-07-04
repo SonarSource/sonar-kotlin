@@ -109,7 +109,7 @@ class KotlinSensor(
         val fileSystem: FileSystem = sensorContext.fileSystem()
         val mainFilePredicate = fileSystem.predicates().and(
             fileSystem.predicates().hasLanguage(language.key),
-            fileSystem.predicates().hasType(InputFile.Type.MAIN)
+            fileSystem.predicates().hasType(InputFile.Type.MAIN),
         )
 
         return fileSystem.inputFiles(mainFilePredicate).let { mainFiles ->

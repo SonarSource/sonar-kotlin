@@ -21,4 +21,5 @@ package org.sonarsource.kotlin.gradle
 
 import org.sonarsource.kotlin.api.checks.KotlinCheck
 
+
 val KOTLIN_GRADLE_CHECKS: List<Class<out KotlinCheck>> = listOf()

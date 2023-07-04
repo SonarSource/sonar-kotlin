@@ -71,7 +71,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
 
         val environment = Environment(classpath + deps, LanguageVersion.LATEST_STABLE)
         val converter = { content: String ->
-           val inputFile = TestInputFileBuilder("moduleKey", filePath.fileName.pathString)
+            val inputFile = TestInputFileBuilder("moduleKey", filePath.fileName.pathString)
                 .setCharset(StandardCharsets.UTF_8)
                 .initMetadata(content).build()
 

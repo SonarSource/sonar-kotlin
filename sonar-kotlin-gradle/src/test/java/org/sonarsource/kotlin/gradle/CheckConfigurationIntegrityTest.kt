@@ -36,7 +36,7 @@ class CheckConfigurationIntegrityTest {
     }
 
     @Test
-    @Disabled("Re-enable as soon as first check is implemented!")
+    @Disabled("Should enable it when add actual checks") // TODO
     fun `ensure all checks are actually registered in KotlinCheckList`() {
         val expectedChecks = CHECKS_PACKAGE_DIRECTORIES.flatMap { checksDir ->
             Files.walk(checksDir, 1).asSequence()

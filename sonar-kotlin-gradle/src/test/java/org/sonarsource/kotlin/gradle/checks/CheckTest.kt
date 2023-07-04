@@ -25,7 +25,7 @@ import org.sonarsource.kotlin.testapi.KotlinVerifier
 import java.nio.file.Paths
 
 private const val TEST_FILE_POSTFIX = "Sample.kts"
-val SAMPLES_BASE_DIR = Paths.get( "src", "test", "resources", "org", "sonarsource", "kotlin", "gradle", "checks")
+val SAMPLES_BASE_DIR = Paths.get( "src", "test", "samples", "non-compiling")
 
 abstract class CheckTest(
     val check: AbstractCheck,
