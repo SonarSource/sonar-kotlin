@@ -17,9 +17,20 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.gradle
+package org.sonarsource.kotlin.checks.testing
 
-import org.sonarsource.kotlin.checks.ProviderGetOutsideTaskCheck
+import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.gradle.checks.CheckTest
+import org.sonarsource.kotlin.gradle.checks.SAMPLES_BASE_DIR
+import org.sonarsource.kotlin.testapi.KotlinVerifier
 
-class ProviderGetOutsideTaskCheckTest : CheckTest(ProviderGetOutsideTaskCheck())
+internal class DummyKotlinGradleCheckTest : CheckTest(DummyKotlinGradleCheck()) {
+
+    @Test
+    fun `no issues`() {
+        KotlinVerifier(check) {
+            this.fileName = "DummyKotlinGradleCheckNoIssuesSample.kts"
+            this.baseDir = SAMPLES_BASE_DIR
+        }.verifyNoIssue()
+    }
+}

@@ -17,21 +17,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.checks
+package org.sonarsource.kotlin.checks.testing
 
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@Rule(key = "S6622")
-class ProviderGetOutsideTaskCheck : AbstractCheck() {
-
-    override fun visitCallExpression(expression: KtCallExpression, ctx: KotlinFileContext) {
-        val callee = expression.calleeExpression
-        if (callee is KtNameReferenceExpression && callee.getReferencedName() == "pruntln") {
-            ctx.reportIssue(callee, "Use \"println\" instead of \"pruntln\"")
-        }
+@Rule(key = "Dummy")
+class DummyKotlinGradleCheck : AbstractCheck() {
+    override fun visitNamedFunction(node: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
+        kotlinFileContext.reportIssue(psiElement = node, message = "Hello World!")
     }
 }
