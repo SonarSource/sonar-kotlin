@@ -33,7 +33,6 @@ dependencies {
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
 
     testImplementation(project(":sonar-kotlin-test-api"))
-    testImplementation(project(":sonar-kotlin-checks"))
 }
 
 /* TODO: remove?
