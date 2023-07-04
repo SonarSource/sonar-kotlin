@@ -20,7 +20,6 @@ dependencies {
 
     implementation(project(":sonar-kotlin-api"))
     implementation(project(":sonar-kotlin-surefire"))
-    implementation(project(":sonar-kotlin-checks"))
 
     testImplementation(testLibs.junit.api)
     testImplementation(testLibs.junit.params)
