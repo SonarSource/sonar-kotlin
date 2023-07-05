@@ -1,0 +1,17 @@
+{
+  "title": "\"tasks.register()\" should be preferred over \"tasks.create()\"",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "gradle"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6623",
+  "sqKey": "S6623",
+  "scope": "Main",
+  "quickfix": "unknown"
+}
