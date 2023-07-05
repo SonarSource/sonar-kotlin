@@ -93,7 +93,7 @@ abstract class CreateRuleStubsTask : DefaultTask() {
         val read = checkListFile.readLines()
         val toWrite = mutableListOf<String>()
         var fileSegment = 0
-        val importStatementToAdd = "import org.sonarsource.kotlin.checks.$checkClassName"
+        val importStatementToAdd = "import $checksPackage.$checkClassName"
         val checkListEntryToAdd = "    $checkClassName::class.java,"
         for (i in 0 until read.size - 1) {
             val currentLine = read[i]
@@ -145,6 +145,7 @@ private interface Templates {
     val testsDir : Path
     val samplesDir : Path
     val checkListFile : Path
+    val checksPackage : String
 
     fun generateCheckClass(ruleKey: String, checkClassName: String, messageLine: String?): String
     fun generateTestClass(testClassName: String, checkClassName: String): String
@@ -163,9 +164,10 @@ private object KotlinTemplates: Templates {
     override val samplesDir = Path.of("kotlin-checks-test-sources", "src", "main", "kotlin", "checks")
     override val checkListFile =
         Path.of("sonar-kotlin-plugin", "src", "main", "java", "org", "sonarsource", "kotlin", "plugin", "KotlinCheckList.kt")
+    override val checksPackage = "org.sonarsource.kotlin.checks"
 
     override fun generateCheckClass(ruleKey: String, checkClassName: String, messageLine: String?) = LICENSE_HEADER + """
-        package org.sonarsource.kotlin.checks
+        package $checksPackage
 
         import org.sonar.check.Rule
         import org.sonarsource.kotlin.api.AbstractCheck
@@ -178,7 +180,7 @@ private object KotlinTemplates: Templates {
     """.trimIndent()
 
     override fun generateTestClass(testClassName: String, checkClassName: String) = LICENSE_HEADER + """
-        package org.sonarsource.kotlin.checks
+        package $checksPackage
 
         internal class $testClassName : CheckTest($checkClassName())
         
@@ -195,18 +197,18 @@ private object KotlinTemplates: Templates {
 }
 
 private object KotlinGradleTemplates: Templates {
-    override val checksDir = Path.of("sonar-kotlin-gradle", "src", "main", "java", "org", "sonarsource", "kotlin", "gradle", "checks")
-    override val testsDir = Path.of("sonar-kotlin-gradle", "src", "test", "java", "org", "sonarsource", "kotlin", "gradle", "checks")
-    override val samplesDir = Path.of("sonar-kotlin-gradle", "src", "test", "samples", "non-compiling")
+    override val checksDir = Path.of(KOTLIN_GRADLE_BASEDIR, "src", "main", "java", "org", "sonarsource", "kotlin", "gradle", "checks")
+    override val testsDir = Path.of(KOTLIN_GRADLE_BASEDIR, "src", "test", "java", "org", "sonarsource", "kotlin", "gradle", "checks")
+    override val samplesDir = Path.of(KOTLIN_GRADLE_BASEDIR, "src", "test", "samples", "non-compiling")
     override val checkListFile =
         Path.of(KOTLIN_GRADLE_BASEDIR, "src", "main", "java", "org", "sonarsource", "kotlin", "gradle", "KotlinGradleCheckList.kt")
+    override val checksPackage = "org.sonarsource.kotlin.gradle.checks"
 
     override fun generateCheckClass(ruleKey: String, checkClassName: String, messageLine: String?) = LICENSE_HEADER + """
-        package org.sonarsource.kotlin.gradle.checks
+        package $checksPackage
         
         import org.sonar.check.Rule
-        import org.sonarsource.kotlin.api.checks.AbstractCheck
-        
+        import org.sonarsource.kotlin.api.checks.AbstractCheck       
         ${messageLine?.let { "        \n        $it\n" } ?: ""}
         @Rule(key = "$ruleKey")
         class $checkClassName : AbstractCheck() {
@@ -216,7 +218,7 @@ private object KotlinGradleTemplates: Templates {
     """.trimIndent()
 
     override fun generateTestClass(testClassName: String, checkClassName: String) = LICENSE_HEADER + """
-        package org.sonarsource.kotlin.gradle.checks
+        package $checksPackage
         
         internal class $testClassName : CheckTest($checkClassName())
                 
