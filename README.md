@@ -133,9 +133,9 @@ rule `S42` in the class `AnswersEverythingCheck`, you can call the following in 
 
     ./gradlew setupRuleStubs -PruleKey=S42 -PclassName=AnswersEverythingCheck
 
-If you want this to be a Kotlin Gradle DSL rule, add `-PgradleRule=true`:
+To create stubs for Kotlin Gradle DSL rules instead of Kotlin rules, use `setupGradleRuleStubs`, as in: 
 
-    ./gradlew setupRuleStubs -PruleKey=S42 -PclassName=AnswersEverythingCheck -PgradleRule=true
+    ./gradlew setupGradleRuleStubs -PruleKey=S6626 -PclassName=TaskDefinitionsCheck
 
 ### Updating external linter rule mappings
 
