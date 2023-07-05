@@ -78,7 +78,7 @@ abstract class CreateRuleStubsTask : DefaultTask() {
     }
 
     private fun Templates.createSampleFile(checkClassName: String) =
-        createNewFile(samplesDir.resolve("${checkClassName}Sample.kt"), generateCheckFile("${checkClassName}Sample", ruleKey))
+        createNewFile(samplesDir.resolve("${checkClassName}Sample.$sampleFileExt"), generateCheckFile("${checkClassName}Sample", ruleKey))
 
     private fun createNewFile(targetFile: Path, content: String) = if (targetFile.notExists()) {
             targetFile.createFile()
@@ -146,6 +146,7 @@ private interface Templates {
     val samplesDir : Path
     val checkListFile : Path
     val checksPackage : String
+    val sampleFileExt : String
 
     fun generateCheckClass(ruleKey: String, checkClassName: String, messageLine: String?): String
     fun generateTestClass(testClassName: String, checkClassName: String): String
@@ -165,6 +166,7 @@ private object KotlinTemplates: Templates {
     override val checkListFile =
         Path.of("sonar-kotlin-plugin", "src", "main", "java", "org", "sonarsource", "kotlin", "plugin", "KotlinCheckList.kt")
     override val checksPackage = "org.sonarsource.kotlin.checks"
+    override val sampleFileExt = "kt"
 
     override fun generateCheckClass(ruleKey: String, checkClassName: String, messageLine: String?) = LICENSE_HEADER + """
         package $checksPackage
@@ -203,6 +205,7 @@ private object KotlinGradleTemplates: Templates {
     override val checkListFile =
         Path.of(KOTLIN_GRADLE_BASEDIR, "src", "main", "java", "org", "sonarsource", "kotlin", "gradle", "KotlinGradleCheckList.kt")
     override val checksPackage = "org.sonarsource.kotlin.gradle.checks"
+    override val sampleFileExt = "kts"
 
     override fun generateCheckClass(ruleKey: String, checkClassName: String, messageLine: String?) = LICENSE_HEADER + """
         package $checksPackage
