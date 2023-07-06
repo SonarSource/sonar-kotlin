@@ -45,8 +45,8 @@ abstract class CreateRuleStubsTask internal constructor(
         logger.info("  templates: ${templates::class.simpleName}")
 
         val finishedTasks = listOf(
-            "Create Check Class" to templates.createCheckClass(checkClassName),
-            "Create Test Class" to templates.createTestClass(checkClassName),
+            "Create Check Class" to createCheckClass(checkClassName),
+            "Create Test Class" to createTestClass(checkClassName),
             "Create Sample File" to templates.createSampleFile(checkClassName),
             "Add Rule to KotlinCheckList" to templates.addRuleToChecksListFile(checkClassName),
         )
@@ -55,15 +55,35 @@ abstract class CreateRuleStubsTask internal constructor(
         finishedTasks.forEach { logger.info("${it.first}: ${if (it.second) "successful" else "FAILED"}") }
     }
 
-    private fun RuleStubTemplates.createCheckClass(checkClassName: String) = createNewFile(
-        checksDir.resolve("${checkClassName}.kt"),
+    private fun createCheckClass(checkClassName: String) = createNewFile(
+        templates.checksDir.resolve("${checkClassName}.kt"),
         generateCheckClass(ruleKey, checkClassName, message?.let { """private const val MESSAGE = "$it"""" })
     )
 
-    private fun RuleStubTemplates.createTestClass(checkClassName: String): Boolean {
+    private fun createTestClass(checkClassName: String): Boolean {
         val testClassName = "${checkClassName}Test"
-        return createNewFile(testsDir.resolve("${testClassName}.kt"), generateTestClass(testClassName, checkClassName))
+        return createNewFile(templates.testsDir.resolve("${testClassName}.kt"), generateTestClass(testClassName, checkClassName))
     }
+
+    private fun generateCheckClass(ruleKey: String, checkClassName: String, messageLine: String?) = LICENSE_HEADER + """
+            package ${templates.checksPackage}
+
+            import org.sonar.check.Rule
+            import org.sonarsource.kotlin.api.checks.AbstractCheck
+            ${messageLine?.let { "        \n        $it\n" } ?: ""}
+            @Rule(key = "$ruleKey")
+            class $checkClassName : AbstractCheck() {
+                // TODO: implement this rule
+            }
+            
+        """.trimIndent()
+
+    private fun generateTestClass(testClassName: String, checkClassName: String) = LICENSE_HEADER + """
+            package ${templates.checksPackage}
+    
+            internal class $testClassName : CheckTest($checkClassName())
+
+        """.trimIndent()
 
     private fun RuleStubTemplates.createSampleFile(checkClassName: String) =
         createNewFile(samplesDir.resolve("${checkClassName}Sample.$sampleFileExt"), generateCheckFile("${checkClassName}Sample", ruleKey))

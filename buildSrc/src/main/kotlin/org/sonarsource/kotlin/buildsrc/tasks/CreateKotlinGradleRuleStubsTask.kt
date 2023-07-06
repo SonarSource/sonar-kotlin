@@ -14,26 +14,6 @@ abstract class CreateKotlinGradleRuleStubsTask : CreateRuleStubsTask(
         override val checksPackage = "org.sonarsource.kotlin.gradle.checks"
         override val sampleFileExt = "kts"
 
-        override fun generateCheckClass(ruleKey: String, checkClassName: String, messageLine: String?) = LICENSE_HEADER + """
-            package $checksPackage
-            
-            import org.sonar.check.Rule
-            import org.sonarsource.kotlin.api.checks.AbstractCheck       
-            ${messageLine?.let { "        \n        $it\n" } ?: ""}
-            @Rule(key = "$ruleKey")
-            class $checkClassName : AbstractCheck() {
-                // TODO: implement this rule
-            }
-            
-        """.trimIndent()
-
-        override fun generateTestClass(testClassName: String, checkClassName: String) = LICENSE_HEADER + """
-            package $checksPackage
-            
-            internal class $testClassName : CheckTest($checkClassName())
-                    
-        """.trimIndent()
-
         override fun generateCheckFile(checkSampleName: String, ruleKey: String) = """
             // TODO: insert sample code to test rule $ruleKey here
             
