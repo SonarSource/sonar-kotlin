@@ -1,6 +1,7 @@
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.sonarsource.kotlin.buildsrc.tasks.CreateRuleStubsTask
+import org.sonarsource.kotlin.buildsrc.tasks.CreateKotlinRuleStubsTask
+import org.sonarsource.kotlin.buildsrc.tasks.CreateKotlinGradleRuleStubsTask
 import org.sonarsource.kotlin.buildsrc.tasks.FetchRuleMetadata
 
 plugins {
@@ -288,8 +289,13 @@ artifactory {
     }
 }
 
-tasks.register<CreateRuleStubsTask>("setupRuleStubs") {
+tasks.register<CreateKotlinRuleStubsTask>("setupRuleStubs") {
     finalizedBy(tasks.findByPath(":generateRuleMetadata"))
 }
+
+tasks.register<CreateKotlinGradleRuleStubsTask>("setupGradleRuleStubs") {
+    finalizedBy(tasks.findByPath(":generateRuleMetadata"))
+}
+
 tasks.register<FetchRuleMetadata.FetchSpecificRulesMetadata>("generateRuleMetadata")
 tasks.register<FetchRuleMetadata.FetchAllRulesMetadata>("updateRuleMetadata")
