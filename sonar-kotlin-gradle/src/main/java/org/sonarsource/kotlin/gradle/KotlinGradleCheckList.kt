@@ -23,5 +23,5 @@ import org.sonarsource.kotlin.api.checks.KotlinCheck
 import org.sonarsource.kotlin.gradle.checks.TaskDefinitionsCheck
 
 val KOTLIN_GRADLE_CHECKS: List<Class<out KotlinCheck>> = listOf(
-    TaskDefinitionsCheck::class.java
+    TaskDefinitionsCheck::class.java,
 )

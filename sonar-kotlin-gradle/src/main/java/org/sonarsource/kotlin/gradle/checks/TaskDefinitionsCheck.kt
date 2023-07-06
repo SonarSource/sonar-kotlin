@@ -26,16 +26,22 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtVisitorVoid
+import org.jetbrains.kotlin.psi.psiUtil.endOffset
+import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 
 private const val REF_NAME_GROUP = "group"
 private const val REF_NAME_DESCRIPTION = "description"
 
 @Rule(key = "S6626")
 class TaskDefinitionsCheck : AbstractCheck() {
+
+    // TODO: Improve this rule once semantics Gradle DSL semantics is available in the BindingContext:
+    //       Use FunMatcher with receiver type `org.gradle.api.tasks.TaskContainer` instead of checking for receiver name `tasks`.
 
     override fun visitCallExpression(expression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
         if (!isTasksRegisterCall(expression)) return
@@ -51,14 +57,16 @@ class TaskDefinitionsCheck : AbstractCheck() {
             if (assignmentChecker.hasDescription) null else "\"$REF_NAME_DESCRIPTION\"",
         ).filterNotNull().joinToString(" and ")
 
+        val highlightEndElement = expression.valueArgumentList ?: expression.getCalleeExpressionIfAny()!!
         kotlinFileContext.reportIssue(
-            expression.parent,
+            kotlinFileContext.textRange(expression.parent.startOffset, highlightEndElement.endOffset),
             """Define $missing for this task"""
         )
     }
 
     private fun isTasksRegisterCall(expression: KtCallExpression): Boolean {
-        if ((expression.getCalleeExpressionIfAny() as? KtNameReferenceExpression)?.getReferencedName() != "register") return false
+        val functionName = (expression.getCalleeExpressionIfAny() as? KtNameReferenceExpression)?.getReferencedName()
+        if (functionName != "register" && functionName != "create") return false
         val parent = expression.parent as? KtDotQualifiedExpression ?: return false
         return (parent.receiverExpression as? KtNameReferenceExpression)?.getReferencedName() == "tasks"
     }
