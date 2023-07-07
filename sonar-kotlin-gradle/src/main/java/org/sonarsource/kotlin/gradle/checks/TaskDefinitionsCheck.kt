@@ -59,9 +59,9 @@ class TaskDefinitionsCheck : AbstractCheck() {
                 kotlinFileContext.textRange(expression.parent.startOffset, highlightEndElement.endOffset),
                 message {
                     +"Define "
-                    if (!hasGroup) code("\"$REF_NAME_GROUP\"")
+                    if (!hasGroup) code(REF_NAME_GROUP)
                     if (!(hasGroup || hasDescription)) +" and "
-                    if (!hasDescription) code("\"$REF_NAME_DESCRIPTION\"")
+                    if (!hasDescription) code(REF_NAME_DESCRIPTION)
                     +" for this task"
                 }
             )
