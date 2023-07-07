@@ -1,0 +1,17 @@
+{
+  "title": "Core plugins IDs should be replaced by their shortcuts",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "gradle"
+  ],
+  "defaultSeverity": "Minor",
+  "ruleSpecification": "RSPEC-6634",
+  "sqKey": "S6634",
+  "scope": "Main",
+  "quickfix": "unknown"
+}
