@@ -17,11 +17,6 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.gradle
+package org.sonarsource.kotlin.gradle.checks
 
-import org.sonarsource.kotlin.api.checks.KotlinCheck
-import org.sonarsource.kotlin.gradle.checks.TaskDefinitionsCheck
-
-val KOTLIN_GRADLE_CHECKS: List<Class<out KotlinCheck>> = listOf(
-    TaskDefinitionsCheck::class.java,
-)
+internal class TaskDefinitionsCheckTest : CheckTest(TaskDefinitionsCheck())

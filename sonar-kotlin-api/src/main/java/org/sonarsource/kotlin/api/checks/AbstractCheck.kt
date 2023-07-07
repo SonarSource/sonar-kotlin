@@ -61,7 +61,7 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
     /**
      * @param textRange `null` when on file
      */
-    internal fun KotlinFileContext.reportIssue(
+    fun KotlinFileContext.reportIssue(
         textRange: TextRange? = null,
         message: Message,
         secondaryLocations: List<SecondaryLocation> = emptyList(),

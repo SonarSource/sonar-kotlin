@@ -27,9 +27,12 @@ import org.sonar.api.batch.fs.TextRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 object KotlinTextRanges {
-    fun InputFile.textRange(psiDocument: Document, element: PsiElement): TextRange {
-        val startPointer = textPointerAtOffset(psiDocument, element.textRange.startOffset)
-        val endPointer = textPointerAtOffset(psiDocument, element.textRange.endOffset)
+    fun InputFile.textRange(psiDocument: Document, element: PsiElement): TextRange =
+        textRange(psiDocument, element.textRange.startOffset, element.textRange.endOffset)
+
+    fun InputFile.textRange(psiDocument: Document, startOffset: Int, endOffset: Int): TextRange {
+        val startPointer = textPointerAtOffset(psiDocument, startOffset)
+        val endPointer = textPointerAtOffset(psiDocument, endOffset)
         return newRange(startPointer.line(), startPointer.lineOffset(), endPointer.line(), endPointer.lineOffset())
     }
 
@@ -40,6 +43,9 @@ object KotlinTextRanges {
 
         return newPointer(startLineNumber + 1, startLineOffset)
     }
+
+    fun KotlinFileContext.textRange(startOffset: Int, endOffset: Int): TextRange =
+        inputFileContext.inputFile.textRange(ktFile.viewProvider.document!!, startOffset, endOffset)
 
     fun KotlinFileContext.textRange(psiElement: PsiElement) =
         inputFileContext.inputFile.textRange(ktFile.viewProvider.document!!, psiElement)
