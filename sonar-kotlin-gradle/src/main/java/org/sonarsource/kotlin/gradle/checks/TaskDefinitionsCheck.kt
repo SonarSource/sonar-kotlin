@@ -33,6 +33,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.api.reporting.message
 
 private const val REF_NAME_GROUP = "group"
 private const val REF_NAME_DESCRIPTION = "description"
@@ -50,18 +51,21 @@ class TaskDefinitionsCheck : AbstractCheck() {
 
         val assignmentChecker = AssignmentChecker()
         block.acceptChildren(assignmentChecker)
-        if (assignmentChecker.hasGroup && assignmentChecker.hasDescription) return
 
-        val missing = listOf(
-            if (assignmentChecker.hasGroup) null else "\"$REF_NAME_GROUP\"",
-            if (assignmentChecker.hasDescription) null else "\"$REF_NAME_DESCRIPTION\"",
-        ).filterNotNull().joinToString(" and ")
-
-        val highlightEndElement = expression.valueArgumentList ?: expression.getCalleeExpressionIfAny()!!
-        kotlinFileContext.reportIssue(
-            kotlinFileContext.textRange(expression.parent.startOffset, highlightEndElement.endOffset),
-            """Define $missing for this task"""
-        )
+        with(assignmentChecker) {
+            if (hasGroup && hasDescription) return
+            val highlightEndElement = expression.valueArgumentList ?: expression.getCalleeExpressionIfAny()!!
+            kotlinFileContext.reportIssue(
+                kotlinFileContext.textRange(expression.parent.startOffset, highlightEndElement.endOffset),
+                message {
+                    +"Define "
+                    if (!hasGroup) code("\"$REF_NAME_GROUP\"")
+                    if (!(hasGroup || hasDescription)) +" and "
+                    if (!hasDescription) code("\"$REF_NAME_DESCRIPTION\"")
+                    +" for this task"
+                }
+            )
+        }
     }
 
     private fun isTasksRegisterCall(expression: KtCallExpression): Boolean {
