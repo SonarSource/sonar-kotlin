@@ -29,6 +29,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.message
 
 private val corePluginMatcherRegex = """org\.gradle\.[^.]+""".toRegex()
+private const val PREFIX_LENGTH = "org.gradle.".length
 
 @Rule(key = "S6634")
 class CorePluginsShortcutUsageCheck : AbstractCheck() {
@@ -40,7 +41,7 @@ class CorePluginsShortcutUsageCheck : AbstractCheck() {
         val argAsString = callExpr.valueArguments.first().getArgumentExpression()
             ?.predictRuntimeStringValue(kotlinFileContext.bindingContext) ?: return
         if (argAsString.matches(corePluginMatcherRegex)) {
-            val canonicalName = argAsString.substring(11).let {
+            val canonicalName = argAsString.substring(PREFIX_LENGTH).let {
                 if (it.contains('-')) "`$it`"
                 else it
             }
