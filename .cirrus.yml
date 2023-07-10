@@ -132,6 +132,11 @@ build_task:
   build_script:
     - source cirrus-env BUILD-PRIVATE
     - regular_gradle_build_deploy_analyze
+  on_failure:
+    error_log_artifacts:
+      path: "hs_err_pid*.log"
+    heap_dump_artifacts:
+      path: "*.hprof"
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 ws_scan_task:
@@ -197,6 +202,11 @@ build_win_task:
   <<: *SETUP_GRADLE_CACHE
   build_script:
     - ./gradlew build -Pqa --info --console plain --no-daemon --build-cache
+  on_failure:
+    error_log_artifacts:
+      path: "hs_err_pid*.log"
+    heap_dump_artifacts:
+      path: "*.hprof"
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 promote_task:
