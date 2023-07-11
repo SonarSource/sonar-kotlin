@@ -1,0 +1,49 @@
+<h2>Why is this an issue?</h2>
+<p>Using the Kotlin Gradle DSL, a task can be defined in several ways:</p>
+<ul>
+  <li> <code>tasks.create(…​)</code> will eagerly configure the task, regardless of whether it is required. </li>
+  <li> <code>tasks.register(…​)</code> lazily configures the task only when it is required. This happens when it is located using query methods such
+  as <code>TaskCollection.getByName(java.lang.String)</code>, when it is added to the task graph for execution, or when <code>Provider.get()</code> is
+  called on the return value of this method. </li>
+</ul>
+<p>It is generally more efficient to use <code>tasks.register(…​)</code> instead of <code>tasks.create(…​)</code> as the task will not be configured
+if it is not needed.</p>
+<h2>How to fix it</h2>
+<p>Replace <code>tasks.create(…​)</code> with <code>tasks.register(…​)</code>.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+tasks.create("myTask") {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    description = "My task."
+    // other configuration logic
+
+    doLast {
+      // ...
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+tasks.register("myTask") {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    description = "My task."
+    // other configuration logic
+
+    doLast {
+      // ...
+    }
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/TaskContainer.html">org.gradle.api.tasks.TaskContainer</a> </li>
+</ul>
+<h3>Standards</h3>
+<ul>
+  <li> <a href="https://docs.gradle.org/current/userguide/task_configuration_avoidance.html">Task configuration avoidance</a> </li>
+  <li> <a href="https://www.youtube.com/watch?v=LvuVboGNVoE&amp;list=PL0UJI1nZ56yAHv9H9kZA6vat4N1kSRGis&amp;index=10">Configuration avoidance (Gradle
+  best practice tip #8)</a> </li>
+</ul>
+
