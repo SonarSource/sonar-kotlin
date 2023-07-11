@@ -1,0 +1,32 @@
+<h2>Why is this an issue?</h2>
+<p>In order to extend the functionalities of your Gradle build you can add plugins with <code>id("plugin-id")</code>. Gradle maintains some plugins
+that are known as <a href="https://docs.gradle.org/current/userguide/plugin_reference.html">core plugins</a>. These core plugins can be identified by
+a short name.</p>
+<p>When adding core plugins, it is a good practice to use their short name because it is more concise, readable, and less prone to typing
+mistakes.</p>
+<h2>How to fix it</h2>
+<p>Replace <code>id("core-plugin-id")</code> with the core plugin short name.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+plugins {
+    id("org.gradle.java")
+    id("org.gradle.jacoco")
+    id("org.gradle.maven-publish")
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+plugins {
+    java
+    jacoco
+    `maven-publish`
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://docs.gradle.org/current/userguide/plugin_reference.html">Gradle core plugins reference</a> </li>
+  <li> <a href="https://docs.gradle.org/current/userguide/plugins.html">Gradle plugins</a> </li>
+</ul>
+
