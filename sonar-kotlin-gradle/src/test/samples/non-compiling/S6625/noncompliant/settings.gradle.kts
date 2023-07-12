@@ -4,3 +4,9 @@
 dependencyResolutionManagement {
     // ...
 }
+
+project = "myProject"
+name = "myProject"
+
+project == "myProject"
+project.name == "myProject"
