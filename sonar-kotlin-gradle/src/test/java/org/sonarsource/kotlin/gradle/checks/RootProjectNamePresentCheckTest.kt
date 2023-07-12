@@ -17,18 +17,29 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.gradle
+package org.sonarsource.kotlin.gradle.checks
 
-import org.sonarsource.kotlin.api.checks.KotlinCheck
-import org.sonarsource.kotlin.gradle.checks.CorePluginsShortcutUsageCheck
-import org.sonarsource.kotlin.gradle.checks.RootProjectNamePresentCheck
-import org.sonarsource.kotlin.gradle.checks.TaskDefinitionsCheck
-import org.sonarsource.kotlin.gradle.checks.TaskRegisterVsCreateCheck
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.testapi.KotlinVerifier
 
+internal class RootProjectNamePresentCheckTest : CheckTest(
+    check = RootProjectNamePresentCheck(),
+    sampleFileSemantics = "S6625/noncompliant/settings.gradle.kts"
+) {
 
-val KOTLIN_GRADLE_CHECKS: List<Class<out KotlinCheck>> = listOf(
-    CorePluginsShortcutUsageCheck::class.java,
-    RootProjectNamePresentCheck::class.java,
-    TaskDefinitionsCheck::class.java,
-    TaskRegisterVsCreateCheck::class.java,
-)
+    @Test
+    fun `no issues settings`() {
+        KotlinVerifier(check) {
+            this.fileName = "S6625/compliant/settings.gradle.kts"
+            this.baseDir = SAMPLES_BASE_DIR
+        }.verifyNoIssue()
+    }
+
+    @Test
+    fun `no issues buildscript`() {
+        KotlinVerifier(check) {
+            this.fileName = "S6625/compliant/build.gradle.kts"
+            this.baseDir = SAMPLES_BASE_DIR
+        }.verifyNoIssue()
+    }
+}
