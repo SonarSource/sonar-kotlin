@@ -1,0 +1,17 @@
+{
+  "title": "Dependency versions shouldn\u0027t be hard-coded",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "gradle"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6624",
+  "sqKey": "S6624",
+  "scope": "All",
+  "quickfix": "unknown"
+}
