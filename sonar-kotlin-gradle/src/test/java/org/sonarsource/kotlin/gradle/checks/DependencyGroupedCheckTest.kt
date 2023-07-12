@@ -17,20 +17,6 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.gradle
+package org.sonarsource.kotlin.gradle.checks
 
-import org.sonarsource.kotlin.api.checks.KotlinCheck
-import org.sonarsource.kotlin.gradle.checks.CorePluginsShortcutUsageCheck
-import org.sonarsource.kotlin.gradle.checks.DependencyGroupedCheck
-import org.sonarsource.kotlin.gradle.checks.DependencyVersionHardcodedCheck
-import org.sonarsource.kotlin.gradle.checks.TaskDefinitionsCheck
-import org.sonarsource.kotlin.gradle.checks.TaskRegisterVsCreateCheck
-
-
-val KOTLIN_GRADLE_CHECKS: List<Class<out KotlinCheck>> = listOf(
-    CorePluginsShortcutUsageCheck::class.java,
-    DependencyGroupedCheck::class.java,
-    DependencyVersionHardcodedCheck::class.java,
-    TaskDefinitionsCheck::class.java,
-    TaskRegisterVsCreateCheck::class.java,
-)
+internal class DependencyGroupedCheckTest : CheckTest(DependencyGroupedCheck())
