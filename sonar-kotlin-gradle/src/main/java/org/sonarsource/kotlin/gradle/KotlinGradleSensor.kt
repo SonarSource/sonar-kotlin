@@ -33,6 +33,9 @@ import org.sonarsource.kotlin.api.common.KotlinLanguage
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensor
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
+import java.io.File
+
+const val GRADLE_PROJECT_ROOT_PROPERTY = "sonar.kotlin.gradleProjectRoot"
 
 private val LOG = LoggerFactory.getLogger(KotlinGradleSensor::class.java)
 
@@ -62,8 +65,10 @@ class KotlinGradleSensor(
     override fun getFilesToAnalyse(sensorContext: SensorContext): Iterable<InputFile> {
         val fileSystem: FileSystem = sensorContext.fileSystem()
 
+        val rootDirFile = File(sensorContext.config()[GRADLE_PROJECT_ROOT_PROPERTY].get())
+
         val projectConnection = GradleConnector.newConnector()
-            .forProjectDirectory(fileSystem.baseDir())
+            .forProjectDirectory(rootDirFile)
             .connect()
 
         projectConnection.newBuild()

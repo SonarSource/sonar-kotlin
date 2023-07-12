@@ -32,6 +32,7 @@ import org.sonarsource.kotlin.externalreport.detekt.DetektRulesDefinition
 import org.sonarsource.kotlin.externalreport.detekt.DetektSensor
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintRulesDefinition
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintSensor
+import org.sonarsource.kotlin.gradle.GRADLE_PROJECT_ROOT_PROPERTY
 import org.sonarsource.kotlin.gradle.KotlinGradleSensor
 import org.sonarsource.kotlin.surefire.KotlinResourcesLocator
 import org.sonarsource.kotlin.surefire.KotlinSurefireParser
@@ -51,10 +52,7 @@ class KotlinPlugin : Plugin {
         const val REPOSITORY_NAME = "SonarAnalyzer"
         const val PROFILE_NAME = "Sonar way"
         const val SKIP_UNCHANGED_FILES_OVERRIDE = "sonar.kotlin.skipUnchanged"
-        const val GRADLE_PROJECT_ROOT_PROPERTY = "sonar.kotlin.gradleProjectRoot"
     }
-
-    private fun doScanGradleFiles(context: Plugin.Context): Boolean = context.bootConfiguration[GRADLE_PROJECT_ROOT_PROPERTY].isPresent
 
     override fun define(context: Plugin.Context) {
 
@@ -65,7 +63,7 @@ class KotlinPlugin : Plugin {
             KotlinProfileDefinition::class.java,
         )
 
-        if (doScanGradleFiles(context)) {
+        context.bootConfiguration[GRADLE_PROJECT_ROOT_PROPERTY].ifPresent {
             context.addExtension(KotlinGradleSensor::class.java)
         }
 
