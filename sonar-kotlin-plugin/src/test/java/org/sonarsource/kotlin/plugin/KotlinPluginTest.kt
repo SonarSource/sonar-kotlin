@@ -30,7 +30,7 @@ import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
 import kotlin.time.ExperimentalTime
 import org.sonar.api.config.Configuration
-import org.sonarsource.kotlin.plugin.KotlinPlugin.Companion.GRADLE_PROJECT_ROOT_PROPERTY
+import org.sonarsource.kotlin.gradle.GRADLE_PROJECT_ROOT_PROPERTY
 import java.util.Optional
 
 @ExperimentalTime
