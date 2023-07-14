@@ -1,0 +1,30 @@
+<h2>Why is this an issue?</h2>
+<p><code>settings.gradle.kts</code> or <code>settings.gradle</code> are used to define general project properties; see the following sample file:</p>
+<pre>
+rootProject.name = "myProject"
+
+include("foo", "bar")
+</pre>
+<p>In general it is not mandatory to define the <code>settings.gradle.kts</code> or <code>settings.gradle</code>, however it is hingly recommended
+because:</p>
+<ul>
+  <li> it improves performance, since Gradle won’t navigate up the filesystem directory tree looking for the settings file </li>
+  <li> it is a good practice to define project properties, like the <code>rootProject.name</code> </li>
+</ul>
+<h2>How to fix it</h2>
+<p>Simply add a <code>settings.gradle.kts</code> or <code>settings.gradle</code> file. For example with such content:</p>
+<pre>
+rootProject.name = "myProject"
+
+include("module1", "module2")
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://docs.gradle.org/current/dsl/org.gradle.api.initialization.Settings.html">Settings - Gradle DSL</a> </li>
+</ul>
+<h3>Standards</h3>
+<ul>
+  <li> <a href="https://youtu.be/hKtO1yGEWvY?list=PL0UJI1nZ56yAHv9H9kZA6vat4N1kSRGis&amp;t=154">Always specify Gradle settings</a> </li>
+</ul>
+
