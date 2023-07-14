@@ -1,4 +1,4 @@
-dependencies { // Noncompliant {{Group dependencies by their destination}}
+dependencies { // Noncompliant {{Group dependencies by their destination.}}
 //^[sc=1;ec=12]
     compile("org.foo:bar")
     implementation("org.foo:bar")
@@ -29,7 +29,7 @@ dependencies { // Noncompliant {{Group dependencies by their destination}}
     compileOnly("org.foo:bar")
 //  ^^^^^^^^^^^<
 
-    constraints { // Noncompliant {{Group dependencies by their destination}}
+    constraints { // Noncompliant {{Group dependencies by their destination.}}
 //  ^^^^^^^^^^^
         compile("org.foo:bar")
         implementation("org.foo:bar")

@@ -46,7 +46,7 @@ class DependencyGroupedCheck : AbstractCheck() {
         if (visitor.secondaryLocations.isNotEmpty()) {
             kotlinFileContext.reportIssue(
                 expression.getCalleeExpressionIfAny()!!,
-                "Group dependencies by their destination",
+                "Group dependencies by their destination.",
                 visitor.secondaryLocations
             )
         }
