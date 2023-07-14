@@ -28,17 +28,17 @@ internal class RootProjectNamePresentCheckTest : CheckTest(
 ) {
 
     @Test
-    fun `no issues settings`() {
-        KotlinVerifier(check) {
-            this.fileName = "S6625/compliant/settings.gradle.kts"
-            this.baseDir = SAMPLES_BASE_DIR
-        }.verifyNoIssue()
-    }
+    fun `no issues settings`() = verifyNoIssue("S6625/compliant/settings.gradle.kts")
 
     @Test
-    fun `no issues buildscript`() {
+    fun `no issues buildscript`() = verifyNoIssue("S6625/compliant/build.gradle.kts")
+
+    @Test
+    fun `no issues settings with setter`() = verifyNoIssue("S6625/compliant-setter/settings.gradle.kts")
+
+    private fun verifyNoIssue(fileName: String) {
         KotlinVerifier(check) {
-            this.fileName = "S6625/compliant/build.gradle.kts"
+            this.fileName = fileName
             this.baseDir = SAMPLES_BASE_DIR
         }.verifyNoIssue()
     }

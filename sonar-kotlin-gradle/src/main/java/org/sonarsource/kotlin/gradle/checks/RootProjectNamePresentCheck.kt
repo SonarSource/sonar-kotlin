@@ -21,20 +21,22 @@ package org.sonarsource.kotlin.gradle.checks
 
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
-import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.reporting.message
 
 private const val SETTINGS_FILE_NAME = "settings.gradle.kts"
 private const val IDENTIFIER_ROOT_PROJECT = "rootProject"
 private const val IDENTIFIER_NAME = "name"
+private const val REF_NAME_SET_NAME = "setName"
 
 @Rule(key = "S6625")
 class RootProjectNamePresentCheck : AbstractCheck() {
@@ -47,7 +49,7 @@ class RootProjectNamePresentCheck : AbstractCheck() {
         if (!visitor.isRootProjectNameAssigned) {
 
             kotlinFileContext.reportIssue(
-                kotlinFileContext.textRange(file.startOffset, file.startOffset + 1),
+                null,
                 message {
                     +"Assign "
                     code("$IDENTIFIER_ROOT_PROJECT.$IDENTIFIER_NAME")
@@ -65,12 +67,24 @@ class RootProjectNamePresentCheck : AbstractCheck() {
         override fun visitBinaryExpression(expression: KtBinaryExpression) {
             if (expression.operationToken != KtTokens.EQ) return
             val qualifier = expression.left as? KtDotQualifiedExpression ?: return
-
             val receiver = qualifier.receiverExpression as? KtNameReferenceExpression ?: return
             val selector = qualifier.selectorExpression as? KtNameReferenceExpression ?: return
 
-            isRootProjectNameAssigned = isRootProjectNameAssigned ||
-                (receiver.getReferencedName() == IDENTIFIER_ROOT_PROJECT && selector.getReferencedName() == IDENTIFIER_NAME)
+            if (receiver.getReferencedName() == IDENTIFIER_ROOT_PROJECT && selector.getReferencedName() == IDENTIFIER_NAME) {
+                isRootProjectNameAssigned = true
+            }
+        }
+
+        override fun visitCallExpression(expression: KtCallExpression) {
+            val qualifier = expression.parent as? KtDotQualifiedExpression ?: return
+
+            if (expression.getCalleeExpressionIfAny()?.getReferencedName() == REF_NAME_SET_NAME
+                && qualifier.receiverExpression.getReferencedName() == IDENTIFIER_ROOT_PROJECT
+            ) {
+                isRootProjectNameAssigned = true
+            }
         }
     }
 }
+
+private fun KtExpression.getReferencedName() = (this as? KtNameReferenceExpression)?.getReferencedName()
