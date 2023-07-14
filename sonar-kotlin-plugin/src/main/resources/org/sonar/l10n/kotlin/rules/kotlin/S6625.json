@@ -1,0 +1,17 @@
+{
+  "title": "\"rooProject.name\" should always be present in Gradle settings",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "gradle"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6625",
+  "sqKey": "S6625",
+  "scope": "All",
+  "quickfix": "unknown"
+}

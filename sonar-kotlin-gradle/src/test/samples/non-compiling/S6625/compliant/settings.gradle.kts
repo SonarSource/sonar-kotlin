@@ -1,0 +1,5 @@
+rootProject.setName("myProject")
+
+dependencyResolutionManagement {
+    // ...
+}

@@ -1,0 +1,27 @@
+<h2>Why is this an issue?</h2>
+<p><code>settings.gradle.kts</code> or <code>settings.gradle</code> are used to define general project properties.</p>
+<p>It is a good practice to specify the <code>rootProject.name</code> property to set your project name and avoid inconsistencies. By default, Gradle
+uses the project directory name as the project name and this is not guaranteed to always be the desired behavior.</p>
+<h2>How to fix it</h2>
+<p>Add the <code>rootProject.name</code> property to the Gradle settings file (i.e. <code>settings.gradle.kts</code> or
+<code>settings.gradle</code>)</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+include("module1", "module2")
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+rootProject.name = "myProject"
+include("module1", "module2")
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://docs.gradle.org/current/dsl/org.gradle.api.initialization.Settings.html">Settings - Gradle DSL</a> </li>
+</ul>
+<h3>Standards</h3>
+<ul>
+  <li> <a href="https://youtu.be/hKtO1yGEWvY?list=PL0UJI1nZ56yAHv9H9kZA6vat4N1kSRGis&amp;t=83">Always specify Gradle settings</a> </li>
+</ul>
+
