@@ -1,0 +1,46 @@
+<h2>Why is this an issue?</h2>
+<p>Dependencies should be grouped by their destination, otherwise, it becomes hard for the reader to see which destination has what dependencies.</p>
+<h3>What is the potential impact?</h3>
+<h4>Readability</h4>
+<p>This change improves readability by making it easier to see which destination has what dependencies.</p>
+<h2>How to fix it</h2>
+<p>Reorder your dependencies so that they are grouped by destination.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    implementation("com.google.guava:guava:30.1.1-jre")
+    implementation("org.apache.commons:commons-lang3:3.9")
+
+    testImplementation(testLibs.junit.api)
+    testRuntimeOnly(testLibs.junit.engine)
+
+    testImplementation(testLibs.assertj.core)
+    testImplementation(libs.sonar.plugin.api)
+
+    implementation("log4j:log4j:1.2.17")
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    implementation("com.google.guava:guava:30.1.1-jre")
+    implementation("org.apache.commons:commons-lang3:3.9")
+    implementation("log4j:log4j:1.2.17")
+
+    testImplementation(testLibs.junit.api)
+    testImplementation(testLibs.assertj.core)
+    testImplementation(libs.sonar.plugin.api)
+
+    testRuntimeOnly(testLibs.junit.engine)
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://github.com/liutikas/gradle-best-practices#keep-your-dependencies-clustered">Best Practices when using Gradle - Keep your
+  dependencies clustered (Liutikas)</a> </li>
+</ul>
+
