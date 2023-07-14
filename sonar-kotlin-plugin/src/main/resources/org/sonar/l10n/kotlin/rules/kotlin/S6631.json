@@ -1,0 +1,17 @@
+{
+  "title": "Gradle settings file should always be present",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "gradle"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6631",
+  "sqKey": "S6631",
+  "scope": "All",
+  "quickfix": "unknown"
+}
