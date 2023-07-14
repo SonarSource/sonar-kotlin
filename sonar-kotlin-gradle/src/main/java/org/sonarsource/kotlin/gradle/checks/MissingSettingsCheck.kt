@@ -17,20 +17,11 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.gradle
+package org.sonarsource.kotlin.gradle.checks
 
-import org.sonarsource.kotlin.api.checks.KotlinCheck
-import org.sonarsource.kotlin.gradle.checks.CorePluginsShortcutUsageCheck
-import org.sonarsource.kotlin.gradle.checks.DependencyVersionHardcodedCheck
-import org.sonarsource.kotlin.gradle.checks.MissingSettingsCheck
-import org.sonarsource.kotlin.gradle.checks.TaskDefinitionsCheck
-import org.sonarsource.kotlin.gradle.checks.TaskRegisterVsCreateCheck
+import org.sonar.check.Rule
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 
-
-val KOTLIN_GRADLE_CHECKS: List<Class<out KotlinCheck>> = listOf(
-    CorePluginsShortcutUsageCheck::class.java,
-    DependencyVersionHardcodedCheck::class.java,
-    MissingSettingsCheck::class.java,
-    TaskDefinitionsCheck::class.java,
-    TaskRegisterVsCreateCheck::class.java,
-)
+@Rule(key = "S6631")
+class MissingSettingsCheck : AbstractCheck()
+// Rule is implemented in the KotlinGradleSensor
