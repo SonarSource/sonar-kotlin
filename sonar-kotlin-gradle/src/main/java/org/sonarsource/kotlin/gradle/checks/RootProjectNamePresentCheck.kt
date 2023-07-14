@@ -55,6 +55,7 @@ class RootProjectNamePresentCheck : AbstractCheck() {
                     code("$IDENTIFIER_ROOT_PROJECT.$IDENTIFIER_NAME")
                     +" in "
                     code(SETTINGS_FILE_NAME)
+                    +"."
                 }
             )
         }
