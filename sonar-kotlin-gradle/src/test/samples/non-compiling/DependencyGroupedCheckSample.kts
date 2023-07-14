@@ -1,110 +1,119 @@
-dependencies {
-    compile("org.foo:bar") // Compliant
-    implementation("org.foo:bar") // Compliant
-    compile("org.foo:bar") // Noncompliant {{Group `compile` dependencies}}
-//  ^^^^^^^
-    compile("org.foo:bar") // Noncompliant {{Group `compile` dependencies}}
-//  ^^^^^^^
-    implementation("org.foo:bar") // Compliant
+dependencies { // Noncompliant {{Group dependencies by their destination}}
+//^[sc=1;ec=12]
+    compile("org.foo:bar")
+    implementation("org.foo:bar")
+    compile("org.foo:bar")
+//  ^^^^^^^<
+    compile("org.foo:bar")
+//  ^^^^^^^<
+    implementation("org.foo:bar")
 
-    compileClasspath("org.foo:bar") // Complaint
+    compileClasspath("org.foo:bar")
 
-    compileOnly("org.foo:bar") // Compliant
-    implementation("org.foo:bar") // Noncompliant {{Group `implementation` dependencies}}
-//  ^^^^^^^^^^^^^^
+    compileOnly("org.foo:bar")
+    implementation("org.foo:bar")
+//  ^^^^^^^^^^^^^^<
 
-    println("Hello, world!") // Compliant
-    compileOnly("org.foo:bar") // Compliant
-    compileClasspath("org.foo:bar") // Noncompliant {{Group `compileClasspath` dependencies}}
+    println("Hello, world!")
+    compileOnly("org.foo:bar")
+    compileClasspath("org.foo:bar")
+//  ^^^^^^^^^^^^^^^^<
 
-    compileOnly("org.foo:bar") // Compliant
-    runtime("org.foo:bar") // Compliant
-    runtime("org.foo:bar") // Compliant
-    println("Hello, world!") // Compliant
-    println("Hello, world!") // Compliant
-    runtime("org.foo:bar") // Compliant
-    runtime("org.foo:bar") // Compliant
-    compileOnly("org.foo:bar") // Noncompliant {{Group `compileOnly` dependencies}}
+    compileOnly("org.foo:bar")
+    runtime("org.foo:bar")
+    runtime("org.foo:bar")
+    println("Hello, world!")
+    println("Hello, world!")
+    runtime("org.foo:bar")
+    runtime("org.foo:bar")
+    compileOnly("org.foo:bar")
+//  ^^^^^^^^^^^<
 
-    constraints {
-        compile("org.foo:bar") // Compliant
-        implementation("org.foo:bar") // Compliant
-        compile("org.foo:bar") // Noncompliant {{Group `compile` dependencies}}
-//      ^^^^^^^
-        compile("org.foo:bar") // Noncompliant {{Group `compile` dependencies}}
-        implementation("org.foo:bar") // Compliant
+    constraints { // Noncompliant {{Group dependencies by their destination}}
+//  ^^^^^^^^^^^
+        compile("org.foo:bar")
+        implementation("org.foo:bar")
+        compile("org.foo:bar")
+//      ^^^^^^^<
+        compile("org.foo:bar")
+//      ^^^^^^^<
+        implementation("org.foo:bar")
 
-        compileClasspath("org.foo:bar") // Complaint
+        compileClasspath("org.foo:bar")
 
-        compileOnly("org.foo:bar") // Compliant
-        implementation("org.foo:bar") // Noncompliant {{Group `implementation` dependencies}}
-        println("Hello, world!") // Compliant
-        compileOnly("org.foo:bar") // Compliant
-        compileClasspath("org.foo:bar") // Noncompliant {{Group `compileClasspath` dependencies}}
+        compileOnly("org.foo:bar")
+        implementation("org.foo:bar")
+//      ^^^^^^^^^^^^^^<
+        println("Hello, world!")
+        compileOnly("org.foo:bar")
+        compileClasspath("org.foo:bar")
+//      ^^^^^^^^^^^^^^^^<
     }
 
-    compileClasspath("org.foo:bar") // Noncompliant {{Group `compileClasspath` dependencies}}
-    runtime("org.foo:bar") // Compliant
-    runtime("org.foo:bar") // Compliant
+    runtime("org.foo:bar")
+    runtime("org.foo:bar")
 }
 
-dependencies {
-    compile("org.foo:bar") // Compliant
-    compile("org.foo:bar") // Compliant
-    compile("org.foo:bar") // Compliant
-    implementation("org.foo:bar") // Compliant
-    implementation("org.foo:bar") // Compliant
-    implementation("org.foo:bar") // Compliant
-    compileClasspath("org.foo:bar") // Complaint
-    compileClasspath("org.foo:bar") // Compliant
-    compileOnly("org.foo:bar") // Compliant
+dependencies { // Compliant
+    compile("org.foo:bar")
+    compile("org.foo:bar")
+    compile("org.foo:bar")
+    implementation("org.foo:bar")
+    implementation("org.foo:bar")
+    implementation("org.foo:bar")
+    compileClasspath("org.foo:bar")
+    compileClasspath("org.foo:bar")
+    compileOnly("org.foo:bar")
 
-    println("Hello, world!") // Compliant
-    compileOnly("org.foo:bar") // Compliant
+    println("Hello, world!")
+    compileOnly("org.foo:bar")
 
-    compileOnly("org.foo:bar") // Compliant
-    compileOnly("org.foo:bar") // Compliant
-    runtime("org.foo:bar") // Compliant
-    runtime("org.foo:bar") // Compliant
-    println("Hello, world!") // Compliant
-    println("Hello, world!") // Compliant
-    runtime("org.foo:bar") // Compliant
-    runtime("org.foo:bar") // Compliant
+    compileOnly("org.foo:bar")
+    compileOnly("org.foo:bar")
+    runtime("org.foo:bar")
+    runtime("org.foo:bar")
+    println("Hello, world!")
+    println("Hello, world!")
+    runtime("org.foo:bar")
+    runtime("org.foo:bar")
 
     constraints {
-        compile("org.foo:bar") // Compliant
-        compile("org.foo:bar") // Compliant
-        compile("org.foo:bar") // Compliant
-        implementation("org.foo:bar") // Compliant
-        implementation("org.foo:bar") // Compliant
-        implementation("org.foo:bar") // Compliant
+        compile("org.foo:bar")
+        compile("org.foo:bar")
+        compile("org.foo:bar")
+        implementation("org.foo:bar")
+        implementation("org.foo:bar")
+        implementation("org.foo:bar")
 
-        compileClasspath("org.foo:bar") // Complaint
-        compileClasspath("org.foo:bar") // Compliant
+        compileClasspath("org.foo:bar")
+        compileClasspath("org.foo:bar")
 
-        compileOnly("org.foo:bar") // Compliant
-        println("Hello, world!") // Compliant
-        compileOnly("org.foo:bar") // Compliant
+        compileOnly("org.foo:bar")
+        println("Hello, world!")
+        compileOnly("org.foo:bar")
     }
 
-    runtime("org.foo:bar") // Compliant
-    runtime("org.foo:bar") // Compliant
+    runtime("org.foo:bar")
+    runtime("org.foo:bar")
 }
 
-foo {
-    compile("org.foo:bar") // Compliant
-    implementation("org.foo:bar") // Compliant
-    compile("org.foo:bar") // Compliant
+fun foo(configuration: DependencyHandlerScope.() -> Unit) {}
+fun constraints(configuration: DependencyHandlerScope.() -> Unit) {}
+
+foo { // Compliant
+    compile("org.foo:bar")
+    implementation("org.foo:bar")
+    compile("org.foo:bar")
 
     constraints {
-        compile("org.foo:bar") // Compliant
-        implementation("org.foo:bar") // Compliant
-        compile("org.foo:bar") // Compliant
+        compile("org.foo:bar")
+        implementation("org.foo:bar")
+        compile("org.foo:bar")
     }
 }
 
-constraints {
-    compile("org.foo:bar") // Compliant
-    implementation("org.foo:bar") // Compliant
-    compile("org.foo:bar") // Compliant
+constraints { // Compliant
+    compile("org.foo:bar")
+    implementation("org.foo:bar")
+    compile("org.foo:bar")
 }
