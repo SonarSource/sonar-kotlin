@@ -19,15 +19,11 @@
  */
 package org.sonarsource.kotlin.gradle.checks
 
-import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
-import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.KtVisitorVoid
-import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
@@ -38,32 +34,11 @@ private const val VERSION_ARGUMENT_IDENTIFIER = "version"
 
 private val PATTERN_DEPENDENCY_WITH_VERSION = Regex("[^:]+:[^:]+:[^:]+")
 
-private const val REF_NAME_DEPENDENCIES = "dependencies"
-
-private val REF_NAME_DEPENDENCY_HANDLER_SCOPE_EXTENSIONS = setOf(
-    "annotationProcessor",
-    "compile",
-    "compileClasspath",
-    "compileOnly",
-    "implementation",
-    "runtime",
-    "runtimeClasspath",
-    "runtimeOnly",
-    "testAnnotationProcessor",
-    "testCompile",
-    "testCompileClasspath",
-    "testCompileOnly",
-    "testImplementation",
-    "testRuntime",
-    "testRuntimeClasspath",
-    "testRuntimeOnly",
-)
-
 @Rule(key = "S6624")
 class DependencyVersionHardcodedCheck : AbstractCheck() {
 
     override fun visitCallExpression(expression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        if (getFunctionNameOrNull(expression) != REF_NAME_DEPENDENCIES) return
+        if (getFunctionName(expression) != REF_NAME_DEPENDENCIES) return
         checkDependencyHandlerScopeLambda(expression, kotlinFileContext)
     }
 
@@ -87,7 +62,7 @@ class DependencyVersionHardcodedCheck : AbstractCheck() {
     ) : KtVisitorVoid() {
 
         override fun visitCallExpression(expression: KtCallExpression) {
-            val functionName = getFunctionNameOrNull(expression) ?: return
+            val functionName = getFunctionName(expression) ?: return
             if (!REF_NAME_DEPENDENCY_HANDLER_SCOPE_EXTENSIONS.contains(functionName)) return
 
             if (expression.valueArguments.size == 1) {
@@ -115,14 +90,6 @@ class DependencyVersionHardcodedCheck : AbstractCheck() {
             }
         }
     }
-}
-
-private fun getFunctionNameOrNull(expression: KtCallExpression) =
-    (expression.getCalleeExpressionIfAny() as? KtNameReferenceExpression)?.getReferencedName()
-
-private fun getLambdaBlock(expression: KtCallExpression): KtBlockExpression? {
-    val lambdaArg = expression.valueArguments.lastOrNull() as? KtLambdaArgument
-    return lambdaArg?.getLambdaExpression()?.bodyExpression
 }
 
 private fun KtStringTemplateExpression.simpleStringOrNull() = if (entries.size == 1) {
