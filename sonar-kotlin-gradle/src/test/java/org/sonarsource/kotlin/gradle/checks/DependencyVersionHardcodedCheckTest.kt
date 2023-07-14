@@ -17,22 +17,6 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.gradle
+package org.sonarsource.kotlin.gradle.checks
 
-import org.sonarsource.kotlin.api.checks.KotlinCheck
-import org.sonarsource.kotlin.gradle.checks.CorePluginsShortcutUsageCheck
-import org.sonarsource.kotlin.gradle.checks.RootProjectNamePresentCheck
-import org.sonarsource.kotlin.gradle.checks.DependencyVersionHardcodedCheck
-import org.sonarsource.kotlin.gradle.checks.MissingSettingsCheck
-import org.sonarsource.kotlin.gradle.checks.TaskDefinitionsCheck
-import org.sonarsource.kotlin.gradle.checks.TaskRegisterVsCreateCheck
-
-
-val KOTLIN_GRADLE_CHECKS: List<Class<out KotlinCheck>> = listOf(
-    CorePluginsShortcutUsageCheck::class.java,
-    RootProjectNamePresentCheck::class.java,
-    DependencyVersionHardcodedCheck::class.java,
-    MissingSettingsCheck::class.java,
-    TaskDefinitionsCheck::class.java,
-    TaskRegisterVsCreateCheck::class.java,
-)
+internal class DependencyVersionHardcodedCheckTest : CheckTest(DependencyVersionHardcodedCheck())

@@ -28,20 +28,27 @@ import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.batch.rule.CheckFactory
+import org.sonar.api.rule.RuleKey
 import org.sonarsource.analyzer.commons.ProgressReport
+import org.sonarsource.kotlin.api.common.KOTLIN_REPOSITORY_KEY
 import org.sonarsource.kotlin.api.common.KotlinLanguage
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensor
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
 import org.sonarsource.kotlin.visiting.KtChecksVisitor
+import java.io.File
+
+const val GRADLE_PROJECT_ROOT_PROPERTY = "sonar.kotlin.gradleProjectRoot"
+const val MISSING_SETTINGS_RULE_KEY = "S6631"
 
 private val LOG = LoggerFactory.getLogger(KotlinGradleSensor::class.java)
 
 class KotlinGradleSensor(
     checkFactory: CheckFactory,
     language: KotlinLanguage,
-): AbstractKotlinSensor(
+) : AbstractKotlinSensor(
     checkFactory, language, KOTLIN_GRADLE_CHECKS
 ) {
+
     override fun describe(descriptor: SensorDescriptor) {
         descriptor
             .onlyOnLanguage(language.key)
@@ -53,7 +60,7 @@ class KotlinGradleSensor(
         filesToAnalyze: Iterable<InputFile>,
         progressReport: ProgressReport,
         filenames: List<String>
-    ) = object: AbstractKotlinSensorExecuteContext(
+    ) = object : AbstractKotlinSensorExecuteContext(
         sensorContext, filesToAnalyze, progressReport, listOf(KtChecksVisitor(checks)), filenames, LOG
     ) {
         override val bindingContext: BindingContext = BindingContext.EMPTY
@@ -62,8 +69,12 @@ class KotlinGradleSensor(
     override fun getFilesToAnalyse(sensorContext: SensorContext): Iterable<InputFile> {
         val fileSystem: FileSystem = sensorContext.fileSystem()
 
+        val rootDirFile = File(sensorContext.config()[GRADLE_PROJECT_ROOT_PROPERTY].get())
+
+        checkForMissingGradleSettings(rootDirFile, sensorContext)
+
         val projectConnection = GradleConnector.newConnector()
-            .forProjectDirectory(fileSystem.baseDir())
+            .forProjectDirectory(rootDirFile)
             .connect()
 
         projectConnection.newBuild()
@@ -74,6 +85,27 @@ class KotlinGradleSensor(
         return models.keys.mapNotNull { file ->
             val predicate = fileSystem.predicates().hasAbsolutePath(file.absolutePath)
             fileSystem.inputFile(predicate)
+        }
+    }
+
+    private fun checkForMissingGradleSettings(rootDirFile: File, sensorContext: SensorContext) {
+        val missingSettingsRuleKey = RuleKey.of(KOTLIN_REPOSITORY_KEY, MISSING_SETTINGS_RULE_KEY)
+        if (sensorContext.activeRules().find(missingSettingsRuleKey) == null) return
+
+        if (!rootDirFile.resolve("settings.gradle").exists() && !rootDirFile.resolve("settings.gradle.kts").exists()) {
+            val project = sensorContext.project()
+
+            with(sensorContext) {
+                newIssue()
+                    .forRule(missingSettingsRuleKey)
+                    .at(
+                        newIssue()
+                            .newLocation()
+                            .on(project)
+                            .message("""Add a missing "settings.gradle" or "settings.gradle.kts" file.""")
+                    )
+                    .save()
+            }
         }
     }
 }
