@@ -1,4 +1,4 @@
-// Noncompliant@0 {{Assign `rootProject.name` in `settings.gradle.kts`}}
+// Noncompliant@0 {{Assign `rootProject.name` in `settings.gradle.kts`.}}
 
 dependencyResolutionManagement {
     // ...
