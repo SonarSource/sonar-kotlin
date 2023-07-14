@@ -1,0 +1,45 @@
+<h2>Why is this an issue?</h2>
+<p>In general hard-coded values is a well known bad practice that affects maintainability. In dependency management, this issue is even more critical
+because there is the risk of accidentally having different versions for the same dependency in your configuration.</p>
+<p>Keeping hard-coded dependency versions increases the cost of maintainability and complicates the update process.</p>
+<h2>How to fix it</h2>
+<p>There are several ways to fix it:</p>
+<ul>
+  <li> extract the versions in variables </li>
+  <li> use Spring dependency management plugin: <code>io.spring.dependency-management</code> </li>
+  <li> use centralized dependencies with <a
+  href="https://www.youtube.com/watch?v=WvtcCCCLfOc&amp;list=PL0UJI1nZ56yAHv9H9kZA6vat4N1kSRGis&amp;index=21">Version Catalogs</a> </li>
+</ul>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+dependencies {
+    testImplementation("org.mockito:mockito-core:4.5.1")
+    testImplementation("org.mockito:mockito-inline:4.5.1")
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+ext {
+    mockitoVersion = "4.5.1"
+}
+
+dependencies {
+    testImplementation("org.mockito:mockito-core:$mockitoVersion")
+    testImplementation("org.mockito:mockito-inline:$mockitoVersion")
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://docs.gradle.org/current/userguide/platforms.html">Sharing dependency versions between projects</a> </li>
+</ul>
+<h3>Conference presentations</h3>
+<ul>
+  <li> <a href="https://www.youtube.com/watch?v=MU0Gs7i0D6w">Dependency management? Model it!</a> </li>
+</ul>
+<h3>Standards</h3>
+<ul>
+  <li> <a href="https://www.youtube.com/watch?v=WvtcCCCLfOc&amp;list=PL0UJI1nZ56yAHv9H9kZA6vat4N1kSRGis&amp;index=21">Version Catalogs</a> </li>
+</ul>
+
