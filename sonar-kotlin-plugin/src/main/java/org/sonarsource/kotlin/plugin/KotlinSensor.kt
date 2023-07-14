@@ -51,6 +51,8 @@ import kotlin.jvm.optionals.getOrElse
 
 private val LOG = LoggerFactory.getLogger(KotlinSensor::class.java)
 
+private const val KOTLIN_SCRIPT_FILE_EXTENSIONS = ".kts"
+
 class KotlinSensor(
     checkFactory: CheckFactory,
     private val fileLinesContextFactory: FileLinesContextFactory,
@@ -110,6 +112,7 @@ class KotlinSensor(
         val mainFilePredicate = fileSystem.predicates().and(
             fileSystem.predicates().hasLanguage(language.key),
             fileSystem.predicates().hasType(InputFile.Type.MAIN),
+            fileSystem.predicates().not(fileSystem.predicates().hasExtension(KOTLIN_SCRIPT_FILE_EXTENSIONS))
         )
 
         return fileSystem.inputFiles(mainFilePredicate).let { mainFiles ->
