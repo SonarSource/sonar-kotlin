@@ -1,5 +1,5 @@
 {
-  "title": "\"equals(other: Any?)\" should test argument type",
+  "title": "\"equals(other: Any?)\" should test the argument\u0027s type",
   "type": "BUG",
   "status": "ready",
   "remediation": {
