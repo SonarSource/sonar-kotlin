@@ -30,7 +30,6 @@ import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -51,7 +50,6 @@ import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.utils.Version
 import org.sonar.check.Rule
-import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.common.COMPILER_THREAD_COUNT_PROPERTY
 import org.sonarsource.kotlin.api.common.FAIL_FAST_PROPERTY_NAME
@@ -61,7 +59,6 @@ import org.sonarsource.kotlin.api.common.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.api.frontend.Environment
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.analyzeAndGetBindingContext
-import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
 import org.sonarsource.kotlin.api.sensors.environment
 import org.sonarsource.kotlin.plugin.caching.contentHashKey
 import org.sonarsource.kotlin.plugin.cpd.computeCPDTokensCacheKey
@@ -111,6 +108,20 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertThat(location.message())
             .isEqualTo("Correct one of the identical sub-expressions on both sides this operator.")
         assertTextRange(location.textRange()).hasRange(2, 12, 2, 13)
+    }
+
+    @Test
+    fun test_no_rules_executed_for_Kotlin_scripts() {
+        val inputFile = createInputFile(
+            "file1.kts", """
+            print (1 == 1)
+            """.trimIndent()
+        )
+        context.fileSystem().add(inputFile)
+        val checkFactory = checkFactory("S1764")
+        sensor(checkFactory).execute(context)
+        val issues = context.allIssues()
+        assertThat(issues).isEmpty()
     }
 
     @Test

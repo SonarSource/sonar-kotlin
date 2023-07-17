@@ -51,7 +51,7 @@ import kotlin.jvm.optionals.getOrElse
 
 private val LOG = LoggerFactory.getLogger(KotlinSensor::class.java)
 
-private const val KOTLIN_SCRIPT_FILE_EXTENSIONS = ".kts"
+private const val KOTLIN_SCRIPT_FILE_EXTENSIONS = "kts"
 
 class KotlinSensor(
     checkFactory: CheckFactory,
