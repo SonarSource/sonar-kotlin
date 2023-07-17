@@ -504,6 +504,18 @@
     "constantDebtMinutes": 0
   },
   {
+    "key": "standard:no-single-line-block-comment",
+    "name": "No Single Line Block Comment",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
     "key": "standard:no-trailing-spaces",
     "name": "No Trailing Spaces",
     "url": "https://ktlint.github.io/#rules",
@@ -1406,6 +1418,18 @@
   {
     "key": "standard:no-semi",
     "name": "No Semicolons",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-single-line-block-comment",
+    "name": "No Single Line Block Comment",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",

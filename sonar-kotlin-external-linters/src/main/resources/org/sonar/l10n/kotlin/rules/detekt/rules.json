@@ -60,6 +60,30 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "BracesOnIfStatements",
+    "name": "Braces On If Statements",
+    "description": "Braces do not comply with the specified policy",
+    "url": "https://detekt.github.io/detekt/style.html#bracesonifstatements",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "BracesOnWhenStatements",
+    "name": "Braces On When Statements",
+    "description": "Braces do not comply with the specified policy",
+    "url": "https://detekt.github.io/detekt/style.html#bracesonwhenstatements",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "CanBeNonNullable",
     "name": "Can Be Non Nullable",
     "description": "Variable can be changed to non-nullable, as it is never set to null.",
@@ -84,9 +108,21 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "CastNullableToNonNullableType",
+    "name": "Cast Nullable To Non Nullable Type",
+    "description": "Nullable type to non-null type cast is found. Consider using two assertions, `null` assertions and type cast",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#castnullabletononnullabletype",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "CastToNullableType",
     "name": "Cast To Nullable Type",
-    "description": "Disallow to cast to nullable types.",
+    "description": "Use safe cast instead of unsafe cast to nullable types.",
     "url": "https://detekt.github.io/detekt/potential-bugs.html#casttonullabletype",
     "tags": [
       "defect"
@@ -309,6 +345,18 @@
     ],
     "type": "CODE_SMELL",
     "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "DoubleNegativeLambda",
+    "name": "Double Negative Lambda",
+    "description": "Double negative from a function name expressed in the negative (like `takeUnless`) with a lambda block that also contains negation. This is more readable when rewritten using a positive form of the function (like `takeIf`).",
+    "url": "https://detekt.github.io/detekt/style.html#doublenegativelambda",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
     "constantDebtMinutes": 5
   },
   {
@@ -669,6 +717,18 @@
     ],
     "type": "CODE_SMELL",
     "severity": "CRITICAL",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "ForbiddenAnnotation",
+    "name": "Forbidden Annotation",
+    "description": "Avoid using this annotation.",
+    "url": "https://detekt.github.io/detekt/style.html#forbiddenannotation",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
     "constantDebtMinutes": 5
   },
   {
@@ -1042,18 +1102,6 @@
     "constantDebtMinutes": 10
   },
   {
-    "key": "MandatoryBracesIfStatements",
-    "name": "Mandatory Braces If Statements",
-    "description": "Multi-line if statement was found that does not have braces. These braces should be added to improve readability.",
-    "url": "https://detekt.github.io/detekt/style.html#mandatorybracesifstatements",
-    "tags": [
-      "style"
-    ],
-    "type": "CODE_SMELL",
-    "severity": "INFO",
-    "constantDebtMinutes": 5
-  },
-  {
     "key": "MandatoryBracesLoops",
     "name": "Mandatory Braces Loops",
     "description": "A multi-line loop was found that does not have braces. These should be added to improve readability.",
@@ -1344,7 +1392,7 @@
   {
     "key": "NullableToStringCall",
     "name": "Nullable To String Call",
-    "description": "This call may return the string \u0026quot;null\u0026quot;",
+    "description": "`toString()` on nullable receiver may return the string \u0026quot;null\u0026quot;",
     "url": "https://detekt.github.io/detekt/potential-bugs.html#nullabletostringcall",
     "tags": [
       "defect"
@@ -1472,6 +1520,18 @@
     "type": "CODE_SMELL",
     "severity": "MAJOR",
     "constantDebtMinutes": 20
+  },
+  {
+    "key": "PropertyUsedBeforeDeclaration",
+    "name": "Property Used Before Declaration",
+    "description": "Properties before declaration should not be used.",
+    "url": "https://detekt.github.io/detekt/potential-bugs.html#propertyusedbeforedeclaration",
+    "tags": [
+      "defect"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "CRITICAL",
+    "constantDebtMinutes": 5
   },
   {
     "key": "ProtectedMemberInFinalClass",
@@ -1607,7 +1667,7 @@
   {
     "key": "SerialVersionUIDInSerializableClass",
     "name": "Serial Version UIDIn Serializable Class",
-    "description": "A class which implements the Serializable interface does not define a correct serialVersionUID field. The serialVersionUID field should be a constant long value inside a companion object.",
+    "description": "A class which implements the Serializable interface does not define a correct serialVersionUID field. The serialVersionUID field should be a private constant long value inside a companion object.",
     "url": "https://detekt.github.io/detekt/style.html#serialversionuidinserializableclass",
     "tags": [
       "warning"
@@ -1662,6 +1722,29 @@
     "type": "CODE_SMELL",
     "severity": "MAJOR",
     "constantDebtMinutes": 5
+  },
+  {
+    "key": "StringShouldBeRawString",
+    "name": "String Should Be Raw String",
+    "description": "The string can be converted to raw string.",
+    "url": "https://detekt.github.io/detekt/style.html#stringshouldberawstring",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "SuspendFunSwallowedCancellation",
+    "name": "Suspend Fun Swallowed Cancellation",
+    "description": "`runCatching` does not propagate `CancellationException`, don\u0027t use it with `suspend` lambda blocks.",
+    "tags": [
+      "minor"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MINOR",
+    "constantDebtMinutes": 10
   },
   {
     "key": "SuspendFunWithCoroutineScopeReceiver",
@@ -1938,6 +2021,17 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "UnnecessaryBracesAroundTrailingLambda",
+    "name": "Unnecessary Braces Around Trailing Lambda",
+    "description": "Braces around trailing lambda is unnecessary.",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "UnnecessaryFilter",
     "name": "Unnecessary Filter",
     "description": "`filter()` with other collection operations may be simplified.",
@@ -2130,6 +2224,18 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "UnusedParameter",
+    "name": "Unused Parameter",
+    "description": "Function parameter is unused and should be removed.",
+    "url": "https://detekt.github.io/detekt/style.html#unusedparameter",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "UnusedPrivateClass",
     "name": "Unused Private Class",
     "description": "Private class is unused and should be removed.",
@@ -2144,8 +2250,20 @@
   {
     "key": "UnusedPrivateMember",
     "name": "Unused Private Member",
-    "description": "Private member is unused and should be removed.",
+    "description": "Private function is unused and should be removed.",
     "url": "https://detekt.github.io/detekt/style.html#unusedprivatemember",
+    "tags": [
+      "maintainability"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 5
+  },
+  {
+    "key": "UnusedPrivateProperty",
+    "name": "Unused Private Property",
+    "description": "Property is unused and should be removed.",
+    "url": "https://detekt.github.io/detekt/style.html#unusedprivateproperty",
     "tags": [
       "maintainability"
     ],
@@ -2274,9 +2392,21 @@
     "constantDebtMinutes": 5
   },
   {
+    "key": "UseLet",
+    "name": "Use Let",
+    "description": "Use `?.let {}` instead of if/else with a null block when checking for nullable values",
+    "url": "https://detekt.github.io/detekt/style.html#uselet",
+    "tags": [
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "INFO",
+    "constantDebtMinutes": 5
+  },
+  {
     "key": "UseOrEmpty",
     "name": "Use Or Empty",
-    "description": "Use `orEmpty()` call instead of `?: emptyList()`",
+    "description": "Use `orEmpty()` call instead of `?:` with empty collection factory methods",
     "url": "https://detekt.github.io/detekt/style.html#useorempty",
     "tags": [
       "style"
