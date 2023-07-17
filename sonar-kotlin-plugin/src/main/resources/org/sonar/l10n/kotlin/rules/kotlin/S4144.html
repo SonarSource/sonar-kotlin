@@ -1,8 +1,7 @@
 <h2>Why is this an issue?</h2>
-<p>When two functions have the same implementation, either it was a mistake - something else was intended - or the duplication was intentional, but
-may be confusing to maintainers. In the latter case, the code should be refactored.</p>
-<h3>Noncompliant code example</h3>
-<pre>
+<p>Two functions having the same implementation are suspicious. It might be that something else was intended. Or the duplication is intentional, which
+becomes a maintenance burden.</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 class MyClass {
   fun calculateCode(): String {
     doTheThing()
@@ -10,15 +9,16 @@ class MyClass {
     return "done"
   }
 
-  fun getStatus(): String {  // Noncompliant
+  fun getStatus(): String {  // Noncompliant: duplicates calculateCode
     doTheThing()
     doOtherThing()
     return "done"
   }
 }
 </pre>
-<h3>Compliant solution</h3>
-<pre>
+<p>If the identical logic is intentional, the code should be refactored to avoid duplication. For example, by having both functions call the same
+function or by having one implementation invoke the other.</p>
+<pre data-diff-id="1" data-diff-type="compliant">
 class MyClass {
   fun calculateCode(): String {
     doTheThing()
@@ -26,7 +26,7 @@ class MyClass {
     return "done"
   }
 
-  fun getStatus(): String = calculateCode()
+  fun getStatus(): String = calculateCode() // Intent is clear
 }
 </pre>
 <h3>Exceptions</h3>

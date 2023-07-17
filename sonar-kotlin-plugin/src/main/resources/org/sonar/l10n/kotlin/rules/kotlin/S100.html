@@ -1,3 +1,12 @@
 <h2>Why is this an issue?</h2>
-<p>Shared naming conventions allow teams to collaborate efficiently. This rule checks that all function names match a provided regular expression.</p>
+<p>Shared naming conventions allow teams to collaborate efficiently.</p>
+<p>This rule raises an issue when a function name does not match a provided regular expression.</p>
+<p>For example, with the default provided regular expression <code>^[a-zA-Z][a-zA-Z0-9]*$</code>, the function:</p>
+<pre>
+fun _DoSomething() {...} // Noncompliant
+</pre>
+<p>should be renamed to</p>
+<pre>
+fun DoSomething() {...}
+</pre>
 

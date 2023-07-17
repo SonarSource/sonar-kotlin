@@ -3,8 +3,10 @@
 code.</p>
 <p>Further, because some methods require that the argument remain unmodified during the execution, passing a collection to itself can result in
 undefined behavior.</p>
-<h3>Noncompliant code example</h3>
-<pre>
+<h2>How to fix it</h2>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
 val objs = mutableListOf&lt;Any&gt;()
 objs.add("Hello")
 
@@ -14,8 +16,8 @@ objs.containsAll(objs) // Noncompliant; always true
 objs.removeAll(objs) // Noncompliant; confusing. Use clear() instead
 objs.retainAll(objs) // Noncompliant; NOOP
 </pre>
-<h3>Compliant solution</h3>
-<pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
 val newList = mutableListOf&lt;Any&gt;()
 val objs = mutableListOf&lt;Any&gt;()
 objs.add("Hello")
