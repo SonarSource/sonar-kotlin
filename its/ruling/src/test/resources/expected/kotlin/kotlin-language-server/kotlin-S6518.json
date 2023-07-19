@@ -1,13 +1,13 @@
 {
-'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/completion/Completions.kt':[
-553,
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/completion/Completions.kt": [
+553
 ],
-'kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/Logger.kt':[
+"kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/Logger.kt": [
 150,
-151,
+151
 ],
-'kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/util/Utils.kt':[
+"kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/util/Utils.kt": [
 38,
-38,
-],
+38
+]
 }

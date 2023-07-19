@@ -1,8 +1,8 @@
 {
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/jvm/src/io/ktor/server/http/content/StaticContent.kt':[
-122,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/jvm/src/io/ktor/server/http/content/StaticContent.kt": [
+122
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/jvmAndNix/src/io/ktor/server/routing/HostsRoutingBuilder.kt':[
-115,
-],
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/jvmAndNix/src/io/ktor/server/routing/HostsRoutingBuilder.kt": [
+115
+]
 }

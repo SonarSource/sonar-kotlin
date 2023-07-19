@@ -1,8 +1,8 @@
 {
-'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/KotlinTextDocumentService.kt':[
-107,
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/KotlinTextDocumentService.kt": [
+107
 ],
-'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt':[
-465,
-],
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt": [
+465
+]
 }

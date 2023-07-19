@@ -1,11 +1,11 @@
 {
-'kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ReferenceSearcher.kt':[
-62,
+"kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ReferenceSearcher.kt": [
+62
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/ranges/RangesJVM.kt':[
-30,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/ranges/RangesJVM.kt": [
+30
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/ranges/Ranges.kt':[
-68,
-],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/ranges/Ranges.kt": [
+68
+]
 }

@@ -1,8 +1,8 @@
 {
-'kotlin-test-resources-sources-project:ruling/src/test/resources/sources/kotlin/S2123.kt':[
-6,
+"kotlin-test-resources-sources-project:ruling/src/test/resources/sources/kotlin/S2123.kt": [
+6
 ],
-'kotlin-test-resources-sources-project:ruling/src/test/resources/sources/kotlin/S2757.kt':[
+"kotlin-test-resources-sources-project:ruling/src/test/resources/sources/kotlin/S2757.kt": [
 2,
 5,
 6,
@@ -10,6 +10,6 @@
 8,
 12,
 13,
-14,
-],
+14
+]
 }

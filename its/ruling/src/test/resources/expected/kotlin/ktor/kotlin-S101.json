@@ -1,10 +1,10 @@
 {
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-locations/jvm/test/io/ktor/tests/locations/CustomLocationsTest.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-locations/jvm/test/io/ktor/tests/locations/CustomLocationsTest.kt": [
 38,
 39,
-42,
+42
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-locations/jvm/test/io/ktor/tests/locations/LocationsTest.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-locations/jvm/test/io/ktor/tests/locations/LocationsTest.kt": [
 28,
 45,
 60,
@@ -32,9 +32,9 @@
 612,
 615,
 631,
-633,
+633
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-resources/jvmAndNix/test/io/ktor/tests/resources/ResourcesTest.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-resources/jvmAndNix/test/io/ktor/tests/resources/ResourcesTest.kt": [
 34,
 51,
 64,
@@ -63,6 +63,6 @@
 388,
 422,
 427,
-495,
-],
+495
+]
 }

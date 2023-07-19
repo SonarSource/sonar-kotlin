@@ -1,8 +1,8 @@
 {
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-netty/jvm/src/io/ktor/server/netty/http2/NettyHttp2ApplicationResponse.kt':[
-54,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-netty/jvm/src/io/ktor/server/netty/http2/NettyHttp2ApplicationResponse.kt": [
+54
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-shared/ktor-websockets/common/src/io/ktor/websocket/WebSocketExtensionHeader.kt':[
-40,
-],
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-shared/ktor-websockets/common/src/io/ktor/websocket/WebSocketExtensionHeader.kt": [
+40
+]
 }

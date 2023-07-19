@@ -1,103 +1,103 @@
 {
-'kotlin-ktor-project:sources/kotlin/ktor/buildSrc/src/main/kotlin/CommonConfig.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/buildSrc/src/main/kotlin/CommonConfig.kt": [
 12,
-18,
+18
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/buildSrc/src/main/kotlin/Publication.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/buildSrc/src/main/kotlin/Publication.kt": [
 80,
-165,
+165
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-apache/jvm/src/io/ktor/client/engine/apache/ApacheEngineConfig.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-apache/jvm/src/io/ktor/client/engine/apache/ApacheEngineConfig.kt": [
 66,
-74,
+74
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-apache5/jvm/src/io/ktor/client/engine/apache5/Apache5EngineConfig.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-apache5/jvm/src/io/ktor/client/engine/apache5/Apache5EngineConfig.kt": [
 58,
-66,
+66
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-core/common/src/io/ktor/client/plugins/cache/HttpCacheEntry.kt':[
-57,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-core/common/src/io/ktor/client/plugins/cache/HttpCacheEntry.kt": [
+57
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-curl/desktop/src/io/ktor/client/engine/curl/internal/CurlMultiApiHandler.kt':[
-75,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-curl/desktop/src/io/ktor/client/engine/curl/internal/CurlMultiApiHandler.kt": [
+75
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-darwin-legacy/darwin/src/io/ktor/client/engine/darwin/DarwinLegacyClientEngineConfig.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-darwin-legacy/darwin/src/io/ktor/client/engine/darwin/DarwinLegacyClientEngineConfig.kt": [
 72,
-85,
+85
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-darwin-legacy/darwin/src/io/ktor/client/engine/darwin/certificates/LegacyCertificatePinner.kt':[
-345,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-darwin-legacy/darwin/src/io/ktor/client/engine/darwin/certificates/LegacyCertificatePinner.kt": [
+345
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-darwin/darwin/src/io/ktor/client/engine/darwin/DarwinClientEngineConfig.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-darwin/darwin/src/io/ktor/client/engine/darwin/DarwinClientEngineConfig.kt": [
 73,
-86,
+86
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-darwin/darwin/src/io/ktor/client/engine/darwin/certificates/CertificatePinner.kt':[
-345,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-darwin/darwin/src/io/ktor/client/engine/darwin/certificates/CertificatePinner.kt": [
+345
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-mock/common/src/io/ktor/client/engine/mock/MockEngine.kt':[
-59,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-mock/common/src/io/ktor/client/engine/mock/MockEngine.kt": [
+59
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-okhttp/jvm/src/io/ktor/client/engine/okhttp/OkHttpConfig.kt':[
-43,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-okhttp/jvm/src/io/ktor/client/engine/okhttp/OkHttpConfig.kt": [
+43
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-http/common/src/io/ktor/http/Ranges.kt':[
-100,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-http/common/src/io/ktor/http/Ranges.kt": [
+100
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-io/js/src/io/ktor/utils/io/bits/PrimitiveArraysJs.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-io/js/src/io/ktor/utils/io/bits/PrimitiveArraysJs.kt": [
 298,
-305,
+305
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-network/ktor-network-tls/jvm/src/io/ktor/network/tls/TLSClientHandshake.kt':[
-479,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-network/ktor-network-tls/jvm/src/io/ktor/network/tls/TLSClientHandshake.kt": [
+479
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-cio/jvm/test/io/ktor/tests/server/cio/CIOHttpClientTest.kt':[
-116,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-cio/jvm/test/io/ktor/tests/server/cio/CIOHttpClientTest.kt": [
+116
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-cio/jvmAndNix/src/io/ktor/server/cio/backend/ServerPipeline.kt':[
-53,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-cio/jvmAndNix/src/io/ktor/server/cio/backend/ServerPipeline.kt": [
+53
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/jvm/src/io/ktor/server/http/content/StaticContent.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/jvm/src/io/ktor/server/http/content/StaticContent.kt": [
 322,
 323,
 377,
-378,
+378
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-host-common/jvmAndNix/src/io/ktor/server/engine/BaseApplicationResponse.kt':[
-210,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-host-common/jvmAndNix/src/io/ktor/server/engine/BaseApplicationResponse.kt": [
+210
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-netty/jvm/src/io/ktor/server/netty/cio/RequestBodyHandler.kt':[
-32,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-netty/jvm/src/io/ktor/server/netty/cio/RequestBodyHandler.kt": [
+32
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-auth/jvmAndNix/src/io/ktor/server/auth/Authentication.kt':[
-24,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-auth/jvmAndNix/src/io/ktor/server/auth/Authentication.kt": [
+24
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-auth/jvmAndNix/src/io/ktor/server/auth/BasicAuth.kt':[
-121,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-auth/jvmAndNix/src/io/ktor/server/auth/BasicAuth.kt": [
+121
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-call-id/jvmAndNix/src/io/ktor/server/plugins/callid/CallId.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-call-id/jvmAndNix/src/io/ktor/server/plugins/callid/CallId.kt": [
 186,
 187,
-265,
+265
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-partial-content/jvmAndNix/src/io/ktor/server/plugins/partialcontent/PartialContentUtils.kt':[
-24,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-partial-content/jvmAndNix/src/io/ktor/server/plugins/partialcontent/PartialContentUtils.kt": [
+24
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-webjars/jvm/src/io/ktor/server/webjars/Webjars.kt':[
-46,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-webjars/jvm/src/io/ktor/server/webjars/Webjars.kt": [
+46
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-servlet-jakarta/jvm/src/io/ktor/server/servlet/jakarta/WebResources.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-servlet-jakarta/jvm/src/io/ktor/server/servlet/jakarta/WebResources.kt": [
 74,
-76,
+76
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-servlet/jvm/src/io/ktor/server/servlet/WebResources.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-servlet/jvm/src/io/ktor/server/servlet/WebResources.kt": [
 73,
-75,
+75
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-test-host/jvmAndNix/src/io/ktor/server/testing/TestApplication.kt':[
-117,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-test-host/jvmAndNix/src/io/ktor/server/testing/TestApplication.kt": [
+117
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-utils/posix/src/io/ktor/util/ThreadInfo.kt':[
-25,
-],
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-utils/posix/src/io/ktor/util/ThreadInfo.kt": [
+25
+]
 }
