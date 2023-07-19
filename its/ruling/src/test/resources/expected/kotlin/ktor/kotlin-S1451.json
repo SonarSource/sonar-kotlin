@@ -4013,6 +4013,9 @@
 "kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-http-redirect/jvmAndNix/src/io/ktor/server/plugins/httpsredirect/HttpsRedirect.kt": [
 0
 ],
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-jte/jte-classes/gg/jte/generated/ondemand/JtetestGenerated.kt": [
+0
+],
 "kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-jte/jvm/src/io/ktor/server/jte/Jte.kt": [
 0
 ],
