@@ -1,20 +1,20 @@
 {
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/model/CargoProjectService.kt':[
-60,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/model/CargoProjectService.kt": [
+60
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/settings/RustProjectSettingsService.kt':[
-53,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/settings/RustProjectSettingsService.kt": [
+53
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/inspections/import/ui.kt':[
-53,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/inspections/import/ui.kt": [
+53
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/Snapshot.kt':[
-14,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/Snapshot.kt": [
+14
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/extractFunction/ui.kt':[
-48,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/extractFunction/ui.kt": [
+48
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/RsTestCase.kt':[
-11,
-],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/RsTestCase.kt": [
+11
+]
 }

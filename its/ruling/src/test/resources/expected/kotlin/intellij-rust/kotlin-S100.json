@@ -1,29 +1,29 @@
 {
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/intellij-toml/src/test/kotlin/org/toml/ide/TomlAnnotatorTest.kt':[
-11,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/intellij-toml/src/test/kotlin/org/toml/ide/TomlAnnotatorTest.kt": [
+11
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/commands/CargoFmtTest.kt':[
-14,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/commands/CargoFmtTest.kt": [
+14
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/RustProjectSettingsServiceTest.kt':[
-20,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/RustProjectSettingsServiceTest.kt": [
+20
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/model/CargoProjectsServiceTest.kt':[
-16,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/model/CargoProjectsServiceTest.kt": [
+16
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/model/impl/CargoTomlWatcherIntegrationTest.kt':[
-17,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/model/impl/CargoTomlWatcherIntegrationTest.kt": [
+17
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/model/impl/CargoTomlWatcherTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/model/impl/CargoTomlWatcherTest.kt": [
 19,
 33,
 41,
-77,
+77
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/RunConfigurationTestCase.kt':[
-22,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/RunConfigurationTestCase.kt": [
+22
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/filters/RsBacktraceFilterTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/filters/RsBacktraceFilterTest.kt": [
 21,
 26,
 35,
@@ -33,28 +33,28 @@
 55,
 60,
 63,
-66,
+66
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/filters/RsConsoleFilterTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/filters/RsConsoleFilterTest.kt": [
 12,
 17,
 24,
 30,
-36,
+36
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/filters/RsExplainFilterTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/filters/RsExplainFilterTest.kt": [
 14,
 19,
 24,
 29,
-34,
+34
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/filters/RsPanicFilterTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/filters/RsPanicFilterTest.kt": [
 15,
 20,
-25,
+25
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/producers/RunConfigurationProducerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/producers/RunConfigurationProducerTest.kt": [
 40,
 47,
 54,
@@ -72,31 +72,31 @@
 188,
 200,
 207,
-219,
+219
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/test/CargoTestRunLineMarkerContributorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/test/CargoTestRunLineMarkerContributorTest.kt": [
 14,
 21,
 30,
-40,
+40
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/toolchain/CargoCommandLineTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/toolchain/CargoCommandLineTest.kt": [
 14,
 22,
 30,
 38,
 46,
-54,
+54
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/toolchain/CargoTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/toolchain/CargoTest.kt": [
 16,
 25,
 34,
 54,
 63,
-72,
+72
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/util/CargoCommandCompletionProviderTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/util/CargoCommandCompletionProviderTest.kt": [
 19,
 33,
 38,
@@ -106,9 +106,9 @@
 65,
 70,
 75,
-80,
+80
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/actions/RsJoinLinesHandlerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/actions/RsJoinLinesHandlerTest.kt": [
 9,
 11,
 12,
@@ -133,18 +133,18 @@
 207,
 218,
 225,
-232,
+232
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/actions/RsJoinRawLinesHandlerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/actions/RsJoinRawLinesHandlerTest.kt": [
 9,
 21,
 43,
 61,
 75,
 90,
-106,
+106
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/actions/RsMoveLeftRightHandlerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/actions/RsMoveLeftRightHandlerTest.kt": [
 14,
 24,
 30,
@@ -166,9 +166,9 @@
 154,
 168,
 178,
-184,
+184
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/actions/mover/RsCommaListElementUpDownMoverTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/actions/mover/RsCommaListElementUpDownMoverTest.kt": [
 9,
 21,
 33,
@@ -181,9 +181,9 @@
 129,
 138,
 150,
-162,
+162
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/actions/mover/RsItemUpDownMoverTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/actions/mover/RsItemUpDownMoverTest.kt": [
 11,
 17,
 27,
@@ -205,21 +205,21 @@
 223,
 231,
 243,
-253,
+253
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/actions/mover/RsMatchArmUpDownMoverTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/actions/mover/RsMatchArmUpDownMoverTest.kt": [
 9,
 25,
 49,
 64,
-84,
+84
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsCrateDocLineMarkerProviderTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsCrateDocLineMarkerProviderTest.kt": [
 19,
 24,
-28,
+28
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsErrorAnnotatorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsErrorAnnotatorTest.kt": [
 11,
 13,
 18,
@@ -305,9 +305,9 @@
 1105,
 1110,
 1115,
-1121,
+1121
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsExpressionAnnotatorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsExpressionAnnotatorTest.kt": [
 10,
 46,
 107,
@@ -319,9 +319,9 @@
 176,
 181,
 188,
-195,
+195
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsHighlightingAnnotatorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsHighlightingAnnotatorTest.kt": [
 10,
 17,
 26,
@@ -333,23 +333,23 @@
 91,
 98,
 108,
-118,
+118
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsHighlightingMutableAnnotatorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsHighlightingMutableAnnotatorTest.kt": [
 10,
 19,
-28,
+28
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsLiteralAnnotatorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsLiteralAnnotatorTest.kt": [
 9,
 19,
-30,
+30
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsStdlibErrorAnnotatorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsStdlibErrorAnnotatorTest.kt": [
 18,
-27,
+27
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsSyntaxErrorsAnnotatorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsSyntaxErrorsAnnotatorTest.kt": [
 9,
 16,
 33,
@@ -369,19 +369,19 @@
 216,
 226,
 233,
-241,
+241
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/AddAsTyFixTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/AddAsTyFixTest.kt": [
 12,
 22,
 32,
-44,
+44
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/AddSelfTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/AddSelfTest.kt": [
 11,
-29,
+29
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/AddStructFieldsFixTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/AddStructFieldsFixTest.kt": [
 15,
 29,
 43,
@@ -392,9 +392,9 @@
 121,
 150,
 240,
-288,
+288
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/AddTurbofishFixTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/AddTurbofishFixTest.kt": [
 14,
 20,
 22,
@@ -403,39 +403,39 @@
 46,
 68,
 71,
-76,
+76
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/AddUnsafeTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/AddUnsafeTest.kt": [
 11,
 25,
 49,
 67,
 81,
 95,
-109,
+109
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToOwnedTyFixTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToOwnedTyFixTest.kt": [
 14,
 48,
-67,
+67
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToSizedTypeFixTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToSizedTypeFixTest.kt": [
 12,
 18,
 24,
-32,
+32
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToStrFixTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToStrFixTest.kt": [
 14,
-24,
+24
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToStringFixTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToStringFixTest.kt": [
 14,
 24,
 34,
-44,
+44
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToTyUsingFromStrFixTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToTyUsingFromStrFixTest.kt": [
 15,
 16,
 17,
@@ -446,20 +446,20 @@
 104,
 130,
 154,
-168,
+168
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToTyUsingFromTraitFixTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToTyUsingFromTraitFixTest.kt": [
 14,
 34,
 47,
-57,
+57
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToTyUsingTraitFixTestBase.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToTyUsingTraitFixTestBase.kt": [
 19,
 43,
-57,
+57
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToTyUsingTryFromTraitFixTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToTyUsingTryFromTraitFixTest.kt": [
 15,
 43,
 73,
@@ -468,9 +468,9 @@
 167,
 195,
 211,
-224,
+224
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToTyWithDerefsRefsFixTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ConvertToTyWithDerefsRefsFixTest.kt": [
 13,
 25,
 37,
@@ -483,9 +483,9 @@
 106,
 113,
 125,
-138,
+138
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/commenter/RsCommenterTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/commenter/RsCommenterTest.kt": [
 21,
 22,
 23,
@@ -496,9 +496,9 @@
 29,
 31,
 32,
-33,
+33
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/docs/RsQuickDocumentationTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/docs/RsQuickDocumentationTest.kt": [
 14,
 41,
 49,
@@ -575,9 +575,9 @@
 913,
 938,
 946,
-954,
+954
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/docs/RsQuickNavigationInfoTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/docs/RsQuickNavigationInfoTest.kt": [
 13,
 31,
 45,
@@ -641,21 +641,21 @@
 669,
 683,
 694,
-701,
+701
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/docs/RsResolveLinkTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/docs/RsResolveLinkTest.kt": [
 15,
 22,
 30,
 40,
 48,
-58,
+58
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/docs/RsStdlibResolveLinkTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/docs/RsStdlibResolveLinkTest.kt": [
 17,
-24,
+24
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/folding/RsFoldingBuilderTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/folding/RsFoldingBuilderTest.kt": [
 13,
 14,
 15,
@@ -675,9 +675,9 @@
 29,
 30,
 31,
-32,
+32
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsAutoIndentTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsAutoIndentTest.kt": [
 11,
 19,
 31,
@@ -699,9 +699,9 @@
 211,
 230,
 243,
-254,
+254
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsFormatterLineBreaksTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsFormatterLineBreaksTest.kt": [
 15,
 16,
 18,
@@ -711,9 +711,9 @@
 160,
 174,
 180,
-192,
+192
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsFormatterTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsFormatterTest.kt": [
 13,
 14,
 15,
@@ -762,12 +762,12 @@
 348,
 376,
 401,
-415,
+415
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsMatchArmCommaFormatProcessorTest.kt':[
-10,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsMatchArmCommaFormatProcessorTest.kt": [
+10
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsSingleImportRemoveBracesFormatProcessorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsSingleImportRemoveBracesFormatProcessorTest.kt": [
 10,
 12,
 15,
@@ -780,21 +780,21 @@
 35,
 37,
 41,
-45,
+45
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsStatementSemicolonFormatProcessorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsStatementSemicolonFormatProcessorTest.kt": [
 10,
 44,
 62,
 102,
-142,
+142
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsTrailingCommaFormatProcessorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsTrailingCommaFormatProcessorTest.kt": [
 9,
 61,
-77,
+77
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/highlight/RsHighlightExitPointsHandlerFactoryTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/highlight/RsHighlightExitPointsHandlerFactoryTest.kt": [
 22,
 31,
 40,
@@ -811,9 +811,9 @@
 161,
 174,
 187,
-207,
+207
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/hints/RsInlayParameterHintsProviderTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/hints/RsInlayParameterHintsProviderTest.kt": [
 30,
 64,
 72,
@@ -831,14 +831,14 @@
 207,
 223,
 242,
-257,
+257
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/hints/RsParameterInfoHandlerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/hints/RsParameterInfoHandlerTest.kt": [
 35,
 40,
-148,
+148
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/hints/RsQuickDefinitionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/hints/RsQuickDefinitionTest.kt": [
 20,
 32,
 46,
@@ -849,9 +849,9 @@
 110,
 122,
 135,
-148,
+148
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsAssertEqualInspectionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsAssertEqualInspectionTest.kt": [
 9,
 23,
 41,
@@ -859,9 +859,9 @@
 69,
 87,
 101,
-112,
+112
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsBorrowCheckerInspectionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsBorrowCheckerInspectionTest.kt": [
 10,
 21,
 32,
@@ -888,12 +888,12 @@
 270,
 292,
 308,
-316,
+316
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsExperimentalChecksInspectionTest.kt':[
-9,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsExperimentalChecksInspectionTest.kt": [
+9
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsExtraSemicolonInspectionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsExtraSemicolonInspectionTest.kt": [
 10,
 14,
 18,
@@ -902,13 +902,13 @@
 30,
 37,
 43,
-55,
+55
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsFieldInitShorthandInspectionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsFieldInitShorthandInspectionTest.kt": [
 10,
-16,
+16
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsReassignImmutableInspectionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsReassignImmutableInspectionTest.kt": [
 10,
 17,
 24,
@@ -929,17 +929,17 @@
 138,
 150,
 162,
-172,
+172
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsSelfConventionInspectionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsSelfConventionInspectionTest.kt": [
 47,
 55,
-62,
+62
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsSimplifyBooleanExpressionInspectionTest.kt':[
-9,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsSimplifyBooleanExpressionInspectionTest.kt": [
+9
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsSortImplTraitMembersInspectionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsSortImplTraitMembersInspectionTest.kt": [
 10,
 44,
 52,
@@ -949,9 +949,9 @@
 91,
 158,
 182,
-249,
+249
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsTypeCheckInspectionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsTypeCheckInspectionTest.kt": [
 9,
 15,
 19,
@@ -967,16 +967,16 @@
 99,
 108,
 119,
-130,
+130
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsUnresolvedReferenceInspectionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsUnresolvedReferenceInspectionTest.kt": [
 12,
 22,
 28,
 34,
-45,
+45
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsVariableMutableInspectionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsVariableMutableInspectionTest.kt": [
 10,
 16,
 22,
@@ -990,18 +990,18 @@
 107,
 118,
 132,
-146,
+146
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsWrongLifetimeParametersNumberTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsWrongLifetimeParametersNumberTest.kt": [
 10,
 25,
 36,
 49,
 58,
 64,
-73,
+73
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsWrongTypeParametersNumberInspectionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsWrongTypeParametersNumberInspectionTest.kt": [
 10,
 32,
 36,
@@ -1013,9 +1013,9 @@
 133,
 143,
 157,
-167,
+167
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/import/AutoImportFixStdTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/import/AutoImportFixStdTest.kt": [
 14,
 22,
 38,
@@ -1031,9 +1031,9 @@
 229,
 261,
 299,
-312,
+312
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/import/AutoImportFixTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/import/AutoImportFixTest.kt": [
 10,
 30,
 50,
@@ -1071,9 +1071,9 @@
 895,
 924,
 974,
-1010,
+1010
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/AddCurlyBracesIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/AddCurlyBracesIntentionTest.kt": [
 10,
 15,
 20,
@@ -1081,28 +1081,28 @@
 30,
 35,
 40,
-45,
+45
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/AddDeriveIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/AddDeriveIntentionTest.kt": [
 10,
 17,
 25,
-36,
+36
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/AddElseIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/AddElseIntentionTest.kt": [
 16,
 26,
 40,
 54,
 72,
-90,
+90
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/AddImplIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/AddImplIntentionTest.kt": [
 9,
 21,
-29,
+29
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/DemorgansLawIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/DemorgansLawIntentionTest.kt": [
 10,
 20,
 30,
@@ -1114,18 +1114,18 @@
 90,
 100,
 110,
-120,
+120
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/ExtractInlineModuleIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/ExtractInlineModuleIntentionTest.kt": [
 15,
 39,
-63,
+63
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/FillMatchArmsIntentionStdTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/FillMatchArmsIntentionStdTest.kt": [
 14,
-27,
+27
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/FillMatchArmsIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/FillMatchArmsIntentionTest.kt": [
 10,
 33,
 56,
@@ -1133,34 +1133,34 @@
 105,
 128,
 154,
-167,
+167
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/FlipBinaryExpressionIntentionTest.kt':[
-14,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/FlipBinaryExpressionIntentionTest.kt": [
+14
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/IfLetToMatchIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/IfLetToMatchIntentionTest.kt": [
 9,
 23,
 40,
 57,
 78,
-99,
+99
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/MatchToIfLetIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/MatchToIfLetIntentionTest.kt": [
 9,
 25,
 41,
 57,
-92,
+92
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/MoveGuardToMatchArmIntentionITest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/MoveGuardToMatchArmIntentionITest.kt": [
 9,
 17,
 31,
 51,
-67,
+67
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/MoveTypeConstraintToParameterListIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/MoveTypeConstraintToParameterListIntentionTest.kt": [
 10,
 15,
 20,
@@ -1172,9 +1172,9 @@
 50,
 55,
 60,
-62,
+62
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/MoveTypeConstraintToWhereClauseIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/MoveTypeConstraintToWhereClauseIntentionTest.kt": [
 9,
 14,
 19,
@@ -1189,28 +1189,28 @@
 64,
 76,
 82,
-84,
+84
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/RemoveCurlyBracesIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/RemoveCurlyBracesIntentionTest.kt": [
 10,
 15,
-26,
+26
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/RemoveParenthesesFromExprIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/RemoveParenthesesFromExprIntentionTest.kt": [
+9
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/RsIntentionTestBase.kt": [
+16
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/SetImmutableIntentionTest.kt": [
 9,
+14
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/RsIntentionTestBase.kt':[
-16,
-],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/SetImmutableIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/SetMutableIntentionTest.kt": [
 9,
-14,
+14
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/SetMutableIntentionTest.kt':[
-9,
-14,
-],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/SimplifyBooleanExpressionIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/SimplifyBooleanExpressionIntentionTest.kt": [
 12,
 22,
 32,
@@ -1236,20 +1236,20 @@
 216,
 226,
 236,
-246,
+246
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/SpecifyTypeExplicitlyIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/SpecifyTypeExplicitlyIntentionTest.kt": [
 9,
 14,
 19,
-23,
+23
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/ToggleIgnoreTestIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/ToggleIgnoreTestIntentionTest.kt": [
 9,
 18,
-27,
+27
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/UnElideLifetimesIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/UnElideLifetimesIntentionTest.kt": [
 9,
 15,
 21,
@@ -1258,9 +1258,9 @@
 43,
 53,
 63,
-77,
+77
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/UnwrapSingleExprIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/UnwrapSingleExprIntentionTest.kt": [
 9,
 21,
 31,
@@ -1271,9 +1271,9 @@
 79,
 95,
 111,
-127,
+127
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/UnwrapToTryIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/UnwrapToTryIntentionTest.kt": [
 9,
 19,
 29,
@@ -1286,31 +1286,31 @@
 95,
 101,
 107,
-113,
+113
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/WrapLambdaExprIntentionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/WrapLambdaExprIntentionTest.kt": [
 9,
-25,
+25
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/lineMarkers/RsImplsLineMarkerProviderTest.kt':[
-11,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/lineMarkers/RsImplsLineMarkerProviderTest.kt": [
+11
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/lineMarkers/RsRecursiveCallLineMarkerProviderTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/lineMarkers/RsRecursiveCallLineMarkerProviderTest.kt": [
 13,
 19,
 28,
 37,
 47,
-56,
+56
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/lineMarkers/RsTraitItemImplLineMarkerProviderTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/lineMarkers/RsTraitItemImplLineMarkerProviderTest.kt": [
 15,
-39,
+39
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/miscExtensions/RsBreadcrumbsInfoProviderTest.kt':[
-16,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/miscExtensions/RsBreadcrumbsInfoProviderTest.kt": [
+16
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/navigation/goto/RsGotoSuperHandlerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/navigation/goto/RsGotoSuperHandlerTest.kt": [
 15,
 29,
 45,
@@ -1319,9 +1319,9 @@
 93,
 107,
 115,
-128,
+128
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/navigation/goto/RsGotoTypeDeclarationTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/navigation/goto/RsGotoTypeDeclarationTest.kt": [
 14,
 22,
 36,
@@ -1339,9 +1339,9 @@
 174,
 182,
 194,
-232,
+232
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/refactoring/RenameTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/refactoring/RenameTest.kt": [
 14,
 60,
 66,
@@ -1351,23 +1351,23 @@
 108,
 129,
 152,
-173,
+173
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/refactoring/RsConvertToNamedFieldsActionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/refactoring/RsConvertToNamedFieldsActionTest.kt": [
 13,
-22,
+22
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/refactoring/RsDowngradeModuleToFileTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/refactoring/RsDowngradeModuleToFileTest.kt": [
 17,
 30,
 43,
-53,
+53
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/refactoring/RsPromoteModuleToDirectoryActionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/refactoring/RsPromoteModuleToDirectoryActionTest.kt": [
 19,
-31,
+31
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/search/RsFindUsagesTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/search/RsFindUsagesTest.kt": [
 14,
 23,
 41,
@@ -1375,9 +1375,9 @@
 70,
 97,
 110,
-131,
+131
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/structure/RsStructureViewTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/structure/RsStructureViewTest.kt": [
 18,
 32,
 45,
@@ -1393,22 +1393,22 @@
 266,
 270,
 274,
-337,
+337
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/template/RsLiveTemplatesTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/template/RsLiveTemplatesTest.kt": [
 90,
 99,
-105,
+105
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/template/postfix/MatchPostfixTemplateTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/template/postfix/MatchPostfixTemplateTest.kt": [
 9,
 37,
-53,
+53
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/template/postfix/NotPostfixTemplateTest.kt':[
-9,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/template/postfix/NotPostfixTemplateTest.kt": [
+9
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsAngleBraceTypedHandlerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsAngleBraceTypedHandlerTest.kt": [
 11,
 12,
 13,
@@ -1426,22 +1426,22 @@
 38,
 41,
 44,
-47,
+47
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsBraceMatcherTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsBraceMatcherTest.kt": [
 15,
 21,
 27,
 33,
 35,
 37,
-70,
+70
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsDotTypedHandlerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsDotTypedHandlerTest.kt": [
 9,
-23,
+23
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsEnterInLineCommentHandlerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsEnterInLineCommentHandlerTest.kt": [
 11,
 12,
 13,
@@ -1457,9 +1457,9 @@
 25,
 27,
 28,
-30,
+30
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsEnterInStringLiteralHandlerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsEnterInStringLiteralHandlerTest.kt": [
 13,
 26,
 43,
@@ -1478,9 +1478,9 @@
 184,
 193,
 202,
-214,
+214
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsQuoteHandlerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsQuoteHandlerTest.kt": [
 11,
 21,
 31,
@@ -1497,9 +1497,9 @@
 98,
 110,
 111,
-112,
+112
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsRawLiteralHashesBalancerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsRawLiteralHashesBalancerTest.kt": [
 11,
 21,
 31,
@@ -1513,9 +1513,9 @@
 111,
 121,
 135,
-146,
+146
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/assist/RsSmartEnterProcessorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/assist/RsSmartEnterProcessorTest.kt": [
 41,
 42,
 43,
@@ -1524,15 +1524,15 @@
 46,
 47,
 48,
-49,
+49
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/wordSelection/RsListSelectionHandlerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/wordSelection/RsListSelectionHandlerTest.kt": [
 10,
 22,
 34,
-44,
+44
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsAttributeCompletionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsAttributeCompletionTest.kt": [
 9,
 14,
 19,
@@ -1552,19 +1552,19 @@
 102,
 107,
 112,
-117,
+117
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsCompletionAutoPopupTest.kt':[
-25,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsCompletionAutoPopupTest.kt": [
+25
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsCompletionFilteringTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsCompletionFilteringTest.kt": [
 9,
-27,
+27
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsCompletionPriorityTest.kt':[
-16,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsCompletionPriorityTest.kt": [
+16
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsCompletionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsCompletionTest.kt": [
 9,
 15,
 23,
@@ -1620,9 +1620,9 @@
 541,
 550,
 561,
-569,
+569
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsDeriveCompletionProviderTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsDeriveCompletionProviderTest.kt": [
 16,
 28,
 40,
@@ -1633,15 +1633,15 @@
 82,
 87,
 93,
-98,
+98
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsExternCrateCompletionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsExternCrateCompletionTest.kt": [
 16,
 21,
 25,
-29,
+29
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsKeywordCompletionContributorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsKeywordCompletionContributorTest.kt": [
 12,
 20,
 28,
@@ -1734,9 +1734,9 @@
 469,
 479,
 489,
-503,
+503
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsLookupElementTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsLookupElementTest.kt": [
 16,
 21,
 28,
@@ -1750,15 +1750,15 @@
 76,
 81,
 88,
-93,
+93
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsModCompletionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsModCompletionTest.kt": [
 9,
 19,
 29,
-39,
+39
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsPartialParseCompletionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsPartialParseCompletionTest.kt": [
 9,
 15,
 21,
@@ -1777,9 +1777,9 @@
 129,
 134,
 154,
-159,
+159
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsPsiPatternTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsPsiPatternTest.kt": [
 15,
 21,
 27,
@@ -1819,17 +1819,17 @@
 246,
 253,
 260,
-267,
+267
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsStdlibCompletionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsStdlibCompletionTest.kt": [
 13,
 19,
 26,
 33,
 41,
-47,
+47
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsTypeAwareCompletionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsTypeAwareCompletionTest.kt": [
 9,
 19,
 29,
@@ -1842,9 +1842,9 @@
 153,
 165,
 179,
-189,
+189
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/ext/RsPsiStructureTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/ext/RsPsiStructureTest.kt": [
 26,
 27,
 28,
@@ -1862,17 +1862,17 @@
 52,
 90,
 99,
-126,
+126
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/macros/RsErrorChainMacroExpansionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/macros/RsErrorChainMacroExpansionTest.kt": [
 11,
 102,
 136,
 170,
 196,
-216,
+216
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/macros/RsMacroExpansionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/macros/RsMacroExpansionTest.kt": [
 9,
 20,
 40,
@@ -1902,9 +1902,9 @@
 405,
 420,
 437,
-451,
+451
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/parser/RsCompleteParsingTestCase.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/parser/RsCompleteParsingTestCase.kt": [
 12,
 13,
 14,
@@ -1941,9 +1941,9 @@
 45,
 47,
 48,
-50,
+50
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/parser/RsPartialParsingTestCase.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/parser/RsPartialParsingTestCase.kt": [
 16,
 17,
 18,
@@ -1956,9 +1956,9 @@
 25,
 26,
 27,
-28,
+28
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/psi/RsAttributeTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/psi/RsAttributeTest.kt": [
 50,
 55,
 61,
@@ -1984,16 +1984,16 @@
 207,
 217,
 227,
-239,
+239
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/psi/RsCodeFragmentFactoryTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/psi/RsCodeFragmentFactoryTest.kt": [
 12,
-20,
+20
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/psi/RsNumericLiteralValueTest.kt':[
-43,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/psi/RsNumericLiteralValueTest.kt": [
+43
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsClosuresResolveTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsClosuresResolveTest.kt": [
 25,
 39,
 52,
@@ -2009,18 +2009,18 @@
 247,
 258,
 269,
-281,
+281
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsMacroExpansionResolveTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsMacroExpansionResolveTest.kt": [
 9,
 26,
 48,
 70,
 92,
 115,
-143,
+143
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsMacroResolveTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsMacroResolveTest.kt": [
 10,
 23,
 33,
@@ -2030,14 +2030,14 @@
 70,
 86,
 101,
-112,
+112
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsMultiResolveTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsMultiResolveTest.kt": [
 13,
 21,
-29,
+29
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsNamespaceResolveTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsNamespaceResolveTest.kt": [
 9,
 25,
 35,
@@ -2052,24 +2052,24 @@
 152,
 166,
 173,
-184,
+184
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsOperatorsResolve.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsOperatorsResolve.kt": [
 12,
 36,
 59,
-81,
+81
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsPackageLibraryResolveTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsPackageLibraryResolveTest.kt": [
 16,
 28,
 41,
 54,
 67,
 80,
-95,
+95
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsPreciseTraitMatchingTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsPreciseTraitMatchingTest.kt": [
 11,
 28,
 51,
@@ -2082,9 +2082,9 @@
 171,
 190,
 212,
-234,
+234
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsResolveTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsResolveTest.kt": [
 10,
 18,
 27,
@@ -2186,9 +2186,9 @@
 1035,
 1044,
 1051,
-1059,
+1059
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsStdlibResolveTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsStdlibResolveTest.kt": [
 15,
 24,
 32,
@@ -2242,9 +2242,9 @@
 478,
 491,
 510,
-527,
+527
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsStubOnlyResolveTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsStubOnlyResolveTest.kt": [
 9,
 22,
 37,
@@ -2273,9 +2273,9 @@
 366,
 386,
 397,
-407,
+407
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsTypeAwareGenericResolveTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsTypeAwareGenericResolveTest.kt": [
 12,
 20,
 31,
@@ -2332,9 +2332,9 @@
 794,
 811,
 828,
-843,
+843
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsTypeAwareResolveTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsTypeAwareResolveTest.kt": [
 11,
 23,
 33,
@@ -2384,9 +2384,9 @@
 623,
 633,
 643,
-655,
+655
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsUseResolveTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsUseResolveTest.kt": [
 10,
 22,
 36,
@@ -2426,15 +2426,15 @@
 501,
 526,
 538,
-550,
+550
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/stubs/RsStubAccessTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/stubs/RsStubAccessTest.kt": [
 34,
 47,
 51,
-62,
+62
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/stubs/RsStubTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/stubs/RsStubTest.kt": [
 16,
 25,
 34,
@@ -2444,23 +2444,23 @@
 82,
 93,
 107,
-120,
+120
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsArithmeticOpsTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsArithmeticOpsTest.kt": [
 12,
 35,
 58,
 82,
-112,
+112
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsDivergingTypeInferenceTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsDivergingTypeInferenceTest.kt": [
 10,
 17,
 24,
 31,
-46,
+46
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsEnumPatternTypeInferenceTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsEnumPatternTypeInferenceTest.kt": [
 9,
 20,
 33,
@@ -2468,9 +2468,9 @@
 58,
 72,
 87,
-102,
+102
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsExpressionTypeInferenceTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsExpressionTypeInferenceTest.kt": [
 9,
 21,
 30,
@@ -2591,9 +2591,9 @@
 1022,
 1034,
 1043,
-1051,
+1051
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsGenericExpressionTypeInferenceTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsGenericExpressionTypeInferenceTest.kt": [
 11,
 21,
 31,
@@ -2716,9 +2716,9 @@
 1386,
 1400,
 1413,
-1424,
+1424
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsImplicitTraitsTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsImplicitTraitsTest.kt": [
 19,
 21,
 26,
@@ -2739,18 +2739,18 @@
 108,
 113,
 120,
-127,
+127
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsIndexTypeInferenceTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsIndexTypeInferenceTest.kt": [
 12,
 29,
 46,
 64,
 88,
 105,
-121,
+121
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsNumericLiteralTypeInferenceTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsNumericLiteralTypeInferenceTest.kt": [
 9,
 15,
 21,
@@ -2818,9 +2818,9 @@
 480,
 491,
 503,
-511,
+511
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsPatternMatchingTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsPatternMatchingTest.kt": [
 9,
 17,
 27,
@@ -2838,14 +2838,14 @@
 145,
 154,
 163,
-174,
+174
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsSnapshotMapTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsSnapshotMapTest.kt": [
 25,
 31,
-40,
+40
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsStdlibExpressionTypeInferenceTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsStdlibExpressionTypeInferenceTest.kt": [
 18,
 27,
 37,
@@ -2891,12 +2891,12 @@
 434,
 441,
 474,
-485,
+485
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsStubOnlyTypeInferenceTest.kt':[
-10,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsStubOnlyTypeInferenceTest.kt": [
+10
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsTypeResolvingTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsTypeResolvingTest.kt": [
 13,
 22,
 29,
@@ -2937,16 +2937,16 @@
 259,
 265,
 271,
-277,
+277
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsUnificationTableTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsUnificationTableTest.kt": [
 76,
 80,
 86,
 92,
-99,
+99
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/refactoring/RsExtractFunctionTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/refactoring/RsExtractFunctionTest.kt": [
 20,
 38,
 103,
@@ -2980,9 +2980,9 @@
 791,
 817,
 853,
-881,
+881
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/refactoring/RsImportOptimizerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/refactoring/RsImportOptimizerTest.kt": [
 13,
 19,
 30,
@@ -3002,9 +3002,9 @@
 182,
 187,
 195,
-211,
+211
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/refactoring/RsIntroduceVariableHandlerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/refactoring/RsIntroduceVariableHandlerTest.kt": [
 19,
 30,
 40,
@@ -3016,9 +3016,9 @@
 119,
 129,
 144,
-163,
+163
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/refactoring/implementMembers/ImplementMembersHandlerTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/refactoring/implementMembers/ImplementMembersHandlerTest.kt": [
 15,
 19,
 45,
@@ -3033,9 +3033,9 @@
 335,
 364,
 406,
-447,
+447
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/refactoring/implementMembers/RsNameSuggestionsKtTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/refactoring/implementMembers/RsNameSuggestionsKtTest.kt": [
 18,
 30,
 43,
@@ -3045,28 +3045,28 @@
 83,
 98,
 116,
-124,
+124
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/stdext/AsyncValueTest.kt':[
-16,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/stdext/AsyncValueTest.kt": [
+16
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/toml/CargoCrateDocLineMarkerProviderTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/toml/CargoCrateDocLineMarkerProviderTest.kt": [
 44,
 52,
 57,
 62,
 67,
 72,
-77,
+77
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/toml/CargoTomlCompletionContributorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/toml/CargoTomlCompletionContributorTest.kt": [
 12,
 21,
 26,
 31,
-36,
+36
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/CargoProjectResolveTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/CargoProjectResolveTest.kt": [
 18,
 35,
 55,
@@ -3075,31 +3075,31 @@
 169,
 192,
 217,
-240,
+240
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/CargoProjectServiceTest.kt':[
-16,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/CargoProjectServiceTest.kt": [
+16
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/CargoProjectStructureTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/CargoProjectStructureTest.kt": [
 17,
-49,
+49
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/RsCargoCheckAnnotatorTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/RsCargoCheckAnnotatorTest.kt": [
 23,
 27,
 34,
 43,
 70,
-108,
+108
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/RsCompilerSourcesPerformance.kt':[
-33,
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/RsCompilerSourcesPerformance.kt": [
+33
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/RsHighlightingPerformanceTest.kt':[
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/RsHighlightingPerformanceTest.kt": [
 26,
-29,
+29
 ],
-'kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/RsTypingEmptyFileFuzzyTest.kt':[
-12,
-],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/RsTypingEmptyFileFuzzyTest.kt": [
+12
+]
 }

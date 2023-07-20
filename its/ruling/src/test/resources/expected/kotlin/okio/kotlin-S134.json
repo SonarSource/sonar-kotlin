@@ -1,5 +1,5 @@
 {
-'kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/Buffer.kt':[
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/Buffer.kt": [
 409,
 420,
 470,
@@ -11,12 +11,12 @@
 605,
 911,
 1474,
-1494,
+1494
 ],
-'kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/InflaterSource.kt':[
-68,
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/InflaterSource.kt": [
+68
 ],
-'kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/Options.kt':[
-170,
-],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/Options.kt": [
+170
+]
 }

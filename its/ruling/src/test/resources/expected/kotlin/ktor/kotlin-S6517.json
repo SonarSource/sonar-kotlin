@@ -1,72 +1,72 @@
 {
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-core/common/src/io/ktor/client/engine/HttpClientEngine.kt':[
-113,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-core/common/src/io/ktor/client/engine/HttpClientEngine.kt": [
+113
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-core/common/src/io/ktor/client/plugins/HttpSend.kt':[
-25,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-core/common/src/io/ktor/client/plugins/HttpSend.kt": [
+25
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-core/common/src/io/ktor/client/plugins/api/ClientHook.kt':[
-14,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-core/common/src/io/ktor/client/plugins/api/ClientHook.kt": [
+14
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-core/js/src/io/ktor/client/fetch/LibDom.kt':[
-361,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-core/js/src/io/ktor/client/fetch/LibDom.kt": [
+361
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-plugins/ktor-client-logging/common/src/io/ktor/client/plugins/logging/Logger.kt':[
-10,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-plugins/ktor-client-logging/common/src/io/ktor/client/plugins/logging/Logger.kt": [
+10
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-http/common/src/io/ktor/http/ContentTypeMatcher.kt':[
-10,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-http/common/src/io/ktor/http/ContentTypeMatcher.kt": [
+10
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-http/common/src/io/ktor/http/content/Multipart.kt':[
-104,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-http/common/src/io/ktor/http/content/Multipart.kt": [
+104
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-io/common/src/io/ktor/utils/io/core/Closeable.kt':[
-3,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-io/common/src/io/ktor/utils/io/core/Closeable.kt": [
+3
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-io/js/src/io/ktor/utils/io/core/CloseableJS.kt':[
-3,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-io/js/src/io/ktor/utils/io/core/CloseableJS.kt": [
+3
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-io/posix/src/io/ktor/utils/io/core/CloseableNative.kt':[
-3,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-io/posix/src/io/ktor/utils/io/core/CloseableNative.kt": [
+3
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-network/jvmAndNix/src/io/ktor/network/sockets/Sockets.kt':[
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-network/jvmAndNix/src/io/ktor/network/sockets/Sockets.kt": [
 78,
-90,
+90
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/jvmAndNix/src/io/ktor/server/application/Hook.kt':[
-13,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/jvmAndNix/src/io/ktor/server/application/Hook.kt": [
+13
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/jvmAndNix/src/io/ktor/server/config/ConfigLoaders.kt':[
-14,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/jvmAndNix/src/io/ktor/server/config/ConfigLoaders.kt": [
+14
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/jvmAndNix/src/io/ktor/server/logging/Logging.kt':[
-19,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/jvmAndNix/src/io/ktor/server/logging/Logging.kt": [
+19
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-host-common/jvmAndNix/src/io/ktor/server/engine/EmbeddedServer.kt':[
-15,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-host-common/jvmAndNix/src/io/ktor/server/engine/EmbeddedServer.kt": [
+15
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-auth/jvmAndNix/test/io/ktor/tests/auth/OAuth2Test.kt':[
-583,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-auth/jvmAndNix/test/io/ktor/tests/auth/OAuth2Test.kt": [
+583
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-html-builder/jvmAndNix/src/io/ktor/server/html/Template.kt':[
-11,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-html-builder/jvmAndNix/src/io/ktor/server/html/Template.kt": [
+11
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-locations/jvm/src/io/ktor/server/locations/Locations.kt':[
-140,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-locations/jvm/src/io/ktor/server/locations/Locations.kt": [
+140
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-rate-limit/jvmAndNix/src/io/ktor/server/plugins/ratelimit/RateLimiter.kt':[
-14,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-rate-limit/jvmAndNix/src/io/ktor/server/plugins/ratelimit/RateLimiter.kt": [
+14
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-servlet-jakarta/jvm/src/io/ktor/server/servlet/jakarta/ServletUpgrade.kt':[
-21,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-servlet-jakarta/jvm/src/io/ktor/server/servlet/jakarta/ServletUpgrade.kt": [
+21
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-servlet/jvm/src/io/ktor/server/servlet/ServletUpgrade.kt':[
-21,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-servlet/jvm/src/io/ktor/server/servlet/ServletUpgrade.kt": [
+21
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-shared/ktor-serialization/common/src/ContentConverter.kt':[
-101,
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-shared/ktor-serialization/common/src/ContentConverter.kt": [
+101
 ],
-'kotlin-ktor-project:sources/kotlin/ktor/ktor-shared/ktor-serialization/ktor-serialization-kotlinx/common/src/io/ktor/serialization/kotlinx/Extensions.kt':[
-22,
-],
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-shared/ktor-serialization/ktor-serialization-kotlinx/common/src/io/ktor/serialization/kotlinx/Extensions.kt": [
+22
+]
 }

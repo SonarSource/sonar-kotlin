@@ -1,125 +1,125 @@
 {
-'kotlin-kotlin-project:sources/kotlin/kotlin/build-common/src/org/jetbrains/kotlin/incremental/ProtoCompareGenerated.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/build-common/src/org/jetbrains/kotlin/incremental/ProtoCompareGenerated.kt": [
 2048,
 2126,
-2206,
+2206
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/range/inExpression/InFloatingPointRangeLiteralExpressionGenerator.kt':[
-61,
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/range/inExpression/InFloatingPointRangeLiteralExpressionGenerator.kt": [
+61
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/state/typeMappingUtil.kt':[
-35,
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/state/typeMappingUtil.kt": [
+35
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/container/src/org/jetbrains/kotlin/container/Dsl.kt':[
-49,
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/container/src/org/jetbrains/kotlin/container/Dsl.kt": [
+49
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/checkers/InlineChecker.kt':[
-95,
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/checkers/InlineChecker.kt": [
+95
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/constants/evaluate/OperationsMapGenerated.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/constants/evaluate/OperationsMapGenerated.kt": [
 24,
-25,
+25
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/inline/InlineAnalyzerExtension.kt':[
-65,
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/inline/InlineAnalyzerExtension.kt": [
+65
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.js/src/org/jetbrains/kotlin/ir/backend/js/compiler.kt':[
-29,
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.js/src/org/jetbrains/kotlin/ir/backend/js/compiler.kt": [
+29
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/lower/BridgeLowering.kt':[
-186,
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/lower/BridgeLowering.kt": [
+186
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/light-classes/src/org/jetbrains/kotlin/asJava/builder/LightClassBuilder.kt':[
-77,
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/light-classes/src/org/jetbrains/kotlin/asJava/builder/LightClassBuilder.kt": [
+77
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-java8/tests/org/jetbrains/kotlin/generators/tests/GenerateJava8Tests.kt':[
-34,
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-java8/tests/org/jetbrains/kotlin/generators/tests/GenerateJava8Tests.kt": [
+34
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/generators/tests/GenerateCompilerTests.kt':[
-59,
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/generators/tests/GenerateCompilerTests.kt": [
+59
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors.runtime/tests/org/jetbrains/kotlin/generators/tests/GenerateRuntimeDescriptorTests.kt':[
-23,
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors.runtime/tests/org/jetbrains/kotlin/generators/tests/GenerateRuntimeDescriptorTests.kt": [
+23
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/core/reflection.jvm/src/kotlin/reflect/jvm/internal/AnnotationConstructorCaller.kt':[
-166,
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/reflection.jvm/src/kotlin/reflect/jvm/internal/AnnotationConstructorCaller.kt": [
+166
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/core/util.runtime/src/org/jetbrains/kotlin/storage/storage.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/util.runtime/src/org/jetbrains/kotlin/storage/storage.kt": [
 42,
-44,
+44
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/generators/builtins/generateBuiltIns.kt':[
-84,
+"kotlin-kotlin-project:sources/kotlin/kotlin/generators/builtins/generateBuiltIns.kt": [
+84
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/generators/tests/org/jetbrains/kotlin/generators/arguments/GenerateGradleOptions.kt':[
-146,
+"kotlin-kotlin-project:sources/kotlin/kotlin/generators/tests/org/jetbrains/kotlin/generators/arguments/GenerateGradleOptions.kt": [
+146
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/generators/tests/org/jetbrains/kotlin/generators/evaluate/GenerateOperationsMap.kt':[
-33,
+"kotlin-kotlin-project:sources/kotlin/kotlin/generators/tests/org/jetbrains/kotlin/generators/evaluate/GenerateOperationsMap.kt": [
+33
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/generators/tests/org/jetbrains/kotlin/generators/protobuf/GenerateProtoBuf.kt':[
-65,
+"kotlin-kotlin-project:sources/kotlin/kotlin/generators/tests/org/jetbrains/kotlin/generators/protobuf/GenerateProtoBuf.kt": [
+65
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/generators/tests/org/jetbrains/kotlin/generators/tests/GenerateTests.kt':[
-165,
+"kotlin-kotlin-project:sources/kotlin/kotlin/generators/tests/org/jetbrains/kotlin/generators/tests/GenerateTests.kt": [
+165
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/KotlinCommonBlock.kt':[
-55,
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/KotlinCommonBlock.kt": [
+55
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/kotlinSpacingRules.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/kotlinSpacingRules.kt": [
 178,
-539,
+539
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/smart/LambdaItems.kt':[
-94,
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/smart/LambdaItems.kt": [
+94
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/smart/LambdaSignatureItems.kt':[
-77,
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/smart/LambdaSignatureItems.kt": [
+77
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/util/CachedValueHelpers.kt':[
-25,
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/util/CachedValueHelpers.kt": [
+25
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/src/org/jetbrains/kotlin/idea/inspections/gradle/KotlinGradleModelFacade.kt':[
-70,
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/src/org/jetbrains/kotlin/idea/inspections/gradle/KotlinGradleModelFacade.kt": [
+70
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/configuration/ModuleSourceRootMap.kt':[
-39,
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/configuration/ModuleSourceRootMap.kt": [
+39
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/KotlinPluginUpdater.kt':[
-214,
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/KotlinPluginUpdater.kt": [
+214
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/parameterInfo/TypeHints.kt':[
-121,
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/parameterInfo/TypeHints.kt": [
+121
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/parameterInfo/AbstractParameterInfoTest.kt':[
-59,
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/parameterInfo/AbstractParameterInfoTest.kt": [
+59
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/TypeVisitor.kt':[
-94,
+"kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/TypeVisitor.kt": [
+94
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ast/Types.kt':[
-42,
+"kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ast/Types.kt": [
+42
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/generators/tests/GenerateJsTests.kt':[
-14,
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/generators/tests/GenerateJsTests.kt": [
+14
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/generators/tests/generateTestDataForReservedWords.kt':[
-42,
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/generators/tests/generateTestDataForReservedWords.kt": [
+42
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/js/js.translator/src/org/jetbrains/kotlin/js/translate/intrinsic/functions/factories/ArrayFIF.kt':[
-47,
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.translator/src/org/jetbrains/kotlin/js/translate/intrinsic/functions/factories/ArrayFIF.kt": [
+47
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/js-example/src/main/kotlin/sample/Hello.kt':[
-3,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/js-example/src/main/kotlin/sample/Hello.kt": [
+3
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/kotlin.test/js/it/src/test/kotlin/MainTest.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/kotlin.test/js/it/src/test/kotlin/MainTest.kt": [
 52,
-66,
+66
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/coroutines/src/kotlin/coroutines/intrinsics/Intrinsics.kt':[
-45,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/coroutines/src/kotlin/coroutines/intrinsics/Intrinsics.kt": [
+45
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/generated/_ArraysJs.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/generated/_ArraysJs.kt": [
 109,
 146,
 156,
@@ -129,168 +129,168 @@
 196,
 206,
 216,
-226,
+226
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/builtins.kt':[
-99,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/builtins.kt": [
+99
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/collections.kt':[
-133,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/collections.kt": [
+133
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/concurrent.kt':[
-16,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/concurrent.kt": [
+16
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/samples/test/samples/properties/delegates.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/samples/test/samples/properties/delegates.kt": [
 26,
 41,
-66,
+66
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/MapAccessors.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/MapAccessors.kt": [
 22,
 35,
 42,
-52,
+52
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/coroutines/experimental/intrinsics/Intrinsics.kt':[
-44,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/coroutines/experimental/intrinsics/Intrinsics.kt": [
+44
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/internal/contracts/ContractBuilder.kt':[
-32,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/internal/contracts/ContractBuilder.kt": [
+32
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/util/Lazy.kt':[
-44,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/util/Lazy.kt": [
+44
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/main/kotlin/org.jetbrains.kotlin.tools/kotlinMetadataVisibilities.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/main/kotlin/org.jetbrains.kotlin.tools/kotlinMetadataVisibilities.kt": [
 49,
-87,
+87
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/idl2k/src/main/kotlin/idl.kt':[
-592,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/idl2k/src/main/kotlin/idl.kt": [
+592
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/idl2k/src/main/kotlin/main.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/idl2k/src/main/kotlin/main.kt": [
 10,
 109,
-111,
+111
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidProject/Lib/src/androidTest/kotlin/internalTest.kt':[
-3,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidProject/Lib/src/androidTest/kotlin/internalTest.kt": [
+3
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidProject/Lib/src/test/kotlin/internalTest.kt':[
-3,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidProject/Lib/src/test/kotlin/internalTest.kt": [
+3
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/buildCacheSimple/src/main/kotlin/foo.kt':[
-3,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/buildCacheSimple/src/main/kotlin/foo.kt": [
+3
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/duplicatedClass/app/src/main/kotlin/useA.kt':[
-1,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/duplicatedClass/app/src/main/kotlin/useA.kt": [
+1
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/javaLibraryProject/app/src/main/kotlin/App.kt':[
-3,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/javaLibraryProject/app/src/main/kotlin/App.kt": [
+3
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kapt2/android-databinding/app/src/main/java/com/example/databinding/MainActivity.kt':[
-18,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kapt2/android-databinding/app/src/main/java/com/example/databinding/MainActivity.kt": [
+18
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kapt2/kt19179/app/src/main/kotlin/Test.kt':[
-5,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kapt2/kt19179/app/src/main/kotlin/Test.kt": [
+5
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kotlin2JsDceProject/mainProject/src/main/kotlin/exampleapp/main.kt':[
-7,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kotlin2JsDceProject/mainProject/src/main/kotlin/exampleapp/main.kt": [
+7
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kotlin2JsProject/mainProject/src/main/kotlin/example/main.kt':[
-7,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kotlin2JsProject/mainProject/src/main/kotlin/example/main.kt": [
+7
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kotlin2JsProjectWithSourceMapInline/app/src/main/kotlin/main.kt':[
-1,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kotlin2JsProjectWithSourceMapInline/app/src/main/kotlin/main.kt": [
+1
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/multiplatformAndroidProject/libJvm/src/main/kotlin/javaLibUse.kt':[
-5,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/multiplatformAndroidProject/libJvm/src/main/kotlin/javaLibUse.kt": [
+5
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/multiplatformMultipleCommonModules/libJvm/src/main/kotlin/javaLibUse.kt':[
-5,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/multiplatformMultipleCommonModules/libJvm/src/main/kotlin/javaLibUse.kt": [
+5
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/multiplatformProject/libJvm/src/main/kotlin/javaLibUse.kt':[
-5,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/multiplatformProject/libJvm/src/main/kotlin/javaLibUse.kt": [
+5
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/multiprojectWithDependency/projB/src/main/kotlin/helloWorld.kt':[
-3,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/multiprojectWithDependency/projB/src/main/kotlin/helloWorld.kt": [
+3
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/samWithReceiverSimple/src/test.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/samWithReceiverSimple/src/test.kt": [
 23,
-24,
+24
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/suppressWarnings/src/helloWorld.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/suppressWarnings/src/helloWorld.kt": [
+5
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/plugin/KotlinPlugin.kt": [
+544
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-accessToInternal/src/main/kotlin/org/jetbrains/HelloWorld.kt": [
+19
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-extraArguments/src/main/kotlin/org/jetbrains/HelloWorld.kt": [
+3
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-helloworld/src/main/kotlin/org/jetbrains/HelloWorld.kt": [
+3
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-js-extraArguments/src/main/kotlin/org/jetbrains/HelloWorld.kt": [
+3
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-js-suppressWarnings/src/main/kotlin/org/jetbrains/HelloWorld.kt": [
 5,
+13
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/plugin/KotlinPlugin.kt':[
-544,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-kotlin-version-in-manifest/src/main/kotlin/test.kt": [
+40
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-accessToInternal/src/main/kotlin/org/jetbrains/HelloWorld.kt':[
-19,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-moduleName/src/main/kotlin/org/jetbrains/moduleName.kt": [
+19
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-extraArguments/src/main/kotlin/org/jetbrains/HelloWorld.kt':[
-3,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-moduleNameDefault/src/main/kotlin/org/jetbrains/moduleName.kt": [
+3
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-helloworld/src/main/kotlin/org/jetbrains/HelloWorld.kt':[
-3,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-multimodule-srcdir-absolute/sub/src/main/kotlin/org/jetbrains/HelloWorld.kt": [
+3
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-js-extraArguments/src/main/kotlin/org/jetbrains/HelloWorld.kt':[
-3,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-multimodule-srcdir/sub/src/main/kotlin/org/jetbrains/HelloWorld.kt": [
+3
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-js-suppressWarnings/src/main/kotlin/org/jetbrains/HelloWorld.kt':[
-5,
-13,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-multimodule/sub/src/main/kotlin/org/jetbrains/HelloWorld.kt": [
+3
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-kotlin-version-in-manifest/src/main/kotlin/test.kt':[
-40,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-multiplatform/js/src/main/kotlin/org/jetbrains/HelloWorld.kt": [
+3
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-moduleName/src/main/kotlin/org/jetbrains/moduleName.kt':[
-19,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-multiplatform/jvm/src/main/kotlin/org/jetbrains/HelloWorld.kt": [
+3
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-moduleNameDefault/src/main/kotlin/org/jetbrains/moduleName.kt':[
-3,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-plugins/use-test-extension/src/main/kotlin/main.kt": [
+3
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-multimodule-srcdir-absolute/sub/src/main/kotlin/org/jetbrains/HelloWorld.kt':[
-3,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-multimodule-srcdir/sub/src/main/kotlin/org/jetbrains/HelloWorld.kt':[
-3,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-multimodule/sub/src/main/kotlin/org/jetbrains/HelloWorld.kt':[
-3,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-multiplatform/js/src/main/kotlin/org/jetbrains/HelloWorld.kt':[
-3,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-multiplatform/jvm/src/main/kotlin/org/jetbrains/HelloWorld.kt':[
-3,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-plugins/use-test-extension/src/main/kotlin/main.kt':[
-3,
-],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-sam-with-receiver-simple/src/main/kotlin/test.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-sam-with-receiver-simple/src/main/kotlin/test.kt": [
 7,
-8,
+8
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-suppressWarnings/src/main/kotlin/org/jetbrains/HelloWorld.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-suppressWarnings/src/main/kotlin/org/jetbrains/HelloWorld.kt": [
 5,
-13,
+13
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin/src/it/simple/src/main/kotlin/yo.kt':[
-1,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin/src/it/simple/src/main/kotlin/yo.kt": [
+1
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-stdlib-gen/src/templates/dsl/Templates.kt':[
-212,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-stdlib-gen/src/templates/dsl/Templates.kt": [
+212
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlinp/test/org/jetbrains/kotlin/kotlinp/test/GenerateKotlinpTests.kt':[
-10,
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlinp/test/org/jetbrains/kotlin/kotlinp/test/GenerateKotlinpTests.kt": [
+10
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/test/org/jetbrains/kotlin/kapt3/test/KotlinKapt3IntegrationTests.kt':[
-54,
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/test/org/jetbrains/kotlin/kapt3/test/KotlinKapt3IntegrationTests.kt": [
+54
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/ultimate/src/org/jetbrains/kotlin/idea/spring/lineMarking/KotlinSpringModelDependenciesLineMarkerProvider.kt':[
-72,
+"kotlin-kotlin-project:sources/kotlin/kotlin/ultimate/src/org/jetbrains/kotlin/idea/spring/lineMarking/KotlinSpringModelDependenciesLineMarkerProvider.kt": [
+72
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/ultimate/tests/org/jetbrains/kotlin/tests/GenerateUltimateTests.kt':[
-30,
-],
+"kotlin-kotlin-project:sources/kotlin/kotlin/ultimate/tests/org/jetbrains/kotlin/tests/GenerateUltimateTests.kt": [
+30
+]
 }

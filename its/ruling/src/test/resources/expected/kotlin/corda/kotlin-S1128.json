@@ -1,88 +1,88 @@
 {
-'kotlin-corda-project:sources/kotlin/corda/client/rpc/src/integration-test/kotlin/net/corda/client/rpc/BlacklistKotlinClosureTest.kt':[
-4,
+"kotlin-corda-project:sources/kotlin/corda/client/rpc/src/integration-test/kotlin/net/corda/client/rpc/BlacklistKotlinClosureTest.kt": [
+4
 ],
-'kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/UntrustworthyData.kt':[
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/UntrustworthyData.kt": [
 5,
 6,
-7,
+7
 ],
-'kotlin-corda-project:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/contracts/asset/Obligation.kt':[
+"kotlin-corda-project:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/contracts/asset/Obligation.kt": [
 43,
-44,
+44
 ],
-'kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/network/NetworkBootstrapper.kt':[
+"kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/network/NetworkBootstrapper.kt": [
 38,
-39,
+39
 ],
-'kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/AMQPBridgeTest.kt':[
-9,
+"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/AMQPBridgeTest.kt": [
+9
 ],
-'kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/ProtonWrapperTests.kt':[
-11,
+"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/ProtonWrapperTests.kt": [
+11
 ],
-'kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/services/BFTNotaryServiceTests.kt':[
+"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/services/BFTNotaryServiceTests.kt": [
 54,
-55,
+55
 ],
-'kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/utilities/registration/NodeRegistrationTest.kt':[
-23,
+"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/utilities/registration/NodeRegistrationTest.kt": [
+23
 ],
-'kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/api/CheckpointStorage.kt':[
-3,
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/api/CheckpointStorage.kt": [
+3
 ],
-'kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/api/ServiceHubInternal.kt':[
-27,
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/api/ServiceHubInternal.kt": [
+27
 ],
-'kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SingleThreadedStateMachineManager.kt':[
-11,
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SingleThreadedStateMachineManager.kt": [
+11
 ],
-'kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/internal/AbstractNodeTests.kt':[
-10,
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/internal/AbstractNodeTests.kt": [
+10
 ],
-'kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/events/PersistentScheduledFlowRepositoryTest.kt':[
-9,
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/events/PersistentScheduledFlowRepositoryTest.kt": [
+9
 ],
-'kotlin-corda-project:sources/kotlin/corda/samples/irs-demo/cordapp/src/main/kotlin/net/corda/irs/api/NodeInterestRates.kt':[
+"kotlin-corda-project:sources/kotlin/corda/samples/irs-demo/cordapp/src/main/kotlin/net/corda/irs/api/NodeInterestRates.kt": [
 28,
-29,
+29
 ],
-'kotlin-corda-project:sources/kotlin/corda/samples/notary-demo/src/main/kotlin/net/corda/notarydemo/BFTNotaryCordform.kt':[
+"kotlin-corda-project:sources/kotlin/corda/samples/notary-demo/src/main/kotlin/net/corda/notarydemo/BFTNotaryCordform.kt": [
 10,
+11
+],
+"kotlin-corda-project:sources/kotlin/corda/samples/notary-demo/src/main/kotlin/net/corda/notarydemo/RaftNotaryCordform.kt": [
+10
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/Schema.kt": [
 11,
+12
 ],
-'kotlin-corda-project:sources/kotlin/corda/samples/notary-demo/src/main/kotlin/net/corda/notarydemo/RaftNotaryCordform.kt':[
-10,
+"kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/InMemoryMessagingNetwork.kt": [
+31
 ],
-'kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/Schema.kt':[
-11,
-12,
+"kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/DriverDSLImpl.kt": [
+26
 ],
-'kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/InMemoryMessagingNetwork.kt':[
-31,
-],
-'kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/DriverDSLImpl.kt':[
-26,
-],
-'kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/ProcessUtilities.kt':[
+"kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/ProcessUtilities.kt": [
 4,
-5,
+5
 ],
-'kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/network/NetworkMapServer.kt':[
+"kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/network/NetworkMapServer.kt": [
 11,
-12,
+12
 ],
-'kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/core/SerializationTestHelpers.kt':[
-6,
+"kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/core/SerializationTestHelpers.kt": [
+6
 ],
-'kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/dsl/TestDSL.kt':[
+"kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/dsl/TestDSL.kt": [
 23,
-24,
+24
 ],
-'kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/internal/InternalTestUtils.kt':[
-3,
+"kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/internal/InternalTestUtils.kt": [
+3
 ],
-'kotlin-corda-project:sources/kotlin/corda/tools/shell/src/integration-test/kotlin/net/corda/tools/shell/SSHServerTest.kt':[
-25,
-],
+"kotlin-corda-project:sources/kotlin/corda/tools/shell/src/integration-test/kotlin/net/corda/tools/shell/SSHServerTest.kt": [
+25
+]
 }

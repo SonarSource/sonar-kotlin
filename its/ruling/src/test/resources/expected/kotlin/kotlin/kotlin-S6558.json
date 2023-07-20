@@ -1,60 +1,60 @@
 {
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/Parameters.kt':[
-42,
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/Parameters.kt": [
+42
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/src/org/jetbrains/kotlin/cli/jvm/compiler/CliKotlinAsJavaSupport.kt':[
-86,
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/src/org/jetbrains/kotlin/cli/jvm/compiler/CliKotlinAsJavaSupport.kt": [
+86
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/src/org/jetbrains/kotlin/incremental/InputsCache.kt':[
-77,
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/src/org/jetbrains/kotlin/incremental/InputsCache.kt": [
+77
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-java8/tests/org/jetbrains/kotlin/serialization/builtins/AdditionalBuiltInsMembersSignatureListsTest.kt':[
-51,
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-java8/tests/org/jetbrains/kotlin/serialization/builtins/AdditionalBuiltInsMembersSignatureListsTest.kt": [
+51
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/jvm/compiler/MultiModuleJavaAnalysisCustomTest.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/jvm/compiler/MultiModuleJavaAnalysisCustomTest.kt": [
 62,
-102,
+102
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/caches/lightClasses/LightMemberOriginForCompiledElement.kt':[
-159,
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/caches/lightClasses/LightMemberOriginForCompiledElement.kt": [
+159
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/src/org/jetbrains/kotlin/idea/core/script/GradleScriptTemplateProvider.kt':[
-199,
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/src/org/jetbrains/kotlin/idea/core/script/GradleScriptTemplateProvider.kt": [
+199
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertToStringTemplateIntention.kt':[
-33,
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertToStringTemplateIntention.kt": [
+33
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/branchedTransformations/intentions/IfThenToElvisIntention.kt':[
-36,
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/branchedTransformations/intentions/IfThenToElvisIntention.kt": [
+36
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/rename/RenameKotlinFunctionProcessor.kt':[
-194,
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/rename/RenameKotlinFunctionProcessor.kt": [
+194
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/codeInsight/AbstractInspectionTest.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/codeInsight/AbstractInspectionTest.kt": [
 81,
-81,
+81
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/collections/StreamsTest.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/collections/StreamsTest.kt": [
 53,
-55,
+55
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/collections/StreamsTest.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/collections/StreamsTest.kt": [
 53,
-55,
+55
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/io/FileTreeWalks.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/io/FileTreeWalks.kt": [
 294,
 307,
-320,
+320
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/io/Files.kt':[
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/io/Files.kt": [
 71,
-74,
+74
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/plugins/android-extensions/android-extensions-compiler/test/org/jetbrains/android/synthetic/test/AbstractAndroidBoxTest.kt':[
-45,
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/android-extensions/android-extensions-compiler/test/org/jetbrains/android/synthetic/test/AbstractAndroidBoxTest.kt": [
+45
 ],
-'kotlin-kotlin-project:sources/kotlin/kotlin/plugins/android-extensions/android-extensions-compiler/test/org/jetbrains/android/synthetic/test/CompilerTestUtils.kt':[
-71,
-],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/android-extensions/android-extensions-compiler/test/org/jetbrains/android/synthetic/test/CompilerTestUtils.kt": [
+71
+]
 }

@@ -1,28 +1,28 @@
 {
-'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/CompiledFile.kt':[
-49,
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/CompiledFile.kt": [
+49
 ],
-'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/CompilerClassPath.kt':[
-132,
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/CompilerClassPath.kt": [
+132
 ],
-'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt':[
-490,
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt": [
+490
 ],
-'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/completion/Completions.kt':[
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/completion/Completions.kt": [
 284,
 395,
 467,
 499,
 515,
-530,
+530
 ],
-'kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/references/FindReferences.kt':[
-192,
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/references/FindReferences.kt": [
+192
 ],
-'kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/classpath/GradleClassPathResolver.kt':[
-64,
+"kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/classpath/GradleClassPathResolver.kt": [
+64
 ],
-'kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/util/Utils.kt':[
-38,
-],
+"kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/util/Utils.kt": [
+38
+]
 }

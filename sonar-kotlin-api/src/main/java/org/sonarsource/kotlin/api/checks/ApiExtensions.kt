@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.descriptors.SyntheticPropertyDescriptor
 import org.jetbrains.kotlin.descriptors.ValueDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
@@ -68,8 +69,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 import org.jetbrains.kotlin.psi2ir.deparenthesize
-import org.jetbrains.kotlin.psi2ir.unwrappedGetMethod
-import org.jetbrains.kotlin.psi2ir.unwrappedSetMethod
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
@@ -570,3 +569,9 @@ fun SensorContext.hasCacheEnabled(): Boolean {
 fun KtWhenExpression.isExhaustive(context: KotlinFileContext): Boolean {
     return entries.any { it.isElse } || context.bindingContext[BindingContext.EXHAUSTIVE_WHEN, this] == true
 }
+
+val PropertyDescriptor.unwrappedGetMethod: FunctionDescriptor?
+    get() = if (this is SyntheticPropertyDescriptor) this.getMethod else getter
+
+val PropertyDescriptor.unwrappedSetMethod: FunctionDescriptor?
+    get() = if (this is SyntheticPropertyDescriptor) this.setMethod else setter
