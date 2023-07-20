@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -47,8 +48,11 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
+import org.jetbrains.kotlin.synthetic.SyntheticJavaPropertyDescriptor
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import org.mockito.Mockito
+import org.mockito.internal.verification.Times
 import org.sonar.api.SonarEdition
 import org.sonar.api.SonarQubeSide
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
@@ -588,6 +592,30 @@ class ApiExtensionsScopeFunctionResolutionTest {
         sensorContext.setRuntime(minimumCompatibleRuntime)
         sensorContext.isCacheEnabled = true
         assertThat(sensorContext.hasCacheEnabled()).isTrue()
+    }
+
+    @Test
+    fun `PropertyDescriptor unwrappedGetMethod() returns the correct FunctionDescriptor`() {
+        val syntheticJavaPropertyDescriptor = Mockito.mock(SyntheticJavaPropertyDescriptor::class.java)
+        syntheticJavaPropertyDescriptor.unwrappedGetMethod
+        Mockito.verify(syntheticJavaPropertyDescriptor, Times(1)).getMethod
+        Mockito.verify(syntheticJavaPropertyDescriptor, Times(0)).getter
+
+        val propertyDescriptor = Mockito.mock(PropertyDescriptor::class.java)
+        propertyDescriptor.unwrappedGetMethod
+        Mockito.verify(propertyDescriptor, Times(1)).getter
+    }
+
+    @Test
+    fun `PropertyDescriptor unwrappedSetMethod() returns the correct FunctionDescriptor`() {
+        val syntheticJavaPropertyDescriptor = Mockito.mock(SyntheticJavaPropertyDescriptor::class.java)
+        syntheticJavaPropertyDescriptor.unwrappedSetMethod
+        Mockito.verify(syntheticJavaPropertyDescriptor, Times(1)).setMethod
+        Mockito.verify(syntheticJavaPropertyDescriptor, Times(0)).setter
+
+        val propertyDescriptor = Mockito.mock(PropertyDescriptor::class.java)
+        propertyDescriptor.unwrappedSetMethod
+        Mockito.verify(propertyDescriptor, Times(1)).setter
     }
 }
 
