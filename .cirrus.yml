@@ -48,6 +48,12 @@ linux_3_5_cpu_7G_template: &LINUX_3_5_CPU_7G
     cpu: 3.5
     memory: 7G
 
+linux_4_cpu_8G_template: &LINUX_4_CPU_8G
+  eks_container:
+    <<: *LINUX_IMAGE
+    cpu: 4
+    memory: 8G
+
 linux_6_cpu_12G_java_17_template: &LINUX_6_CPU_12G_JAVA_17
   eks_container:
     <<: *LINUX_IMAGE
@@ -121,7 +127,7 @@ qa_task_filter_template: &QA_TASK_FILTER
   <<: *ONLY_IF_SONARSOURCE_QA
 
 build_task:
-  <<: *LINUX_3_5_CPU_7G
+  <<: *LINUX_4_CPU_8G
   <<: *SETUP_GRADLE_CACHE
   env:
     # analysis on next
