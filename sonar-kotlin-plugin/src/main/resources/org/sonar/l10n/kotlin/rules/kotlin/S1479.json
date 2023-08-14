@@ -1,6 +1,12 @@
 {
   "title": "\"when\" statements should not have too many clauses",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    },
+    "attribute": "FOCUSED"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

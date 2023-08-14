@@ -1,20 +1,37 @@
 <h2>Why is this an issue?</h2>
-<p>A long parameter list can indicate that a new structure should be created to wrap the numerous parameters or that the function is doing too many
-things.</p>
-<h3>Noncompliant code example</h3>
-<p>With a maximum number of 4 parameters:</p>
+<p>Functions with a long parameter list are difficult to use, as maintainers must figure out the role of each parameter and keep track of their
+position.</p>
 <pre>
-fun foo(p1: String, p2: String, p3: String, p4: String, p5: String) { // Noncompliant
-  // ...
+fun setCoordinates(x1: Int, y1: Int, z1: Int, x2: Int, y2: Int, z2: Int) { // Noncompliant
+    // ...
 }
 </pre>
-<h3>Compliant solution</h3>
+<p>The solution can be to:</p>
+<ul>
+  <li> Split the function into smaller ones </li>
+</ul>
 <pre>
-fun foo(p1: String, p2: String, p3: String, p4: String) {
-  // ...
+// Each function does a part of what the original setCoordinates function was doing, so confusion risks are lower
+fun setOrigin(x: Int, y: Int, z: Int) {
+   // ...
+}
+
+fun setSize(width: Int, height: Int, depth: Int) {
+   // ...
 }
 </pre>
+<ul>
+  <li> Find a better data structure for the parameters that group data in a way that makes sense for the specific application domain </li>
+</ul>
+<pre>
+data class Point(val x: Int, val y: Int, val z: Int) // In geometry, Point is a logical structure to group data
+
+fun setCoordinates(p1: Point, p2: Point) {
+    // ...
+}
+</pre>
+<p>This rule raises an issue when a function has more parameters than the provided threshold.</p>
 <h3>Exceptions</h3>
 <p>Methods annotated with Spring’s <code>@RequestMapping</code> (and related shortcut annotations, like <code>@GetRequest</code>) or
-<code>@JsonCreator</code> may have a lot of parameters, encapsulation being possible. Such methods are therefore ignored.</p>
+<code>@JsonCreator</code> may have a lot of parameters, encapsulation being possible. Therefore the rule ignores such methods.</p>
 
