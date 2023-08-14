@@ -1,6 +1,12 @@
 {
   "title": "\"MutableStateFlow\" and \"MutableSharedFlow\" should not be exposed",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    },
+    "attribute": "MODULAR"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

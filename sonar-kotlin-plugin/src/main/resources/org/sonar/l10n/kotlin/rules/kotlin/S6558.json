@@ -1,6 +1,12 @@
 {
   "title": "\"It\" shouldn\u0027t be used as a lambda parameter name",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    },
+    "attribute": "CLEAR"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

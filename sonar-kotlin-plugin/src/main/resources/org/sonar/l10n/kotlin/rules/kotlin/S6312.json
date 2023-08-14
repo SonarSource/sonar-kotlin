@@ -1,6 +1,12 @@
 {
   "title": "Extension functions on CoroutineScopes should not be declared as \"suspend\"",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    },
+    "attribute": "LOGICAL"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",

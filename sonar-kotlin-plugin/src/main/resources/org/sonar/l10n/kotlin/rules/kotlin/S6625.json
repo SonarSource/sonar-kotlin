@@ -1,6 +1,12 @@
 {
-  "title": "\"rooProject.name\" should always be present in Gradle settings",
+  "title": "\"rootProject.name\" should always be present in Gradle settings",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    },
+    "attribute": "CONVENTIONAL"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
