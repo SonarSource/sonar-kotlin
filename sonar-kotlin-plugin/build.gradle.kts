@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     compileOnly(libs.sonar.plugin.api)
+    compileOnly(libs.slf4j.api)
     implementation(libs.sonar.analyzer.commons)
     implementation(libs.sonar.xml.parsing)
     implementation(libs.sonar.regex.parsing)
@@ -30,6 +31,7 @@ dependencies {
     implementation(project(":sonar-kotlin-surefire"))
     implementation(project(":sonar-kotlin-checks"))
 
+    testImplementation(libs.slf4j.api)
     testImplementation(testLibs.junit.api)
     testImplementation(testLibs.junit.params)
     testRuntimeOnly(testLibs.junit.engine)

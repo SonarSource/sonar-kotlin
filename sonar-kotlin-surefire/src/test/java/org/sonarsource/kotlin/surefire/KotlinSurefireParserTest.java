@@ -29,6 +29,7 @@ import kotlin.jvm.JvmField;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
@@ -36,7 +37,6 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
-import org.sonar.api.utils.log.LoggerLevel;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -92,9 +92,9 @@ class KotlinSurefireParserTest {
     when(context.fileSystem()).thenReturn(new DefaultFileSystem(Paths.get("/test")));
     parser.collect(context, getDirs("multipleReports"), false);
     verify(context, never()).newMeasure();
-    assertThat(logTester.logs(LoggerLevel.WARN)).isNotEmpty();
-    assertThat(logTester.logs(LoggerLevel.WARN)).allMatch(message -> message.startsWith(PREFIX));
-    assertThat(logTester.logs(LoggerLevel.WARN)).allMatch(message -> message.endsWith(WARNING));
+    assertThat(logTester.logs(Level.WARN)).isNotEmpty();
+    assertThat(logTester.logs(Level.WARN)).allMatch(message -> message.startsWith(PREFIX));
+    assertThat(logTester.logs(Level.WARN)).allMatch(message -> message.endsWith(WARNING));
   }
 
   @Test

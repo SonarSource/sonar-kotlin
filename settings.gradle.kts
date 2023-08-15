@@ -36,8 +36,9 @@ dependencyResolutionManagement {
     versionCatalogs {
 
         val kotlinVersion: String by extra
-        val analyzerCommonsVersionStr = "2.5.0.1358"
-        val sonarPluginApi = "9.15.0.435"
+        val analyzerCommonsVersionStr = "2.7.0.1482"
+        val sonarPluginApi = "10.1.0.809"
+        val slf4jApi = "1.7.30"
 
         create("libs") {
             val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
@@ -51,6 +52,7 @@ dependencyResolutionManagement {
             library("sonar-analyzer-commons-recognizers", "org.sonarsource.analyzer-commons", "sonar-analyzer-recognizers").versionRef(analyzerCommons)
             library("sonar-performance-measure", "org.sonarsource.analyzer-commons", "sonar-performance-measure").versionRef(analyzerCommons)
             library("sonar-plugin-api", "org.sonarsource.api.plugin", "sonar-plugin-api").version(sonarPluginApi)
+            library("slf4j-api", "org.slf4j", "slf4j-api").version(slf4jApi)
             library("sonar-regex-parsing", "org.sonarsource.analyzer-commons", "sonar-regex-parsing").versionRef(analyzerCommons)
             library("sonar-xml-parsing", "org.sonarsource.analyzer-commons", "sonar-xml-parsing").versionRef(analyzerCommons)
             library("staxmate", "com.fasterxml.staxmate", "staxmate").versionRef(staxmate)
