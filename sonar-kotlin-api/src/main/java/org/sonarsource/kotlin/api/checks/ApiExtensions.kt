@@ -575,3 +575,7 @@ val PropertyDescriptor.unwrappedGetMethod: FunctionDescriptor?
 
 val PropertyDescriptor.unwrappedSetMethod: FunctionDescriptor?
     get() = if (this is SyntheticPropertyDescriptor) this.setMethod else setter
+
+object ApiExtensions {
+    fun getClassStringRepresentation() : String = "A certain string"
+}

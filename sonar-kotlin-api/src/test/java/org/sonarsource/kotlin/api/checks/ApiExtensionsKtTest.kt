@@ -64,6 +64,12 @@ import java.util.TreeMap
 internal class ApiExtensionsKtTest {
 
     @Test
+    fun `test class string repr`(){
+        val s = ApiExtensions.getClassStringRepresentation()
+        assertThat(s).isEqualTo("A certain string")
+    }
+
+    @Test
     fun `test isLocalVariable`() {
         val tree = parse(
             """
