@@ -96,6 +96,7 @@ tasks.jar {
                 "Plugin-OrganizationUrl" to "https://www.sonarsource.com",
                 "Plugin-SourcesUrl" to "https://github.com/SonarSource/sonar-kotlin",
                 "Plugin-Version" to project.version,
+                "Plugin-RequiredForLanguages" to "kotlin",
                 "Sonar-Version" to "6.7",
                 "SonarLint-Supported" to "true",
                 "Version" to project.version.toString(),
