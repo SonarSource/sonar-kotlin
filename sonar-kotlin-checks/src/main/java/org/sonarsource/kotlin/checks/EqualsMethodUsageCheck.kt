@@ -19,6 +19,8 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.com.intellij.psi.PsiMethodCallExpression
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -32,9 +34,12 @@ import org.sonarsource.kotlin.api.checks.ANY_TYPE
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.EQUALS_METHOD_NAME
 import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.INT_TYPE
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+
+private const val BIG_INTEGER_TYPE = "java.math.BigInteger"
 
 @Rule(key = "S6519")
 class EqualsMethodUsageCheck : CallAbstractCheck() {
@@ -42,7 +47,11 @@ class EqualsMethodUsageCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         val parent = callExpression.parent
-        if (parent is KtDotQualifiedExpression && parent.selectorExpression == callExpression && !parent.receiverExpression.isSuperOrOuterClass()) {
+        if (parent is KtDotQualifiedExpression &&
+            parent.selectorExpression == callExpression &&
+            !parent.receiverExpression.isSuperOrOuterClass() &&
+            parent.isNotInteger()
+        ) {
             val grandParent = parent.parent.skipParentParentheses()
             val callee = callExpression.calleeExpression!! // as this function was matched .calleeExpression can't be null
             if (grandParent is KtPrefixExpression && grandParent.operationToken == KtTokens.EXCL) {
@@ -57,3 +66,18 @@ class EqualsMethodUsageCheck : CallAbstractCheck() {
 
 private fun KtExpression.isSuperOrOuterClass() = this is KtSuperExpression ||
     (this is KtThisExpression && this.getTargetLabel() != null)
+
+private fun PsiElement.isNotInteger(): Boolean {
+    if (this is PsiMethodCallExpression) {
+        methodExpression.qualifierExpression?.type?.let { psiType ->
+            if (psiType.canonicalText == BIG_INTEGER_TYPE) {
+                return false
+            }
+            if (psiType.canonicalText == INT_TYPE) {
+                return false
+            }
+        }
+    }
+
+    return true
+}
