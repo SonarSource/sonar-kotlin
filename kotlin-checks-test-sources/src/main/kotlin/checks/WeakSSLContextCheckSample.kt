@@ -64,12 +64,12 @@ class WeakSSLContextCheckSample {
         bar(SSLContext.getInstance("SSL")) // Noncompliant {{Change this code to use a stronger protocol.}}
         bar(SSLContext.getInstance("SSLv2")) // Noncompliant
         bar(SSLContext.getInstance("SSLv3")) // Noncompliant
-        bar(SSLContext.getInstance("TLS")) // Noncompliant
+        bar(SSLContext.getInstance("TLS"))
         bar(SSLContext.getInstance("TLSv1")) // Noncompliant
         bar(SSLContext.getInstance("TLSv1.1")) // Noncompliant
         bar(SSLContext.getInstance("TLSv1.2"))
         bar(SSLContext.getInstance("TLSv1.3"))
-        bar(SSLContext.getInstance("DTLS")) // Noncompliant
+        bar(SSLContext.getInstance("DTLS"))
         bar(SSLContext.getInstance("DTLSv1.0")) // Noncompliant
         bar(SSLContext.getInstance("DTLSv1.2"))
         bar(SSLContext.getInstance("DTLSv1.3"))
