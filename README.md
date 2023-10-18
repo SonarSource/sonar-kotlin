@@ -3,7 +3,7 @@ Code Quality and Security for Kotlin
 
 [![Build Status](https://api.cirrus-ci.com/github/SonarSource/sonar-kotlin.svg?branch=master)](https://cirrus-ci.com/github/SonarSource/sonar-kotlin) [![Quality Gate Status](https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.kotlin%3Akotlin&metric=alert_status)](https://next.sonarqube.com/sonarqube/dashboard?id=org.sonarsource.kotlin%3Akotlin) [![Coverage](https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.kotlin%3Akotlin&metric=coverage)](https://next.sonarqube.com/sonarqube/dashboard?id=org.sonarsource.kotlin%3Akotlin)
 
-This SonarSource project is a code analyzer for Kotlin projects.
+This SonarSource project is a code analyzer for Kotlin projects to help developers write [Clean Code](https://www.sonarsource.com/solutions/clean-code/?utm_medium=referral&utm_source=github&utm_campaign=clean-code&utm_content=sonar-kotlin).
 
 Features
 --------
@@ -34,7 +34,7 @@ which are used as input:
 
     git submodule update --init its/sources
 
-Then you need to build Ktor project:
+Then you need to build the Ktor project:
 
     cd its/sources/kotlin/ktor
 
