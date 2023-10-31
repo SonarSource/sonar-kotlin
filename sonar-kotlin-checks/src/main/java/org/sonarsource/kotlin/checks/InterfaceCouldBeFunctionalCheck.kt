@@ -39,7 +39,7 @@ class InterfaceCouldBeFunctionalCheck : AbstractCheck() {
 
     private fun checkFunctionalInterface(klass: KtClass, context: KotlinFileContext) {
         val isNonFunctionalInterface = klass.isInterface() && klass.getFunKeyword() == null
-        if (isNonFunctionalInterface && hasExactlyOneFunctionAndNoProperties(klass)) {
+        if (isNonFunctionalInterface && hasExactlyOneFunctionAndNoProperties(klass) && !klass.isSealed()) {
             context.reportIssue(
                 // As an interface has always a keyword, the not-null assertion is safe here.
                 klass.getClassOrInterfaceKeyword()!!,

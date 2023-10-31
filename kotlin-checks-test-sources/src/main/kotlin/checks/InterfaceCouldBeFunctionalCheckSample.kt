@@ -135,5 +135,8 @@ class InterfaceCouldBeFunctionalCheckSample {
         fun parentFun2()
     }
 
+    sealed interface SealedInterface { // Compliant: functional interfaces cannot be sealed
+        fun map(value: Int): Int
+    }
 
 }
