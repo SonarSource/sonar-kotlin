@@ -41,9 +41,6 @@ private val EXPECTED_OVERRIDES = listOf(
     },
     FunMatcher(name = "hashCode", returnType = "kotlin.Int") {
         withNoArguments()
-    },
-    FunMatcher(name = "toString", returnType = "kotlin.String") {
-        withNoArguments()
     }
 )
 
@@ -75,7 +72,6 @@ class EqualsOverriddenWithArrayFieldCheck : AbstractCheck() {
         return when (missingFunctionNames.size) {
             1 -> "Override ${missingFunctionNames[0]} to consider array content in the method."
             2 -> "Override ${missingFunctionNames[0]} and ${missingFunctionNames[1]} to consider array content in the method."
-            3 -> "Override ${missingFunctionNames[0]}, ${missingFunctionNames[1]} and ${missingFunctionNames[2]} to consider array content in the method."
             else -> null
         }
     }
