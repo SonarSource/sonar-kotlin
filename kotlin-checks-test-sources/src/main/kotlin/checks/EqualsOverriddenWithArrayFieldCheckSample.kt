@@ -1,11 +1,11 @@
 package checks
 
 class EqualsOverriddenWithArrayFieldCheckSample {
-    data class PersonWithoutEqualsHashcodeAndToString( // Noncompliant {{Override equals, hashCode and toString to consider array content in the method.}}
+    data class PersonWithoutEqualsHashcodeAndToString( // Noncompliant {{Override equals and hashCode to consider array content in the method.}}
         val names: Array<String>, val age: Int
     ) {}
 
-    data class PersonWithoutEqualsAndToString( // Noncompliant {{Override equals and toString to consider array content in the method.}}
+    data class PersonWithoutEqualsAndToString( // Noncompliant {{Override equals to consider array content in the method.}}
         val names: Array<String>,
         val age: Int
     ) {
@@ -16,7 +16,7 @@ class EqualsOverriddenWithArrayFieldCheckSample {
         }
     }
 
-    data class PersonWithoutHashCodeAndToString( // Noncompliant {{Override hashCode and toString to consider array content in the method.}}
+    data class PersonWithoutHashCodeAndToString( // Noncompliant {{Override hashCode to consider array content in the method.}}
         val names: Array<String>,
         val age: Int
     ) {
@@ -74,7 +74,7 @@ class EqualsOverriddenWithArrayFieldCheckSample {
         }
     }
 
-    data class WithoutToString(val names: Array<String>, val age: Int) { // Noncompliant {{Override toString to consider array content in the method.}}
+    data class WithoutToString(val names: Array<String>, val age: Int) { // compliant
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -110,7 +110,7 @@ class EqualsOverriddenWithArrayFieldCheckSample {
         abstract fun toString(returned: String): String
     }
 
-    data class AmbiguousOverrides(val names: Array<String>, val age: Int) : AmbiguousParent() { // Noncompliant {{Override equals, hashCode and toString to consider array content in the method.}}
+    data class AmbiguousOverrides(val names: Array<String>, val age: Int) : AmbiguousParent() { // Noncompliant {{Override equals and hashCode to consider array content in the method.}}
 
         override fun equals(other: String?): Boolean {
             return true
@@ -151,12 +151,12 @@ class EqualsOverriddenWithArrayFieldCheckSample {
         }
     }
 
-    data class WithoutBody(val names: Array<String>) // Noncompliant {{Override equals, hashCode and toString to consider array content in the method.}}
+    data class WithoutBody(val names: Array<String>) // Noncompliant {{Override equals and hashCode to consider array content in the method.}}
 
-    data class EmptyBody(val names: Array<String>) { // Noncompliant {{Override equals, hashCode and toString to consider array content in the method.}}
+    data class EmptyBody(val names: Array<String>) { // Noncompliant {{Override equals and hashCode to consider array content in the method.}}
     }
 
-    data class ArrayInBody(val age: Int) { // Noncompliant {{Override equals, hashCode and toString to consider array content in the method.}}
+    data class ArrayInBody(val age: Int) { // Noncompliant {{Override equals and hashCode to consider array content in the method.}}
         val employers = arrayOf("SonarSource")
     }
 
