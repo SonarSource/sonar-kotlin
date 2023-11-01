@@ -233,4 +233,59 @@ abstract class EqualsArgumentTypeCheckSample {
         }
     }
 
+    class MyClass9 {
+        override fun equals(other: Any?): Boolean { // compliant
+            when(other){
+                is MyClass9 -> return true
+                else -> return false
+            }
+        }
+    }
+
+    class MyClass12 {
+        override fun equals(other: Any?): Boolean { // compliant
+            when(other){
+                !is MyClass12 -> return false
+                else -> return true
+            }
+        }
+    }
+
+    class MyClass10 {
+        override fun equals(other: Any?): Boolean { // Noncompliant
+            when(other){
+                !is MyClass9 -> return false
+                else -> return true
+            }
+        }
+    }
+
+    class MyClass11 {
+        override fun equals(other: Any?): Boolean { // compliant
+            when{
+                other is MyClass11 -> return true
+                else -> return false
+            }
+        }
+    }
+
+    class MyClass13 {
+        override fun equals(other: Any?): Boolean { // Noncompliant
+            val me = MyClass13()
+            when(me){
+                is MyClass13 -> return true
+                else -> return false
+            }
+        }
+    }
+
+    class MyClass14()  {
+        override fun equals(other: Any?): Boolean { // Noncompliant
+            val me = MyClass14()
+            when{
+                me is MyClass14 -> return true
+                else -> return false
+            }
+        }
+    }
 }
