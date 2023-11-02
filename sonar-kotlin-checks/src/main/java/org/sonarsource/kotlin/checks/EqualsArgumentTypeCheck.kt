@@ -30,8 +30,12 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
+import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.KtWhenConditionIsPattern
+import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.ANY_TYPE
 import org.sonarsource.kotlin.api.checks.AbstractCheck
@@ -56,25 +60,63 @@ class EqualsArgumentTypeCheck : AbstractCheck() {
 
         val klass = function.containingClass() ?: return
         val parameter = function.valueParameters.first()
-        val parentNames = klass.superTypeListEntries.mapNotNull { it.typeReference!!.nameForReceiverLabel() }
 
-        if (function.collectDescendantsOfType<KtIsExpression> { parameter.name == (it.leftHandSide as? KtNameReferenceExpression)?.getReferencedName() }
-                .none {
-                    // typeReference is always present
-                    val name = it.typeReference!!.nameForReceiverLabel()
-                    klass.name == name || parentNames.contains(name) ||
-                        it.typeReference!!.determineType(bindingContext)
-                            ?.let { type -> klass.determineType(bindingContext)?.isSupertypeOf(type) } == true
-                } &&
 
-            function.collectDescendantsOfType<KtBinaryExpression> { it.operationToken == KtTokens.EQEQ || it.operationToken == KtTokens.EXCLEQ }
-                .none { binaryExpression -> isBinaryExpressionCorrect(binaryExpression, parameter, klass) } &&
-
-            function.collectDescendantsOfType<KtBinaryExpressionWithTypeRHS> { it.operationReference.getReferencedName() == "as?" }
-                .none { binaryExpression -> isBinaryExpressionWithTypeCorrect(binaryExpression, parameter, klass) }
+        if (checkIsExpression(function, parameter, klass, bindingContext) &&
+            checkWhenExpression(function, parameter, klass, bindingContext) &&
+            checkBinaryExpression(function, parameter, klass) &&
+            checkBinaryExpressionRHS(function, parameter, klass)
         ) {
             ctx.reportIssue(function.nameIdentifier!!, "Add a type test to this method.")
         }
+    }
+
+    private fun checkBinaryExpressionRHS(
+        function: KtNamedFunction,
+        parameter: KtParameter,
+        klass: KtClass
+    ) = function.collectDescendantsOfType<KtBinaryExpressionWithTypeRHS> { it.operationReference.getReferencedName() == "as?" }
+        .none { binaryExpression -> isBinaryExpressionWithTypeCorrect(binaryExpression, parameter, klass) }
+
+    private fun checkBinaryExpression(
+        function: KtNamedFunction,
+        parameter: KtParameter,
+        klass: KtClass
+    ) = function.collectDescendantsOfType<KtBinaryExpression> { it.operationToken == KtTokens.EQEQ || it.operationToken == KtTokens.EXCLEQ }
+        .none { binaryExpression -> isBinaryExpressionCorrect(binaryExpression, parameter, klass) }
+
+    private fun checkWhenExpression(
+        function: KtNamedFunction,
+        parameter: KtParameter,
+        klass: KtClass,
+        bindingContext: BindingContext
+    ) =
+        function.collectDescendantsOfType<KtWhenExpression> { parameter.name == (it.subjectExpression as? KtNameReferenceExpression)?.getReferencedName() }
+            .none {
+                it.collectDescendantsOfType<KtWhenConditionIsPattern>().any { whenConditionIsPattern ->
+                    // typeReference is always present
+                    isExpressionCorrectType(whenConditionIsPattern.typeReference!!, klass, bindingContext)
+                }
+            }
+
+    private fun checkIsExpression(
+        function: KtNamedFunction,
+        parameter: KtParameter,
+        klass: KtClass,
+        bindingContext: BindingContext
+    ) =
+        function.collectDescendantsOfType<KtIsExpression> { parameter.name == (it.leftHandSide as? KtNameReferenceExpression)?.getReferencedName() }
+            .none {
+                // typeReference is always present
+                isExpressionCorrectType(it.typeReference!!, klass, bindingContext)
+            }
+
+    private fun isExpressionCorrectType(typeReference: KtTypeReference, klass: KtClass, bindingContext: BindingContext): Boolean {
+        val name = typeReference.nameForReceiverLabel()
+        val parentNames = klass.superTypeListEntries.mapNotNull { it.typeReference!!.nameForReceiverLabel() }
+        return klass.name == name || parentNames.contains(name) ||
+            typeReference.determineType(bindingContext)
+                ?.let { type -> klass.determineType(bindingContext)?.isSupertypeOf(type) } == true
     }
 
     private fun isBinaryExpressionWithTypeCorrect(
