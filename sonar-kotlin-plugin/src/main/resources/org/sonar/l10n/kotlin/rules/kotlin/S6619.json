@@ -1,0 +1,21 @@
+{
+  "title": "Null checks should be useful",
+  "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    },
+    "attribute": "CLEAR"
+  },
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6619",
+  "sqKey": "S6619",
+  "scope": "All",
+  "quickfix": "unknown"
+}

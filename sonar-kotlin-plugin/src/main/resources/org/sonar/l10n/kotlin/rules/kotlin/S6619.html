@@ -1,0 +1,68 @@
+<h2>Why is this an issue?</h2>
+<p>In Kotlin, nullability is a part of the type system. This means that all types could be used in 2 ways. <code>T</code> - as non-nullable and
+<code>T?</code> as nullable. When you want to access properties or instance methods of a nullable type, you need to handle the potential null value.
+However, while accessing a non-nullable type, you don’t need to test nullability as the compiler knows that the value can never be <code>null</code>.
+So all the nullability checks on the non-nullable types are considered code smells.</p>
+<p>Here is an example of non-nullable variable. <code>s</code> is of a type <code>String</code> and cannot be <code>null</code>.</p>
+<pre>
+val s: String = ""
+</pre>
+<p>Here is an example of nullable variable. Nullable variables are declared by using the <code>?</code>.</p>
+<pre>
+val s: String? = null
+</pre>
+<h2>How to fix it</h2>
+<p>Avoid using null checks on non-nullable variables.</p>
+<h3>Code examples</h3>
+<p>If your variable type is non-nullable, any null checks are redundant. For example, <code>if (s == null) {}</code>, <code>requireNotNull(s)</code>
+and <code>checkNotNull(s)</code> can be dropped from your code.</p>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+val s: String = ""
+if (s != null) { doSomething() } // This statement is always true
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+val s: String = ""
+doSomething()
+</pre>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+val s: String = ""
+if (s == null) { doSomething() } // This statement is always false.
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="2" data-diff-type="compliant">
+val s: String = ""
+</pre>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="3" data-diff-type="noncompliant">
+val s: String = "ABC"
+return s ?: "" // This ?: is useless.
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="3" data-diff-type="compliant">
+val s: String = "ABC"
+return s
+</pre>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="4" data-diff-type="noncompliant">
+val s: String = ""
+s!!.doSomething() //You do not need to assert that S is non-null.
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="4" data-diff-type="compliant">
+val s: String = ""
+s.doSomething
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/null-safety.html#nullable-types-and-non-null-types">Kotlin Documentation - Null Safety</a> </li>
+  <li> <a href="https://kotlinlang.org/docs/strings.html">Kotlin Documentation - Strings</a> </li>
+</ul>
+<h3>Articles &amp; blog posts</h3>
+<ul>
+  <li> <a href="https://blog.logrocket.com/complete-guide-null-safety-kotlin/">A complete guide to null safety in Kotlin</a> </li>
+</ul>
+
