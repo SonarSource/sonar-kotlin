@@ -220,13 +220,11 @@ promote_task:
   <<: *ONLY_IF_SONARSOURCE_QA
   <<: *LINUX_1_CPU_1G
   env:
-    #promotion cloud function
-    GCF_ACCESS_TOKEN: VAULT[development/kv/data/promote data.token]
-    PROMOTE_URL: VAULT[development/kv/data/promote data.url]
+    ARTIFACTORY_PROMOTE_ACCESS_TOKEN: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-promoter access_token]
     #artifacts that will have downloadable links in burgr
     ARTIFACTS: "\
       org.sonarsource.kotlin:sonar-kotlin-plugin:jar"
   script:
     - source cirrus-env PROMOTE
-    - curl -sfSL -H "Authorization: Bearer $GCF_ACCESS_TOKEN" "$PROMOTE_URL/$GITHUB_REPO/$GITHUB_BRANCH/$BUILD_NUMBER/$PULL_REQUEST?multi=true"
+    - cirrus_jfrog_promote multi
     - burgr-notify-promotion
