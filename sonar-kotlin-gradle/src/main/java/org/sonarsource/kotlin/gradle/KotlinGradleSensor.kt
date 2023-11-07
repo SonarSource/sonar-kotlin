@@ -84,7 +84,7 @@ class KotlinGradleSensor(
 
         val models = projectConnection.getModel(KotlinDslScriptsModel::class.java).scriptModels
         return models.keys.mapNotNull { file ->
-            val predicate = fileSystem.predicates().hasAbsolutePath(file.absolutePath)
+            val predicate = fileSystem.predicates().hasURI(file.toURI())
             fileSystem.inputFile(predicate)
         }
     }
