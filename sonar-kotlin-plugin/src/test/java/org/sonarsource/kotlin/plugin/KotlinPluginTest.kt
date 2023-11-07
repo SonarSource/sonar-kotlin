@@ -36,23 +36,13 @@ import java.util.Optional
 @ExperimentalTime
 internal class KotlinPluginTest {
     @Test
-    fun testWithoutGradle() {
-        testSonarQube(17)
-    }
-
-    @Test
-    fun testWithGradle() {
-        testSonarQube(18, mapOf(GRADLE_PROJECT_ROOT_PROPERTY to "../"))
+    fun testSonarQube() {
+        testSonarQube(18)
     }
 
     @Test
     fun testSonarLint() {
-        testSonarLint(4)
-    }
-
-    @Test
-    fun testSonarLintWithGradle() {
-        testSonarLint(5, mapOf(GRADLE_PROJECT_ROOT_PROPERTY to "../"))
+        testSonarLint(5)
     }
 
     private fun testSonarQube(expectedExtensionsCount: Int, overrideProperties: Map<String, String> = emptyMap()) {

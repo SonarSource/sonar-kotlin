@@ -52,6 +52,7 @@ class KotlinGradleSensor(
     override fun describe(descriptor: SensorDescriptor) {
         descriptor
             .onlyOnLanguage(language.key)
+            .onlyWhenConfiguration { it.hasKey(GRADLE_PROJECT_ROOT_PROPERTY) }
             .name("Gradle Sensor")
     }
 

@@ -61,11 +61,8 @@ class KotlinPlugin : Plugin {
             KotlinSensor::class.java,
             KotlinRulesDefinition::class.java,
             KotlinProfileDefinition::class.java,
+            KotlinGradleSensor::class.java
         )
-
-        context.bootConfiguration[GRADLE_PROJECT_ROOT_PROPERTY].ifPresent {
-            context.addExtension(KotlinGradleSensor::class.java)
-        }
 
         if (context.runtime.product != SonarProduct.SONARLINT) {
             context.addExtensions(
