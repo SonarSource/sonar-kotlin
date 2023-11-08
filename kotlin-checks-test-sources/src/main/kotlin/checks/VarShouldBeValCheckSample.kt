@@ -11,6 +11,7 @@ class VarShouldBeValCheckSample {
 
     class Address {
         var street: String = "baker" // compliant
+        var number: Int = 221 // compliant
     }
 
     fun assignmentOperators(): Unit {
@@ -43,6 +44,7 @@ class VarShouldBeValCheckSample {
 
     fun assignmentExpressions(): Unit {
         val numbers = mutableListOf(1, 2, 3, 4)
+        numbers[0] = 2
         var x = 0 // compliant
         (x) = 1
         var y = 0 // compliant
@@ -52,7 +54,9 @@ class VarShouldBeValCheckSample {
         }
         z.z = 10
 
-        numbers[0] = 2
+        val address = Address()
+        address.number ++
+
 
     }
 

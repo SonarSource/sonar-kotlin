@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtOperationExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
@@ -52,12 +53,19 @@ class VarShouldBeValCheck : AbstractCheck() {
     }
 
     private fun collectAssignmentTo(block: PsiElement, variable: KtProperty, bindingContext: BindingContext): List<KtOperationExpression> {
+        KtDotQualifiedExpression
         return block
             .collectDescendantsOfType<KtOperationExpression> { expr -> isAssignment(expr) }
             .filter { assignment ->
                 when (assignment) {
-                    is KtBinaryExpression -> getReference(assignment).let { isReferencingVar(variable, it, bindingContext) } ?: false
-                    is KtUnaryExpression -> isReferencingVar(variable, assignment.baseExpression as KtReferenceExpression, bindingContext)
+                    is KtBinaryExpression -> isReferencingVar(variable, getReference(assignment), bindingContext) ?: false
+                    is KtUnaryExpression -> (assignment.baseExpression as? KtReferenceExpression)?.let {
+                        isReferencingVar(
+                            variable,
+                            it,
+                            bindingContext
+                        )
+                    } ?: false
                     // I don't know how to cover it
                     else -> false
                 }
