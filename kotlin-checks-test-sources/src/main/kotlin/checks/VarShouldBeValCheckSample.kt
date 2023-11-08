@@ -20,6 +20,8 @@ class VarShouldBeValCheckSample {
         x = 1
         var y = 0 // compliant
         y += 1
+        var p = 0 // compliant
+        (p) += 1
         var i = 0 // compliant
         i -= 1
         var z = 0 // compliant

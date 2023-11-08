@@ -59,17 +59,20 @@ class VarShouldBeValCheck : AbstractCheck() {
             .filter { assignment ->
                 when (assignment) {
                     is KtBinaryExpression -> isReferencingVar(variable, getReference(assignment), bindingContext) ?: false
-                    is KtUnaryExpression -> (assignment.baseExpression as? KtReferenceExpression)?.let {
-                        isReferencingVar(
-                            variable,
-                            it,
-                            bindingContext
-                        )
-                    } ?: false
+                    is KtUnaryExpression -> isReferencingVar(variable, getReference(assignment), bindingContext)
                     // I don't know how to cover it
                     else -> false
                 }
             }
+    }
+
+    private fun getReference(operator: KtUnaryExpression): KtReferenceExpression {
+        val expr = operator.baseExpression!!
+        return if(expr is KtReferenceExpression){
+            expr
+        }else{
+            expr.findDescendantOfType<KtReferenceExpression>()!!
+        }
     }
 
 
