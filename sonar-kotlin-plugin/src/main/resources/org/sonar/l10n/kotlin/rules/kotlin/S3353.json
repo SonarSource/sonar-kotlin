@@ -1,0 +1,15 @@
+{
+  "title": "\"var\" should be \"val\" if local variable is never re-assigned",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "2min"
+  },
+  "tags": [],
+  "defaultSeverity": "Critical",
+  "ruleSpecification": "RSPEC-3353",
+  "sqKey": "S3353",
+  "scope": "Main",
+  "quickfix": "unknown"
+}
