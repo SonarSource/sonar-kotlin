@@ -2,7 +2,7 @@ package checks
 
 import kotlin.math.max
 
-class VarShouldBeValCheckSample {
+class VarShouldBeValCheckSampleNoSemantics {
     var notUsed = "not used" // compliant, not a local variable
     var x = "x" // compliant
         set(value){
@@ -68,7 +68,7 @@ class VarShouldBeValCheckSample {
     }
 
     fun nested(): Int {
-        var shadowed = 0 // Noncompliant
+        var shadowed = 0 // compliant, cannot be found with no semantics
         var z = 0 // compliant
         fun nestedFun(x : Int): Unit {
            var shadowed = 1 // compliant
@@ -89,5 +89,4 @@ class VarShouldBeValCheckSample {
         val newLength = max(16, 2) // Compliant
         return newLength
     }
-
 }

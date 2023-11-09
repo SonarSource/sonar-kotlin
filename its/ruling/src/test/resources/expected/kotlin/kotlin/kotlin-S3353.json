@@ -1,0 +1,42 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/state/typeMapperUtils.kt": [
+61
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/eval4j/test/org/jetbrains/eval4j/jdi/test/jdiTest.kt": [
+102
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/util/CommentSaver.kt": [
+388
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/KotlinNameSuggester.kt": [
+173
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/usages/KotlinFunctionCallUsage.kt": [
+433
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/introduce/extractionEngine/ExtractableCodeDescriptor.kt": [
+83
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/j2k/tests/org/jetbrains/kotlin/j2k/AbstractJavaToKotlinConverterMultiFileTest.kt": [
+77
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/collections/AbstractMutableMap.kt": [
+128
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/test/core/JsonTest.kt": [
+14
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/test/core/RegExpTest.kt": [
+44
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/js/JsArrayTest.kt": [
+28,
+29
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidJackProject/Android/root/kotlin/org/jetbrains/kotlin/gradle/test/androidalfa/MainActivity2.kt": [
+35
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidProject/Android/root/kotlin/org/jetbrains/kotlin/gradle/test/androidalfa/MainActivity2.kt": [
+19
+]
+}

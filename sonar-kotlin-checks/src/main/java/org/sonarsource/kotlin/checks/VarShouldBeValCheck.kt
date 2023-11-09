@@ -24,9 +24,9 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtOperationExpression
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
@@ -66,12 +66,12 @@ class VarShouldBeValCheck : AbstractCheck() {
             }
     }
 
-    private fun getReference(operator: KtUnaryExpression): KtReferenceExpression {
+    private fun getReference(operator: KtUnaryExpression): KtNameReferenceExpression {
         val expr = operator.baseExpression!!
-        return if(expr is KtReferenceExpression){
+        return if(expr is KtNameReferenceExpression){
             expr
         }else{
-            expr.findDescendantOfType<KtReferenceExpression>()!!
+            expr.findDescendantOfType<KtNameReferenceExpression>()!!
         }
     }
 
@@ -90,13 +90,18 @@ class VarShouldBeValCheck : AbstractCheck() {
         }
     }
 
-    private fun getReference(expr: KtBinaryExpression): KtReferenceExpression {
-        return expr.left!!.findDescendantOfType<KtReferenceExpression>()!!
+    private fun getReference(expr: KtBinaryExpression): KtNameReferenceExpression {
+        return expr.left!!.findDescendantOfType<KtNameReferenceExpression>()!!
     }
 
-    private fun isReferencingVar(variable: KtProperty, reference: KtReferenceExpression, bindingContext: BindingContext): Boolean {
+    private fun isReferencingVar(variable: KtProperty, reference: KtNameReferenceExpression, bindingContext: BindingContext): Boolean {
         val definition =
             bindingContext[REFERENCE_TARGET, reference]?.let { DescriptorToSourceUtils.descriptorToDeclaration(it) as? KtProperty }
-        return variable === definition
+        return if(definition == null){
+            //no semantics true if same identifier
+            variable.name  == reference.getReferencedName()
+        }else{
+            variable === definition
+        }
     }
 }
