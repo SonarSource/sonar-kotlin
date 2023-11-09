@@ -132,6 +132,7 @@ import org.sonarsource.kotlin.checks.UnicodeAwareCharClassesCheck
 import org.sonarsource.kotlin.checks.UnnecessaryImportsCheck
 import org.sonarsource.kotlin.checks.UnpredictableHashSaltCheck
 import org.sonarsource.kotlin.checks.UnpredictableSecureRandomSaltCheck
+import org.sonarsource.kotlin.checks.UnsuitedFindFunctionWithNullComparisonCheck
 import org.sonarsource.kotlin.checks.UnusedDeferredResultCheck
 import org.sonarsource.kotlin.checks.UnusedFunctionParameterCheck
 import org.sonarsource.kotlin.checks.UnusedLocalVariableCheck
@@ -261,6 +262,7 @@ val KOTLIN_CHECKS = listOf(
     UnnecessaryImportsCheck::class.java,
     UnpredictableHashSaltCheck::class.java,
     UnpredictableSecureRandomSaltCheck::class.java,
+    UnsuitedFindFunctionWithNullComparisonCheck::class.java,
     UnusedDeferredResultCheck::class.java,
     UnusedFunctionParameterCheck::class.java,
     UnusedLocalVariableCheck::class.java,

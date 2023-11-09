@@ -1,0 +1,21 @@
+{
+  "title": "\"find\" should be replaced with \"any\", \"none\" or \"contains\"",
+  "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "LOW"
+    },
+    "attribute": "CLEAR"
+  },
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6528",
+  "sqKey": "S6528",
+  "scope": "All",
+  "quickfix": "unknown"
+}
