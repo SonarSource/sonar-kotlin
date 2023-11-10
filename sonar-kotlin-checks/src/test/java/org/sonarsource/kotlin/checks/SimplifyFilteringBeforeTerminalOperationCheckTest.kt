@@ -19,4 +19,18 @@
  */
 package org.sonarsource.kotlin.checks
 
-internal class SimplifyFilteringBeforeTerminalOperationCheckTest : CheckTest(SimplifyFilteringBeforeTerminalOperationCheck())
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.testapi.KotlinVerifier
+
+internal class SimplifyFilteringBeforeTerminalOperationCheckTest : CheckTest(SimplifyFilteringBeforeTerminalOperationCheck()) {
+
+    @Test
+    fun `with no semantics`() {
+        KotlinVerifier(check) {
+            this.fileName = "SimplifyFilteringBeforeTerminalOperationCheckNoSemanticsSample.kt"
+            this.classpath = emptyList()
+            this.deps = emptyList()
+            this.isAndroid = false
+        }.verifyNoIssue()
+    }
+}

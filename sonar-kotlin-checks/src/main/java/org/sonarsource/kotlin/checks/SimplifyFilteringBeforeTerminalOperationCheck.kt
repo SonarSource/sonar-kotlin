@@ -21,7 +21,9 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.utils.IDEAPluginsCompatibilityAPI
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
@@ -32,37 +34,31 @@ private val FILTER_MATCHER = FunMatcher(qualifier = KOTLIN_COLLECTIONS_QUALIFIER
 
 @Rule(key = "S6527")
 class SimplifyFilteringBeforeTerminalOperationCheck : CallAbstractCheck() {
-    override val functionsToVisit = setOf(
-        FunMatcher(qualifier = KOTLIN_COLLECTIONS_QUALIFIER, name = "any") { withNoArguments() },
-        FunMatcher(qualifier = KOTLIN_COLLECTIONS_QUALIFIER, name = "none") { withNoArguments() },
-        FunMatcher(qualifier = KOTLIN_COLLECTIONS_QUALIFIER, name = "count") { withNoArguments() },
-        FunMatcher(qualifier = KOTLIN_COLLECTIONS_QUALIFIER, name = "last") { withNoArguments() },
-        FunMatcher(qualifier = KOTLIN_COLLECTIONS_QUALIFIER, name = "lastOrNull") { withNoArguments() },
-        FunMatcher(qualifier = KOTLIN_COLLECTIONS_QUALIFIER, name = "first") { withNoArguments() },
-        FunMatcher(qualifier = KOTLIN_COLLECTIONS_QUALIFIER, name = "firstOrNull") { withNoArguments() },
-        FunMatcher(qualifier = KOTLIN_COLLECTIONS_QUALIFIER, name = "single") { withNoArguments() },
-        FunMatcher(qualifier = KOTLIN_COLLECTIONS_QUALIFIER, name = "singleOrNull") { withNoArguments() }
+    override val functionsToVisit = listOf(
+        FunMatcher(qualifier = KOTLIN_COLLECTIONS_QUALIFIER) {
+            withNames("any", "none", "count", "last", "lastOrNull", "first", "firstOrNull", "single", "singleOrNull")
+            withNoArguments()
+        }
     )
 
+    @OptIn(IDEAPluginsCompatibilityAPI::class)
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         val chainedCallBeforeTerminalOperationCall = callExpression.parent
             .let { it as? KtDotQualifiedExpression }
             ?.receiverExpression
-            .let { it as? KtDotQualifiedExpression }
-            ?.selectorExpression
-            .let { it as? KtCallExpression }
+            .let { it?.getCall(kotlinFileContext.bindingContext) }
 
         if (chainedCallBeforeTerminalOperationCall != null
             && FILTER_MATCHER.matches(chainedCallBeforeTerminalOperationCall, kotlinFileContext.bindingContext)
         ) {
-            val filterCallText = chainedCallBeforeTerminalOperationCall.text
+            val filterCallText = chainedCallBeforeTerminalOperationCall.callElement.text
+            val filterPredicateText = chainedCallBeforeTerminalOperationCall.valueArguments[0].asElement().text
             val terminalOperationCallText = callExpression.text
-            val filterPredicateText = chainedCallBeforeTerminalOperationCall.valueArguments[0].text
             val terminalOperationWithPredicate = "${callExpression.calleeExpression!!.text} $filterPredicateText"
 
             val message = "Remove \"$filterCallText\" and replace \"$terminalOperationCallText\" with \"$terminalOperationWithPredicate\"."
 
-            kotlinFileContext.reportIssue(chainedCallBeforeTerminalOperationCall, message)
+            kotlinFileContext.reportIssue(chainedCallBeforeTerminalOperationCall.callElement, message)
         }
     }
 }

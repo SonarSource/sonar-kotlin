@@ -1,10 +1,16 @@
 package checks
 
 class SimplifyFilteringBeforeTerminalOperationCheckSample {
-    fun onList(list: List<Int>) {
+    fun test(list: List<Int>, set: Set<Int>, array: Array<Int>) {
         list.filter { it > 5 }.any() // Noncompliant {{Remove "filter { it > 5 }" and replace "any()" with "any { it > 5 }".}}
         //   ^^^^^^^^^^^^^^^^^
         list.any { it > 5 }
+
+        set.filter { it > 5 }.any() // Noncompliant
+        set.any { it > 5 }
+
+        array.filter { it > 5 }.any() // Noncompliant
+        array.any { it > 5 }
 
         list.filter { it > 5 }.none() // Noncompliant
         list.none { it > 5 }
@@ -32,6 +38,14 @@ class SimplifyFilteringBeforeTerminalOperationCheckSample {
 
         list.map { it + 1 }.filter { it < 10 }.filter { it > 5 }.any() // Noncompliant
         list.map { it + 1 }.filter { it < 10 }.filter { it > 5 }.map { it }.any()
+
+        with(list) {
+            filter { it > 5 }.any() // Noncompliant {{Remove "filter { it > 5 }" and replace "any()" with "any { it > 5 }".}}
+        //  ^^^^^^^^^^^^^^^^^
+        }
+
+        (list.filter { it > 5 }).any() // Noncompliant {{Remove "filter { it > 5 }" and replace "any()" with "any { it > 5 }".}}
+        //    ^^^^^^^^^^^^^^^^^
 
         list.any()
         list.none()
