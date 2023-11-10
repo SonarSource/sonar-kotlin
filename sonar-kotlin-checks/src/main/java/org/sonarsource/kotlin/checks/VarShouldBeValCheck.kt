@@ -45,7 +45,7 @@ class VarShouldBeValCheck : AbstractCheck() {
         val context = data ?: return
         val bindingContext: BindingContext = context.bindingContext
 
-        val varProperties = file.collectDescendantsOfType<KtProperty> { it.localVar() || it.isPrivate() }
+        val varProperties = file.collectDescendantsOfType<KtProperty> { it.localVar() || it.isPrivateVar() }
         val destructedVar = file.collectDescendantsOfType<KtDestructuringDeclarationEntry> { it.localVar() }
         val allVars: List<KtNamedDeclaration> = varProperties + destructedVar
 
@@ -72,6 +72,10 @@ class VarShouldBeValCheck : AbstractCheck() {
 
     private fun KtProperty.localVar(): Boolean {
         return this.isLocal && this.isVar
+    }
+
+    private fun KtProperty.isPrivateVar(): Boolean {
+        return this.isPrivate() && this.isVar
     }
 
     private fun KtDestructuringDeclarationEntry.localVar(): Boolean {

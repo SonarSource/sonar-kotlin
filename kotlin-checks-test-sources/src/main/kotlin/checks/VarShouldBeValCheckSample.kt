@@ -4,6 +4,7 @@ import kotlin.math.max
 
 class VarShouldBeValCheckSample {
     private var foo = 0 // Noncompliant {{Replace the keyword `var` with `val`.}}
+    private val bar = 0 // compliant
 
     var notUsed = "not used" // compliant, not a local variable
     var x = "x" // compliant
