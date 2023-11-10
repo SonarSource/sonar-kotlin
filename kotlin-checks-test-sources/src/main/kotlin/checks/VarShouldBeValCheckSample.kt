@@ -3,6 +3,8 @@ package checks
 import kotlin.math.max
 
 class VarShouldBeValCheckSample {
+    private var foo = 0 // Noncompliant {{Replace the keyword `var` with `val`.}}
+
     var notUsed = "not used" // compliant, not a local variable
     var x = "x" // compliant
         set(value){
@@ -38,7 +40,8 @@ class VarShouldBeValCheckSample {
         u/= 2
         var t = 0 // compliant
         t %= 2
-        var (a, b) = Pair(0, 1) // not supported for now, should we ?
+        var (a, b) = Pair(0, 1) // Noncompliant
+//              ^
         a = 1
         var c = 0 // compliant
         c = 1 as Int

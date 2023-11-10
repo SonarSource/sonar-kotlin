@@ -1,6 +1,12 @@
 {
   "title": "\"var\" should be \"val\" if local variable is never re-assigned",
   "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "HIGH"
+    },
+    "attribute": "CLEAR"
+  },
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
