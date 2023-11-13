@@ -1,0 +1,21 @@
+{
+  "title": "Function chain using \"filter\" should be simplified",
+  "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "LOW"
+    },
+    "attribute": "EFFICIENT"
+  },
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6527",
+  "sqKey": "S6527",
+  "scope": "All",
+  "quickfix": "unknown"
+}
