@@ -1,0 +1,41 @@
+<h2>Why is this an issue?</h2>
+<p>The <code>filter(predicate)</code> function is used to extract a subset of elements from a collection that match a given predicate. Many collection
+functions such as <code>any()</code>, <code>count()</code>, <code>first()</code>, and more, come with an optional condition predicate.</p>
+<p>It is not recommended to invoke the <code>filter(predicate)</code> function prior to these terminal operations. Instead, the predicate variant of
+the terminal operation should be used as a replacement.</p>
+<h3>What is the potential impact?</h3>
+<p>Using <code>filter(predicate)</code> before terminal operations can result in unnecessary iterations over the collection, which could negatively
+impact the performance of the code, especially with large collections. By directly using the predicate variant of the function, you can streamline the
+code and improve its efficiency and readability.</p>
+<h2>How to fix it</h2>
+<p>Replace the <code>filter(predicate)</code> call with the predicate variant of the terminal operation. As of Kotlin API version 1.8, the list of
+terminal operations supporting a predicate is:</p>
+<ul>
+  <li> <code>any()</code> </li>
+  <li> <code>none()</code> </li>
+  <li> <code>count()</code> </li>
+  <li> <code>first()</code>, <code>firstOrNull()</code> </li>
+  <li> <code>last()</code>, <code>lastOrNull()</code> </li>
+  <li> <code>single()</code>, <code>singleOrNull()</code> </li>
+</ul>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+val list = listOf(5,2,9,6,8,2,5,7,3)
+val hasElementsGreater5 = list.filter { it &gt; 5 }.any() // Noncompliant
+val countElementsGreater5 = list.filter { it &gt; 5 }.count() // Noncompliant
+val lastElementGreater5 = list.filter { it &gt; 5 }.lastOrNull() // Noncompliant
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+val list = listOf(5,2,9,6,8,2,5,7,3)
+val hasElementsGreater5 = list.any { it &gt; 5 } // Compliant
+val countElementsGreater5 = list.count { it &gt; 5 } // Compliant
+val lastElementGreater5 = list.lastOrNull { it &gt; 5 } // Compliant
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/">Kotlin API Docs, Package kotlin.collections</a> </li>
+</ul>
+

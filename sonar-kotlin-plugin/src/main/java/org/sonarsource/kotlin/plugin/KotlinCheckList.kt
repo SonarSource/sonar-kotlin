@@ -108,6 +108,7 @@ import org.sonarsource.kotlin.checks.ScheduledThreadPoolExecutorZeroCheck
 import org.sonarsource.kotlin.checks.SelfAssignmentCheck
 import org.sonarsource.kotlin.checks.ServerCertificateCheck
 import org.sonarsource.kotlin.checks.SimplifiedPreconditionsCheck
+import org.sonarsource.kotlin.checks.SimplifyFilteringBeforeTerminalOperationCheck
 import org.sonarsource.kotlin.checks.SimplifySizeExpressionCheck
 import org.sonarsource.kotlin.checks.SingletonPatternCheck
 import org.sonarsource.kotlin.checks.StreamNotConsumedCheck
@@ -236,6 +237,7 @@ val KOTLIN_CHECKS = listOf(
     SelfAssignmentCheck::class.java,
     ServerCertificateCheck::class.java,
     SimplifiedPreconditionsCheck::class.java,
+    SimplifyFilteringBeforeTerminalOperationCheck::class.java,
     SingletonPatternCheck::class.java,
     SimplifySizeExpressionCheck::class.java,
     StreamNotConsumedCheck::class.java,
