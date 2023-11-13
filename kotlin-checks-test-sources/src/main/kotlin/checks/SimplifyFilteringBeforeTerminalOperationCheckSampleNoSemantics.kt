@@ -1,6 +1,6 @@
 package checks
 
-class SimplifyFilteringBeforeTerminalOperationCheckNoSemanticsSample {
+class SimplifyFilteringBeforeTerminalOperationCheckSampleNoSemantics {
     fun test(list: List<Int>, set: Set<Int>, array: Array<Int>) {
         list.filter { it > 5 }.any()
         list.any { it > 5 }
