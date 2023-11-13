@@ -43,22 +43,20 @@ class SimplifyFilteringBeforeTerminalOperationCheck : CallAbstractCheck() {
 
     @OptIn(IDEAPluginsCompatibilityAPI::class)
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
-        val chainedCallBeforeTerminalOperationCall = callExpression.parent
+        callExpression.parent
             .let { it as? KtDotQualifiedExpression }
             ?.receiverExpression
-            .let { it?.getCall(kotlinFileContext.bindingContext) }
+            ?.getCall(kotlinFileContext.bindingContext)
+            ?.takeIf { callBeforeTerminalOp -> FILTER_MATCHER.matches(callBeforeTerminalOp, kotlinFileContext.bindingContext) }
+            ?.let { filterCallBeforeTerminalOp ->
+                val filterCallText = filterCallBeforeTerminalOp.callElement.text
+                val filterPredicateText = filterCallBeforeTerminalOp.valueArguments[0].asElement().text
+                val terminalOpCallText = callExpression.text
+                val terminalOpWithPredicate = "${callExpression.calleeExpression!!.text} $filterPredicateText"
 
-        if (chainedCallBeforeTerminalOperationCall != null
-            && FILTER_MATCHER.matches(chainedCallBeforeTerminalOperationCall, kotlinFileContext.bindingContext)
-        ) {
-            val filterCallText = chainedCallBeforeTerminalOperationCall.callElement.text
-            val filterPredicateText = chainedCallBeforeTerminalOperationCall.valueArguments[0].asElement().text
-            val terminalOperationCallText = callExpression.text
-            val terminalOperationWithPredicate = "${callExpression.calleeExpression!!.text} $filterPredicateText"
+                val message = "Remove \"$filterCallText\" and replace \"$terminalOpCallText\" with \"$terminalOpWithPredicate\"."
 
-            val message = "Remove \"$filterCallText\" and replace \"$terminalOperationCallText\" with \"$terminalOperationWithPredicate\"."
-
-            kotlinFileContext.reportIssue(chainedCallBeforeTerminalOperationCall.callElement, message)
-        }
+                kotlinFileContext.reportIssue(filterCallBeforeTerminalOp.callElement, message)
+            }
     }
 }
