@@ -22,13 +22,15 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
+import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.DECLARATION_TO_DESCRIPTOR
@@ -40,14 +42,13 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 @Rule(key = "S3353")
 class VarShouldBeValCheck : AbstractCheck() {
 
-    override fun visitKtFile(file: KtFile, data: KotlinFileContext?) {
+    override fun visitKtFile(file: KtFile, data: KotlinFileContext) {
         super.visitKtFile(file, data)
-        val context = data ?: return
-        val bindingContext: BindingContext = context.bindingContext
+        val bindingContext: BindingContext = data.bindingContext
 
         val varProperties = file.collectDescendantsOfType<KtProperty> { it.localVar() || it.isPrivateVar() }
         val destructedVar = file.collectDescendantsOfType<KtDestructuringDeclarationEntry> { it.localVar() }
-        val allVars: List<KtNamedDeclaration> = varProperties + destructedVar
+        val allVars = varProperties + destructedVar
 
         val binaryAssignments = file.collectDescendantsOfType<KtBinaryExpression> { it.isAssignment() }
         val unaryAssignments = file.collectDescendantsOfType<KtUnaryExpression> { it.isAssignment() }
@@ -58,14 +59,14 @@ class VarShouldBeValCheck : AbstractCheck() {
 
         allVars.forEach { variable ->
             val descriptor = bindingContext[DECLARATION_TO_DESCRIPTOR, variable]
-            val name = variable.name!!
+            val name = (variable as KtNamedDeclaration).name!!
 
             val nameNotReferenced = nameToAssignment[name] == null
             val isNotReferenced = declarationToAssignment[descriptor] == null
 
             //first check in case we don't have semantics, second check use semantics
             if (nameNotReferenced || (descriptor != null && isNotReferenced)) {
-                context.reportIssue(variable, """Replace the keyword `var` with `val`.""")
+                data.reportIssue(variable.valOrVarKeyword!!, """Replace the keyword `var` with `val`.""")
             }
         }
     }
@@ -101,11 +102,20 @@ class VarShouldBeValCheck : AbstractCheck() {
     }
 
     private fun KtBinaryExpression.reference(): KtNameReferenceExpression? {
-        return this.left!!.findDescendantOfType<KtNameReferenceExpression>()
+        return assignedExpression(this.left!!)
     }
 
     private fun KtUnaryExpression.reference(): KtNameReferenceExpression? {
-        return this.findDescendantOfType<KtNameReferenceExpression>()
+        return assignedExpression(this.baseExpression!!)
+    }
+
+    private fun assignedExpression(expr: KtExpression): KtNameReferenceExpression? {
+        return when (expr) {
+            is KtNameReferenceExpression -> expr
+            is KtParenthesizedExpression -> assignedExpression(expr.expression!!)
+            is KtDotQualifiedExpression -> expr.selectorExpression?.let { assignedExpression(it) }
+            else -> null
+        }
     }
 
 }

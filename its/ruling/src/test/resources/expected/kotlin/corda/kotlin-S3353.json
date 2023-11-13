@@ -1,5 +1,31 @@
 {
+"kotlin-corda-project:sources/kotlin/corda/experimental/behave/src/main/kotlin/net/corda/behave/node/configuration/NetworkInterface.kt": [
+39
+],
+"kotlin-corda-project:sources/kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/Literal.kt": [
+18
+],
 "kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/DeserializeSimpleTypesTests.kt": [
 485
+],
+"kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/InMemoryMessagingNetwork.kt": [
+163
+],
+"kotlin-corda-project:sources/kotlin/corda/tools/blobinspector/src/main/kotlin/net/corda/blobinspector/Main.kt": [
+50,
+53,
+57,
+60
+],
+"kotlin-corda-project:sources/kotlin/corda/tools/explorer/src/main/kotlin/net/corda/explorer/model/SettingsModel.kt": [
+23,
+24,
+25,
+26,
+27,
+28
+],
+"kotlin-corda-project:sources/kotlin/corda/webserver/src/main/kotlin/net/corda/webserver/internal/NodeWebServer.kt": [
+48
 ]
 }

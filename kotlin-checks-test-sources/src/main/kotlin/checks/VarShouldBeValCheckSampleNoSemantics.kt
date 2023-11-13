@@ -44,7 +44,12 @@ class VarShouldBeValCheckSampleNoSemantics {
         c = 1 as Int
     }
 
+    private var used = "used" // compliant
+
+
     fun assignmentExpressions(): Unit {
+        this.used = "used"
+
         val numbers = mutableListOf(1, 2, 3, 4)
         numbers[0] = 2
         var x = 0 // compliant

@@ -1,15 +1,67 @@
 {
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/SMAP.kt": [
+188
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/SourceCompilerForInline.kt": [
+93
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/state/typeMapperUtils.kt": [
 61
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/when/SwitchCodegen.kt": [
+43
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/src/org/jetbrains/kotlin/cli/common/CommonCompilerPerformanceManager.kt": [
+16
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/src/org/jetbrains/kotlin/incremental/IncrementalJvmCompilerRunner.kt": [
+135
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/lower/ObjectClassLowering.kt": [
+42
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/model/ResolutionCandidate.kt": [
+76
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/tower/TowerResolver.kt": [
+314
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common-jvm6/tests/org/jetbrains/kotlin/test/clientserver/TestProcessServer.kt": [
+64
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/eval4j/test/org/jetbrains/eval4j/jdi/test/jdiTest.kt": [
 102
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/KotlinCommonBlock.kt": [
+356
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/KotlinSpacingBuilder.kt": [
+76
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/caches/lightClasses/platformWrappers.kt": [
+86,
+87
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/util/CommentSaver.kt": [
 388
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/CompletionBindingContextProvider.kt": [
+87
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/KotlinNameSuggester.kt": [
 173
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/script/ScriptDefinitionsManager.kt": [
+64
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/evaluate/extractFunctionForDebuggerUtil.kt": [
+140
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/scratch/repl/KtScratchReplExecutor.kt": [
+84
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/loopToCallChain/sequence/FilterTransformation.kt": [
+73
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/usages/KotlinFunctionCallUsage.kt": [
 433
@@ -17,8 +69,21 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/introduce/extractionEngine/ExtractableCodeDescriptor.kt": [
 83
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/pullUp/KotlinPullUpHelper.kt": [
+245
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/j2k/tests/org/jetbrains/kotlin/j2k/AbstractJavaToKotlinConverterMultiFileTest.kt": [
 77
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/j2k/tests/org/jetbrains/kotlin/j2k/AbstractJavaToKotlinConverterSingleFileTest.kt": [
+56
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/jps-tests/test/org/jetbrains/kotlin/jps/build/AbstractIncrementalJpsTest.kt": [
+100
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/runtime/Enum.kt": [
+9,
+10
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/collections/AbstractMutableMap.kt": [
 128
@@ -33,10 +98,36 @@
 28,
 29
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/test/kotlin/cases/private/privateMultifile1.kt": [
+6
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/test/kotlin/cases/private/privatePart.kt": [
+5
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidDaggerProject/app/src/main/java/com/example/dagger/kotlin/ui/HomeActivity.kt": [
+48
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidJackProject/Android/root/kotlin/org/jetbrains/kotlin/gradle/test/androidalfa/MainActivity2.kt": [
 35
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidProject/Android/root/kotlin/org/jetbrains/kotlin/gradle/test/androidalfa/MainActivity2.kt": [
 19
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kapt2/android-realm/src/main/java/io/realm/examples/kotlin/KotlinExampleActivity.kt": [
+103,
+110
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/plugin/KaptExtension.kt": [
+49,
+50
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/android-extensions/android-extensions-compiler/src/org/jetbrains/kotlin/android/parcel/serializers/ParcelSerializers.kt": [
+280
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/android-extensions/android-extensions-compiler/test/org/jetbrains/android/parcel/AbstractAsmLikeInstructionListingTest.kt": [
+189
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/src/org/jetbrains/kotlin/kapt3/javac/KaptTreeMaker.kt": [
+37
 ]
 }

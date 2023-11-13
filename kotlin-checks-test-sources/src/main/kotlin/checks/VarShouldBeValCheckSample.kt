@@ -6,19 +6,32 @@ class VarShouldBeValCheckSample {
     private var foo = 0 // Noncompliant {{Replace the keyword `var` with `val`.}}
     private val bar = 0 // compliant
 
+    //private var rememberMe: Boolean by config
+
+
     var notUsed = "not used" // compliant, not a local variable
     var x = "x" // compliant
         set(value){
             x = value
         }
 
+    private var y = "y" // compliant
+        set(value){
+            y = value
+        }
+
+
     class Address {
         var street: String = "baker" // compliant
         var number: Int = 221 // compliant
     }
 
+    annotation class Fancy
+
     fun assignmentOperators(): Unit {
+        @Fancy
         var j = 0 // Noncompliant
+
         var x = 0 // compliant
         x = 1
         var y = 0 // compliant
@@ -42,13 +55,21 @@ class VarShouldBeValCheckSample {
         var t = 0 // compliant
         t %= 2
         var (a, b) = Pair(0, 1) // Noncompliant
-//              ^
+//      ^^^
         a = 1
         var c = 0 // compliant
         c = 1 as Int
     }
 
+    private var oneSelect = "used" // compliant
+    private var twoSelect = "used" // compliant
+
+    fun mySelf() = this
+
     fun assignmentExpressions(): Unit {
+        this.oneSelect = "used"
+        this.mySelf().twoSelect = "used"
+
         val numbers = mutableListOf(1, 2, 3, 4)
         numbers[0] = 2
         var x = 0 // compliant
