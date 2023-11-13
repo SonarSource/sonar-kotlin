@@ -17,14 +17,6 @@
 57,
 60
 ],
-"kotlin-corda-project:sources/kotlin/corda/tools/explorer/src/main/kotlin/net/corda/explorer/model/SettingsModel.kt": [
-23,
-24,
-25,
-26,
-27,
-28
-],
 "kotlin-corda-project:sources/kotlin/corda/webserver/src/main/kotlin/net/corda/webserver/internal/NodeWebServer.kt": [
 48
 ]

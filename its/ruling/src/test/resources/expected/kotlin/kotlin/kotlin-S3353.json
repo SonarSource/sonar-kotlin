@@ -38,10 +38,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/KotlinSpacingBuilder.kt": [
 76
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/caches/lightClasses/platformWrappers.kt": [
-86,
-87
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/util/CommentSaver.kt": [
 388
 ],
@@ -77,9 +73,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/j2k/tests/org/jetbrains/kotlin/j2k/AbstractJavaToKotlinConverterSingleFileTest.kt": [
 56
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/jps-tests/test/org/jetbrains/kotlin/jps/build/AbstractIncrementalJpsTest.kt": [
-100
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/runtime/Enum.kt": [
 9,

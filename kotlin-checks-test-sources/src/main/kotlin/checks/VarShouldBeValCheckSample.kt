@@ -5,20 +5,16 @@ import kotlin.math.max
 class VarShouldBeValCheckSample {
     private var foo = 0 // Noncompliant {{Replace the keyword `var` with `val`.}}
     private val bar = 0 // compliant
-
-    //private var rememberMe: Boolean by config
-
-
     var notUsed = "not used" // compliant, not a local variable
-    var x = "x" // compliant
+    private var y = "y" // Noncompliant
         set(value){
-            x = value
+            field = value
         }
+    private var abc = 0 // compliant
 
-    private var y = "y" // compliant
-        set(value){
-            y = value
-        }
+    fun classProperties(): Unit {
+        this::abc.set(1)
+    }
 
 
     class Address {

@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -46,13 +47,17 @@ class VarShouldBeValCheck : AbstractCheck() {
         super.visitKtFile(file, data)
         val bindingContext: BindingContext = data.bindingContext
 
-        val varProperties = file.collectDescendantsOfType<KtProperty> { it.localVar() || it.isPrivateVar() }
+        val varProperties = file.collectDescendantsOfType<KtProperty> { it.localVar() || it.privateClassVar() }
         val destructedVar = file.collectDescendantsOfType<KtDestructuringDeclarationEntry> { it.localVar() }
         val allVars = varProperties + destructedVar
 
         val binaryAssignments = file.collectDescendantsOfType<KtBinaryExpression> { it.isAssignment() }
         val unaryAssignments = file.collectDescendantsOfType<KtUnaryExpression> { it.isAssignment() }
-        val assignedExpressions = binaryAssignments.mapNotNull { it.reference() } + unaryAssignments.mapNotNull { it.reference() }
+        val callableVarReference = file.collectDescendantsOfType<KtCallableReferenceExpression>()
+
+        val assignedExpressions = listOf(binaryAssignments.mapNotNull { it.reference() },
+            unaryAssignments.mapNotNull { it.reference() },
+            callableVarReference.map { it.callableReference }).flatten()
 
         val declarationToAssignment = assignedExpressions.groupBy { it.getResolvedCall(bindingContext)?.resultingDescriptor?.original }
         val nameToAssignment = assignedExpressions.groupBy { it.getReferencedName() }
@@ -75,7 +80,7 @@ class VarShouldBeValCheck : AbstractCheck() {
         return this.isLocal && this.isVar
     }
 
-    private fun KtProperty.isPrivateVar(): Boolean {
+    private fun KtProperty.privateClassVar(): Boolean {
         return this.isPrivate() && this.isVar
     }
 

@@ -3,15 +3,6 @@
 46,
 64
 ],
-"kotlin-ktor-project:sources/kotlin/ktor/ktor-io/jvm/src/io/ktor/utils/io/pool/DefaultPool.kt": [
-38
-],
-"kotlin-ktor-project:sources/kotlin/ktor/ktor-network/jvm/src/io/ktor/network/selector/InterestSuspensionsMap.kt": [
-13,
-17,
-21,
-25
-],
 "kotlin-ktor-project:sources/kotlin/ktor/ktor-network/jvm/src/io/ktor/network/util/Utils.kt": [
 29
 ],
