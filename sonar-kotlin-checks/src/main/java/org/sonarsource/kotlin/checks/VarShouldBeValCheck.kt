@@ -19,9 +19,11 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
+import org.jetbrains.kotlin.psi.KtDestructuringDeclaration
 import org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -39,17 +41,12 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.reporting.message
 
 @Rule(key = "S3353")
 class VarShouldBeValCheck : AbstractCheck() {
-
     override fun visitKtFile(file: KtFile, data: KotlinFileContext) {
-        super.visitKtFile(file, data)
         val bindingContext: BindingContext = data.bindingContext
-
-        val varProperties = file.collectDescendantsOfType<KtProperty> { it.localVar() || it.privateClassVar() }
-        val destructedVar = file.collectDescendantsOfType<KtDestructuringDeclarationEntry> { it.localVar() }
-        val allVars = varProperties + destructedVar
 
         val binaryAssignments = file.collectDescendantsOfType<KtBinaryExpression> { it.isAssignment() }
         val unaryAssignments = file.collectDescendantsOfType<KtUnaryExpression> { it.isAssignment() }
@@ -59,29 +56,59 @@ class VarShouldBeValCheck : AbstractCheck() {
             unaryAssignments.mapNotNull { it.reference() },
             callableVarReference.map { it.callableReference }).flatten()
 
-        val declarationToAssignment = assignedExpressions.groupBy { it.getResolvedCall(bindingContext)?.resultingDescriptor?.original }
-        val nameToAssignment = assignedExpressions.groupBy { it.getReferencedName() }
+        val assignedDeclarations = assignedExpressions
+            .mapNotNull { it.getResolvedCall(bindingContext)?.resultingDescriptor?.original }
+            .toSet()
 
-        allVars.forEach { variable ->
-            val descriptor = bindingContext[DECLARATION_TO_DESCRIPTOR, variable]
-            val name = (variable as KtNamedDeclaration).name!!
+        val assignedNames = assignedExpressions
+            .map { it.getReferencedName() }
+            .toSet()
 
-            val nameNotReferenced = nameToAssignment[name] == null
-            val isNotReferenced = declarationToAssignment[descriptor] == null
-
-            //first check in case we don't have semantics, second check use semantics
-            if (nameNotReferenced || (descriptor != null && isNotReferenced)) {
-                data.reportIssue(variable.valOrVarKeyword!!, """Replace the keyword `var` with `val`.""")
-            }
+        val varProperties = file.collectDescendantsOfType<KtProperty> {
+            (it.localVar() || it.privateClassVar()) && !it.isLateInit()
         }
+
+        val msg = message {
+            +"Replace the keyword "
+            code("var")
+            +" with "
+            code("val")
+            +". This property is never modified."
+        }
+
+        varProperties
+            .filter { it.isNotReferenced(assignedDeclarations, assignedNames, bindingContext) }
+            .forEach { variable ->
+                data.reportIssue(variable.valOrVarKeyword, msg)
+            }
+
+        val destructedDeclaration = file.collectDescendantsOfType<KtDestructuringDeclaration> { it.isVar }
+        destructedDeclaration
+            .filter {
+                it.collectDescendantsOfType<KtDestructuringDeclarationEntry>()
+                    .all { variable -> variable.isNotReferenced(assignedDeclarations, assignedNames, bindingContext) }
+            }
+            .forEach { variable ->
+                data.reportIssue(variable.valOrVarKeyword!!, msg)
+            }
     }
 
-    private fun KtProperty.localVar(): Boolean {
-        return this.isLocal && this.isVar
-    }
+    private fun KtProperty.isLateInit(): Boolean = hasModifier(KtTokens.LATEINIT_KEYWORD)
+    private fun KtProperty.localVar(): Boolean = this.isLocal && this.isVar
+    private fun KtProperty.privateClassVar(): Boolean = this.isPrivate() && this.isVar
+    private fun KtNamedDeclaration.isNotReferenced(
+        assignedDeclarations: Set<CallableDescriptor>,
+        assignedNames: Set<String>,
+        bindingContext: BindingContext,
+    ): Boolean {
+        val descriptor = bindingContext[DECLARATION_TO_DESCRIPTOR, this]
+        val name = this.name!!
 
-    private fun KtProperty.privateClassVar(): Boolean {
-        return this.isPrivate() && this.isVar
+        return if (descriptor != null) {
+            !assignedDeclarations.contains(descriptor)
+        } else {
+            !assignedNames.contains(name)
+        }
     }
 
     private fun KtDestructuringDeclarationEntry.localVar(): Boolean {

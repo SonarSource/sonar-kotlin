@@ -1,10 +1,12 @@
 package checks
 
 import kotlin.math.max
+import kotlin.properties.Delegates
 
 class VarShouldBeValCheckSample {
-    private var foo = 0 // Noncompliant {{Replace the keyword `var` with `val`.}}
+    private var foo = 0 // Noncompliant {{Replace the keyword `var` with `val`. This property is never modified.}}
     private val bar = 0 // compliant
+    private lateinit var late : Address // compliant
     var notUsed = "not used" // compliant, not a local variable
     private var y = "y" // Noncompliant
         set(value){
@@ -52,7 +54,8 @@ class VarShouldBeValCheckSample {
         t %= 2
         var (a, b) = Pair(0, 1) // Noncompliant
 //      ^^^
-        a = 1
+        var (e, f) = Pair(0, 1) // Compliant
+        e = 0
         var c = 0 // compliant
         c = 1 as Int
     }
@@ -65,6 +68,11 @@ class VarShouldBeValCheckSample {
     fun assignmentExpressions(): Unit {
         this.oneSelect = "used"
         this.mySelf().twoSelect = "used"
+
+        var delegate1 by Delegates.notNull<String>() // Noncompliant
+        var delegate2 by Delegates.notNull<String>() // compliant
+        delegate2 = "used"
+
 
         val numbers = mutableListOf(1, 2, 3, 4)
         numbers[0] = 2
@@ -84,7 +92,7 @@ class VarShouldBeValCheckSample {
     }
 
     fun resizeNonCompliant(): Int {
-        var newLength = max(16, 2) // Noncompliant {{Replace the keyword `var` with `val`.}}
+        var newLength = max(16, 2) // Noncompliant {{Replace the keyword `var` with `val`. This property is never modified.}}
         return newLength
     }
 

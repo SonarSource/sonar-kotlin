@@ -26,9 +26,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/tower/TowerResolver.kt": [
 314
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common-jvm6/tests/org/jetbrains/kotlin/test/clientserver/TestProcessServer.kt": [
-64
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/eval4j/test/org/jetbrains/eval4j/jdi/test/jdiTest.kt": [
 102
 ],
@@ -55,9 +52,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/scratch/repl/KtScratchReplExecutor.kt": [
 84
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/loopToCallChain/sequence/FilterTransformation.kt": [
-73
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/usages/KotlinFunctionCallUsage.kt": [
 433
@@ -96,9 +90,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/test/kotlin/cases/private/privatePart.kt": [
 5
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidDaggerProject/app/src/main/java/com/example/dagger/kotlin/ui/HomeActivity.kt": [
-48
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidJackProject/Android/root/kotlin/org/jetbrains/kotlin/gradle/test/androidalfa/MainActivity2.kt": [
 35

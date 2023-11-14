@@ -2,12 +2,6 @@
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/intentions/IfLetToMatchIntention.kt": [
 52
 ],
-"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/surroundWith/statement/RsStatementsSurrounderBase.kt": [
-50
-],
-"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/TypeInference.kt": [
-811
-],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/producers/RunConfigurationProducerTest.kt": [
 306,
 307

@@ -38,7 +38,7 @@ class VarShouldBeValCheckSampleNoSemantics {
         u/= 2
         var t = 0 // compliant
         t %= 2
-        var (a, b) = Pair(0, 1) // Noncompliant
+        var (a, b) = Pair(0, 1) // compliant
         a = 1
         var c = 0 // compliant
         c = 1 as Int
@@ -68,7 +68,7 @@ class VarShouldBeValCheckSampleNoSemantics {
     }
 
     fun resizeNonCompliant(): Int {
-        var newLength = max(16, 2) // Noncompliant {{Replace the keyword `var` with `val`.}}
+        var newLength = max(16, 2) // Noncompliant {{Replace the keyword `var` with `val`. This property is never modified.}}
         return newLength
     }
 
