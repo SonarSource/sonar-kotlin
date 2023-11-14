@@ -49,4 +49,5 @@ class AbstractClassShouldBeInterfaceCheck : AbstractCheck() {
 
     private fun KtFunction.isNotAbstract() = !hasModifier(KtTokens.ABSTRACT_KEYWORD)
     private fun KtProperty.isNotAbstract() = !hasModifier(KtTokens.ABSTRACT_KEYWORD)
+
 }

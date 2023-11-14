@@ -82,4 +82,10 @@ class AbstractClassShouldBeInterfaceCheckSample {
         }
     }
 
+    abstract class K {} // Noncompliant
+    abstract class L : K() {} // compliant, extend an abstract as he may have no other choice
+
+    interface M {} // compliant
+    abstract class N : M {} // Noncompliant
+
 }
