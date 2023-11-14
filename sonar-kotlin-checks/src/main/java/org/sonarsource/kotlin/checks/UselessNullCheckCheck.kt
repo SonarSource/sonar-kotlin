@@ -39,6 +39,7 @@ import org.sonarsource.kotlin.api.checks.determineType
 import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.reporting.Message
 
 private val NON_NULL_CHECK_FUNS = FunMatcher("kotlin") {
     withNames("requireNotNull", "checkNotNull")
@@ -51,20 +52,30 @@ class UselessNullCheckCheck : AbstractCheck() {
 
         when (binaryExpression.operationToken) {
             KtTokens.EQEQ -> binaryExpression.operandComparedToNull(bc)?.let {
-                handleNullCheck(kotlinFileContext, it, "null check", binaryExpression)
+                handleNullCheck(kotlinFileContext, it, binaryExpression) { +"null check" }
             }
 
             KtTokens.EXCLEQ -> binaryExpression.operandComparedToNull(bc)?.let {
-                handleNonNullCheck(kotlinFileContext, it, "non-null check", binaryExpression)
+                handleNonNullCheck(kotlinFileContext, it, binaryExpression) { +"non-null check" }
             }
 
-            KtTokens.ELVIS -> handleNonNullCheck(kotlinFileContext, binaryExpression.left!!, "elvis operation", binaryExpression.operationReference)
+            KtTokens.ELVIS -> handleNonNullCheck(
+                kotlinFileContext,
+                binaryExpression.left!!,
+                binaryExpression.operationReference
+            ) {
+                +"elvis operation "
+                code("?:")
+            }
 
         }
     }
 
     override fun visitSafeQualifiedExpression(safeDotExpression: KtSafeQualifiedExpression, kfc: KotlinFileContext) {
-        handleNonNullCheck(kfc, safeDotExpression.receiverExpression, "null-safe access", safeDotExpression.operationTokenNode.psi)
+        handleNonNullCheck(kfc, safeDotExpression.receiverExpression, safeDotExpression.operationTokenNode.psi) {
+            +"null-safe access "
+            code("?.")
+        }
     }
 
     override fun visitUnaryExpression(unaryExpression: KtUnaryExpression, kfc: KotlinFileContext) {
@@ -72,20 +83,26 @@ class UselessNullCheckCheck : AbstractCheck() {
             handleNonNullCheck(
                 kfc,
                 unaryExpression.baseExpression!!,
-                "non-null assertion (!!)",
                 unaryExpression.operationReference
-            )
+            ) {
+                +"non-null assertion "
+                code("!!")
+            }
         }
     }
 
     override fun visitCallExpression(callExpression: KtCallExpression, kfc: KotlinFileContext) {
-        if (callExpression.getResolvedCall(kfc.bindingContext) matches NON_NULL_CHECK_FUNS && callExpression.valueArguments.size > 0) {
+        val resolvedCall = callExpression.getResolvedCall(kfc.bindingContext)
+        if (resolvedCall matches NON_NULL_CHECK_FUNS) {
+            // requireNotNull and checkNotNull have no implementations without parameters. The first parameter is always the value to check.
             handleNonNullCheck(
                 kfc,
                 callExpression.getArgumentByParameterIndex(0, kfc.bindingContext).first().getArgumentExpression()!!,
-                "non-null check",
                 callExpression
-            )
+            ) {
+                +"non-null check "
+                code(resolvedCall!!.resultingDescriptor.name.asString())
+            }
         }
     }
 
@@ -103,25 +120,25 @@ class UselessNullCheckCheck : AbstractCheck() {
     private fun handleNullCheck(
         kfc: KotlinFileContext,
         expression: KtExpression,
-        checkTypeForMessage: String,
-        issueLocation: PsiElement
+        issueLocation: PsiElement,
+        nullCheckTypeForMessage: Message.() -> Unit
     ) =
-        raiseIssueIfUselessCheck(kfc, expression, checkTypeForMessage, issueLocation, true)
+        raiseIssueIfUselessCheck(kfc, expression, issueLocation, true, nullCheckTypeForMessage)
 
     private fun handleNonNullCheck(
         kfc: KotlinFileContext,
         expression: KtExpression,
-        checkTypeForMessage: String,
-        issueLocation: PsiElement
+        issueLocation: PsiElement,
+        nullCheckTypeForMessage: Message.() -> Unit
     ) =
-        raiseIssueIfUselessCheck(kfc, expression, checkTypeForMessage, issueLocation, false)
+        raiseIssueIfUselessCheck(kfc, expression, issueLocation, false, nullCheckTypeForMessage)
 
     private fun raiseIssueIfUselessCheck(
         kfc: KotlinFileContext,
         expression: KtExpression,
-        checkTypeForMessage: String,
         issueLocation: PsiElement,
-        comparesToNull: Boolean
+        comparesToNull: Boolean,
+        nullCheckTypeForMessage: Message.() -> Unit
     ) {
         val (nullCaseResult, nonNullCaseResult) = if (comparesToNull) {
             "succeeds" to "fails"
@@ -129,14 +146,20 @@ class UselessNullCheckCheck : AbstractCheck() {
             "fails" to "succeeds"
         }
 
-        val result = if (expression.isNull()) {
+        val resolvedExpression = expression.predictRuntimeValueExpression(kfc.bindingContext)
+
+        val result = if (resolvedExpression.isNull()) {
             nullCaseResult
-        } else if (expression.determineType(kfc.bindingContext)?.nullability() == TypeNullability.NOT_NULL) {
+        } else if (resolvedExpression.determineType(kfc.bindingContext)?.nullability() == TypeNullability.NOT_NULL) {
             nonNullCaseResult
         } else {
             return
         }
 
-        kfc.reportIssue(issueLocation, "Remove this useless $checkTypeForMessage, it always $result.")
+        kfc.reportIssue(issueLocation) {
+            +"Remove this useless "
+            nullCheckTypeForMessage()
+            +", it always $result."
+        }
     }
 }
