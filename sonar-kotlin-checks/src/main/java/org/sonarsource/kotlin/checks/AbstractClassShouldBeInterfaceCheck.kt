@@ -19,6 +19,8 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.descriptors.ClassDescriptor
+import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFunction
@@ -27,7 +29,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.typeUtil.isInterface
+import org.jetbrains.kotlin.types.typeUtil.isAny
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
@@ -40,7 +42,7 @@ class AbstractClassShouldBeInterfaceCheck : AbstractCheck() {
     override fun visitClass(klass: KtClass, context: KotlinFileContext) {
         super.visitClass(klass, context)
 
-        if (!klass.isAbstract() || klass.isInterface()) return
+        if (!klass.isAbstract() || klass.isInterface() || klass.extendsClass(context.bindingContext)) return
 
         val allMethods = klass.collectDescendantsOfType<KtFunction>()
         val allProperties = klass.collectDescendantsOfType<KtProperty>()
@@ -53,18 +55,14 @@ class AbstractClassShouldBeInterfaceCheck : AbstractCheck() {
         }
     }
 
-    private fun KtClass.extendsClass(bindingContext: BindingContext): Boolean = {
-        val classType? = this.determineType(this)
-        if(classType!=null){
-
-        }else{
-            val superTypes = superTypeListEntries
-
-        }
-
-        val superTypes = superTypeListEntries
-        superTypes.isNotEmpty() && superTypes.all { it.typeAsUserType?.referencedName != "Any" }
+    private fun KtClass.extendsClass(bindingContext: BindingContext): Boolean {
+        val classType: KotlinType? = this.determineType(bindingContext)
+        //maybe we should only check if it extends some things and not just classes
+        return classType?.supertypes()?.any { it.isClass() } ?: superTypeListEntries.isNotEmpty()
     }
+
+    private fun KotlinType.isClass(): Boolean =
+        !this.isAny() && (constructor.declarationDescriptor as? ClassDescriptor)?.kind == ClassKind.CLASS
 
     private fun KtFunction.isNotAbstract() = !hasModifier(KtTokens.ABSTRACT_KEYWORD)
     private fun KtProperty.isNotAbstract() = !hasModifier(KtTokens.ABSTRACT_KEYWORD)

@@ -1,24 +1,12 @@
 {
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/intrinsics/IntrinsicPropertyGetter.kt": [
-24
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/container/tests/org/jetbrains/kotlin/container/tests/ComponentContainerTest.kt": [
 316
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/analyzer/AnalyzerFacade.kt": [
 310
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/tower/NewCallArguments.kt": [
-47
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.common/src/org/jetbrains/kotlin/backend/common/lower/LocalDeclarationsLowering.kt": [
 86
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/contracts/model/ESEffect.kt": [
-34
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/model/ResolutionAtoms.kt": [
-55
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/tower/TowerResolver.kt": [
 291
@@ -39,9 +27,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/core/builtins/native/kotlin/Number.kt": [
 22
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors.runtime/src/kotlin/reflect/jvm/internal/structure/ReflectJavaElement.kt": [
-21
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/CommonAlignmentStrategy.kt": [
 22
 ],
@@ -54,33 +39,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/stepping/KotlinStepActionFactory.kt": [
 36
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/decompiler/textBuilder/AbstractDecompiledTextFromJsMetadataTest.kt": [
-78,
-80
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/decompiler/textBuilder/AbstractDecompiledTextTest.kt": [
-53,
-55
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/imports/AbstractOptimizeImportsTest.kt": [
-39
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/semantics/abstractClassesForGeneratedTests.kt": [
-20,
-22,
-24,
-26,
-28,
-30,
-39,
-44,
-50,
-57
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.translator/src/org/jetbrains/kotlin/js/translate/callTranslator/CallTranslator.kt": [
-262,
-264
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.translator/src/org/jetbrains/kotlin/js/translate/intrinsic/functions/basic/FunctionIntrinsic.kt": [
 26
 ],
@@ -92,47 +50,10 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.khronos.webgl.kt": [
 69,
-75,
-81,
-87,
-93,
-99,
-105,
 111
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.dom.kt": [
-280,
-335,
-341,
-356,
-543,
-581,
-719
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.dom.svg.kt": [
-368,
-371,
-377,
-383,
-389,
-395,
-401,
-436,
-540,
-587,
-615,
-621,
-661,
-667,
-735,
-779,
-782,
-785,
-814,
-817
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.xhr.kt": [
-39
+341
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/test/kotlin/cases/companions/companions.kt": [
 13,
