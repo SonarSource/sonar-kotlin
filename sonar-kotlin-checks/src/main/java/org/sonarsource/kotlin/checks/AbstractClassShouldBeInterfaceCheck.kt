@@ -25,8 +25,13 @@ import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.typeUtil.isInterface
+import org.jetbrains.kotlin.types.typeUtil.supertypes
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.checks.determineType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S6526")
@@ -36,6 +41,7 @@ class AbstractClassShouldBeInterfaceCheck : AbstractCheck() {
         super.visitClass(klass, context)
 
         if (!klass.isAbstract() || klass.isInterface()) return
+
         val allMethods = klass.collectDescendantsOfType<KtFunction>()
         val allProperties = klass.collectDescendantsOfType<KtProperty>()
 
@@ -45,6 +51,19 @@ class AbstractClassShouldBeInterfaceCheck : AbstractCheck() {
                 "Either replace the class declaration with an interface declaration, or add actual function implementations or state properties to the abstract class."
             )
         }
+    }
+
+    private fun KtClass.extendsClass(bindingContext: BindingContext): Boolean = {
+        val classType? = this.determineType(this)
+        if(classType!=null){
+
+        }else{
+            val superTypes = superTypeListEntries
+
+        }
+
+        val superTypes = superTypeListEntries
+        superTypes.isNotEmpty() && superTypes.all { it.typeAsUserType?.referencedName != "Any" }
     }
 
     private fun KtFunction.isNotAbstract() = !hasModifier(KtTokens.ABSTRACT_KEYWORD)
