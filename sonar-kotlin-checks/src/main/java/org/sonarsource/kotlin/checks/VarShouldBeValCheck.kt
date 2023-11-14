@@ -111,10 +111,6 @@ class VarShouldBeValCheck : AbstractCheck() {
         }
     }
 
-    private fun KtDestructuringDeclarationEntry.localVar(): Boolean {
-        return this.isVar
-    }
-
     private fun KtBinaryExpression.isAssignment(): Boolean {
         return this.operationReference.getReferencedNameElementType() in setOf(
             KtTokens.EQ,
