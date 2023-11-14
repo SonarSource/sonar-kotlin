@@ -1,0 +1,18 @@
+{
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-http/common/src/io/ktor/http/content/OutgoingContent.kt": [
+72,
+103,
+113
+],
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-io/common/src/io/ktor/utils/io/charsets/Encoding.kt": [
+20,
+90
+],
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-utils/common/src/io/ktor/util/internal/LockFreeLinkedList.kt": [
+58,
+114
+],
+"kotlin-ktor-project:sources/kotlin/ktor/ktor-utils/common/src/io/ktor/util/network/NetworkAddress.kt": [
+14
+]
+}

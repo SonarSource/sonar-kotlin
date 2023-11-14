@@ -1,0 +1,54 @@
+{
+"kotlin-corda-project:sources/kotlin/corda/client/jackson/src/main/kotlin/net/corda/client/jackson/JacksonSupport.kt": [
+487,
+501
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/internal/notary/NotaryService.kt": [
+11
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/vault/QueryCriteriaUtils.kt": [
+146
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/BaseTransactions.kt": [
+14
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/AMQPBridgeTest.kt": [
+46
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/CertificateRevocationListNodeTests.kt": [
+75
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/ProtonWrapperTests.kt": [
+50
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/internal/NodeTest.kt": [
+33
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/RPCSecurityManagerTest.kt": [
+183
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/messaging/ArtemisMessagingTest.kt": [
+67
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/registration/NetworkRegistrationHelperTest.kt": [
+54
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/EvolutionSerializer.kt": [
+250
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/PropertySerializers.kt": [
+12
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/CordaClassResolverTests.kt": [
+68
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationOutputTests.kt": [
+212
+],
+"kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/InternalMockNetwork.kt": [
+461
+],
+"kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/test/kotlin/net/corda/testing/internal/RigorousMockTest.kt": [
+18
+]
+}
