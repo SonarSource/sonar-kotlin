@@ -58,7 +58,10 @@ class AbstractClassShouldBeInterfaceCheck : AbstractCheck() {
     private fun KtClass.extendsClass(bindingContext: BindingContext): Boolean {
         val classType: KotlinType? = this.determineType(bindingContext)
         //maybe we should only check if it extends some things and not just classes
-        return classType?.supertypes()?.any { it.isClass() } ?: superTypeListEntries.isNotEmpty()
+        return if (classType != null)
+            classType.supertypes().any { it.isClass() }
+        else
+            superTypeListEntries.isNotEmpty()
     }
 
     private fun KotlinType.isClass(): Boolean =
