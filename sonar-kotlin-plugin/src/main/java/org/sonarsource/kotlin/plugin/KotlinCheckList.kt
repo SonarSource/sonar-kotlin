@@ -37,6 +37,7 @@ import org.sonarsource.kotlin.checks.CodeAfterJumpCheck
 import org.sonarsource.kotlin.checks.CollapsibleIfStatementsCheck
 import org.sonarsource.kotlin.checks.CollectionCallingItselfCheck
 import org.sonarsource.kotlin.checks.CollectionInappropriateCallsCheck
+import org.sonarsource.kotlin.checks.CollectionShouldBeImmutableCheck
 import org.sonarsource.kotlin.checks.CollectionSizeAndArrayLengthCheck
 import org.sonarsource.kotlin.checks.CommentedCodeCheck
 import org.sonarsource.kotlin.checks.CoroutineScopeFunSuspendingCheck
@@ -169,6 +170,7 @@ val KOTLIN_CHECKS = listOf(
     CodeAfterJumpCheck::class.java,
     CollapsibleIfStatementsCheck::class.java,
     CollectionCallingItselfCheck::class.java,
+    CollectionShouldBeImmutableCheck::class.java,
     CollectionSizeAndArrayLengthCheck::class.java,
     CollectionInappropriateCallsCheck::class.java,
     CoroutineScopeFunSuspendingCheck::class.java,
