@@ -1,0 +1,42 @@
+<h2>Why is this an issue?</h2>
+<p>If a local variable is never reassigned, it should be declared <code>val</code> to make it a constant within its scope. This makes the code easier
+to read and protects the variable from accidental re-assignments in future code changes.</p>
+<h3>What is the potential impact?</h3>
+<h4>Readability and Understanding</h4>
+<p>If a variable is declared <code>val</code>, it is evident to readers that the variable value is never altered but serves as a constant. This makes
+it easier to understand the code because readers do not need to keep track of possible state changes of the variable.</p>
+<h4>Wrong code</h4>
+<p>Developers might intend for a variable to remain unchanged and have their code relying on that constraint. For example, a variable could be
+expected to have a specific range. Changing the value of the variable could break that constraint. Also, developers could have assigned the wrong
+variable.</p>
+<p>Declare variables that remain unchanged as <code>val</code> to avoid these mistakes.</p>
+<h2>How to fix it</h2>
+<p>Replace the keyword <code>var</code> with <code>val</code>.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+fun resize(): Int {
+    var newLength = max(16, 2*bufferLength) // Noncompliant, `newLength` is assigned only once
+    allocBuffer(newLength)
+    return resize
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+fun resize(): Int {
+    val newLength = max(16, 2*bufferLength) // Compliant
+    allocBuffer(newLength)
+    return resize
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/basic-syntax.html#variables">Kotlin Docs, Variables</a> </li>
+</ul>
+<h3>Articles &amp; blog posts</h3>
+<ul>
+  <li> <a href="https://medium.com/techmacademy/kotlin-101-val-vs-var-behind-the-scenes-65d96c6608bf">Estefania Cassingena Navone, Kotlin 101: val vs.
+  var Behind The Scenes!</a> </li>
+</ul>
+
