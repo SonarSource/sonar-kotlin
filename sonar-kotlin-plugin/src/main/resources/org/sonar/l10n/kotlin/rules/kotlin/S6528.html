@@ -1,52 +1,57 @@
 <p>The <code>kotlin.collections</code> package offers many functions to interact with collections. In particular, functions
-<code>find(predicate)</code> and <code>findLast(predicate)</code> return the first and last element that matches the given predicate.</p>
+<code>find(predicate)</code>, <code>findLast(predicate)</code>, <code>firstOrNull(predicate)</code> and "`lastOrNull(predicate)` return the element
+that matches the given predicate.</p>
 <h2>Why is this an issue?</h2>
-<p>The functions <code>find(predicate)</code> and <code>findLast(predicate)</code> can be improperly used to check the presence of an element that
-matches the given predicate. In such cases the code is more difficult to read and understand than it would be with the functions
-<code>any(predicate)</code>, <code>none(predicate)</code> or <code>contains(element)</code>.</p>
+<p>The functions <code>find(predicate)</code>, <code>findLast(predicate)</code>, <code>firstOrNull(predicate)</code> and "`lastOrNull(predicate)` can
+be improperly used to check the presence of an element that matches the given predicate. In such cases the code is more difficult to read and
+understand than it would be with the functions <code>any(predicate)</code>, <code>none(predicate)</code> or <code>contains(element)</code>.</p>
 <h3>What is the potential impact?</h3>
-<p>The pattern of using <code>find(predicate)</code> or <code>findLast(predicate)</code> combined with a null check , to check the presence of an
-element is not immediately clear to readers. For example, the expression <code>list.find { it &gt; 5 } != null</code> is more difficult to understand
-than <code>list.any { it &gt; 5 }</code>. The additional comparison operator increases the complexity of the expression and introduces confusion about
-the intent of the code.</p>
+<p>The pattern of using <code>find(predicate)</code>, <code>findLast(predicate)</code>, <code>firstOrNull(predicate)</code> and
+"`lastOrNull(predicate)` combined with a null check, to check the presence of an element is not immediately clear to readers. For example, the
+expression <code>list.find { it &gt; 5 } != null</code> is more difficult to understand than <code>list.any { it &gt; 5 }</code>. The additional
+comparison operator increases the complexity of the expression and introduces confusion about the intent of the code.</p>
 <h2>How to fix it</h2>
-<p>Replace the use of <code>find(predicate)</code> or <code>findLast(predicate)</code> with <code>any(predicate)</code>, <code>none(predicate)</code>
-or <code>contains(element)</code>.</p>
+<p>Replace the use of <code>find(predicate)</code>, <code>findLast(predicate)</code>, <code>firstOrNull(predicate)</code> and "`lastOrNull(predicate)`
+with <code>any(predicate)</code>, <code>none(predicate)</code> or <code>contains(element)</code>.</p>
 <p>There are four possible scenarios:</p>
 <ol>
-  <li> The predicate is a binary expression not checking for equality, and the found object is compared to not be <code>null</code>:
+  <li> The predicate is a simple binary expression checking for equality, and the found object is compared to not be <code>null</code>:
     <ul>
-      <li> Replace <code>find(predicate) != null</code> with <code>any(predicate)</code>. </li>
-      <li> Replace <code>findLast(predicate) != null</code> with <code>any(predicate)</code>. </li>
+      <li> Replace <code>find { it == element } != null</code> with <code>contains(element)</code>. </li>
+      <li> Replace <code>findLast { it == element } != null</code> with <code>contains(element)</code>. </li>
+      <li> Replace <code>firstOrNull { x → x == element } != null</code> with <code>contains(element)</code>. </li>
+      <li> Replace <code>lastOrNull { x → x == element } != null</code> with <code>contains(element)</code>. </li>
     </ul>  </li>
-  <li> The predicate is a binary expression not checking for equality, and the found object is compared to be <code>null</code>:
+  <li> The predicate is a simple binary expression checking for equality, and the found object is compared to be <code>null</code>:
     <ul>
-      <li> Replace <code>find(predicate) == null</code> with <code>none(predicate)</code>. </li>
-      <li> Replace <code>findLast(predicate) == null</code> with <code>none(predicate)</code>. </li>
+      <li> Replace <code>find { it == element } == null</code> with <code>!contains(element)</code>. </li>
+      <li> Replace <code>findLast { it == element } == null</code> with <code>!contains(element)</code>. </li>
+      <li> Replace <code>firstOrNull { x → x == element } == null</code> with <code>!contains(element)</code>. </li>
+      <li> Replace <code>lastOrNull { x → x == element } == null</code> with <code>!contains(element)</code>. </li>
     </ul>  </li>
-  <li> The predicate is a simple binary expression checking for equality, and null check on the found object has the opposite equality operator as the
-  predicate:
+  <li> The predicate is any binary expression not checking for equality, and the found object is compared to not be <code>null</code>:
     <ul>
-      <li> Replace <code>find {it == element} != null</code> with <code>contains(element)</code>. </li>
-      <li> Replace <code>findLast {it != element} == null</code> with <code>contains(element)</code>. </li>
+      <li> Replace <code>find { it &gt; 5 } != null</code> with <code>any { it &gt; 5 }</code>. </li>
+      <li> Replace <code>findLast { it != 5 } != null</code> with <code>any { it != 5 }</code>. </li>
+      <li> Replace <code>firstOrNull { x → x &lt; 5 } != null</code> with <code>any { x → x &lt; 5 }</code>. </li>
+      <li> Replace <code>lastOrNull { x → x != 5 } != null</code> with <code>any { x → x != 5 }</code>. </li>
     </ul>  </li>
-  <li> The predicate is a simple binary expression checking for equality, and null check on the found object has the same equality operator as the
-  predicate:
+  <li> The predicate is any binary expression not checking for equality, and the found object is compared to be <code>null</code>:
     <ul>
-      <li> Replace <code>find {it == element} == null</code> with <code>!contains(element)</code>. </li>
-      <li> Replace <code>findLast {it != element} != null</code> with <code>!contains(element)</code>. </li>
+      <li> Replace <code>find { it &gt; 5 } == null</code> with <code>none { it &gt; 5 }</code>. </li>
+      <li> Replace <code>findLast { it != 5 } == null</code> with <code>none { it != 5 }</code>. </li>
+      <li> Replace <code>firstOrNull { x → x &lt; 5 } == null</code> with <code>none { x → x &lt; 5 }</code>. </li>
+      <li> Replace <code>lastOrNull { x → x != 5 } == null</code> with <code>none { x → x != 5 }</code>. </li>
     </ul>  </li>
 </ol>
-<p><em>Note that 3) and 4) apply only when the predicate checks that an item from the collection is equals or not equals to the given
-element.</em></p>
 <h3>Code examples</h3>
 <h4>Noncompliant code example</h4>
 <pre data-diff-id="1" data-diff-type="noncompliant">
 fun example(list: List&lt;Int&gt;) {
     list.find { it &gt; 5 } != null // Noncompliant
     list.findLast { it &gt; 5 } == null // Noncompliant
-    list.find { it == 5 } != null // Noncompliant
-    list.find { x -&gt; x != 5 } != null // Noncompliant
+    list.firstOrNull { it == 5 } != null // Noncompliant
+    list.lastOrNull { x -&gt; x == 5 } != null // Noncompliant
     list.find { x -&gt; 5 == 4 } != null // Noncompliant, note that this case cannot be fixed using contains
 }
 </pre>

@@ -22,25 +22,26 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.lexer.KtTokens.EQEQ
 import org.jetbrains.kotlin.lexer.KtTokens.EXCLEQ
 import org.jetbrains.kotlin.psi.KtBinaryExpression
-import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
-import org.jetbrains.kotlin.psi.KtOperationExpression
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.findClosestAncestorOfType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.reporting.Message
+import org.sonarsource.kotlin.api.reporting.message
 
 /**
- * This rule reports an issue when the pattern of using `find(predicate)` or `findLast(predicate)`,
- * from the `kotlin.collections` package, combined with a null check is detected.
+ * This rule reports an issue when the pattern of using `find(predicate)`, `findLast(predicate)`, `firstOrNull(predicate)`,
+ * and `lastOrNull(predicate)` from the `kotlin.collections` package, combined with a null check is detected.
  *
  * The rule suggests to replace the pattern with `any(predicate)`, `none(predicate)`, and `contains(element)` depending on the case.
  */
@@ -49,60 +50,51 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
 
     override val functionsToVisit = listOf(
         FunMatcher(qualifier = "kotlin.collections") {
-            withNames("find", "findLast")
+            withNames("find", "findLast", "firstOrNull", "lastOrNull")
             withArguments("kotlin.Function1")
         }
     )
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
-        callExpression.parent.parent
-            ?.takeIf { it is KtOperationExpression }
-            ?.let { it as KtBinaryExpression }
-            ?.takeIf { it.right is KtConstantExpression && it.right!!.isNull() }
+        callExpression.findClosestAncestorOfType<KtBinaryExpression>()
+            ?.takeIf { isConstantNull(it.right) || isConstantNull(it.left) }
             ?.let { report(it, callExpression, kotlinFileContext) }
     }
 
-    private fun report(nullComparisonExpr: KtBinaryExpression, findCallExpr: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        // findCallExpr is a call to find or findLast, having as argument a lambda expression with a single parameter
-        val lambda = findCallExpr.valueArguments[0].getArgumentExpression() as KtLambdaExpression
+    private fun isConstantNull(expression: KtExpression?): Boolean = expression is KtConstantExpression && expression.isNull()
 
-        // lambda has a binary expression as body
-        val lambdaBinaryExpr = lambda.binaryExpression()
-        val lambdaParameterName = if (lambda.valueParameters.isEmpty()) "it" else lambda.valueParameters[0].name
+    private fun report(nullComparisonExpr: KtBinaryExpression, callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
+        // callExpression has argument a lambda expression with a single parameter, due to the functionsToVisit FunMatchers
+        val lambda = callExpression.valueArguments[0].getArgumentExpression() as KtLambdaExpression
 
-        // the case in which the lambda predicate checks for equality among the collection elements
-        // meaning that the binary expressions has one operand that matches the lambda parameter name (or the implicit parameter "it")
-        if (lambdaBinaryExpr != null
-            && lambdaBinaryExpr.isSingleEqualityBinaryExpression() && lambdaBinaryExpr.references(lambdaParameterName!!)) {
+        val lambdaBinaryExpr = lambda.bodyExpression!!.firstChild as? KtBinaryExpression
+        // the lambda either has the implicit "it" parameter or a single parameter
+        val lambdaParameterName = if (lambda.valueParameters.isEmpty()) "it" else lambda.valueParameters[0].name!!
 
-            // the element to be found is the binary expression operand that is not the lambda parameter
-            val element = lambdaBinaryExpr.nonParameterOperand(lambdaParameterName)
-            val expressionBeforeFind = (findCallExpr.parent as KtDotQualifiedExpression).receiverExpression
+        // the functionsToVisit can be applied directly on the collection, or indirectly, for example using "with(collection)"
+        val dotExpressionBeforeFind = callExpression.findClosestAncestorOfType<KtDotQualifiedExpression>()?.receiverExpression
+        // in case the function is called on the collection directly, we build the replacement on the dot expression before the call
+        val beforeFindTxt = dotExpressionBeforeFind?.text?.plus(".") ?: ""
+
+        // case in which the lambda predicate is an equality check: "it == something" or "x -> x == something"
+        if (lambdaBinaryExpr != null && lambdaBinaryExpr.isSingleEquality() && lambdaBinaryExpr.references(lambdaParameterName)) {
             val negateContains = (lambdaBinaryExpr.operationToken == EQEQ) xor (nullComparisonExpr.operationToken == EXCLEQ)
-            val replacementExpr = (if (negateContains) "!" else "") + "${expressionBeforeFind.text}.contains(${element.text})"
+            // the binary expression operand that is not the lambda parameter
+            val elementTxt = lambdaBinaryExpr.nonParameterOperand(lambdaParameterName).text
+            val replacementExpr = (if (negateContains) "!" else "") + "${beforeFindTxt}contains($elementTxt)"
 
             kotlinFileContext.reportIssue(nullComparisonExpr, message(nullComparisonExpr, replacementExpr))
         } else {
-            val expressionBeforeFind = (findCallExpr.parent as KtDotQualifiedExpression).receiverExpression
             val isAnyReplacement = nullComparisonExpr.operationToken == EXCLEQ
-            val replacementExpr = "${expressionBeforeFind.text}.${if (isAnyReplacement) "any" else "none"} ${lambda.text}"
+            val replacementExpr = "${beforeFindTxt}${if (isAnyReplacement) "any" else "none"} ${lambda.text}"
 
             kotlinFileContext.reportIssue(nullComparisonExpr, message(nullComparisonExpr, replacementExpr))
         }
     }
 
-    private fun KtLambdaExpression.binaryExpression(): KtBinaryExpression? {
-        return this.bodyExpression
-            .takeIf { it is KtBlockExpression }
-            ?.firstChild
-            ?.takeIf { it is KtBinaryExpression }
-            ?.let { it as KtBinaryExpression }
-    }
-
     // checks that the binary expression has no binary expression as child, and it is an equality comparison
-    private fun KtBinaryExpression.isSingleEqualityBinaryExpression(): Boolean =
-        this.getChildOfType<KtBinaryExpression>() == null
-            && (this.operationToken == EQEQ || this.operationToken == EXCLEQ)
+    private fun KtBinaryExpression.isSingleEquality(): Boolean =
+        this.getChildOfType<KtBinaryExpression>() == null && this.operationToken == EQEQ
 
     private fun KtBinaryExpression.references(reference: String): Boolean =
         this.left!!.references(reference) || this.right!!.references(reference)
@@ -111,8 +103,14 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
         if (!this.left!!.references(parameter)) this.left!! else this.right!!
 
     private fun KtExpression.references(reference: String): Boolean =
-        this.takeIf { it is KtNameReferenceExpression }?.let { it as KtNameReferenceExpression }?.text == reference
+        this.let { it as? KtNameReferenceExpression }?.getReferencedName() == reference
 
-    private fun message(nullComparisonExpr: KtBinaryExpression, replacementExpr: String): String =
-        "Replace \"${nullComparisonExpr.text}\" with \"$replacementExpr\"."
+    private fun message(nullComparisonExpr: KtBinaryExpression, replacementExpr: String): Message =
+        message {
+            +"Replace "
+            code(nullComparisonExpr.text)
+            +" with "
+            code(replacementExpr)
+            +"."
+        }
 }

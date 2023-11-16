@@ -96,9 +96,9 @@ import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.sonar.api.SonarProduct
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.utils.Version
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.merge
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
-import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
     qualifier = "java.util.Properties"
@@ -187,7 +187,7 @@ fun PsiElement.linesOfCode(): Set<Int> {
     val document = this.containingFile.viewProvider.document!!
     this.accept(object : KtTreeVisitorVoid() {
         override fun visitElement(element: PsiElement) {
-            if(element !is PsiComment) {
+            if (element !is PsiComment) {
                 super.visitElement(element)
             }
             if (element is LeafPsiElement && element !is PsiWhiteSpace && element !is PsiComment) {
@@ -491,6 +491,16 @@ fun KtExpression?.getterMatches(bindingContext: BindingContext, propertyName: St
     else -> false
 }
 
+inline fun <reified T : KtExpression> KtExpression.findClosestAncestorOfType(): T? {
+    var parent = this.parent
+
+    while (parent != null && parent !is T) {
+        parent = parent.parent
+    }
+
+    return parent as? T
+}
+
 fun KtBinaryExpression.isPlus() =
     this.operationReference.operationSignTokenType?.let { OperatorConventions.BINARY_OPERATION_NAMES[it] }?.asString() == "plus"
 
@@ -508,10 +518,10 @@ fun KtClassOrObject.hasExactlyOneFunctionAndNoProperties(): Boolean {
 }
 
 fun KotlinType.isFunctionalInterface(): Boolean =
-    (constructor.declarationDescriptor as? ClassDescriptor) ?.let(::getSingleAbstractMethodOrNull) != null
+    (constructor.declarationDescriptor as? ClassDescriptor)?.let(::getSingleAbstractMethodOrNull) != null
 
 fun KotlinFileContext.merge(firstElement: PsiElement, lastElement: PsiElement) =
-    merge(listOf(textRange(firstElement),textRange(lastElement)))
+    merge(listOf(textRange(firstElement), textRange(lastElement)))
 
 fun KotlinType.simpleName(): String = getKotlinTypeFqName(false).substringAfterLast(".")
 
