@@ -27,6 +27,9 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/core/builtins/native/kotlin/Number.kt": [
 22
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors.runtime/src/kotlin/reflect/jvm/internal/structure/ReflectJavaElement.kt": [
+21
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/CommonAlignmentStrategy.kt": [
 22
 ],
@@ -50,10 +53,47 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.khronos.webgl.kt": [
 69,
+75,
+81,
+87,
+93,
+99,
+105,
 111
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.dom.kt": [
-341
+280,
+335,
+341,
+356,
+543,
+581,
+719
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.dom.svg.kt": [
+368,
+371,
+377,
+383,
+389,
+395,
+401,
+436,
+540,
+587,
+615,
+621,
+661,
+667,
+735,
+779,
+782,
+785,
+814,
+817
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.xhr.kt": [
+39
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/test/kotlin/cases/companions/companions.kt": [
 13,
