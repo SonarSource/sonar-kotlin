@@ -23,8 +23,10 @@ import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtSuperTypeCallEntry
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -40,34 +42,24 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 class AbstractClassShouldBeInterfaceCheck : AbstractCheck() {
 
     override fun visitClass(klass: KtClass, context: KotlinFileContext) {
-        super.visitClass(klass, context)
 
-        if (!klass.isAbstract() || klass.isInterface() || klass.extendsClass(context.bindingContext)) return
+        if (!klass.isAbstract() || klass.isInterface() || klass.extendsClass()) return
 
         val allMethods = klass.collectDescendantsOfType<KtFunction>()
-        val allProperties = klass.collectDescendantsOfType<KtProperty>()
+        val allProperties: List<KtProperty> by lazy { klass.collectDescendantsOfType<KtProperty>() }
 
-        if (allMethods.none { it.isNotAbstract() } && allProperties.none { it.isNotAbstract() }) {
+        if (allMethods.all { it.isAbstract() } && allProperties.all { it.isAbstract() }) {
             context.reportIssue(
                 klass.nameIdentifier!!,
-                "Either replace the class declaration with an interface declaration, or add actual function implementations or state properties to the abstract class."
+                "Replace this abstract class with an interface, or add function implementations or state properties to the class."
             )
         }
     }
 
-    private fun KtClass.extendsClass(bindingContext: BindingContext): Boolean {
-        val classType: KotlinType? = this.determineType(bindingContext)
-        //maybe we should only check if it extends some things and not just classes
-        return if (classType != null)
-            classType.supertypes().any { it.isClass() }
-        else
-            superTypeListEntries.isNotEmpty()
+    private fun KtClass.extendsClass(): Boolean {
+        return superTypeListEntries.any { it is KtSuperTypeCallEntry }
     }
 
-    private fun KotlinType.isClass(): Boolean =
-        !this.isAny() && (constructor.declarationDescriptor as? ClassDescriptor)?.kind == ClassKind.CLASS
-
-    private fun KtFunction.isNotAbstract() = !hasModifier(KtTokens.ABSTRACT_KEYWORD)
-    private fun KtProperty.isNotAbstract() = !hasModifier(KtTokens.ABSTRACT_KEYWORD)
+    private fun KtDeclaration.isAbstract() = hasModifier(KtTokens.ABSTRACT_KEYWORD)
 
 }

@@ -1,7 +1,9 @@
 package checks
 
 class AbstractClassShouldBeInterfaceCheckSample {
-    abstract class ShapeA { // Noncompliant {{Either replace the class declaration with an interface declaration, or add actual function implementations or state properties to the abstract class.}}
+
+    abstract class ShapeA { // Noncompliant {{Replace this abstract class with an interface, or add function implementations or state properties to the class.}}
+//                 ^^^^^^
         abstract fun getPath(): Int
         abstract fun getBoundingBox(): Pair<Int,Int>
     }
@@ -87,5 +89,8 @@ class AbstractClassShouldBeInterfaceCheckSample {
 
     interface M {} // compliant
     abstract class N : M {} // Noncompliant
+    abstract class O : K(), M {} // compliant
 
+    abstract interface ZZZ { // Compliant
+    }
 }
