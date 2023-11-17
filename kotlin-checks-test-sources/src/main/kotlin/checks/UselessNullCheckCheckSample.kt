@@ -1,5 +1,11 @@
 package checks
 
+import kotlinx.coroutines.CoroutineScope
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.util.Arrays
+import kotlin.coroutines.CoroutineContext
+
 class UselessNullCheckCheckSample {
     fun foo() {
         val s: String = ""
@@ -58,7 +64,13 @@ class UselessNullCheckCheckSample {
         f!! // Compliant
 
         aField!! // Noncompliant
-        bField!! // Noncompliant
+
+        // The following is a compliant FN. bField is declared as:
+        // val bField:String? = ""
+        // so the type is technically nullable but the value is never null. We could solve this by resolving the runtime value expression.
+        // However, this causes FPs in some situations, see SONARKT-373.
+        bField!! // Compliant FN
+
         cField!! // Noncompliant
         dField!!
         eField!! // Noncompliant
@@ -67,7 +79,7 @@ class UselessNullCheckCheckSample {
         hField!! // Noncompliant
     }
 
-    fun `ensure we don't trigger on some unexpected code`() {
+    fun `ensure we don't trigger on some unexpected code`(foo: Any) {
         val s: String = ""
 
         if (s == "") {}
@@ -76,10 +88,20 @@ class UselessNullCheckCheckSample {
         var i: Int = 0
         i++
 
-
+        (foo as? String)?.isLong() ?: true // Compliant regression test (SONARKT-373)
     }
 
     private fun Any?.doSomething() {}
     private fun getSomething() = ""
     private fun getSomethingNullable(): String? = null
 }
+
+
+fun platformTypesShouldBeCompliant() {
+    val list = Arrays.asList<String>(null)
+    val item = list.first()
+    item.length
+    item?.length
+    item!!
+}
+fun String.isLong() = length > 10

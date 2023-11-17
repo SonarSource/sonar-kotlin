@@ -150,7 +150,10 @@ class UselessNullCheckCheck : AbstractCheck() {
 
         val result = if (resolvedExpression.isNull()) {
             nullCaseResult
-        } else if (resolvedExpression.determineType(kfc.bindingContext)?.nullability() == TypeNullability.NOT_NULL) {
+        } else if (
+            // We are not using the resolvedExpression on purpose here, as it can cause FPs. See SONARKT-373.
+            expression.determineType(kfc.bindingContext)?.nullability() == TypeNullability.NOT_NULL
+        ) {
             nonNullCaseResult
         } else {
             return
