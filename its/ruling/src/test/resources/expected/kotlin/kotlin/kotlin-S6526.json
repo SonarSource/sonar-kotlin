@@ -1,0 +1,115 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/container/tests/org/jetbrains/kotlin/container/tests/ComponentContainerTest.kt": [
+316
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/analyzer/AnalyzerFacade.kt": [
+310
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.common/src/org/jetbrains/kotlin/backend/common/lower/LocalDeclarationsLowering.kt": [
+86
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/tower/TowerResolver.kt": [
+291
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/codegen/AbstractCustomScriptCodegenTest.kt": [
+139,
+150
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/daemon/CompilerDaemonTest.kt": [
+927
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/scripts/ScriptTemplateTest.kt": [
+563,
+587,
+590,
+593
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/builtins/native/kotlin/Number.kt": [
+22
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors.runtime/src/kotlin/reflect/jvm/internal/structure/ReflectJavaElement.kt": [
+21
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/CommonAlignmentStrategy.kt": [
+22
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/configuration/BuildSystemType.kt": [
+12
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/decompiler/stubBuilder/flags/flags.kt": [
+24
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/stepping/KotlinStepActionFactory.kt": [
+36
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.translator/src/org/jetbrains/kotlin/js/translate/intrinsic/functions/basic/FunctionIntrinsic.kt": [
+26
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/scripting/jvm-maven-deps/script/src/org/jetbrains/kotlin/script/examples/jvm/resolve/maven/scriptDef.kt": [
+28
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/scripting/jvm-simple-script/script/src/org/jetbrains/kotlin/script/examples/jvm/simple/scriptDef.kt": [
+16
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.khronos.webgl.kt": [
+69,
+75,
+81,
+87,
+93,
+99,
+105,
+111
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.dom.kt": [
+280,
+335,
+341,
+356,
+543,
+581,
+719
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.dom.svg.kt": [
+368,
+371,
+377,
+383,
+389,
+395,
+401,
+436,
+540,
+587,
+615,
+621,
+661,
+667,
+735,
+779,
+782,
+785,
+814,
+817
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.xhr.kt": [
+39
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/test/kotlin/cases/companions/companions.kt": [
+13,
+47,
+80
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/test/kotlin/cases/nestedClasses/publicAbstractClass.kt": [
+3
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-dagger-maven-example/src/main/kotlin/PumpModule.kt": [
+7
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-kapt-allopen/src/main/kotlin/PumpModule.kt": [
+7
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/sam-with-receiver/sam-with-receiver-cli/test/org/jetbrains/kotlin/samWithReceiver/AbstractSamWithReceiverScriptTest.kt": [
+41
+]
+}

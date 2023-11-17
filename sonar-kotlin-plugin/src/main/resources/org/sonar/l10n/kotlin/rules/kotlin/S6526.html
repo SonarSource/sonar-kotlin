@@ -1,0 +1,50 @@
+<h2>Why is this an issue?</h2>
+<p>If an abstract class does not contain properties nor actual function implementations but only abstract functions, it should be replaced with an
+interface. This is a good practice because an interface provides more flexibility, while an abstract class does not offer any benefit in this
+situation.</p>
+<h3>What is the potential impact?</h3>
+<h4>Flexibility of the design</h4>
+<p>Abstract classes are limited in their inheritability compared to interfaces, while they do not offer any benefit in this situation. A class can
+only extend one class but can implement many interfaces. When APIs are represented by abstract classes instead of interfaces, the implementing class
+must have the abstract class as its one (and only) parent class. Also, it cannot implement more than one API at once.</p>
+<h2>How to fix it</h2>
+<p>Either replace the class declaration with an interface declaration, or add actual function implementations or state properties to the abstract
+class.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+abstract class Shape { // Noncompliant, abstract class only contains abstract functions
+    abstract fun getPath(): Path
+    abstract fun getArea(): Double
+    abstract fun getBoundingBox(): Rectangle
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+interface Shape { // Compliant, we are using an interface here
+    fun getPath(): Path
+    fun getArea(): Double
+    fun getBoundingBox(): Rectangle
+}
+
+// or
+
+abstract class Shape { // Compliant, abstract class has function implementations
+    abstract fun getPath(): Path
+    abstract fun getArea(): Double
+    fun getBoundingBox(): Rectangle {
+        // ...
+    }
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/interfaces.html">Kotlin Docs, Interfaces</a> </li>
+</ul>
+<h3>Articles &amp; blog posts</h3>
+<ul>
+  <li> <a href="https://blog.kotlin-academy.com/abstract-class-vs-interface-in-kotlin-5ab8697c3a14">Kotlin Academy, Abstract class vs interface in
+  Kotlin</a> </li>
+</ul>
+

@@ -1,0 +1,21 @@
+{
+  "title": "Abstract class should be interface",
+  "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    },
+    "attribute": "CONVENTIONAL"
+  },
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-6526",
+  "sqKey": "S6526",
+  "scope": "All",
+  "quickfix": "unknown"
+}
