@@ -6,33 +6,33 @@ import java.net.HttpURLConnection
 import java.util.Arrays
 import kotlin.coroutines.CoroutineContext
 
-class UselessNullCheckCheckSample {
+class UselessNullCheckCheckSampleNoSemantics {
     fun foo() {
         val s: String = ""
 
-        if (s == null) {} // Noncompliant {{Remove this useless null check, it always fails.}}
-//          ^^^^^^^^^
+        if (s == null) {} // Compliant FN (missing semantics)
 
-        if (s != null) {} // Noncompliant {{Remove this useless non-null check, it always succeeds.}}
-        s?.doSomething() // Noncompliant {{Remove this useless null-safe access `?.`, it always succeeds.}}
-//       ^^
+
+        if (s != null) {} // Compliant FN (missing semantics)
+        s?.doSomething() // Compliant FN (missing semantics)
+
         fun foo(s: Any): String {
-            s ?: return "" // Noncompliant {{Remove this useless elvis operation `?:`, it always succeeds.}}
-//            ^^
+            s ?: return "" // Compliant FN (missing semantics)
+
             return s.toString()
         }
-        requireNotNull(s) // Noncompliant {{Remove this useless non-null check `requireNotNull`, it always succeeds.}}
-//      ^^^^^^^^^^^^^^^^^
+        requireNotNull(s) // Compliant FN (missing semantics)
 
-        checkNotNull(s) // Noncompliant {{Remove this useless non-null check `checkNotNull`, it always succeeds.}}
-        s!!.doSomething() // Noncompliant {{Remove this useless non-null assertion `!!`, it always succeeds.}}
-//       ^^
+
+        checkNotNull(s) // Compliant FN (missing semantics)
+        s!!.doSomething() // Compliant FN (missing semantics)
+
         null!! // Noncompliant {{Remove this useless non-null assertion `!!`, it always fails.}}
         null?.doSomething() // Noncompliant {{Remove this useless null-safe access `?.`, it always fails.}}
         null ?: doSomething() // Noncompliant
         null != "" // Noncompliant
         0 != null // Noncompliant
-        doSomething() ?: null // Noncompliant
+        doSomething() ?: null // Compliant FN (missing semantics)
     }
 
     val aField: String? = null
@@ -47,7 +47,7 @@ class UselessNullCheckCheckSample {
 
     fun bar() {
         val a: String? = null
-        a!! // Noncompliant
+        a!! // Compliant FN (missing semantics)
 
         var b: String? = null
         b!! // Compliant FN. We don't currently resolve the value of vars.
@@ -57,15 +57,15 @@ class UselessNullCheckCheckSample {
         c!! // Compliant FN. We don't currently resolve the value of vars.
 
         var d: String = ""
-        d!! // Noncompliant
+        d!! // Compliant FN (missing semantics)
 
         var e = getSomething()
-        e!! // Noncompliant
+        e!! // Compliant FN (missing semantics)
 
         val f = getSomethingNullable()
         f!! // Compliant
 
-        aField!! // Noncompliant
+        aField!! // Compliant FN (missing semantics)
 
         // The following is a compliant FN. bField is declared as:
         // val bField:String? = ""
@@ -73,12 +73,12 @@ class UselessNullCheckCheckSample {
         // However, this causes FPs in some situations, see SONARKT-373.
         bField!! // Compliant FN
 
-        cField!! // Noncompliant
+        cField!! // Compliant FN (missing semantics)
         dField!!
-        eField!! // Noncompliant
+        eField!! // Compliant FN (missing semantics)
         fField!!
         gField!!
-        hField!! // Noncompliant
+        hField!! // Compliant FN (missing semantics)
     }
 
     fun `ensure we don't trigger on some unexpected code`(foo: Any) {

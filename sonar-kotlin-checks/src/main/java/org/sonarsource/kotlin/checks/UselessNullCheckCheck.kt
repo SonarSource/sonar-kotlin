@@ -23,13 +23,16 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getArgumentByParameterIndex
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
+import org.jetbrains.kotlin.types.checker.SimpleClassicTypeSystemContext.isError
 import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.jetbrains.kotlin.types.typeUtil.nullability
 import org.sonar.check.Rule
@@ -151,8 +154,8 @@ class UselessNullCheckCheck : AbstractCheck() {
         val result = if (resolvedExpression.isNull()) {
             nullCaseResult
         } else if (
-            // We are not using the resolvedExpression on purpose here, as it can cause FPs. See SONARKT-373.
-            expression.determineType(kfc.bindingContext)?.nullability() == TypeNullability.NOT_NULL
+        // We are not using the resolvedExpression on purpose here, as it can cause FPs. See SONARKT-373.
+            expression.isNotNullable(kfc.bindingContext)
         ) {
             nonNullCaseResult
         } else {
@@ -166,3 +169,12 @@ class UselessNullCheckCheck : AbstractCheck() {
         }
     }
 }
+
+private fun KtExpression.isNotNullable(bc: BindingContext) =
+    when (this) {
+        is KtConstantExpression -> !isNull()
+        is KtStringTemplateExpression -> true
+        else -> determineType(bc)?.let { resolvedType ->
+            !resolvedType.isError() && resolvedType.nullability() == TypeNullability.NOT_NULL
+        } == true
+    }

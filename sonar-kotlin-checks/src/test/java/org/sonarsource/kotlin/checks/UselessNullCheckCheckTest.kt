@@ -19,4 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-internal class UselessNullCheckCheckTest : CheckTest(UselessNullCheckCheck())
+internal class UselessNullCheckCheckTest : CheckTestWithNoSemantics(UselessNullCheckCheck(), shouldReport = true)
