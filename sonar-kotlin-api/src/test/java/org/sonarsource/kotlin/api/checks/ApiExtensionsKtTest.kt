@@ -181,9 +181,6 @@ internal class ApiExtensionsKtTest {
                 textToExpression[it.text] = it
         }
 
-        assertThat(textToExpression["find"]!!.findClosestAncestorOfType<KtDotQualifiedExpression>())
-            .isEqualTo(textToExpression["list.filter { it.startsWith(prefix) }.find { it.length > length }"])
-
         assertThat(textToExpression["find { it.length > length }"]!!.findClosestAncestorOfType<KtDotQualifiedExpression>())
             .isEqualTo(textToExpression["list.filter { it.startsWith(prefix) }.find { it.length > length }"])
 
@@ -193,7 +190,17 @@ internal class ApiExtensionsKtTest {
         assertThat(textToExpression["filter { it.startsWith(prefix) }"]!!.findClosestAncestorOfType<KtBinaryExpression>())
             .isEqualTo(textToExpression["list.filter { it.startsWith(prefix) }.find { it.length > length } != null"])
 
+        assertThat(textToExpression["find"]!!.findClosestAncestorOfType<KtDotQualifiedExpression>())
+            .isEqualTo(textToExpression["list.filter { it.startsWith(prefix) }.find { it.length > length }"])
+
+        assertThat(textToExpression["find"]!!.findClosestAncestorOfType<KtDotQualifiedExpression> { it is KtDotQualifiedExpression })
+            .isEqualTo(textToExpression["list.filter { it.startsWith(prefix) }.find { it.length > length }"])
+
+        assertThat(textToExpression["find"]!!.findClosestAncestorOfType<KtBinaryExpression> { it is KtDotQualifiedExpression }).isNull()
+
         assertThat(textToExpression["find"]!!.findClosestAncestorOfType<KtClassLiteralExpression>()).isNull()
+
+        assertThat(textToExpression["find"]!!.findClosestAncestorOfType<KtClassLiteralExpression> { it is KtBinaryExpression }).isNull()
     }
 
     @Test

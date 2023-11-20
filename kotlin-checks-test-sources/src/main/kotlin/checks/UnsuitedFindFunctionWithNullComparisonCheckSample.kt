@@ -77,6 +77,12 @@ class UnsuitedFindFunctionWithNullComparisonCheckSample {
             }
         }
 
+        5.let {
+            with(list) {
+                findLast { it > 5 } != null // Noncompliant {{Replace `findLast { it > 5 } != null` with `any { it > 5 }`.}}
+            }
+        }
+
         list.find { x -> x == 5 } != null // Noncompliant {{Replace `list.find { x -> x == 5 } != null` with `list.contains(5)`.}}
         list.find { x -> x == five } != null // Noncompliant {{Replace `list.find { x -> x == five } != null` with `list.contains(five)`.}}
         list.find { x -> five() == 5 } != null // Noncompliant {{Replace `list.find { x -> five() == 5 } != null` with `list.any { x -> five() == 5 }`.}}

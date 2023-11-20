@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.lexer.KtTokens.EQEQ
 import org.jetbrains.kotlin.lexer.KtTokens.EXCLEQ
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
@@ -57,11 +56,9 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         callExpression.findClosestAncestorOfType<KtBinaryExpression>()
-            ?.takeIf { isConstantNull(it.right) || isConstantNull(it.left) }
+            ?.takeIf { it.right!!.isNull() || it.left!!.isNull() }
             ?.let { report(it, callExpression, kotlinFileContext) }
     }
-
-    private fun isConstantNull(expression: KtExpression?): Boolean = expression is KtConstantExpression && expression.isNull()
 
     private fun report(nullComparisonExpr: KtBinaryExpression, callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
         // callExpression has argument a lambda expression with a single parameter, due to the functionsToVisit FunMatchers
@@ -72,7 +69,8 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
         val lambdaParameterName = if (lambda.valueParameters.isEmpty()) "it" else lambda.valueParameters[0].name!!
 
         // the functionsToVisit can be applied directly on the collection, or indirectly, for example using "with(collection)"
-        val dotExpressionBeforeFind = callExpression.findClosestAncestorOfType<KtDotQualifiedExpression>()?.receiverExpression
+        val dotExpressionBeforeFind =
+            callExpression.findClosestAncestorOfType<KtDotQualifiedExpression>(stopCondition = { it is KtBinaryExpression })?.receiverExpression
         // in case the function is called on the collection directly, we build the replacement on the dot expression before the call
         val beforeFindTxt = dotExpressionBeforeFind?.text?.plus(".") ?: ""
 
