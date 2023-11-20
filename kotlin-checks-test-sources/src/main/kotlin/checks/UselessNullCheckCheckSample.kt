@@ -4,9 +4,26 @@ import kotlinx.coroutines.CoroutineScope
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.util.Arrays
+import java.util.WeakHashMap
+import java.util.concurrent.locks.ReentrantReadWriteLock
+import kotlin.concurrent.read
 import kotlin.coroutines.CoroutineContext
 
 class UselessNullCheckCheckSample {
+
+    data class Container(val map: Map<String, String>)
+
+    fun baz() {
+        val container = Container(mapOf("foo" to "bar"))
+
+        val res = container.map["xyz"]
+            ?: "default"
+
+
+        listOf<String>().singleOrNull { true }
+    }
+
+
     fun foo() {
         val s: String = ""
 
@@ -84,8 +101,10 @@ class UselessNullCheckCheckSample {
     fun `ensure we don't trigger on some unexpected code`(foo: Any) {
         val s: String = ""
 
-        if (s == "") {}
-        if (s != "") {}
+        if (s == "") {
+        }
+        if (s != "") {
+        }
 
         var i: Int = 0
         i++
@@ -106,4 +125,16 @@ private fun platformTypesShouldBeCompliant() {
     item?.length
     item!!
 }
+
 private fun String.isLong() = length > 10
+
+
+private val cacheLock = ReentrantReadWriteLock()
+private val exceptionCtors: WeakHashMap<Class<out Throwable>, Ctor2> = WeakHashMap()
+private typealias Ctor2 = (Throwable) -> Throwable?
+
+private fun <E : Throwable> moo(exception: E) =
+    cacheLock.read { exceptionCtors[exception.javaClass] }?.let { cachedCtor ->
+        cachedCtor(exception) as E?
+    }
+

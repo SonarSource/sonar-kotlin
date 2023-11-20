@@ -4,6 +4,9 @@ import kotlinx.coroutines.CoroutineScope
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.util.Arrays
+import java.util.WeakHashMap
+import java.util.concurrent.locks.ReentrantReadWriteLock
+import kotlin.concurrent.read
 import kotlin.coroutines.CoroutineContext
 
 class UselessNullCheckCheckSampleNoSemantics {
@@ -107,3 +110,13 @@ private fun platformTypesShouldBeCompliant() {
     item!!
 }
 private fun String.isLong() = length > 10
+
+
+private val cacheLock = ReentrantReadWriteLock()
+private val exceptionCtors: WeakHashMap<Class<out Throwable>, Ctor> = WeakHashMap()
+private typealias Ctor = (Throwable) -> Throwable?
+
+private fun <E : Throwable> moo(exception: E) =
+    cacheLock.read { exceptionCtors[exception.javaClass] }?.let { cachedCtor ->
+        cachedCtor(exception) as E?
+    }

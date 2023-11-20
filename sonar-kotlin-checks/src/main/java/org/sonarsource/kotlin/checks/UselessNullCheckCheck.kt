@@ -20,6 +20,8 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.com.intellij.psi.PsiStatement
+import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -28,7 +30,9 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
+import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.isNull
+import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getArgumentByParameterIndex
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -39,6 +43,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.determineType
+import org.sonarsource.kotlin.api.checks.findClosestAncestorOfType
 import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
@@ -50,6 +55,8 @@ private val NON_NULL_CHECK_FUNS = FunMatcher("kotlin") {
 
 @Rule(key = "S6619")
 class UselessNullCheckCheck : AbstractCheck() {
+
+
     override fun visitBinaryExpression(binaryExpression: KtBinaryExpression, kotlinFileContext: KotlinFileContext) {
         val bc = kotlinFileContext.bindingContext
 
@@ -162,11 +169,29 @@ class UselessNullCheckCheck : AbstractCheck() {
             return
         }
 
+        if (kfc.mayBeAffectedByErrorInSemantics(expression)) {
+            return
+        }
+
         kfc.reportIssue(issueLocation) {
             +"Remove this useless "
             nullCheckTypeForMessage()
             +", it always $result."
         }
+    }
+}
+
+/**
+ * In some cases, semantics may be broken, e.g. in the Ktor IT. This may be due to multiplatform, although that is unconfirmed.
+ * We seem to be able to identify such cases by looking for a MISSING_BUILT_IN_DECLARATION error in the same statement.
+ * We ignore all cases such a diagnostic is present.
+ */
+private fun KotlinFileContext.mayBeAffectedByErrorInSemantics(expression: KtExpression): Boolean {
+    val ancestor: PsiElement = expression.findClosestAncestorOfType<PsiStatement>() ?: ktFile
+    return diagnostics.any {
+        it.factory == Errors.MISSING_BUILT_IN_DECLARATION &&
+                it.psiElement.startOffset >= ancestor.startOffset &&
+                it.psiElement.startOffset <= ancestor.endOffset
     }
 }
 
