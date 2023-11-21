@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.testapi
 import io.mockk.InternalPlatformDsl.toStr
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
@@ -53,6 +54,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
     var classpath: List<String> = System.getProperty("java.class.path").split(System.getProperty("path.separator")) + DEFAULT_KOTLIN_CLASSPATH
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
     var isAndroid = false
+    var customDiagnostics: List<Diagnostic>? = null
 
     fun verify() {
         verifyFile {
@@ -78,9 +80,9 @@ class KotlinVerifier(private val check: AbstractCheck) {
             if (isScriptFile) {
                 // TODO: Add logic here to create a Binding with Kotlin Script / Gradle DSL semantics.
                 //       Currently, we are just providing an empty context (`doResolve = false`)
-                kotlinTreeOf(content, environment, inputFile, false) to inputFile
+                kotlinTreeOf(content, environment, inputFile, false, customDiagnostics) to inputFile
             } else {
-                kotlinTreeOf(content, environment, inputFile, true) to inputFile
+                kotlinTreeOf(content, environment, inputFile, true, customDiagnostics) to inputFile
             }
         }
         createVerifier(converter, filePath).verify()

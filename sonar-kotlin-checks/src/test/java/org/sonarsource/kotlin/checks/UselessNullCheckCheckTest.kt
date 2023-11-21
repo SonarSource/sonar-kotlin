@@ -19,4 +19,36 @@
  */
 package org.sonarsource.kotlin.checks
 
-internal class UselessNullCheckCheckTest : CheckTestWithNoSemantics(UselessNullCheckCheck(), shouldReport = true)
+import io.mockk.every
+import io.mockk.mockk
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.diagnostics.Diagnostic
+import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.testapi.KotlinVerifier
+
+internal class UselessNullCheckCheckTest : CheckTestWithNoSemantics(UselessNullCheckCheck(), shouldReport = true) {
+    @Test
+    fun `ensure issues are not raised when MISSING_BUILT_IN_DECLARATION diagnostics is found on node`() {
+        val diagnostic = mockk<Diagnostic> {
+            every { factory } returns Errors.MISSING_BUILT_IN_DECLARATION
+            every { psiElement } returns mockk<PsiElement> {
+                every { startOffset } returns 100
+            }
+        }
+
+        val diagnostic2 = mockk<Diagnostic> {
+            every { factory } returns Errors.MISSING_BUILT_IN_DECLARATION
+            every { psiElement } returns mockk<PsiElement> {
+                every { startOffset } returns 999
+            }
+        }
+
+
+        KotlinVerifier(check) {
+            this.fileName = sampleFileNoSemantics ?: "UselessNullCheckCheckSampleWithErrorDiagnostics.kt"
+            this.customDiagnostics = listOf(diagnostic)
+        }.verify()
+    }
+}

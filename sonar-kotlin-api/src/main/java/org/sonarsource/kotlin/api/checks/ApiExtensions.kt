@@ -495,7 +495,7 @@ fun KtExpression?.getterMatches(bindingContext: BindingContext, propertyName: St
  * Finds the closest ancestor of type T within the scope of a {@param stopCondition}.
  * By default, there is no stop condition so the search continues up till the AST root is reached.
  */
-inline fun <reified T: PsiElement> KtExpression.findClosestAncestorOfType(stopCondition: (PsiElement) -> Boolean = { false }): T? {
+inline fun <reified T : KtExpression> KtExpression.findClosestAncestorOfType(stopCondition: (PsiElement) -> Boolean = { false }): T? {
     var parent = this.parent
 
     while (parent != null && !stopCondition.invoke(parent) && parent !is T) {
@@ -503,6 +503,16 @@ inline fun <reified T: PsiElement> KtExpression.findClosestAncestorOfType(stopCo
     }
 
     return parent as? T
+}
+
+fun PsiElement.findClosestAncestor(predicate: (PsiElement) -> Boolean): PsiElement? {
+    var parent = this.parent
+
+    while (parent != null && !predicate(parent)) {
+        parent = parent.parent
+    }
+
+    return parent
 }
 
 fun KtBinaryExpression.isPlus() =

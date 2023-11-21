@@ -50,6 +50,8 @@ class UselessNullCheckCheckSample {
         null != "" // Noncompliant
         0 != null // Noncompliant
         doSomething() ?: null // Noncompliant
+        42!! // Noncompliant
+        42 != null // Noncompliant
     }
 
     val aField: String? = null
