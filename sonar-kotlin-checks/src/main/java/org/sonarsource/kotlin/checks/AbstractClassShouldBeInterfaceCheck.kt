@@ -35,7 +35,7 @@ class AbstractClassShouldBeInterfaceCheck : AbstractCheck() {
 
     override fun visitClass(klass: KtClass, context: KotlinFileContext) {
 
-        if (!klass.isAbstract() || klass.isInterface() || klass.extendsClass()) return
+        if (!klass.isAbstract() || klass.isInterface() || klass.extendsClass() || klass.isExternal()) return
 
         val allMethods = klass.collectDescendantsOfType<KtFunction>()
         val allProperties: List<KtProperty> by lazy { klass.collectDescendantsOfType<KtProperty>() }
@@ -51,6 +51,7 @@ class AbstractClassShouldBeInterfaceCheck : AbstractCheck() {
     private fun KtClass.extendsClass(): Boolean {
         return superTypeListEntries.any { it is KtSuperTypeCallEntry }
     }
+    private fun KtClass.isExternal() = hasModifier(KtTokens.EXTERNAL_KEYWORD)
 
     private fun KtDeclaration.isAbstract() = hasModifier(KtTokens.ABSTRACT_KEYWORD)
 
