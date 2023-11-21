@@ -34,21 +34,13 @@ internal class UselessNullCheckCheckTest : CheckTestWithNoSemantics(UselessNullC
         val diagnostic = mockk<Diagnostic> {
             every { factory } returns Errors.MISSING_BUILT_IN_DECLARATION
             every { psiElement } returns mockk<PsiElement> {
-                every { startOffset } returns 100
+                every { startOffset } returns 0
             }
         }
-
-        val diagnostic2 = mockk<Diagnostic> {
-            every { factory } returns Errors.MISSING_BUILT_IN_DECLARATION
-            every { psiElement } returns mockk<PsiElement> {
-                every { startOffset } returns 999
-            }
-        }
-
 
         KotlinVerifier(check) {
             this.fileName = sampleFileNoSemantics ?: "UselessNullCheckCheckSampleWithErrorDiagnostics.kt"
             this.customDiagnostics = listOf(diagnostic)
-        }.verify()
+        }.verifyNoIssue()
     }
 }

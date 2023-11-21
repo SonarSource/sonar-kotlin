@@ -25,16 +25,12 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
-import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.isNull
-import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsStatement
 import org.jetbrains.kotlin.resolve.calls.util.getArgumentByParameterIndex
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.types.checker.SimpleClassicTypeSystemContext.isError
@@ -44,7 +40,6 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.determineType
-import org.sonarsource.kotlin.api.checks.findClosestAncestor
 import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
@@ -151,6 +146,8 @@ class UselessNullCheckCheck : AbstractCheck() {
         comparesToNull: Boolean,
         nullCheckTypeForMessage: Message.() -> Unit
     ) {
+        if (kfc.mayBeAffectedByErrorInSemantics()) return
+
         val (nullCaseResult, nonNullCaseResult) = if (comparesToNull) {
             "succeeds" to "fails"
         } else {
@@ -170,10 +167,6 @@ class UselessNullCheckCheck : AbstractCheck() {
             return
         }
 
-        if (kfc.mayBeAffectedByErrorInSemantics(expression)) {
-            return
-        }
-
         kfc.reportIssue(issueLocation) {
             +"Remove this useless "
             nullCheckTypeForMessage()
@@ -185,20 +178,11 @@ class UselessNullCheckCheck : AbstractCheck() {
 /**
  * [WORKAROUND]
  * In some cases, semantics may be broken, e.g. in the Ktor IT. This may be due to multiplatform, although that is unconfirmed.
- * We seem to be able to identify such cases by looking for a MISSING_BUILT_IN_DECLARATION error in the same statement.
- * We ignore all cases where such a diagnostic is present.
+ * We seem to be able to identify such cases by looking for a MISSING_BUILT_IN_DECLARATION error somewhere close to the statement.
+ * Since it is not always clear where this diagnostic might be raised, we over-approximate and ignore all files where such an error is
+ * found.
  */
-private fun KotlinFileContext.mayBeAffectedByErrorInSemantics(expression: KtExpression): Boolean {
-    val ancestor: PsiElement = expression.findClosestAncestor {
-        it is KtDeclaration || (it is KtExpression && it.isUsedAsStatement(bindingContext))
-    } ?: ktFile
-
-    val ancestorTextOffsetRange = ancestor.startOffset..ancestor.endOffset
-
-    return diagnostics.any { diagnostic ->
-        diagnostic.factory == Errors.MISSING_BUILT_IN_DECLARATION && diagnostic.psiElement.startOffset in ancestorTextOffsetRange
-    }
-}
+private fun KotlinFileContext.mayBeAffectedByErrorInSemantics() = diagnostics.any { it.factory == Errors.MISSING_BUILT_IN_DECLARATION }
 
 private fun KtExpression.isNotNullable(bc: BindingContext) =
     when (this) {
