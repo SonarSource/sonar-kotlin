@@ -26,9 +26,11 @@ import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -161,6 +163,44 @@ internal class ApiExtensionsKtTest {
             .isEmpty()
         assertThat(referencesMap.filter { it.value.setterMatches(ctx, "x", setNameMatcher) }.map { it.key })
             .isEmpty()
+    }
+
+
+    @Test
+    fun `test KtExpression findClosestAncestorOfType`() {
+        val tree = parse(
+            """
+            fun foo(list: List<String>, prefix: String, length: Int): Boolean = 
+                list.filter { it.startsWith(prefix) }.find { it.length > length } != null
+            """.trimIndent()
+        )
+
+        val textToExpression: MutableMap<String, KtExpression> = TreeMap()
+        walker(tree.psiFile) {
+            if (it is KtExpression)
+                textToExpression[it.text] = it
+        }
+
+        assertThat(textToExpression["find { it.length > length }"]!!.findClosestAncestorOfType<KtDotQualifiedExpression>())
+            .isEqualTo(textToExpression["list.filter { it.startsWith(prefix) }.find { it.length > length }"])
+
+        assertThat(textToExpression["find { it.length > length }"]!!.findClosestAncestorOfType<KtBinaryExpression>())
+            .isEqualTo(textToExpression["list.filter { it.startsWith(prefix) }.find { it.length > length } != null"])
+
+        assertThat(textToExpression["filter { it.startsWith(prefix) }"]!!.findClosestAncestorOfType<KtBinaryExpression>())
+            .isEqualTo(textToExpression["list.filter { it.startsWith(prefix) }.find { it.length > length } != null"])
+
+        assertThat(textToExpression["find"]!!.findClosestAncestorOfType<KtDotQualifiedExpression>())
+            .isEqualTo(textToExpression["list.filter { it.startsWith(prefix) }.find { it.length > length }"])
+
+        assertThat(textToExpression["find"]!!.findClosestAncestorOfType<KtDotQualifiedExpression> { it is KtDotQualifiedExpression })
+            .isEqualTo(textToExpression["list.filter { it.startsWith(prefix) }.find { it.length > length }"])
+
+        assertThat(textToExpression["find"]!!.findClosestAncestorOfType<KtBinaryExpression> { it is KtDotQualifiedExpression }).isNull()
+
+        assertThat(textToExpression["find"]!!.findClosestAncestorOfType<KtClassLiteralExpression>()).isNull()
+
+        assertThat(textToExpression["find"]!!.findClosestAncestorOfType<KtClassLiteralExpression> { it is KtBinaryExpression }).isNull()
     }
 
     @Test
