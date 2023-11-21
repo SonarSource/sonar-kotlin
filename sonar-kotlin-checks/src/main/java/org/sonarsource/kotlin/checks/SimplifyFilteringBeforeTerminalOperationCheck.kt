@@ -28,6 +28,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.reporting.message
 
 private const val KOTLIN_COLLECTIONS_QUALIFIER = "kotlin.collections"
 private val FILTER_MATCHER = FunMatcher(qualifier = KOTLIN_COLLECTIONS_QUALIFIER, name = "filter") { withArguments("kotlin.Function1") }
@@ -54,7 +55,15 @@ class SimplifyFilteringBeforeTerminalOperationCheck : CallAbstractCheck() {
                 val terminalOpCallText = callExpression.text
                 val terminalOpWithPredicate = "${callExpression.calleeExpression!!.text} $filterPredicateText"
 
-                val message = "Remove \"$filterCallText\" and replace \"$terminalOpCallText\" with \"$terminalOpWithPredicate\"."
+                val message = message {
+                    +"Remove "
+                    code(filterCallText)
+                    +" and replace "
+                    code(terminalOpCallText)
+                    +" with "
+                    code(terminalOpWithPredicate)
+                    +"."
+                }
 
                 kotlinFileContext.reportIssue(filterCallBeforeTerminalOp.callElement, message)
             }
