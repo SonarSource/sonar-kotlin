@@ -27,26 +27,25 @@ import java.nio.file.Paths
 private const val NON_COMPILING_TEST_FILE_POSTFIX = "SampleNonCompiling.kt"
 val NON_COMPILING_BASE_DIR = Paths.get("..", "kotlin-checks-test-sources", "src", "main", "files", "non-compiling", "checks")
 
-abstract class CheckTestNonCompiling(
-    check: AbstractCheck,
-    sampleFileSemantics: String? = null,
-    val sampleFileNonCompiling: String? = null,
-    classpath: List<String>? = null,
-    dependencies: List<String>? = null,
-    val shouldReport: Boolean = false,
-) : CheckTest(
-    check = check,
-    sampleFileSemantics = sampleFileSemantics,
-    classpath = classpath,
-    dependencies = dependencies
-) {
+interface CheckTestNonCompiling {
     @Test
-    fun `without semantics`() {
+    fun `non compiling`()
+}
+
+class CheckTestNonCompilingImpl(
+    val check: AbstractCheck,
+    private val sampleFileNonCompiling: String? = null,
+    private val shouldReport: Boolean = false,
+) : CheckTestNonCompiling {
+    private val checkName = check::class.java.simpleName
+
+    @Test
+    override fun `non compiling`() {
         KotlinVerifier(check) {
             this.fileName = sampleFileNonCompiling ?: "$checkName$NON_COMPILING_TEST_FILE_POSTFIX"
             this.baseDir = NON_COMPILING_BASE_DIR
-            this.classpath = this@CheckTestNonCompiling.classpath ?: emptyList()
-            this.deps = this@CheckTestNonCompiling.dependencies ?: emptyList()
+            this.classpath = emptyList()
+            this.deps = emptyList()
         }.let {
             if (this.shouldReport) it.verify() else it.verifyNoIssue()
         }
