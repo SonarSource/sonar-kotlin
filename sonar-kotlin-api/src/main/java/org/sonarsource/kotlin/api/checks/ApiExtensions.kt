@@ -328,11 +328,16 @@ private fun KtProperty.determineType(bindingContext: BindingContext) =
 fun KtProperty.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
-fun KtExpression.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
-
-fun KtValueArgument.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
+fun KtExpression.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false): String? {
+    val type = determineType(bindingContext)
+    // I have had a case where the compiler could not resolve the type to a specific one only to a constraint type,
+    // but I was not able to reproduce it
+    return if(type?.constructor?.declarationDescriptor != null){
+        type.getKotlinTypeFqName(printTypeArguments)
+    }else{
+        null
+    }
+}
 
 private fun KtParameter.determineType(bindingContext: BindingContext) =
     bindingContext[BindingContext.TYPE, typeReference]

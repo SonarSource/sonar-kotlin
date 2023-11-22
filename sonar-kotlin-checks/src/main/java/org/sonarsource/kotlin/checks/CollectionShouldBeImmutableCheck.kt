@@ -20,17 +20,18 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtArrayAccessExpression
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
-import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -43,29 +44,48 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S6524")
 class CollectionShouldBeImmutableCheck : AbstractCheck() {
-    private val mutableCollections = setOf("kotlin.collections.MutableList")
-    private val mutatorsOperations = setOf("add", "addAll", "remove", "removeAll", "retainAll", "clear")
+    private val mutableCollections =
+        setOf("kotlin.collections.MutableList", "kotlin.collections.MutableSet", "kotlin.collections.MutableMap")
+    private val mutatorsOperations =
+        setOf("add", "addAll", "remove", "removeAll", "retainAll", "clear", "set", "removeAt", "put", "putAll", "getOrPut")
+    private val assignmentOperations = setOf(KtTokens.PLUSEQ, KtTokens.MINUSEQ)
 
 
     override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext) {
         val bindingContext = context.bindingContext
 
-        if(function.receiverTypeReference?.determineTypeAsString(bindingContext) in mutableCollections) {
-            val functionsCalledOnThis = function
-                .collectDescendantsOfType<KtCallExpression> { it.noReceiver() || it.thisIsReceiver()}
-            if(functionsCalledOnThis.none { (it.calleeExpression as KtNameReferenceExpression).getReferencedName() in mutatorsOperations }) {
-                context.reportIssue(function.receiverTypeReference!!.navigationElement, "Make this collection immutable.")
-            }
+        if (function.receiverTypeReference?.determineTypeAsString(bindingContext) in mutableCollections) {
+            reportForExtensionFunction(function, context)
         }
+        reportForParametersAndProperties(function, bindingContext, context)
+    }
 
+    private fun reportForParametersAndProperties(
+        function: KtNamedFunction,
+        bindingContext: BindingContext,
+        context: KotlinFileContext,
+    ) {
+        val mutableProperties: List<KtNamedDeclaration> = function
+            .collectDescendantsOfType<KtProperty> { it.isMutableCollection(bindingContext) }
+        val mutableParameters: List<KtNamedDeclaration> = function.valueParameters
+            .filter { it.isMutableCollection(bindingContext) }
 
+        val mutableVariables = mutableProperties + mutableParameters
 
-        val mutableVariables = function
-            .collectDescendantsOfType<KtNamedDeclaration>{ it.isMutableCollection(bindingContext) }
 
         val mutatedCollections: List<KtNameReferenceExpression> = function
             .collectDescendantsOfType<KtQualifiedExpression> { it.mutateCollection(bindingContext) }
             .mapNotNull { simpleReference(it.receiverExpression) }
+
+        val arrayAccess: List<KtNameReferenceExpression> = function
+            .collectDescendantsOfType<KtBinaryExpression> { it.isArrayAccess() }
+            .mapNotNull { (it.left as KtArrayAccessExpression).arrayExpression }
+            .filter { it.isMutableCollection(bindingContext) }
+            .mapNotNull { simpleReference(it) }
+
+        val assignments: List<KtNameReferenceExpression> = function
+            .collectDescendantsOfType<KtBinaryExpression> { it.isAssignment() }
+            .mapNotNull { simpleReference(it.left) }
 
         val mutablePropertiesInFunctionCalls: List<KtNameReferenceExpression> = function
             .collectDescendantsOfType<KtCallExpression>()
@@ -74,8 +94,7 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
             .mapNotNull { simpleReference(it.getArgumentExpression()) }
 
 
-
-        val referencesToMutableCollections = mutatedCollections + mutablePropertiesInFunctionCalls
+        val referencesToMutableCollections = mutatedCollections + mutablePropertiesInFunctionCalls + arrayAccess + assignments
 
         val mutatedNames = referencesToMutableCollections.mapNotNull { it.name }.toSet()
         val mutatedDeclarations =
@@ -83,9 +102,23 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
 
 
         mutableVariables
-            .filter { it.isNotReferenced(mutatedDeclarations, mutatedNames, bindingContext)  }
+            .filter { it.isNotReferenced(mutatedDeclarations, mutatedNames, bindingContext) }
             .forEach { context.reportIssue(it, "Make this collection immutable.") }
     }
+
+    private fun reportForExtensionFunction(
+        function: KtNamedFunction,
+        context: KotlinFileContext,
+    ) {
+
+        val functionsCalledOnThis = function
+            .collectDescendantsOfType<KtCallExpression> { it.noReceiver() || it.thisIsReceiver() }
+
+        if (functionsCalledOnThis.none { (it.calleeExpression as KtNameReferenceExpression).getReferencedName() in mutatorsOperations }) {
+            context.reportIssue(function.receiverTypeReference!!.navigationElement, "Make this collection immutable.")
+        }
+    }
+    
 
     private fun simpleReference(expression: KtExpression?): KtNameReferenceExpression? {
         return when (expression) {
@@ -101,7 +134,7 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
         bindingContext: BindingContext,
     ): Boolean {
         val descriptor = bindingContext[DECLARATION_TO_DESCRIPTOR, this]
-        val name = this.name!!
+        val name = this.nameAsSafeName.asString()
 
         return if (descriptor != null) {
             !mutatedDeclarations.contains(descriptor)
@@ -111,10 +144,10 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
     }
 
     private fun KtQualifiedExpression.mutateCollection(bindingContext: BindingContext): Boolean {
-        return if(this.selectorExpression is KtCallExpression && (this.selectorExpression as KtCallExpression).calleeExpression is KtNameReferenceExpression) {
+        return if (this.selectorExpression is KtCallExpression && (this.selectorExpression as KtCallExpression).calleeExpression is KtNameReferenceExpression) {
             val receiverType = this.receiverExpression.determineTypeAsString(bindingContext)
             val selector = ((this.selectorExpression as KtCallExpression).calleeExpression as KtNameReferenceExpression).getReferencedName()
-            selector in mutatorsOperations && (receiverType==null || receiverType in mutableCollections)
+            selector in mutatorsOperations && (receiverType == null || receiverType in mutableCollections)
         } else {
             false
         }
@@ -125,7 +158,7 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
     }
 
     private fun KtCallExpression.thisIsReceiver(): Boolean {
-        return if(this.parent is KtQualifiedExpression) {
+        return if (this.parent is KtQualifiedExpression) {
             val parent = this.parent as KtQualifiedExpression
             simpleReference(parent.receiverExpression)?.name == "this"
         } else {
@@ -141,11 +174,16 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
         return this.getArgumentExpression()!!.isMutableCollection(bindingContext)
     }
 
-    private fun KtNamedDeclaration.isMutableCollection(bindingContext: BindingContext): Boolean {
-        return when(this){
-            is KtProperty, is KtParameter, is KtUserType -> this.determineTypeAsString(bindingContext) in mutableCollections
-            else -> false
-        }
+    private fun KtNamedDeclaration.isMutableCollection(bindingContext: BindingContext): Boolean =
+        this.determineTypeAsString(bindingContext) in mutableCollections
+
+    private fun KtBinaryExpression.isArrayAccess(): Boolean {
+        return this.operationToken == KtTokens.EQ && this.left is KtArrayAccessExpression
+
+    }
+
+    private fun KtBinaryExpression.isAssignment(): Boolean {
+        return this.operationToken in assignmentOperations
     }
 
 }

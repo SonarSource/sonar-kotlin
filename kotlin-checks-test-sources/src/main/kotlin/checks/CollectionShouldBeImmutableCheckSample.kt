@@ -2,7 +2,6 @@ package checks
 
 class CollectionShouldBeImmutableCheckSample {
 
-
     fun append(): Unit {
         val list = mutableListOf(1,2,3) // compliant
         list.add(4)
@@ -60,6 +59,45 @@ class CollectionShouldBeImmutableCheckSample {
         val x = mutableListOf(1,2,3) // Noncompliant
 //      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         val y = Pair(1, x.reduce { acc, i -> i + acc  })
+    }
+
+    fun allOperators(): Unit {
+        val x = mutableListOf(1,2,3) // Noncompliant
+        val y = mutableSetOf(1,2,3) // Noncompliant
+        val z = mutableMapOf(1 to 2) // Noncompliant
+
+        val a = mutableListOf(1,2,3) // Compliant
+        a.addAll(listOf(1,2,3))
+        val b = mutableListOf(1,2,3) // Compliant
+        b.remove(1)
+        val c = mutableListOf(1,2,3) // Compliant
+        c.removeAll(listOf(1,2,3))
+        val d = mutableListOf(1,2,3) // Compliant
+        d.retainAll(listOf(1,2,3))
+        val e = mutableListOf(1,2,3) // Compliant
+        e.clear()
+        val f = mutableListOf(1,2,3) // Compliant
+        f.removeAt(0)
+        val g = mutableMapOf(1 to 2) // Compliant
+        g.put(1, 2)
+        val h = mutableMapOf(1 to 2) // Compliant
+        h.putAll(mapOf(1 to 2))
+        val i = mutableSetOf(1,2,3) // Compliant
+        i.remove(1)
+        val j = mutableMapOf(1 to 2) // Compliant
+        j[1] = 2
+        val k = mutableListOf(1,2,3) // Compliant
+        k += 1
+        val l = mutableMapOf(1 to 2) // Compliant
+        l.getOrPut(1) { 2 }
+    }
+
+    fun foo(): Unit {
+        val configure: (MutableMap<String, Any?>) -> Unit = {}
+    }
+
+    fun returnCollection(l : MutableList<Int>): MutableList<Int> { // Noncompliant
+        return l
     }
 
 
