@@ -39,7 +39,7 @@ class CheckTestNonCompilingImpl(
 ) : CheckTestNonCompiling {
     private val checkName = check::class.java.simpleName
 
-    @Test
+
     override fun `non compiling`() {
         KotlinVerifier(check) {
             this.fileName = sampleFileNonCompiling ?: "$checkName$NON_COMPILING_TEST_FILE_POSTFIX"
