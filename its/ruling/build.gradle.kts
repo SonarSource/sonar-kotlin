@@ -7,7 +7,6 @@ dependencies {
     testImplementation(testLibs.sonar.orchestrator)
     testImplementation(testLibs.assertj.core)
     testImplementation(libs.sonar.analyzer.commons)
-    testCompileOnly(project(":sonar-kotlin-plugin"))
 }
 
 sonarqube.isSkipProject = true
@@ -16,9 +15,6 @@ tasks.test {
     onlyIf {
         project.hasProperty("its") || project.hasProperty("ruling")
     }
-
-    // dependsOn(tasks.withType<Copy>())
-
     listOf("keepSonarqubeRunning", "reportAll", "cleanProjects", "buildProjects")
         .associateWith { System.getProperty(it) }
         .filter { it.value != null }

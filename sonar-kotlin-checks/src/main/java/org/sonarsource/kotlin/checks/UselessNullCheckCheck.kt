@@ -148,21 +148,15 @@ class UselessNullCheckCheck : AbstractCheck() {
     ) {
         if (kfc.mayBeAffectedByErrorInSemantics()) return
 
-        val (nullCaseResult, nonNullCaseResult) = if (comparesToNull) {
-            "succeeds" to "fails"
-        } else {
-            "fails" to "succeeds"
-        }
-
         val resolvedExpression = expression.predictRuntimeValueExpression(kfc.bindingContext)
 
         val result = if (resolvedExpression.isNull()) {
-            nullCaseResult
+            if (comparesToNull) "succeeds" else "fails"
         } else if (
         // We are not using the resolvedExpression on purpose here, as it can cause FPs. See SONARKT-373.
             expression.isNotNullable(kfc.bindingContext)
         ) {
-            nonNullCaseResult
+            if (comparesToNull) "fails" else "succeeds"
         } else {
             return
         }

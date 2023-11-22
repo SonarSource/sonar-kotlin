@@ -11,19 +11,6 @@ import kotlin.coroutines.CoroutineContext
 
 class UselessNullCheckCheckSample {
 
-    data class Container(val map: Map<String, String>)
-
-    fun baz() {
-        val container = Container(mapOf("foo" to "bar"))
-
-        val res = container.map["xyz"]
-            ?: "default"
-
-
-        listOf<String>().singleOrNull { true }
-    }
-
-
     fun foo() {
         val s: String = ""
 
