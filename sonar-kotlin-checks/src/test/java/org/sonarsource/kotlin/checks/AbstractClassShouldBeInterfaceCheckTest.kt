@@ -19,4 +19,5 @@
  */
 package org.sonarsource.kotlin.checks
 
-internal class AbstractClassShouldBeInterfaceCheckTest : CheckTest(AbstractClassShouldBeInterfaceCheck())
+internal class AbstractClassShouldBeInterfaceCheckTest : CheckTest(AbstractClassShouldBeInterfaceCheck()),
+    CheckTestNonCompiling by CheckTestNonCompilingImpl(AbstractClassShouldBeInterfaceCheck())
