@@ -23,10 +23,11 @@ import org.jetbrains.kotlin.lexer.KtTokens.EQEQ
 import org.jetbrains.kotlin.lexer.KtTokens.EXCLEQ
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
+import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
@@ -37,6 +38,8 @@ import org.sonarsource.kotlin.api.checks.findClosestAncestorOfType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.Message
 import org.sonarsource.kotlin.api.reporting.message
+
+const val MAX_MESSAGE_LENGTH: Int = 100
 
 /**
  * This rule reports an issue when the pattern of using `find(predicate)`, `findLast(predicate)`, `firstOrNull(predicate)`,
@@ -69,10 +72,11 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
         val lambdaParameterName = if (lambda.valueParameters.isEmpty()) "it" else lambda.valueParameters[0].name!!
 
         // the functionsToVisit can be applied directly on the collection, or indirectly, for example using "with(collection)"
-        val dotExpressionBeforeFind =
-            callExpression.findClosestAncestorOfType<KtDotQualifiedExpression>(stopCondition = { it is KtBinaryExpression })?.receiverExpression
-        // in case the function is called on the collection directly, we build the replacement on the dot expression before the call
-        val beforeFindTxt = dotExpressionBeforeFind?.text?.plus(".") ?: ""
+        val qualifiedExprBeforeFind =
+            callExpression.findClosestAncestorOfType<KtQualifiedExpression>(stopCondition = { it is KtBinaryExpression })
+        val qualifiedExpressionAccessor = if (qualifiedExprBeforeFind is KtSafeQualifiedExpression) "?." else "."
+        // in case the function is called on the collection directly, we build the replacement on the qualified expression before the call
+        val beforeFindTxt = qualifiedExprBeforeFind?.receiverExpression?.text?.plus(qualifiedExpressionAccessor) ?: ""
 
         // case in which the lambda predicate is an equality check: "it == something" or "x -> x == something"
         if (lambdaBinaryExpr != null && lambdaBinaryExpr.isSingleEquality() && lambdaBinaryExpr.references(lambdaParameterName)) {
@@ -81,12 +85,17 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
             val elementTxt = lambdaBinaryExpr.nonParameterOperand(lambdaParameterName).text
             val replacementExpr = (if (negateContains) "!" else "") + "${beforeFindTxt}contains($elementTxt)"
 
-            kotlinFileContext.reportIssue(nullComparisonExpr, message(nullComparisonExpr, replacementExpr))
+            val message = if (replacementExpr.length < MAX_MESSAGE_LENGTH) message(replacementExpr) else message("contains")
+
+            kotlinFileContext.reportIssue(nullComparisonExpr, message)
         } else {
             val isAnyReplacement = nullComparisonExpr.operationToken == EXCLEQ
-            val replacementExpr = "${beforeFindTxt}${if (isAnyReplacement) "any" else "none"} ${lambda.text}"
+            val anyOrNone = if (isAnyReplacement) "any" else "none"
+            val replacementExpr = "${beforeFindTxt}${anyOrNone} ${lambda.text}"
 
-            kotlinFileContext.reportIssue(nullComparisonExpr, message(nullComparisonExpr, replacementExpr))
+            val message = if (replacementExpr.length < MAX_MESSAGE_LENGTH) message(replacementExpr) else message(anyOrNone)
+
+            kotlinFileContext.reportIssue(nullComparisonExpr, message)
         }
     }
 
@@ -103,11 +112,9 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
     private fun KtExpression.references(reference: String): Boolean =
         this.let { it as? KtNameReferenceExpression }?.getReferencedName() == reference
 
-    private fun message(nullComparisonExpr: KtBinaryExpression, replacementExpr: String): Message =
+    private fun message(replacementExpr: String): Message =
         message {
-            +"Replace "
-            code(nullComparisonExpr.text)
-            +" with "
+            +"Replace with "
             code(replacementExpr)
             +"."
         }
