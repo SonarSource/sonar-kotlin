@@ -53,7 +53,7 @@ class UnsuitedFindFunctionWithNullComparisonCheckSample {
         map.entries.find { it.key == five } != null // Noncompliant
         map.entries.find { it.key > five() } == null // Noncompliant
 
-        list.map { it + 1 }.filter { it > 1 }.find { it > 5 } != null // Noncompliant {{Replace with `list.map { it + 1 }.filter { it > 1 }.any { it > 5 }`.}}
+        list.map { it + 1 }.filter { it > 1 }.find { it > 5 } != null // Noncompliant {{Replace with `any`.}}
     //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         list.findLast { `my var` -> `my var` == 5 } != null // Noncompliant {{Replace with `list.contains(5)`.}}
@@ -93,11 +93,13 @@ class UnsuitedFindFunctionWithNullComparisonCheckSample {
             it > 5
         } != null
 
-        list.filter { x -> // Noncompliant {{Replace with `contains`.}}
-            if(x == 5) false else true // filter
-        }.map {
+        list.map {// Noncompliant {{Replace with `contains`.}}
             it.inc() // mapping
         }.find {
+            it == 5
+        } != null
+
+        list.find {// Noncompliant {{Replace with `list.contains(5)`.}}
             it == 5
         } != null
 
@@ -117,6 +119,7 @@ class UnsuitedFindFunctionWithNullComparisonCheckSample {
         list.find { x -> 1 == 5 } != null // Noncompliant
         list.find { x -> { x > 5 }() } != null // Noncompliant {{Replace with `list.any { x -> { x > 5 }() }`.}}
         list.findLast { x -> { x == 5 }() } != null // Noncompliant {{Replace with `list.any { x -> { x == 5 }() }`.}}
+        list.findLast { x -> { if(x >= 5 && 5 > 4) false else true }() } == null // Noncompliant {{Replace with `none`.}}
     }
 
     class NonKotlinCollections {

@@ -39,7 +39,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.Message
 import org.sonarsource.kotlin.api.reporting.message
 
-const val MAX_MESSAGE_LENGTH: Int = 100
+const val MAX_MESSAGE_LENGTH: Int = 40
 
 /**
  * This rule reports an issue when the pattern of using `find(predicate)`, `findLast(predicate)`, `firstOrNull(predicate)`,
@@ -50,16 +50,13 @@ const val MAX_MESSAGE_LENGTH: Int = 100
 @Rule(key = "S6528")
 class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
 
-    override val functionsToVisit = listOf(
-        FunMatcher(qualifier = "kotlin.collections") {
-            withNames("find", "findLast", "firstOrNull", "lastOrNull")
-            withArguments("kotlin.Function1")
-        }
-    )
+    override val functionsToVisit = listOf(FunMatcher(qualifier = "kotlin.collections") {
+        withNames("find", "findLast", "firstOrNull", "lastOrNull")
+        withArguments("kotlin.Function1")
+    })
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
-        callExpression.findClosestAncestorOfType<KtBinaryExpression>()
-            ?.takeIf { it.right!!.isNull() || it.left!!.isNull() }
+        callExpression.findClosestAncestorOfType<KtBinaryExpression>()?.takeIf { it.right!!.isNull() || it.left!!.isNull() }
             ?.let { report(it, callExpression, kotlinFileContext) }
     }
 
@@ -67,7 +64,7 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
         // callExpression has argument a lambda expression with a single parameter, due to the functionsToVisit FunMatchers
         val lambda = callExpression.valueArguments[0].getArgumentExpression() as KtLambdaExpression
 
-        val lambdaBinaryExpr = lambda.bodyExpression!!.firstChild as? KtBinaryExpression
+        val lambdaBinaryExpr = lambda.bodyExpression!!.children[0] as? KtBinaryExpression
         // the lambda either has the implicit "it" parameter or a single parameter
         val lambdaParameterName = if (lambda.valueParameters.isEmpty()) "it" else lambda.valueParameters[0].name!!
 
@@ -85,7 +82,8 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
             val elementTxt = lambdaBinaryExpr.nonParameterOperand(lambdaParameterName).text
             val replacementExpr = (if (negateContains) "!" else "") + "${beforeFindTxt}contains($elementTxt)"
 
-            val message = if (replacementExpr.length < MAX_MESSAGE_LENGTH) message(replacementExpr) else message("contains")
+            val message = if (replacementExpr.length < MAX_MESSAGE_LENGTH && !replacementExpr.contains("\\n")) message(replacementExpr)
+            else message("contains")
 
             kotlinFileContext.reportIssue(nullComparisonExpr, message)
         } else {
@@ -93,29 +91,29 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
             val anyOrNone = if (isAnyReplacement) "any" else "none"
             val replacementExpr = "${beforeFindTxt}${anyOrNone} ${lambda.text}"
 
-            val message = if (replacementExpr.length < MAX_MESSAGE_LENGTH) message(replacementExpr) else message(anyOrNone)
+            val message = if (replacementExpr.length < MAX_MESSAGE_LENGTH && !replacementExpr.contains("\\n")) message(replacementExpr)
+            else message(anyOrNone)
 
             kotlinFileContext.reportIssue(nullComparisonExpr, message)
         }
     }
 
-    // checks that the binary expression has no binary expression as child, and it is an equality comparison
-    private fun KtBinaryExpression.isSingleEquality(): Boolean =
-        this.getChildOfType<KtBinaryExpression>() == null && this.operationToken == EQEQ
-
-    private fun KtBinaryExpression.references(reference: String): Boolean =
-        this.left!!.references(reference) || this.right!!.references(reference)
-
-    private fun KtBinaryExpression.nonParameterOperand(parameter: String): KtExpression =
-        if (!this.left!!.references(parameter)) this.left!! else this.right!!
-
-    private fun KtExpression.references(reference: String): Boolean =
-        this.let { it as? KtNameReferenceExpression }?.getReferencedName() == reference
-
-    private fun message(replacementExpr: String): Message =
-        message {
-            +"Replace with "
-            code(replacementExpr)
-            +"."
-        }
+    private fun message(replacementExpr: String): Message = message {
+        +"Replace with "
+        code(replacementExpr)
+        +"."
+    }
 }
+
+// checks that the binary expression has no binary expression as child, and it is an equality comparison
+private fun KtBinaryExpression.isSingleEquality(): Boolean =
+    this.getChildOfType<KtBinaryExpression>() == null && this.operationToken == EQEQ
+
+private fun KtBinaryExpression.references(reference: String): Boolean =
+    this.left!!.references(reference) || this.right!!.references(reference)
+
+private fun KtBinaryExpression.nonParameterOperand(parameter: String): KtExpression =
+    if (!this.left!!.references(parameter)) this.left!! else this.right!!
+
+private fun KtExpression.references(reference: String): Boolean =
+    this.let { it as? KtNameReferenceExpression }?.getReferencedName() == reference
