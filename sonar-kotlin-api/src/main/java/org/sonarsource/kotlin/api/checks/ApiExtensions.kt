@@ -245,7 +245,7 @@ private fun Call.predictValueExpression(bindingContext: BindingContext) =
         valueArguments[1].getArgumentExpression()
     } else null
 
-private fun KtReferenceExpression.extractFromInitializer(
+fun KtReferenceExpression.extractFromInitializer(
     bindingContext: BindingContext,
     declarations: MutableList<PsiElement> = mutableListOf(),
 ) =
@@ -261,7 +261,7 @@ private fun KtReferenceExpression.extractFromInitializer(
 /**
  * Will try to resolve what `it` is an alias for inside of a `let` or `also` scope.
  */
-private fun KtReferenceExpression.extractLetAlsoTargetExpression(bindingContext: BindingContext) =
+fun KtReferenceExpression.extractLetAlsoTargetExpression(bindingContext: BindingContext) =
     findReceiverScopeFunctionLiteral(bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
 
 /**

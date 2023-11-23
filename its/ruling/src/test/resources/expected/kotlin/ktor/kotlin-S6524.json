@@ -1,38 +1,14 @@
 {
-"kotlin-ktor-project:sources/kotlin/ktor/ktor-client/ktor-client-core/common/src/io/ktor/client/plugins/cache/storage/UnlimitedCacheStorage.kt": [
-24,
-44
-],
-"kotlin-ktor-project:sources/kotlin/ktor/ktor-http/common/src/io/ktor/http/parsing/regex/RegexParserGenerator.kt": [
-68
-],
 "kotlin-ktor-project:sources/kotlin/ktor/ktor-http/ktor-http-cio/common/src/io/ktor/http/cio/internals/CharArrayBuilder.kt": [
 87,
 167
-],
-"kotlin-ktor-project:sources/kotlin/ktor/ktor-network/jvm/src/io/ktor/network/selector/SelectorManagerSupport.kt": [
-56
-],
-"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/jvmAndNix/src/io/ktor/server/config/MapApplicationConfig.kt": [
-81
-],
-"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-core/jvmAndNix/test/io/ktor/server/http/ParametersTest.kt": [
-36
-],
-"kotlin-ktor-project:sources/kotlin/ktor/ktor-server/ktor-server-plugins/ktor-server-sessions/jvm/src/io/ktor/server/sessions/SessionSerializerReflection.kt": [
-288,
-294,
-300
 ],
 "kotlin-ktor-project:sources/kotlin/ktor/ktor-utils/common/src/io/ktor/util/pipeline/PhaseContent.kt": [
 41
 ],
 "kotlin-ktor-project:sources/kotlin/ktor/ktor-utils/common/src/io/ktor/util/pipeline/Pipeline.kt": [
-180,
-213,
 289,
 301,
-319,
 328,
 355
 ]
