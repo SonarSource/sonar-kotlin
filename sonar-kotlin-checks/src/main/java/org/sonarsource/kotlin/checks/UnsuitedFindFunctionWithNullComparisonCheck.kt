@@ -39,8 +39,6 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.Message
 import org.sonarsource.kotlin.api.reporting.message
 
-const val MAX_MESSAGE_LENGTH: Int = 40
-
 /**
  * This rule reports an issue when the pattern of using `find(predicate)`, `findLast(predicate)`, `firstOrNull(predicate)`,
  * and `lastOrNull(predicate)` from the `kotlin.collections` package, combined with a null check is detected.
@@ -64,6 +62,8 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
         // callExpression has argument a lambda expression with a single parameter, due to the functionsToVisit FunMatchers
         val lambda = callExpression.valueArguments[0].getArgumentExpression() as KtLambdaExpression
 
+        // Note that lambda.bodyExpression!!.children[0] and lambda.bodyExpression!!.firstChild behave differently in case of a block body
+        // when there is a comment before the expression, the firstChild is the comment, while children[0] is the expression
         val lambdaBinaryExpr = lambda.bodyExpression!!.children[0] as? KtBinaryExpression
         // the lambda either has the implicit "it" parameter or a single parameter
         val lambdaParameterName = if (lambda.valueParameters.isEmpty()) "it" else lambda.valueParameters[0].name!!
@@ -78,12 +78,11 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
         // case in which the lambda predicate is an equality check: "it == something" or "x -> x == something"
         if (lambdaBinaryExpr != null && lambdaBinaryExpr.isSingleEquality() && lambdaBinaryExpr.references(lambdaParameterName)) {
             val negateContains = (lambdaBinaryExpr.operationToken == EQEQ) xor (nullComparisonExpr.operationToken == EXCLEQ)
-            // the binary expression operand that is not the lambda parameter
             val elementTxt = lambdaBinaryExpr.nonParameterOperand(lambdaParameterName).text
             val replacementExpr = (if (negateContains) "!" else "") + "${beforeFindTxt}contains($elementTxt)"
 
-            val message = if (replacementExpr.length < MAX_MESSAGE_LENGTH && !replacementExpr.contains("\\n")) message(replacementExpr)
-            else message("contains")
+            // suggest the replacement only if the message is not too long and does not contain a line break
+            val message = if (replacementExpr.isVerbose()) message("contains") else message(replacementExpr)
 
             kotlinFileContext.reportIssue(nullComparisonExpr, message)
         } else {
@@ -91,8 +90,8 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
             val anyOrNone = if (isAnyReplacement) "any" else "none"
             val replacementExpr = "${beforeFindTxt}${anyOrNone} ${lambda.text}"
 
-            val message = if (replacementExpr.length < MAX_MESSAGE_LENGTH && !replacementExpr.contains("\\n")) message(replacementExpr)
-            else message(anyOrNone)
+            // suggest the replacement only if the message is not too long and does not contain a line break
+            val message = if (replacementExpr.isVerbose()) message(anyOrNone) else message(replacementExpr)
 
             kotlinFileContext.reportIssue(nullComparisonExpr, message)
         }
@@ -117,3 +116,5 @@ private fun KtBinaryExpression.nonParameterOperand(parameter: String): KtExpress
 
 private fun KtExpression.references(reference: String): Boolean =
     this.let { it as? KtNameReferenceExpression }?.getReferencedName() == reference
+
+private fun String.isVerbose(): Boolean = this.length >= 40 || this.contains("\\n")
