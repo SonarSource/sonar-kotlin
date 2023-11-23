@@ -188,24 +188,6 @@ because of course the fields available on android.R are not the ones you'd
 expect from just looking at your own R class.
 
 
-UsesMinSdkAttributes
---------------------
-Summary: Minimum SDK and target SDK attributes not defined
-
-Priority: 9 / 10
-Severity: Warning
-Category: Correctness
-Vendor: Android Open Source Project
-Contact: https://groups.google.com/g/lint-dev
-Feedback: https://issuetracker.google.com/issues/new?component=192708
-
-The manifest should contain a <uses-sdk> element which defines the minimum API
-Level required for the application to run, as well as the target version (the
-highest API level you have tested the version for).
-
-More information: 
-https://developer.android.com/guide/topics/manifest/uses-sdk-element.html
-
 WrongViewCast
 -------------
 Summary: Mismatched view type
@@ -639,6 +621,18 @@ Scoped storage is enforced on Android 10+ (or Android 11+ if using
 requestLegacyExternalStorage). In particular, WRITE_EXTERNAL_STORAGE will no
 longer provide write access to all files; it will provide the equivalent of
 READ_EXTERNAL_STORAGE instead.
+
+As of Android 13, if you need to query or interact with MediaStore or media
+files on the shared storage, you should be using instead one or more new
+storage permissions:
+* android.permission.READ_MEDIA_IMAGES
+* android.permission.READ_MEDIA_VIDEO
+* android.permission.READ_MEDIA_AUDIO
+
+and then add maxSdkVersion="33" to the older permission. See the developer
+guide for how to do this:
+https://developer.android.com/about/versions/13/behavior-changes-13#granular-m
+edia-permissions
 
 The MANAGE_EXTERNAL_STORAGE permission can be used to manage all files, but it
 is rarely necessary and most apps on Google Play are not allowed to use it.
@@ -1175,7 +1169,7 @@ Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Some methods have no side effects, and calling them without doing something
-without the result is suspicious.
+with the result is suspicious.
 
 
 CommitPrefEdits
@@ -1326,6 +1320,24 @@ WorkContinuations cannot be enqueued automatically.  You must call enqueue()
 on a WorkContinuation to have it and its parent continuations enqueued inside
 WorkManager.
 
+
+ExactAlarm
+----------
+Summary: Invalid Usage of Exact Alarms
+
+Priority: 6 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+The USE_EXACT_ALARM permission is only available when targeting API level 33
+and above. Also, note that this permission is only permitted for apps whose
+core functionality requires precisely-timed actions for user facing features.
+
+More information: 
+https://developer.android.com/training/scheduling/alarms
 
 ExifInterface
 -------------
@@ -2181,35 +2193,6 @@ More information:
 https://developer.android.com/distribute/best-practices/develop/target-sdk.html
 https://developer.android.com/reference/android/os/Build.VERSION_CODES.html
 
-Override
---------
-Summary: Method conflicts with new inherited method
-
-Priority: 6 / 10
-Severity: Error
-Category: Correctness
-Vendor: Android Open Source Project
-Contact: https://groups.google.com/g/lint-dev
-Feedback: https://issuetracker.google.com/issues/new?component=192708
-
-Suppose you are building against Android API 8, and you've subclassed
-Activity. In your subclass you add a new method called isDestroyed(). At some
-later point, a method of the same name and signature is added to Android. Your
-method will now override the Android method, and possibly break its contract.
-Your method is not calling super.isDestroyed(), since your compilation target
-doesn't know about the method.
-
-The above scenario is what this lint detector looks for. The above example is
-real, since isDestroyed() was added in API 17, but it will be true for any
-method you have added to a subclass of an Android class where your build
-target is lower than the version the method was introduced in.
-
-To fix this, either rename your method, or if you are really trying to augment
-the builtin method if available, switch to a higher build target where you can
-deliberately add @Override on your overriding method, and call super if
-appropriate etc.
-
-
 OverrideAbstract
 ----------------
 Summary: Not overriding abstract methods on older platforms
@@ -2352,6 +2335,28 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 Some APIs require optional features to be present. This check makes sure that
 calls to these APIs are surrounded by a check which enforces this.
 
+
+ScheduleExactAlarm
+------------------
+Summary: Scheduling Exact Alarms Without Required Permission
+
+Priority: 6 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Applications looking to schedule exact alarms should ensure that the
+SCHEDULE_EXACT_ALARM permission is granted by calling the
+AlarmManager#canScheduleExactAlarms API before attempting to set an exact
+alarm. If the permission is not granted to your application, please consider
+requesting it from the user by starting the
+ACTION_REQUEST_SCHEDULE_EXACT_ALARM intent or gracefully falling back to
+another option.
+
+More information: 
+https://developer.android.com/training/scheduling/alarms#exact
 
 SdCardPath
 ----------
@@ -3347,6 +3352,40 @@ In other words, use <tech>name</tech>, not <tech> name </tech>.
 More information: 
 https://issuetracker.google.com/36988969
 
+NoOp
+----
+Summary: NoOp Code
+
+Priority: 5 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+NOTE: This issue is disabled by default!
+You can enable it by adding --enable NoOp
+
+This check looks for code which looks like it's a no-op -- usually leftover
+expressions from interactive debugging, but in some cases bugs where you had
+intended to do something with the expression such as assign it to a field.
+
+Available options:
+
+pure-getters (default is false):
+Whether to assume methods with getter-names have no side effects.
+
+Getter methods (where names start with get or is, and have non-void return types, and no arguments) should not have side effects. With this option turned on, lint will assume that is the case and will list any getter calls whose results are ignored as suspicious code.
+
+To configure this option, use a lint.xml file with an <option> like this:
+
+<lint>
+    <issue id="NoOp">
+        <option name="pure-getters" value="false" />
+    </issue>
+</lint>
+
+
+
 NonConstantResourceId
 ---------------------
 Summary: Checks use of resource IDs in places requiring constants
@@ -3452,6 +3491,25 @@ To fix this, you can change your schema to use a TEXT type instead.
 
 More information: 
 https://www.sqlite.org/datatype3.html
+
+SetAndClearCommunicationDevice
+------------------------------
+Summary: Clearing communication device
+
+Priority: 5 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+After selecting the audio device for communication use cases using
+setCommunicationDevice(AudioDeviceInfo device), the selection is active as
+long as the requesting application process lives, until
+clearCommunicationDevice() is called or until the device is disconnected. It
+is therefore important to clear the request when a call ends or the requesting
+activity or service is stopped or destroyed.
+
 
 StateListReachable
 ------------------
@@ -3609,10 +3667,10 @@ Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
 
-Watch face editor activities must be able to launch in the Wear OS app
-activity task in order to work correctly. Thus only launchMode="standard" is
-allowed. The watch face will not be shown on the watch if it does not satisfy
-this requirement.
+Watch face editor activities must be able to launch in the Wear OS companion
+app activity task in order to work correctly. Thus only launchMode="standard"
+is allowed. The watch face will not be shown on the watch if it does not
+satisfy this requirement.
 
 
 WatchFaceForAndroidX
@@ -3743,6 +3801,23 @@ for the UPDATE_INDEX intent to continue supporting indexing in your app.
 
 More information: 
 https://firebase.google.com/docs/app-indexing/android/personal-content#add-a-broadcast-receiver-to-your-app
+
+BomWithoutPlatform
+------------------
+Summary: Using a BOM without platform call
+
+Priority: 4 / 10
+Severity: Warning
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+When including a BOM, the dependency's coordinates must be wrapped in a call
+to platform() for Gradle to interpret it correctly.
+
+More information: 
+https://developer.android.com/r/tools/gradle-bom-docs
 
 DeprecatedSinceApi
 ------------------
@@ -4133,12 +4208,14 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 The Activity should not be locked to a portrait orientation so that users can
 take advantage of the multi-window environments and larger landscape-first
-screens that Android runs on such as Chrome OS. To fix the issue, consider
-calling setRequestedOrientation with the
+screens that Android runs on such as ChromeOS, tablets, and foldables. To fix
+the issue, consider calling setRequestedOrientation with the
 ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR or
 ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED options or removing the call all
 together.
 
+More information: 
+https://developer.android.com/guide/topics/large-screens/large-screen-cookbook#restricted_app_orientation
 
 UnsupportedChromeOsCameraSystemFeature
 --------------------------------------
@@ -4153,11 +4230,13 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 You should look for the FEATURE_CAMERA_ANY features to include all possible
 cameras that may be on the device. Looking for FEATURE_CAMERA only looks for a
-rear facing camera, which certain tablets or Chrome OS devices don't have, as
-well as newer device configurations and modes may place the device in a state
-where the rear camera is not available. To fix the issue, look for
+rear facing camera, which certain large screen devices don't have, as well as
+newer device configurations and modes may place the device in a state where
+the rear camera is not available. To fix the issue, look for
 FEATURE_CAMERA_ANY instead.
 
+More information: 
+https://developer.android.com/guide/topics/large-screens/large-screen-cookbook#chromebook_camera_support
 
 VisibleForTests
 ---------------
@@ -4507,6 +4586,41 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 Discouraged APIs are allowed and are not deprecated, but they may be unfit for
 common use (e.g. due to slow performance or subtle behavior).
+
+
+EditedTargetSdkVersion
+----------------------
+Summary: Manually Edited TargetSdkVersion
+
+Priority: 2 / 10
+Severity: Error
+Category: Correctness
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Updating the targetSdkVersion of an app is seemingly easy: just increment the
+targetSdkVersion number in the manifest file!
+
+But that's not actually safe. The targetSdkVersion controls a wide range of
+behaviors that change from release to release, and to update, you should
+carefully consult the documentation to see what has changed, how your app may
+need to adjust, and then of course, carefully test everything.
+
+In new versions of Android Studio, there is a special migration assistant,
+available from the tools menu (and as a quickfix from this lint warning) which
+analyzes your specific app and filters the set of applicable migration steps
+to those needed for your app.
+
+This lint check does something very simple: it just detects whether it looks
+like you've manually edited the targetSdkVersion field in a build.gradle file.
+Obviously, as part of doing the above careful steps, you may end up editing
+the value, which would trigger the check -- and it's safe to ignore it; this
+lint check only runs in the IDE, not from the command line; it's sole purpose
+to bring awareness to the (many) developers who haven't been aware of this
+issue and have just bumped the targetSdkVersion, recompiled, and uploaded
+their updated app to the Google Play Store, sometimes leading to crashes or
+other problems on newer devices.
 
 
 MangledCRLF
@@ -4959,14 +5073,54 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 NOTE: This issue is disabled by default!
 You can enable it by adding --enable UnsupportedChromeOsHardware
 
-The <uses-feature> element should not require this unsupported Chrome OS
-hardware feature. Any uses-feature not explicitly marked with required="false"
-is necessary on the device to be installed on. Ensure that any features that
-might prevent it from being installed on a Chrome OS device are reviewed and
-marked as not required in the manifest.
+The <uses-feature> element should not require this unsupported large screen
+hardware feature. Any <uses-feature> not explicitly marked with
+required="false" is necessary on the device to be installed on. Ensure that
+any features that might prevent it from being installed on a ChromeOS, large
+screen, or foldable device are reviewed and marked as not required in the
+manifest.
 
 More information: 
 https://developer.android.com/topic/arc/manifest.html#incompat-entries
+
+ChromeOsAbiSupport
+------------------
+Summary: Missing ABI Support for ChromeOS
+
+Priority: 4 / 10
+Severity: Warning
+Category: Correctness:Chrome OS
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+To properly support ChromeOS, your Android application should have an x86
+and/or x86_64 binary as part of the build configuration. To fix the issue,
+ensure your files are properly optimized for ARM; the binary translator will
+then ensure compatibility with x86. Alternatively, add an abiSplit for x86
+within your build.gradle file and create the required x86 dependencies.
+
+More information: 
+https://developer.android.com/ndk/guides/abis
+
+ChromeOsOnConfigurationChanged
+------------------------------
+Summary: Poor performance with APIs inside onConfigurationChanged()
+
+Priority: 4 / 10
+Severity: Warning
+Category: Correctness:Chrome OS
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+When users resize the Android emulator in Android 13 and Chrome OS, an
+onConfigurationChanged() API call occurs. If your onConfigurationChanged()
+method contains any code that can cause a redraw, your app might take a
+performance hit on large screens. To fix the issue, ensure your
+onConfigurationChanged() method does not contain any calls to UI redraw logic
+for specific elements.
+
 
 PermissionImpliesUnsupportedChromeOsHardware
 --------------------------------------------
@@ -4978,14 +5132,12 @@ Category: Correctness:Chrome OS
 Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
 Feedback: https://issuetracker.google.com/issues/new?component=192708
-NOTE: This issue is disabled by default!
-You can enable it by adding --enable PermissionImpliesUnsupportedChromeOsHardware
 
 The <uses-permission> element should not require a permission that implies an
-unsupported Chrome OS hardware feature. Google Play assumes that certain
+unsupported large screen hardware feature. Google Play assumes that certain
 hardware related permissions indicate that the underlying hardware features
 are required by default. To fix the issue, consider declaring the
-corresponding uses-feature element with required="false" attribute.
+corresponding <uses-feature> element with required="false" attribute.
 
 More information: 
 https://developer.android.com/topic/arc/manifest.html#implied-features
@@ -5012,6 +5164,24 @@ thus manipulate the host application in unintended ways.
 More information: 
 https://developer.android.com/reference/android/webkit/WebView.html#addJavascriptInterface(java.lang.Object,%20java.lang.String)
 https://support.google.com/faqs/answer/9095419?hl=en
+https://goo.gle/AddJavascriptInterface
+
+BinderGetCallingInMainThread
+----------------------------
+Summary: Incorrect usage of getCallingUid() or getCallingPid()
+
+Priority: 9 / 10
+Severity: Error
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Binder.getCallingUid() and Binder.getCallingPid() will return information
+about the current process if called inside a thread that is not handling a
+binder transaction. This can cause security issues. If you still want to use
+your own uid/pid, use Process.myUid() or Process.myPid().
+
 
 DeletedProvider
 ---------------
@@ -5031,6 +5201,7 @@ exception at a higher level, this is not secure and should not be used.
 
 More information: 
 https://android-developers.googleblog.com/2018/03/cryptography-changes-in-android-p.html
+https://goo.gle/DeletedProvider
 
 DeprecatedProvider
 ------------------
@@ -5048,6 +5219,7 @@ targetSdkVersion is P or higher.
 
 More information: 
 https://android-developers.googleblog.com/2018/03/cryptography-changes-in-android-p.html
+https://goo.gle/DeprecatedProvider
 
 GetInstance
 -----------
@@ -5064,6 +5236,8 @@ Cipher#getInstance should not be called with ECB as the cipher mode or without
 setting the cipher mode because the default mode on android is ECB, which is
 insecure.
 
+More information: 
+https://goo.gle/GetInstance
 
 SecureRandom
 ------------
@@ -5081,6 +5255,7 @@ sequence of numbers. This may be useful for testing but it is not appropriate
 for secure use.
 
 More information: 
+https://goo.gle/SecureRandom
 https://developer.android.com/reference/java/security/SecureRandom.html
 
 TrulyRandom
@@ -5109,7 +5284,30 @@ already been applied. After reading the blog entry and updating your code if
 necessary, you can disable this lint issue.
 
 More information: 
+https://goo.gle/TrulyRandom
 https://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html
+
+UnsafeImplicitIntentLaunch
+--------------------------
+Summary: Implicit intent matches an internal non-exported component
+
+Priority: 9 / 10
+Severity: Error
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+NOTE: This issue is disabled by default!
+You can enable it by adding --enable UnsafeImplicitIntentLaunch
+
+This intent matches a non-exported component within the same app. In many
+cases, the app developer could instead use an explicit Intent to send messages
+to their internal components, ensuring that the messages are safely delivered
+without exposure to malicious apps on the device. Using such implicit intents
+will result in a crash in an upcoming version of Android.
+
+More information: 
+https://goo.gle/ImplicitIntentHijack
 
 VulnerableCordovaVersion
 ------------------------
@@ -5146,6 +5344,7 @@ the ability to load any fragment, with any arguments, in your process.
 
 More information: 
 http://securityintelligence.com/new-vulnerability-android-framework-fragment-injection
+https://goo.gle/ExportedPreferenceActivity
 
 JavascriptInterface
 -------------------
@@ -5163,27 +5362,7 @@ addJavascriptInterface method with a @JavascriptInterface annotation.
 
 More information: 
 https://developer.android.com/reference/android/webkit/WebView.html#addJavascriptInterface(java.lang.Object, java.lang.String)
-
-PackageManagerGetSignatures
----------------------------
-Summary: Potential Multiple Certificate Exploit
-
-Priority: 8 / 10
-Severity: Warning
-Category: Security
-Vendor: Android Open Source Project
-Contact: https://groups.google.com/g/lint-dev
-Feedback: https://issuetracker.google.com/issues/new?component=192708
-
-Improper validation of app signatures could lead to issues where a malicious
-app submits itself to the Play Store with both its real certificate and a fake
-certificate and gains access to functionality or information it shouldn't have
-due to another application only checking for the fake certificate and ignoring
-the rest. Please make sure to validate all signatures returned by this
-method.
-
-More information: 
-https://bluebox.com/technical/android-fake-id-vulnerability/
+https://goo.gle/JavascriptInterface
 
 PackagedPrivateKey
 ------------------
@@ -5198,6 +5377,8 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 In general, you should not package private key files inside your app.
 
+More information: 
+https://goo.gle/PackagedPrivateKey
 
 UsingC2DM
 ---------
@@ -5231,6 +5412,8 @@ The <grant-uri-permission> element allows specific paths to be shared. This
 detector checks for a path URL of just '/' (everything), which is probably not
 what you want; you should limit access to a subset.
 
+More information: 
+https://goo.gle/GrantAllUris
 
 AllowAllHostnameVerifier
 ------------------------
@@ -5248,6 +5431,8 @@ method always returns true (thus trusting any hostname) which could result in
 insecure network traffic caused by trusting arbitrary hostnames in TLS/SSL
 certificates presented by peers.
 
+More information: 
+https://goo.gle/AllowAllHostnameVerifier
 
 AuthLeak
 --------
@@ -5281,6 +5466,8 @@ always returns true (thus trusting any hostname) which could result in
 insecure network traffic caused by trusting arbitrary hostnames in TLS/SSL
 certificates presented by peers.
 
+More information: 
+https://goo.gle/BadHostnameVerifier
 
 EasterEgg
 ---------
@@ -5338,6 +5525,8 @@ certificate through other means, such as by calling
 `SSLCertificateSocketFactory.getDefaultHostnameVerifier() to get a
 HostnameVerifier and calling HostnameVerifier.verify().
 
+More information: 
+https://goo.gle/SSLCertificateSocketFactoryCreateSocket
 
 SSLCertificateSocketFactoryGetInsecure
 --------------------------------------
@@ -5357,6 +5546,8 @@ presented by peers. This method should be avoided unless needed for a special
 circumstance such as debugging. Instead,
 SSLCertificateSocketFactory.getDefault() should be used.
 
+More information: 
+https://goo.gle/SSLCertificateSocketFactoryGetInsecure
 
 SetJavaScriptEnabled
 --------------------
@@ -5373,6 +5564,7 @@ Your code should not invoke setJavaScriptEnabled if you are not sure that your
 app really requires JavaScript support.
 
 More information: 
+https://goo.gle/SetJavaScriptEnabled
 https://developer.android.com/training/articles/security-tips
 
 SetWorldReadable
@@ -5391,6 +5583,8 @@ holes in applications. It is strongly discouraged; instead, applications
 should use more formal mechanisms for interactions such as ContentProvider,
 BroadcastReceiver, and Service.
 
+More information: 
+https://goo.gle/SetWorldReadable
 
 SetWorldWritable
 ----------------
@@ -5408,6 +5602,8 @@ holes in applications. It is strongly discouraged; instead, applications
 should use more formal mechanisms for interactions such as ContentProvider,
 BroadcastReceiver, and Service.
 
+More information: 
+https://goo.gle/SetWorldWritable
 
 TileProviderPermissions
 -----------------------
@@ -5441,6 +5637,8 @@ or checkClientTrusted methods do nothing (thus trusting any certificate chain)
 which could result in insecure network traffic caused by trusting arbitrary
 TLS/SSL certificates presented by peers.
 
+More information: 
+https://goo.gle/TrustAllX509TrustManager
 
 UnprotectedSMSBroadcastReceiver
 -------------------------------
@@ -5456,6 +5654,24 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 BroadcastReceivers that declare an intent-filter for SMS_DELIVER or
 SMS_RECEIVED must ensure that the caller has the BROADCAST_SMS permission,
 otherwise it is possible for malicious actors to spoof intents.
+
+More information: 
+https://goo.gle/UnprotectedSMSBroadcastReceiver
+
+UnsafeIntentLaunch
+------------------
+Summary: Launched Unsafe Intent
+
+Priority: 6 / 10
+Severity: Warning
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Intent that potentially could come from an untrusted source should not be
+launched from an unprotected component without first being sanitized. See this
+support FAQ for details: https://support.google.com/faqs/answer/9267555
 
 
 UnsafeProtectedBroadcastReceiver
@@ -5474,6 +5690,8 @@ action string must check that the received intent's action string matches the
 expected value, otherwise it is possible for malicious actors to spoof
 intents.
 
+More information: 
+https://goo.gle/UnsafeProtectedBroadcastReceiver
 
 UseCheckPermission
 ------------------
@@ -5510,6 +5728,8 @@ since it protects against man-in-the-middle attacks etc. Older projects
 created in Android Studio used HTTP but we now default to HTTPS and recommend
 upgrading existing projects.
 
+More information: 
+https://goo.gle/UsingHttp
 
 AcceptsUserCertificates
 -----------------------
@@ -5528,6 +5748,7 @@ app's trust-anchors inside a <debug-overrides> element to make sure they are
 only available when android:debuggable is set to "true".
 
 More information: 
+https://goo.gle/AcceptsUserCertificates
 https://developer.android.com/training/articles/security-config#TrustingDebugCa
 
 CustomPermissionTypo
@@ -5546,6 +5767,8 @@ defined in the same manifest, but aren't, and may be typos.
 
 Please double check the permission value you have supplied.
 
+More information: 
+https://goo.gle/CustomPermissionTypo
 
 CustomX509TrustManager
 ----------------------
@@ -5560,6 +5783,8 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 
 This check looks for custom X509TrustManager implementations.
 
+More information: 
+https://goo.gle/CustomX509TrustManager
 
 ExportedContentProvider
 -----------------------
@@ -5578,6 +5803,8 @@ provides access to sensitive data, it should be protected by specifying
 export=false in the manifest or by protecting it with a permission that can be
 granted to other applications.
 
+More information: 
+https://goo.gle/ExportedContentProvider
 
 ExportedReceiver
 ----------------
@@ -5595,6 +5822,8 @@ intent-filter and do not specify exported=false) should define a permission
 that an entity must have in order to launch the receiver or bind to it.
 Without this, any application can use this receiver.
 
+More information: 
+https://goo.gle/ExportedReceiver
 
 ExportedService
 ---------------
@@ -5612,6 +5841,8 @@ intent-filter and do not specify exported=false) should define a permission
 that an entity must have in order to launch the service or bind to it. Without
 this, any application can use this service.
 
+More information: 
+https://goo.gle/ExportedService
 
 HardcodedDebugMode
 ------------------
@@ -5633,6 +5864,8 @@ If on the other hand you specify a specific value in the manifest file, then
 the tools will always use it. This can lead to accidentally publishing your
 app with debug information.
 
+More information: 
+https://goo.gle/HardcodedDebugMode
 
 InsecureBaseConfiguration
 -------------------------
@@ -5650,6 +5883,7 @@ by your app, which impacts the privacy of your users. Consider only allowing
 encrypted traffic by setting the cleartextTrafficPermitted tag to "false".
 
 More information: 
+https://goo.gle/InsecureBaseConfiguration
 https://developer.android.com/preview/features/security-config.html
 
 IntentFilterExportedReceiver
@@ -5686,6 +5920,8 @@ We recommend setting android:exported to false (even on previous versions of
 Android prior to this requirement) unless you have a good reason to export a
 particular component.
 
+More information: 
+https://goo.gle/IntentFilterExportedReceiver
 
 InvalidPermission
 -----------------
@@ -5721,6 +5957,8 @@ errors, such as android:permission="true".
 expected to be a  permission string from the system, another app, or your own,
 NOT a boolean.
 
+More information: 
+https://goo.gle/KnownPermissionError
 
 PermissionNamingConvention
 --------------------------
@@ -5743,6 +5981,29 @@ com.example.myapp.permission.ENGAGE_HYPERSPACE.
 
 Following this recommendation avoids naming collisions, and helps clearly
 identify the owner and intention of a custom permission.
+
+
+ProviderReadPermissionOnly
+--------------------------
+Summary: Provider with readPermission only and implemented write APIs
+
+Priority: 5 / 10
+Severity: Warning
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+This check looks for Content Providers that only have the readPermission
+attribute but implement write APIs.
+
+If android:readPermission is specified and both android:permission and
+android:writePermission are omitted, other apps can access any write
+operations that this provider exposes with no permission check. For a quick
+fix, changing the existing android:readPermission to android:permission will
+protect both read and write access with the same permission. Alternatively,
+declaring a separate android:writePermission can protect write access with a
+different permission.
 
 
 ReservedSystemPermission
@@ -5807,7 +6068,7 @@ UnspecifiedImmutableFlag
 Summary: Missing PendingIntent mutability flag
 
 Priority: 5 / 10
-Severity: Warning
+Severity: Fatal
 Category: Security
 Vendor: Android Open Source Project
 Contact: https://groups.google.com/g/lint-dev
@@ -5816,8 +6077,38 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 Apps targeting Android 12 and higher must specify either FLAG_IMMUTABLE or
 FLAG_MUTABLE when constructing a PendingIntent.
 
+FLAG_IMMUTABLE is available since target SDK 23, and is almost always the best
+choice. See
+https://developer.android.com/guide/components/intents-filters#CreateImmutable
+PendingIntents for a list of common exceptions to this rule.
+
 More information: 
 https://developer.android.com/about/versions/12/behavior-changes-12#pending-intent-mutability
+https://goo.gle/UnspecifiedImmutableFlag
+
+UnspecifiedRegisterReceiverFlag
+-------------------------------
+Summary: Missing registerReceiver() exported flag
+
+Priority: 5 / 10
+Severity: Warning
+Category: Security
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+A future platform release will require all receivers registering for
+non-system broadcasts to include a flag indicating the receiver's exported
+state. Apps registering for non-system broadcasts should use the
+ContextCompat#registerReceiver APIs with flags set to either RECEIVER_EXPORTED
+or RECEIVER_NOT_EXPORTED.
+
+If you are not expecting broadcasts from other apps on the device, register
+your receiver with RECEIVER_NOT_EXPORTED to protect your receiver on all
+platform releases.
+
+More information: 
+https://developer.android.com/reference/androidx/core/content/ContextCompat#registerReceiver(android.content.Context,android.content.BroadcastReceiver,android.content.IntentFilter,int)
 
 WebViewClientOnReceivedSslError
 -------------------------------
@@ -5833,6 +6124,8 @@ Feedback: https://issuetracker.google.com/issues/new?component=192708
 This check looks for onReceivedSslError implementations that invoke
 SslErrorHandler#proceed.
 
+More information: 
+https://goo.gle/WebViewClientOnReceivedSslError
 
 RiskyLibrary
 ------------
@@ -5859,6 +6152,7 @@ remove it from your app.
 
 More information: 
 https://play.google.com/sdks
+https://goo.gle/RiskyLibrary
 
 UnsafeDynamicallyLoadedCode
 ---------------------------
@@ -5917,6 +6211,8 @@ There are cases where it is appropriate for an application to write world
 readable files, but these should be reviewed carefully to ensure that they
 contain no private data that is leaked to other applications.
 
+More information: 
+https://goo.gle/WorldReadableFiles
 
 WorldWriteableFiles
 -------------------
@@ -5934,6 +6230,8 @@ writeable files, but these should be reviewed carefully to ensure that they
 contain no private data, and that if the file is modified by a malicious
 application it does not trick or compromise your application.
 
+More information: 
+https://goo.gle/WorldWriteableFiles
 
 DataExtractionRules
 -------------------
@@ -5960,6 +6258,7 @@ not right for your app.
 
 More information: 
 https://developer.android.com/about/versions/12/backup-restore#xml-changes
+https://goo.gle/DataExtractionRules
 
 BidiSpoofing
 ------------
@@ -6591,6 +6890,23 @@ class and pass this object to your Handler when you instantiate the Handler;
 Make all references to members of the outer class using the WeakReference
 object.
 
+
+KaptUsageInsteadOfKsp
+---------------------
+Summary: Kapt usage should be replaced with KSP
+
+Priority: 4 / 10
+Severity: Warning
+Category: Performance
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+KSP is a more efficient replacement for kapt. For libraries that support both,
+KSP should be used to improve build times.
+
+More information: 
+https://developer.android.com/studio/build/migrate-to-ksp
 
 MergeRootFrame
 --------------
@@ -7820,6 +8136,22 @@ ensure that your dialogs use the standard strings, you can use the resource
 strings @android:string/ok and @android:string/cancel.
 
 
+ReportShortcutUsage
+-------------------
+Summary: Report shortcut usage
+
+Priority: 2 / 10
+Severity: Information
+Category: Usability
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+Reporting shortcut usage is important to improving the ranking of shortcuts
+
+More information: 
+https://developer.android.com/develop/ui/views/launch/shortcuts/managing-shortcuts
+
 Productivity
 ============
 
@@ -7844,6 +8176,23 @@ androidx.fragment:fragment with androidx.fragment:fragment-ktx.
 
 More information: 
 https://developer.android.com/kotlin/ktx
+
+UseTomlInstead
+--------------
+Summary: Use TOML Version Catalog Instead
+
+Priority: 4 / 10
+Severity: Warning
+Category: Productivity
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+
+If your project is using a libs.versions.toml file, you should place all
+Gradle dependencies in the TOML file. This lint check looks for version
+declarations outside of the TOML file and suggests moving them (and in the
+IDE, provides a quickfix to performing the operation automatically).
+
 
 Accessibility
 =============
@@ -7900,8 +8249,9 @@ the user interface.
 
 Note that elements in application screens that are purely decorative and do
 not provide any content or enable a user action should not have accessibility
-content descriptions. In this case, just suppress the lint warning with a
-tools:ignore="ContentDescription" attribute.
+content descriptions. In this case, set their descriptions to @null. If your
+app's minSdkVersion is 16 or higher, you can instead set these graphical
+elements' android:importantForAccessibility attributes to no.
 
 Note that for text fields, you should not set both the hint and the
 contentDescription attributes since the hint will never be shown. Just set the
@@ -8453,6 +8803,23 @@ You can enable it by adding --enable LintImplUnexpectedDomain
 
 This checks flags URLs to domains that have not been explicitly allowed for
 use as a documentation source.
+
+
+KotlincFE10
+-----------
+Summary: Avoid using old K1 Kotlin compiler APIs
+
+Priority: 4 / 10
+Severity: Warning
+Category: Lint Implementation Issues
+Vendor: Android Open Source Project
+Contact: https://groups.google.com/g/lint-dev
+Feedback: https://issuetracker.google.com/issues/new?component=192708
+NOTE: This issue is disabled by default!
+You can enable it by adding --enable KotlincFE10
+
+K2, the new version of Kotlin compiler, which encompasses the new frontend, is
+coming. Try to avoid using internal APIs from the old frontend if possible.
 
 
 LintImplDollarEscapes

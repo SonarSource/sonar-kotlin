@@ -1,25 +1,69 @@
 <h2>Why is this an issue?</h2>
+<p>When the same code is duplicated in two or more separate branches of a conditional, it can make the code harder to understand, maintain, and can
+potentially introduce bugs if one instance of the code is changed but others are not.</p>
 <p>Having two clauses in a <code>when</code> statement or two branches in an <code>if</code> chain with the same implementation is at best duplicate
-code, and at worst a coding error. If the same logic is truly needed for both instances, then in an <code>if</code> chain they should be combined, or
-for a <code>when</code>, duplicates should be refactored.</p>
-<h3>Noncompliant code example</h3>
-<pre>
-fun s1871(x: Int) {
-    when (x) {
-        1 -&gt; {
-            val y = x / 2
-            print(y)
-        }
-        2 -&gt; {
-            val y = x / 2
-            print(y)
-        }
-    }
+code, and at worst a coding error.</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+if (a &gt;= 0 &amp;&amp; a &lt; 10) {
+  doFirstThing()
+  doTheThing()
+}
+else if (a &gt;= 10 &amp;&amp; a &lt; 20) {
+  doTheOtherThing()
+}
+else if (a &gt;= 20 &amp;&amp; a &lt; 50) { // Noncompliant; duplicates first condition
+  doFirstThing()
+  doTheThing()
+}
+else {
+  doTheRest()
+}
+</pre>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+when (x) {
+  1 -&gt; {
+    doFirstThing()
+    doSomething()
+  }
+  2 -&gt; doSomethingDifferent()
+  3 -&gt; { // Noncompliant; duplicates case 1's implementation
+    doFirstThing()
+    doSomething()
+  }
+  else -&gt; doTheRest()
+}
+</pre>
+<p>If the same logic is needed for both instances, then:</p>
+<ul>
+  <li> in an <code>if</code> structure they should be combined </li>
+</ul>
+<pre data-diff-id="1" data-diff-type="compliant">
+if ((a &gt;= 0 &amp;&amp; a &lt; 10) || (a &gt;= 20 &amp;&amp; a &lt; 50)) {
+  doFirstThing()
+  doTheThing()
+}
+else if (a &gt;= 10 &amp;&amp; a &lt; 20) {
+  doTheOtherThing()
+}
+else {
+  doTheRest()
+}
+</pre>
+<ul>
+  <li> for a <code>when</code>, the values should be put together in the branch expression list. </li>
+</ul>
+<pre data-diff-id="2" data-diff-type="compliant">
+when (x) {
+  1, 3 -&gt; {
+    doFirstThing()
+    doSomething()
+  }
+  2 -&gt; doSomethingDifferent()
+  else -&gt; doTheRest()
 }
 </pre>
 <h3>Exceptions</h3>
-<p>Blocks in an <code>if</code> chain that contain a single line of code are ignored, as are blocks in a <code>when</code> statement that contain a
-single line of code with or without a following <code>break</code>.</p>
+<p>Blocks in an <code>if</code> chain or in a <code>when</code> branch that contain a single line of code are ignored.</p>
 <pre>
 if (a == 1) {
     doSomething()  //no issue, usually this is done on purpose to increase the readability
@@ -34,9 +78,14 @@ clauses when all branches have the same single line of code. In case of <code>if
 with default clauses, rule {rule:kotlin:S3923} raises a bug.</p>
 <pre>
 if (a == 1) {
-  doSomething()  //Noncompliant, this might have been done on purpose but probably not
+  doSomething()  // Noncompliant, this might have been done on purpose but probably not
 } else if (a == 2) {
   doSomething()
 }
 </pre>
+<h2>Resources</h2>
+<h3>Related rules</h3>
+<ul>
+  <li> {rule:kotlin:S3923} - All branches in a conditional structure should not have exactly the same implementation </li>
+</ul>
 

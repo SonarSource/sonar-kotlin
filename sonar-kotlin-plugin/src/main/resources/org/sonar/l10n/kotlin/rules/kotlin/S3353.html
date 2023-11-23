@@ -8,7 +8,7 @@ it easier to understand the code because readers do not need to keep track of po
 <h4>Wrong code</h4>
 <p>Developers might intend for a variable to remain unchanged and have their code relying on that constraint. For example, a variable could be
 expected to have a specific range. Changing the value of the variable could break that constraint. Also, developers could have assigned the wrong
-variable.</p>
+variable. If the developers inject a value into a variable with an annotation, they should declare it as late initialized.</p>
 <p>Declare variables that remain unchanged as <code>val</code> to avoid these mistakes.</p>
 <h2>How to fix it</h2>
 <p>Replace the keyword <code>var</code> with <code>val</code>.</p>
@@ -20,6 +20,11 @@ fun resize(): Int {
     allocBuffer(newLength)
     return resize
 }
+
+class MyClass {
+    @inject
+    private var myVar: Int = 0 // Noncompliant, `myVar` is late initialized and should be declared as such
+}
 </pre>
 <h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
@@ -27,6 +32,11 @@ fun resize(): Int {
     val newLength = max(16, 2*bufferLength) // Compliant
     allocBuffer(newLength)
     return resize
+}
+
+class MyClass {
+    @inject
+    private lateinit var myVar: Int // Compliant
 }
 </pre>
 <h2>Resources</h2>

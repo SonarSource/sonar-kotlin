@@ -19,8 +19,8 @@
  */
 package org.sonarsource.slang;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
+import com.sonar.orchestrator.junit4.OrchestratorRule;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SurefireTest extends TestBase {
 
   @ClassRule
-  public static final Orchestrator ORCHESTRATOR = Tests.ORCHESTRATOR;
+  public static final OrchestratorRule ORCHESTRATOR = Tests.ORCHESTRATOR;
   private static final Path BASE_DIRECTORY = Paths.get("projects");
 
 

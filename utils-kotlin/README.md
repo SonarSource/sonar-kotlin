@@ -22,8 +22,8 @@ To re-generate ktlint's [`rules.json`](../sonar-kotlin-plugin/src/main/resources
 
 To re-generate android lint's [`rules.json`](../../sonar-kotlin-plugin/src/main/resources/org/sonar/l10n/android/rules/androidlint/rules.json):
 
-1. Update android lint with command `$ANDROID_SDK_HOME/tools/bin/sdkmanager --install "cmdline-tools;latest"`
-2. Check Android Lint version with command `$ANDROID_SDK_HOME/cmdline-tools/$version/bin/lint --version`
+1. Update android lint with command `$ANDROID_SDK_HOME/tools/bin/sdkmanager --install "cmdline-tools;latest"` (run with java sdk 8 to work around the split package problem)
+2. Check Android Lint version with command `$ANDROID_SDK_HOME/cmdline-tools/$version/bin/lint --version` (requires java sdk 17)
 3. Export android lint help `$ANDROID_SDK_HOME/cmdline-tools/$version/bin/lint --show > utils-kotlin/src/main/resources/android-lint-help.txt`
 4. Run `./gradlew utils-kotlin:updateAndroidLintRules` from the project's root directory
 

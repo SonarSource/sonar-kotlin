@@ -19,11 +19,12 @@
  */
 package org.sonarsource.slang;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.build.Build;
 import com.sonar.orchestrator.build.GradleBuild;
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.junit4.OrchestratorRule;
+import com.sonar.orchestrator.junit4.OrchestratorRuleBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
 import com.sonar.orchestrator.locator.Location;
 import com.sonar.orchestrator.locator.MavenLocation;
@@ -56,7 +57,7 @@ public class SlangRulingTest {
   private static final String SQ_VERSION_PROPERTY = "sonar.runtimeVersion";
   private static final String DEFAULT_SQ_VERSION = "LATEST_RELEASE";
 
-  private static Orchestrator orchestrator;
+  private static OrchestratorRule orchestrator;
   private static boolean keepSonarqubeRunning = "true".equals(System.getProperty("keepSonarqubeRunning"));
   private static final boolean IGNORE_EXPECTED_ISSUES_AND_REPORT_ALL = "true".equals(System.getProperty("reportAll"));
   private static final boolean CLEAN_PROJECT_BINARIES = "true".equals(System.getProperty("cleanProjects"));
@@ -64,7 +65,7 @@ public class SlangRulingTest {
 
   @BeforeClass
   public static void setUp() {
-    OrchestratorBuilder builder = Orchestrator.builderEnv()
+    OrchestratorRuleBuilder builder = OrchestratorRule.builderEnv()
       .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion(System.getProperty(SQ_VERSION_PROPERTY, DEFAULT_SQ_VERSION))
       .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin", "sonar-lits-plugin", "0.11.0.2659"));
