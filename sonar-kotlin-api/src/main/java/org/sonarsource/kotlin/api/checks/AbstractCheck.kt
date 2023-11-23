@@ -82,6 +82,13 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
 
     fun KotlinFileContext.reportIssue(
         psiElement: PsiElement,
+        secondaryLocations: List<SecondaryLocation> = emptyList(),
+        gap: Double? = null,
+        message: Message.() -> Unit
+    ) = reportIssue(textRange(psiElement), Message().apply(message), secondaryLocations, gap)
+
+    fun KotlinFileContext.reportIssue(
+        psiElement: PsiElement,
         message: Message,
         secondaryLocations: List<SecondaryLocation> = emptyList(),
         gap: Double? = null,

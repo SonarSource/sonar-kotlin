@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.testapi
 
+import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.api.batch.fs.InputFile
 // TODO: testapi should not depend on frontend module.
@@ -28,7 +29,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinTree
 import org.sonarsource.kotlin.api.frontend.RegexCache
 import org.sonarsource.kotlin.api.frontend.bindingContext
 
-fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile, doResolve: Boolean = true): KotlinTree {
+fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile, doResolve: Boolean = true, providedDiagnostics: List<Diagnostic>? = null): KotlinTree {
     val (ktFile, document) = KotlinSyntaxStructure.of(content, environment, inputFile)
 
     val bindingContext = if (doResolve) bindingContext(
@@ -36,5 +37,5 @@ fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile
         environment.classpath,
         listOf(ktFile),
     ) else BindingContext.EMPTY
-    return KotlinTree(ktFile, document, bindingContext, bindingContext.diagnostics.noSuppression().toList(), RegexCache())
+    return KotlinTree(ktFile, document, bindingContext, providedDiagnostics ?: bindingContext.diagnostics.noSuppression().toList(), RegexCache())
 }

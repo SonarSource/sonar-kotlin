@@ -140,6 +140,7 @@ import org.sonarsource.kotlin.checks.UnusedLocalVariableCheck
 import org.sonarsource.kotlin.checks.UnusedPrivateMethodCheck
 import org.sonarsource.kotlin.checks.UselessAssignmentsCheck
 import org.sonarsource.kotlin.checks.UselessIncrementCheck
+import org.sonarsource.kotlin.checks.UselessNullCheckCheck
 import org.sonarsource.kotlin.checks.VarShouldBeValCheck
 import org.sonarsource.kotlin.checks.VariableAndParameterNameCheck
 import org.sonarsource.kotlin.checks.VerifiedServerHostnamesCheck
@@ -272,6 +273,7 @@ val KOTLIN_CHECKS = listOf(
     UnusedPrivateMethodCheck::class.java,
     UselessAssignmentsCheck::class.java,
     UselessIncrementCheck::class.java,
+    UselessNullCheckCheck::class.java,
     VarShouldBeValCheck::class.java,
     VariableAndParameterNameCheck::class.java,
     VerifiedServerHostnamesCheck::class.java,

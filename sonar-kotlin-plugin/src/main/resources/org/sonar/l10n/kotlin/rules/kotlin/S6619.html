@@ -1,0 +1,93 @@
+<h2>Why is this an issue?</h2>
+<p>In Kotlin, nullability is a part of the type system. By default, any given type <code>T</code> is non-nullable. If you append a "?" to the type, it
+becomes nullable: <code>T?</code>.</p>
+<p>When accessing properties or functions of a nullable type, you need to handle the case when the target is <code>null</code>. However, while
+accessing a non-nullable type, it is redundant to test for <code>null</code>, as the compiler statically ensures that the value can never be
+<code>null</code>. So all the nullability checks on the non-nullable types are considered code smells.</p>
+<p>On the other hand, performing a null-check on a value that is always null is equally as redundant.</p>
+<p>Here is an example of a non-nullable variable. <code>s</code> is of a type <code>String</code> and cannot be <code>null</code>.</p>
+<pre>
+val s: String = ""
+</pre>
+<p>Here is an example of a nullable variable. Nullable variables are declared by using the <code>?</code>.</p>
+<pre>
+val s: String? = null
+</pre>
+<p>Explicit null checks are comparing a result to <code>null</code> using <code>==</code> or <code>!=</code> operators. In Kotlin, there are various
+other means of implicitly or explicitly performing a null check or assertion, including the following:</p>
+<ul>
+  <li> Safe call operator <code>?.</code> </li>
+  <li> Elvis operator <code>?:</code> </li>
+  <li> Not-null assertion operator <code>!!</code> </li>
+  <li> <code>requireNotNull</code> and <code>checkNotNull</code> functions </li>
+</ul>
+<h2>How to fix it</h2>
+<p>Avoid using null checks on non-nullable variables and values that are always null.</p>
+<h3>Code examples</h3>
+<p>If your variable type is non-nullable, any null checks are redundant. For example, <code>if (s == null) {}</code>, <code>requireNotNull(s)</code>
+and <code>checkNotNull(s)</code> can be dropped from your code.</p>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+val s: String = ""
+if (s != null) { doSomething() } // This statement is always true
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+val s: String = ""
+doSomething()
+</pre>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+fun foo(s: String) {
+  if (s == null) { // Noncompliant, `s == null` is always false.
+      doSomething()
+  }
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="2" data-diff-type="compliant">
+fun foo(s: String) {
+  doSomething()
+}
+</pre>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="3" data-diff-type="noncompliant">
+fun foo(s: String): String {
+    return s ?: "" // Noncompliant, ?: is useless and the empty string will never be returned.
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="3" data-diff-type="compliant">
+fun foo(s: String): String {
+    return s
+}
+</pre>
+<p>If <code>s</code> is nullable, the elvis operation makes sense:</p>
+<pre>
+fun foo(s: String?): String {
+    return s ?: ""
+}
+</pre>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="4" data-diff-type="noncompliant">
+fun foo(s: String) {
+    s!!.doSomething() // Noncompliant, `s` can never be null.
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="4" data-diff-type="compliant">
+fun foo(s: String) {
+    s.doSomething()
+}
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> <a href="https://kotlinlang.org/docs/null-safety.html#nullable-types-and-non-null-types">Kotlin Documentation - Null Safety</a> </li>
+  <li> <a href="https://kotlinlang.org/docs/strings.html">Kotlin Documentation - Strings</a> </li>
+</ul>
+<h3>Articles &amp; blog posts</h3>
+<ul>
+  <li> <a href="https://blog.logrocket.com/complete-guide-null-safety-kotlin/">A complete guide to null safety in Kotlin</a> </li>
+</ul>
+

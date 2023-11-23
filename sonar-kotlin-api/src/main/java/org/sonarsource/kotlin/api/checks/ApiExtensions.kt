@@ -505,6 +505,16 @@ inline fun <reified T : KtExpression> KtExpression.findClosestAncestorOfType(sto
     return parent as? T
 }
 
+fun PsiElement.findClosestAncestor(predicate: (PsiElement) -> Boolean): PsiElement? {
+    var parent = this.parent
+
+    while (parent != null && !predicate(parent)) {
+        parent = parent.parent
+    }
+
+    return parent
+}
+
 fun KtBinaryExpression.isPlus() =
     this.operationReference.operationSignTokenType?.let { OperatorConventions.BINARY_OPERATION_NAMES[it] }?.asString() == "plus"
 

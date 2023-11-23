@@ -204,6 +204,37 @@ internal class ApiExtensionsKtTest {
     }
 
     @Test
+    fun `test findClosestAncestor`() {
+        val tree = parse(
+            """
+            fun foo(list: List<String>, prefix: String, length: Int): Boolean = 
+                list.filter { it.startsWith(prefix) }.find { it.length > length } != null
+            """.trimIndent()
+        )
+
+        val textToExpression: MutableMap<String, KtExpression> = TreeMap()
+        walker(tree.psiFile) {
+            if (it is KtExpression)
+                textToExpression[it.text] = it
+        }
+
+        val findCall = textToExpression["find { it.length > length }"]!!
+
+        assertThat(findCall.findClosestAncestor { it is KtDotQualifiedExpression })
+            .isEqualTo(textToExpression["list.filter { it.startsWith(prefix) }.find { it.length > length }"])
+
+        assertThat(findCall.findClosestAncestor { it is KtFunction && it.name == "foo" })
+            .isEqualTo(textToExpression["""
+                fun foo(list: List<String>, prefix: String, length: Int): Boolean = 
+                    list.filter { it.startsWith(prefix) }.find { it.length > length } != null
+            """.trimIndent()])
+
+        // Null, as the paramater itself is not a parent of the `find` call
+        assertThat(findCall.findClosestAncestor { it is KtParameter })
+            .isNull()
+    }
+
+    @Test
     fun `PsiElement getVariableType()`() {
         assertThat((null as PsiElement?).getVariableType(BindingContext.EMPTY)).isNull()
         assertThat(PsiWhiteSpaceImpl(" ").getVariableType(BindingContext.EMPTY)).isNull()
