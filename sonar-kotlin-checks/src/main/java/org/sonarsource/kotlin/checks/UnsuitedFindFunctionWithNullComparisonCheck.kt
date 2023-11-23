@@ -23,10 +23,11 @@ import org.jetbrains.kotlin.lexer.KtTokens.EQEQ
 import org.jetbrains.kotlin.lexer.KtTokens.EXCLEQ
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
+import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
@@ -47,16 +48,13 @@ import org.sonarsource.kotlin.api.reporting.message
 @Rule(key = "S6528")
 class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
 
-    override val functionsToVisit = listOf(
-        FunMatcher(qualifier = "kotlin.collections") {
-            withNames("find", "findLast", "firstOrNull", "lastOrNull")
-            withArguments("kotlin.Function1")
-        }
-    )
+    override val functionsToVisit = listOf(FunMatcher(qualifier = "kotlin.collections") {
+        withNames("find", "findLast", "firstOrNull", "lastOrNull")
+        withArguments("kotlin.Function1")
+    })
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
-        callExpression.findClosestAncestorOfType<KtBinaryExpression>()
-            ?.takeIf { it.right!!.isNull() || it.left!!.isNull() }
+        callExpression.findClosestAncestorOfType<KtBinaryExpression>()?.takeIf { it.right!!.isNull() || it.left!!.isNull() }
             ?.let { report(it, callExpression, kotlinFileContext) }
     }
 
@@ -64,51 +62,59 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
         // callExpression has argument a lambda expression with a single parameter, due to the functionsToVisit FunMatchers
         val lambda = callExpression.valueArguments[0].getArgumentExpression() as KtLambdaExpression
 
-        val lambdaBinaryExpr = lambda.bodyExpression!!.firstChild as? KtBinaryExpression
+        // Note that lambda.bodyExpression!!.children[0] and lambda.bodyExpression!!.firstChild behave differently in case of a block body
+        // when there is a comment before the expression, the firstChild is the comment, while children[0] is the expression
+        val lambdaBinaryExpr = lambda.bodyExpression!!.children[0] as? KtBinaryExpression
         // the lambda either has the implicit "it" parameter or a single parameter
         val lambdaParameterName = if (lambda.valueParameters.isEmpty()) "it" else lambda.valueParameters[0].name!!
 
         // the functionsToVisit can be applied directly on the collection, or indirectly, for example using "with(collection)"
-        val dotExpressionBeforeFind =
-            callExpression.findClosestAncestorOfType<KtDotQualifiedExpression>(stopCondition = { it is KtBinaryExpression })?.receiverExpression
-        // in case the function is called on the collection directly, we build the replacement on the dot expression before the call
-        val beforeFindTxt = dotExpressionBeforeFind?.text?.plus(".") ?: ""
+        val qualifiedExprBeforeFind =
+            callExpression.findClosestAncestorOfType<KtQualifiedExpression>(stopCondition = { it is KtBinaryExpression })
+        val qualifiedExpressionAccessor = if (qualifiedExprBeforeFind is KtSafeQualifiedExpression) "?." else "."
+        // in case the function is called on the collection directly, we build the replacement on the qualified expression before the call
+        val beforeFindTxt = qualifiedExprBeforeFind?.receiverExpression?.text?.plus(qualifiedExpressionAccessor) ?: ""
 
         // case in which the lambda predicate is an equality check: "it == something" or "x -> x == something"
         if (lambdaBinaryExpr != null && lambdaBinaryExpr.isSingleEquality() && lambdaBinaryExpr.references(lambdaParameterName)) {
             val negateContains = (lambdaBinaryExpr.operationToken == EQEQ) xor (nullComparisonExpr.operationToken == EXCLEQ)
-            // the binary expression operand that is not the lambda parameter
             val elementTxt = lambdaBinaryExpr.nonParameterOperand(lambdaParameterName).text
             val replacementExpr = (if (negateContains) "!" else "") + "${beforeFindTxt}contains($elementTxt)"
 
-            kotlinFileContext.reportIssue(nullComparisonExpr, message(nullComparisonExpr, replacementExpr))
+            // suggest the replacement only if the message is not too long and does not contain a line break
+            val message = if (replacementExpr.isVerbose()) message("contains") else message(replacementExpr)
+
+            kotlinFileContext.reportIssue(nullComparisonExpr, message)
         } else {
             val isAnyReplacement = nullComparisonExpr.operationToken == EXCLEQ
-            val replacementExpr = "${beforeFindTxt}${if (isAnyReplacement) "any" else "none"} ${lambda.text}"
+            val anyOrNone = if (isAnyReplacement) "any" else "none"
+            val replacementExpr = "${beforeFindTxt}${anyOrNone} ${lambda.text}"
 
-            kotlinFileContext.reportIssue(nullComparisonExpr, message(nullComparisonExpr, replacementExpr))
+            // suggest the replacement only if the message is not too long and does not contain a line break
+            val message = if (replacementExpr.isVerbose()) message(anyOrNone) else message(replacementExpr)
+
+            kotlinFileContext.reportIssue(nullComparisonExpr, message)
         }
     }
 
-    // checks that the binary expression has no binary expression as child, and it is an equality comparison
-    private fun KtBinaryExpression.isSingleEquality(): Boolean =
-        this.getChildOfType<KtBinaryExpression>() == null && this.operationToken == EQEQ
-
-    private fun KtBinaryExpression.references(reference: String): Boolean =
-        this.left!!.references(reference) || this.right!!.references(reference)
-
-    private fun KtBinaryExpression.nonParameterOperand(parameter: String): KtExpression =
-        if (!this.left!!.references(parameter)) this.left!! else this.right!!
-
-    private fun KtExpression.references(reference: String): Boolean =
-        this.let { it as? KtNameReferenceExpression }?.getReferencedName() == reference
-
-    private fun message(nullComparisonExpr: KtBinaryExpression, replacementExpr: String): Message =
-        message {
-            +"Replace "
-            code(nullComparisonExpr.text)
-            +" with "
-            code(replacementExpr)
-            +"."
-        }
+    private fun message(replacementExpr: String): Message = message {
+        +"Replace with "
+        code(replacementExpr)
+        +"."
+    }
 }
+
+// checks that the binary expression has no binary expression as child, and it is an equality comparison
+private fun KtBinaryExpression.isSingleEquality(): Boolean =
+    this.getChildOfType<KtBinaryExpression>() == null && this.operationToken == EQEQ
+
+private fun KtBinaryExpression.references(reference: String): Boolean =
+    this.left!!.references(reference) || this.right!!.references(reference)
+
+private fun KtBinaryExpression.nonParameterOperand(parameter: String): KtExpression =
+    if (!this.left!!.references(parameter)) this.left!! else this.right!!
+
+private fun KtExpression.references(reference: String): Boolean =
+    this.let { it as? KtNameReferenceExpression }?.getReferencedName() == reference
+
+private fun String.isVerbose(): Boolean = this.length >= 40 || this.contains("\\n")

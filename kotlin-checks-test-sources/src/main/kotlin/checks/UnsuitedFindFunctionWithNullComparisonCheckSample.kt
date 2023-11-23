@@ -4,29 +4,29 @@ class UnsuitedFindFunctionWithNullComparisonCheckSample {
 
     fun onCollections(list: List<Int>, set: Set<Int>, array: Array<Int>, map: Map<Int, Int>) {
 
-        list.find { it > 5 } != null // Noncompliant {{Replace `list.find { it > 5 } != null` with `list.any { it > 5 }`.}}
+        list.find { it > 5 } != null // Noncompliant {{Replace with `list.any { it > 5 }`.}}
     //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-        list.findLast { it > 5 } == null // Noncompliant  {{Replace `list.findLast { it > 5 } == null` with `list.none { it > 5 }`.}}
-        list.firstOrNull { it > 5 } == null // Noncompliant  {{Replace `list.firstOrNull { it > 5 } == null` with `list.none { it > 5 }`.}}
-        list.lastOrNull { it > 5 } == null // Noncompliant  {{Replace `list.lastOrNull { it > 5 } == null` with `list.none { it > 5 }`.}}
+        list.findLast { it > 5 } == null // Noncompliant  {{Replace with `list.none { it > 5 }`.}}
+        list.firstOrNull { it > 5 } == null // Noncompliant  {{Replace with `list.none { it > 5 }`.}}
+        list.lastOrNull { it > 5 } == null // Noncompliant  {{Replace with `list.none { it > 5 }`.}}
 
-        list.find { it == 5 } != null // Noncompliant  {{Replace `list.find { it == 5 } != null` with `list.contains(5)`.}}
-        list.find { 5 == it } != null // Noncompliant  {{Replace `list.find { 5 == it } != null` with `list.contains(5)`.}}
-        list.find { it != 5 } == null // Noncompliant  {{Replace `list.find { it != 5 } == null` with `list.none { it != 5 }`.}}
-        list.find { 5 != it } == null // Noncompliant  {{Replace `list.find { 5 != it } == null` with `list.none { 5 != it }`.}}
+        list.find { it == 5 } != null // Noncompliant  {{Replace with `list.contains(5)`.}}
+        list.find { 5 == it } != null // Noncompliant  {{Replace with `list.contains(5)`.}}
+        list.find { it != 5 } == null // Noncompliant  {{Replace with `list.none { it != 5 }`.}}
+        list.find { 5 != it } == null // Noncompliant  {{Replace with `list.none { 5 != it }`.}}
 
-        list.find { it == 5 } == null // Noncompliant  {{Replace `list.find { it == 5 } == null` with `!list.contains(5)`.}}
-        list.find { 5 == it } == null // Noncompliant  {{Replace `list.find { 5 == it } == null` with `!list.contains(5)`.}}
-        list.find { it != 5 } != null // Noncompliant  {{Replace `list.find { it != 5 } != null` with `list.any { it != 5 }`.}}
-        list.find { 5 != it } != null // Noncompliant  {{Replace `list.find { 5 != it } != null` with `list.any { 5 != it }`.}}
+        list.find { it == 5 } == null // Noncompliant  {{Replace with `!list.contains(5)`.}}
+        list.find { 5 == it } == null // Noncompliant  {{Replace with `!list.contains(5)`.}}
+        list.find { it != 5 } != null // Noncompliant  {{Replace with `list.any { it != 5 }`.}}
+        list.find { 5 != it } != null // Noncompliant  {{Replace with `list.any { 5 != it }`.}}
 
         fun five() = 5
         val five = 5
-        list.find { it > five } == null // Noncompliant  {{Replace `list.find { it > five } == null` with `list.none { it > five }`.}}
-        list.find { it > five() } == null // Noncompliant  {{Replace `list.find { it > five() } == null` with `list.none { it > five() }`.}}
-        list.find { it == five } != null // Noncompliant  {{Replace `list.find { it == five } != null` with `list.contains(five)`.}}
-        list.find { it == five() } == null // Noncompliant  {{Replace `list.find { it == five() } == null` with `!list.contains(five())`.}}
+        list.find { it > five } == null // Noncompliant  {{Replace with `list.none { it > five }`.}}
+        list.find { it > five() } == null // Noncompliant  {{Replace with `list.none { it > five() }`.}}
+        list.find { it == five } != null // Noncompliant  {{Replace with `list.contains(five)`.}}
+        list.find { it == five() } == null // Noncompliant  {{Replace with `!list.contains(five())`.}}
 
         list.find { it > 5 }
         list.findLast { it > 5 }
@@ -53,22 +53,22 @@ class UnsuitedFindFunctionWithNullComparisonCheckSample {
         map.entries.find { it.key == five } != null // Noncompliant
         map.entries.find { it.key > five() } == null // Noncompliant
 
-        list.map { it + 1 }.filter { it > 1 }.find { it > 5 } != null // Noncompliant {{Replace `list.map { it + 1 }.filter { it > 1 }.find { it > 5 } != null` with `list.map { it + 1 }.filter { it > 1 }.any { it > 5 }`.}}
+        list.map { it + 1 }.filter { it > 1 }.find { it > 5 } != null // Noncompliant {{Replace with `any`.}}
     //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-        list.findLast { `my var` -> `my var` == 5 } != null // Noncompliant {{Replace `list.findLast { `my var` -> `my var` == 5 } != null` with `list.contains(5)`.}}
+        list.findLast { `my var` -> `my var` == 5 } != null // Noncompliant {{Replace with `list.contains(5)`.}}
 
 
-        null != list.find { it > 5 } // Noncompliant {{Replace `null != list.find { it > 5 }` with `list.any { it > 5 }`.}}
+        null != list.find { it > 5 } // Noncompliant {{Replace with `list.any { it > 5 }`.}}
 
-        ((((list.find { it > 5 })))) != null // Noncompliant {{Replace `((((list.find { it > 5 })))) != null` with `list.any { it > 5 }`.}}
+        ((((list.find { it > 5 })))) != null // Noncompliant {{Replace with `list.any { it > 5 }`.}}
 
         with(list) {
-            if (find { it > 5 } != null) { // Noncompliant {{Replace `find { it > 5 } != null` with `any { it > 5 }`.}}
+            if (find { it > 5 } != null) { // Noncompliant {{Replace with `any { it > 5 }`.}}
 
             }
 
-            if (find { it == 5 } != null) { // Noncompliant {{Replace `find { it == 5 } != null` with `contains(5)`.}}
+            if (find { it == 5 } != null) { // Noncompliant {{Replace with `contains(5)`.}}
 
             }
 
@@ -79,18 +79,47 @@ class UnsuitedFindFunctionWithNullComparisonCheckSample {
 
         5.let {
             with(list) {
-                findLast { it > 5 } != null // Noncompliant {{Replace `findLast { it > 5 } != null` with `any { it > 5 }`.}}
+                findLast { it > 5 } != null // Noncompliant {{Replace with `any { it > 5 }`.}}
             }
         }
 
-        list.find { x -> x == 5 } != null // Noncompliant {{Replace `list.find { x -> x == 5 } != null` with `list.contains(5)`.}}
-        list.find { x -> x == five } != null // Noncompliant {{Replace `list.find { x -> x == five } != null` with `list.contains(five)`.}}
-        list.find { x -> five() == 5 } != null // Noncompliant {{Replace `list.find { x -> five() == 5 } != null` with `list.any { x -> five() == 5 }`.}}
+        list.filter { x -> x == 5 && (list.firstOrNull { it is Int } as Int?) == null } // Noncompliant {{Replace with `list.none { it is Int }`.}}
+
+        list.filter { x -> // Noncompliant {{Replace with `any`.}}
+            if(x == 5) false else true // filter
+        }.map {
+            it.inc() // mapping
+        }.find {
+            it > 5
+        } != null
+
+        list.map {// Noncompliant {{Replace with `contains`.}}
+            it.inc() // mapping
+        }.find {
+            it == 5
+        } != null
+
+        list.find {// Noncompliant {{Replace with `list.contains(5)`.}}
+            it == 5
+        } != null
+
+        val nullableList :List<Int>? = null
+
+        nullableList?.findLast { it == 5 } != null // Noncompliant {{Replace with `nullableList?.contains(5)`.}}
+        nullableList?.firstOrNull { it >= 5 } != null // Noncompliant {{Replace with `nullableList?.any { it >= 5 }`.}}
+        nullableList?.find { it >= 5 } == null // Noncompliant {{Replace with `nullableList?.none { it >= 5 }`.}}
+
+        nullableList!!.findLast { it == 5 } != null // Noncompliant {{Replace with `nullableList!!.contains(5)`.}}
+
+        list.find { x -> x == 5 } != null // Noncompliant {{Replace with `list.contains(5)`.}}
+        list.find { x -> x == five } != null // Noncompliant {{Replace with `list.contains(five)`.}}
+        list.find { x -> five() == 5 } != null // Noncompliant {{Replace with `list.any { x -> five() == 5 }`.}}
         list.find { x -> x == five && five == 5 } != null // Noncompliant
         list.find { x -> x == five && x == 5 } != null // Noncompliant
         list.find { x -> 1 == 5 } != null // Noncompliant
-        list.find { x -> { x > 5 }() } != null // Noncompliant {{Replace `list.find { x -> { x > 5 }() } != null` with `list.any { x -> { x > 5 }() }`.}}
-        list.findLast { x -> { x == 5 }() } != null // Noncompliant {{Replace `list.findLast { x -> { x == 5 }() } != null` with `list.any { x -> { x == 5 }() }`.}}
+        list.find { x -> { x > 5 }() } != null // Noncompliant {{Replace with `list.any { x -> { x > 5 }() }`.}}
+        list.findLast { x -> { x == 5 }() } != null // Noncompliant {{Replace with `list.any { x -> { x == 5 }() }`.}}
+        list.findLast { x -> { if(x >= 5 && 5 > 4) false else true }() } == null // Noncompliant {{Replace with `none`.}}
     }
 
     class NonKotlinCollections {
