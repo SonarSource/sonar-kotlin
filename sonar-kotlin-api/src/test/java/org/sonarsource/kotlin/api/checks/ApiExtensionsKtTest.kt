@@ -424,6 +424,10 @@ class ApiExtensionsKtDetermineTypeTest {
         val expr = ktFile.findDescendantOfType<KtBlockExpression> { it.text == "{ 1 }" }!!
         assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
             .isEqualTo("kotlin.Int")
+        assertThat(expr.determineTypeAsString(bindingContext))
+            .isEqualTo("kotlin.Int")
+        val missingContext = BindingContext.EMPTY
+        assertThat(expr.determineTypeAsString(missingContext)).isNull()
     }
 
     @Test

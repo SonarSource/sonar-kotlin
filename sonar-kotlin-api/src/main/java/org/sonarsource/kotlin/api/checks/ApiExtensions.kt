@@ -245,7 +245,7 @@ private fun Call.predictValueExpression(bindingContext: BindingContext) =
         valueArguments[1].getArgumentExpression()
     } else null
 
-fun KtReferenceExpression.extractFromInitializer(
+private fun KtReferenceExpression.extractFromInitializer(
     bindingContext: BindingContext,
     declarations: MutableList<PsiElement> = mutableListOf(),
 ) =
@@ -261,7 +261,7 @@ fun KtReferenceExpression.extractFromInitializer(
 /**
  * Will try to resolve what `it` is an alias for inside of a `let` or `also` scope.
  */
-fun KtReferenceExpression.extractLetAlsoTargetExpression(bindingContext: BindingContext) =
+private fun KtReferenceExpression.extractLetAlsoTargetExpression(bindingContext: BindingContext) =
     findReceiverScopeFunctionLiteral(bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
 
 /**
@@ -328,16 +328,8 @@ private fun KtProperty.determineType(bindingContext: BindingContext) =
 fun KtProperty.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
-fun KtExpression.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false): String? {
-    val type = determineType(bindingContext)
-    // I have had a case where the compiler could not resolve the type to a specific one only to a constraint type,
-    // but I was not able to reproduce it
-    return if(type?.constructor?.declarationDescriptor != null){
-        type.getKotlinTypeFqName(printTypeArguments)
-    }else{
-        null
-    }
-}
+fun KtExpression.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
+    determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
 private fun KtParameter.determineType(bindingContext: BindingContext) =
     bindingContext[BindingContext.TYPE, typeReference]

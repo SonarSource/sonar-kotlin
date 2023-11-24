@@ -66,7 +66,9 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
 
         reportPropertiesAndParameters(function, mutatedDeclarations, bindingContext, context)
 
-        if (function.receiverTypeReference?.determineTypeAsString(bindingContext) in mutableCollections) {
+        val isExtensionFunctionOnMutableCollection =
+            function.receiverTypeReference?.determineTypeAsString(bindingContext) in mutableCollections
+        if (isExtensionFunctionOnMutableCollection) {
             reportForExtensionFunction(function, bindingContext, mutatedNames, context)
         }
     }
@@ -86,6 +88,37 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
         mutableVariables
             .filter { it.isNotReferenced(mutatedDeclarations, bindingContext) }
             .forEach { context.reportIssue(it, "Make this collection immutable.") }
+    }
+
+    private fun KtNamedDeclaration.isMutableCollection(bindingContext: BindingContext): Boolean =
+        this.determineTypeAsString(bindingContext) in mutableCollections
+
+    private fun KtNamedDeclaration.isNotReferenced(
+        mutatedDeclarations: Set<CallableDescriptor>,
+        bindingContext: BindingContext,
+    ): Boolean {
+        val descriptor = bindingContext[DECLARATION_TO_DESCRIPTOR, this]
+        //descriptor is never null because we need the descriptor to know if we will consider the declaration
+        //no need to return false if descriptor is null
+        return !mutatedDeclarations.contains(descriptor)
+    }
+
+    private fun reportForExtensionFunction(
+        function: KtNamedFunction,
+        bindingContext: BindingContext,
+        mutatedNames: Set<String>,
+        context: KotlinFileContext,
+    ) {
+        val functionsCalledOnThis = function
+            .collectDescendantsOfType<KtCallExpression> { it.noReceiver() }
+
+        if (functionsCalledOnThis.none { it.mutateCollection(bindingContext) } && "this" !in mutatedNames) {
+            context.reportIssue(function.receiverTypeReference!!.navigationElement, "Make this collection immutable.")
+        }
+    }
+
+    private fun KtCallExpression.noReceiver(): Boolean {
+        return this.parent is KtBlockExpression
     }
 
     private fun collectReferenceToMutatedCollections(
@@ -117,41 +150,18 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
         return mutablePropertiesReceiver + mutablePropertiesInBinaryExpression + mutablePropertiesInFunctionCalls
     }
 
-    private fun reportForExtensionFunction(
-        function: KtNamedFunction,
-        bindingContext: BindingContext,
-        mutatedNames: Set<String>,
-        context: KotlinFileContext,
-    ) {
-        val functionsCalledOnThis = function
-            .collectDescendantsOfType<KtCallExpression> { it.noReceiver() }
-
-        if (functionsCalledOnThis.none { it.mutateCollection(bindingContext) } && "this" !in mutatedNames) {
-            context.reportIssue(function.receiverTypeReference!!.navigationElement, "Make this collection immutable.")
-        }
-    }
-
     private fun findReferenceExpressions(
         expression: KtExpression,
     ): List<KtNameReferenceExpression> {
-        return expression.collectDescendantsOfType<KtNameReferenceExpression>({ x -> canGoInside(x) }, { true })
+        return expression.collectDescendantsOfType<KtNameReferenceExpression>(::considerElement) { true }
     }
 
-    private fun canGoInside(element: PsiElement): Boolean {
+    private fun considerElement(element: PsiElement): Boolean {
         return when (element) {
             is KtCallExpression -> false
             is KtDotQualifiedExpression -> false
             else -> true
         }
-    }
-
-    private fun KtNamedDeclaration.isNotReferenced(
-        mutatedDeclarations: Set<CallableDescriptor>,
-        bindingContext: BindingContext,
-    ): Boolean {
-        val descriptor = bindingContext[DECLARATION_TO_DESCRIPTOR, this]
-        //descriptor is never null because we need the descriptor to know if we will consider the declaration
-        return !mutatedDeclarations.contains(descriptor)
     }
 
     private fun KtQualifiedExpression.mutateCollection(bindingContext: BindingContext): Boolean {
@@ -181,13 +191,5 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
             this.dispatchReceiverParameter?.type
         }
     }
-
-    private fun KtCallExpression.noReceiver(): Boolean {
-        return this.parent is KtBlockExpression
-    }
-
-
-    private fun KtNamedDeclaration.isMutableCollection(bindingContext: BindingContext): Boolean =
-        this.determineTypeAsString(bindingContext) in mutableCollections
 
 }
