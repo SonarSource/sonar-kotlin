@@ -31,7 +31,6 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -79,13 +78,10 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
         bindingContext: BindingContext,
         context: KotlinFileContext,
     ) {
-        val mutableProperties: List<KtNamedDeclaration> = function
-            .collectDescendantsOfType<KtProperty> { it.isMutableCollection(bindingContext) }
         val mutableParameters: List<KtNamedDeclaration> = function.valueParameters
             .filter { it.isMutableCollection(bindingContext) }
 
-        val mutableVariables = mutableProperties + mutableParameters
-        mutableVariables
+        mutableParameters
             .filter { it.isNotReferenced(mutatedDeclarations, bindingContext) }
             .forEach { context.reportIssue(it, "Make this collection immutable.") }
     }
