@@ -57,6 +57,20 @@ fun List&lt;Int&gt;.sum(): Int { // Compliant
     return reduce { acc, it -&gt; acc + it}
 }
 </pre>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="4" data-diff-type="noncompliant">
+fun doSomething(): Int {
+    val list = object.myMutableList // Noncompliant, can be immutable
+    return reduce { acc, it -&gt; acc + it}
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="4" data-diff-type="compliant">
+fun doSomething(): Int {
+    val list : List&lt;Int&gt; = object.myMutableList // compliant
+    return reduce { acc, it -&gt; acc + it}
+}
+</pre>
 <h2>Resources</h2>
 <h3>Articles &amp; blog posts</h3>
 <ul>
