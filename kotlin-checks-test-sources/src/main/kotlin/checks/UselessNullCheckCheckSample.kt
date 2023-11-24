@@ -127,3 +127,10 @@ private fun <E : Throwable> moo(exception: E) =
         cachedCtor(exception) as E?
     }
 
+private class FooBar(
+    something: Any
+) {
+    private val someString: String? = something as? String
+    val isString: Boolean
+        get() = someString != null // Compliant
+}
