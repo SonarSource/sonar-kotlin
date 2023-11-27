@@ -1,0 +1,21 @@
+{
+  "title": "Collection should be immutable if contents is not changed",
+  "type": "CODE_SMELL",
+  "code": {
+    "impacts": {
+      "MAINTAINABILITY": "MEDIUM"
+    },
+    "attribute": "CLEAR"
+  },
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Minor",
+  "ruleSpecification": "RSPEC-6524",
+  "sqKey": "S6524",
+  "scope": "All",
+  "quickfix": "unknown"
+}

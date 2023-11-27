@@ -1,0 +1,65 @@
+<h2>Why is this an issue?</h2>
+<p>If a mutable collection type is used but no mutating functions such as <code>add</code> or <code>remove</code> are ever called, and the collection
+instance does not leave the scope of the function, it can be replaced with the corresponding immutable collection type.</p>
+<p>This is similar to why <code>val</code> should be used instead of <code>var</code> for local variables that are never re-assigned.</p>
+<h3>What is the potential impact?</h3>
+<h4>Readability and Understanding</h4>
+<p>If an immutable collection type is used, it is evident to the readers that its content is never changed. This makes it easier to understand the
+code because readers do not need to keep track of possible state changes of the collection.</p>
+<h4>Performance</h4>
+<p>In some cases, optimized implementation variants of collection classes can be used when the collection is immutable.</p>
+<h4>Wrong code</h4>
+<p>Developers might intend for a collection to remain unchanged and have their code relying on that constraint. For example, a map could be expected
+to contain specific elements. Changing the contents of a collection breaks that constraint. Also, users of an API might otherwise downcast an
+immutable collection they got from a library into a mutable collection, and so cause unforeseen side effects.</p>
+<p>Declare collections that remain unchanged as immutable to avoid these mistakes.</p>
+<h2>How to fix it</h2>
+<p>Replace mutable collection type names such as <code>MutableList</code> or <code>MutableMap</code> with their immutable equivalents, such as
+<code>List</code> or <code>map</code>.</p>
+<p>Replace builder functions that return mutable collection instances, such as <code>mutableListOf</code> with their immutable counterparts, such as
+<code>listOf</code>.</p>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+fun sum123(): Int {
+    val list = mutableListOf(1,2,3) // Noncompliant, can be immutable
+    return list.reduce { acc, it -&gt; acc + it}
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+fun sum123(): Int {
+    val list = listOf(1,2,3) // Compliant
+    return list.reduce { acc, it -&gt; acc + it}
+}
+</pre>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+fun sumList(list: MutableList&lt;Int&gt;): Int { // Noncompliant, can be immutable
+    return list.reduce { acc, it -&gt; acc + it}
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="2" data-diff-type="compliant">
+fun sumList(list: List&lt;Int&gt;): Int { // Compliant
+    return list.reduce { acc, it -&gt; acc + it}
+}
+</pre>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="3" data-diff-type="noncompliant">
+fun MutableList&lt;Int&gt;.sum(): Int { // Noncompliant, can be immutable
+    return reduce { acc, it -&gt; acc + it}
+}
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="3" data-diff-type="compliant">
+fun List&lt;Int&gt;.sum(): Int { // Compliant
+    return reduce { acc, it -&gt; acc + it}
+}
+</pre>
+<h2>Resources</h2>
+<h3>Articles &amp; blog posts</h3>
+<ul>
+  <li> <a href="https://www.baeldung.com/kotlin/immutable-collections">Baeldung, Kotlin Immutable Collections</a> </li>
+</ul>
+
