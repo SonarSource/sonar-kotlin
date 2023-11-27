@@ -32,7 +32,7 @@ interface CheckTestNonCompiling {
     fun `non compiling`()
 }
 
-class CheckTestNonCompilingImpl(
+class DefaultCheckTestNonCompiling(
     val check: AbstractCheck,
     private val sampleFileNonCompiling: String? = null,
     private val shouldReport: Boolean = false,
