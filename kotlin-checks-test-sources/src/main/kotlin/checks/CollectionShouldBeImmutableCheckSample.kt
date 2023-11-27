@@ -157,10 +157,21 @@ class CollectionShouldBeImmutableCheckSample {
         add(1)
     }
 
+    fun MutableList<Int>.compliantDelegate4(): Unit { // Compliant
+        if(add(1)) {}
+    }
+
     fun MutableList<Int>.noncompliantDelegate(): Int { // Noncompliant
 //      ^^^^^^^^^^^^^^^^
         return reduce { acc, it -> acc + it}
     }
+
+    fun MutableList<Int>.noncompliantDelegate2(): Int { // compliant, FN
+        var list = mutableListOf(1, 2, 3) // we should change noReciever to check that it is called on this
+        list.add(1)
+        return reduce { acc, it -> acc + it}
+    }
+
 
 
     class AMutableCollections : MutableCollection<Int> {
