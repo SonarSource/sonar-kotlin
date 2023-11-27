@@ -113,12 +113,12 @@ class UselessNullCheckCheck : AbstractCheck() {
     }
 
     private fun KtBinaryExpression.operandComparedToNull(bc: BindingContext): KtExpression? {
-        val left = left?.predictRuntimeValueExpression(bc) ?: return null
-        val right = right?.predictRuntimeValueExpression(bc) ?: return null
+        val leftResolved = left?.predictRuntimeValueExpression(bc) ?: return null
+        val rightResolved = right?.predictRuntimeValueExpression(bc) ?: return null
 
         return when {
-            left.isNull() -> right
-            right.isNull() -> left
+            leftResolved.isNull() -> right
+            rightResolved.isNull() -> left
             else -> null
         }
     }
