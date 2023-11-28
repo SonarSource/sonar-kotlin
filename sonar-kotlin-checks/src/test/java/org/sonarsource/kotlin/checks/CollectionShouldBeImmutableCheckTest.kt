@@ -19,4 +19,5 @@
  */
 package org.sonarsource.kotlin.checks
 
-internal class CollectionShouldBeImmutableCheckTest : CheckTestWithNoSemantics(CollectionShouldBeImmutableCheck())
+internal class CollectionShouldBeImmutableCheckTest : CheckTestWithNoSemantics(CollectionShouldBeImmutableCheck()),
+    CheckTestNonCompiling by DefaultCheckTestNonCompiling(CollectionShouldBeImmutableCheck())
