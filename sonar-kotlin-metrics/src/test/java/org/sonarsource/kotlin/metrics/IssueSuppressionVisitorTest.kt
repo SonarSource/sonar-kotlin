@@ -33,6 +33,7 @@ import org.sonarsource.kotlin.checks.BadFunctionNameCheck
 import org.sonarsource.kotlin.checks.DeprecatedCodeUsedCheck
 import org.sonarsource.kotlin.checks.TooManyCasesCheck
 import org.sonarsource.kotlin.checks.UnusedLocalVariableCheck
+import org.sonarsource.kotlin.checks.UselessNullCheckCheck
 import org.sonarsource.kotlin.checks.VariableAndParameterNameCheck
 import org.sonarsource.kotlin.testapi.DEFAULT_KOTLIN_CLASSPATH
 import org.sonarsource.kotlin.testapi.KOTLIN_BASE_DIR
@@ -54,16 +55,36 @@ class IssueSuppressionVisitorTest {
     }
 
     private fun scanWithSuppression(path: Path) =
-        scanFile(path, true, BadClassNameCheck(), BadFunctionNameCheck(), VariableAndParameterNameCheck(), UnusedLocalVariableCheck(), TooManyCasesCheck(), DeprecatedCodeUsedCheck())
+        scanFile(
+            path,
+            true,
+            BadClassNameCheck(),
+            BadFunctionNameCheck(),
+            VariableAndParameterNameCheck(),
+            UnusedLocalVariableCheck(),
+            TooManyCasesCheck(),
+            DeprecatedCodeUsedCheck(),
+            UselessNullCheckCheck(),
+        )
 
     private fun scanWithoutSuppression(path: Path) =
-        scanFile(path, false, BadClassNameCheck(), BadFunctionNameCheck(), VariableAndParameterNameCheck(), UnusedLocalVariableCheck(), TooManyCasesCheck(), DeprecatedCodeUsedCheck())
+        scanFile(
+            path,
+            false,
+            BadClassNameCheck(),
+            BadFunctionNameCheck(),
+            VariableAndParameterNameCheck(),
+            UnusedLocalVariableCheck(),
+            TooManyCasesCheck(),
+            DeprecatedCodeUsedCheck(),
+            UselessNullCheckCheck(),
+        )
 
     private fun scanFile(path: Path, suppress: Boolean, check: AbstractCheck, vararg checks: AbstractCheck): SingleFileVerifier {
-        val env = Environment(DEFAULT_KOTLIN_CLASSPATH, LanguageVersion.LATEST_STABLE)
+        val env = Environment(System.getProperty("java.class.path").split(System.getProperty("path.separator")) + DEFAULT_KOTLIN_CLASSPATH, LanguageVersion.LATEST_STABLE)
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
-        val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin.kt")
+        val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(testFileContent)
             .build()

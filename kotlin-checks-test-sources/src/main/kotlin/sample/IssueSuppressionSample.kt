@@ -80,3 +80,19 @@ private fun S1479(values: List<Int>): List<String> {
         }
     }
 }
+
+private fun UselessNullChecks(foo: String) {
+    @Suppress("kotlin:S6619")
+    foo ?: "bar"
+
+    @Suppress("UNNECESSARY_SAFE_CALL")
+    foo?.plus("bar")
+
+    @Suppress("UNNECESSARY_NOT_NULL_ASSERTION")
+    foo != null
+
+    @Suppress("USELESS_ELVIS")
+    foo ?: "bar"
+
+    foo ?: "bar" // Noncompliant
+}

@@ -49,6 +49,10 @@ private val COMPILER_KEY_TO_SONAR_KEYS = mapOf(
     "ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE" to sequenceOf("kotlin:S6615"),
     "UNUSED_VALUE" to sequenceOf("kotlin:S6615"),
     "UNUSED_CHANGED_VALUE" to sequenceOf("kotlin:S6615"),
+    "UNNECESSARY_SAFE_CALL" to sequenceOf("kotlin:S6619"),
+    "UNNECESSARY_NOT_NULL_ASSERTION" to sequenceOf("kotlin:S6619"),
+    "USELESS_ELVIS" to sequenceOf("kotlin:S6619"),
+    "USELESS_NULLABLE_CHECK" to sequenceOf("kotlin:S6619"),
 )
 
 class IssueSuppressionVisitor : KotlinFileVisitor() {
