@@ -37,6 +37,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
@@ -238,6 +239,39 @@ internal class ApiExtensionsKtTest {
     fun `PsiElement getVariableType()`() {
         assertThat((null as PsiElement?).getVariableType(BindingContext.EMPTY)).isNull()
         assertThat(PsiWhiteSpaceImpl(" ").getVariableType(BindingContext.EMPTY)).isNull()
+    }
+
+    @Test
+    fun `test Functions modifiers`(){
+        val tree = parse(
+            """
+            abstract fun abstractFun():Unit{}
+            open fun openFun():Unit{}
+            override fun overrideFun():Unit{}
+            actual fun actualFun():Unit{}
+            expect fun expectFun():Unit{}
+            fun defaultFun():Unit{}
+            """.trimIndent()
+        )
+        val textToExpression: MutableMap<String, KtNamedFunction> = TreeMap()
+        walker(tree.psiFile) {
+            if (it is KtNamedFunction)
+                textToExpression[it.name!!] = it
+        }
+        assertThat(textToExpression["abstractFun"]!!.isAbstract()).isTrue()
+        assertThat(textToExpression["defaultFun"]!!.isAbstract()).isFalse()
+
+        assertThat(textToExpression["openFun"]!!.isOpen()).isTrue()
+        assertThat(textToExpression["defaultFun"]!!.isOpen()).isFalse()
+
+        assertThat(textToExpression["overrideFun"]!!.overrides()).isTrue()
+        assertThat(textToExpression["defaultFun"]!!.overrides()).isFalse()
+
+        assertThat(textToExpression["actualFun"]!!.isActual()).isTrue()
+        assertThat(textToExpression["defaultFun"]!!.isActual()).isFalse()
+
+        assertThat(textToExpression["expectFun"]!!.isExpect()).isTrue()
+        assertThat(textToExpression["defaultFun"]!!.isExpect()).isFalse()
     }
 
     @Test
