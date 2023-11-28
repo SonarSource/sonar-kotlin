@@ -221,7 +221,7 @@ class CollectionShouldBeImmutableCheckSample {
         }
     }
 
-    fun id(x : AMutableCollections): AMutableCollections = x // compliant, for now don't know how to check that is subtype of MutableCollection
+    fun id(x : AMutableCollections): AMutableCollections = x // FN,  for now don't know how to check that is subtype of MutableCollection
 
 
     fun foo(configure: (MutableMap<String, Any?>) -> Unit): Unit { // compliant
@@ -245,4 +245,8 @@ class CollectionShouldBeImmutableCheckSample {
 
     }
 
+}
+
+private fun nonCompliantParameterOnFileLevel(list: MutableList<Int>): Int { // Noncompliant
+    return list.reduce { acc, it -> acc + it}
 }

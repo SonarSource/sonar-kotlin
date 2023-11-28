@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -59,10 +60,9 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
             "kotlin.collections.MutableCollection"
         )
 
-    override fun visitClass(klass: KtClass, context: KotlinFileContext) {
-        if (klass.isInterface()) return
+    override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
 
-        klass
+        file
             .collectDescendantsOfType<KtNamedFunction>(::notAnInterface) { true }
             .forEach { reportNamedFunction(it, context) }
     }
