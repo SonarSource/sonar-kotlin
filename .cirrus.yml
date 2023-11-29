@@ -46,7 +46,7 @@ linux_3_5_cpu_7G_template: &LINUX_3_5_CPU_7G
   eks_container:
     <<: *LINUX_IMAGE
     cpu: 3.5
-    memory: 7G
+    memory: 12G # TODO: decrease back to 7G when we fix the memory issues with the Gradle scanner
 
 linux_6_cpu_12G_java_17_template: &LINUX_6_CPU_12G_JAVA_17
   eks_container:
