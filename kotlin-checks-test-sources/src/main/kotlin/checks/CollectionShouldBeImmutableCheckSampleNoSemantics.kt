@@ -77,6 +77,7 @@ class CollectionShouldBeImmutableCheckSampleNoSemantics {
         l: MutableList<Int>, // Compliant
         m: MutableList<Int>, // Compliant
         n: MutableList<Int>, // Compliant
+        o: MutableMap<Int,Int>, // Compliant
     ): Unit {
         a.add(1)
         b.iterator()
@@ -94,6 +95,7 @@ class CollectionShouldBeImmutableCheckSampleNoSemantics {
         l!!.doSomething()
         m?.doSomething()
         if(true){n}else{n}.doSomething()
+        o.entries
     }
 
 

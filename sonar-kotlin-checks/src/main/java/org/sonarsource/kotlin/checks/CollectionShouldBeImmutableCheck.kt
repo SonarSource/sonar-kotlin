@@ -24,13 +24,16 @@ import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
+import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.DECLARATION_TO_DESCRIPTOR
@@ -40,6 +43,11 @@ import org.jetbrains.kotlin.types.KotlinType
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.determineTypeAsString
+import org.sonarsource.kotlin.api.checks.isAbstract
+import org.sonarsource.kotlin.api.checks.isActual
+import org.sonarsource.kotlin.api.checks.isExpect
+import org.sonarsource.kotlin.api.checks.isOpen
+import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S6524")
@@ -52,8 +60,24 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
             "kotlin.collections.MutableCollection"
         )
 
+    override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
 
-    override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext) {
+        file
+            .collectDescendantsOfType<KtNamedFunction>(::notAnInterface) { true }
+            .forEach { reportNamedFunction(it, context) }
+    }
+
+    private fun notAnInterface(element: PsiElement): Boolean {
+        return if (element is KtClass) {
+            !element.isInterface()
+        } else {
+            true
+        }
+    }
+
+    private fun reportNamedFunction(function: KtNamedFunction, context: KotlinFileContext) {
+        if (function.isAbstract() || function.overrides() || function.isOpen() || function.isExpect() || function.isActual()) return
+
         val bindingContext = context.bindingContext
 
         val referencesToMutableCollections = collectReferenceToMutatedCollections(function, bindingContext)
@@ -155,11 +179,11 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
     }
 
     private fun KtQualifiedExpression.mutatesCollection(bindingContext: BindingContext): Boolean {
-        return if (this.selectorExpression is KtCallExpression) {
-            val selectorExpression = this.selectorExpression as KtCallExpression
-            selectorExpression.mutatesCollection(bindingContext)
-        } else {
-            false
+        return when(val selector = this.selectorExpression){
+            null -> true
+            is KtCallExpression -> selector.mutatesCollection(bindingContext)
+            is KtReferenceExpression -> selector.mutatesCollection(bindingContext)
+            else -> false
         }
     }
 

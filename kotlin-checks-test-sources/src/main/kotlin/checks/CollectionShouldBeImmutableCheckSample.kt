@@ -78,6 +78,7 @@ class CollectionShouldBeImmutableCheckSample {
         l: MutableList<Int>, // Compliant
         m: MutableList<Int>, // Compliant
         n: MutableList<Int>, // Compliant
+        o: MutableMap<Int,Int>, // Compliant
     ): Unit {
         a.add(1)
         b.iterator()
@@ -95,6 +96,7 @@ class CollectionShouldBeImmutableCheckSample {
         l!!.doSomething()
         m?.doSomething()
         if(true){n}else{n}.doSomething()
+        o.entries
     }
 
 
@@ -219,10 +221,32 @@ class CollectionShouldBeImmutableCheckSample {
         }
     }
 
-    fun id(x : AMutableCollections): AMutableCollections = x // compliant, for now don't know how to check that is subtype of MutableCollection
+    fun id(x : AMutableCollections): AMutableCollections = x // FN,  for now don't know how to check that is subtype of MutableCollection
 
 
     fun foo(configure: (MutableMap<String, Any?>) -> Unit): Unit { // compliant
     }
 
+    interface A {
+        fun foo(list : MutableList<Int>): Unit // compliant
+        fun bar(list : MutableList<Int>): Int { // compliant
+            return list.reduce { acc, it -> acc + it}
+        }
+    }
+
+    abstract class B : A{
+        override fun foo(list: MutableList<Int>) { // compliant
+        }
+
+        abstract fun baz(list: MutableList<Int>): Unit // compliant
+
+        open fun qux(list: MutableList<Int>): Unit { // compliant
+        }
+
+    }
+
+}
+
+private fun nonCompliantParameterOnFileLevel(list: MutableList<Int>): Int { // Noncompliant
+    return list.reduce { acc, it -> acc + it}
 }

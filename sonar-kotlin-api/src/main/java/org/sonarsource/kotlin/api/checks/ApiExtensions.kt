@@ -311,6 +311,18 @@ fun KtNamedFunction.overrides() = modifierList?.hasModifier(KtTokens.OVERRIDE_KE
 
 fun KtNamedFunction.isAbstract() = modifierList?.hasModifier(KtTokens.ABSTRACT_KEYWORD) ?: false
 
+fun KtNamedFunction.isOpen(): Boolean {
+    return modifierList?.hasModifier(KtTokens.OPEN_KEYWORD) ?: false
+}
+
+fun KtNamedFunction.isActual(): Boolean {
+    return modifierList?.hasModifier(KtTokens.ACTUAL_KEYWORD) ?: false
+}
+
+fun KtNamedFunction.isExpect(): Boolean {
+    return modifierList?.hasModifier(KtTokens.EXPECT_KEYWORD) ?: false
+}
+
 fun KtNamedFunction.suspendModifier() = modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD)
 
 fun KtQualifiedExpression.resolveReferenceTarget(bindingContext: BindingContext) =
