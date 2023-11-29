@@ -49,14 +49,10 @@ dependencyResolutionManagement {
             library("gson", "com.google.code.gson", "gson").versionRef(gson)
             library("kotlin-compiler-embeddable", "org.jetbrains.kotlin", "kotlin-compiler-embeddable").version(kotlinVersion)
             library("sonar-analyzer-commons", "org.sonarsource.analyzer-commons", "sonar-analyzer-commons").versionRef(analyzerCommons)
-            library("sonar-analyzer-commons-recognizers", "org.sonarsource.analyzer-commons", "sonar-analyzer-recognizers").versionRef(
-                analyzerCommons
-            )
-            library(
-                "sonar-performance-measure",
-                "org.sonarsource.analyzer-commons",
-                "sonar-performance-measure"
-            ).versionRef(analyzerCommons)
+            library("sonar-analyzer-commons-recognizers", "org.sonarsource.analyzer-commons", "sonar-analyzer-recognizers")
+                .versionRef(analyzerCommons)
+            library("sonar-performance-measure", "org.sonarsource.analyzer-commons", "sonar-performance-measure")
+                .versionRef(analyzerCommons)
             library("sonar-plugin-api", "org.sonarsource.api.plugin", "sonar-plugin-api").version(sonarPluginApi)
             library("slf4j-api", "org.slf4j", "slf4j-api").version(slf4jApi)
             library("sonar-regex-parsing", "org.sonarsource.analyzer-commons", "sonar-regex-parsing").versionRef(analyzerCommons)
@@ -99,16 +95,12 @@ dependencyResolutionManagement {
             library("junit-params", "org.junit.jupiter", "junit-jupiter-params").versionRef(junit)
             library("mockito-core", "org.mockito", "mockito-core").versionRef(mockito)
             library("mockk", "io.mockk", "mockk").versionRef(mockk)
-            library("sonar-analyzer-test-commons", "org.sonarsource.analyzer-commons", "sonar-analyzer-test-commons").versionRef(
-                analyzerCommons
-            )
+            library("sonar-analyzer-test-commons", "org.sonarsource.analyzer-commons", "sonar-analyzer-test-commons")
+                .versionRef(analyzerCommons)
             library("sonar-orchestrator-junit4", "org.sonarsource.orchestrator", "sonar-orchestrator-junit4").versionRef(orchestrator)
             library("sonar-plugin-api-impl", "org.sonarsource.sonarqube", "sonar-plugin-api-impl").versionRef(sonarqube)
-            library(
-                "sonar-plugin-api-test-fixtures",
-                "org.sonarsource.api.plugin",
-                "sonar-plugin-api-test-fixtures"
-            ).version(sonarPluginApi)
+            library("sonar-plugin-api-test-fixtures", "org.sonarsource.api.plugin", "sonar-plugin-api-test-fixtures")
+                .version(sonarPluginApi)
             library("sonar-ws", "org.sonarsource.sonarqube", "sonar-ws").versionRef(sonarqube)
             library("sonarlint-core", "org.sonarsource.sonarlint.core", "sonarlint-core").versionRef(sonarlint)
         }
