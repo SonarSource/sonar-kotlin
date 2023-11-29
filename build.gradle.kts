@@ -1,15 +1,14 @@
-
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.sonarsource.kotlin.buildsrc.tasks.CreateKotlinRuleStubsTask
 import org.sonarsource.kotlin.buildsrc.tasks.CreateKotlinGradleRuleStubsTask
+import org.sonarsource.kotlin.buildsrc.tasks.CreateKotlinRuleStubsTask
 import org.sonarsource.kotlin.buildsrc.tasks.FetchRuleMetadata
 
 plugins {
     java
     id("jacoco")
     id("com.jfrog.artifactory") version "4.25.1"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE" apply false
-    id("org.sonarqube") version "3.3"
+    id("io.spring.dependency-management") version "1.1.4" apply false
+    id("org.sonarqube") version "4.4.1.3373"
     id("org.jetbrains.kotlin.jvm") apply false
     id("com.diffplug.spotless") version "6.11.0"
     `maven-publish`
@@ -18,7 +17,7 @@ plugins {
 
 val projectTitle: String by project
 
-configure(subprojects.filter { it.name != "kotlin-checks-test-sources"}) {
+configure(subprojects.filter { it.name != "kotlin-checks-test-sources" }) {
     apply(plugin = "com.diffplug.spotless")
 
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
@@ -168,13 +167,13 @@ subprojects {
 
     val sourcesJar by tasks.creating(Jar::class) {
         dependsOn(JavaPlugin.CLASSES_TASK_NAME)
-        classifier = "sources"
+        archiveClassifier.set("sources")
         from(sourceSets.main.get().allSource)
     }
 
     val javadocJar by tasks.creating(Jar::class) {
         dependsOn(javadoc)
-        classifier = "javadoc"
+        archiveClassifier.set("javadoc")
         from(tasks["javadoc"])
     }
 

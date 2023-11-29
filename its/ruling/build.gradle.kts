@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    testImplementation(testLibs.sonar.orchestrator)
+    testImplementation(testLibs.sonar.orchestrator.junit4)
     testImplementation(testLibs.assertj.core)
     testImplementation(libs.sonar.analyzer.commons)
 }

@@ -1,6 +1,6 @@
 dependencies {
     testImplementation(testLibs.sonarlint.core)
-    testImplementation(testLibs.sonar.orchestrator)
+    testImplementation(testLibs.sonar.orchestrator.junit4)
     testImplementation(testLibs.assertj.core)
     testImplementation(testLibs.sonar.ws)
     testImplementation(libs.sonar.analyzer.commons)

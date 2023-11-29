@@ -36,8 +36,44 @@
     "constantDebtMinutes": 0
   },
   {
+    "key": "standard:binary-expression-wrapping",
+    "name": "Binary Expression Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:blank-line-before-declaration",
+    "name": "Blank Line Before Declaration",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
     "key": "standard:block-comment-initial-star-alignment",
     "name": "Block Comment Initial Star Alignment",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:chain-method-continuation",
+    "name": "Chain Method Continuation",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -62,6 +98,18 @@
   {
     "key": "standard:class-naming",
     "name": "Class Naming",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:class-signature",
+    "name": "Class Signature",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -168,6 +216,30 @@
     "constantDebtMinutes": 0
   },
   {
+    "key": "standard:function-expression-body",
+    "name": "Function Expression Body",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:function-literal",
+    "name": "Function Literal",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
     "key": "standard:function-naming",
     "name": "Function Naming",
     "url": "https://ktlint.github.io/#rules",
@@ -206,6 +278,18 @@
   {
     "key": "standard:function-start-of-body-spacing",
     "name": "Function Start Of Body Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:function-type-modifier-spacing",
+    "name": "Function Type Modifier Spacing",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -422,6 +506,18 @@
   {
     "key": "standard:no-empty-class-body",
     "name": "No Empty Class Body",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-empty-file",
+    "name": "No Empty File",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -806,6 +902,18 @@
   {
     "key": "standard:spacing-between-function-name-and-opening-parenthesis",
     "name": "Spacing Between Function Name And Opening Parenthesis",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:statement-wrapping",
+    "name": "Statement Wrapping",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -960,8 +1068,44 @@
     "constantDebtMinutes": 0
   },
   {
+    "key": "standard:binary-expression-wrapping",
+    "name": "Binary Expression Wrapping",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:blank-line-before-declaration",
+    "name": "Blank Line Before Declaration",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
     "key": "standard:block-comment-initial-star-alignment",
     "name": "Block Comment Initial Star Alignment",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:chain-method-continuation",
+    "name": "Chain Method Continuation",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -986,6 +1130,18 @@
   {
     "key": "standard:class-naming",
     "name": "Class Naming",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:class-signature",
+    "name": "Class Signature",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -1092,6 +1248,30 @@
     "constantDebtMinutes": 0
   },
   {
+    "key": "standard:function-expression-body",
+    "name": "Function Expression Body",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:function-literal",
+    "name": "Function Literal",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
     "key": "standard:function-naming",
     "name": "Function Naming",
     "url": "https://ktlint.github.io/#rules",
@@ -1130,6 +1310,18 @@
   {
     "key": "standard:function-start-of-body-spacing",
     "name": "Function Start Of Body Spacing",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:function-type-modifier-spacing",
+    "name": "Function Type Modifier Spacing",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -1346,6 +1538,18 @@
   {
     "key": "standard:no-empty-class-body",
     "name": "No Empty Class Body",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:no-empty-file",
+    "name": "No Empty File",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",
@@ -1730,6 +1934,18 @@
   {
     "key": "standard:spacing-between-function-name-and-opening-parenthesis",
     "name": "Spacing Between Function Name And Opening Parenthesis",
+    "url": "https://ktlint.github.io/#rules",
+    "tags": [
+      "ktlint",
+      "style"
+    ],
+    "type": "CODE_SMELL",
+    "severity": "MAJOR",
+    "constantDebtMinutes": 0
+  },
+  {
+    "key": "standard:statement-wrapping",
+    "name": "Statement Wrapping",
     "url": "https://ktlint.github.io/#rules",
     "tags": [
       "ktlint",

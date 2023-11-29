@@ -19,8 +19,8 @@
  */
 package org.sonarsource.slang;
 
-import com.sonar.orchestrator.Orchestrator;
-import com.sonar.orchestrator.OrchestratorBuilder;
+import com.sonar.orchestrator.junit4.OrchestratorRule;
+import com.sonar.orchestrator.junit4.OrchestratorRuleBuilder;
 import com.sonar.orchestrator.locator.Locators;
 import java.io.File;
 import java.io.IOException;
@@ -61,9 +61,9 @@ public class SonarLintTest {
   @BeforeClass
   public static void prepare() throws Exception {
     // Orchestrator is used only to retrieve plugin artifacts from filesystem or maven
-    OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv();
+    OrchestratorRuleBuilder orchestratorBuilder = OrchestratorRule.builderEnv();
     Tests.addLanguagePlugins(orchestratorBuilder);
-    Orchestrator orchestrator = orchestratorBuilder
+    OrchestratorRule orchestrator = orchestratorBuilder
       .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion(System.getProperty(Tests.SQ_VERSION_PROPERTY, Tests.DEFAULT_SQ_VERSION))
       .build();

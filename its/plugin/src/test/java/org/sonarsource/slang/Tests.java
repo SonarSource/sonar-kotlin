@@ -19,8 +19,9 @@
  */
 package org.sonarsource.slang;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
+import com.sonar.orchestrator.junit4.OrchestratorRule;
+import com.sonar.orchestrator.junit4.OrchestratorRuleBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
 import com.sonar.orchestrator.locator.Location;
 import com.sonar.orchestrator.locator.MavenLocation;
@@ -48,10 +49,10 @@ public class Tests {
   private static final Set<String> LANGUAGES = new HashSet<>(Collections.singletonList("kotlin"));
 
   @ClassRule
-  public static final Orchestrator ORCHESTRATOR;
+  public static final OrchestratorRule ORCHESTRATOR;
 
   static {
-    OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv();
+    OrchestratorRuleBuilder orchestratorBuilder = OrchestratorRule.builderEnv();
     addLanguagePlugins(orchestratorBuilder);
     ORCHESTRATOR = orchestratorBuilder
       .useDefaultAdminCredentialsForBuilds(true)

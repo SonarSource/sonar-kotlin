@@ -37,7 +37,7 @@ fun dispatchFunction(instance: Any) {
 </pre>
 <h4>Noncompliant code example</h4>
 <p>When <code>threshold = 2</code></p>
-<pre data-diff-id="1" data-diff-type="noncompliant">
+<pre data-diff-id="2" data-diff-type="noncompliant">
 fun compare(a: Int, b: Int): Int {
     // ...
     return if (a &gt; b) { // Noncompliant
@@ -50,7 +50,7 @@ fun compare(a: Int, b: Int): Int {
 }
 </pre>
 <h4>Compliant solution</h4>
-<pre data-diff-id="1" data-diff-type="compliant">
+<pre data-diff-id="2" data-diff-type="compliant">
 fun compare(a: Int, b: Int): Int {
     // ...
     return when { // Compliant
