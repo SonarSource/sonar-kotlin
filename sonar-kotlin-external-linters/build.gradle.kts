@@ -16,10 +16,10 @@ dependencies {
 
     implementation(project(":sonar-kotlin-api"))
 
+    testRuntimeOnly(testLibs.junit.engine)
     testImplementation(libs.slf4j.api)
     testImplementation(testLibs.junit.api)
     testImplementation(testLibs.junit.params)
-    testRuntimeOnly(testLibs.junit.engine)
     testImplementation(testLibs.assertj.core)
     testImplementation(testLibs.mockito.core)
     testImplementation(testLibs.mockk)

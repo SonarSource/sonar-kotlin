@@ -21,11 +21,11 @@ dependencies {
     implementation(libs.gson)
     implementation(utilLibs.jcommander)
 
+    testRuntimeOnly(testLibs.junit.engine)
     testImplementation(testLibs.junit.api)
     testImplementation(testLibs.assertj.core)
     testImplementation(libs.sonar.plugin.api)
 
-    testRuntimeOnly(testLibs.junit.engine)
     implementation(project(":sonar-kotlin-external-linters"))
 }
 

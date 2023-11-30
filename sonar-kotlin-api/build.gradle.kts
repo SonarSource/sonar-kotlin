@@ -14,10 +14,10 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
 
+    testRuntimeOnly(testLibs.junit.engine)
     testImplementation(libs.slf4j.api)
     testImplementation(testLibs.junit.api)
     testImplementation(testLibs.junit.params)
-    testRuntimeOnly(testLibs.junit.engine)
     testImplementation(testLibs.assertj.core)
     testImplementation(testLibs.mockito.core)
     testImplementation(testLibs.mockk)
@@ -25,7 +25,6 @@ dependencies {
     testImplementation(testLibs.sonar.analyzer.test.commons)
     testImplementation(testLibs.sonar.plugin.api.impl)
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
-
     testImplementation(project(":sonar-kotlin-test-api"))
 }
 

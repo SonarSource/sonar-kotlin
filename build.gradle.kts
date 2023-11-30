@@ -289,10 +289,14 @@ artifactory {
 }
 
 tasks.register<CreateKotlinRuleStubsTask>("setupRuleStubs") {
+    group = "Rules"
+    description = "Generate required stubs for a new Kotlin rule"
     finalizedBy(tasks.findByPath(":generateRuleMetadata"))
 }
 
 tasks.register<CreateKotlinGradleRuleStubsTask>("setupGradleRuleStubs") {
+    group = "Rules"
+    description = "Generate required stubs for a new Kotlin Gradle DSL rule"
     finalizedBy(tasks.findByPath(":generateRuleMetadata"))
 }
 
