@@ -36,24 +36,15 @@ import java.util.Optional
 @ExperimentalTime
 internal class KotlinPluginTest {
     @Test
-    fun testWithoutGradle() {
-        testSonarQube(17)
-    }
-
-    @Test
-    fun testWithGradle() {
-        testSonarQube(18, mapOf(GRADLE_PROJECT_ROOT_PROPERTY to "../"))
+    fun testSonarQube() {
+        testSonarQube(18)
     }
 
     @Test
     fun testSonarLint() {
-        testSonarLint(4)
+        testSonarLint(5)
     }
 
-    @Test
-    fun testSonarLintWithGradle() {
-        testSonarLint(5, mapOf(GRADLE_PROJECT_ROOT_PROPERTY to "../"))
-    }
 
     private fun testSonarQube(expectedExtensionsCount: Int, overrideProperties: Map<String, String> = emptyMap()) {
         val runtime = SonarRuntimeImpl.forSonarQube(Version.create(7, 9), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY)

@@ -17,7 +17,6 @@ dependencies {
     implementation(libs.staxmate)
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
-    implementation(libs.gradle.tooling.api)
 
     implementation(project(":sonar-kotlin-api"))
     implementation(project(":sonar-kotlin-surefire"))

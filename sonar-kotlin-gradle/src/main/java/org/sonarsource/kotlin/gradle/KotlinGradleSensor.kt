@@ -19,8 +19,6 @@
  */
 package org.sonarsource.kotlin.gradle
 
-import org.gradle.tooling.GradleConnector
-import org.gradle.tooling.model.kotlin.dsl.KotlinDslScriptsModel
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.slf4j.LoggerFactory
 import org.sonar.api.batch.fs.FileSystem
@@ -69,23 +67,18 @@ class KotlinGradleSensor(
     override fun getFilesToAnalyse(sensorContext: SensorContext): Iterable<InputFile> {
         val fileSystem: FileSystem = sensorContext.fileSystem()
 
-        val rootDirFile = File(sensorContext.config()[GRADLE_PROJECT_ROOT_PROPERTY].get())
+        val mainFilePredicate = fileSystem.predicates().and(
+            fileSystem.predicates().or(
+                fileSystem.predicates().hasFilename("build.gradle.kts"),
+                fileSystem.predicates().hasFilename("settings.gradle.kts")
+            )
+        )
 
-        checkForMissingGradleSettings(rootDirFile, sensorContext)
-
-        val projectConnection = GradleConnector.newConnector()
-            .forProjectDirectory(rootDirFile)
-            .connect()
-
-        projectConnection.newBuild()
-            .forTasks("prepareKotlinBuildScriptModel")
-            .run()
-
-        val models = projectConnection.getModel(KotlinDslScriptsModel::class.java).scriptModels
-        return models.keys.mapNotNull { file ->
-            val predicate = fileSystem.predicates().hasAbsolutePath(file.absolutePath)
-            fileSystem.inputFile(predicate)
+        sensorContext.config()[GRADLE_PROJECT_ROOT_PROPERTY].ifPresent {
+            checkForMissingGradleSettings(File(it), sensorContext)
         }
+
+        return fileSystem.inputFiles(mainFilePredicate)
     }
 
     private fun checkForMissingGradleSettings(rootDirFile: File, sensorContext: SensorContext) {
