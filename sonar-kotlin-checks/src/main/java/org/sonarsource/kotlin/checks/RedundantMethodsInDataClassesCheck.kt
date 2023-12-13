@@ -206,7 +206,7 @@ private fun findParameter(
 private fun checkDotExpression(
     expression: KtExpression?,
     klassParameter: KtParameter,
-    methodParameters: MutableList<KtParameter>,
+    methodParameters: List<KtParameter>,
 ): Boolean =
     if (expression is KtDotQualifiedExpression) {
         ((expression.receiverExpression as KtNameReferenceExpression).getReferencedName() == methodParameters[0].name
