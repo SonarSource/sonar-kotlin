@@ -78,7 +78,7 @@ class CipherModeOperationCheck : CallAbstractCheck() {
     }
 }
 
-private fun generateSecondaryLocations(secondaries: MutableList<PsiElement>, kotlinFileContext: KotlinFileContext) =
+private fun generateSecondaryLocations(secondaries: List<PsiElement>, kotlinFileContext: KotlinFileContext) =
     secondaries.mapIndexed { i, secondary ->
         if (i < secondaries.size - 1) {
             SecondaryLocation(kotlinFileContext.textRange(secondary), "Initialization vector is configured here.")
