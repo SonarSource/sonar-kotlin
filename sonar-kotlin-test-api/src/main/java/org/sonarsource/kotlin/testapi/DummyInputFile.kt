@@ -76,7 +76,7 @@ class DummyInputFile(val path: Path? = null) : InputFile {
         newRange(newPointer(startLine, startLineOffset), newPointer(endLine, endLineOffset))
 
     override fun selectLine(line: Int): TextRange {
-        if (line > lines.size) throw IllegalArgumentException("Line not in file")
+        require(line <= lines.size) { "Line not in file" }
         return newRange(line, 0, line, lines[line - 1].length)
     }
 

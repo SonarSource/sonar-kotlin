@@ -32,7 +32,6 @@ import org.sonarsource.kotlin.externalreport.detekt.DetektRulesDefinition
 import org.sonarsource.kotlin.externalreport.detekt.DetektSensor
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintRulesDefinition
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintSensor
-import org.sonarsource.kotlin.gradle.GRADLE_PROJECT_ROOT_PROPERTY
 import org.sonarsource.kotlin.gradle.KotlinGradleSensor
 import org.sonarsource.kotlin.surefire.KotlinResourcesLocator
 import org.sonarsource.kotlin.surefire.KotlinSurefireParser
