@@ -187,7 +187,7 @@ private fun checkIfExpressionHasParameter(
     first: KtExpression?,
     second: KtExpression?,
     klassParameters: List<KtParameter>,
-    methodParameters: MutableList<KtParameter>,
+    methodParameters: List<KtParameter>,
     map: MutableMap<KtParameter, Boolean>,
 ) {
     val parameter = findParameter(first, klassParameters) ?: return
