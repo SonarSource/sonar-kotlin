@@ -39,7 +39,7 @@ class KotlinResourcesLocatorTest {
 
   private final FileSystem fileSystem = mock(FileSystem.class);
   private final KotlinResourcesLocator kotlinResourcesLocator = new KotlinResourcesLocator(fileSystem);
-  private final InputFile expected = new DefaultInputFile(new DefaultIndexedFile("", new File("/").toPath(), "",""), (x) -> {});
+  private final InputFile expected = new DefaultInputFile(new DefaultIndexedFile("", new File("/").toPath(), "",""), (x) -> {}, (x) -> {});
 
   @BeforeEach
   void setUp() {
