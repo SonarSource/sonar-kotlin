@@ -20,15 +20,17 @@ dependencies {
 </pre>
 <h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
-ext {
-    mockitoVersion = "4.5.1"
-}
+const val mockitoVersion = "4.5.1"
 
 dependencies {
     testImplementation("org.mockito:mockito-core:$mockitoVersion")
     testImplementation("org.mockito:mockito-inline:$mockitoVersion")
 }
 </pre>
+<p>Alternatively, you can put <code>const val mockitoVersion = "4.5.1"</code> in any <code>.kt</code> file in <code>buildSrc/src/main/kotlin</code> or
+use a more robust dependency management mechanism like <a href="https://plugins.gradle.org/plugin/io.spring.dependency-management">Spring dependency
+management plugin</a> or <a href="https://www.youtube.com/watch?v=WvtcCCCLfOc&amp;list=PL0UJI1nZ56yAHv9H9kZA6vat4N1kSRGis&amp;index=21">Version
+Catalogs</a>.</p>
 <h2>Resources</h2>
 <h3>Documentation</h3>
 <ul>
