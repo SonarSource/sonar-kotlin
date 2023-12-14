@@ -6,6 +6,10 @@ intention of the designer of the API.</p>
 <h4>Readability and Understanding</h4>
 <p>This change makes it easier to understand what a function does, because the semantics of indexed access operators is evident to the reader, while
 for a function call, the reader would need to know what the called function does.</p>
+<h4>Java interop</h4>
+<p>The issue is also raised when Java API is used as a Kotlin compiler treats all <code>get(.)</code> methods as possible index access operators. Use
+<code>CompletableFuture[timeout, unit]</code> instead of <code>CompletableFuture.get(timeout, unit)</code> when accessing Java’s
+<code>CompletableFuture</code>.</p>
 <h2>How to fix it</h2>
 <p>Replace <code>instance.get(index)</code> with <code>instance[index]</code>.</p>
 <p>Replace <code>instance.set(index, value)</code> with <code>instance[index] = value</code>.</p>
