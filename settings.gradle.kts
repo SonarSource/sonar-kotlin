@@ -10,6 +10,10 @@ pluginManagement {
     }
 }
 
+plugins {
+    id("com.gradle.enterprise") version("3.16.1")
+}
+
 rootProject.name = "kotlin"
 
 include("sonar-kotlin-api")
@@ -25,6 +29,13 @@ include("its:plugin")
 include("its:ruling")
 include("kotlin-checks-test-sources")
 include("utils-kotlin")
+
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
+    }
+}
 
 dependencyResolutionManagement {
 
@@ -83,7 +94,7 @@ dependencyResolutionManagement {
             val junit = version("junit", "5.10.1")
             val mockito = version("mockito", "5.7.0")
             val mockk = version("mockk", "1.13.3")
-            val orchestrator = version("orchestrator", "4.5.0.1682")
+            val orchestrator = version("orchestrator", "4.5.0.1700")
             val sonarlint = version("sonarlint", "9.5.0.76302")
             val sonarqube = version("sonarqube", "10.0.0.68432")
 

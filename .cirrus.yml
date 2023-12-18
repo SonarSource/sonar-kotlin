@@ -131,7 +131,7 @@ build_task:
     DEPLOY_PULL_REQUEST: true
   build_script:
     - source cirrus-env BUILD-PRIVATE
-    - regular_gradle_build_deploy_analyze
+    - regular_gradle_build_deploy_analyze --scan
   on_failure:
     error_log_artifacts:
       path: "hs_err_pid*.log"
