@@ -131,7 +131,26 @@ build_task:
     DEPLOY_PULL_REQUEST: true
   build_script:
     - source cirrus-env BUILD-PRIVATE
-    - regular_gradle_build_deploy_analyze
+    - regular_gradle_build_deploy_analyze -x test -x sonar
+  on_failure:
+    error_log_artifacts:
+      path: "hs_err_pid*.log"
+    heap_dump_artifacts:
+      path: "*.hprof"
+  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+
+build_test_analyze_task:
+  <<: *LINUX_3_5_CPU_7G
+  <<: *SETUP_GRADLE_CACHE
+  env:
+    # analysis on next
+    SONAR_TOKEN: VAULT[development/kv/data/next data.token]
+    SONAR_HOST_URL: https://next.sonarqube.com/sonarqube
+    #allow deployment of pull request artifacts to repox
+    DEPLOY_PULL_REQUEST: true
+  build_script:
+    - source cirrus-env BUILD-PRIVATE
+    - regular_gradle_build_deploy_analyze -x artifactoryPublish
   on_failure:
     error_log_artifacts:
       path: "hs_err_pid*.log"
@@ -152,7 +171,7 @@ ws_scan_task:
     folder: ${CIRRUS_WORKING_DIR}/.m2/repository
   whitesource_script:
     - source cirrus-env QA
-    - ./gradlew clean build -x test
+    - ./gradlew clean assemble
     - source ./export_ws_variables.sh
     - source ws_scan.sh
   allow_failures: "true"
