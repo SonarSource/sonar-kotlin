@@ -20,7 +20,6 @@
 package org.sonarsource.slang;
 
 import com.sonar.orchestrator.build.SonarScanner;
-import com.sonar.orchestrator.junit4.OrchestratorRule;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,7 +28,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import org.junit.ClassRule;
+
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Issues;
 import org.sonarqube.ws.Measures.ComponentWsResponse;
 import org.sonarqube.ws.Measures.Measure;
@@ -43,8 +44,8 @@ import static java.util.Collections.singletonList;
 
 public abstract class TestBase {
 
-  @ClassRule
-  public static final OrchestratorRule ORCHESTRATOR = Tests.ORCHESTRATOR;
+  @RegisterExtension
+  public static final OrchestratorExtension ORCHESTRATOR = TestsHelper.ORCHESTRATOR;
 
   protected SonarScanner getSonarScanner(String projectKey, String directoryToScan, String languageKey) {
     return getSonarScanner(projectKey, directoryToScan, languageKey, null);

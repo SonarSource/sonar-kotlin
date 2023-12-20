@@ -20,9 +20,7 @@
 package org.sonarsource.slang;
 
 import com.sonar.orchestrator.build.SonarScanner;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
 import org.sonarqube.ws.Issues.Issue;
 import org.sonarqube.ws.client.issues.SearchRequest;
 
@@ -34,9 +32,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ExternalReportTest extends TestBase {
 
   private static final String BASE_DIRECTORY = "projects/externalreport/";
-
-  @Rule
-  public TemporaryFolder tmpDir = new TemporaryFolder();
 
   @Test
   public void detekt() {

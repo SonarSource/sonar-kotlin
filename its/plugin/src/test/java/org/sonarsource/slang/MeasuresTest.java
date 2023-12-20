@@ -19,7 +19,7 @@
  */
 package org.sonarsource.slang;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonarqube.ws.Issues;
 
 import java.util.List;

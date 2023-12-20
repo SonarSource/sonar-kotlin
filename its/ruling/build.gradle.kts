@@ -4,14 +4,16 @@ plugins {
 }
 
 dependencies {
-    testImplementation(testLibs.sonar.orchestrator.junit4)
+    testImplementation(testLibs.sonar.orchestrator.junit5)
     testImplementation(testLibs.assertj.core)
+    testImplementation(testLibs.junit.engine)
     testImplementation(libs.sonar.analyzer.commons)
 }
 
 sonarqube.isSkipProject = true
 
 tasks.test {
+    useJUnitPlatform()
     onlyIf {
         project.hasProperty("its") || project.hasProperty("ruling")
     }

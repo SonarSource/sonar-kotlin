@@ -19,9 +19,22 @@
  */
 package org.sonarsource.slang;
 
-import com.sonar.orchestrator.junit4.OrchestratorRule;
-import com.sonar.orchestrator.junit4.OrchestratorRuleBuilder;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
+import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
 import com.sonar.orchestrator.locator.Locators;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.sonarsource.sonarlint.core.StandaloneSonarLintEngineImpl;
+import org.sonarsource.sonarlint.core.analysis.api.ClientInputFile;
+import org.sonarsource.sonarlint.core.client.api.common.analysis.Issue;
+import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneAnalysisConfiguration;
+import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneGlobalConfiguration;
+import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneSonarLintEngine;
+import org.sonarsource.sonarlint.core.commons.IssueSeverity;
+import org.sonarsource.sonarlint.core.commons.Language;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,40 +45,27 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.sonarsource.sonarlint.core.StandaloneSonarLintEngineImpl;
-import org.sonarsource.sonarlint.core.analysis.api.ClientInputFile;
-import org.sonarsource.sonarlint.core.client.api.common.analysis.Issue;
-import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneAnalysisConfiguration;
-import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneGlobalConfiguration;
-import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneSonarLintEngine;
-import org.sonarsource.sonarlint.core.commons.IssueSeverity;
-import org.sonarsource.sonarlint.core.commons.Language;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
 public class SonarLintTest {
 
-  @ClassRule
-  public static TemporaryFolder temp = new TemporaryFolder();
+  @TempDir
+  public static File temp;
 
   private static StandaloneSonarLintEngine sonarlintEngine;
 
   private static File baseDir;
 
-  @BeforeClass
+  @BeforeAll
   public static void prepare() throws Exception {
     // Orchestrator is used only to retrieve plugin artifacts from filesystem or maven
-    OrchestratorRuleBuilder orchestratorBuilder = OrchestratorRule.builderEnv();
-    Tests.addLanguagePlugins(orchestratorBuilder);
-    OrchestratorRule orchestrator = orchestratorBuilder
+    OrchestratorExtensionBuilder orchestratorBuilder = OrchestratorExtension.builderEnv();
+    TestsHelper.addLanguagePlugins(orchestratorBuilder);
+    OrchestratorExtension orchestrator = orchestratorBuilder
       .useDefaultAdminCredentialsForBuilds(true)
-      .setSonarVersion(System.getProperty(Tests.SQ_VERSION_PROPERTY, Tests.DEFAULT_SQ_VERSION))
+      .setSonarVersion(System.getProperty(TestsHelper.SQ_VERSION_PROPERTY, TestsHelper.DEFAULT_SQ_VERSION))
       .build();
 
     Locators locators = orchestrator.getConfiguration().locators();
@@ -76,22 +76,22 @@ public class SonarLintTest {
 
     sonarLintConfigBuilder
       .addEnabledLanguage(Language.KOTLIN)
-      .setSonarLintUserHome(temp.newFolder().toPath())
+      .setSonarLintUserHome(temp.toPath())
       .setLogOutput((formattedMessage, level) -> {
         /* Don't pollute logs */
       });
     StandaloneGlobalConfiguration configuration = sonarLintConfigBuilder.build();
     sonarlintEngine = new StandaloneSonarLintEngineImpl(configuration);
-    baseDir = temp.newFolder();
+    baseDir = temp;
   }
 
-  @AfterClass
+  @AfterAll
   public static void stop() {
     sonarlintEngine.stop();
   }
 
   @Test
-  public void test_kotlin() throws Exception {
+  void test_kotlin() throws Exception {
     ClientInputFile inputFile = prepareInputFile("foo.kt",
       "fun foo_bar() {\n" +
         "    if (true) { \n" +
