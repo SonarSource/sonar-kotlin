@@ -55,13 +55,13 @@ linux_6_cpu_12G_java_17_template: &LINUX_6_CPU_12G_JAVA_17
     cpu: 6
     memory: 24G
 
-windows_4_cpu_15G_template: &WINDOWS_4_CPU_15G
+windows_16_cpu_32G_template: &WINDOWS_16_CPU_32G
   ec2_instance:
     experimental: true # see https://github.com/cirruslabs/cirrus-ci-docs/issues/1051
     image: base-windows-jdk17-v*
     platform: windows
     region: eu-central-1
-    type: t3.xlarge
+    type: c5.4xlarge # 3.6 GHz (3.9GHz single core) Intel Xeon Scalable Processor, 16 vCPU, 32 GiB Memory
     subnet_id: ${CIRRUS_AWS_SUBNET}
     preemptible: false
     use_ssd: true
@@ -185,7 +185,7 @@ qa_plug_pub_win_task:
     SQ_VERSION: LATEST_RELEASE[9.9]
     GRADLE_TASK: ":its:plugin:test"
     ITS_PROJECT: "plugin"
-  <<: *WINDOWS_4_CPU_15G
+  <<: *WINDOWS_16_CPU_32G
   <<: *GRADLE_ITS_TEMPLATE
 
 qa_ruling_kotlin_task:
@@ -222,7 +222,7 @@ qa_ruling_kotlin_compiler_task:
 
 build_win_task:
   <<: *QA_TASK_FILTER
-  <<: *WINDOWS_4_CPU_15G
+  <<: *WINDOWS_16_CPU_32G
   <<: *SETUP_GRADLE_CACHE
   build_script:
     - ./gradlew build -Pqa --info --console plain --no-daemon --build-cache
