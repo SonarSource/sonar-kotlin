@@ -43,6 +43,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonarsource.analyzer.commons.ProfileGenerator;
@@ -102,6 +103,7 @@ public class SlangRulingTest {
   }
 
   @Test
+  @EnabledIfEnvironmentVariable(named = "KOTLIN_COMPILER_IT_ENABLED", matches = "true")
   void test_kotlin_compiler() throws IOException {
     List<String> exclusions = List.of(
       "**/testData/**/*",
