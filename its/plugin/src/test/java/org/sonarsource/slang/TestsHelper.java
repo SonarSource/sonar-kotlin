@@ -20,46 +20,37 @@
 package org.sonarsource.slang;
 
 import com.sonar.orchestrator.OrchestratorBuilder;
-import com.sonar.orchestrator.junit4.OrchestratorRule;
-import com.sonar.orchestrator.junit4.OrchestratorRuleBuilder;
+
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
+import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
 import com.sonar.orchestrator.locator.Location;
 import com.sonar.orchestrator.locator.MavenLocation;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.ClassRule;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-  DuplicationsTest.class,
-  ExternalReportTest.class,
-  MeasuresTest.class,
-  SuppressWarningsTest.class,
-  SurefireTest.class
-})
-public class Tests {
+
+public class TestsHelper {
 
   static final String SQ_VERSION_PROPERTY = "sonar.runtimeVersion";
   static final String DEFAULT_SQ_VERSION = "LATEST_RELEASE";
 
   private static final Set<String> LANGUAGES = new HashSet<>(Collections.singletonList("kotlin"));
 
-  @ClassRule
-  public static final OrchestratorRule ORCHESTRATOR;
+  public static final OrchestratorExtension ORCHESTRATOR;
 
   static {
-    OrchestratorRuleBuilder orchestratorBuilder = OrchestratorRule.builderEnv();
+    OrchestratorExtensionBuilder orchestratorBuilder = OrchestratorExtension.builderEnv();
     addLanguagePlugins(orchestratorBuilder);
     ORCHESTRATOR = orchestratorBuilder
-      .useDefaultAdminCredentialsForBuilds(true)
-      .setSonarVersion(System.getProperty(SQ_VERSION_PROPERTY, DEFAULT_SQ_VERSION))
-      .restoreProfileAtStartup(FileLocation.of("src/test/resources/suppress-warnings-kotlin.xml"))
-      .restoreProfileAtStartup(FileLocation.of("src/test/resources/norule.xml"))
-      .build();
+            .useDefaultAdminCredentialsForBuilds(true)
+            .setSonarVersion(System.getProperty(SQ_VERSION_PROPERTY, DEFAULT_SQ_VERSION))
+            .restoreProfileAtStartup(FileLocation.of("src/test/resources/suppress-warnings-kotlin.xml"))
+            .restoreProfileAtStartup(FileLocation.of("src/test/resources/norule.xml"))
+            .build();
   }
 
   static void addLanguagePlugins(OrchestratorBuilder builder) {

@@ -44,7 +44,6 @@ dependencyResolutionManagement {
             val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
             val gson = version("gson", "2.10.1")
             val staxmate = version("staxmate", "2.4.1")
-            val gradleToolingApi = version("gradle-tooling-api", "7.5.1")
 
             library("gson", "com.google.code.gson", "gson").versionRef(gson)
             library("kotlin-compiler-embeddable", "org.jetbrains.kotlin", "kotlin-compiler-embeddable").version(kotlinVersion)
@@ -96,7 +95,7 @@ dependencyResolutionManagement {
             library("mockk", "io.mockk", "mockk").versionRef(mockk)
             library("sonar-analyzer-test-commons", "org.sonarsource.analyzer-commons", "sonar-analyzer-test-commons")
                 .versionRef(analyzerCommons)
-            library("sonar-orchestrator-junit4", "org.sonarsource.orchestrator", "sonar-orchestrator-junit4").versionRef(orchestrator)
+            library("sonar-orchestrator-junit5", "org.sonarsource.orchestrator", "sonar-orchestrator-junit5").versionRef(orchestrator)
             library("sonar-plugin-api-impl", "org.sonarsource.sonarqube", "sonar-plugin-api-impl").versionRef(sonarqube)
             library("sonar-plugin-api-test-fixtures", "org.sonarsource.api.plugin", "sonar-plugin-api-test-fixtures")
                 .version(sonarPluginApi)

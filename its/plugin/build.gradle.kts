@@ -1,6 +1,7 @@
 dependencies {
     testImplementation(testLibs.sonarlint.core)
-    testImplementation(testLibs.sonar.orchestrator.junit4)
+    testImplementation(testLibs.sonar.orchestrator.junit5)
+    testImplementation(testLibs.junit.engine)
     testImplementation(testLibs.assertj.core)
     testImplementation(testLibs.sonar.ws)
     testImplementation(libs.sonar.analyzer.commons)
@@ -9,12 +10,9 @@ dependencies {
 sonarqube.isSkipProject = true
 
 tasks.test {
+    useJUnitPlatform()
     onlyIf {
         project.hasProperty("plugin") || project.hasProperty("its")
-    }
-    filter {
-        includeTestsMatching("org.sonarsource.slang.Tests")
-        includeTestsMatching("org.sonarsource.slang.SonarLintTest")
     }
     systemProperty("java.awt.headless", "true")
     outputs.upToDateWhen { false }

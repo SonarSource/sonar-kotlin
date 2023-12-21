@@ -20,13 +20,14 @@
 package org.sonarsource.slang;
 
 import com.sonar.orchestrator.build.MavenBuild;
-import com.sonar.orchestrator.junit4.OrchestratorRule;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
-import org.junit.ClassRule;
-import org.junit.Test;
+
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonarqube.ws.Measures;
 
 import static java.lang.Double.parseDouble;
@@ -35,8 +36,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SurefireTest extends TestBase {
 
-  @ClassRule
-  public static final OrchestratorRule ORCHESTRATOR = Tests.ORCHESTRATOR;
+  @RegisterExtension
+  public static final OrchestratorExtension ORCHESTRATOR = TestsHelper.ORCHESTRATOR;
   private static final Path BASE_DIRECTORY = Paths.get("projects");
 
 
