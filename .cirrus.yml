@@ -95,23 +95,6 @@ gradle_its_template: &GRADLE_ITS_TEMPLATE
       -Pqa --info --console plain --no-daemon --build-cache
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
-kotlin_its_template: &KOTLIN_ITS_TEMPLATE
-  <<: *SETUP_GRADLE_CACHE
-  run_its_script:
-    - |
-      if [ -n "${GIT_SUB_MODULE}" ]; then
-        git submodule update --init --depth 1 "${GIT_SUB_MODULE}"
-      fi
-    - source cirrus-env QA
-    - bash ./build-ktor.sh
-    - ./gradlew "${GRADLE_TASK}" "-P${ITS_PROJECT}"
-      "-Dsonar.runtimeVersion=${SQ_VERSION}"
-      "-Dorchestrator.configUrl=https://repox.jfrog.io/repox/orchestrator.properties/orch-h2.properties"
-      "-Dorchestrator.artifactory.accessToken=${ARTIFACTORY_ACCESS_TOKEN}"
-      "-DbuildNumber=$BUILD_NUMBER"
-      -Pqa --info --console plain --no-daemon --build-cache
-  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
-
 only_if_sonarsource_qa_template: &ONLY_IF_SONARSOURCE_QA
   only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
 
@@ -213,7 +196,7 @@ qa_ruling_kotlin_task:
     ITS_PROJECT: "ruling"
     GIT_SUB_MODULE: "its/sources"
   <<: *LINUX_6_CPU_12G_JAVA_17
-  <<: *KOTLIN_ITS_TEMPLATE
+  <<: *GRADLE_ITS_TEMPLATE
 
 build_win_task:
   <<: *QA_TASK_FILTER
@@ -231,6 +214,7 @@ build_win_task:
 promote_task:
   depends_on:
     - build
+    - build_test_analyze
     - qa_plug_pub_lin
     - qa_plug_pub_win
     - qa_ruling_kotlin
