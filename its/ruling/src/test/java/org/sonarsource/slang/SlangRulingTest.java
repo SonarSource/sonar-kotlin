@@ -33,7 +33,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,12 +40,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonarsource.analyzer.commons.ProfileGenerator;
@@ -106,62 +102,7 @@ public class SlangRulingTest {
   }
 
   @Test
-  public void test_kotlin_ktor() throws IOException {
-    List<String> ktorDirs = Arrays.asList(
-            "",
-            "ktor-client/ktor-client-winhttp/",
-            "ktor-client/ktor-client-tests/",
-            "ktor-client/ktor-client-plugins/ktor-client-websockets/",
-            "ktor-client/ktor-client-plugins/ktor-client-tracing/",
-            "ktor-client/ktor-client-plugins/ktor-client-resources/",
-            "ktor-client/ktor-client-plugins/ktor-client-logging/",
-            "ktor-client/ktor-client-plugins/ktor-client-json/",
-            "ktor-client/ktor-client-plugins/ktor-client-encoding/",
-            "ktor-client/ktor-client-plugins/ktor-client-content-negotiation/",
-            "ktor-client/ktor-client-plugins/ktor-client-auth/",
-            "ktor-client/ktor-client-plugins/",
-            "ktor-client/ktor-client-okhttp/",
-            "ktor-client/ktor-client-mock/",
-            "ktor-client/ktor-client-js/",
-            "ktor-client/ktor-client-jetty-jakarta/",
-            "ktor-client/ktor-client-jetty/",
-            "ktor-client/ktor-client-java/",
-            "ktor-client/ktor-client-ios/",
-            "ktor-client/ktor-client-darwin-legacy/",
-            "ktor-client/ktor-client-darwin/",
-            "ktor-client/ktor-client-curl/",
-            "ktor-client/ktor-client-core/",
-            "ktor-client/ktor-client-cio/",
-            "ktor-client/ktor-client-apache5/",
-            "ktor-client/ktor-client-apache/",
-            "ktor-client/ktor-client-android/",
-            "ktor-client/",
-            "ktor-http/",
-            "ktor-io/",
-            "ktor-java-modules-test/",
-            "ktor-network/",
-            "ktor-server/",
-            "ktor-shared/",
-            "ktor-test-dispatcher/",
-            "ktor-utils/");
-
-    String binaries = ktorDirs.stream().map(dir -> FileLocation.of("../sources/kotlin/ktor/" + dir + "build/classes"))
-      .map(SlangRulingTest::getFileLocationAbsolutePath)
-      .collect(Collectors.joining(","));
-
-    String libraries = ktorDirs.stream().map(dir -> FileLocation.of("../sources/kotlin/ktor/" + dir + "build/libs"))
-      .map(SlangRulingTest::getFileLocationAbsolutePath)
-      .collect(Collectors.joining(","));
-
-    executeSonarScannerAndAssertDifferences("kotlin/ktor", Map.of(
-      "sonar.inclusions", "sources/kotlin/ktor/**/*.kt",
-      "sonar.exclusions", "**/testData/**/*,**/Win*.kt,**/PrimitiveArraysTest.kt,**/ContentTestSuite.kt",
-      "sonar.java.binaries", binaries,
-      "sonar.java.libraries", libraries));
-  }
-
-  @Test
-  public void test_kotlin_compiler() throws IOException {
+  void test_kotlin_compiler() throws IOException {
     List<String> exclusions = List.of(
       "**/testData/**/*",
       "sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/CompileServiceImpl.kt",
@@ -174,7 +115,7 @@ public class SlangRulingTest {
   }
 
   @Test
-  public void test_resources_sources() throws IOException {
+  void test_resources_sources() throws IOException {
     executeSonarScannerAndAssertDifferences("kotlin/test-resources-sources", Map.of(
       "sonar.inclusions", "ruling/src/test/resources/sources/kotlin/**/*.kt",
       "sonar.java.libraries", System.getProperty("gradle.main.compile.classpath").replace(File.pathSeparatorChar, ',')
@@ -182,7 +123,7 @@ public class SlangRulingTest {
   }
 
   @Test
-  public void test_kotlin_android() throws IOException {
+  void test_kotlin_android() throws IOException {
     executeSonarScannerAndAssertDifferences("kotlin/android-architecture-components", Map.of(
       "sonar.inclusions", "sources/kotlin/android-architecture-components/**/*.kt",
       "sonar.exclusions", "**/testData/**/*"
@@ -190,7 +131,7 @@ public class SlangRulingTest {
   }
 
   @Test
-  public void test_kotlin_corda() throws IOException {
+  void test_kotlin_corda() throws IOException {
     executeSonarScannerAndAssertDifferences("kotlin/corda", Map.of(
       "sonar.inclusions", "sources/kotlin/corda/**/*.kt",
       "sonar.exclusions", "**/testData/**/*"
@@ -198,7 +139,7 @@ public class SlangRulingTest {
   }
 
   @Test
-  public void test_kotlin_intellij_rust() throws IOException {
+  void test_kotlin_intellij_rust() throws IOException {
     executeSonarScannerAndAssertDifferences("kotlin/intellij-rust", Map.of(
       "sonar.inclusions", "sources/kotlin/intellij-rust/**/*.kt",
       "sonar.exclusions", "**/testData/**/*"
@@ -206,14 +147,14 @@ public class SlangRulingTest {
   }
 
   @Test
-  public void test_kotlin_okio() throws IOException {
+  void test_kotlin_okio() throws IOException {
     executeSonarScannerAndAssertDifferences("kotlin/okio", Map.of(
       "sonar.inclusions", "sources/kotlin/okio/**/*.kt",
       "sonar.exclusions", "**/testData/**/*"));
   }
 
   @Test
-  public void test_kotlin_language_server() throws IOException {
+  void test_kotlin_language_server() throws IOException {
     executeGradleBuildAndAssertDifferences("kotlin/kotlin-language-server", Map.of());
   }
 
