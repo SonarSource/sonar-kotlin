@@ -1,6 +1,6 @@
 /*
  * SonarSource Kotlin
- * Copyright (C) 2018-2023 SonarSource SA
+ * Copyright (C) 2018-2024 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
