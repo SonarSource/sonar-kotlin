@@ -88,7 +88,6 @@ gradle_its_template: &GRADLE_ITS_TEMPLATE
       fi
     - source cirrus-env QA
     - ./gradlew "${GRADLE_TASK}" "-P${ITS_PROJECT}"
-      "-I ${GRADLE_HOME}/init.d/repoxAuth.init.gradle.kts"
       "-Dsonar.runtimeVersion=${SQ_VERSION}"
       "-Dorchestrator.configUrl=https://repox.jfrog.io/repox/orchestrator.properties/orch-h2.properties"
       "-Dorchestrator.artifactory.accessToken=${ARTIFACTORY_ACCESS_TOKEN}"
