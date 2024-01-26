@@ -87,7 +87,7 @@ gradle_its_template: &GRADLE_ITS_TEMPLATE
         git submodule update --init --depth 1 "${GIT_SUB_MODULE}"
       fi
     - source cirrus-env QA
-    - ./gradlew "${GRADLE_TASK}" "-P${ITS_PROJECT}"
+    - ./gradlew -I ${GRADLE_HOME}/init.d/repoxAuth.init.gradle.kts "${GRADLE_TASK}" "-P${ITS_PROJECT}"
       "-Dsonar.runtimeVersion=${SQ_VERSION}"
       "-Dorchestrator.configUrl=https://repox.jfrog.io/repox/orchestrator.properties/orch-h2.properties"
       "-Dorchestrator.artifactory.accessToken=${ARTIFACTORY_ACCESS_TOKEN}"
