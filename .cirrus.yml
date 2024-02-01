@@ -30,7 +30,7 @@ env:
   GRADLE_USER_HOME: ${CIRRUS_WORKING_DIR}/.gradle
 
 linux_image_template: &LINUX_IMAGE
-  image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-g7-latest
+  image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-latest
   cluster_name: ${CIRRUS_CLUSTER_NAME}
   region: eu-central-1
   namespace: default
