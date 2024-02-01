@@ -169,6 +169,7 @@ ws_scan_task:
 # ---------------------------------------------------------------------------
 qa_plug_pub_lin_task:
   <<: *QA_TASK_FILTER
+  <<: *LINUX_6_CPU_12G_JAVA_17
   env:
     ITS_PROJECT: "plugin"
     GRADLE_TASK: ":its:plugin:test"
@@ -176,35 +177,34 @@ qa_plug_pub_lin_task:
       - SQ_VERSION: "DEV"
       - SQ_VERSION: "LATEST_RELEASE[9.9]"
       - SQ_VERSION: "LATEST_RELEASE"
-  <<: *LINUX_6_CPU_12G_JAVA_17
   <<: *GRADLE_ITS_TEMPLATE
 
 qa_plug_pub_win_task:
   <<: *QA_TASK_FILTER
+  <<: *WINDOWS_16_CPU_32G
   env:
     SQ_VERSION: LATEST_RELEASE[9.9]
     GRADLE_TASK: ":its:plugin:test"
     ITS_PROJECT: "plugin"
-  <<: *WINDOWS_16_CPU_32G
   <<: *GRADLE_ITS_TEMPLATE
 
 qa_ruling_kotlin_task:
   <<: *QA_TASK_FILTER
+  <<: *LINUX_6_CPU_12G_JAVA_17
   env:
     SQ_VERSION: "LATEST_RELEASE"
     GRADLE_TASK: ":its:ruling:test"
     ITS_PROJECT: "ruling"
     GIT_SUB_MODULE: "its/sources"
-  <<: *LINUX_6_CPU_12G_JAVA_17
   <<: *GRADLE_ITS_TEMPLATE
 
 qa_ruling_kotlin_compiler_task:
   <<: *QA_TASK_FILTER
+  <<: *LINUX_6_CPU_12G_JAVA_17
   env:
     KOTLIN_COMPILER_IT_ENABLED: "true"
     SQ_VERSION: "LATEST_RELEASE"
     GIT_SUB_MODULE: "its/sources"
-  <<: *LINUX_6_CPU_12G_JAVA_17
   <<: *SETUP_GRADLE_CACHE
   run_its_script:
     - |
