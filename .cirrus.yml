@@ -26,6 +26,7 @@ env:
   # Use bash (instead of sh on linux or cmd.exe on windows)
   CIRRUS_SHELL: bash
 
+  GITHUB_TOKEN_KEY: development/github/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-metrics
   GITHUB_TOKEN: VAULT[${GITHUB_TOKEN_KEY} token]
   GIT_SUB_MODULE: ""
   GRADLE_USER_HOME: ${CIRRUS_WORKING_DIR}/.gradle
