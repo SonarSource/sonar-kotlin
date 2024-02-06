@@ -31,13 +31,6 @@ env:
   GIT_SUB_MODULE: ""
   GRADLE_USER_HOME: ${CIRRUS_WORKING_DIR}/.gradle
 
-#linux_image_template: &LINUX_IMAGE
-#  image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-latest
-#  cluster_name: ${CIRRUS_CLUSTER_NAME}
-#  region: eu-central-1
-#  namespace: default
-#  use_in_memory_disk: true
-
 linux_image_template: &LINUX_IMAGE
   dockerfile: .cirrus/Dockerfile
   docker_arguments:
@@ -111,7 +104,6 @@ gradle_its_template: &GRADLE_ITS_TEMPLATE
       "-DbuildNumber=$BUILD_NUMBER"
       -Pqa --info --console plain --no-daemon --build-cache
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
-
 
 only_if_sonarsource_qa_template: &ONLY_IF_SONARSOURCE_QA
   only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
