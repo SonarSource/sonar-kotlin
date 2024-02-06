@@ -26,26 +26,15 @@ env:
   # Use bash (instead of sh on linux or cmd.exe on windows)
   CIRRUS_SHELL: bash
 
-  GITHUB_TOKEN_KEY: development/github/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-metrics
-  GITHUB_TOKEN: VAULT[${GITHUB_TOKEN_KEY} token]
   GIT_SUB_MODULE: ""
   GRADLE_USER_HOME: ${CIRRUS_WORKING_DIR}/.gradle
 
 linux_image_template: &LINUX_IMAGE
-  dockerfile: .cirrus/Dockerfile
-  docker_arguments:
-    CIRRUS_AWS_ACCOUNT: ${CIRRUS_AWS_ACCOUNT}
-    GITHUB_TOKEN: ${GITHUB_TOKEN}
-    GRADLE_USER_HOME: ${GRADLE_USER_HOME}
+  image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-g7-latest
   cluster_name: ${CIRRUS_CLUSTER_NAME}
-  builder_role: cirrus-builder
-  builder_image: docker-builder-v*
-  builder_instance_type: t3.small
-  builder_subnet_id: ${CIRRUS_AWS_SUBNET}
   region: eu-central-1
   namespace: default
   use_in_memory_disk: true
-
 
 linux_1_cpu_1G_template: &LINUX_1_CPU_1G
   eks_container:
