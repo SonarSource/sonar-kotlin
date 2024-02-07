@@ -6,9 +6,10 @@ env:
   ARTIFACTORY_URL: VAULT[development/kv/data/repox data.url]
 
   ARTIFACTORY_PRIVATE_READER_ACCESS_TOKEN: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-private-reader access_token]
-  ARTIFACTORY_ACCESS_TOKEN: ${ARTIFACTORY_PRIVATE_READER_ACCESS_TOKEN}
+
   ARTIFACTORY_PRIVATE_USERNAME: vault-${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-private-reader
   ARTIFACTORY_PRIVATE_PASSWORD: ${ARTIFACTORY_PRIVATE_READER_ACCESS_TOKEN}
+  ARTIFACTORY_ACCESS_TOKEN: ${ARTIFACTORY_PRIVATE_READER_ACCESS_TOKEN}
 
   # Deploy public artifact to artifactory
   ARTIFACTORY_DEPLOY_USERNAME: vault-${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-qa-deployer
@@ -29,7 +30,6 @@ env:
 
   GIT_SUB_MODULE: ""
   GRADLE_USER_HOME: ${CIRRUS_WORKING_DIR}/.gradle
-  GRADLE_HOME: ${GRADLE_USER_HOME}
 
 linux_image_template: &LINUX_IMAGE
   image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-g7-latest
@@ -93,6 +93,7 @@ gradle_its_template: &GRADLE_ITS_TEMPLATE
       "-Dorchestrator.configUrl=https://repox.jfrog.io/repox/orchestrator.properties/orch-h2.properties"
       "-Dorchestrator.artifactory.accessToken=${ARTIFACTORY_ACCESS_TOKEN}"
       "-DbuildNumber=$BUILD_NUMBER"
+      -I ${GRADLE_HOME}/init.d/repoxAuth.init.gradle.kts
       -Pqa --info --console plain --no-daemon --build-cache
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
@@ -218,6 +219,7 @@ qa_ruling_kotlin_compiler_task:
       "-Dorchestrator.configUrl=https://repox.jfrog.io/repox/orchestrator.properties/orch-h2.properties"
       "-Dorchestrator.artifactory.accessToken=${ARTIFACTORY_ACCESS_TOKEN}"
       "-DbuildNumber=$BUILD_NUMBER"
+      -I ${GRADLE_HOME}/init.d/repoxAuth.init.gradle.kts
       -Pqa --info --console plain --no-daemon --build-cache
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
