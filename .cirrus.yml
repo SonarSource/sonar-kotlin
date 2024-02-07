@@ -93,6 +93,7 @@ gradle_its_template: &GRADLE_ITS_TEMPLATE
       "-Dorchestrator.configUrl=https://repox.jfrog.io/repox/orchestrator.properties/orch-h2.properties"
       "-Dorchestrator.artifactory.accessToken=${ARTIFACTORY_ACCESS_TOKEN}"
       "-DbuildNumber=$BUILD_NUMBER"
+      -I "${GRADLE_HOME}/init.d/repoxAuth.init.gradle.kts"
       -Pqa --info --console plain --no-daemon --build-cache
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
@@ -218,6 +219,7 @@ qa_ruling_kotlin_compiler_task:
       "-Dorchestrator.configUrl=https://repox.jfrog.io/repox/orchestrator.properties/orch-h2.properties"
       "-Dorchestrator.artifactory.accessToken=${ARTIFACTORY_ACCESS_TOKEN}"
       "-DbuildNumber=$BUILD_NUMBER"
+      -I "${GRADLE_HOME}/init.d/repoxAuth.init.gradle.kts"
       -Pqa --info --console plain --no-daemon --build-cache
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
