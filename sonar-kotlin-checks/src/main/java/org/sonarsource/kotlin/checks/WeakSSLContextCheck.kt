@@ -48,8 +48,6 @@ class WeakSSLContextCheck : AbstractCheck() {
 
     private val WEAK_FOR_SSL = setOf(
         "SSL",
-        "TLS",
-        "DTLS",
         "SSLv2",
         "SSLv3",
         "TLSv1",
