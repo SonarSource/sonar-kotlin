@@ -40,6 +40,6 @@ jobs:
         with:
           status: failure
           fields: repo,author,eventName
-          channel: '#team-lang-kotlin'
+          channel: '#squad-jvm-kotlin'
         env:
           SLACK_WEBHOOK_URL: ${{ fromJSON(steps.secrets.outputs.vault).SLACK_WEBHOOK }}
