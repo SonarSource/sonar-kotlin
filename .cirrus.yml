@@ -239,7 +239,7 @@ fossa_task:
     cpu: 4
     memory: 8G
   env:
-    FOSSA_API_KEY: ENCRYPTED[b9f0d7e70bbcb7f73fab158fddd13f6f26ac2cf9601e91d3341065398302cf32eef2ea4cb458e6a035672233281b7f93]
+    FOSSA_API_KEY: ENCRYPTED[8c648fa20825e3af30e9493cb69367bab606097cb02f4f2f766eb91a68e746f82ff19c049dc30b44ae693c8fd2b8b650]
   analyze_script:
     - wget https://github.com/fossas/fossa-cli/releases/download/v3.9.8/fossa_3.9.8_linux_amd64.zip
     - wget https://github.com/fossas/fossa-cli/releases/download/v3.9.8/fossa_3.9.8_linux_amd64.zip.sha256
