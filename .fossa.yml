@@ -1,0 +1,11 @@
+version: 3
+
+project:
+  id: SonarSource/sonar-kotlin
+  name: sonar-kotlin
+  url: https://github.com/SonarSource/sonar-kotlin
+
+paths:
+  exclude:
+    - ./its/sources
+    - ./**/fixtures
