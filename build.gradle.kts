@@ -95,6 +95,10 @@ allprojects {
         mavenLocal()
         val repository = if (project.hasProperty("qa")) "sonarsource-qa" else "sonarsource"
         maven {
+            credentials {
+              username = System.getenv("ARTIFACTORY_PRIVATE_USERNAME")
+              password = System.getenv("ARTIFACTORY_PRIVATE_PASSWORD")
+            }
             url = uri("https://repox.jfrog.io/repox/${repository}")
         }
     }
