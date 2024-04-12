@@ -14,6 +14,9 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
 
+    // https://mvnrepository.com/artifact/com.jetbrains.intellij.platform/analysis
+    implementation("com.jetbrains.intellij.platform:analysis:241.14494.241")
+
     testRuntimeOnly(testLibs.junit.engine)
     testImplementation(libs.slf4j.api)
     testImplementation(testLibs.junit.api)
