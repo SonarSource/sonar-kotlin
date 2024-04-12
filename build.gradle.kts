@@ -95,11 +95,19 @@ allprojects {
         mavenLocal()
         val repository = if (project.hasProperty("qa")) "sonarsource-qa" else "sonarsource"
         maven {
-            credentials {
-              username = System.getenv("ARTIFACTORY_PRIVATE_USERNAME")
-              password = System.getenv("ARTIFACTORY_PRIVATE_PASSWORD")
-            }
             url = uri("https://repox.jfrog.io/repox/${repository}")
+
+            // The environment variables ARTIFACTORY_PRIVATE_USERNAME and ARTIFACTORY_PRIVATE_PASSWORD are used in QA
+            // On local box, please add artifactoryUsername and artifactoryPassword to ~/.gradle/gradle.properties
+            val artifactoryUsername = System.getenv("ARTIFACTORY_PRIVATE_USERNAME") ?: project.findProperty("artifactoryUsername") ?: ""
+            val artifactoryPassword = System.getenv("ARTIFACTORY_PRIVATE_PASSWORD") ?: project.findProperty("artifactoryPassword") ?: ""
+
+            if (artifactoryUsername is String && artifactoryUsername.isNotEmpty() && artifactoryPassword is String && artifactoryPassword.isNotEmpty()) {
+                credentials {
+                    username = artifactoryUsername
+                    password = artifactoryPassword
+                }
+            }
         }
     }
 }
