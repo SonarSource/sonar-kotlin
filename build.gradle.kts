@@ -92,11 +92,6 @@ allprojects {
     }
 
     repositories {
-        maven(url = "https://www.jetbrains.com/intellij-repository/releases/")
-
-        maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies")
-        maven("https://packages.jetbrains.team/maven/p/ij/intellij-dependencies")
-
         mavenLocal()
         val repository = if (project.hasProperty("qa")) "sonarsource-qa" else "sonarsource"
         maven {
