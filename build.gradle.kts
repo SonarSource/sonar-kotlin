@@ -109,6 +109,7 @@ allprojects {
                 }
             }
         }
+        mavenCentral()
     }
 }
 
