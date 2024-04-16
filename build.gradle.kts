@@ -110,6 +110,9 @@ allprojects {
             }
         }
         mavenCentral()
+        maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies")
+        maven("https://packages.jetbrains.team/maven/p/ij/intellij-dependencies")
+        maven("https://www.jetbrains.com/intellij-repository/releases/")
     }
 }
 

@@ -13,6 +13,9 @@ dependencies {
     implementation(libs.staxmate)
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
+    // implementation(libs.analysis.api.providers.`for`.ide)
+    implementation(libs.intellij.platform.core)
+    implementation(libs.high.level.api.fir.`for`.ide)
 
     testRuntimeOnly(testLibs.junit.engine)
     testImplementation(libs.slf4j.api)

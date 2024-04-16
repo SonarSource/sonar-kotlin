@@ -36,3 +36,6 @@ data class KotlinFileContext(
 )
 
 fun KotlinFileContext.secondaryOf(psiElement: PsiElement, msg: String? = null) = SecondaryLocation(textRange(psiElement), msg)
+
+
+private fun doNothing(session: org.jetbrains.kotlin.analysis.api.fir.KtFirAnalysisSessionProvider) {}

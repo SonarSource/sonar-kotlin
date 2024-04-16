@@ -28,6 +28,9 @@ include("utils-kotlin")
 
 dependencyResolutionManagement {
 
+
+
+
     /*
     * We are knowingly using this versionCatalogs feature, as it improves dependency management drastically, even though it is still marked
     * as unstable.
@@ -57,6 +60,21 @@ dependencyResolutionManagement {
             library("sonar-regex-parsing", "org.sonarsource.analyzer-commons", "sonar-regex-parsing").versionRef(analyzerCommons)
             library("sonar-xml-parsing", "org.sonarsource.analyzer-commons", "sonar-xml-parsing").versionRef(analyzerCommons)
             library("staxmate", "com.fasterxml.staxmate", "staxmate").versionRef(staxmate)
+
+            library("intellij-platform-core", "com.jetbrains.intellij.platform", "core").version("213.7172.25")
+
+            library("high-level-api-fir-for-ide", "org.jetbrains.kotlin", "high-level-api-fir-for-ide").version(kotlinVersion)
+            library("high-level-api-for-ide", "org.jetbrains.kotlin", "high-level-api-for-ide").version(kotlinVersion)
+            library("low-level-api-fir-for-ide", "org.jetbrains.kotlin", "low-level-api-fir-for-ide").version(kotlinVersion)
+            library("analysis-api-providers-for-ide", "org.jetbrains.kotlin", "analysis-api-providers-for-ide").version(kotlinVersion)
+            library("analysis-project-structure-for-ide", "org.jetbrains.kotlin", "analysis-project-structure-for-ide").version(kotlinVersion)
+            library("symbol-light-classes-for-ide", "org.jetbrains.kotlin", "symbol-light-classes-for-ide").version(kotlinVersion)
+            library("analysis-api-standalone-for-ide", "org.jetbrains.kotlin", "analysis-api-standalone-for-ide").version(kotlinVersion)
+            library("high-level-api-impl-base-for-ide", "org.jetbrains.kotlin", "high-level-api-impl-base-for-ide").version(kotlinVersion)
+            library("kotlin-compiler-common-for-ide", "org.jetbrains.kotlin", "kotlin-compiler-common-for-ide").version(kotlinVersion)
+            library("kotlin-compiler-fir-for-ide", "org.jetbrains.kotlin", "kotlin-compiler-fir-for-ide").version(kotlinVersion)
+            library("kotlin-compiler-fe10-for-ide", "org.jetbrains.kotlin", "kotlin-compiler-fe10-for-ide").version(kotlinVersion)
+            library("kotlin-compiler-ir-for-ide","org.jetbrains.kotlin", "kotlin-compiler-ir-for-ide").version(kotlinVersion)
         }
 
         create("utilLibs") {
