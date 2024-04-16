@@ -273,7 +273,7 @@ open class PropertyGetterAndSetterUsageCheckSample {
 
        // property getter and setter support annotations
        var value1: String = ""
-           get(): @MyAnnotation1 String = field.uppercase()
+           get(): String = field.uppercase()
            set(value: @MyAnnotation2 String) { field = value.lowercase() }
 
 
