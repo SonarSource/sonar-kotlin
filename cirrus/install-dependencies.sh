@@ -11,6 +11,14 @@ HIGH_LEVEL_API_FIR_FOR_IDE[artifact_id]="high-level-api-fir-for-ide"
 HIGH_LEVEL_API_FIR_FOR_IDE[version]="2.0.0-RC1"
 HIGH_LEVEL_API_FIR_FOR_IDE[packaging]="jar"
 
+declare -A PLATFORM_UTIL
+PLATFORM_UTIL[url]="https://www.jetbrains.com/intellij-repository/releases/com/jetbrains/intellij/platform/util/213.7172.25/util-213.7172.25.jar"
+PLATFORM_UTIL[group_id]="com.jetbrains.intellij.platform"
+PLATFORM_UTIL[artifact_id]="util"
+PLATFORM_UTIL[version]="213.7172.25"
+PLATFORM_UTIL[packaging]="jar"
+
+
 download_and_install() {
   local -n dependency="${1}"
   local origin="${dependency[url]}"
@@ -33,7 +41,7 @@ download_and_install() {
       --location \
       --silent \
       --output "${destination}" \
-      "${destination}"
+      "${origin}"
   fi
   # Install in local repository
   local absolute_path="$(cd "$(dirname "${destination}")" && pwd)/$(basename "${destination}")"
@@ -47,4 +55,5 @@ download_and_install() {
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     download_and_install HIGH_LEVEL_API_FIR_FOR_IDE
+    download_and_install PLATFORM_UTIL
 fi
