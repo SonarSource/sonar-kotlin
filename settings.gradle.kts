@@ -62,6 +62,7 @@ dependencyResolutionManagement {
             library("staxmate", "com.fasterxml.staxmate", "staxmate").versionRef(staxmate)
 
             library("intellij-platform-core", "com.jetbrains.intellij.platform", "core").version("213.7172.25")
+            library("intellij-platform-analysis", "com.jetbrains.intellij.platform", "analysis").version("241.14494.241")
 
             library("high-level-api-fir-for-ide", "org.jetbrains.kotlin", "high-level-api-fir-for-ide").version(kotlinVersion)
             library("high-level-api-for-ide", "org.jetbrains.kotlin", "high-level-api-for-ide").version(kotlinVersion)

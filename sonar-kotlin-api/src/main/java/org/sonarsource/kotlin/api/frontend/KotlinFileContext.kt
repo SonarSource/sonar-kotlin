@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.api.frontend
 
+import org.jetbrains.kotlin.analysis.api.fir.KtFirAnalysisSessionProvider
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.jetbrains.kotlin.psi.KtFile
@@ -38,4 +39,7 @@ data class KotlinFileContext(
 fun KotlinFileContext.secondaryOf(psiElement: PsiElement, msg: String? = null) = SecondaryLocation(textRange(psiElement), msg)
 
 
-private fun doNothing(session: org.jetbrains.kotlin.analysis.api.fir.KtFirAnalysisSessionProvider) {}
+private fun KotlinFileContext.doNothing() {
+    //val sessionProvider = KtFirAnalysisSessionProvider(ktFile.project as com.intellij.openapi.project.Project)
+    // analyse function to which we give a lambda
+}
