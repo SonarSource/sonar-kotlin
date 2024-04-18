@@ -1,3 +1,6 @@
+import org.gradle.kotlin.dsl.provider.inLenientMode
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("jvm")
 }
@@ -14,6 +17,15 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
 
+    implementation("com.jetbrains.intellij.platform:util:232.4652") { isTransitive = false }
+//    implementation("com.jetbrains.intellij.platform:core:232.4652") { isTransitive = false }
+//    implementation("com.jetbrains.intellij.platform:core-impl:232.4652") { isTransitive = false }
+//    implementation("com.jetbrains.intellij.java:java-psi:232.4652") { isTransitive = false }
+
+    implementation("org.jetbrains.kotlin:high-level-api-for-ide:2.0.0-RC1") { isTransitive = false }
+//    implementation("org.jetbrains.kotlin:kotlin-compiler-common-for-ide:2.0.0-RC1") { isTransitive = false }
+//    implementation("org.jetbrains.kotlin:kotlin-compiler-fe10-for-ide:2.0.0-RC1") { isTransitive = false }
+
     testRuntimeOnly(testLibs.junit.engine)
     testImplementation(libs.slf4j.api)
     testImplementation(testLibs.junit.api)
@@ -26,6 +38,12 @@ dependencies {
     testImplementation(testLibs.sonar.plugin.api.impl)
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
     testImplementation(project(":sonar-kotlin-test-api"))
+}
+
+tasks.withType<KotlinCompile> {
+    compilerOptions {
+        freeCompilerArgs.add("-Xopt-in=org.jetbrains.kotlin.analysis.api.analyze.kt")
+    }
 }
 
 // The new version 11.0.17 of javadoc has a bug and does not handle package annotations correctly

@@ -36,3 +36,13 @@ data class KotlinFileContext(
 )
 
 fun KotlinFileContext.secondaryOf(psiElement: PsiElement, msg: String? = null) = SecondaryLocation(textRange(psiElement), msg)
+
+
+private fun KotlinFileContext.doNothing() {
+    //val sessionProvider = KtFirAnalysisSessionProvider(ktFile.project as com.intellij.openapi.project.Project)
+    // analyse function to which we give a lambda
+    org.jetbrains.kotlin.analysis.api.analyze(ktFile) {
+        // todo try new features and rewrite a rule
+    }
+
+}
