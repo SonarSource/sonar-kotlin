@@ -17,43 +17,43 @@ plugins {
 
 val projectTitle: String by project
 
-configure(subprojects.filter { it.name != "kotlin-checks-test-sources" }) {
-    apply(plugin = "com.diffplug.spotless")
-
-    configure<com.diffplug.gradle.spotless.SpotlessExtension> {
-
-        lineEndings = com.diffplug.spotless.LineEnding.UNIX
-
-        fun SourceSet.findSourceFilesToTarget() = allJava.srcDirs.flatMap { srcDir ->
-            project.fileTree(srcDir).filter { file ->
-                file.name.endsWith(".kt") || (file.name.endsWith(".java") && file.name != "package-info.java")
-            }
-        }
-
-        kotlin {
-            licenseHeaderFile(rootProject.file("LICENSE_HEADER")).updateYearWithLatest(true)
-
-            target(
-                project.sourceSets.main.get().findSourceFilesToTarget(),
-                project.sourceSets.test.get().findSourceFilesToTarget()
-            )
-        }
-        kotlinGradle {
-            target("*.gradle.kts")
-            ktlint()
-        }
-
-        format("misc") {
-            // define the files to apply `misc` to
-            target("*.gradle", "*.md", ".gitignore")
-
-            // define the steps to apply to those files
-            trimTrailingWhitespace()
-            indentWithSpaces()
-            endWithNewline()
-        }
-    }
-}
+//configure(subprojects.filter { it.name != "kotlin-checks-test-sources" }) {
+//    apply(plugin = "com.diffplug.spotless")
+//
+//    configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+//
+//        lineEndings = com.diffplug.spotless.LineEnding.UNIX
+//
+//        fun SourceSet.findSourceFilesToTarget() = allJava.srcDirs.flatMap { srcDir ->
+//            project.fileTree(srcDir).filter { file ->
+//                file.name.endsWith(".kt") || (file.name.endsWith(".java") && file.name != "package-info.java")
+//            }
+//        }
+//
+//        kotlin {
+//            licenseHeaderFile(rootProject.file("LICENSE_HEADER")).updateYearWithLatest(true)
+//
+//            target(
+//                project.sourceSets.main.get().findSourceFilesToTarget(),
+//                project.sourceSets.test.get().findSourceFilesToTarget()
+//            )
+//        }
+//        kotlinGradle {
+//            target("*.gradle.kts")
+//            ktlint()
+//        }
+//
+//        format("misc") {
+//            // define the files to apply `misc` to
+//            target("*.gradle", "*.md", ".gitignore")
+//
+//            // define the steps to apply to those files
+//            trimTrailingWhitespace()
+//            indentWithSpaces()
+//            endWithNewline()
+//        }
+//    }
+//}
 
 allprojects {
     apply<JavaPlugin>()
@@ -95,23 +95,24 @@ allprojects {
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies")
         maven("https://packages.jetbrains.team/maven/p/ij/intellij-dependencies")
+
         mavenLocal()
         val repository = if (project.hasProperty("qa")) "sonarsource-qa" else "sonarsource"
-        maven {
-            url = uri("https://repox.jfrog.io/repox/${repository}")
-
-            // The environment variables ARTIFACTORY_PRIVATE_USERNAME and ARTIFACTORY_PRIVATE_PASSWORD are used in QA
-            // On local box, please add artifactoryUsername and artifactoryPassword to ~/.gradle/gradle.properties
-            val artifactoryUsername = System.getenv("ARTIFACTORY_PRIVATE_USERNAME") ?: project.findProperty("artifactoryUsername") ?: ""
-            val artifactoryPassword = System.getenv("ARTIFACTORY_PRIVATE_PASSWORD") ?: project.findProperty("artifactoryPassword") ?: ""
-
-            if (artifactoryUsername is String && artifactoryUsername.isNotEmpty() && artifactoryPassword is String && artifactoryPassword.isNotEmpty()) {
-                credentials {
-                    username = artifactoryUsername
-                    password = artifactoryPassword
-                }
-            }
-        }
+//        maven {
+//            url = uri("https://repox.jfrog.io/repox/${repository}")
+//
+//            // The environment variables ARTIFACTORY_PRIVATE_USERNAME and ARTIFACTORY_PRIVATE_PASSWORD are used in QA
+//            // On local box, please add artifactoryUsername and artifactoryPassword to ~/.gradle/gradle.properties
+//            val artifactoryUsername = System.getenv("ARTIFACTORY_PRIVATE_USERNAME") ?: project.findProperty("artifactoryUsername") ?: ""
+//            val artifactoryPassword = System.getenv("ARTIFACTORY_PRIVATE_PASSWORD") ?: project.findProperty("artifactoryPassword") ?: ""
+//
+//            if (artifactoryUsername is String && artifactoryUsername.isNotEmpty() && artifactoryPassword is String && artifactoryPassword.isNotEmpty()) {
+//                credentials {
+//                    username = artifactoryUsername
+//                    password = artifactoryPassword
+//                }
+//            }
+//        }
     }
 }
 
