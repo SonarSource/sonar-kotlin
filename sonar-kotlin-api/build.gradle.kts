@@ -18,18 +18,16 @@ dependencies {
     implementation(libs.sonar.analyzer.commons.recognizers)
 
     implementation("com.jetbrains.intellij.platform:util:232.4652") { isTransitive = false }
-    implementation("com.jetbrains.intellij.platform:core:232.4652") { isTransitive = false }
-    implementation("com.jetbrains.intellij.platform:core-impl:232.4652") { isTransitive = false }
-    implementation("com.jetbrains.intellij.java:java-psi:232.4652") { isTransitive = false }
-
+//    implementation("com.jetbrains.intellij.platform:core:232.4652") { isTransitive = false }
+//    implementation("com.jetbrains.intellij.platform:core-impl:232.4652") { isTransitive = false }
+//    implementation("com.jetbrains.intellij.java:java-psi:232.4652") { isTransitive = false }
 
     implementation("org.jetbrains.kotlin:high-level-api-for-ide:2.0.0-RC1") { isTransitive = false }
-    implementation("org.jetbrains.kotlin:kotlin-compiler-common-for-ide:2.0.0-RC1") { isTransitive = false }
-    implementation("org.jetbrains.kotlin:kotlin-compiler-fe10-for-ide:2.0.0-RC1") { isTransitive = false }
+//    implementation("org.jetbrains.kotlin:kotlin-compiler-common-for-ide:2.0.0-RC1") { isTransitive = false }
+//    implementation("org.jetbrains.kotlin:kotlin-compiler-fe10-for-ide:2.0.0-RC1") { isTransitive = false }
 
     testRuntimeOnly(testLibs.junit.engine)
     testImplementation(libs.slf4j.api)
-
     testImplementation(testLibs.junit.api)
     testImplementation(testLibs.junit.params)
     testImplementation(testLibs.assertj.core)
