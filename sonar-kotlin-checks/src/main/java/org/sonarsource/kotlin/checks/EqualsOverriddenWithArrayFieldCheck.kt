@@ -56,12 +56,8 @@ class EqualsOverriddenWithArrayFieldCheck : AbstractCheck() {
     private fun KtClass.hasAnArrayProperty(bindingContext: BindingContext): Boolean {
         // Because we only call this function on data classes, we can assume they have constructor
         val constructor = this.findDescendantOfType<KtPrimaryConstructor>()!!
-        val oneParameterIsAnArray = constructor.valueParameters.any { it.isAnArray(bindingContext) }
-        return if (oneParameterIsAnArray) {
-            true
-        } else {
-            this.body?.properties?.any { it.isAnArray(bindingContext) } ?: false
-        }
+        // For data classes, only arguments of the primary constructor are included in equals and hashCode
+        return constructor.valueParameters.any { it.isAnArray(bindingContext) }
     }
 
     private fun KtClass.buildIssueMessage(bindingContext: BindingContext): String? {
