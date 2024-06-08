@@ -15,6 +15,9 @@ dependencies {
     implementation(libs.kotlin.compiler.embeddable)
     implementation(utilLibs.bundles.ktlint)
 
+    // The 2 following modules migrated to kotlin-compiler, but in the current module we still
+    // need kotlin-compiler-embeddable, due to detekt and ktlint. So we need to disable transitivity
+    // in these 2 dependencies, to avoid bringing th kotlin-compiler dependency
     implementation(project(":sonar-kotlin-plugin")) {
         isTransitive = false
     }

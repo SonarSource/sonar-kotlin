@@ -24,7 +24,6 @@ import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.ApiVersion
@@ -37,14 +36,15 @@ import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import java.io.File
 
+/* This is a reduced copy of a org.sonarsource.kotlin.api.frontend.KotlinCoreEnvironmentTools.kt from sonar-kotlin-api */
+
 class Environment(
-    val classpath: List<String>,
     kotlinLanguageVersion: LanguageVersion,
     javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8,
     numberOfThreads: Int? = null
 ) {
     val disposable = Disposer.newDisposable()
-    val configuration = compilerConfiguration(classpath, kotlinLanguageVersion, javaLanguageVersion, numberOfThreads)
+    val configuration = compilerConfiguration(kotlinLanguageVersion, javaLanguageVersion, numberOfThreads)
     val env = kotlinCoreEnvironment(configuration, disposable)
     val ktPsiFactory: KtPsiFactory = KtPsiFactory(env.project, false)
 }
@@ -68,12 +68,10 @@ fun kotlinCoreEnvironment(
 }
 
 fun compilerConfiguration(
-    classpath: List<String>,
     languageVersion: LanguageVersion,
     jvmTarget: JvmTarget,
     numberOfThreads: Int?,
 ): CompilerConfiguration {
-    val classpathFiles = classpath.map(::File)
     val versionSettings = LanguageVersionSettingsImpl(
         languageVersion,
         ApiVersion.createByLanguageVersion(languageVersion),
@@ -84,6 +82,5 @@ fun compilerConfiguration(
         put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
         put(JVMConfigurationKeys.JDK_HOME, File(System.getProperty("java.home")))
         numberOfThreads?.let { put(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS, it) }
-        addJvmClasspathRoots(classpathFiles)
     }
 }

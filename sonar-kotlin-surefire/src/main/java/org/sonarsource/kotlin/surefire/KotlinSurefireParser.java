@@ -96,6 +96,7 @@ public class KotlinSurefireParser {
       try {
         parser.parse(report);
       } catch (XMLStreamException e) {
+        LOGGER.warn(String.format("Failed to parse the Surefire report: %s", report));
         throw new ParseException(e);
       }
     }

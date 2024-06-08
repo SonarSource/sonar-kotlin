@@ -116,7 +116,7 @@ tasks.shadowJar {
     exclude("org/jetbrains/kotlin/org/jline/**")
     exclude("org/jetbrains/kotlin/net/jpountz/**")
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 39_000_000L, 39_500_000L)
+        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 39_200_000L, 39_700_000L)
     }
 }
 
