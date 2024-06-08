@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.api.checks
 
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext

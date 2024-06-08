@@ -17,19 +17,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.api.frontend
+package org.sonarsource.kotlin.core
 
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
-import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
-import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
-import com.intellij.openapi.Disposable
-import com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.com.intellij.openapi.Disposable
+import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -37,11 +34,7 @@ import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
-import org.jetbrains.kotlin.config.languageVersionSettings
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPsiFactory
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
 
 class Environment(
@@ -70,41 +63,8 @@ fun kotlinCoreEnvironment(
     return KotlinCoreEnvironment.createForProduction(
         disposable,
         configuration,
-        // FIXME Add support of Kotlin/JS Kotlin/Native
         EnvironmentConfigFiles.JVM_CONFIG_FILES,
     )
-}
-
-fun bindingContext(
-    environment: KotlinCoreEnvironment,
-    classpath: List<String>,
-    files: List<KtFile>,
-): BindingContext =
-    if (classpath.isEmpty())
-        BindingContext.EMPTY
-    else
-        analyzeAndGetBindingContext(environment, files)
-
-fun analyzeAndGetBindingContext(
-    env: KotlinCoreEnvironment,
-    ktFiles: List<KtFile>,
-): BindingContext {
-    val analyzer = AnalyzerWithCompilerReport(
-        MessageCollector.NONE,
-        env.configuration.languageVersionSettings,
-        false
-    )
-    analyzer.analyzeAndReport(ktFiles) {
-        TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
-            env.project,
-            ktFiles,
-            NoScopeRecordCliBindingTrace(),
-            env.configuration,
-            env::createPackagePartProvider,
-            ::FileBasedDeclarationProviderFactory
-        )
-    }
-    return analyzer.analysisResult.bindingContext
 }
 
 fun compilerConfiguration(
@@ -127,4 +87,3 @@ fun compilerConfiguration(
         addJvmClasspathRoots(classpathFiles)
     }
 }
-

@@ -15,8 +15,12 @@ dependencies {
     implementation(libs.kotlin.compiler.embeddable)
     implementation(utilLibs.bundles.ktlint)
 
-    implementation(project(":sonar-kotlin-plugin"))
-    implementation(project(":sonar-kotlin-api"))
+    implementation(project(":sonar-kotlin-plugin")) {
+        isTransitive = false
+    }
+    implementation(project(":sonar-kotlin-api")) {
+        isTransitive = false
+    }
 
     implementation(libs.gson)
     implementation(utilLibs.jcommander)
@@ -26,7 +30,9 @@ dependencies {
     testImplementation(testLibs.assertj.core)
     testImplementation(libs.sonar.plugin.api)
 
-    implementation(project(":sonar-kotlin-external-linters"))
+    implementation(project(":sonar-kotlin-external-linters")) {
+        isTransitive = false
+    }
 }
 
 tasks {
