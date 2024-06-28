@@ -6,9 +6,6 @@ on:
       - master
       - 'dogfood/**'
 
-env:
-  SLACK_USERNAME: Dogfood build action
-
 jobs:
   dogfood_merge:
     runs-on: ubuntu-latest
@@ -21,7 +18,6 @@ jobs:
         uses: SonarSource/vault-action-wrapper@dc8fe04652687f7278f3ecd27905967836bab0eb  # tag=2.7.4-1
         with:
           secrets: |
-            development/kv/data/slack webhook | SLACK_WEBHOOK;
             development/github/token/{REPO_OWNER_NAME_DASH}-dogfood-merge token | dogfood_token;
       - name: git octopus step
         env:
@@ -33,13 +29,12 @@ jobs:
       # Use the output from the `dogfood` step
       - name: Get the name of the dogfood branch and its HEAD SHA1
         run: echo "The dogfood branch was `${{ steps.dogfood.outputs.dogfood-branch }}` and its HEAD SHA1 was `${{ steps.dogfood.outputs.sha1 }}`"
-      #slack notifications
+      # Notify on Slack
       - name: Notify failures on Slack
         if: failure()
-        uses: 8398a7/action-slack@v3
-        with:
-          status: failure
-          fields: repo,author,eventName
-          channel: '#squad-jvm-kotlin'
+        uses: slackapi/slack-github-action@70cd7be8e40a46e8b0eced40b0de447bdb42f68e # v1.26.0
         env:
-          SLACK_WEBHOOK_URL: ${{ fromJSON(steps.secrets.outputs.vault).SLACK_WEBHOOK }}
+          SLACK_BOT_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).SLACK_BOT_TOKEN }}
+        with:
+          channel-id: squad-jvm-notifs
+          slack-message: "Dogfood build for `${{ steps.dogfood.outputs.sha1 }}`: *failed*, see the logs at https://github.com/SonarSource/sonar-kotlin/actions/workflows/dogfood.yml"
