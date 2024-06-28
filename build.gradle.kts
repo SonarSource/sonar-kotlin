@@ -15,6 +15,7 @@ plugins {
     signing
 }
 
+{
 val projectTitle: String by project
 
 configure(subprojects.filter { it.name != "kotlin-checks-test-sources" }) {
