@@ -19,7 +19,7 @@
  */
 package org.sonarsource.kotlin.visiting
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtElement
 import org.sonar.api.batch.rule.Checks
 import org.sonarsource.kotlin.api.checks.AbstractCheck

@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.api.frontend
 
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.resolve.BindingContext

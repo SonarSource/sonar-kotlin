@@ -21,7 +21,7 @@ package org.sonarsource.kotlin.checks
 
 import java.net.URI
 import java.net.URISyntaxException
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
