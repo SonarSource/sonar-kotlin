@@ -114,6 +114,7 @@ build_task:
     DEPLOY_PULL_REQUEST: true
   build_script:
     - source cirrus-env BUILD-PRIVATE
+    - ./cirrus/install-dependencies.sh
     - regular_gradle_build_deploy_analyze -x test -x sonar
   on_failure:
     error_log_artifacts:
@@ -133,6 +134,7 @@ build_test_analyze_task:
     DEPLOY_PULL_REQUEST: true
   build_script:
     - source cirrus-env BUILD-PRIVATE
+    - ./cirrus/install-dependencies.sh
     - regular_gradle_build_deploy_analyze -x artifactoryPublish
   on_failure:
     error_log_artifacts:
