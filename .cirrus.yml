@@ -18,11 +18,6 @@ env:
   ORG_GRADLE_PROJECT_signingPassword: VAULT[development/kv/data/sign data.passphrase]
   ORG_GRADLE_PROJECT_signingKeyId: 0x7DCD4258
 
-  # burgr notification
-  BURGR_URL: VAULT[development/kv/data/burgr data.url]
-  BURGR_USERNAME: VAULT[development/kv/data/burgr data.cirrus_username]
-  BURGR_PASSWORD: VAULT[development/kv/data/burgr data.cirrus_password]
-
   # Use bash (instead of sh on linux or cmd.exe on windows)
   CIRRUS_SHELL: bash
 
@@ -164,8 +159,6 @@ ws_scan_task:
 
 # --- WARNING --- WARNING --- WARNING --- WARNING --- WARNING --- WARNING ---
 # The following task names should all be included in promote_task/depends_on
-# Burgr does not support task name length > 16, see:
-# https://github.com/SonarSource/burgr/blob/c7678264f198818ea12800e2457c6557075c51ca/core/src/main/java/com/sonarsource/burgr/jsoninterface/CirrusStage.java#L79
 # ---------------------------------------------------------------------------
 qa_plug_pub_lin_task:
   <<: *QA_TASK_FILTER
@@ -248,7 +241,4 @@ promote_task:
   env:
     ARTIFACTORY_PROMOTE_ACCESS_TOKEN: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-promoter access_token]
     GITHUB_TOKEN: VAULT[development/github/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-promotion token]
-    #artifacts that will have downloadable links in burgr
-    ARTIFACTS: "\
-      org.sonarsource.kotlin:sonar-kotlin-plugin:jar"
-  script: cirrus_promote_gradle
+  script: cirrus_promote_gradle multi
