@@ -237,7 +237,7 @@ promote_task:
     - build_win
     - ws_scan
   <<: *ONLY_IF_SONARSOURCE_QA
-  <<: *LINUX_1_CPU_1G
+  <<: *LINUX_3_5_CPU_7G
   env:
     ARTIFACTORY_PROMOTE_ACCESS_TOKEN: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-promoter access_token]
     GITHUB_TOKEN: VAULT[development/github/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-promotion token]
