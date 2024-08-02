@@ -34,7 +34,7 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
-import org.sonarsource.kotlin.api.frontend.ParseException;
+import org.sonarsource.analyzer.commons.xml.ParseException;
 import org.sonarsource.kotlin.surefire.data.UnitTestClassReport;
 import org.sonarsource.kotlin.surefire.data.UnitTestIndex;
 
@@ -96,7 +96,8 @@ public class KotlinSurefireParser {
       try {
         parser.parse(report);
       } catch (XMLStreamException e) {
-        throw new ParseException("Fail to parse the Surefire report: " + report, null, e);
+        LOGGER.warn(String.format("Failed to parse the Surefire report: %s", report));
+        throw new ParseException(e);
       }
     }
   }

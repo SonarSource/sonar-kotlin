@@ -19,8 +19,8 @@
  */
 package org.sonarsource.kotlin.api.reporting
 
-import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import com.intellij.openapi.editor.Document
+import com.intellij.psi.PsiElement
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.TextPointer
 import org.sonar.api.batch.fs.TextRange

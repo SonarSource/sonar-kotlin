@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.testapi
 
 import io.mockk.InternalPlatformDsl.toStr
-import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.sonar.api.batch.fs.InputFile

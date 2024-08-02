@@ -21,7 +21,7 @@ package org.sonarsource.kotlin.checks
 
 import java.util.regex.Pattern
 import java.util.stream.Collectors
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression

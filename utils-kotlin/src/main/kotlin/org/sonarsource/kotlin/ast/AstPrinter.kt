@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.ast
 
 import org.jetbrains.kotlin.config.LanguageVersion
-import org.sonarsource.kotlin.api.frontend.Environment
+import org.sonarsource.kotlin.core.Environment
 import org.sonarsource.kotlin.tools.AstPrinter
 import java.nio.file.Path
 import kotlin.io.path.readText
@@ -34,7 +34,7 @@ fun main(vararg args: String) {
 
     val mode = args[0].lowercase()
     val inputFile = resolveDir(args[1])
-    val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
+    val environment = Environment(LanguageVersion.LATEST_STABLE)
 
     val ktFile by lazy { environment.ktPsiFactory.createFile(inputFile.readText()) }
 

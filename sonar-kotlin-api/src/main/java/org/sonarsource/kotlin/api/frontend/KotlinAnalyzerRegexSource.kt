@@ -19,7 +19,7 @@
  */
 package org.sonarsource.kotlin.api.frontend
 
-import org.jetbrains.kotlin.com.intellij.openapi.editor.Document
+import com.intellij.openapi.editor.Document
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.sonar.api.batch.fs.InputFile
