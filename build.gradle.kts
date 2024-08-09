@@ -8,7 +8,7 @@ plugins {
     id("jacoco")
     id("com.jfrog.artifactory") version "4.25.1"
     id("io.spring.dependency-management") version "1.1.4" apply false
-    id("org.sonarqube") version "4.4.1.3373"
+    id("org.sonarqube") version "5.1.0.4882"
     id("org.jetbrains.kotlin.jvm") apply false
     id("com.diffplug.spotless") version "6.11.0"
     `maven-publish`
