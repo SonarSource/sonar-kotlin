@@ -4,7 +4,7 @@ import android.os.CancellationSignal
 import android.hardware.biometrics.BiometricPrompt as BiometricPromptAndroid
 import androidx.biometric.BiometricPrompt as BiometricPromptAndroidX
 
-val promptInfo = androidx.biometric.BiometricPrompt.PromptInfo()
+val promptInfo = BiometricPromptAndroidX.PromptInfo()
 
 fun android() {
     val biometricPrompt = BiometricPromptAndroid()
