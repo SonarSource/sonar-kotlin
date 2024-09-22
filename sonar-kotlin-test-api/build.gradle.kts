@@ -18,7 +18,7 @@ dependencies {
     implementation(libs.sonar.xml.parsing)
     implementation(libs.sonar.regex.parsing)
     implementation(libs.sonar.performance.measure)
-    implementation(libs.kotlin.compiler.embeddable)
+    implementation(libs.kotlin.compiler)
     implementation(libs.staxmate)
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
