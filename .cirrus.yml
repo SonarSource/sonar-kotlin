@@ -25,7 +25,7 @@ env:
   GRADLE_USER_HOME: ${CIRRUS_WORKING_DIR}/.gradle
 
 linux_image_template: &LINUX_IMAGE
-  image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-g7-latest
+  image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-g8-latest
   cluster_name: ${CIRRUS_CLUSTER_NAME}
   region: eu-central-1
   namespace: default
@@ -46,7 +46,7 @@ linux_3_5_cpu_7G_template: &LINUX_3_5_CPU_7G
 linux_6_cpu_12G_java_17_template: &LINUX_6_CPU_12G_JAVA_17
   eks_container:
     <<: *LINUX_IMAGE
-    image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-g7-latest
+    image: ${CIRRUS_AWS_ACCOUNT}.dkr.ecr.eu-central-1.amazonaws.com/base:j17-g8-latest
     cpu: 6
     memory: 24G
 
