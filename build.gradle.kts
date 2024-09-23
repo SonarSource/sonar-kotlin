@@ -6,7 +6,7 @@ import org.sonarsource.kotlin.buildsrc.tasks.FetchRuleMetadata
 plugins {
     java
     id("jacoco")
-    id("com.jfrog.artifactory") version "4.25.1"
+    id("com.jfrog.artifactory") version "5.2.5"
     id("io.spring.dependency-management") version "1.1.4" apply false
     id("org.sonarqube") version "5.1.0.4882"
     id("org.jetbrains.kotlin.jvm") apply false
@@ -275,28 +275,22 @@ artifactory {
             setPassword(System.getenv("ARTIFACTORY_DEPLOY_PASSWORD"))
         }
 
-        defaults(
-            delegateClosureOf<groovy.lang.GroovyObject> {
-                setProperty(
-                    "properties",
-                    mapOf(
-                        "build.name" to "sonar-kotlin",
-                        "build.number" to System.getenv("BUILD_NUMBER"),
-                        "pr.branch.target" to System.getenv("PULL_REQUEST_BRANCH_TARGET"),
-                        "pr.number" to System.getenv("PULL_REQUEST_NUMBER"),
-                        "vcs.branch" to System.getenv("GIT_BRANCH"),
-                        "vcs.revision" to System.getenv("GIT_COMMIT"),
-                        "version" to project.version as String,
-
-                        "publishPom" to "true",
-                        "publishIvy" to "false"
-                    )
+        defaults {
+            setProperties(
+                mapOf(
+                    "build.name" to "sonar-kotlin",
+                    "build.number" to System.getenv("BUILD_NUMBER"),
+                    "pr.branch.target" to System.getenv("PULL_REQUEST_BRANCH_TARGET"),
+                    "pr.number" to System.getenv("PULL_REQUEST_NUMBER"),
+                    "vcs.branch" to System.getenv("GIT_BRANCH"),
+                    "vcs.revision" to System.getenv("GIT_COMMIT"),
+                    "version" to project.version as String,
                 )
-                invokeMethod("publications", "mavenJava")
-                setProperty("publishPom", true) // Publish generated POM files to Artifactory (true by default)
-                setProperty("publishIvy", false) // Publish generated Ivy descriptor files to Artifactory (true by default)
-            }
-        )
+            )
+            publications("mavenJava")
+            setPublishPom(true) // Publish generated POM files to Artifactory (true by default)
+            setPublishIvy(false) // Publish generated Ivy descriptor files to Artifactory (true by default)
+        }
     }
 }
 
