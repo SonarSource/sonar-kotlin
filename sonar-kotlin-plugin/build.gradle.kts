@@ -4,7 +4,7 @@ import java.util.Date
 import java.util.jar.JarInputStream
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.0"
+    id("com.gradleup.shadow") version "8.3.1"
     kotlin("jvm")
 }
 
