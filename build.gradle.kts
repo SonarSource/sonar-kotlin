@@ -93,6 +93,7 @@ allprojects {
 
     repositories {
         mavenLocal()
+        mavenCentral()
         val repository = if (project.hasProperty("qa")) "sonarsource-qa" else "sonarsource"
         maven {
             url = uri("https://repox.jfrog.io/repox/${repository}")
