@@ -39,8 +39,9 @@ configure(subprojects.filter { it.name != "kotlin-checks-test-sources" }) {
             )
         }
         kotlinGradle {
+            // 6.11.0 + 0.47.1 = OK
             target("*.gradle.kts")
-            ktlint()
+            ktlint("0.47.1")
         }
 
         format("misc") {
@@ -93,6 +94,7 @@ allprojects {
 
     repositories {
         mavenLocal()
+        mavenCentral()
         val repository = if (project.hasProperty("qa")) "sonarsource-qa" else "sonarsource"
         maven {
             url = uri("https://repox.jfrog.io/repox/${repository}")
