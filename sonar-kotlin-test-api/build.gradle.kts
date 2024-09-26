@@ -23,13 +23,3 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
 }
-
-// The new version 11.0.17 of javadoc has a bug and does not handle package annotations correctly
-// Adding a "tag" option is a workaround to prevent javadoc errors
-// @see https://bugs.openjdk.org/browse/JDK-8295850
-tasks.withType<Javadoc> {
-    options {
-        this as StandardJavadocDocletOptions
-        addStringOption("tag", "javax.annotation.ParametersAreNonnullByDefault:ParametersAreNonnullByDefault")
-    }
-}
