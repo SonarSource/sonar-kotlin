@@ -27,12 +27,6 @@ include("kotlin-checks-test-sources")
 include("utils-kotlin")
 
 dependencyResolutionManagement {
-
-    /*
-    * We are knowingly using this versionCatalogs feature, as it improves dependency management drastically, even though it is still marked
-    * as unstable.
-    */
-    @Suppress("UnstableApiUsage")
     versionCatalogs {
 
         val kotlinVersion: String by extra
