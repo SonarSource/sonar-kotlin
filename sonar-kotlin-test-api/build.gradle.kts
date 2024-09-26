@@ -9,7 +9,6 @@ dependencies {
     compileOnly(testLibs.assertj.core)
     compileOnly(testLibs.mockito.core)
     compileOnly(testLibs.mockk)
-    compileOnly(testLibs.classgraph)
     compileOnly(testLibs.sonar.analyzer.test.commons)
     compileOnly(testLibs.sonar.plugin.api.impl)
     compileOnly(testLibs.sonar.plugin.api.test.fixtures)

@@ -78,7 +78,6 @@ dependencyResolutionManagement {
         create("testLibs") {
             val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
             val assertj = version("assertj", "3.24.2")
-            val classgraph = version("classgraph", "4.8.165")
             val junit = version("junit", "5.10.1")
             val mockito = version("mockito", "5.7.0")
             val mockk = version("mockk", "1.13.3")
@@ -87,7 +86,6 @@ dependencyResolutionManagement {
             val sonarqube = version("sonarqube", "10.0.0.68432")
 
             library("assertj-core", "org.assertj", "assertj-core").versionRef(assertj)
-            library("classgraph", "io.github.classgraph", "classgraph").versionRef(classgraph)
             library("junit-api", "org.junit.jupiter", "junit-jupiter-api").versionRef(junit)
             library("junit-engine", "org.junit.jupiter", "junit-jupiter-engine").versionRef(junit)
             library("junit-params", "org.junit.jupiter", "junit-jupiter-params").versionRef(junit)
