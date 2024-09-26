@@ -10,7 +10,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4" apply false
     id("org.sonarqube") version "5.1.0.4882"
     id("org.jetbrains.kotlin.jvm") apply false
-    id("com.diffplug.spotless") version "6.11.0"
+    id("com.diffplug.spotless") version "6.25.0"
     `maven-publish`
     signing
 }
@@ -40,7 +40,7 @@ configure(subprojects.filter { it.name != "kotlin-checks-test-sources" }) {
         }
         kotlinGradle {
             target("*.gradle.kts")
-            ktlint()
+            ktlint("0.50.0")
         }
 
         format("misc") {
