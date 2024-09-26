@@ -23,7 +23,6 @@ dependencies {
     testImplementation(testLibs.assertj.core)
     testImplementation(testLibs.mockito.core)
     testImplementation(testLibs.mockk)
-    testImplementation(testLibs.classgraph)
     testImplementation(testLibs.sonar.analyzer.test.commons)
     testImplementation(testLibs.sonar.plugin.api.impl)
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
