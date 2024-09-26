@@ -26,3 +26,9 @@ dependencies {
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
     testImplementation(project(":sonar-kotlin-test-api"))
 }
+
+task<JavaExec>("printAst") {
+    group = "Application"
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("org.sonarsource.kotlin.ast.AstPrinterKt")
+}

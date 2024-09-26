@@ -7,7 +7,6 @@ plugins {
     java
     id("jacoco")
     id("com.jfrog.artifactory") version "5.2.5"
-    id("io.spring.dependency-management") version "1.1.4" apply false
     id("org.sonarqube") version "5.1.0.4882"
     id("org.jetbrains.kotlin.jvm") apply false
     id("com.diffplug.spotless") version "6.11.0"
@@ -58,7 +57,6 @@ configure(subprojects.filter { it.name != "kotlin-checks-test-sources" }) {
 allprojects {
     apply<JavaPlugin>()
     apply(plugin = "jacoco")
-    apply(plugin = "io.spring.dependency-management")
     apply(plugin = "com.jfrog.artifactory")
     apply(plugin = "maven-publish")
     apply(plugin = "signing")

@@ -11,12 +11,12 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(utilLibs.bundles.detekt)
-    // detekt needs "kotlin-compiler-embeddable:{strictly 1.7.21}", to fix this we can specify a version explicitly:
-    implementation(libs.kotlin.compiler.embeddable)
     implementation(utilLibs.bundles.ktlint)
 
-    implementation(project(":sonar-kotlin-plugin"))
-    implementation(project(":sonar-kotlin-api"))
+    implementation(project(":sonar-kotlin-external-linters")) {
+        // detekt needs strict specific version of kotlin-compiler-embeddable which differs from our
+        isTransitive = false
+    }
 
     implementation(libs.gson)
     implementation(utilLibs.jcommander)
@@ -25,8 +25,6 @@ dependencies {
     testImplementation(testLibs.junit.api)
     testImplementation(testLibs.assertj.core)
     testImplementation(libs.sonar.plugin.api)
-
-    implementation(project(":sonar-kotlin-external-linters"))
 }
 
 tasks {
@@ -58,12 +56,5 @@ tasks {
         doFirst {
             println("Updating rules for Android Lint")
         }
-    }
-
-    task<JavaExec>("printAst") {
-        dependsOn(":sonar-kotlin-plugin:compileJava")
-        group = "Application"
-        classpath = sourceSets.main.get().runtimeClasspath
-        mainClass.set("org.sonarsource.kotlin.ast.AstPrinterKt")
     }
 }
