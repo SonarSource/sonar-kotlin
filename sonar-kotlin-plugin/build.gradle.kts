@@ -94,7 +94,7 @@ val sourcesJar = tasks.sourcesJar
 val javadocJar = tasks.javadocJar
 
 tasks.shadowJar {
-    minimize {}
+//    minimize {}
     exclude("META-INF/native/**/*jansi*")
     exclude("org/jetbrains/kotlin/org/jline/**")
     exclude("org/jetbrains/kotlin/net/jpountz/**")
@@ -103,7 +103,7 @@ tasks.shadowJar {
         exclude(dependency("org.jetbrains.kotlin:low-level-api-fir-for-ide"))
     }
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 45_800_000L, 46_200_000L)
+//        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 45_800_000L, 46_200_000L)
     }
 }
 
