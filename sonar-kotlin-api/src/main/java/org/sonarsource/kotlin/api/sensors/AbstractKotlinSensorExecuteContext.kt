@@ -19,8 +19,8 @@
  */
 package org.sonarsource.kotlin.api.sensors
 
-import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import com.intellij.openapi.util.Disposer
+import com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.jetbrains.kotlin.psi.KtFile

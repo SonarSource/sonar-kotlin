@@ -21,7 +21,7 @@ package org.sonarsource.kotlin.checks
 
 import io.mockk.every
 import io.mockk.mockk
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.psiUtil.startOffset

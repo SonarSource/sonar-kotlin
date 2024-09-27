@@ -19,7 +19,7 @@
  */
 package org.sonarsource.kotlin.testapi
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.runtime.structure.ReflectJavaLiteralAnnotationArgument
 import org.jetbrains.kotlin.descriptors.runtime.structure.findAnnotation
 import org.jetbrains.kotlin.name.FqName

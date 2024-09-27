@@ -19,13 +19,13 @@
  */
 package org.sonarsource.kotlin.metrics
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiAnnotation
-import org.jetbrains.kotlin.com.intellij.psi.PsiComment
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.com.intellij.psi.PsiKeyword
-import org.jetbrains.kotlin.com.intellij.psi.PsiLiteral
-import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
-import org.jetbrains.kotlin.com.intellij.psi.javadoc.PsiDocComment
+import com.intellij.psi.PsiAnnotation
+import com.intellij.psi.PsiComment
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiKeyword
+import com.intellij.psi.PsiLiteral
+import com.intellij.psi.impl.source.tree.LeafPsiElement
+import com.intellij.psi.javadoc.PsiDocComment
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
 import org.jetbrains.kotlin.lexer.KtKeywordToken
 import org.jetbrains.kotlin.psi.KtAnnotationEntry

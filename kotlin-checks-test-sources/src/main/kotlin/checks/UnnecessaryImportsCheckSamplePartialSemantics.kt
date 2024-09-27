@@ -2,8 +2,8 @@ package checks
 
 import checks.ClassInSameFileA
 import checks.DelicateCoroutinesApi
-import com.google.common.collect.ImmutableList
-import com.google.common.collect.ImmutableList.copyOf
+import com.google.common.collect.ImmutableList // Noncompliant
+import com.google.common.collect.ImmutableList.copyOf // Noncompliant
 import com.google.common.collect.ImmutableList.of
 import com.google.common.collect.ImmutableSet.of as immutable_set_of
 import com.google.common.io.Files
