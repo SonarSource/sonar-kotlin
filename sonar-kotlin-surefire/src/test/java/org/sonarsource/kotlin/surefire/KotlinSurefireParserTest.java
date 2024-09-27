@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.ctc.wstx.exc.WstxEOFException;
 import kotlin.jvm.JvmField;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,6 +41,7 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -185,6 +188,21 @@ class KotlinSurefireParserTest {
     assertThat(context.measure(":java.Foo", CoreMetrics.TEST_ERRORS).value()).isZero();
     assertThat(context.measure(":java.Foo", CoreMetrics.TEST_FAILURES).value()).isZero();
     assertThat(context.measure(":java.Foo", CoreMetrics.TEST_EXECUTION_TIME).value()).isEqualTo(659);
+  }
+
+  @Test
+  void shouldThrowWhenUnparsable() {
+    SensorContextTester context = mockContext();
+
+    var reportPath = "src/test/resources/org/sonarsource/kotlin/surefire/api/SurefireParserTest/unparsable/TEST-FooTest.xml"
+      .replace('/', File.separatorChar);
+    var dirs = getDirs("unparsable");
+    assertThatThrownBy(() -> parser.collect(context, dirs, true))
+      .isInstanceOf(IllegalStateException.class)
+      .hasMessage("Fail to parse the Surefire report: " + reportPath)
+      .hasRootCauseInstanceOf(WstxEOFException.class)
+      .hasRootCauseMessage("Unexpected EOF in prolog" + System.lineSeparator() +
+        " at [row,col {unknown-source}]: [1,0]");
   }
 
   private List<File> getDirs(String... directoryNames) {
