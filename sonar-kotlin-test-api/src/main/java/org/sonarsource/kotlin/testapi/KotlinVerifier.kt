@@ -56,6 +56,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
     var isAndroid = false
     var customDiagnostics: List<Diagnostic>? = null
+    var useK2 = false
 
     fun verify() {
         verifyFile {
@@ -72,7 +73,11 @@ class KotlinVerifier(private val check: AbstractCheck) {
         val filePath = baseDir.resolve(fileName)
         val isScriptFile = filePath.extension == "kts"
 
-        val environment = Environment(classpath + deps, LanguageVersion.LATEST_STABLE)
+        val environment = Environment(
+            classpath + deps,
+            LanguageVersion.LATEST_STABLE,
+            useK2 = useK2,
+        )
         val converter = { content: String ->
             val inputFile = TestInputFileBuilder("moduleKey", filePath.fileName.pathString)
                 .setCharset(StandardCharsets.UTF_8)

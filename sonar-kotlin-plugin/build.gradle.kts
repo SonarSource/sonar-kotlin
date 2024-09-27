@@ -98,8 +98,12 @@ tasks.shadowJar {
     exclude("META-INF/native/**/*jansi*")
     exclude("org/jetbrains/kotlin/org/jline/**")
     exclude("org/jetbrains/kotlin/net/jpountz/**")
+    dependencies {
+        exclude(dependency("org.jetbrains.kotlin:high-level-api-fir-for-ide"))
+        exclude(dependency("org.jetbrains.kotlin:low-level-api-fir-for-ide"))
+    }
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 38_100_000L, 38_600_000L)
+        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 45_800_000L, 46_200_000L)
     }
 }
 

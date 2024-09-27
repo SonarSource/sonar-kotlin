@@ -49,12 +49,22 @@ class Environment(
     val classpath: List<String>,
     kotlinLanguageVersion: LanguageVersion,
     javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8,
+    useK2: Boolean = false,
     numberOfThreads: Int? = null
 ) {
     val disposable = Disposer.newDisposable()
     val configuration = compilerConfiguration(classpath, kotlinLanguageVersion, javaLanguageVersion, numberOfThreads)
+    // K1
     val env = kotlinCoreEnvironment(configuration, disposable)
     val ktPsiFactory: KtPsiFactory = KtPsiFactory(env.project, false)
+    // K2
+    val session = if (useK2) createAnalysisSession(disposable, configuration) else null
+
+    init {
+        if (!useK2) {
+            configureAnalysisApiServices(env)
+        }
+    }
 }
 
 fun kotlinCoreEnvironment(
