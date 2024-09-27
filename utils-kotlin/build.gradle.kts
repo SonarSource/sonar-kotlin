@@ -21,8 +21,8 @@ dependencies {
     implementation(libs.gson)
     implementation(utilLibs.jcommander)
 
-    testRuntimeOnly(testLibs.junit.engine)
-    testImplementation(testLibs.junit.api)
+    testImplementation(testLibs.junit.jupiter)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation(testLibs.assertj.core)
     testImplementation(libs.sonar.plugin.api)
 }

@@ -15,9 +15,8 @@ dependencies {
 
     implementation(project(":sonar-kotlin-api"))
 
-    testRuntimeOnly(testLibs.junit.engine)
-    testImplementation(testLibs.junit.api)
-    testImplementation(testLibs.junit.params)
+    testImplementation(testLibs.junit.jupiter)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation(testLibs.assertj.core)
     testImplementation(testLibs.mockito.core)
     testImplementation(testLibs.mockk)
