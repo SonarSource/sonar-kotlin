@@ -31,6 +31,7 @@ import org.sonarsource.kotlin.api.frontend.Environment
 import org.sonarsource.kotlin.api.frontend.KotlinTree
 import org.sonarsource.kotlin.api.visiting.Comment
 import org.sonarsource.kotlin.api.visiting.CommentAnnotationsAndTokenVisitor
+import java.io.File
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.nio.file.FileVisitResult
@@ -51,7 +52,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
 
     var fileName: String = ""
     var baseDir: Path = KOTLIN_BASE_DIR
-    var classpath: List<String> = System.getProperty("java.class.path").split(System.getProperty("path.separator")) + DEFAULT_KOTLIN_CLASSPATH
+    var classpath: List<String> = System.getProperty("java.class.path").split(File.pathSeparatorChar) + DEFAULT_KOTLIN_CLASSPATH
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
     var isAndroid = false
     var customDiagnostics: List<Diagnostic>? = null
