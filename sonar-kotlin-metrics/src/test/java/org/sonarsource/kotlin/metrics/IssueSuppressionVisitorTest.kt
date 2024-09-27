@@ -39,6 +39,7 @@ import org.sonarsource.kotlin.testapi.DEFAULT_KOTLIN_CLASSPATH
 import org.sonarsource.kotlin.testapi.KOTLIN_BASE_DIR
 import org.sonarsource.kotlin.testapi.kotlinTreeOf
 import org.sonarsource.kotlin.testapi.TestContext
+import java.io.File
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
@@ -81,7 +82,7 @@ class IssueSuppressionVisitorTest {
         )
 
     private fun scanFile(path: Path, suppress: Boolean, check: AbstractCheck, vararg checks: AbstractCheck): SingleFileVerifier {
-        val env = Environment(System.getProperty("java.class.path").split(System.getProperty("path.separator")) + DEFAULT_KOTLIN_CLASSPATH, LanguageVersion.LATEST_STABLE)
+        val env = Environment(System.getProperty("java.class.path").split(File.pathSeparatorChar) + DEFAULT_KOTLIN_CLASSPATH, LanguageVersion.LATEST_STABLE)
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
         val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")

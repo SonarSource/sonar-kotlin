@@ -60,6 +60,7 @@ import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
 import org.sonarsource.kotlin.api.frontend.Environment
 import org.sonarsource.kotlin.testapi.kotlinTreeOf
+import java.io.File
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import java.util.TreeMap
@@ -703,7 +704,7 @@ class ApiExtensionsScopeFunctionResolutionTest {
 private fun parse(code: String) = kotlinTreeOf(
     code,
     Environment(
-        listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(System.getProperty("path.separator")),
+        listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(File.pathSeparatorChar),
         LanguageVersion.LATEST_STABLE
     ),
     TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
@@ -714,7 +715,7 @@ private fun parse(code: String) = kotlinTreeOf(
 
 private fun parseWithoutParsingExceptions(code: String): KtFile {
     val environment = Environment(
-        listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(System.getProperty("path.separator")),
+        listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(File.pathSeparatorChar),
         LanguageVersion.LATEST_STABLE
     )
     val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")

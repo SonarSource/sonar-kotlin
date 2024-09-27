@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.testapi.kotlinTreeOf
+import java.io.File
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import kotlin.io.path.readText
@@ -52,7 +53,7 @@ internal class KotlinSyntaxStructureTest {
         every { BindingContextUtils.getRecordedTypeInfo(any(), any()) } throws expectedException
 
         val content = path.readText()
-        val environment = Environment(System.getProperty("java.class.path").split(":"), LanguageVersion.LATEST_STABLE)
+        val environment = Environment(System.getProperty("java.class.path").split(File.pathSeparatorChar), LanguageVersion.LATEST_STABLE)
         val inputFile = TestInputFileBuilder("moduleKey", path.toString())
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(content).build()
