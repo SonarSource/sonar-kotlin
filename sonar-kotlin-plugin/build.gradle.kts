@@ -31,10 +31,9 @@ dependencies {
     implementation(project(":sonar-kotlin-surefire"))
     implementation(project(":sonar-kotlin-checks"))
 
-    testRuntimeOnly(testLibs.junit.engine)
+    testImplementation(testLibs.junit.jupiter)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation(libs.slf4j.api)
-    testImplementation(testLibs.junit.api)
-    testImplementation(testLibs.junit.params)
     testImplementation(testLibs.assertj.core)
     testImplementation(testLibs.mockito.core)
     testImplementation(testLibs.mockk)

@@ -4,8 +4,7 @@ plugins {
 
 dependencies {
     compileOnly(libs.sonar.plugin.api)
-    compileOnly(testLibs.junit.api)
-    compileOnly(testLibs.junit.params)
+    compileOnly(testLibs.junit.jupiter)
     compileOnly(testLibs.assertj.core)
     compileOnly(testLibs.mockito.core)
     compileOnly(testLibs.mockk)

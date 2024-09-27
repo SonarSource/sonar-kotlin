@@ -80,9 +80,7 @@ dependencyResolutionManagement {
             val sonarqube = version("sonarqube", "10.0.0.68432")
 
             library("assertj-core", "org.assertj", "assertj-core").versionRef(assertj)
-            library("junit-api", "org.junit.jupiter", "junit-jupiter-api").versionRef(junit)
-            library("junit-engine", "org.junit.jupiter", "junit-jupiter-engine").versionRef(junit)
-            library("junit-params", "org.junit.jupiter", "junit-jupiter-params").versionRef(junit)
+            library("junit-jupiter", "org.junit.jupiter", "junit-jupiter").versionRef(junit)
             library("mockito-core", "org.mockito", "mockito-core").versionRef(mockito)
             library("mockk", "io.mockk", "mockk").versionRef(mockk)
             library("sonar-analyzer-test-commons", "org.sonarsource.analyzer-commons", "sonar-analyzer-test-commons")

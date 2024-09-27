@@ -6,7 +6,8 @@ plugins {
 dependencies {
     testImplementation(testLibs.sonar.orchestrator.junit5)
     testImplementation(testLibs.assertj.core)
-    testImplementation(testLibs.junit.engine)
+    testImplementation(testLibs.junit.jupiter)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation(libs.sonar.analyzer.commons)
 }
 
