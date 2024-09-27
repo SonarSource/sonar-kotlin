@@ -3,6 +3,24 @@ plugins {
 }
 
 dependencies {
+    listOf(
+        "org.jetbrains.kotlin:high-level-api-for-ide",
+        "org.jetbrains.kotlin:analysis-api-fe10-for-ide",
+        "org.jetbrains.kotlin:analysis-api-k2-for-ide",
+        "org.jetbrains.kotlin:high-level-api-fir-for-ide",
+        "org.jetbrains.kotlin:high-level-api-for-ide",
+        "org.jetbrains.kotlin:low-level-api-fir-for-ide",
+//        "org.jetbrains.kotlin:analysis-project-structure-for-ide",
+        "org.jetbrains.kotlin:symbol-light-classes-for-ide",
+        "org.jetbrains.kotlin:analysis-api-standalone-for-ide",
+        "org.jetbrains.kotlin:analysis-api-platform-interface-for-ide",
+        "org.jetbrains.kotlin:high-level-api-impl-base-for-ide",
+        "org.jetbrains.kotlin:analysis-api-for-ide",
+    ).forEach {
+        // https://youtrack.jetbrains.com/issue/KT-61639/Standalone-Analysis-API-cannot-find-transitive-dependencies
+        api("$it:2.0.20") { isTransitive = false }
+    }
+
     compileOnly(libs.sonar.plugin.api)
     compileOnly(libs.slf4j.api)
     implementation(libs.sonar.analyzer.commons)

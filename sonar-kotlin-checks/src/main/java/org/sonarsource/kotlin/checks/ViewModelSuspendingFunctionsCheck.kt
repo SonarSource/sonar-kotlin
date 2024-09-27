@@ -19,6 +19,9 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
@@ -38,12 +41,24 @@ class ViewModelSuspendingFunctionsCheck : AbstractCheck() {
         val bindingContext = kotlinFileContext.bindingContext
         function.suspendModifier()?.let {
             if (!function.isPrivate()
-                && function.extendsViewModel(bindingContext)
+                && extendsViewModel(function)
             ) {
                 kotlinFileContext.reportIssue(it,
                     """Classes extending "ViewModel" should not expose suspending functions.""")
             }
         }
+    }
+}
+
+private fun extendsViewModel(function: KtNamedFunction): Boolean {
+    analyze(function) {
+        val containingSymbol = function.symbol.containingSymbol
+        if (containingSymbol is KaClassSymbol) {
+            return containingSymbol.superTypes.any {
+                it.symbol?.classId?.asString() == "androidx/lifecycle/ViewModel"
+            }
+        }
+        return false
     }
 }
 

@@ -43,4 +43,5 @@ abstract class CheckTest(
             this.isAndroid = this@CheckTest.isAndroid
         }.verify()
     }
+
 }

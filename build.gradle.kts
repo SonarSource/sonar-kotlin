@@ -91,6 +91,13 @@ allprojects {
 
     repositories {
         mavenLocal()
+
+        maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies") {
+            content {
+                includeGroup("org.jetbrains.kotlin")
+            }
+        }
+
         val repository = if (project.hasProperty("qa")) "sonarsource-qa" else "sonarsource"
         maven {
             url = uri("https://repox.jfrog.io/repox/${repository}")
@@ -107,6 +114,7 @@ allprojects {
                 }
             }
         }
+        mavenCentral()
     }
 }
 
