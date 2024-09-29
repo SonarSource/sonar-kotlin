@@ -151,6 +151,7 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         }.result
 
     private fun getArrayAccessImportsFilter(arrayAccesses: Collection<KtArrayAccessExpression>, bindingContext: BindingContext) =
+        // FIXME(Godin): ???
         if (bindingContext == BindingContext.EMPTY) {
             { imp: KtImportDirective -> imp.importedName?.asString() !in ARRAY_ACCESS_IMPORTED_NAMES }
         } else {

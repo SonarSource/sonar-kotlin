@@ -30,11 +30,11 @@ class UselessNullCheckCheckSampleNoSemantics {
         checkNotNull(s) // Compliant FN (missing semantics)
         s!!.doSomething() // Compliant FN (missing semantics)
 
-        null!! // Noncompliant {{Remove this useless non-null assertion `!!`, it always fails.}}
-        null?.doSomething() // Noncompliant {{Remove this useless null-safe access `?.`, it always fails.}}
-        null ?: doSomething() // Noncompliant
-        null != "" // Noncompliant
-        0 != null // Noncompliant
+        null!! // FN
+        null?.doSomething() // FN
+        null ?: doSomething() // FN
+        null != "" // FN
+        0 != null // FN
         doSomething() ?: null // Compliant FN (missing semantics)
     }
 

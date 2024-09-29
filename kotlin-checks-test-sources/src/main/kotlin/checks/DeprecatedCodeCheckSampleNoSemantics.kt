@@ -1,4 +1,5 @@
 package checks
 
 @Deprecated("")
-class DeprecatedCodeCheckSampleNoSemantics
+class DeprecatedCodeCheckSampleNoSemantics // Noncompliant
+//    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
