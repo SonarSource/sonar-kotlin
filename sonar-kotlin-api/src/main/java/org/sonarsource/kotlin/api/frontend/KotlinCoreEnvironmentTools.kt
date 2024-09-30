@@ -44,7 +44,13 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
 
-// FIXME(Godin): trace calls when classpath is empty?
+/**
+ * DO NOT FORGET TO CALL
+ *
+ * ```
+ * Disposer.dispose(environment.disposable)
+ * ```
+ */
 class Environment(
     val classpath: List<String>,
     kotlinLanguageVersion: LanguageVersion,
