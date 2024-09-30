@@ -84,8 +84,6 @@ gradle_its_template: &GRADLE_ITS_TEMPLATE
     - source cirrus-env QA
     - ./gradlew "${GRADLE_TASK}" "-P${ITS_PROJECT}"
       "-Dsonar.runtimeVersion=${SQ_VERSION}"
-      "-Dorchestrator.configUrl=file:///$CIRRUS_WORKING_DIR/orchestrator.properties"
-      "-Dorchestrator.artifactory.accessToken=${ARTIFACTORY_ACCESS_TOKEN}"
       "-DbuildNumber=$BUILD_NUMBER"
       -Pqa --info --console plain --no-daemon --build-cache
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
@@ -207,8 +205,6 @@ qa_ruling_kotlin_compiler_task:
     - source cirrus-env QA
     - ./gradlew :its:ruling:test --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_compiler" -Pruling
       "-Dsonar.runtimeVersion=${SQ_VERSION}"
-      "-Dorchestrator.configUrl=file:///$CIRRUS_WORKING_DIR/orchestrator.properties"
-      "-Dorchestrator.artifactory.accessToken=${ARTIFACTORY_ACCESS_TOKEN}"
       "-DbuildNumber=$BUILD_NUMBER"
       -Pqa --info --console plain --no-daemon --build-cache
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT

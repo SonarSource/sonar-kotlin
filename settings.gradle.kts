@@ -75,7 +75,7 @@ dependencyResolutionManagement {
             val junit = version("junit", "5.10.1")
             val mockito = version("mockito", "5.7.0")
             val mockk = version("mockk", "1.13.3")
-            val orchestrator = version("orchestrator", "4.5.0.1700")
+            val orchestrator = version("orchestrator", "5.0.0.2065")
             val sonarlint = version("sonarlint", "9.5.0.76302")
             val sonarqube = version("sonarqube", "10.0.0.68432")
 
