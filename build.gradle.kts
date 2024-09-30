@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.sonarsource.kotlin.buildsrc.tasks.CreateKotlinGradleRuleStubsTask
 import org.sonarsource.kotlin.buildsrc.tasks.CreateKotlinRuleStubsTask
@@ -125,7 +126,7 @@ subprojects {
     }
 
     tasks.withType<KotlinCompile>().all {
-        kotlinOptions.jvmTarget = java.sourceCompatibility.toString()
+        compilerOptions.jvmTarget = JvmTarget.fromTarget(java.sourceCompatibility.toString())
     }
 
     jacoco {
