@@ -84,11 +84,6 @@ allprojects {
         project.version = project.version.toString().replace("-SNAPSHOT", versionSuffix)
     }
 
-    val extraProperties = File(rootDir, "private/extraProperties.gradle")
-    if (extraProperties.exists()) {
-        apply(from = extraProperties)
-    }
-
     repositories {
         mavenLocal()
         val repository = if (project.hasProperty("qa")) "sonarsource-qa" else "sonarsource"
