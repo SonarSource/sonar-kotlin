@@ -98,7 +98,7 @@ fun analyzeAndGetBindingContext(
         TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
             env.project,
             ktFiles,
-            NoScopeRecordCliBindingTrace(),
+            NoScopeRecordCliBindingTrace(env.project),
             env.configuration,
             env::createPackagePartProvider,
             ::FileBasedDeclarationProviderFactory
