@@ -24,7 +24,7 @@ dependencies {
 sonarqube.isSkipProject = true
 
 val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
+compileKotlin.compilerOptions {
     suppressWarnings = true
 }
 
