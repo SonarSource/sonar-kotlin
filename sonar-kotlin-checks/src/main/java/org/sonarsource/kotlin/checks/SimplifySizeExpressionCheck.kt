@@ -19,7 +19,7 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtToken
 import org.jetbrains.kotlin.lexer.KtTokens.ANDAND_Id
 import org.jetbrains.kotlin.lexer.KtTokens.EQEQ_Id

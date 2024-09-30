@@ -20,7 +20,7 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.KtNodeTypes
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty

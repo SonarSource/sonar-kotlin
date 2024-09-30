@@ -19,7 +19,7 @@ dependencies {
     implementation(libs.sonar.xml.parsing)
     implementation(libs.sonar.regex.parsing)
     implementation(libs.sonar.performance.measure)
-    implementation(libs.kotlin.compiler.embeddable)
+    implementation(libs.kotlin.compiler)
     implementation(libs.staxmate)
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
@@ -99,7 +99,7 @@ tasks.shadowJar {
     exclude("org/jetbrains/kotlin/org/jline/**")
     exclude("org/jetbrains/kotlin/net/jpountz/**")
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 37_500_000L, 38_000_000L)
+        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 39_200_000L, 39_700_000L)
     }
 }
 

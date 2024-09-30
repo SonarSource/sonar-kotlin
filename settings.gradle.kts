@@ -40,7 +40,7 @@ dependencyResolutionManagement {
             val staxmate = version("staxmate", "2.4.1")
 
             library("gson", "com.google.code.gson", "gson").versionRef(gson)
-            library("kotlin-compiler-embeddable", "org.jetbrains.kotlin", "kotlin-compiler-embeddable").version(kotlinVersion)
+            library("kotlin-compiler", "org.jetbrains.kotlin", "kotlin-compiler").version(kotlinVersion)
             library("sonar-analyzer-commons", "org.sonarsource.analyzer-commons", "sonar-analyzer-commons").versionRef(analyzerCommons)
             library("sonar-analyzer-commons-recognizers", "org.sonarsource.analyzer-commons", "sonar-analyzer-recognizers")
                 .versionRef(analyzerCommons)

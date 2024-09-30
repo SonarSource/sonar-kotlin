@@ -19,7 +19,7 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.com.intellij.psi.tree.IElementType
+import com.intellij.psi.tree.IElementType
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
