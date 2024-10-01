@@ -66,8 +66,14 @@ class UnnecessaryImportsCheck : AbstractCheck() {
 
         val bindingContext = context.bindingContext
 
+        // FIXME BindingContext.EMPTY does not provide diagnostics
         val unresolvedImports = context.diagnostics
             .mapNotNull { it.psiElement.getParentOfType<KtImportDirective>(false) }
+
+        // FIXME for debug
+        unresolvedImports.forEach {
+            println(it.importedFqName)
+        }
 
         val groupedReferences = references.groupBy { reference ->
             reference.importableSimpleName()
@@ -91,7 +97,9 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         context: KotlinFileContext
     ) = file.importDirectives.filter {
         // 0. Filter out unresolved imports, to avoid FPs in case of incomplete semantic
+        // FIXME
         it !in unresolvedImports
+//        true
     }.filter { imp ->
         // 1. Filter out & report all imports that import from kotlin.* or the same package as our file
         if (imp.isImportedImplicitlyAlready(file.packageDirective?.qualifiedName)) {
@@ -151,9 +159,6 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         }.result
 
     private fun getArrayAccessImportsFilter(arrayAccesses: Collection<KtArrayAccessExpression>, bindingContext: BindingContext) =
-        if (bindingContext == BindingContext.EMPTY) {
-            { imp: KtImportDirective -> imp.importedName?.asString() !in ARRAY_ACCESS_IMPORTED_NAMES }
-        } else {
             arrayAccesses.map {
                 it.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull()
             }.let { resolvedArrayAccesses ->
@@ -161,7 +166,6 @@ class UnnecessaryImportsCheck : AbstractCheck() {
                     imp.importedFqName !in resolvedArrayAccesses
                 }
             }
-        }
 
     private fun getDelegatesImportsFilter(propertyDelegates: Collection<KtPropertyDelegate>, bindingContext: BindingContext): (KtImportDirective) -> Boolean {
         fun getFqNameFromResolvedCall (variableAccessor: VariableAccessorDescriptor): FqName? =
@@ -172,10 +176,11 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         fun getFqNamesFromAccessor(ktProperty: KtProperty): List<FqName>? =
             (bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, ktProperty] as? VariableDescriptorWithAccessors)?.accessors?.mapNotNull(::getFqNameFromResolvedCall)
 
-        return if (bindingContext == BindingContext.EMPTY) {
-            { imp: KtImportDirective -> imp.importedName?.asString() !in DELEGATES_IMPORTED_NAMES }
-        } else {
-            propertyDelegates.flatMap { propDelegate ->
+        // FIXME
+//        return if (bindingContext == BindingContext.EMPTY) {
+//            { imp: KtImportDirective -> imp.importedName?.asString() !in DELEGATES_IMPORTED_NAMES }
+//        } else {
+            return propertyDelegates.flatMap { propDelegate ->
                 bindingContext[BindingContext.DELEGATE_EXPRESSION_TO_PROVIDE_DELEGATE_CALL, propDelegate.expression]
                     .getResolvedCall(bindingContext)
                     ?.resultingDescriptor
@@ -186,17 +191,15 @@ class UnnecessaryImportsCheck : AbstractCheck() {
                     imp.importedFqName !in delegateImports
                 }
             }
-        }
+//        }
     }
-    private fun getInvokeCallsImportsFilter(calls: Collection<KtCallExpression>, bindingContext: BindingContext) =
-        if (bindingContext == BindingContext.EMPTY) {
-            { imp: KtImportDirective -> imp.importedName?.asString() != "invoke" }
-        } else {
+
+    private fun getInvokeCallsImportsFilter(calls: Collection<KtCallExpression>, bindingContext: BindingContext): (KtImportDirective) -> Boolean {
             // Lazy because we don't want to do this operation unless we find at least one "invoke" import
             val callsFqn by lazy(LazyThreadSafetyMode.NONE) {
                 calls.mapNotNull { it.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() }
             }; // ';' is mandatory here
-            { imp: KtImportDirective ->
+            return { imp: KtImportDirective ->
                 if (imp.importedName?.asString() != "invoke") true
                 else {
                     imp.importedFqName !in callsFqn

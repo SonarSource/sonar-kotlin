@@ -80,9 +80,9 @@ fun bindingContext(
     classpath: List<String>,
     files: List<KtFile>,
 ): BindingContext =
-    if (classpath.isEmpty())
-        BindingContext.EMPTY
-    else
+//    if (classpath.isEmpty())
+//        BindingContext.EMPTY
+//    else
         analyzeAndGetBindingContext(environment, files)
 
 fun analyzeAndGetBindingContext(

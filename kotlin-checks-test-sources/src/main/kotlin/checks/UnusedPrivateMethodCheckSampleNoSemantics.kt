@@ -4,14 +4,14 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlin.jvm.Throws
 
 class UnusedPrivateMethodCheckSampleNoSemantics {
-    
+
     @Suppress
-    private fun withAnnotation1() { 
+    private fun withAnnotation1() { // Noncompliant
         
     }
 
     @OptIn
-    private fun withAnnotation2() { 
+    private fun withAnnotation2() { // Noncompliant
         
     }
     

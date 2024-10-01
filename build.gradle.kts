@@ -86,6 +86,7 @@ allprojects {
     }
 
     repositories {
+        mavenCentral()
         mavenLocal()
         val repository = if (project.hasProperty("qa")) "sonarsource-qa" else "sonarsource"
         maven {

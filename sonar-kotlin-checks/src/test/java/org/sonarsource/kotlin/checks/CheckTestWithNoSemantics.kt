@@ -20,8 +20,13 @@
 package org.sonarsource.kotlin.checks
 
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
 import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.testapi.KOTLIN_BASE_DIR
 import org.sonarsource.kotlin.testapi.KotlinVerifier
+import java.nio.file.Path
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.copyTo
 
 private const val NO_SEMANTICS_TEST_FILE_POSTFIX = "SampleNoSemantics.kt"
 
@@ -38,8 +43,38 @@ abstract class CheckTestWithNoSemantics(
     classpath = classpath,
     dependencies = dependencies
 ) {
+    /**
+     * Uses ".kts" file extension for
+     * [org.jetbrains.kotlin.resolve.BindingContext.EMPTY]
+     */
     @Test
-    fun `without semantics`() {
+    fun `without semantics BEFORE`(@TempDir tempDir: Path) {
+        val name = "$checkName$NO_SEMANTICS_TEST_FILE_POSTFIX"
+        val copy = KOTLIN_BASE_DIR.resolve(name).copyTo(tempDir.resolve("$name.kts"))
+        KotlinVerifier(check) {
+            this.fileName = copy.absolutePathString()
+            this.classpath = emptyList()
+            this.deps = emptyList()
+        }.let {
+            if (this.shouldReport) it.verify() else it.verifyNoIssue()
+        }
+    }
+
+    @Test
+    fun `without semantics COPY`(@TempDir tempDir: Path) {
+        val name = "$checkName$NO_SEMANTICS_TEST_FILE_POSTFIX"
+        val copy = KOTLIN_BASE_DIR.resolve(name).copyTo(tempDir.resolve(name))
+        KotlinVerifier(check) {
+            this.fileName = copy.absolutePathString()
+            this.classpath = emptyList()
+            this.deps = emptyList()
+        }.let {
+            if (this.shouldReport) it.verify() else it.verifyNoIssue()
+        }
+    }
+
+    @Test
+    fun `without semantics AFTER`() {
         KotlinVerifier(check) {
             this.fileName = sampleFileNoSemantics ?: "$checkName$NO_SEMANTICS_TEST_FILE_POSTFIX"
             this.classpath = this@CheckTestWithNoSemantics.classpath ?: emptyList()
