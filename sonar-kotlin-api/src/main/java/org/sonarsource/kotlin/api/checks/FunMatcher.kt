@@ -72,6 +72,13 @@ class FunMatcherImpl(
         return matches(functionDescriptor)
     }
 
+    // fun <T> call(arg: T): T {}
+    // call("")
+    // resulting: call(String): String
+    // candidate: call(T): T
+
+    // if (s is String) call(/* String & T */ s): /* String & T */
+
     fun matches(call: Call, bindingContext: BindingContext) = preCheckArgumentCount(call) &&
         matches(bindingContext[RESOLVED_CALL, call]?.resultingDescriptor)
 

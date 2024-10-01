@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.fir.resolve.transformers.body.resolve.approximateDeclarationType
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -39,7 +40,11 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.DECLARATION_TO_DESCRIPTOR
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
+import org.jetbrains.kotlin.resolve.substitutedUnderlyingType
+import org.jetbrains.kotlin.resolve.unsubstitutedUnderlyingType
+import org.jetbrains.kotlin.types.IntersectionTypeConstructor
 import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.typeUtil.expandIntersectionTypeIfNecessary
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.determineTypeAsString
@@ -153,8 +158,15 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
                 val functionDescriptor = call.getResolvedCall(bindingContext)?.resultingDescriptor
                 val parameterTypes = functionDescriptor?.valueParameters
                 if (parameterTypes != null) {
-                    val fullyQualifiedTypes = parameterTypes.map { it.type.getKotlinTypeFqName(false) }
-                    call.valueArguments.zip(fullyQualifiedTypes).filter { it.second in mutableCollections }.map { it.first }
+                    call.valueArguments.zip(parameterTypes).filter { it ->
+                        val parameterType = it.second
+                        val c = parameterType.type.constructor
+                        if (c is IntersectionTypeConstructor) {
+                            c.supertypes.any { it.getKotlinTypeFqName(false) in mutableCollections }
+                        } else
+                            parameterType.type.getKotlinTypeFqName(false) in mutableCollections
+                    }.map { it.first }
+//                    call.valueArguments.zip(fullyQualifiedTypes).filter { it.second in mutableCollections }.map { it.first }
                 } else {
                     call.valueArguments
                 }

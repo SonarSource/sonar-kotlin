@@ -49,6 +49,7 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -509,6 +510,29 @@ class ApiExtensionsKtDetermineTypeTest {
         assertThat(anyType.isSupertypeOf(fooType) && !fooType.isSupertypeOf(anyType)).isTrue
         assertThat(anyType.isSupertypeOf(fooSonType)).isTrue
         assertThat(anyType.isSupertypeOf(anyType)).isFalse
+    }
+
+    @Test
+    fun intersection_type() {
+        val tree = parse(
+            """
+            fun <T> reproducer(t: T) = if (t is String) listOf(t) else emptyList()
+        """.trimIndent()
+        )
+        tree.psiFile.findDescendantOfType<KtCallExpression> { it ->
+            val functionDescriptor = it.getResolvedCall(tree.bindingContext)?.resultingDescriptor
+            println(functionDescriptor?.returnType)
+            functionDescriptor?.valueParameters?.forEach { it ->
+                println(it.type)
+            }
+            false
+        }
+//        if (false)
+        tree.psiFile.findDescendantOfType<KtExpression> {
+            println(it.text)
+            println(it.determineTypeAsString(tree.bindingContext))
+            false
+        }
     }
 }
 

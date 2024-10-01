@@ -250,3 +250,5 @@ class CollectionShouldBeImmutableCheckSample {
 private fun nonCompliantParameterOnFileLevel(list: MutableList<Int>): Int { // Noncompliant
     return list.reduce { acc, it -> acc + it}
 }
+
+fun <T> reproducer(t: T) = if (t is String) listOf(t) else emptyList()
