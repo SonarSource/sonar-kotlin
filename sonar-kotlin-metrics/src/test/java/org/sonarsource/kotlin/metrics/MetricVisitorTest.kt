@@ -337,7 +337,7 @@ internal class MetricVisitorTest {
     }
 
     private fun scan(code: String) {
-        inputFile = TestInputFileBuilder("moduleKey", createTempFile(tempFolder).name)
+        inputFile = TestInputFileBuilder("moduleKey", createTempFile(tempFolder, suffix = ".kt").name)
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(code).build()
         val ctx = InputFileContextImpl(sensorContext, inputFile, false)

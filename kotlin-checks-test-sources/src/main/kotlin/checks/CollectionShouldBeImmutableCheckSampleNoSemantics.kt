@@ -1,13 +1,15 @@
 package checks
 
 class CollectionShouldBeImmutableCheckSampleNoSemantics {
-    fun MutableCollection<Int>.doSomething(): Unit {}
+    fun MutableCollection<Int>.doSomething(): Unit {} // Noncompliant
+//      ^^^^^^^^^^^^^^^^^^^^^^
 
     //let also apply run with
     fun nonCompliant(
         x: MutableList<Int>,
         y: MutableSet<String>,
-        z: MutableMap<Int, Int>,
+        z: MutableMap<Int, Int>, // Noncompliant
+//      ^^^^^^^^^^^^^^^^^^^^^^^
         a: MutableList<Int>,
         b: MutableList<Int>,
         c: MutableList<Int>,
@@ -34,7 +36,8 @@ class CollectionShouldBeImmutableCheckSampleNoSemantics {
     }
 
     fun List<Int>.toList(): List<Int> = this // compliant
-    fun baz(list : MutableList<Int>): Unit {}
+    fun baz(list : MutableList<Int>): Unit {} // Noncompliant
+//          ^^^^^^^^^^^^^^^^^^^^^^^
 
     fun List<Int>.foo(): Unit {} // Compliant
     fun doNothing(a : List<Int>, b : Set<String>, c : Map<Int,Int>): Unit {}
@@ -60,7 +63,8 @@ class CollectionShouldBeImmutableCheckSampleNoSemantics {
         crazy.let { it.also { it.apply { it.run { with(this) { it.add(1) } } } } }
     }
 
-    fun MutableList<Int>.doSomething2(): MutableList<Int> { return this }
+    fun MutableList<Int>.doSomething2(): MutableList<Int> { return this } // Noncompliant
+//      ^^^^^^^^^^^^^^^^
 
     fun compliantFunctionsCalledOn(
         a: MutableList<Int>, // Compliant
@@ -131,9 +135,10 @@ class CollectionShouldBeImmutableCheckSampleNoSemantics {
         Pair(f, 1)
     }
 
-    fun foo_(x : MutableList<Int>): Unit {}
-    fun foo2(x : MutableCollection<Int>): Unit {}
-
+    fun foo_(x : MutableList<Int>): Unit {} // Noncompliant
+//           ^^^^^^^^^^^^^^^^^^^^
+    fun foo2(x : MutableCollection<Int>): Unit {} // Noncompliant
+//           ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     fun nonCompliantParameter(list: MutableList<Int>): Int {
         return list.reduce { acc, it -> acc + it}

@@ -1,8 +1,10 @@
 package checks
 
-typealias ActionN = () -> Void
+typealias ActionN = () -> Void // Noncompliant
+//                        ^^^^
 
-typealias LLActionN = List<Function1<List<String>, Function2<Set<Int>, List<List<List<Void>>>, otherpackage.Void>>>
+typealias LLActionN = List<Function1<List<String>, Function2<Set<Int>, List<List<List<Void>>>, otherpackage.Void>>> // Noncompliant
+//                                                                                    ^^^^
 
 fun myFunN(a: Action) {
     println(a)
@@ -26,14 +28,18 @@ abstract class TestEN : TestAN<Void> {
 
 }
 
-class TestFN : TestAN<Void?> { 
+class TestFN : TestAN<Void?> { // Noncompliant
+//                    ^^^^^
     override fun foo(): Void? { return null }
 }
 
-fun sN() : TestAN<Void?> = TODO()
+fun sN() : TestAN<Void?> = TODO() // Noncompliant
+//                ^^^^^
 
 
 interface WithVoidFunctionsN {
-    fun voidFunction1(): Void 
-    fun voidFunction2(): Void 
+    fun voidFunction1(): Void // Noncompliant
+//                       ^^^^
+    fun voidFunction2(): Void // Noncompliant
+//                       ^^^^
 }
