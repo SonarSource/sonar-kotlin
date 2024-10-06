@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.testapi.KotlinVerifier
 
-internal class UselessNullCheckCheckTest : CheckTestWithNoSemantics(UselessNullCheckCheck(), shouldReport = true) {
+internal class UselessNullCheckCheckTest : CheckTestWithNoSemantics(UselessNullCheckCheck()) {
     @Test
     fun `ensure issues are not raised when MISSING_BUILT_IN_DECLARATION diagnostics is found on node`() {
         val diagnostic = mockk<Diagnostic> {
