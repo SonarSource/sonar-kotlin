@@ -14,14 +14,16 @@ class ServerCertificateCheckSampleNoSemantics {
 
 internal class TrustAllManager2 : X509TrustManager {
     @Throws(CertificateException::class)
-    override fun checkClientTrusted( // FN due to missing binding context
+    override fun checkClientTrusted( // Noncompliant
+//               ^^^^^^^^^^^^^^^^^^
         x509Certificates: Array<X509Certificate>,
         s: String,
     ) {
     }
 
     @Throws(CertificateException::class)
-    override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String) { // FN due to missing binding context
+    override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String) { // Noncompliant
+//               ^^^^^^^^^^^^^^^^^^
         LOG.log(Level.SEVERE, "ERROR $s")
     }
 
@@ -39,11 +41,13 @@ internal object Main2 {
     fun main(args: Array<String>) {
         var trustManager: X509TrustManager = object : X509TrustManager {
             @Throws(CertificateException::class)
-            override fun checkClientTrusted(x509Certificates: Array<X509Certificate>, s: String) { // FN due to missing binding context
+            override fun checkClientTrusted(x509Certificates: Array<X509Certificate>, s: String) { // Noncompliant
+//                       ^^^^^^^^^^^^^^^^^^
             }
 
             @Throws(CertificateException::class)
-            override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String) { // FN due to missing binding context
+            override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String) { // Noncompliant
+//                       ^^^^^^^^^^^^^^^^^^
                 println("123")
             }
 
@@ -70,7 +74,8 @@ internal object Main2 {
         }
         trustManager = object : X509TrustManager {
             @Throws(CertificateException::class)
-            override fun checkClientTrusted(
+            override fun checkClientTrusted( // Noncompliant
+//                       ^^^^^^^^^^^^^^^^^^
                 x509Certificates: Array<X509Certificate>,
                 s: String,
             ) {
@@ -78,7 +83,8 @@ internal object Main2 {
             }
 
             @Throws(CertificateException::class)
-            override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String) {
+            override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String) { // Noncompliant
+//                       ^^^^^^^^^^^^^^^^^^
                 try {
                     throw CertificateException()
                 } catch (e: CertificateException) {
@@ -124,27 +130,33 @@ internal object Main2 {
 
 internal class EmptyX509ExtendedTrustManager2 : X509ExtendedTrustManager() {
     @Throws(CertificateException::class)
-    override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String, socket: Socket) {
+    override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String, socket: Socket) { // Noncompliant
+//               ^^^^^^^^^^^^^^^^^^
     }
 
     @Throws(CertificateException::class)
-    override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String, engine: SSLEngine) {
+    override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String, engine: SSLEngine) { // Noncompliant
+//               ^^^^^^^^^^^^^^^^^^
     }
 
     @Throws(CertificateException::class)
-    override fun checkClientTrusted(x509Certificates: Array<X509Certificate>, s: String) { // FN due to missing binding context
+    override fun checkClientTrusted(x509Certificates: Array<X509Certificate>, s: String) { // Noncompliant
+//               ^^^^^^^^^^^^^^^^^^
     }
 
     @Throws(CertificateException::class)
-    override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String, socket: Socket) { // FN due to missing binding context
+    override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String, socket: Socket) { // Noncompliant
+//               ^^^^^^^^^^^^^^^^^^
     }
 
     @Throws(CertificateException::class)
-    override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String, sslEngine: SSLEngine) { // FN due to missing binding context
+    override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String, sslEngine: SSLEngine) { // Noncompliant
+//               ^^^^^^^^^^^^^^^^^^
     }
 
     @Throws(CertificateException::class)
-    override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String) { // FN due to missing binding context
+    override fun checkServerTrusted(x509Certificates: Array<X509Certificate>, s: String) { // Noncompliant
+//               ^^^^^^^^^^^^^^^^^^
     }
 
     override fun getAcceptedIssuers(): Array<X509Certificate> {

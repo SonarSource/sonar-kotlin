@@ -2,11 +2,13 @@ package checks
 
 class EqualsOverriddenWithArrayFieldCheckSampleNoSemantics {
 
-    data class PersonWithoutEqualsOrHashcode( // Compliant - FN  without semantics
+    data class PersonWithoutEqualsOrHashcode( // Noncompliant
+//             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         val names: Array<String>, val age: Int
     ) {}
 
-    data class PersonWithoutEquals( // Compliant - FN  without semantics
+    data class PersonWithoutEquals( // Noncompliant
+//             ^^^^^^^^^^^^^^^^^^^
         val names: Array<String>,
         val age: Int
     ) {
@@ -17,7 +19,8 @@ class EqualsOverriddenWithArrayFieldCheckSampleNoSemantics {
         }
     }
 
-    data class PersonWithoutHashCode(  // Compliant - FN  without semantics
+    data class PersonWithoutHashCode(  // Noncompliant
+//             ^^^^^^^^^^^^^^^^^^^^^
         val names: Array<String>,
         val age: Int
     ) {
@@ -55,7 +58,8 @@ class EqualsOverriddenWithArrayFieldCheckSampleNoSemantics {
 
     }
 
-    data class WithInBodyProperty(val age: Int) {  // Compliant - FN  without semantics
+    data class WithInBodyProperty(val age: Int) {  // Noncompliant
+//             ^^^^^^^^^^^^^^^^^^
         val names: Array<String> = arrayOf("Alice")
         override fun toString(): String {
             return "$names\n$age"
