@@ -1,0 +1,20 @@
+{
+"kotlin-corda-project:sources/kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/PrettyPrint.kt": [
+101,
+102,
+103,
+112,
+113,
+114
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/HibernateConfigurationTest.kt": [
+693,
+777
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationPropertyOrdering.kt": [
+52
+],
+"kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/integration-test/kotlin/net/corda/testing/driver/DriverTests.kt": [
+45
+]
+}

@@ -1,0 +1,11 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/build-common/src/org/jetbrains/kotlin/incremental/storage/values.kt": [
+31
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/util/src/org/jetbrains/kotlin/load/kotlin/incremental/components/IncrementalCache.kt": [
+21
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/util.runtime/src/org/jetbrains/kotlin/utils/Jsr305State.kt": [
+33
+]
+}

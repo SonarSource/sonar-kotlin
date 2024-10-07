@@ -1,0 +1,32 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/intentions/SelfTargetingIntention.kt": [
+114
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/coroutines/src/kotlin/coroutines/CoroutineContextImpl.kt": [
+25
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/reflect/KClassImpl.kt": [
+72
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/coroutines/experimental/CoroutineContextImpl.kt": [
+25
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/OrderingTest.kt": [
+143
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/collections/ArraysTest.kt": [
+27
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/properties/delegation/lazy/LazyValuesTest.kt": [
+92
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kapt2/kt15001/app/src/main/java/MyModule.kt": [
+12
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/src/org/jetbrains/uast/kotlin/declarations/KotlinUMethod.kt": [
+125
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/src/org/jetbrains/uast/kotlin/declarations/KotlinUVariable.kt": [
+112
+]
+}

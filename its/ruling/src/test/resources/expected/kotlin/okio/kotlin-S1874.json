@@ -1,0 +1,93 @@
+{
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/Buffer.kt": [
+405,
+405,
+406,
+416,
+463,
+463,
+464,
+465,
+465,
+466,
+467,
+467,
+468,
+671,
+687,
+690,
+691,
+703,
+895,
+910,
+939,
+941,
+976,
+1135,
+1189,
+1201,
+2147
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/ByteString.kt": [
+395,
+395
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/RealBufferedSource.kt": [
+200,
+218,
+221,
+222,
+280,
+280,
+280,
+300,
+300,
+301,
+301,
+302,
+302
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/test/java/okio/BufferCursorKotlinTest.kt": [
+99
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/test/java/okio/BufferKotlinTest.kt": [
+25,
+26,
+27
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/test/java/okio/ByteStringKotlinTest.kt": [
+33,
+34,
+35
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/test/java/okio/SegmentSharingTest.kt": [
+42,
+43,
+44,
+45,
+46,
+47
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/src/main/kotlin/okio/Base64.kt": [
+53,
+58,
+63,
+134,
+135,
+143
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/src/main/kotlin/okio/Utf8.kt": [
+82,
+100
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/src/main/kotlin/okio/common/ByteString.kt": [
+64,
+64,
+74,
+74,
+91,
+91,
+101,
+101
+]
+}

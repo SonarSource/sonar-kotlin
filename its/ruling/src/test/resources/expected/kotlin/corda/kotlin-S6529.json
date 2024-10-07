@@ -1,0 +1,11 @@
+{
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/utilities/AppendOnlyPersistentMap.kt": [
+171
+],
+"kotlin-corda-project:sources/kotlin/corda/samples/irs-demo/cordapp/src/main/kotlin/net/corda/irs/contract/IRS.kt": [
+546
+],
+"kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/services/MockAttachmentStorage.kt": [
+71
+]
+}
