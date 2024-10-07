@@ -1,6 +1,5 @@
 pluginManagement {
     repositories {
-        maven(url = "https://repox.jfrog.io/repox/plugins.gradle.org/")
         gradlePluginPortal()
     }
 
