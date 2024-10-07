@@ -32,6 +32,9 @@
 "kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/KotlinUtils.kt": [
 90
 ],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/UntrustworthyData.kt": [
+26
+],
 "kotlin-corda-project:sources/kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/Literal.kt": [
 126
 ],
@@ -43,6 +46,7 @@
 3
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/artemis/CertificateChainCheckPolicy.kt": [
+10,
 11
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/cordapp/CordappConfigProvider.kt": [

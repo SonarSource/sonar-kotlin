@@ -1,0 +1,33 @@
+{
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/DeflaterSink.kt": [
+150
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/ForwardingSink.kt": [
+29,
+32,
+34,
+37
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/ForwardingSource.kt": [
+29,
+31,
+34
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/GzipSink.kt": [
+84,
+86
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/GzipSource.kt": [
+168,
+171
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/InflaterSource.kt": [
+111
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/RealBufferedSink.kt": [
+250
+],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/RealBufferedSource.kt": [
+457
+]
+}

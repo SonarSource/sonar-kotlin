@@ -1,0 +1,40 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/RegeneratedLambdaFieldRemapper.kt": [
+64
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/optimization/fixStack/AnalyzeTryCatchBlocks.kt": [
+96
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/optimization/fixStack/StackTransformationUtils.kt": [
+35
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/src/org/jetbrains/kotlin/cli/jvm/repl/GenericReplCompiler.kt": [
+76,
+76,
+79
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend.java/src/org/jetbrains/kotlin/resolve/jvm/modules/JavaModuleInfo.kt": [
+63
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/contracts/parsing/PsiConditionParser.kt": [
+88,
+91,
+92
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/actions/generate/KotlinGenerateTestSupportActionBase.kt": [
+156
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/inspections/ScopeFunctionConversionInspection.kt": [
+190
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/inspections/SortModifiersInspection.kt": [
+25,
+31
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/quickfix/createFromUsage/createVariable/CreateParameterByRefActionFactory.kt": [
+66
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/builtins.kt": [
+188
+]
+}

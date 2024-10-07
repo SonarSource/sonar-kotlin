@@ -1,17 +1,10 @@
 {
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/workspace/StandardLibrary.kt": [
-8,
-9,
-10,
-11,
 14,
 17
 ],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/toolchain/Cargo.kt": [
 23
-],
-"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/folding/RsFoldingBuilder.kt": [
-21
 ],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/intentions/UnwrapToTryIntention.kt": [
 15
@@ -19,29 +12,15 @@
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/lineMarkers/RsImplsLineMarkerProvider.kt": [
 20
 ],
-"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/psi/ext/RsEnumItem.kt": [
-9
-],
-"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/psi/ext/RsForeignModItem.kt": [
-10
-],
-"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/ref/RsAssocTypeBindingReferenceImpl.kt": [
-10,
-11
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/TraitRef.kt": [
+15
 ],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/implementMembers/ImplementMembersFix.kt": [
 13
 ],
-"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/implementMembers/impl.kt": [
-14,
-15
-],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/implementMembers/ui.kt": [
 20,
 21
-],
-"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/toml/CargoCrateDocLineMarkerProvider.kt": [
-14
 ],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/toml/RsTomlCompletionProvider.kt": [
 23
@@ -50,9 +29,6 @@
 9
 ],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/lineMarkers/RsTraitItemImplLineMarkerProviderTest.kt": [
-8
-],
-"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsTypeAwareResolveTest.kt": [
 8
 ]
 }
