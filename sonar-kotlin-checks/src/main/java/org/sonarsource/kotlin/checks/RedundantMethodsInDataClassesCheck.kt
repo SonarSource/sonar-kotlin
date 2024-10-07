@@ -118,7 +118,9 @@ private fun checkHashExpression(
         }
     }
     if (ARRAYS_HASHCODE_MATCHER.matches(callExpression, bindingContext)) {
-        val arguments = (callExpression.valueArguments[0].getArgumentExpression() as KtCallExpression).valueArguments
+        val argumentExpression = callExpression.valueArguments[0].getArgumentExpression()
+        if (argumentExpression !is KtCallExpression) return false
+        val arguments = argumentExpression.valueArguments
         if (arguments.size != klassParameters.size) return false
         return arguments.all {
             findParameter(it.getArgumentExpression(), klassParameters) != null
