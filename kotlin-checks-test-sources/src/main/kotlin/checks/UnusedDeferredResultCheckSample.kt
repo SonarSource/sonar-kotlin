@@ -122,3 +122,10 @@ suspend fun asyncReturnUnit() {
 fun deferredConsumer(d: Deferred<Int>): Nothing = TODO()
 
 fun custom() : Deferred<String> = TODO()
+
+// https://sonarsource.atlassian.net/browse/SONARKT-404
+private fun <T> intersectionType(t: T) {
+    fun <T> nop(t: T) = t
+    if (t is Deferred<*>)
+        nop(t)
+}
