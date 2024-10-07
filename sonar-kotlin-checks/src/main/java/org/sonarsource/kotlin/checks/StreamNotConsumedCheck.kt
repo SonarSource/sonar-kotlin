@@ -26,6 +26,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val STREAM_MESSAGE = "Refactor the code so this stream pipeline is used."
@@ -47,6 +48,7 @@ private val SEQUENCE_MATCHER = FunMatcher(qualifier = "kotlin.sequences") {
     )
 }
 
+@K1only
 @Rule(key = "S3958")
 class StreamNotConsumedCheck : CallAbstractCheck() {
 

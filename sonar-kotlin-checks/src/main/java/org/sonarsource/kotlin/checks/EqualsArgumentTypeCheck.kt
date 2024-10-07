@@ -43,6 +43,7 @@ import org.sonarsource.kotlin.api.checks.EQUALS_METHOD_NAME
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.determineType
 import org.sonarsource.kotlin.api.checks.isSupertypeOf
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val EQUALS_MATCHER = FunMatcher {
@@ -50,6 +51,7 @@ private val EQUALS_MATCHER = FunMatcher {
     withArguments(ANY_TYPE)
 }
 
+@K1only
 @Rule(key = "S2097")
 class EqualsArgumentTypeCheck : AbstractCheck() {
 

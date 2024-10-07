@@ -25,10 +25,12 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.determineSignature
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@K1only
 @Rule(key = "S1871")
 class DuplicateBranchCheck : AbstractBranchDuplication() {
 

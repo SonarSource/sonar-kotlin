@@ -29,8 +29,10 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.annotatedElement
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@K1only
 @Rule(key = "S1133")
 class DeprecatedCodeCheck : AbstractCheck() {
     

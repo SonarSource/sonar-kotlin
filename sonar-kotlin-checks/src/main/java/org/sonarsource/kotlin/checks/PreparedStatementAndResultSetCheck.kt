@@ -34,6 +34,7 @@ import org.sonarsource.kotlin.api.checks.predictReceiverExpression
 import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val PREPARE_STATEMENT = FunMatcher(qualifier = "java.sql.Connection", name = "prepareStatement")
@@ -47,6 +48,7 @@ private val RESULT_SET_GET = FunMatcher(qualifier = "java.sql.ResultSet", nameRe
     withArguments(ArgumentMatcher(INT_TYPE), ArgumentMatcher.ANY)
 }
 
+@K1only
 @Rule(key = "S2695")
 class PreparedStatementAndResultSetCheck : CallAbstractCheck() {
 

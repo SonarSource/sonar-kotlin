@@ -19,4 +19,7 @@
  */
 package org.sonarsource.kotlin.checks
 
-class EqualsOverriddenWithArrayFieldCheckTest : CheckTestWithNoSemantics(EqualsOverriddenWithArrayFieldCheck(), shouldReport = true)
+class EqualsOverriddenWithArrayFieldCheckTest : CheckTestWithNoSemantics(
+    EqualsOverriddenWithArrayFieldCheck(),
+    shouldReport = true
+)

@@ -24,11 +24,13 @@ import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.finders.UnicodeUnawareCharClassFinder
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.PATTERN_COMPILE_MATCHER
 import org.sonarsource.kotlin.api.regex.RegexContext
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@K1only
 @Rule(key = "S5867")
 class UnicodeAwareCharClassesCheck : AbstractRegexCheck() {
     override fun visitRegex(

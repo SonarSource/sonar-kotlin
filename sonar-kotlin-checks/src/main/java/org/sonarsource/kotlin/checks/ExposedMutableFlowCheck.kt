@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isTopLevelKtOrJavaMember
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.determineTypeAsString
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val DISALLOWED_TYPES = listOf(
@@ -38,6 +39,7 @@ private val DISALLOWED_TYPES = listOf(
 
 private const val MESSAGE = "Don't expose mutable flow types."
 
+@K1only
 @Rule(key = "S6305")
 class ExposedMutableFlowCheck : AbstractCheck() {
     override fun visitProperty(property: KtProperty, kotlinFileContext: KotlinFileContext) {

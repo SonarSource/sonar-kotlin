@@ -50,6 +50,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.isCompanionObject
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE_UNUSED = "Remove this unused import."
@@ -57,6 +58,7 @@ private const val MESSAGE_REDUNDANT = "Remove this redundant import."
 private val DELEGATES_IMPORTED_NAMES = setOf("getValue", "setValue", "provideDelegate")
 private val ARRAY_ACCESS_IMPORTED_NAMES = setOf("get", "set")
 
+@K1only
 @Rule(key = "S1128")
 class UnnecessaryImportsCheck : AbstractCheck() {
 

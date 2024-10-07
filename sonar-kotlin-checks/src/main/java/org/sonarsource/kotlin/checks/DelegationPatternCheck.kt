@@ -47,8 +47,10 @@ import org.sonarsource.kotlin.api.checks.determineTypeAsString
 import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.checks.returnType
 import org.sonarsource.kotlin.api.checks.returnTypeAsString
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@K1only
 @Rule(key = "S6514")
 class DelegationPatternCheck : AbstractCheck() {
 

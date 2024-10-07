@@ -34,6 +34,7 @@ import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.checks.predictReceiverExpression
 import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val ASYMMETRIC_INITIALIZE_MATCHER = FunMatcher {
@@ -75,6 +76,7 @@ private val INSECURE_EC_SPECS = setOf(
 )
 private const val EC_MIN_KEY_SIZE = 224
 
+@K1only
 @Rule(key = "S4426")
 class RobustCryptographicKeysCheck : AbstractCheck() {
 

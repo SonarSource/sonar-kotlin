@@ -49,6 +49,7 @@ private val NON_NULL_CHECK_FUNS = FunMatcher("kotlin") {
     withNames("requireNotNull", "checkNotNull")
 }
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6619")
 class UselessNullCheckCheck : AbstractCheck() {
 

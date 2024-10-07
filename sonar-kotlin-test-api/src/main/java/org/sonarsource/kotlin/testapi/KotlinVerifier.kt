@@ -91,8 +91,11 @@ class KotlinVerifier(private val check: AbstractCheck) {
                 kotlinTreeOf(content, environment, inputFile, true, customDiagnostics) to inputFile
             }
         }
-        createVerifier(converter, filePath).verify()
-        Disposer.dispose(environment.disposable)
+        try {
+            createVerifier(converter, filePath).verify()
+        } finally {
+            Disposer.dispose(environment.disposable)
+        }
     }
 
 

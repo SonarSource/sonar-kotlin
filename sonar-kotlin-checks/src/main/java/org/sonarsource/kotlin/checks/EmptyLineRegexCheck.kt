@@ -53,6 +53,7 @@ import org.sonarsource.kotlin.api.checks.KOTLIN_TEXT
 import org.sonarsource.kotlin.api.checks.findUsages
 import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.PATTERN_COMPILE_MATCHER
 import org.sonarsource.kotlin.api.regex.REGEX_MATCHER
@@ -69,6 +70,7 @@ private val PATTERN_FIND = FunMatcher(qualifier = "java.util.regex.Matcher", nam
 private val STRING_IS_EMPTY = FunMatcher(qualifier = KOTLIN_TEXT, name = "isEmpty")
 private val REGEX_FIND = FunMatcher(qualifier = "kotlin.text.Regex", name = "find")
 
+@K1only
 @Rule(key = "S5846")
 class EmptyLineRegexCheck : AbstractRegexCheck() {
 

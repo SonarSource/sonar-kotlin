@@ -37,6 +37,7 @@ private const val MESSAGE = "Make sure that enabling JavaScript support is safe 
 private val ANDROID_SET_JAVASCRIPT_ENABLED =
     FunMatcher(definingSupertype = "android.webkit.WebSettings", name = "setJavaScriptEnabled") { withArguments("kotlin.Boolean") }
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6362")
 class WebViewJavaScriptSupportCheck : CallAbstractCheck() {
 

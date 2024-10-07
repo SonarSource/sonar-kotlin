@@ -27,8 +27,10 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.getType
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@K1only
 @Rule(key = "S6517")
 class InterfaceCouldBeFunctionalCheck : AbstractCheck() {
 

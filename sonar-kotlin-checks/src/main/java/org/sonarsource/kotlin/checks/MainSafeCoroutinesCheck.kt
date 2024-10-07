@@ -44,6 +44,7 @@ import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.checks.resolveReferenceTarget
 import org.sonarsource.kotlin.api.checks.suspendModifier
 import org.sonarsource.kotlin.api.checks.throwsExceptions
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 val THREAD_SLEEP_MATCHER = FunMatcher(qualifier = "java.lang.Thread", name = "sleep")
@@ -70,6 +71,7 @@ val BLOCKING_ANNOTATIONS = setOf(
     "javax.net.ssl.SSLException",
 )
 
+@K1only
 @Rule(key = "S6307")
 class MainSafeCoroutinesCheck : AbstractCheck() {
 

@@ -45,6 +45,9 @@ import org.jetbrains.kotlin.references.fe10.base.DummyKtFe10ReferenceResolutionH
 import org.jetbrains.kotlin.references.fe10.base.KtFe10ReferenceResolutionHelper
 import org.jetbrains.kotlin.resolve.extensions.AnalysisHandlerExtension
 
+@Deprecated("")
+annotation class K1only(val comments: String = "")
+
 internal fun configureAnalysisApiServices(env: KotlinCoreEnvironment) {
     val application = env.projectEnvironment.environment.application
     if (application.getServiceIfCreated(KtFe10ReferenceResolutionHelper::class.java) == null) {

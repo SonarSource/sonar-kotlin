@@ -26,8 +26,10 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.getVariableType
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@K1only
 @Rule(key = "S1481")
 class UnusedLocalVariableCheck : AbstractCheck() {
 
