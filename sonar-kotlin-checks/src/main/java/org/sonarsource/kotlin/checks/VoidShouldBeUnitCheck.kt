@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
@@ -34,6 +35,8 @@ import org.jetbrains.kotlin.types.TypeProjection
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.determineType
+import org.sonarsource.kotlin.api.checks.determineTypeAsString
+import org.sonarsource.kotlin.api.checks.fqName
 import org.sonarsource.kotlin.api.checks.isAbstract
 import org.sonarsource.kotlin.api.reporting.message
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
@@ -50,6 +53,10 @@ private val message = message {
 class VoidShouldBeUnitCheck : AbstractCheck() {
 
     override fun visitTypeReference(typeReference: KtTypeReference, kotlinFileContext: KotlinFileContext) {
+
+        analyze(typeReference) {
+            typeReference.type.fqName() == "java.lang.Void"
+        }
 
         if (typeReference.isVoidTypeRef(kotlinFileContext.bindingContext) &&
             !typeReference.isInheritedType() &&
