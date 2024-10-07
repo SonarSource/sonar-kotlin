@@ -24,6 +24,10 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaLocalVariableSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.isLocal
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.coroutines.hasSuspendFunctionType
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
@@ -35,6 +39,7 @@ import org.jetbrains.kotlin.descriptors.SyntheticPropertyDescriptor
 import org.jetbrains.kotlin.descriptors.ValueDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.Call
@@ -503,8 +508,19 @@ fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression, binding
 /**
  * Checks if an expression is a function local variable
  */
+@Deprecated("", replaceWith = ReplaceWith("isLocalVariable()"))
 fun KtExpression?.isLocalVariable(bindingContext: BindingContext) =
     (this is KtNameReferenceExpression) && (bindingContext[BindingContext.REFERENCE_TARGET, this] is LocalVariableDescriptor)
+
+// https://googlesamples.github.io/android-custom-lint-rules/api-guide.html#astanalysis/kotlinanalysisapi
+// https://kotlin.github.io/analysis-api/migrating-from-k1.html#-6zwegf_221
+fun KtExpression?.isLocalVariable(): Boolean {
+    if (this !is KtNameReferenceExpression) return false
+    val expression = this
+    analyze(expression) {
+        return expression.mainReference.resolveToSymbol() is KaLocalVariableSymbol
+    }
+}
 
 fun KtExpression?.setterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
     is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
