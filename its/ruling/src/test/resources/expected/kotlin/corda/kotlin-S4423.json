@@ -1,0 +1,15 @@
+{
+"kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/protonwrapper/netty/SSLHelper.kt": [
+107,
+121
+],
+"kotlin-corda-project:sources/kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/crypto/X509UtilitiesTest.kt": [
+234
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/ProtonWrapperTests.kt": [
+125
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/TLSAuthenticationTests.kt": [
+414
+]
+}

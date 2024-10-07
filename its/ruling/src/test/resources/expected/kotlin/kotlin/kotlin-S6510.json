@@ -71,12 +71,18 @@
 36,
 64
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/contracts/model/visitors/Reducer.kt": [
+32
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/NewCommonSuperTypeCalculator.kt": [
 209
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/components/ArgumentsToParametersMapper.kt": [
 48,
 123
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/components/CallableReferenceResolution.kt": [
+91
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/components/TypeArgumentsToParametersMapper.kt": [
 49
@@ -101,6 +107,11 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/jvm/compiler/AbstractWriteSignatureTest.kt": [
 256
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors/src/org/jetbrains/kotlin/renderer/DescriptorRendererImpl.kt": [
+49,
+56,
+742
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors/src/org/jetbrains/kotlin/types/checker/NewKotlinTypeChecker.kt": [
 233
@@ -128,6 +139,9 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/caches/resolve/IDEKotlinAsJavaSupport.kt": [
 213
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/decompiler/common/KotlinMetadataStubBuilder.kt": [
+45
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/project/ResolveElementCache.kt": [
 154,
@@ -204,6 +218,9 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/codeInsight/KotlinBreadcrumbsInfoProvider.kt": [
 193,
 361
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/conversion/copy/ConvertTextJavaCopyPasteProcessor.kt": [
+173
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/editor/KotlinLiteralCopyPasteProcessor.kt": [
 191

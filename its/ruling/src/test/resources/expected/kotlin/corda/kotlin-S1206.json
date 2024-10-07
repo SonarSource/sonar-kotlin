@@ -1,0 +1,15 @@
+{
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/ProgressTracker.kt": [
+64,
+68
+],
+"kotlin-corda-project:sources/kotlin/corda/experimental/corda-utils/src/main/kotlin/io/cryptoblk/core/Utils.kt": [
+71
+],
+"kotlin-corda-project:sources/kotlin/corda/samples/irs-demo/cordapp/src/main/kotlin/net/corda/irs/contract/IRSUtils.kt": [
+72
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationOutputTests.kt": [
+929
+]
+}
