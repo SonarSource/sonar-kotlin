@@ -85,7 +85,7 @@ gradle_its_template: &GRADLE_ITS_TEMPLATE
     - ./gradlew "${GRADLE_TASK}" "-P${ITS_PROJECT}"
       "-Dsonar.runtimeVersion=${SQ_VERSION}"
       "-DbuildNumber=$BUILD_NUMBER"
-      -Pqa --info --console plain --no-daemon --build-cache
+      --info --console plain --no-daemon --build-cache
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 only_if_sonarsource_qa_template: &ONLY_IF_SONARSOURCE_QA
@@ -206,7 +206,7 @@ qa_ruling_kotlin_compiler_task:
     - ./gradlew :its:ruling:test --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_compiler" -Pruling
       "-Dsonar.runtimeVersion=${SQ_VERSION}"
       "-DbuildNumber=$BUILD_NUMBER"
-      -Pqa --info --console plain --no-daemon --build-cache
+      --info --console plain --no-daemon --build-cache
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 build_win_task:
@@ -214,7 +214,7 @@ build_win_task:
   <<: *WINDOWS_16_CPU_32G
   <<: *SETUP_GRADLE_CACHE
   build_script:
-    - ./gradlew build -Pqa --info --console plain --no-daemon --build-cache
+    - ./gradlew build --info --console plain --no-daemon --build-cache
   on_failure:
     error_log_artifacts:
       path: "hs_err_pid*.log"
