@@ -1,0 +1,17 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/build-common/src/org/jetbrains/kotlin/incremental/IncrementalJvmCache.kt": [
+550
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/DaemonParams.kt": [
+234
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/LazyClasspathWatcher.kt": [
+120
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/src/org/jetbrains/kotlin/incremental/snapshots/hashUtil.kt": [
+24
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.frontend/src/org/jetbrains/kotlin/incremental/js/IncrementalResultsConsumer.kt": [
+75
+]
+}

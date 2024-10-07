@@ -2,6 +2,9 @@
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/intentions/IfLetToMatchIntention.kt": [
 52
 ],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/parser/RustParserUtil.kt": [
+31
+],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/producers/RunConfigurationProducerTest.kt": [
 306,
 307

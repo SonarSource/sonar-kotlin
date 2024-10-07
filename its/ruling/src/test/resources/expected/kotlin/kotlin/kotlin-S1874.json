@@ -1,0 +1,1499 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/ant/src/org/jetbrains/kotlin/ant/KotlinCompilerBaseTask.kt": [
+87
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/build-common/test/org/jetbrains/kotlin/build/JvmBuildMetaInfoTest.kt": [
+23,
+26,
+53,
+62
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/build-common/test/org/jetbrains/kotlin/build/SerializationUtilsTest.kt": [
+20,
+32,
+46
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/buildSrc/src/main/kotlin/pill/parser.kt": [
+242,
+312
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/ieee754.kt": [
+16,
+61
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/intrinsics/TypeIntrinsics.kt": [
+59
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/cli-common/src/org/jetbrains/kotlin/cli/common/arguments/argumentUtils.kt": [
+31,
+82,
+84
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/container/tests/org/jetbrains/kotlin/container/tests/ComponentContainerTest.kt": [
+20,
+25,
+33,
+39,
+52,
+74,
+94,
+107,
+122,
+138,
+155,
+175,
+205,
+228,
+237,
+247,
+272,
+293,
+324,
+335,
+353
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-client/src/org/jetbrains/kotlin/daemon/client/CompilerCallbackServicesFacadeServer.kt": [
+19,
+39
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-client/src/org/jetbrains/kotlin/daemon/client/KotlinCompilerClient.kt": [
+155,
+171,
+280,
+445
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/CompileService.kt": [
+114,
+127,
+157
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/JpsCompilerServicesFacade.kt": [
+19
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/KotlinRemoteReplService.kt": [
+98,
+103,
+108,
+113,
+118,
+118,
+121,
+121
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/RemoteCompilationCanceledStatusClient.kt": [
+20,
+30
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/RemoteIncrementalCacheClient.kt": [
+19,
+26
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/RemoteIncrementalCompilationComponentsClient.kt": [
+22,
+26
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/RemoteLookupTrackerClient.kt": [
+20,
+29
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend.script/src/org/jetbrains/kotlin/script/scriptTemplate.kt": [
+32,
+62,
+62,
+62,
+62,
+70,
+72,
+73,
+74,
+74,
+81,
+83,
+84,
+89,
+96
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/frontend/di/injection.kt": [
+32,
+68
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/tower/NewResolutionOldInference.kt": [
+239,
+242,
+455,
+571,
+579
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/types/expressions/LocalClassifierAnalyzer.kt": [
+193
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/test/org/jetbrains/kotlin/incremental/BuildDiffsStorageTest.kt": [
+23,
+42,
+52,
+61,
+72,
+80
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/test/org/jetbrains/kotlin/incremental/BuildLogParserParametrizedTest.kt": [
+20,
+32
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/test/org/jetbrains/kotlin/incremental/parsing/ClassesFqNamesTest.kt": [
+13,
+31,
+42,
+57,
+73,
+92,
+104,
+118
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/test/org/jetbrains/kotlin/incremental/snapshots/FileSnapshotMapTest.kt": [
+7,
+29
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/test/org/jetbrains/kotlin/incremental/snapshots/FileSnapshotTest.kt": [
+5,
+12,
+21,
+29,
+41,
+52,
+61
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.common/src/org/jetbrains/kotlin/backend/common/ir/IrUtils.kt": [
+112
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.common/src/org/jetbrains/kotlin/backend/common/lower/DefaultArgumentStubGenerator.kt": [
+138,
+238
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.common/src/org/jetbrains/kotlin/backend/common/lower/LocalDeclarationsLowering.kt": [
+273
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.common/src/org/jetbrains/kotlin/backend/common/lower/LocalFunctionsLowering.kt": [
+161,
+200
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.common/src/org/jetbrains/kotlin/backend/common/lower/LowerUtils.kt": [
+111,
+114
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/descriptors/SharedVariablesManager.kt": [
+149
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/lower/BridgeLowering.kt": [
+220,
+285
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/lower/EnumClassLowering.kt": [
+124
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/lower/InterfaceDelegationLowering.kt": [
+85
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/lower/ObjectClassLowering.kt": [
+93
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/lower/SyntheticAccessorLowering.kt": [
+182,
+242,
+255
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.psi2ir/src/org/jetbrains/kotlin/psi2ir/generators/BodyGenerator.kt": [
+249,
+280
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.psi2ir/src/org/jetbrains/kotlin/psi2ir/generators/CallGenerator.kt": [
+108,
+124
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/builders/ExpressionHelpers.kt": [
+184,
+192,
+205,
+212
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/builders/IrMemberFunctionBuilder.kt": [
+42
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/builders/Scope.kt": [
+40
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/expressions/impl/IrCallImpl.kt": [
+145
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/expressions/impl/IrDelegatingConstructorCallImpl.kt": [
+76
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/expressions/impl/IrEnumConstructorCallImpl.kt": [
+69
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/util/DeepCopyIrTree.kt": [
+32,
+145,
+427,
+450,
+463,
+482
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/script/KotlinScriptDefinition.kt": [
+29,
+55,
+56,
+56
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/inference/components/SimpleConstraintSystemImpl.kt": [
+23,
+53
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/test/MockLibraryUtil.kt": [
+163
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/codegen/ReflectionClassLoaderTest.kt": [
+36,
+38
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/codegen/TestStdlibWithDxTest.kt": [
+20,
+26,
+30
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/daemon/CompilerDaemonTest.kt": [
+694
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/scripts/ScriptProviderTest.kt": [
+13,
+20
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/util/ArgsToParamsMatchingTest.kt": [
+24,
+28,
+51
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/reflection.jvm/src/kotlin/reflect/jvm/KCallablesJvm.kt": [
+42,
+43,
+44,
+46,
+47,
+49,
+50,
+52,
+53,
+55,
+56,
+57
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/script.runtime/src/kotlin/script/experimental/location/scriptLocation_deprecated.kt": [
+24,
+24,
+24
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/script.runtime/src/kotlin/script/templates/annotations_deprecated.kt": [
+27,
+27
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/eval4j/test/org/jetbrains/eval4j/test/suiteBuilder.kt": [
+74
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/compiler/IDELanguageSettingsProvider.kt": [
+76
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-android/src/org/jetbrains/kotlin/android/debugger/AndroidDexWrapper.kt": [
+40
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-android/src/org/jetbrains/kotlin/android/debugger/AndroidDexerImpl.kt": [
+45
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-android/tests/org/jetbrains/kotlin/android/intention/AbstractAndroidIntentionTest.kt": [
+56
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-android/tests/org/jetbrains/kotlin/android/intention/AbstractAndroidResourceIntentionTest.kt": [
+76
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-android/tests/org/jetbrains/kotlin/android/lint/AbstractKotlinLintTest.kt": [
+59
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-android/tests/org/jetbrains/kotlin/android/quickfix/AbstractAndroidLintQuickfixTest.kt": [
+42
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/KotlinIndicesHelper.kt": [
+292
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/script/ScriptDefinitionsManager.kt": [
+41,
+60,
+114,
+115,
+117,
+120,
+121,
+122,
+123,
+178
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/script/ScriptTemplatesProvider.kt": [
+57,
+58
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/script/ScriptTemplatesProviderAdapter.kt": [
+9,
+11
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/src/org/jetbrains/kotlin/idea/core/script/GradleScriptTemplateProvider.kt": [
+52,
+211,
+268,
+269
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/gradle/MultiplatformProjectImportingTest.kt": [
+28,
+37,
+84,
+141,
+207,
+252,
+329,
+398,
+503,
+609,
+715,
+768,
+821
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/idea/codeInsight/gradle/GradleConfiguratorTest.kt": [
+21,
+25,
+66,
+116,
+186,
+249,
+316,
+395,
+478,
+568,
+660,
+722,
+784,
+855,
+938,
+1002,
+1038,
+1071,
+1104,
+1137,
+1176,
+1218,
+1263,
+1302,
+1361,
+1385,
+1448,
+1481,
+1539,
+1564,
+1627,
+1658
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/idea/codeInsight/gradle/GradleFacetImportTest.kt": [
+47,
+85,
+163,
+205,
+285,
+375,
+466,
+506,
+541,
+639,
+701,
+797,
+831,
+876,
+932,
+990,
+1044,
+1089,
+1134,
+1171,
+1214,
+1258,
+1400,
+1474,
+1540,
+1579,
+1614,
+1670,
+1780,
+1929,
+1968,
+2007
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/idea/codeInsight/gradle/GradleInspectionTest.kt": [
+28,
+31,
+64,
+97,
+133,
+170,
+208,
+242,
+274,
+310
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/idea/codeInsight/gradle/GradleMultiplatformRunTest.kt": [
+35,
+38
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/idea/codeInsight/gradle/GradleUpdateConfigurationQuickFixTest.kt": [
+28,
+49,
+54,
+59,
+64,
+69
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-maven/src/org/jetbrains/kotlin/idea/maven/configuration/KotlinMavenConfigurator.kt": [
+191
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-maven/src/org/jetbrains/kotlin/idea/maven/inspections/KotlinMavenPluginPhaseInspection.kt": [
+205,
+246
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-maven/test/org/jetbrains/kotlin/idea/maven/KotlinMavenArchetypesProviderTest.kt": [
+23,
+31,
+51,
+70,
+91,
+112
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-maven/test/org/jetbrains/kotlin/idea/maven/MavenUpdateConfigurationQuickFixTest.kt": [
+29,
+52,
+57,
+62,
+67,
+72,
+77
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-test-framework/test/org/jetbrains/kotlin/idea/test/TestFixtureExtension.kt": [
+34
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/facet/KotlinFacetEditorGeneralTab.kt": [
+162,
+166
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/facet/facetUtils.kt": [
+247,
+266,
+277
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/inspections/ImplicitNullableNothingTypeInspection.kt": [
+25
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertLambdaToReferenceIntention.kt": [
+46
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertReferenceToLambdaIntention.kt": [
+40
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertTryFinallyToUseCallIntention.kt": [
+35
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertTwoComparisonsToRangeCheckIntention.kt": [
+35
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/FoldInitializerAndIfToElvisIntention.kt": [
+44
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ObjectLiteralToLambdaIntention.kt": [
+51
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveCurlyBracesFromTemplateIntention.kt": [
+25
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveEmptyClassBodyIntention.kt": [
+32
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveEmptyParenthesesFromLambdaCallIntention.kt": [
+31
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveEmptyPrimaryConstructorIntention.kt": [
+27
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveEmptySecondaryConstructorBodyIntention.kt": [
+26
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveExplicitSuperQualifierIntention.kt": [
+37
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveExplicitTypeArgumentsIntention.kt": [
+45
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveRedundantCallsOfConversionMethodsIntention.kt": [
+33
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveSingleExpressionStringTemplateIntention.kt": [
+32
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ReplaceSingleLineLetIntention.kt": [
+24
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ReplaceSizeCheckWithIsNotEmptyIntention.kt": [
+24
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ReplaceSizeZeroCheckWithIsEmptyIntention.kt": [
+24
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/SimplifyBooleanWithConstantsIntention.kt": [
+37
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/UsePropertyAccessSyntaxIntention.kt": [
+61
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/loopToCallChain/UseWithIndexIntention.kt": [
+28
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/ui/KotlinChangeSignatureDialog.kt": [
+268
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/findUsages/AbstractFindUsagesTest.kt": [
+192
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/findUsages/FindUsagesMultiModuleTest.kt": [
+20,
+25
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/codeInsight/generate/AbstractCodeInsightActionTest.kt": [
+43
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/inspections/AbstractLocalInspectionTest.kt": [
+83
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/inspections/AbstractMultiFileLocalInspectionTest.kt": [
+57
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/inspections/InspectionUtils.kt": [
+53
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/intentions/AbstractIntentionTest.kt": [
+81
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/intentions/AbstractMultiFileIntentionTest.kt": [
+59
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/quickfix/AbstractQuickFixTest.kt": [
+180
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/repl/IdeReplExecutionTest.kt": [
+25,
+82,
+96,
+97,
+98,
+100,
+111,
+120,
+135,
+142
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/repl/IdeaJsr223Test.kt": [
+20,
+29,
+47
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/script/TestScriptDefinitionContributors.kt": [
+28,
+29,
+69,
+69
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/src/org/jetbrains/kotlin/compilerRunner/CompilerRunnerUtil.kt": [
+100
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/EncodeSignatureTest.kt": [
+37,
+40,
+47,
+53,
+59,
+70,
+75,
+80,
+85,
+91,
+102,
+120,
+128,
+147,
+160,
+169,
+179,
+188
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/JsonTest.kt": [
+27,
+30,
+70,
+84
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/ast/NameResolutionTest.kt": [
+29,
+38,
+41,
+44,
+47
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/DeadCodeEliminationTest.kt": [
+19,
+22
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/DoWhileGuardEliminationTest.kt": [
+19,
+22,
+24,
+26,
+28
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/EmptyStatementEliminationTest.kt": [
+19,
+22,
+24,
+26,
+28
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/IfStatementReductionTest.kt": [
+19,
+22,
+24
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/LabeledBlockToDoWhileTransformationTest.kt": [
+21,
+24
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/RedundantStatementEliminationTest.kt": [
+19,
+22,
+24,
+26,
+28,
+30,
+32
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/TemporaryAssignmentEliminationTest.kt": [
+20,
+24,
+26,
+28,
+30,
+32,
+34,
+36,
+38,
+40,
+42
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/TemporaryVariableEliminationTest.kt": [
+19,
+22,
+24,
+26,
+28,
+30,
+32,
+34,
+36,
+38,
+40,
+42,
+44,
+46,
+48,
+50
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/WhileConditionFoldingTest.kt": [
+19,
+22,
+24,
+26,
+28,
+30,
+32,
+34,
+36,
+38,
+40,
+42,
+44
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.translator/src/org/jetbrains/kotlin/js/translate/expression/WhenTranslator.kt": [
+41,
+56
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/browser-example-with-library/src/test/kotlin/sample/SampleTest.kt": [
+3,
+13
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/browser-example/src/test/kotlin/sample/SampleTest.kt": [
+3,
+13
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/js-example/src/test/kotlin/sample/SampleTest.kt": [
+5,
+8
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/kotlin-jsr223-daemon-local-eval-example/src/test/kotlin/org/jetbrains/kotlin/script/jsr223/KotlinJsr223ScriptEngineIT.kt": [
+22,
+32,
+53,
+64,
+73,
+99,
+118
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/kotlin-jsr223-local-example/src/test/kotlin/org/jetbrains/kotlin/script/jsr223/KotlinJsr223ScriptEngineIT.kt": [
+23,
+34,
+55,
+66,
+75,
+101,
+115,
+141,
+152,
+176,
+195
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/scripting/jvm-maven-deps/host/test/org/jetbrains/kotlin/script/examples/jvm/resolve/maven/test/resolveTest.kt": [
+10,
+16,
+26,
+37
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/scripting/jvm-simple-script/host/test/org/jetbrains/kotlin/script/examples/jvm/simple/test/simpleTest.kt": [
+11,
+16,
+26
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/kotlin.test/junit/src/main/kotlin/Annotations.kt": [
+12
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/kotlin.test/jvm/src/test/kotlin/StackTraceJVMTest.kt": [
+8,
+15,
+22
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/kotlinx-metadata/jvm/test/kotlinx/metadata/test/MetadataSmokeTest.kt": [
+13,
+25,
+61
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/coroutines/jvm/src/kotlin/coroutines/SafeContinuationJvm.kt": [
+25
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk7/test/TryWithResourcesAutoCloseableTest.kt": [
+20,
+41,
+48,
+55,
+63,
+71,
+85,
+104,
+110,
+119
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk7/test/TryWithResourcesCloseableTest.kt": [
+21,
+41,
+48,
+55,
+63,
+71,
+85,
+104,
+110,
+119
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/collections/CollectionTest.kt": [
+19,
+29,
+40
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/collections/IterableTest.kt": [
+19,
+28,
+38,
+45
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/collections/ListTest.kt": [
+19,
+25
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/collections/MapTest.kt": [
+19,
+26,
+38,
+50,
+61,
+72,
+79,
+91,
+104,
+118,
+126
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/collections/StreamsTest.kt": [
+20,
+26,
+37,
+52,
+60
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/text/RegexTest.kt": [
+19,
+23
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre7/test/TryWithResourcesAutoCloseableTest.kt": [
+20,
+41,
+48,
+55,
+63,
+71,
+85,
+104,
+110,
+119
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre7/test/TryWithResourcesCloseableTest.kt": [
+21,
+41,
+48,
+55,
+63,
+71,
+85,
+104,
+110,
+119
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/collections/CollectionTest.kt": [
+19,
+29,
+40
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/collections/IterableTest.kt": [
+19,
+28,
+38,
+45
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/collections/ListTest.kt": [
+19,
+25
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/collections/MapTest.kt": [
+19,
+26,
+38,
+50,
+61,
+72,
+79,
+91,
+104,
+118,
+126
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/collections/StreamsTest.kt": [
+20,
+26,
+37,
+52,
+60
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/text/RegexTest.kt": [
+19,
+23
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/generated/_ComparisonsJs.kt": [
+36,
+36,
+45,
+45,
+54,
+54,
+72,
+72,
+81,
+81,
+98,
+98,
+107,
+107,
+116,
+116,
+134,
+134,
+143,
+143,
+161,
+161,
+170,
+170,
+179,
+179,
+197,
+197,
+206,
+206,
+223,
+223,
+232,
+232,
+241,
+241,
+259,
+259,
+268,
+268
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/collections.kt": [
+99
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/coroutines/experimental/SafeContinuationJvm.kt": [
+24
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/internal/PlatformImplementations.kt": [
+28,
+31,
+37,
+40
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/util/LazyJVM.kt": [
+57,
+91,
+92
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/io/Console.kt": [
+10,
+18,
+23,
+31,
+39,
+44,
+49,
+57,
+62
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/samples/test/samples/_sampleUtils.kt": [
+21
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/properties/delegation/MapAccessorsTest.kt": [
+75,
+79
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/test/kotlin/org.jetbrains.kotlin.tools.tests/CasesPublicAPITest.kt": [
+27,
+29,
+31,
+33,
+35,
+37,
+39,
+41,
+43,
+45,
+47,
+49,
+51
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/test/kotlin/org.jetbrains.kotlin.tools.tests/RuntimePublicAPITest.kt": [
+10,
+20,
+24,
+28,
+32,
+36,
+40,
+44
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-compiler-client-embeddable-test/src/test/kotlin/org/jetbrains/kotlin/compiler/client/CompilerClientIT.kt": [
+20,
+74
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-compiler-embeddable/test/kotlin/org/jetbrains/kotlin/compiler/embeddable/CompilerEmbeddableSmokeTests.kt": [
+20,
+46
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/AbstractKotlinAndroidGradleTests.kt": [
+9,
+21,
+89,
+128,
+171,
+192,
+221,
+240,
+259,
+288,
+298,
+308,
+334,
+344,
+400
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/BuildCacheIT.kt": [
+20,
+31,
+47,
+62,
+76,
+113,
+137
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/BuildCacheRelocationIT.kt": [
+21,
+42
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/ClassFileIsRemovedIT.kt": [
+6,
+12,
+17,
+28,
+33
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/CoroutinesIT.kt": [
+21,
+30,
+48,
+53,
+58,
+63,
+68,
+73,
+78,
+83,
+88,
+93
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/ExecutionStrategyIT.kt": [
+5,
+24,
+29,
+34
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/IncrementalCompilationMultiProjectIT.kt": [
+9,
+16,
+32,
+52,
+79,
+100,
+131,
+170,
+197,
+239,
+244,
+251,
+256,
+263,
+274,
+299,
+307
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/JavaUpToDateIT.kt": [
+9,
+12,
+34,
+51
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/Kapt3AndroidIT.kt": [
+5,
+31,
+54,
+73,
+84,
+99,
+114
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/Kapt3IT.kt": [
+21,
+38,
+52,
+79,
+112,
+122,
+140,
+152,
+193,
+200,
+241,
+268,
+287,
+312,
+334,
+346,
+372,
+398
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/KaptIncrementalIT.kt": [
+7,
+26,
+49,
+74,
+98,
+123,
+141,
+187,
+217
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/Kotlin2JsGradlePluginIT.kt": [
+7,
+14,
+60,
+78,
+96,
+105,
+116,
+133,
+142,
+167,
+182,
+207,
+225,
+241,
+265,
+287,
+309,
+318
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/KotlinDaemonIT.kt": [
+21,
+29,
+80
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/KotlinGradlePluginIT.kt": [
+23,
+33,
+54,
+77,
+98,
+153,
+166,
+175,
+185,
+211,
+233,
+257,
+267,
+280,
+293,
+320,
+338,
+354,
+376,
+385,
+402,
+422,
+458,
+472,
+493,
+503,
+524,
+574,
+597,
+621,
+635,
+709,
+742,
+771,
+797
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/KotlinGradlePluginMultiVersionIT.kt": [
+6,
+11,
+60,
+101,
+111,
+120
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/MultiplatformGradleIT.kt": [
+24,
+30,
+53,
+72,
+90,
+128,
+163,
+192,
+208,
+231,
+245,
+266
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/PluginsDslIT.kt": [
+7,
+13,
+22,
+31
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/SimpleKotlinGradleIT.kt": [
+4,
+10,
+35,
+46,
+53,
+60,
+68,
+76,
+85,
+93
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/SubpluginsIT.kt": [
+9,
+14,
+33,
+58,
+83,
+101,
+108,
+115,
+126,
+135
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/TestRootAffectedIT.kt": [
+5,
+8,
+37,
+56
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/UpToDatenessIT.kt": [
+7,
+11,
+21,
+31
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/jps/KotlinGradlePluginJpsParametrizedIT.kt": [
+4,
+16
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidJackProject/Android/src/test/kotlin/org/jetbrains/kotlin/gradle/InternalDummyTest.kt": [
+20,
+23
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidProject/Android/src/test/kotlin/org/jetbrains/kotlin/gradle/InternalDummyTest.kt": [
+4,
+7
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/destinationDirReferencedDuringEvaluation/src/test/kotlin/foo/GreeterTest.kt": [
+3,
+7
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kapt2/localAnnotationProcessor/example/src/test/java/test.kt": [
+3,
+8
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kapt2/simple/src/test/java/foo/InternalDummyTest.kt": [
+3,
+6
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kotlin2JsProjectWithCustomSourceset/src/integrationTest/kotlin/MainIT.kt": [
+4,
+7
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kotlin2JsProjectWithTests/src/test/kotlin/MainTest.kt": [
+3,
+7
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/pluginsDsl/allopenPluginsDsl/src/test/kotlin/HelloTest.kt": [
+3,
+10
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/compilerRunner/GradleKotlinCompilerRunner.kt": [
+332
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/internal/Kapt3KotlinGradleSubplugin.kt": [
+222
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/plugin/KaptExtension.kt": [
+53,
+54
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/plugin/KotlinPlugin.kt": [
+824
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/test/kotlin/org/jetbrains/kotlin/gradle/dsl/KotlinJvmOptionsImplTest.kt": [
+5,
+8
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/test/kotlin/org/jetbrains/kotlin/gradle/plugin/RegexTaskToFriendTaskMapperTest.kt": [
+20,
+23,
+30,
+37
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/test/kotlin/org/jetbrains/kotlin/gradle/utils/GradleVersionTest.kt": [
+19,
+23,
+35
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-accessToInternal/src/test/java/org/jetbrains/HelloWorldTest.kt": [
+19,
+29,
+34
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-multiplatform/jvm/src/test/kotlin/org/jetbrains/JVMSpecificTest.kt": [
+6
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-multiplatform/shared/src/test/kotlin/org/jetbrains/SharedTest.kt": [
+4,
+7
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-script-util/src/test/kotlin/org/jetbrains/kotlin/script/util/ScriptUtilContextTests.kt": [
+20,
+24
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-script-util/src/test/kotlin/org/jetbrains/kotlin/script/util/ScriptUtilIT.kt": [
+39,
+62,
+75,
+88
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlinp/test/org/jetbrains/kotlin/kotlinp/test/KotlinpCompilerTestDataTest.kt": [
+11,
+23
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/annotation-based-compiler-plugins-ide-support/src/AnnotationBasedPluginProjectResolverExtension.kt": [
+115
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/src/org/jetbrains/kotlin/kapt3/Kapt3Extension.kt": [
+135
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/src/org/jetbrains/kotlin/kapt3/Kapt3Plugin.kt": [
+95,
+95,
+170,
+186,
+186,
+222
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/test/org/jetbrains/kotlin/kapt3/test/JavaKaptContextTest.kt": [
+28,
+101,
+113,
+134
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/test/org/jetbrains/kotlin/kapt3/test/KotlinKapt3IntegrationTests.kt": [
+22,
+45,
+53,
+62,
+75,
+104,
+114
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/scripting/scripting-cli/src/org/jetbrains/kotlin/scripting/compiler/plugin/KotlinScriptDefinitionAdapterFromNewAPI.kt": [
+20,
+76,
+78,
+79
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/KotlinExpressionValueTest.kt": [
+8,
+11
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/KotlinUastApiTest.kt": [
+17,
+24,
+40,
+51,
+60,
+73,
+81,
+102,
+132,
+140,
+147,
+155,
+165,
+191,
+205,
+218,
+237,
+248,
+263,
+281,
+291,
+311
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/KotlinUastIdentifiersTest.kt": [
+8,
+12,
+15,
+18,
+21,
+24
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/KotlinUastResolveTest.kt": [
+5,
+12
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/KotlinUastTypesTest.kt": [
+3,
+6,
+8,
+10,
+12,
+14,
+16
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/KotlinUastValuesTest.kt": [
+3,
+7,
+10,
+13,
+16,
+19
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/SimpleKotlinRenderLogTest.kt": [
+3,
+6,
+8,
+10,
+12,
+14,
+16,
+18,
+20,
+22,
+24,
+26,
+28,
+30,
+32,
+34,
+36,
+38,
+40,
+42,
+44,
+46,
+48,
+50,
+52,
+55,
+58,
+61,
+64,
+67,
+70,
+73,
+76,
+79
+]
+}
