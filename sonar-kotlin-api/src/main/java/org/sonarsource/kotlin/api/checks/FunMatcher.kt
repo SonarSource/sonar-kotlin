@@ -19,6 +19,22 @@
  */
 package org.sonarsource.kotlin.api.checks
 
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.lifetime.withValidityAssertion
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.signatures.KaCallableSignature
+import org.jetbrains.kotlin.analysis.api.signatures.KaFunctionSignature
+import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.name
+import org.jetbrains.kotlin.analysis.api.types.KaClassType
+import org.jetbrains.kotlin.analysis.api.types.classSymbol
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.backend.common.descriptors.isSuspend
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
@@ -61,15 +77,26 @@ class FunMatcherImpl(
         if (definingSupertypes.isEmpty()) qualifiers else
             if (qualifiers.isEmpty()) definingSupertypes else qualifiers + definingSupertypes
 
+    @Deprecated("", replaceWith = ReplaceWith("matches(node)"))
     fun matches(node: KtCallExpression, bindingContext: BindingContext): Boolean {
         val call = node.getCall(bindingContext)
         return preCheckArgumentCount(call) &&
             matches(bindingContext[RESOLVED_CALL, call]?.resultingDescriptor)
     }
 
+    fun matches(node: KtCallExpression): Boolean = analyze(node) {
+        return matches(node.resolveToCall()?.successfulFunctionCallOrNull()?.partiallyAppliedSymbol?.signature)
+    }
+
+    @Deprecated("use kotlin-analysis-api", replaceWith = ReplaceWith("matches(node)"))
     fun matches(node: KtNamedFunction, bindingContext: BindingContext): Boolean {
         val functionDescriptor = bindingContext[BindingContext.FUNCTION, node]
         return matches(functionDescriptor)
+    }
+
+    @OptIn(KaExperimentalApi::class)
+    fun matches(node: KtNamedFunction): Boolean = analyze(node) {
+        return matches(node.symbol.asSignature())
     }
 
     fun matches(call: Call, bindingContext: BindingContext) = preCheckArgumentCount(call) &&
@@ -91,9 +118,31 @@ class FunMatcherImpl(
             checkReturnType(functionDescriptor) &&
             checkCallParameters(functionDescriptor)
 
+    private fun matches(callableSignature: KaCallableSignature<*>?): Boolean {
+        return callableSignature != null &&
+//            FIXME checkIsDynamic(callableSignature) &&
+//            FIXME checkIsExtensionFunction(callableSignature) &&
+            checkIsSuspending(callableSignature) &&
+            checkIsOperator(callableSignature) &&
+            checkReturnType(callableSignature) &&
+            checkName(callableSignature) &&
+            checkTypeOrSupertype(callableSignature) &&
+            checkCallParameters(callableSignature)
+    }
+
     private fun checkTypeOrSupertype(functionDescriptor: CallableDescriptor) =
         qualifiersOrDefiningSupertypes.isEmpty() || qualifiersOrDefiningSupertypes.contains(getActualQualifier(functionDescriptor)) ||
             !definingSupertypes.isNullOrEmpty() && checkSubType(functionDescriptor)
+
+    private fun checkTypeOrSupertype(callableSignature: KaCallableSignature<*>): Boolean {
+        if (qualifiersOrDefiningSupertypes.isEmpty()) return true
+        println(qualifiersOrDefiningSupertypes)
+        val fqn = callableSignature.symbol.returnType.symbol?.classId?.asFqNameString()?.replace('/', '.')
+        println(fqn)
+        println(definingSupertypes)
+        // TODO
+        return qualifiersOrDefiningSupertypes.contains(fqn)
+    }
 
     private fun getActualQualifier(functionDescriptor: CallableDescriptor) =
         if (functionDescriptor is ConstructorDescriptor) {
@@ -119,6 +168,7 @@ class FunMatcherImpl(
             }
         }
 
+    @Deprecated("")
     private fun checkName(functionDescriptor: CallableDescriptor): Boolean =
         if (functionDescriptor is ConstructorDescriptor) {
             matchConstructor
@@ -127,6 +177,13 @@ class FunMatcherImpl(
             (nameRegex == null && names.isEmpty()) || name in names || (nameRegex != null && nameRegex.matches(name))
         } else false
 
+    private fun checkName(callableSignature: KaCallableSignature<*>): Boolean {
+        if (matchConstructor) return callableSignature.symbol is KaConstructorSymbol
+        val name = callableSignature.symbol.name?.asString() ?: return false
+        return (nameRegex == null && names.isEmpty()) || name in names || (nameRegex != null && nameRegex.matches(name))
+    }
+
+    @Deprecated("")
     private fun checkCallParameters(descriptor: CallableDescriptor): Boolean {
         val valueParameters: List<ValueParameterDescriptor> =
             descriptor.valueParameters
@@ -139,12 +196,23 @@ class FunMatcherImpl(
         }
     }
 
+    private fun checkCallParameters(callableSignature: KaCallableSignature<*>): Boolean {
+        val symbol = callableSignature.symbol as? KaFunctionSymbol ?: return false
+        return arguments.isEmpty() || arguments.any {
+            (symbol.valueParameters.size == it.size) &&
+                it.foldRightIndexed(true) { i, argType, acc ->
+                    acc && argType.matches(symbol.valueParameters[i])
+                }
+        }
+    }
+
     private fun checkIsDynamic(descriptor: CallableDescriptor): Boolean =
         isDynamic?.let { it == descriptor.isDynamic() } ?: true
 
     private fun checkIsExtensionFunction(descriptor: CallableDescriptor): Boolean =
         isExtensionFunction?.let { it == descriptor.isExtension } ?: true
 
+    @Deprecated("")
     private fun checkReturnType(descriptor: CallableDescriptor) =
         returnType?.let {
             val kotlinType = descriptor.returnType
@@ -152,11 +220,24 @@ class FunMatcherImpl(
             else null
         } ?: true
 
+    private fun checkReturnType(callableSignature: KaCallableSignature<*>) =
+       returnType?.let {
+           it == (callableSignature.returnType as? KaClassType)?.classId?.asFqNameString()
+       } ?: true
+
+    @Deprecated("")
     private fun checkIsSuspending(descriptor: CallableDescriptor) =
         isSuspending?.let { it == descriptor.isSuspend } ?: true
 
+    private fun checkIsSuspending(callableSignature: KaCallableSignature<*>) =
+        isSuspending?.let { it == (callableSignature.symbol as? KaNamedFunctionSymbol)?.isSuspend } ?: true
+
+    @Deprecated("")
     private fun checkIsOperator(descriptor: CallableDescriptor) =
         isOperator?.let { it == ((descriptor as? FunctionDescriptor)?.isOperator ?: false) } ?: true
+
+    private fun checkIsOperator(callableSignature: KaCallableSignature<*>) =
+        isOperator?.let { it == (callableSignature.symbol as? KaNamedFunctionSymbol)?.isOperator } ?: true
 }
 
 class FunMatcherBuilderContext(

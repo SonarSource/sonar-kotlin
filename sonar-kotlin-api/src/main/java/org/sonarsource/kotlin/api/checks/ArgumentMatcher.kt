@@ -19,9 +19,19 @@
  */
 package org.sonarsource.kotlin.api.checks
 
+import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.typeParameters
+import org.jetbrains.kotlin.analysis.api.types.KaClassType
+import org.jetbrains.kotlin.analysis.api.types.KaFlexibleType
+import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.codegen.optimization.common.analyze
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.jetbrains.kotlin.types.typeUtil.nullability
@@ -43,12 +53,29 @@ class ArgumentMatcher(
     fun matches(descriptor: ValueParameterDescriptor) = (isVararg == (descriptor.varargElementType != null)) &&
         matchesNullability(descriptor) && matchesName(if (isVararg) descriptor.varargElementType else descriptor.type)
 
+    fun matches(descriptor: KaValueParameterSymbol): Boolean {
+        if (!qualified) TODO()
+        if (nullability != null) TODO()
+        if (isVararg) TODO()
+        if (typeName == null) return true
+        return typeName == fqn(descriptor.returnType)
+    }
+
+    private fun fqn(type: KaType): String? {
+        return when (type) {
+            is KaClassType -> type.classId.asFqNameString().replace('/', '.')
+            is KaFlexibleType -> fqn(type.lowerBound)
+            else -> null
+        }
+    }
+
     private fun matchesName(kotlinType: KotlinType?) =
         if (qualified) matchesQualifiedName(kotlinType) else matchesUnqualifiedName(kotlinType)
 
     private fun matchesNullability(descriptor: ValueParameterDescriptor) =
         nullability?.let { it == descriptor.type.nullability() } ?: true
 
+    @Deprecated("")
     private fun matchesQualifiedName(kotlinType: KotlinType?) =
         // Note that getKotlinTypeFqName(...) is from the kotlin.js package. We use it anyway,
         // as it seems to be the best option to get a type's fully qualified name
