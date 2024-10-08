@@ -19,9 +19,9 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsStatement
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.COROUTINES_FLOW
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
@@ -34,10 +34,11 @@ private const val MESSAGE = "Unused coroutines Flow."
 class FinalFlowOperationCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(FunMatcher(returnType = COROUTINES_FLOW))
 
-    // TODO easy
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
-        if (callExpression.isUsedAsStatement(kotlinFileContext.bindingContext)) {
-            kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) {
+        analyze(callExpression) {
+            if (!callExpression.isUsedAsExpression) {
+                kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
+            }
         }
     }
 }
