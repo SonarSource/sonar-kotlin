@@ -19,6 +19,11 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.symbols.name
+import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.codegen.optimization.common.analyze
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsStatement
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
@@ -58,14 +63,15 @@ class IgnoredOperationStatusCheck : CallAbstractCheck() {
         },
     )
 
-    // TODO easy
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
-        if (callExpression.isUsedAsStatement(kotlinFileContext.bindingContext)) {
-            resolvedCall.resultingDescriptor?.let { resultingDescriptor ->
-                val returnType = resultingDescriptor.returnType?.simpleName() ?: "this method";
-                val message = """Do something with the "$returnType" value returned by "${resultingDescriptor.name}"."""
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) = analyze(callExpression) {
+        if (!callExpression.isUsedAsExpression) {
+//            resolvedCall.resultingDescriptor?.let { resultingDescriptor ->
+            val name = resolvedCall.partiallyAppliedSymbol.signature.symbol.name
+                val returnType = resolvedCall.partiallyAppliedSymbol.signature.returnType.symbol?.name ?: "this method"
+//                val returnType = resultingDescriptor.returnType?.simpleName() ?: "this method";
+                val message = """Do something with the "$returnType" value returned by "${name}"."""
                 kotlinFileContext.reportIssue(callExpression.calleeExpression!!, message)
-            }
+//            }
         }
     }
 
