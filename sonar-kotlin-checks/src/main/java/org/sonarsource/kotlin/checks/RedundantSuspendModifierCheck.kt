@@ -19,11 +19,13 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.backend.common.descriptors.isSuspend
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.overrides
@@ -33,13 +35,15 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 @Rule(key = "S6318")
 class RedundantSuspendModifierCheck : AbstractCheck() {
 
-    // TODO easy
-    override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext) {
+    override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext) = analyze(function) {
         val suspendModifier = function.suspendModifier() ?: return
         with(function) {
             if (hasBody() && !overrides()) {
                 findDescendantOfType<KtNameReferenceExpression> {
-                    it.getResolvedCall(context.bindingContext)?.resultingDescriptor?.isSuspend ?: true
+                    (it.resolveToCall()?.successfulFunctionCallOrNull()
+                        ?.partiallyAppliedSymbol
+                        ?.symbol as? KaNamedFunctionSymbol)?.isSuspend
+                        ?: true
                 } ?: context.reportIssue(suspendModifier, """Remove this unnecessary "suspend" modifier.""")
             }
         }
