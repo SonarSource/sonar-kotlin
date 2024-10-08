@@ -76,6 +76,7 @@ class EmptyLineRegexCheck : AbstractRegexCheck() {
 
     override val functionsToVisit = setOf(PATTERN_COMPILE_MATCHER, REGEX_MATCHER, TO_REGEX_MATCHER)
 
+    // TODO regex
     override fun visitRegex(
         regex: RegexParseResult,
         regexContext: RegexContext,

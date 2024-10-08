@@ -33,6 +33,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 @K1only
 @Rule(key = "S5867")
 class UnicodeAwareCharClassesCheck : AbstractRegexCheck() {
+    // TODO regex
     override fun visitRegex(
         regex: RegexParseResult,
         regexContext: RegexContext,

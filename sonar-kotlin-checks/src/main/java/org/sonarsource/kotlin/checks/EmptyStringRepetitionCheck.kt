@@ -29,6 +29,7 @@ import org.sonarsource.kotlin.api.regex.RegexContext
 @K1only
 @Rule(key = "S5842")
 class EmptyStringRepetitionCheck : AbstractRegexCheck() {
+    // TODO regex
     override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {
         EmptyStringRepetitionFinder(regexContext::reportIssue).visit(regex)
     }

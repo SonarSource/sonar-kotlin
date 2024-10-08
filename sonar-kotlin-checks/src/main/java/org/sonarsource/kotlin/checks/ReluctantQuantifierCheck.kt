@@ -29,6 +29,7 @@ import org.sonarsource.kotlin.api.regex.RegexContext
 @K1only
 @Rule(key = "S5857")
 class ReluctantQuantifierCheck : AbstractRegexCheck() {
+    // TODO regex
     override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {
         ReluctantQuantifierFinder(regexContext::reportIssue).visit(regex)
     }

@@ -29,6 +29,7 @@ import org.sonarsource.kotlin.api.regex.RegexContext
 @K1only
 @Rule(key = "S5868")
 class GraphemeClustersInClassesCheck : AbstractRegexCheck() {
+    // TODO regex
     override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {
         GraphemeInClassFinder(regexContext::reportIssue).visit(regex)
     }

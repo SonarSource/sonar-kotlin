@@ -40,6 +40,7 @@ class RegexComplexityCheck : AbstractRegexCheck() {
     )
     var maxComplexity = DEFAULT_MAX
 
+    // TODO regex
     override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {
         ComplexRegexFinder(regexContext::reportIssue, maxComplexity).visit(regex)
     }

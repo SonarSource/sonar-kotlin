@@ -35,6 +35,7 @@ private const val MESSAGE_MULTIPLE_ERRORS = "Fix the syntax errors inside this r
 @Rule(key = "S5856")
 class InvalidRegexCheck : AbstractRegexCheck() {
 
+    // TODO regex
     override fun visitRegex(
         regex: RegexParseResult,
         regexContext: RegexContext,
