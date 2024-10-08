@@ -45,6 +45,7 @@ private const val MESSAGE = "Make sure using an unencrypted database is safe her
 @K1only
 @Rule(key = "S6291")
 class UnencryptedDatabaseOnMobileCheck : AbstractCheck() {
+    // TODO easy
     override fun visitCallExpression(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
         val bindingContext = kotlinFileContext.bindingContext
         val resolvedCall = callExpression.getResolvedCall(bindingContext)

@@ -33,6 +33,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 @Rule(key = "S1481")
 class UnusedLocalVariableCheck : AbstractCheck() {
 
+    // TODO easy
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
         context.diagnostics
             .filter {

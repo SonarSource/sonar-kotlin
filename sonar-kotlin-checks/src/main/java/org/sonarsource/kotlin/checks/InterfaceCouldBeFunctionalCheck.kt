@@ -70,6 +70,7 @@ private fun hasExactlyOneFunctionAndNoProperties(klass: KtClass): Boolean {
     } && functionCount > 0
 }
 
+// TODO easy
 private fun isFunctionalInterfaceAnnotation(annotation: KtAnnotationEntry, context: KotlinFileContext): Boolean {
     val annotationType = annotation.typeReference.getType(context.bindingContext)
     return (annotationType?.getKotlinTypeFqName(false) == "java.lang.FunctionalInterface")

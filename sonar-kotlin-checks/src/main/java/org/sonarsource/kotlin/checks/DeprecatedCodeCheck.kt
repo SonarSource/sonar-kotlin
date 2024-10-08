@@ -35,7 +35,8 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 @K1only
 @Rule(key = "S1133")
 class DeprecatedCodeCheck : AbstractCheck() {
-    
+
+    // TODO easy
     override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry, context: KotlinFileContext) {
         val descriptor = context.bindingContext[BindingContext.ANNOTATION, annotationEntry]
         if ("kotlin.Deprecated" == descriptor?.fqName?.asString()) {

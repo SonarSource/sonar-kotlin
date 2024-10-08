@@ -60,6 +60,7 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
 
     private val issueMessage = "Remove this redundant method which is the same as a default one."
 
+    // TODO easy
     override fun visitClass(klass: KtClass, context: KotlinFileContext) {
         if (!klass.isData()) return
 

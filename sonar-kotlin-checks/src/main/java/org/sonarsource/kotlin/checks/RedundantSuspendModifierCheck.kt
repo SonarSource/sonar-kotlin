@@ -33,6 +33,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 @Rule(key = "S6318")
 class RedundantSuspendModifierCheck : AbstractCheck() {
 
+    // TODO easy
     override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext) {
         val suspendModifier = function.suspendModifier() ?: return
         with(function) {
