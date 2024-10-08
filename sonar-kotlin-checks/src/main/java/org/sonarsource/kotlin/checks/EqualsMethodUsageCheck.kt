@@ -40,6 +40,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 class EqualsMethodUsageCheck : CallAbstractCheck() {
     override val functionsToVisit = setOf(FunMatcher { name = EQUALS_METHOD_NAME; withArguments(ANY_TYPE) })
 
+    // TODO easy
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         val parent = callExpression.parent
         if (parent is KtDotQualifiedExpression && parent.selectorExpression == callExpression && !parent.receiverExpression.isSuperOrOuterClass()) {

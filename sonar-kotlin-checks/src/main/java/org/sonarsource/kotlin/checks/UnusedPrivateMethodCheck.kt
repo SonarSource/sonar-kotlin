@@ -79,6 +79,7 @@ class UnusedPrivateMethodCheck : AbstractCheck() {
             && !hasModifier(KtTokens.OPERATOR_KEYWORD)
             && (annotationEntries.isEmpty() || annotatedWithCommonAnnotations(bindingContext))
 
+    // TODO easy
     private fun KtNamedFunction.annotatedWithCommonAnnotations(bindingContext: BindingContext) =
         bindingContext[BindingContext.FUNCTION, this]
             ?.annotations

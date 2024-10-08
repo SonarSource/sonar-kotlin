@@ -34,6 +34,7 @@ class RunFinalizersCheck : CallAbstractCheck() {
         FunMatcher(qualifier = "java.lang.System", name = "runFinalizersOnExit") { withArguments("kotlin.Boolean") },
     )
 
+    // TODO easy
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         kotlinFileContext.reportIssue(callExpression.calleeExpression!!, "Remove this call to \"runFinalizersOnExit()\".")
     }

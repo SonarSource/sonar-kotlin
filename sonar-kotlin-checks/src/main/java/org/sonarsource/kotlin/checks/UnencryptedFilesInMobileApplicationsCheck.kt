@@ -38,6 +38,7 @@ class UnencryptedFilesInMobileApplicationsCheck : CallAbstractCheck() {
         FunMatcher(qualifier = "java.nio.file.Files", name = "write"),
     )
 
+    // TODO easy
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         if (kotlinFileContext.isInAndroid()) {
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)

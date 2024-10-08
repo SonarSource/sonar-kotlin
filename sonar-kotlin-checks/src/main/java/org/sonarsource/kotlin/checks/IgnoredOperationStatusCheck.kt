@@ -58,6 +58,7 @@ class IgnoredOperationStatusCheck : CallAbstractCheck() {
         },
     )
 
+    // TODO easy
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         if (callExpression.isUsedAsStatement(kotlinFileContext.bindingContext)) {
             resolvedCall.resultingDescriptor?.let { resultingDescriptor ->

@@ -38,6 +38,7 @@ class IndexedAccessCheck : CallAbstractCheck() {
         }
     )
 
+    // TODO easy
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
         resolvedCall: ResolvedCall<*>,

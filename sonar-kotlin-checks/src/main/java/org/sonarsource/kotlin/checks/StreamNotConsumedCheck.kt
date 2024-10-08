@@ -75,6 +75,7 @@ class StreamNotConsumedCheck : CallAbstractCheck() {
         },
     )
 
+    // TODO easy
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
         resolvedCall: ResolvedCall<*>,
