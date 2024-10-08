@@ -50,6 +50,7 @@ private val funMatchers = listOf(
 @K1only
 @Rule(key = "S4830")
 class ServerCertificateCheck : AbstractCheck() {
+    // TODO determineType
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val (_, _, bindingContext) = kotlinFileContext
 
