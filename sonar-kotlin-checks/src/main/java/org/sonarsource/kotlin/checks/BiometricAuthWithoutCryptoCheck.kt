@@ -19,10 +19,10 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.isNull
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
@@ -40,10 +40,9 @@ private const val MESSAGE = """Make sure performing a biometric authentication w
 class BiometricAuthWithoutCryptoCheck : CallAbstractCheck() {
     override val functionsToVisit = setOf(ANDROID_HARDWARE_AUTH, ANDROIDX_AUTH)
 
-    // TODO easy?
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext,
     ) {
