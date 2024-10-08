@@ -50,6 +50,7 @@ class ArgumentMatcher(
         val ANY = ArgumentMatcher()
     }
 
+    @Deprecated("")
     fun matches(descriptor: ValueParameterDescriptor) = (isVararg == (descriptor.varargElementType != null)) &&
         matchesNullability(descriptor) && matchesName(if (isVararg) descriptor.varargElementType else descriptor.type)
 
