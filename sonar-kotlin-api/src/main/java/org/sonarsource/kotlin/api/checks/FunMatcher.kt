@@ -136,22 +136,28 @@ class FunMatcherImpl(
 
     private fun checkTypeOrSupertype(callableSignature: KaCallableSignature<*>): Boolean {
         if (qualifiersOrDefiningSupertypes.isEmpty()) return true
-        val symbol = callableSignature.symbol
-        val actual = if (symbol is KaConstructorSymbol) {
-            symbol.containingClassId?.asFqNameString()
-        } else {
-            symbol.callableId?.asSingleFqName()?.parent()?.asString()
-        }
         // TODO checkSubType
-        return qualifiersOrDefiningSupertypes.contains(actual)
+        return qualifiersOrDefiningSupertypes.contains(getActualQualifier(callableSignature))
     }
 
+    @Deprecated("")
     private fun getActualQualifier(functionDescriptor: CallableDescriptor) =
         if (functionDescriptor is ConstructorDescriptor) {
             functionDescriptor.constructedClass.fqNameSafe.asString()
         } else {
             functionDescriptor.fqNameSafe.asString().substringBeforeLast(".")
         }
+
+    // TODO when null?
+    /** @return dot-separated package name for top-level functions, class name otherwise */
+    private fun getActualQualifier(callableSignature: KaCallableSignature<*>): String? {
+        val symbol = callableSignature.symbol
+        return if (symbol is KaConstructorSymbol) {
+            symbol.containingClassId?.asFqNameString()
+        } else {
+            symbol.callableId?.asSingleFqName()?.parent()?.asString()
+        }
+    }
 
     private fun checkSubType(functionDescriptor: CallableDescriptor): Boolean =
         when (functionDescriptor) {
