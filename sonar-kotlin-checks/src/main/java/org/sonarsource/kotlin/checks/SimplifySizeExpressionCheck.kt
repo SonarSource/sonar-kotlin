@@ -91,6 +91,7 @@ class SimplifySizeExpressionCheck : CallAbstractCheck() {
         countMatcher, isEmptyMatcher, isNotEmptyMatcher
     )
 
+    // TODO easy?
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
         resolvedCall: ResolvedCall<*>,

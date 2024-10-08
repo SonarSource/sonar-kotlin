@@ -35,6 +35,7 @@ class ReceivingIntentsCheck : CallAbstractCheck() {
         FunMatcher(definingSupertype = "android.content.Context", name = "registerReceiver")
     )
 
+    // TODO easy?
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
         resolvedCall: ResolvedCall<*>,

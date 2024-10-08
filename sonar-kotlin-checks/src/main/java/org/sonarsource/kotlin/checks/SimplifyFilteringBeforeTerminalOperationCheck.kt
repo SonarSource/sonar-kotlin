@@ -44,6 +44,7 @@ class SimplifyFilteringBeforeTerminalOperationCheck : CallAbstractCheck() {
         }
     )
 
+    // TODO easy?
     @OptIn(IDEAPluginsCompatibilityAPI::class)
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         callExpression.parent

@@ -40,6 +40,7 @@ private const val MESSAGE = """Make sure performing a biometric authentication w
 class BiometricAuthWithoutCryptoCheck : CallAbstractCheck() {
     override val functionsToVisit = setOf(ANDROID_HARDWARE_AUTH, ANDROIDX_AUTH)
 
+    // TODO easy?
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
         resolvedCall: ResolvedCall<*>,

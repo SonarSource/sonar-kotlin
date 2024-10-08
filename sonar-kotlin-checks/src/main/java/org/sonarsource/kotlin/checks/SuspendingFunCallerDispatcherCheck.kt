@@ -36,6 +36,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 class SuspendingFunCallerDispatcherCheck : CallAbstractCheck() {
     override val functionsToVisit = FUNS_ACCEPTING_DISPATCHERS
 
+    // TODO easy?
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
         resolvedCall: ResolvedCall<*>,
