@@ -20,21 +20,15 @@
 package org.sonarsource.kotlin.api.checks
 
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
-import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.lifetime.withValidityAssertion
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
-import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.signatures.KaCallableSignature
-import org.jetbrains.kotlin.analysis.api.signatures.KaFunctionSignature
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
-import org.jetbrains.kotlin.analysis.api.types.classSymbol
-import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.backend.common.descriptors.isSuspend
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
@@ -102,8 +96,13 @@ class FunMatcherImpl(
     fun matches(call: Call, bindingContext: BindingContext) = preCheckArgumentCount(call) &&
         matches(bindingContext[RESOLVED_CALL, call]?.resultingDescriptor)
 
+    @Deprecated("")
     fun matches(resolvedCall: ResolvedCall<*>?) = preCheckArgumentCount(resolvedCall?.call) &&
         matches(resolvedCall?.resultingDescriptor)
+
+    fun matches(resolvedCall: KaFunctionCall<*>) =
+        // TODO preCheckArgumentCount?
+        matches(resolvedCall.partiallyAppliedSymbol.signature)
 
     private fun preCheckArgumentCount(call: Call?) = call == null || call.valueArguments.size <= maxArgumentCount
 
@@ -130,18 +129,21 @@ class FunMatcherImpl(
             checkCallParameters(callableSignature)
     }
 
+    @Deprecated("")
     private fun checkTypeOrSupertype(functionDescriptor: CallableDescriptor) =
         qualifiersOrDefiningSupertypes.isEmpty() || qualifiersOrDefiningSupertypes.contains(getActualQualifier(functionDescriptor)) ||
             !definingSupertypes.isNullOrEmpty() && checkSubType(functionDescriptor)
 
     private fun checkTypeOrSupertype(callableSignature: KaCallableSignature<*>): Boolean {
         if (qualifiersOrDefiningSupertypes.isEmpty()) return true
-        println(qualifiersOrDefiningSupertypes)
-        val fqn = callableSignature.symbol.returnType.symbol?.classId?.asFqNameString()?.replace('/', '.')
-        println(fqn)
-        println(definingSupertypes)
-        // TODO
-        return qualifiersOrDefiningSupertypes.contains(fqn)
+        val symbol = callableSignature.symbol
+        val actual = if (symbol is KaConstructorSymbol) {
+            symbol.containingClassId?.asFqNameString()
+        } else {
+            symbol.callableId?.asSingleFqName()?.parent()?.asString()
+        }
+        // TODO checkSubType
+        return qualifiersOrDefiningSupertypes.contains(actual)
     }
 
     private fun getActualQualifier(functionDescriptor: CallableDescriptor) =
