@@ -1,0 +1,131 @@
+{
+"kotlin-corda-project:sources/kotlin/corda/client/jackson/src/main/kotlin/net/corda/client/jackson/JacksonSupport.kt": [
+68,
+80,
+92,
+103,
+146,
+305,
+312,
+319,
+331,
+368,
+379,
+388,
+399,
+406,
+417,
+431,
+444,
+451,
+458,
+465,
+472,
+479,
+487,
+501
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/contracts/TransactionVerificationException.kt": [
+122,
+127,
+131,
+135
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/crypto/CompositeSignature.kt": [
+32,
+52
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/flows/FlowLogic.kt": [
+151,
+167,
+184,
+196,
+209,
+222
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/flows/NotaryError.kt": [
+40
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/identity/CordaX500Name.kt": [
+75
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/internal/LegalNameValidator.kt": [
+14,
+66
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/messaging/CordaRPCOps.kt": [
+44,
+195,
+204
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/AttachmentStorage.kt": [
+38,
+55
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/TimeWindowChecker.kt": [
+10
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/VaultService.kt": [
+143,
+145
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/vault/QueryCriteriaUtils.kt": [
+74,
+237,
+244,
+251,
+266,
+272,
+278,
+284,
+290,
+296,
+302,
+308,
+313,
+335,
+342,
+349,
+356,
+367,
+376,
+386,
+399,
+412
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/NotaryChangeTransactions.kt": [
+77
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/SignedTransaction.kt": [
+263,
+267
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/WireTransaction.kt": [
+47,
+106
+],
+"kotlin-corda-project:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/contracts/asset/Cash.kt": [
+231,
+290
+],
+"kotlin-corda-project:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/contracts/asset/OnLedgerAsset.kt": [
+231,
+323
+],
+"kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/exceptions/RpcExceptions.kt": [
+57
+],
+"kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/config/User.kt": [
+10
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/CordaClock.kt": [
+24
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/config/NodeConfiguration.kt": [
+178,
+343
+],
+"kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/driver/Driver.kt": [
+99
+]
+}

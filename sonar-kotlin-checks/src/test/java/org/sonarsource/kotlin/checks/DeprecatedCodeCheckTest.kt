@@ -19,4 +19,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-class DeprecatedCodeCheckTest : CheckTestWithNoSemantics(DeprecatedCodeCheck())
+class DeprecatedCodeCheckTest : CheckTestWithNoSemantics(DeprecatedCodeCheck(), shouldReport = true)

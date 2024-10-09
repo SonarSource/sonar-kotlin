@@ -1,0 +1,36 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/NetworkUtils.kt": [
+98
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/KotlinRemoteReplService.kt": [
+159
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/test/org/jetbrains/kotlin/incremental/BuildDiffsStorageTest.kt": [
+30
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/internal/makeBackup/MakeBackupCompileTask.kt": [
+25
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/actions/internal/benchmark/AbstractCompletionBenchmarkAction.kt": [
+122
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/actions/internal/benchmark/HighlightingBenchmarkAction.kt": [
+54
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/actions/internal/benchmark/LocalCompletionBenchmark.kt": [
+41
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/actions/internal/benchmark/TopLevelCompletionBenchmark.kt": [
+45
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/collections/MutableCollectionsJVMTest.kt": [
+14,
+15
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/testUtilsJVM.kt": [
+14
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/utils/LazyJVMTest.kt": [
+97
+]
+}

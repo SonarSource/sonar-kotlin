@@ -1,0 +1,141 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/buildSrc/src/main/kotlin/jdksFinder.kt": [
+40,
+101,
+102
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/android-tests/tests/org/jetbrains/kotlin/android/tests/AndroidTestGenerator.kt": [
+30,
+32
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/cfg/pseudocode/instructions/KtElementInstructionImpl.kt": [
+27
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/javac-wrapper/src/org/jetbrains/kotlin/javac/JavacOptionsMapper.kt": [
+31
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/asJava/LightClassTestCommon.kt": [
+18
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/cfg/AbstractPseudoValueTest.kt": [
+50
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/checkers/AbstractDiagnosticsTest.kt": [
+467
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/checkers/BaseDiagnosticsTest.kt": [
+192,
+322
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/checkers/CompilerTestLanguageVersionSettings.kt": [
+84
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/codegen/AbstractBytecodeTextTest.kt": [
+80,
+81
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/ir/AbstractIrTextTestCase.kt": [
+257
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/cli/LauncherScriptTest.kt": [
+45
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/util/src/org/jetbrains/kotlin/config/LanguageVersionSettings.kt": [
+102
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/generators/tests/org/jetbrains/kotlin/generators/protobuf/GenerateProtoBuf.kt": [
+122,
+124
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/generators/tests/org/jetbrains/kotlin/generators/protobuf/GenerateProtoBufCompare.kt": [
+466
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-android/src/org/jetbrains/kotlin/android/folding/ResourceFoldingBuilder.kt": [
+48
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-android/src/org/jetbrains/kotlin/android/quickfix/KotlinAndroidQuickFixProvider.kt": [
+68
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/filters/KotlinExceptionFilter.kt": [
+135
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-maven/test/org/jetbrains/kotlin/idea/maven/AbstractKotlinMavenInspectionTest.kt": [
+60,
+64,
+68,
+82
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/KotlinPluginCompatibilityVerifier.kt": [
+37
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/debugger/KotlinOutputChecker.kt": [
+43,
+45
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/CodeBuilder.kt": [
+54
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ExpressionConverter.kt": [
+343
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/jps-tests/test/org/jetbrains/kotlin/jps/build/AbstractIncrementalJpsTest.kt": [
+163
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/BasicBoxTest.kt": [
+736
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/text/RegexTest.kt": [
+25
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/text/RegexTest.kt": [
+25
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/dom/Classes.kt": [
+43
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/text/RegexJVMTest.kt": [
+18,
+48,
+49,
+51,
+55
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/samples/test/samples/text/regex.kt": [
+12
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/text/RegexTest.kt": [
+17,
+22,
+84,
+147,
+154,
+200
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/text/StringTest.kt": [
+1326
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/test/kotlin/org.jetbrains.kotlin.tools.tests/utils.kt": [
+44
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/BaseGradleIT.kt": [
+274
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-stdlib-gen/src/templates/Aggregates.kt": [
+287
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-stdlib-gen/src/templates/Filtering.kt": [
+14
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-stdlib-gen/src/templates/Mapping.kt": [
+14
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-stdlib-gen/src/templates/dsl/TypeParameterParsers.kt": [
+76
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/src/org/jetbrains/kotlin/kapt3/stubs/ClassFileToSourceStubConverter.kt": [
+86
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/scripting/scripting-cli/src/org/jetbrains/kotlin/scripting/compiler/plugin/ScriptingCommandLineProcessor.kt": [
+117
+]
+}
