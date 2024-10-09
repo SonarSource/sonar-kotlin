@@ -34,4 +34,14 @@ class UnusedLocalVariableCheckTest : CheckTestWithNoSemantics(UnusedLocalVariabl
             this.deps = emptyList()
         }.verifyNoIssue()
     }
+
+    @Test
+    fun `with partial K2 semantics`() {
+        KotlinVerifier(check) {
+            this.fileName = "${checkName}SamplePartialSemantics.kt"
+            this.classpath = DEFAULT_KOTLIN_CLASSPATH + System.getProperty("java.class.path").split(File.pathSeparatorChar)
+            this.useK2 = true
+            this.deps = emptyList()
+        }.verifyNoIssue()
+    }
 }

@@ -19,6 +19,8 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtFile
@@ -26,15 +28,25 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.getVariableType
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@K1only
+//@K1only
 @Rule(key = "S1481")
 class UnusedLocalVariableCheck : AbstractCheck() {
 
-    // TODO easy
-    override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
+    override fun visitKtFile(file: KtFile, context: KotlinFileContext) = analyze(file) {
+        // https://kotlin.github.io/analysis-api/diagnostics.html#diagnostics-in-a-ktfile
+        // TODO this doesn't work anymore for K1 because we clear bindingContext.diagnostics
+        file.collectDiagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS)
+            .filter {
+                // TODO filter by type not needed for K2?
+                it.factoryName == Errors.UNUSED_VARIABLE.name
+            }
+            .map { it.psi as KtNamedDeclaration }
+            .forEach {
+                context.reportIssue(it.nameIdentifier!!, """Remove this unused "${it.name}" local variable.""")
+            }
+
         context.diagnostics
             .filter {
                 it.factory == Errors.UNUSED_VARIABLE &&
