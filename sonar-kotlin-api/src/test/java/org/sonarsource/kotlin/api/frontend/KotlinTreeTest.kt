@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.api.frontend
 
+import com.intellij.openapi.util.Disposer
 import java.nio.file.Files
 import java.nio.file.Path
 import org.assertj.core.api.Assertions.assertThat
@@ -34,7 +35,7 @@ class KotlinTreeTest {
 
   @Test
   fun testCreateKotlinTree() {
-    val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
+    val environment = /* Disposed below */ Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
     val path = Path.of("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
     val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin.kt")
@@ -51,5 +52,7 @@ class KotlinTreeTest {
     val call = tree.bindingContext.get(BindingContext.CALL, ktCallExpression)
     val resolvedCall = tree.bindingContext.get(BindingContext.RESOLVED_CALL, call)
     assertThat(resolvedCall).isNotNull
+
+    Disposer.dispose(environment.disposable)
   }
 }

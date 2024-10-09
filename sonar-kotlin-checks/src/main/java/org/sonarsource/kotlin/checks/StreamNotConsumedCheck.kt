@@ -19,13 +19,14 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsStatement
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val STREAM_MESSAGE = "Refactor the code so this stream pipeline is used."
@@ -47,6 +48,7 @@ private val SEQUENCE_MATCHER = FunMatcher(qualifier = "kotlin.sequences") {
     )
 }
 
+@K1only
 @Rule(key = "S3958")
 class StreamNotConsumedCheck : CallAbstractCheck() {
 
@@ -75,11 +77,11 @@ class StreamNotConsumedCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext,
-    ) {
-        if (callExpression.isUsedAsStatement(kotlinFileContext.bindingContext)) {
+    ) = analyze(callExpression) {
+        if (!callExpression.isUsedAsExpression) {
             val message = if (matchedFun == SEQUENCE_MATCHER) SEQUENCE_MESSAGE else STREAM_MESSAGE;
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, message)
         }

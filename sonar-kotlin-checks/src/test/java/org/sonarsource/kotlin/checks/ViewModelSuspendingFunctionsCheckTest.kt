@@ -19,4 +19,15 @@
  */
 package org.sonarsource.kotlin.checks
 
-internal class ViewModelSuspendingFunctionsCheckTest : CheckTest(ViewModelSuspendingFunctionsCheck())
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.testapi.KotlinVerifier
+
+internal class ViewModelSuspendingFunctionsCheckTest : CheckTest(ViewModelSuspendingFunctionsCheck()) {
+    @Test
+    fun k2() {
+        KotlinVerifier(check) {
+            this.fileName = sampleFileSemantics ?: "${checkName}Sample.kt"
+            this.useK2 = true
+        }.verify()
+    }
+}

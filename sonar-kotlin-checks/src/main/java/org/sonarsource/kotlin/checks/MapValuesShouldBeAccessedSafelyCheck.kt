@@ -34,8 +34,10 @@ import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.reporting.message
 import org.sonarsource.kotlin.api.checks.determineType
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@K1only
 @Rule(key = "S6611")
 class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
 

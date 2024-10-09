@@ -26,10 +26,12 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.predictRuntimeBooleanValue
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Make sure this debug feature is deactivated before delivering the code in production."
 
+@K1only
 @Rule(key = "S4507")
 class DebugFeatureEnabledCheck : CallAbstractCheck() {
 

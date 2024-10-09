@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.api.frontend
 
+import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.junit.jupiter.api.Test
@@ -27,6 +28,7 @@ import org.sonarsource.kotlin.testapi.kotlinTreeOf
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.ObjectAssert
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.junit.jupiter.api.AfterEach
 import java.util.TreeMap
 
 private const val TQ = "\"\"\""
@@ -133,7 +135,7 @@ internal class TextRangeTrackerTest {
             val x = 
             $regex
         """.trimIndent(),
-            environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE),
+            environment,
             inputFile = DummyInputFile()
         )
 
@@ -142,4 +144,15 @@ internal class TextRangeTrackerTest {
 
         return TextRangeTracker.of(entries, DummyInputFile(), tree.document)
     }
+
+    /**
+     * Disposed in [afterEach]
+     */
+    private val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
+
+    @AfterEach
+    fun afterEach() {
+        Disposer.dispose(environment.disposable)
+    }
+
 }

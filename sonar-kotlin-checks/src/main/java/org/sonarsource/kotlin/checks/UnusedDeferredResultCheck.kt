@@ -19,24 +19,24 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsStatement
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.DEFERRED_FQN
-import org.sonarsource.kotlin.api.checks.expressionTypeFqn
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S6315")
 class UnusedDeferredResultCheck : AbstractCheck() {
 
     override fun visitCallExpression(expression: KtCallExpression, context: KotlinFileContext) {
-        val bindingContext = context.bindingContext
-        if (expression.expressionTypeFqn(bindingContext) == DEFERRED_FQN
-            && expression.isUsedAsStatement(bindingContext)
-        ) {
-            context.reportIssue(expression.calleeExpression!!, """This function returns "Deferred", but its result is never used.""")
-            return
+        analyze(expression) {
+            // FIXME avoid repeated construction of ClassId
+            if (expression.expressionType!!.isClassType(ClassId.fromString(DEFERRED_FQN.replace('.', '/')))
+                && !expression.isUsedAsExpression) {
+                context.reportIssue(expression.calleeExpression!!, """This function returns "Deferred", but its result is never used.""")
+            }
         }
     }
 }

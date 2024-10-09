@@ -50,6 +50,7 @@ import org.sonarsource.kotlin.api.checks.isOpen
 import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6524")
 class CollectionShouldBeImmutableCheck : AbstractCheck() {
     private val mutableCollections =
@@ -153,7 +154,10 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
                 val functionDescriptor = call.getResolvedCall(bindingContext)?.resultingDescriptor
                 val parameterTypes = functionDescriptor?.valueParameters
                 if (parameterTypes != null) {
-                    val fullyQualifiedTypes = parameterTypes.map { it.type.getKotlinTypeFqName(false) }
+                    val fullyQualifiedTypes = parameterTypes.map {
+                        if (it.type.constructor.declarationDescriptor == null) null
+                        else it.type.getKotlinTypeFqName(false)
+                    }
                     call.valueArguments.zip(fullyQualifiedTypes).filter { it.second in mutableCollections }.map { it.first }
                 } else {
                     call.valueArguments

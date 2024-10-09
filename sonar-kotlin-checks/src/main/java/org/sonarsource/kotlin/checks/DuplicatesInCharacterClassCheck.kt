@@ -22,12 +22,15 @@ package org.sonarsource.kotlin.checks
 import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.finders.DuplicatesInCharacterClassFinder
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.RegexContext
 
+@K1only
 @Rule(key = "S5869")
 class DuplicatesInCharacterClassCheck : AbstractRegexCheck() {
-    
+
+    // TODO regex
     override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {
         DuplicatesInCharacterClassFinder(regexContext::reportIssue).visit(regex)
     }

@@ -250,3 +250,6 @@ class CollectionShouldBeImmutableCheckSample {
 private fun nonCompliantParameterOnFileLevel(list: MutableList<Int>): Int { // Noncompliant
     return list.reduce { acc, it -> acc + it}
 }
+
+// https://sonarsource.atlassian.net/browse/SONARKT-388
+private fun <T> intersectionType(t: T) = if (t is String) listOf(t) else emptyList()

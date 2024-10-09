@@ -38,6 +38,7 @@ import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.KOTLINX_COROUTINES_PACKAGE
 import org.sonarsource.kotlin.api.checks.determineTypeAsString
 import org.sonarsource.kotlin.api.checks.predictReceiverExpression
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val JOB_CONSTRUCTOR = FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = "Job")
@@ -45,6 +46,7 @@ private val SUPERVISOR_JOB_CONSTRUCTOR = FunMatcher(qualifier = KOTLINX_COROUTIN
 private const val MESSAGE_ENDING = " here leads to the breaking of structured concurrency principles."
 private const val DELICATE_API_CLASS_TYPE = "kotlin.reflect.KClass<kotlinx.coroutines.DelicateCoroutinesApi>"
 
+@K1only
 @Rule(key = "S6306")
 class StructuredConcurrencyPrinciplesCheck : CallAbstractCheck() {
 

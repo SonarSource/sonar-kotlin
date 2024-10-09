@@ -19,8 +19,10 @@
  */
 package org.sonarsource.kotlin.metrics
 
+import com.intellij.openapi.util.Disposer
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.LanguageVersion
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -43,7 +45,11 @@ import kotlin.io.path.name
 
 internal class MetricVisitorTest {
 
+    /**
+     * Disposed in [afterEach]
+     */
     private val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
+
     private lateinit var mockNoSonarFilter: NoSonarFilter
     private lateinit var visitor: MetricVisitor
     private lateinit var sensorContext: SensorContextTester
@@ -337,10 +343,16 @@ internal class MetricVisitorTest {
     }
 
     private fun scan(code: String) {
-        inputFile = TestInputFileBuilder("moduleKey", createTempFile(tempFolder).name)
+        inputFile = TestInputFileBuilder("moduleKey", createTempFile(tempFolder, suffix = ".kt").name)
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(code).build()
         val ctx = InputFileContextImpl(sensorContext, inputFile, false)
         visitor.scan(ctx, kotlinTreeOf(code, environment, inputFile))
     }
+
+    @AfterEach
+    fun afterEach() {
+        Disposer.dispose(environment.disposable)
+    }
+
 }

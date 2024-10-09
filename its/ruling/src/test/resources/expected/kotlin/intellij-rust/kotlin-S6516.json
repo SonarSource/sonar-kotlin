@@ -1,0 +1,14 @@
+{
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/Fold.kt": [
+60,
+69,
+79,
+91,
+97,
+104
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/TypeInference.kt": [
+269,
+509
+]
+}

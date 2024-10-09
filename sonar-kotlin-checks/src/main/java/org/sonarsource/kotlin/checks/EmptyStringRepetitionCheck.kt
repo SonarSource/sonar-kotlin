@@ -22,11 +22,14 @@ package org.sonarsource.kotlin.checks
 import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.finders.EmptyStringRepetitionFinder
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.RegexContext
 
+@K1only
 @Rule(key = "S5842")
 class EmptyStringRepetitionCheck : AbstractRegexCheck() {
+    // TODO regex
     override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {
         EmptyStringRepetitionFinder(regexContext::reportIssue).visit(regex)
     }

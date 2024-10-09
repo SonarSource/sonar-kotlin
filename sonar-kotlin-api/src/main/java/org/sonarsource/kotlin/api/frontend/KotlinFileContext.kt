@@ -30,6 +30,7 @@ import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 data class KotlinFileContext(
     val inputFileContext: InputFileContext,
     val ktFile: KtFile,
+    @Deprecated("use kotlin-analysis-api instead")
     val bindingContext: BindingContext,
     val diagnostics: List<Diagnostic>,
     val regexCache: RegexCache,

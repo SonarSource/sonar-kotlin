@@ -51,8 +51,8 @@ class EqualsOverridenWithHashCodeCheck : AbstractCheck() {
 
         klass.functions.forEach {
             when {
-                hashCodeMethod == null && hashCodeMatcher.matches(it, ctx.bindingContext) -> hashCodeMethod = it
-                equalsMethod == null && equalsMatcher.matches(it, ctx.bindingContext) -> equalsMethod = it
+                hashCodeMethod == null && hashCodeMatcher.matches(it) -> hashCodeMethod = it
+                equalsMethod == null && equalsMatcher.matches(it) -> equalsMethod = it
             }
             if (hashCodeMethod != null && equalsMethod != null) return
         }

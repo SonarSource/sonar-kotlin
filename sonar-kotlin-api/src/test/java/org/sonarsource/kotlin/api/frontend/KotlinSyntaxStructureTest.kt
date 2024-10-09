@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.api.frontend
 
+import com.intellij.openapi.util.Disposer
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
@@ -53,7 +54,7 @@ internal class KotlinSyntaxStructureTest {
         every { BindingContextUtils.getRecordedTypeInfo(any(), any()) } throws expectedException
 
         val content = path.readText()
-        val environment = Environment(System.getProperty("java.class.path").split(File.pathSeparatorChar), LanguageVersion.LATEST_STABLE)
+        val environment = /* Disposed below */ Environment(System.getProperty("java.class.path").split(File.pathSeparatorChar), LanguageVersion.LATEST_STABLE)
         val inputFile = TestInputFileBuilder("moduleKey", path.toString())
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(content).build()
@@ -64,13 +65,15 @@ internal class KotlinSyntaxStructureTest {
                 .hasMessageStartingWith("Exception while analyzing expression in (4,17) in ")
                 .hasMessageContaining("/moduleKey/src/test/resources/api/sample/SimpleClass.kt")
         }
+
+        Disposer.dispose(environment.disposable)
     }
 
     @Test
     fun `ensure ktfile name is properly set`() {
         val path = Path.of("src/test/resources/api/sample/SimpleClass.kt")
         val content = path.readText()
-        val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
+        val environment = /* Disposed below */ Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
 
         val inputFile = TestInputFileBuilder("moduleKey", path.toString())
             .setCharset(StandardCharsets.UTF_8)
@@ -79,5 +82,7 @@ internal class KotlinSyntaxStructureTest {
 
         val (ktFile, _, _) = KotlinSyntaxStructure.of(content, environment, inputFile)
         assertThat(ktFile.containingFile.name).endsWith("/moduleKey/src/test/resources/api/sample/SimpleClass.kt")
+
+        Disposer.dispose(environment.disposable)
     }
 }

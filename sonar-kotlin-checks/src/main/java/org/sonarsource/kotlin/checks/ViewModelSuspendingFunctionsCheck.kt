@@ -19,13 +19,11 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.BindingContext.FUNCTION
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.resolve.descriptorUtil.getAllSuperClassifiers
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.suspendModifier
@@ -35,10 +33,9 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 class ViewModelSuspendingFunctionsCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        val bindingContext = kotlinFileContext.bindingContext
         function.suspendModifier()?.let {
             if (!function.isPrivate()
-                && function.extendsViewModel(bindingContext)
+                && function.extendsViewModel()
             ) {
                 kotlinFileContext.reportIssue(it,
                     """Classes extending "ViewModel" should not expose suspending functions.""")
@@ -47,9 +44,15 @@ class ViewModelSuspendingFunctionsCheck : AbstractCheck() {
     }
 }
 
-private fun KtNamedFunction.extendsViewModel(bindingContext: BindingContext): Boolean {
-    val classDescriptor = bindingContext[FUNCTION, this]?.containingDeclaration as? ClassDescriptor
-    return classDescriptor?.getAllSuperClassifiers()?.any {
-        it.fqNameOrNull()?.asString() == "androidx.lifecycle.ViewModel"
-    } ?: false
+private fun KtNamedFunction.extendsViewModel(): Boolean {
+    val function = this
+    analyze(function) {
+        val containingSymbol = function.symbol.containingSymbol
+        if (containingSymbol is KaClassSymbol) {
+            return containingSymbol.superTypes.any {
+                it.symbol?.classId?.asString() == "androidx/lifecycle/ViewModel"
+            }
+        }
+        return false
+    }
 }

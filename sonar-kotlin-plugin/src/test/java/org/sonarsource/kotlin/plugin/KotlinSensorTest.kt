@@ -247,6 +247,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         context.fileSystem().add(inputFile)
         populateCacheWithExpectedEntries(listOf(inputFile), context)
         mockkStatic("org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContextKt")
+        // TODO dispose
         every { environment(any(), any()) } returns Environment(listOf("file1.kt"), LanguageVersion.LATEST_STABLE)
         mockkStatic("org.sonarsource.kotlin.api.frontend.KotlinCoreEnvironmentToolsKt")
         every { analyzeAndGetBindingContext(any(), any()) } throws IOException("Boom!")

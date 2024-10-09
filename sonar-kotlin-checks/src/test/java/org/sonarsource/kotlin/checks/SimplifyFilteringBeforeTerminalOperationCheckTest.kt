@@ -19,4 +19,6 @@
  */
 package org.sonarsource.kotlin.checks
 
-internal class SimplifyFilteringBeforeTerminalOperationCheckTest : CheckTestWithNoSemantics(SimplifyFilteringBeforeTerminalOperationCheck())
+internal class SimplifyFilteringBeforeTerminalOperationCheckTest : CheckTestWithNoSemantics(
+    SimplifyFilteringBeforeTerminalOperationCheck()
+)

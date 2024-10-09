@@ -38,6 +38,7 @@ abstract class CheckTestWithNoSemantics(
     classpath = classpath,
     dependencies = dependencies
 ) {
+    // FIXME rename
     @Test
     fun `without semantics`() {
         KotlinVerifier(check) {

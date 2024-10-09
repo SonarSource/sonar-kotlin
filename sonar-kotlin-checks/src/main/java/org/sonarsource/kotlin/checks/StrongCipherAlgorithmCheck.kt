@@ -25,6 +25,7 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.ConstructorMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val weakCiphers = listOf(
@@ -42,6 +43,7 @@ private const val msg = "Use a strong cipher algorithm."
 private val cipherGetInstanceMatcher = FunMatcher(qualifier = "javax.crypto.Cipher", name = "getInstance")
 private val nullCipherConstructorMatcher = ConstructorMatcher("javax.crypto.NullCipher")
 
+@K1only
 @Rule(key = "S5547")
 class StrongCipherAlgorithmCheck : AbstractCheck() {
     override fun visitCallExpression(callExpr: KtCallExpression, kotlinFileContext: KotlinFileContext) {

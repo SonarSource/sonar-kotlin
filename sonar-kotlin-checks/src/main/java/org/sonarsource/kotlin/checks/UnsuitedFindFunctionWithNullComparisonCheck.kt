@@ -35,6 +35,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.findClosestAncestorOfType
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.Message
 import org.sonarsource.kotlin.api.reporting.message
@@ -45,6 +46,7 @@ import org.sonarsource.kotlin.api.reporting.message
  *
  * The rule suggests to replace the pattern with `any(predicate)`, `none(predicate)`, and `contains(element)` depending on the case.
  */
+@K1only
 @Rule(key = "S6528")
 class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
 

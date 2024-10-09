@@ -44,16 +44,33 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
 
+/**
+ * DO NOT FORGET TO CALL
+ *
+ * ```
+ * Disposer.dispose(environment.disposable)
+ * ```
+ */
 class Environment(
     val classpath: List<String>,
     kotlinLanguageVersion: LanguageVersion,
     javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8,
+    useK2: Boolean = false,
     numberOfThreads: Int? = null
 ) {
     val disposable = Disposer.newDisposable()
     val configuration = compilerConfiguration(classpath, kotlinLanguageVersion, javaLanguageVersion, numberOfThreads)
+    // K1
     val env = kotlinCoreEnvironment(configuration, disposable)
     val ktPsiFactory: KtPsiFactory = KtPsiFactory(env.project, false)
+    // K2
+    val session = if (useK2) createAnalysisSession(disposable, configuration) else null
+
+    init {
+        if (!useK2) {
+            configureAnalysisApiServices(env)
+        }
+    }
 }
 
 fun kotlinCoreEnvironment(
@@ -75,14 +92,15 @@ fun kotlinCoreEnvironment(
     )
 }
 
+// FIXME(Godin): remove?
 fun bindingContext(
     environment: KotlinCoreEnvironment,
     classpath: List<String>,
     files: List<KtFile>,
 ): BindingContext =
-    if (classpath.isEmpty())
-        BindingContext.EMPTY
-    else
+//    if (classpath.isEmpty())
+//        BindingContext.EMPTY
+//    else
         analyzeAndGetBindingContext(environment, files)
 
 fun analyzeAndGetBindingContext(

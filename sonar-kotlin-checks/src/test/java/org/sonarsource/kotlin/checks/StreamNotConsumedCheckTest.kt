@@ -19,4 +19,5 @@
  */
 package org.sonarsource.kotlin.checks
 
+// TODO probably requires checkSubType in FunMatcher
 class StreamNotConsumedCheckTest : CheckTest(StreamNotConsumedCheck())

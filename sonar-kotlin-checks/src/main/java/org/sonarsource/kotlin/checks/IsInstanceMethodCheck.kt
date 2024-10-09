@@ -20,7 +20,11 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassLikeSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -34,10 +38,12 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val JAVA_CLASS_KEYWORDS = listOf("java", "javaClass")
 
+@K1only
 @Rule(key = "S6202")
 class IsInstanceMethodCheck : CallAbstractCheck() {
 
@@ -75,7 +81,12 @@ class IsInstanceMethodCheck : CallAbstractCheck() {
     private fun isJavaClassKeyword(expr: KtExpression?): Boolean =
         (expr is KtNameReferenceExpression) && (expr.getReferencedName() in JAVA_CLASS_KEYWORDS)
 
-    private fun KtReferenceExpression.isClass(ctx: KotlinFileContext) =
-        ctx.bindingContext[BindingContext.REFERENCE_TARGET, this] is ClassDescriptor
+    // TODO fails in K2 mode
+    private fun KtReferenceExpression.isClass(ctx: KotlinFileContext): Boolean {
+        val expression = this
+        analyze(expression) {
+            return expression.mainReference.resolveToSymbol() is KaClassSymbol
+        }
+    }
 
 }

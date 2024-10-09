@@ -1,0 +1,107 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/buildSrc/src/main/kotlin/pill/parser.kt": [
+285
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/optimization/nullCheck/RedundantNullCheckMethodTransformer.kt": [
+73
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/cli-common/src/org/jetbrains/kotlin/cli/common/repl/AggregatedReplState.kt": [
+90,
+91
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/cli-common/src/org/jetbrains/kotlin/cli/common/repl/ReplState.kt": [
+61
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/container/src/org/jetbrains/kotlin/container/Container.kt": [
+105
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend.script/src/org/jetbrains/kotlin/script/ScriptContentLoader.kt": [
+47
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/analyzer/AnalyzerFacade.kt": [
+120,
+342,
+353,
+359
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/tower/ManyCandidatesResolver.kt": [
+55
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/JvmIrCodegenFactory.kt": [
+35
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/createByPattern.kt": [
+131
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common-jvm6/tests/org/jetbrains/kotlin/test/clientserver/TestProcessServer.kt": [
+118
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/builtins/native/kotlin/Collections.kt": [
+324
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/util.runtime/src/org/jetbrains/kotlin/utils/collections.kt": [
+52
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/eval4j/test/org/jetbrains/eval4j/test/main.kt": [
+246
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/decompiler/classFile/KotlinClsStubBuilder.kt": [
+118
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/inspections/AbstractApplicabilityBasedInspection.kt": [
+36
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/search/usagesSearch/operators/ContainsOperatorReferenceSearcher.kt": [
+62
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/util/ApplicationUtils.kt": [
+43
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/util/dumbUtils.kt": [
+29
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-test-framework/test/org/jetbrains/kotlin/idea/test/testUtils.kt": [
+117
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/inspections/KotlinRedundantOverrideInspection.kt": [
+44
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/MoveMemberToCompanionObjectIntention.kt": [
+261
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/pullUp/KotlinPullUpHelper.kt": [
+153
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/repl/IdeReplExecutionTest.kt": [
+41
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/scripting/common/src/kotlin/script/experimental/basic/basicScript.kt": [
+30
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/scripting/common/src/kotlin/script/experimental/definitions/definitionFromAnnotation.kt": [
+65
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/scripting/jvm-host/src/kotlin/script/experimental/jvmhost/impl/KJVMCompilerImpl.kt": [
+243
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk7/test/TryWithResourcesAutoCloseableTest.kt": [
+26
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk7/test/TryWithResourcesCloseableTest.kt": [
+27
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre7/test/TryWithResourcesAutoCloseableTest.kt": [
+26
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre7/test/TryWithResourcesCloseableTest.kt": [
+27
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/collections/ArrayList.kt": [
+40,
+43
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/collections/CollectionsJVM.kt": [
+36,
+36
+]
+}

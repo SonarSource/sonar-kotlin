@@ -32,7 +32,9 @@ import org.sonarsource.kotlin.api.frontend.bindingContext
 fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile, doResolve: Boolean = true, providedDiagnostics: List<Diagnostic>? = null): KotlinTree {
     val (ktFile, document) = KotlinSyntaxStructure.of(content, environment, inputFile)
 
-    val bindingContext = if (doResolve) bindingContext(
+    val bindingContext =
+    if (environment.session != null) BindingContext.EMPTY else
+    if (doResolve) bindingContext(
         environment.env,
         environment.classpath,
         listOf(ktFile),

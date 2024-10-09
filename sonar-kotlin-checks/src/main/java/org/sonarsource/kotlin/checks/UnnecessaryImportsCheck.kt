@@ -50,6 +50,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.isCompanionObject
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE_UNUSED = "Remove this unused import."
@@ -57,6 +58,7 @@ private const val MESSAGE_REDUNDANT = "Remove this redundant import."
 private val DELEGATES_IMPORTED_NAMES = setOf("getValue", "setValue", "provideDelegate")
 private val ARRAY_ACCESS_IMPORTED_NAMES = setOf("get", "set")
 
+@K1only
 @Rule(key = "S1128")
 class UnnecessaryImportsCheck : AbstractCheck() {
 
@@ -150,10 +152,7 @@ class UnnecessaryImportsCheck : AbstractCheck() {
             }
         }.result
 
-    private fun getArrayAccessImportsFilter(arrayAccesses: Collection<KtArrayAccessExpression>, bindingContext: BindingContext) =
-        if (bindingContext == BindingContext.EMPTY) {
-            { imp: KtImportDirective -> imp.importedName?.asString() !in ARRAY_ACCESS_IMPORTED_NAMES }
-        } else {
+    private fun getArrayAccessImportsFilter(arrayAccesses: Collection<KtArrayAccessExpression>, bindingContext: BindingContext): (KtImportDirective) -> Boolean =
             arrayAccesses.map {
                 it.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull()
             }.let { resolvedArrayAccesses ->
@@ -161,7 +160,6 @@ class UnnecessaryImportsCheck : AbstractCheck() {
                     imp.importedFqName !in resolvedArrayAccesses
                 }
             }
-        }
 
     private fun getDelegatesImportsFilter(propertyDelegates: Collection<KtPropertyDelegate>, bindingContext: BindingContext): (KtImportDirective) -> Boolean {
         fun getFqNameFromResolvedCall (variableAccessor: VariableAccessorDescriptor): FqName? =
@@ -172,10 +170,7 @@ class UnnecessaryImportsCheck : AbstractCheck() {
         fun getFqNamesFromAccessor(ktProperty: KtProperty): List<FqName>? =
             (bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, ktProperty] as? VariableDescriptorWithAccessors)?.accessors?.mapNotNull(::getFqNameFromResolvedCall)
 
-        return if (bindingContext == BindingContext.EMPTY) {
-            { imp: KtImportDirective -> imp.importedName?.asString() !in DELEGATES_IMPORTED_NAMES }
-        } else {
-            propertyDelegates.flatMap { propDelegate ->
+            return propertyDelegates.flatMap { propDelegate ->
                 bindingContext[BindingContext.DELEGATE_EXPRESSION_TO_PROVIDE_DELEGATE_CALL, propDelegate.expression]
                     .getResolvedCall(bindingContext)
                     ?.resultingDescriptor
@@ -186,17 +181,14 @@ class UnnecessaryImportsCheck : AbstractCheck() {
                     imp.importedFqName !in delegateImports
                 }
             }
-        }
     }
-    private fun getInvokeCallsImportsFilter(calls: Collection<KtCallExpression>, bindingContext: BindingContext) =
-        if (bindingContext == BindingContext.EMPTY) {
-            { imp: KtImportDirective -> imp.importedName?.asString() != "invoke" }
-        } else {
+    private fun getInvokeCallsImportsFilter(calls: Collection<KtCallExpression>, bindingContext: BindingContext): (KtImportDirective) -> Boolean
+        {
             // Lazy because we don't want to do this operation unless we find at least one "invoke" import
             val callsFqn by lazy(LazyThreadSafetyMode.NONE) {
                 calls.mapNotNull { it.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() }
             }; // ';' is mandatory here
-            { imp: KtImportDirective ->
+            return { imp: KtImportDirective ->
                 if (imp.importedName?.asString() != "invoke") true
                 else {
                     imp.importedFqName !in callsFqn

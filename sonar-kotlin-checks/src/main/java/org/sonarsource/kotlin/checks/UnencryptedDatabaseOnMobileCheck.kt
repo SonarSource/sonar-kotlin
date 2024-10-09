@@ -27,6 +27,7 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.findCallInPrecedingCallChain
 import org.sonarsource.kotlin.api.checks.matches
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val PROBLEMATIC_SIMPLE_CALLS = listOf(
@@ -41,8 +42,10 @@ private val REALM_ENC_KEY_FUN = FunMatcher(definingSupertype = "io.realm.RealmCo
 
 private const val MESSAGE = "Make sure using an unencrypted database is safe here."
 
+@K1only
 @Rule(key = "S6291")
 class UnencryptedDatabaseOnMobileCheck : AbstractCheck() {
+    // TODO easy
     override fun visitCallExpression(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
         val bindingContext = kotlinFileContext.bindingContext
         val resolvedCall = callExpression.getResolvedCall(bindingContext)

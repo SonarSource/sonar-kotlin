@@ -49,6 +49,7 @@ private val COMMON_ANNOTATIONS = listOf(
     "kotlin.jvm.Throws",
 )
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S1144")
 class UnusedPrivateMethodCheck : AbstractCheck() {
 
@@ -78,6 +79,7 @@ class UnusedPrivateMethodCheck : AbstractCheck() {
             && !hasModifier(KtTokens.OPERATOR_KEYWORD)
             && (annotationEntries.isEmpty() || annotatedWithCommonAnnotations(bindingContext))
 
+    // TODO easy
     private fun KtNamedFunction.annotatedWithCommonAnnotations(bindingContext: BindingContext) =
         bindingContext[BindingContext.FUNCTION, this]
             ?.annotations

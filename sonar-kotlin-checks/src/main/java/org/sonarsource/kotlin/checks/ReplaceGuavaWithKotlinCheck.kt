@@ -38,6 +38,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.overrides
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val GUAVA_OPTIONAL = "com.google.common.base.Optional"
@@ -75,6 +76,7 @@ private val REPLACEMENT_TYPES = mapOf(
     GUAVA_OPTIONAL to """Use "java.util.Optional" instead.""",
 )
 
+@K1only
 @Rule(key = "S4738")
 class ReplaceGuavaWithKotlinCheck : CallAbstractCheck() {
 

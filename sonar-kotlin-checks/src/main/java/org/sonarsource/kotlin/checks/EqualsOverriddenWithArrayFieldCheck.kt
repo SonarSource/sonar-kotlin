@@ -33,6 +33,7 @@ import org.sonarsource.kotlin.api.checks.ArgumentMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.determineTypeAsString
 import org.sonarsource.kotlin.api.checks.overrides
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val EXPECTED_OVERRIDES = listOf(
@@ -44,6 +45,7 @@ private val EXPECTED_OVERRIDES = listOf(
     }
 )
 
+@K1only
 @Rule(key = "S6218")
 class EqualsOverriddenWithArrayFieldCheck : AbstractCheck() {
     override fun visitClass(klass: KtClass, context: KotlinFileContext) {

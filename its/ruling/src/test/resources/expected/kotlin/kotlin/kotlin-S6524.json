@@ -1,0 +1,30 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/InliningContext.kt": [
+88
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/cfg/pseudocode/instructions/jumps/NondeterministicJumpInstruction.kt": [
+76
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.common/src/org/jetbrains/kotlin/backend/common/Utils.kt": [
+30
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/inference/InferenceUtils.kt": [
+74
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertSecondaryConstructorToPrimaryIntention.kt": [
+119
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/src/org/jetbrains/kotlin/jps/build/KotlinBuilder.kt": [
+436
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/collections/GroupingJVM.kt": [
+47
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/MapAccessors.kt": [
+35,
+42
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/Maps.kt": [
+296
+]
+}

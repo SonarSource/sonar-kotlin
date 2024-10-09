@@ -40,6 +40,7 @@ import org.sonarsource.kotlin.api.checks.ConstructorMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
+import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
@@ -48,6 +49,7 @@ private const val ENCRYPTION_KEY = "encryptionKey"
 private const val CHANGE_PASSWORD = "changePassword"
 private val CREATE_CHAR_BYTE_ARRAY = FunMatcher(qualifier = "kotlin") { withNames("byteArrayOf", "charArrayOf") }
 
+@K1only
 @Rule(key = "S6301")
 class MobileDatabaseEncryptionKeysCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(
