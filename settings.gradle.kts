@@ -18,6 +18,7 @@ include("sonar-kotlin-external-linters")
 include("sonar-kotlin-surefire")
 include("sonar-kotlin-metrics")
 include("sonar-kotlin-plugin")
+include("sonar-kotlin-plugin-it")
 include("sonar-kotlin-gradle")
 
 include("its:plugin")

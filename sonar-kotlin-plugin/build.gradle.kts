@@ -94,16 +94,21 @@ val sourcesJar = tasks.sourcesJar
 val javadocJar = tasks.javadocJar
 
 tasks.shadowJar {
-//    minimize {}
+    minimize {}
+    // TODO do we need META-INF/*.kotlin_module ?
     exclude("META-INF/native/**/*jansi*")
-    exclude("org/jetbrains/kotlin/org/jline/**")
-    exclude("org/jetbrains/kotlin/net/jpountz/**")
+    exclude("org/jline/**")
+    exclude("net/jpountz/**")
+    // TODO probably need only "extensions" directories - try to use eachFile{} to filter the rest
+//    exclude("org/jetbrains/kotlin/js/**") // 1M
+//    exclude("org/jetbrains/kotlin/codegen/*.class") // ?
+//    exclude("org/jetbrains/kotlin/backend/**") // ?
     dependencies {
         exclude(dependency("org.jetbrains.kotlin:high-level-api-fir-for-ide"))
         exclude(dependency("org.jetbrains.kotlin:low-level-api-fir-for-ide"))
     }
     doLast {
-//        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 45_800_000L, 46_200_000L)
+//        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 52_500_000L, 53_000_000L)
     }
 }
 

@@ -38,6 +38,18 @@ public class WorkaroundForJarMinimization {
           /** META-INF/services/org.jetbrains.kotlin.resolve.jvm.jvmSignature.KotlinToJvmSignatureMapper */
           org.jetbrains.kotlin.codegen.signature.KotlinToJvmSignatureMapperImpl.class,
 
+          // META-INF/analysis-api/analysis-api-impl-bsase.xml
+          org.jetbrains.kotlin.analysis.api.impl.base.java.source.JavaElementSourceWithSmartPointerFactory.class,
+          org.jetbrains.kotlin.analysis.api.impl.base.references.HLApiReferenceProviderService.class,
+          org.jetbrains.kotlin.analysis.api.impl.base.projectStructure.KaBaseModuleProvider.class,
+          org.jetbrains.kotlin.analysis.api.platform.KotlinProjectMessageBusProvider.class,
+          org.jetbrains.kotlin.analysis.api.impl.base.permissions.KaBaseAnalysisPermissionChecker.class,
+          org.jetbrains.kotlin.analysis.api.impl.base.lifetime.KaBaseLifetimeTracker.class,
+          // META-INF/analysis-api/analysis-api-fe10.xml
+          org.jetbrains.kotlin.analysis.api.descriptors.KaFe10SessionProvider.class,
+          org.jetbrains.kotlin.references.fe10.base.KtFe10KotlinReferenceProviderContributor.class,
+          org.jetbrains.kotlin.analysis.api.descriptors.references.ReadWriteAccessCheckerDescriptorsImpl.class,
+
           /** Used to have proper named groups behavior in regular expressions */
           kotlin.internal.jdk8.JDK8PlatformImplementations.class
   );

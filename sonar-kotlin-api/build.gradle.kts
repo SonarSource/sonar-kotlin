@@ -3,10 +3,13 @@ plugins {
 }
 
 dependencies {
+    // TODO https://github.com/JetBrains/kotlin/commit/3ad9798a17ad9eb68cdb1e9f8f1a69584151bfd4
     listOf(
+        // TODO high-level-api => analysis-api ?
         "org.jetbrains.kotlin:high-level-api-for-ide",
         "org.jetbrains.kotlin:analysis-api-fe10-for-ide",
 //        "org.jetbrains.kotlin:analysis-api-k2-for-ide", // not needed ?
+        // TODO high-level-api => analysis-api-k2 ?
         "org.jetbrains.kotlin:high-level-api-fir-for-ide", // needed for K2
 //        "org.jetbrains.kotlin:high-level-api-for-ide", // not needed ?
         "org.jetbrains.kotlin:low-level-api-fir-for-ide", // needed for K2
@@ -14,6 +17,7 @@ dependencies {
         "org.jetbrains.kotlin:symbol-light-classes-for-ide",
         "org.jetbrains.kotlin:analysis-api-standalone-for-ide",
         "org.jetbrains.kotlin:analysis-api-platform-interface-for-ide",
+        // TODO high-level-api-impl-base => analysis-api-impl-base ?
         "org.jetbrains.kotlin:high-level-api-impl-base-for-ide"
 //        "org.jetbrains.kotlin:analysis-api-for-ide" // not needed ?
     ).forEach {
