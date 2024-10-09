@@ -20,6 +20,8 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtEnumEntrySuperclassReferenceExpression
@@ -31,11 +33,17 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@K1only
+//@K1only
 @Rule(key = "S1874")
 class DeprecatedCodeUsedCheck : AbstractCheck() {
 
-    override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
+    override fun visitKtFile(file: KtFile, context: KotlinFileContext) = analyze(file) {
+        // https://kotlin.github.io/analysis-api/diagnostics.html#diagnostics-in-a-ktfile
+        // TODO this doesn't work anymore for K1 because we clear bindingContext.diagnostics
+        file.collectDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
+            .filter { it.factoryName == Errors.DEPRECATION.name }
+            .forEach { context.reportIssue(it.psi.elementToReport(), "Deprecated code should not be used.") }
+
         context.diagnostics
             .filter { it.factory == Errors.DEPRECATION }
             .forEach { context.reportIssue(it.psiElement.elementToReport(), "Deprecated code should not be used.") }
