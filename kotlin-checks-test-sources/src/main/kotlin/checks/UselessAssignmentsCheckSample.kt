@@ -7,13 +7,11 @@ class UselessAssignmentsCheckSample {
 //              ^
 
         i = 1 // Noncompliant {{The value assigned here is never used.}}
-//      ^^^^^
         i = 2 + 5 // Noncompliant
         i = 3
 
 
-        val j = i++ // Noncompliant {{The value changed here is never used.}}
-//              ^^^
+        val j = i++ // Noncompliant {{The value assigned here is never used.}}
 
 
         var k = 0 // Noncompliant {{Remove this variable, which is assigned but never accessed.}}
