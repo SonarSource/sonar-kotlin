@@ -28,6 +28,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.suspendModifier
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.visiting.analyze
 
 @Rule(key = "S6313")
 class ViewModelSuspendingFunctionsCheck : AbstractCheck() {
@@ -46,7 +47,7 @@ class ViewModelSuspendingFunctionsCheck : AbstractCheck() {
 
 private fun KtNamedFunction.extendsViewModel(): Boolean {
     val function = this
-    analyze(function) {
+    analyze {
         val containingSymbol = function.symbol.containingSymbol
         if (containingSymbol is KaClassSymbol) {
             return containingSymbol.superTypes.any {

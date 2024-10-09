@@ -20,16 +20,36 @@
 package org.sonarsource.kotlin.visiting
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtFile
 import org.sonar.api.batch.rule.Checks
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.common.measureDuration
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
 
+@PublishedApi
+internal var kaSession: KaSession? = null
+
+inline fun <R> analyze(action: KaSession.() -> R): R = action(kaSession!!)
+
+fun kaSession(ktFile: KtFile, action: () -> Unit) {
+    check(kaSession == null)
+    try {
+        analyze(ktFile) {
+            kaSession = this
+            action()
+        }
+    } finally {
+        kaSession = null
+    }
+}
+
 class KtChecksVisitor(val checks: Checks<out AbstractCheck>) : KotlinFileVisitor() {
 
-    override fun visit(kotlinFileContext: KotlinFileContext) {
+    override fun visit(kotlinFileContext: KotlinFileContext) = kaSession(kotlinFileContext.ktFile) {
         flattenNodes(listOf(kotlinFileContext.ktFile)).let { flatNodes ->
             checks.all().forEach { check ->
                 measureDuration(check.javaClass.simpleName) {

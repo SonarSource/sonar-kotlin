@@ -31,11 +31,12 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.checks.suspendModifier
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.visiting.analyze
 
 @Rule(key = "S6318")
 class RedundantSuspendModifierCheck : AbstractCheck() {
 
-    override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext) = analyze(function) {
+    override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext) = analyze {
         val suspendModifier = function.suspendModifier() ?: return
         with(function) {
             if (hasBody() && !overrides()) {

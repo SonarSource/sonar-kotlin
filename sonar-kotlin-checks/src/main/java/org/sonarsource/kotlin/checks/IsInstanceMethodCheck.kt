@@ -40,6 +40,7 @@ import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.visiting.analyze
 
 private val JAVA_CLASS_KEYWORDS = listOf("java", "javaClass")
 
@@ -84,7 +85,7 @@ class IsInstanceMethodCheck : CallAbstractCheck() {
     // TODO fails in K2 mode
     private fun KtReferenceExpression.isClass(ctx: KotlinFileContext): Boolean {
         val expression = this
-        analyze(expression) {
+        analyze {
             return expression.mainReference.resolveToSymbol() is KaClassSymbol
         }
     }

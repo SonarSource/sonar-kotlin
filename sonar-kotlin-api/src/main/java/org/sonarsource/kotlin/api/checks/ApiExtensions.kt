@@ -106,6 +106,8 @@ import org.sonar.api.utils.Version
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.merge
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.visiting.analyze
+import org.sonarsource.kotlin.visiting.kaSession
 
 private val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
     qualifier = "java.util.Properties"
@@ -367,7 +369,7 @@ fun KtTypeReference.determineTypeAsString(bindingContext: BindingContext, printT
 
 fun KtNamedFunction.returnTypeAsString(): String? {
     val namedFunction = this
-    analyze(namedFunction) {
+    analyze {
         when (val returnType = namedFunction.returnType) {
             is KaClassType -> return returnType.classId.asFqNameString()
             else -> return null
@@ -517,7 +519,7 @@ fun KtExpression?.isLocalVariable(bindingContext: BindingContext) =
 fun KtExpression?.isLocalVariable(): Boolean {
     if (this !is KtNameReferenceExpression) return false
     val expression = this
-    analyze(expression) {
+    analyze {
         return expression.mainReference.resolveToSymbol() is KaLocalVariableSymbol
     }
 }

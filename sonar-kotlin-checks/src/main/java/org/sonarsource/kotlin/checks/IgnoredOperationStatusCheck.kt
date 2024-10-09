@@ -33,6 +33,7 @@ import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.simpleName
 import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.visiting.analyze
 
 @K1only
 @Rule(key = "S899")
@@ -63,7 +64,7 @@ class IgnoredOperationStatusCheck : CallAbstractCheck() {
         },
     )
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) = analyze(callExpression) {
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) = analyze {
         if (!callExpression.isUsedAsExpression) {
 //            resolvedCall.resultingDescriptor?.let { resultingDescriptor ->
             val name = resolvedCall.partiallyAppliedSymbol.signature.symbol.name

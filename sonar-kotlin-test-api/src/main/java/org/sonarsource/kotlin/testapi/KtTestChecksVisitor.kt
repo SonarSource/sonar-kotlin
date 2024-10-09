@@ -29,6 +29,7 @@ import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
+import org.sonarsource.kotlin.visiting.kaSession
 
 class KtTestChecksVisitor(private val checks: List<AbstractCheck>) : KotlinFileVisitor() {
     init {
@@ -44,7 +45,7 @@ class KtTestChecksVisitor(private val checks: List<AbstractCheck>) : KotlinFileV
         }
     }
 
-    override fun visit(kotlinFileContext: KotlinFileContext) {
+    override fun visit(kotlinFileContext: KotlinFileContext) = kaSession(kotlinFileContext.ktFile) {
         flattenNodes(listOf(kotlinFileContext.ktFile)).forEach { psiElement ->
             // Note: we only visit KtElements. If we need to visit PsiElement, add a
             // visitPsiElement function in KotlinCheck and call it here in the else branch.

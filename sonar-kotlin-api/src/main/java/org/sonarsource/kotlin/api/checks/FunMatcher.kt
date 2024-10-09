@@ -46,6 +46,7 @@ import org.jetbrains.kotlin.resolve.calls.tasks.isDynamic
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
 import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequence
+import org.sonarsource.kotlin.visiting.analyze
 
 private const val VARARG_PREFIX = "vararg ";
 
@@ -78,7 +79,7 @@ class FunMatcherImpl(
             matches(bindingContext[RESOLVED_CALL, call]?.resultingDescriptor)
     }
 
-    fun matches(node: KtCallExpression): Boolean = analyze(node) {
+    fun matches(node: KtCallExpression): Boolean = analyze {
         return matches(node.resolveToCall()?.successfulFunctionCallOrNull()?.partiallyAppliedSymbol?.signature)
     }
 
@@ -89,7 +90,7 @@ class FunMatcherImpl(
     }
 
     @OptIn(KaExperimentalApi::class)
-    fun matches(node: KtNamedFunction): Boolean = analyze(node) {
+    fun matches(node: KtNamedFunction): Boolean = analyze {
         return matches(node.symbol.asSignature())
     }
 
