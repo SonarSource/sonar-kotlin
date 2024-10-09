@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.diagnostics.MutableDiagnosticsWithSuppression
 import org.slf4j.Logger
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.SensorContext
@@ -135,7 +136,10 @@ abstract class AbstractKotlinSensorExecuteContext(
 
     private val diagnostics: Map<PsiFile, List<Diagnostic>> by lazy {
         measureDuration("Diagnostics") {
-            bindingContext.diagnostics.noSuppression().groupBy { it.psiFile }.toMap()
+            // FIXME
+            val result = bindingContext.diagnostics.noSuppression().groupBy { it.psiFile }.toMap()
+            (bindingContext.diagnostics as MutableDiagnosticsWithSuppression).clear()
+            return@measureDuration result
         }
     }
 
