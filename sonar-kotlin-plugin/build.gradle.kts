@@ -99,7 +99,7 @@ tasks.shadowJar {
     exclude("org/jline/**")
     exclude("net/jpountz/**")
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 38_100_000L, 38_600_000L)
+        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 37_500_000L, 38_000_000L)
     }
 }
 
