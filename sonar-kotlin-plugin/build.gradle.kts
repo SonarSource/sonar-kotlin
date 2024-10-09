@@ -96,8 +96,8 @@ val javadocJar = tasks.javadocJar
 tasks.shadowJar {
     minimize {}
     exclude("META-INF/native/**/*jansi*")
-    exclude("org/jetbrains/kotlin/org/jline/**")
-    exclude("org/jetbrains/kotlin/net/jpountz/**")
+    exclude("org/jline/**")
+    exclude("net/jpountz/**")
     doLast {
         enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 38_100_000L, 38_600_000L)
     }
