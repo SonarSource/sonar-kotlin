@@ -94,8 +94,10 @@ val sourcesJar = tasks.sourcesJar
 val javadocJar = tasks.javadocJar
 
 tasks.shadowJar {
-//    minimize {}
+    minimize {}
+    // TODO do we need META-INF/*.kotlin_module ?
     exclude("META-INF/native/**/*jansi*")
+    // FIXME after switch from embeddable
     exclude("org/jetbrains/kotlin/org/jline/**")
     exclude("org/jetbrains/kotlin/net/jpountz/**")
     dependencies {
