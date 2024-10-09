@@ -82,8 +82,12 @@ class IsInstanceMethodCheck : CallAbstractCheck() {
     private fun isJavaClassKeyword(expr: KtExpression?): Boolean =
         (expr is KtNameReferenceExpression) && (expr.getReferencedName() in JAVA_CLASS_KEYWORDS)
 
-    // TODO easy
-    private fun KtReferenceExpression.isClass(ctx: KotlinFileContext) =
-        ctx.bindingContext[BindingContext.REFERENCE_TARGET, this] is ClassDescriptor
+    // TODO fails in K2 mode
+    private fun KtReferenceExpression.isClass(ctx: KotlinFileContext): Boolean {
+        val expression = this
+        analyze {
+            return expression.mainReference.resolveToSymbol() is KaClassSymbol
+        }
+    }
 
 }
