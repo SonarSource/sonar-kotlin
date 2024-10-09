@@ -100,9 +100,16 @@ tasks.shadowJar {
     exclude("org/jline/**")
     exclude("net/jpountz/**")
     // TODO probably need only "extensions" directories - try to use eachFile{} to filter the rest
-//    exclude("org/jetbrains/kotlin/js/**") // 1M
-//    exclude("org/jetbrains/kotlin/codegen/*.class") // ?
-//    exclude("org/jetbrains/kotlin/backend/**") // ?
+    //   unfortunately eachFile is about JARs
+    //   try https://github.com/GradleUp/gr8 ?
+    //   exclude{} seems to work
+    exclude { it.path.startsWith("org/jetbrains/kotlin/js/") && !it.path.contains("/extensions/") }
+    exclude { it.path.startsWith("org/jetbrains/kotlin/codegen/") && !it.path.contains("/extensions/") }
+    exclude { it.path.startsWith("org/jetbrains/kotlin/backend/") && !it.path.contains("/extensions/") }
+    // TODO what about "com/sun/jna" ?
+    exclude("com/sun/jna/**")
+    // TODO what about "org/fusesource/jansi/internal/native/" ?
+    exclude("com/fusesource/jansi/**")
     dependencies {
         exclude(dependency("org.jetbrains.kotlin:high-level-api-fir-for-ide"))
         exclude(dependency("org.jetbrains.kotlin:low-level-api-fir-for-ide"))
