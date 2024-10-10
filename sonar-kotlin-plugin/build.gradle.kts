@@ -95,6 +95,7 @@ val javadocJar = tasks.javadocJar
 
 tasks.shadowJar {
     minimize {}
+    // FIXME looks like location changed because of https://github.com/JetBrains/kotlin/commit/3116e262045f10d3402383e6f00d1406b8c8bd66
     exclude("META-INF/native/**/*jansi*")
     exclude("org/jline/**")
     exclude("net/jpountz/**")
