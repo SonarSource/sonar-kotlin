@@ -4,10 +4,6 @@ plugins {
     kotlin("jvm")
 }
 
-repositories {
-    maven { url = uri("https://repo.gradle.org/gradle/libs-releases") }
-}
-
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(utilLibs.bundles.detekt)
