@@ -36,6 +36,7 @@ class KotlinTree(
     val bindingContext: BindingContext,
     val diagnostics: List<Diagnostic>,
     val regexCache: RegexCache,
+    val doResolve: Boolean,
 )
 
 data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val inputFile: InputFile) {

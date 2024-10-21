@@ -87,6 +87,8 @@ abstract class AbstractKotlinSensorExecuteContext(
 
     abstract val bindingContext: BindingContext
 
+    abstract val doResolve: Boolean
+
     fun analyzeFiles(): Boolean {
         try {
             val regexCache = RegexCache()
@@ -96,7 +98,7 @@ abstract class AbstractKotlinSensorExecuteContext(
             }.forEach { (ktFile, doc, inputFile) ->
                 if (sensorContext.isCancelled) return false
                 val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
-                val tree = KotlinTree(ktFile, doc, bindingContext, getFileDiagnostics(ktFile), regexCache)
+                val tree = KotlinTree(ktFile, doc, bindingContext, getFileDiagnostics(ktFile), regexCache, doResolve)
 
                 measureDuration(inputFile.filename()) {
                     analyzeFile(inputFileContext, tree)

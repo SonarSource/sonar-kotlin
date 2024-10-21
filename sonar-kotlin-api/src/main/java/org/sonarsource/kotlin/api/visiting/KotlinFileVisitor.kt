@@ -19,13 +19,34 @@
  */
 package org.sonarsource.kotlin.api.visiting
 
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.KotlinTree
 
+@PublishedApi
+internal var kaSession: KaSession? = null
+
+inline fun <R> analyze(action: KaSession.() -> R): R = action(kaSession!!)
+
 abstract class KotlinFileVisitor {
     fun scan(fileContext: InputFileContext, root: KotlinTree) {
-        visit(KotlinFileContext(fileContext, root.psiFile, root.bindingContext, root.diagnostics, root.regexCache))
+        val kotlinFileContext =
+            KotlinFileContext(fileContext, root.psiFile, root.bindingContext, root.diagnostics, root.regexCache)
+        if (!root.doResolve) {
+            visit(kotlinFileContext)
+        } else {
+            check(kaSession == null)
+            try {
+                analyze(root.psiFile) {
+                    kaSession = this
+                    visit(kotlinFileContext)
+                }
+            } finally {
+                kaSession = null
+            }
+        }
     }
 
     abstract fun visit(kotlinFileContext: KotlinFileContext)

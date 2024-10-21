@@ -47,5 +47,5 @@ fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile
         diagnostics.clear()
     }
 
-    return KotlinTree(ktFile, document, bindingContext, providedDiagnostics ?: diagnosticsList, RegexCache())
+    return KotlinTree(ktFile, document, bindingContext, providedDiagnostics ?: diagnosticsList, RegexCache(), doResolve)
 }

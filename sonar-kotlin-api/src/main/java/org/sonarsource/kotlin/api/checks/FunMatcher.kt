@@ -46,7 +46,7 @@ import org.jetbrains.kotlin.resolve.calls.tasks.isDynamic
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
 import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequence
-import org.sonarsource.kotlin.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.analyze
 
 private const val VARARG_PREFIX = "vararg ";
 

@@ -39,7 +39,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.analyze
 
 private val JAVA_CLASS_KEYWORDS = listOf("java", "javaClass")
 

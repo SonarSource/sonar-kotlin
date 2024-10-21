@@ -62,6 +62,7 @@ class KotlinGradleSensor(
         sensorContext, filesToAnalyze, progressReport, listOf(KtChecksVisitor(checks)), filenames, LOG
     ) {
         override val bindingContext: BindingContext = BindingContext.EMPTY
+        override val doResolve: Boolean = false
     }
 
     override fun getFilesToAnalyse(sensorContext: SensorContext): Iterable<InputFile> {

@@ -27,7 +27,7 @@ import org.sonarsource.kotlin.api.checks.COROUTINES_FLOW
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.analyze
 
 private const val MESSAGE = "Unused coroutines Flow."
 

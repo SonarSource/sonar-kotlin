@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.analyze
 
 abstract class CallAbstractCheck : AbstractCheck() {
     abstract val functionsToVisit: Iterable<FunMatcherImpl>

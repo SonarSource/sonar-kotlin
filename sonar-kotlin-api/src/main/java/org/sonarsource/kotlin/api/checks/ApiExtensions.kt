@@ -107,8 +107,7 @@ import org.sonar.api.utils.Version
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.merge
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
-import org.sonarsource.kotlin.visiting.analyze
-import org.sonarsource.kotlin.visiting.kaSession
+import org.sonarsource.kotlin.api.visiting.analyze
 
 private val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
     qualifier = "java.util.Properties"
