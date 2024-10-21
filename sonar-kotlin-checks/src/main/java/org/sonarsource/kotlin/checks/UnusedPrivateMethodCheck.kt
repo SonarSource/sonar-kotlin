@@ -27,11 +27,11 @@ import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.isInfix
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
 // Serializable method should not raise any issue in Kotlin.
 private val IGNORED_METHODS: Set<String> = setOf(
@@ -49,13 +49,12 @@ private val COMMON_ANNOTATIONS = listOf(
     "kotlin.jvm.Throws",
 )
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S1144")
 class UnusedPrivateMethodCheck : AbstractCheck() {
 
     override fun visitClass(klass: KtClass, context: KotlinFileContext) {
         if (!klass.isTopLevel()) return
-        klass.collectDescendantsOfType<KtNamedFunction> { it.shouldCheckForUsage(context.bindingContext) }
+        klass.collectDescendantsOfType<KtNamedFunction> { it.shouldCheckForUsage() }
             .forEach {
                 val functionName = it.name!!
                 if (!IGNORED_METHODS.contains(functionName) && !it.isReferencedIn(klass, functionName)) {
@@ -74,16 +73,15 @@ class UnusedPrivateMethodCheck : AbstractCheck() {
     private fun KtClass.hasInfixReferences(name: String) =
         anyDescendantOfType<KtOperationReferenceExpression> { it.getReferencedName() == name }
 
-    private fun KtNamedFunction.shouldCheckForUsage(bindingContext: BindingContext) =
+    private fun KtNamedFunction.shouldCheckForUsage() =
         isPrivate()
             && !hasModifier(KtTokens.OPERATOR_KEYWORD)
-            && (annotationEntries.isEmpty() || annotatedWithCommonAnnotations(bindingContext))
+            && (annotationEntries.isEmpty() || annotatedWithCommonAnnotations())
 
-    // TODO easy
-    private fun KtNamedFunction.annotatedWithCommonAnnotations(bindingContext: BindingContext) =
-        bindingContext[BindingContext.FUNCTION, this]
-            ?.annotations
-            ?.all { it.fqName?.asString() in COMMON_ANNOTATIONS }
-            ?: false
+    private fun KtNamedFunction.annotatedWithCommonAnnotations() = analyze {
+        symbol.annotations.all {
+            it.classId?.asFqNameString() in COMMON_ANNOTATIONS
+        }
+    }
 
 }
