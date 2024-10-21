@@ -181,7 +181,7 @@ class FunMatcherImpl(
         }
 
     private fun checkSubType(functionDescriptor: KaFunctionSignature<KaFunctionSymbol>): Boolean = analyze {
-        if (functionDescriptor is ConstructorDescriptor) return false
+        if (functionDescriptor.symbol is KaConstructorSymbol) return false
         return functionDescriptor.symbol.allOverriddenSymbols.any {
             val className: String? = it.callableId?.asSingleFqName()?.parent()?.asString()
             definingSupertypes.contains(className)
