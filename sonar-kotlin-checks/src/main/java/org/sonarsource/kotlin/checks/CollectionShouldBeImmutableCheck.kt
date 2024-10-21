@@ -50,7 +50,7 @@ import org.sonarsource.kotlin.api.checks.isOpen
 import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@org.sonarsource.kotlin.api.frontend.K1only
+@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S6524")
 class CollectionShouldBeImmutableCheck : AbstractCheck() {
     private val mutableCollections =

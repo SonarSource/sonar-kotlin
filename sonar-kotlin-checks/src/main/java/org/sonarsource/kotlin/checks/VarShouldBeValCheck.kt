@@ -43,7 +43,7 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.message
 
-@org.sonarsource.kotlin.api.frontend.K1only
+@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S3353")
 class VarShouldBeValCheck : AbstractCheck() {
     override fun visitKtFile(file: KtFile, data: KotlinFileContext) {

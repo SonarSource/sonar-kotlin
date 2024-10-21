@@ -46,7 +46,7 @@ val ISSUE_MESSAGE_SIZE_NEVER_LT = """The size of an array/collection is never "<
 val ISSUE_MESSAGE_SIZE_ALWAYS_GTEQ =
     """The size of an array/collection is always ">=0", update this test to either ".isNotEmpty()" or ".isEmpty()"."""
 
-@org.sonarsource.kotlin.api.frontend.K1only
+@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S3981")
 class CollectionSizeAndArrayLengthCheck : AbstractCheck() {
 

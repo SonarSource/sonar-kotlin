@@ -32,7 +32,6 @@ import org.sonarsource.kotlin.api.checks.ConstructorMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.checks.setterMatches
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = """Increase the "corePoolSize"."""
@@ -43,7 +42,7 @@ private val THREAD_POOL_CONSTRUCTOR_MATCHER =
 private val POOL_SIZE_SETTER_MATCHER =
     FunMatcher(definingSupertype = "java.util.concurrent.ThreadPoolExecutor", name = "setCorePoolSize") { withArguments("kotlin.Int") }
 
-@K1only
+@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S2122")
 class ScheduledThreadPoolExecutorZeroCheck : CallAbstractCheck() {
 

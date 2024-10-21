@@ -46,7 +46,6 @@ import org.sonarsource.kotlin.api.checks.FieldMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val PACKAGE_KOTLIN_COLLECTION = "kotlin.collections"
@@ -83,7 +82,7 @@ private val lengthFieldMatcher = FieldMatcher {
     withQualifiers("kotlin.String")
 }
 
-@K1only
+@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S6529")
 class SimplifySizeExpressionCheck : CallAbstractCheck() {
 

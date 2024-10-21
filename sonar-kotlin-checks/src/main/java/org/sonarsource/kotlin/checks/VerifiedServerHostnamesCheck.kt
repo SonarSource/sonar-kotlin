@@ -31,7 +31,7 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@org.sonarsource.kotlin.api.frontend.K1only
+@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S5527")
 class VerifiedServerHostnamesCheck : AbstractCheck() {
 

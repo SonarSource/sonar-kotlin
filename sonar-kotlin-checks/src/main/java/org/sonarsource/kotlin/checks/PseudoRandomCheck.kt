@@ -27,7 +27,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Make sure that using this pseudorandom number generator is safe here."
@@ -51,7 +50,7 @@ private val RANDOM_CONSTRUCTOR_TYPES = setOf(
     "org.apache.commons.lang.math.JVMRandom"
 )
 
-@K1only
+@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S2245")
 class PseudoRandomCheck : AbstractCheck() {
 

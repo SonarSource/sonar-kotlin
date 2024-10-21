@@ -31,11 +31,10 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.simpleName
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.visiting.analyze
 
-@K1only
+@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S899")
 class IgnoredOperationStatusCheck : CallAbstractCheck() {
 

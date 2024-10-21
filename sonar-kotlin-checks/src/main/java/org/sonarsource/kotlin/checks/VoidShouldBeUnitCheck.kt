@@ -46,7 +46,7 @@ private val message = message {
     +"."
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only
+@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S6508")
 class VoidShouldBeUnitCheck : AbstractCheck() {
 

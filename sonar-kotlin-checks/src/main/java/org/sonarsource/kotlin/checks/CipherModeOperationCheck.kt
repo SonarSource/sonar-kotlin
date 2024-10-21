@@ -47,7 +47,7 @@ private val GCM_PARAMETER_SPEC_MATCHER = ConstructorMatcher("javax.crypto.spec.G
 
 private val GET_BYTES_MATCHER = FunMatcher(qualifier = "kotlin.text", name = "toByteArray")
 
-@org.sonarsource.kotlin.api.frontend.K1only
+@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S6432")
 class CipherModeOperationCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(CIPHER_INIT_MATCHER)

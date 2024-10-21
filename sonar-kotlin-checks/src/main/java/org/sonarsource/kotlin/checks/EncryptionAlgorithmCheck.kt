@@ -26,7 +26,6 @@ import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.checks.predictRuntimeStringValueWithSecondaries
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
@@ -37,7 +36,7 @@ val CIPHER_GET_INSTANCE_MATCHER = FunMatcher {
     name = "getInstance"
 }
 
-@K1only
+@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S5542")
 class EncryptionAlgorithmCheck : CallAbstractCheck() {
 

@@ -31,7 +31,7 @@ import org.sonarsource.kotlin.api.checks.FUNS_ACCEPTING_DISPATCHERS
 import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@K1only
+@K1only("easy?")
 @Rule(key = "S6311")
 class SuspendingFunCallerDispatcherCheck : CallAbstractCheck() {
     override val functionsToVisit = FUNS_ACCEPTING_DISPATCHERS

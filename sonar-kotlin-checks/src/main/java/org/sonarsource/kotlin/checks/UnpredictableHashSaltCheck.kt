@@ -35,7 +35,6 @@ import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.checks.simpleArgExpressionOrNull
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.secondaryOf
 
@@ -53,7 +52,7 @@ private val matcherSaltIndexMap = mapOf(
     ConstructorMatcher("$SPECS_PACKAGE.$PARAMETER_SPEC_FUN_NAME") to 0,
 )
 
-@K1only
+@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S2053")
 class UnpredictableHashSaltCheck : CallAbstractCheck() {
     override val functionsToVisit = matcherSaltIndexMap.keys

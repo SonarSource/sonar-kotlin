@@ -38,13 +38,12 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.visiting.analyze
 
 private val JAVA_CLASS_KEYWORDS = listOf("java", "javaClass")
 
-@K1only
+@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S6202")
 class IsInstanceMethodCheck : CallAbstractCheck() {
 

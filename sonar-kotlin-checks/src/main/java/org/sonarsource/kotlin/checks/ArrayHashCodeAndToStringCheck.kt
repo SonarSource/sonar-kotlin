@@ -55,7 +55,7 @@ private val PRIMITIVE_ARRAY_REPLACEMENT = mapOf("hashCode" to "contentHashCode",
 private val OBJECT_ARRAY_REPLACEMENT = mapOf("hashCode" to "contentDeepHashCode", "toString" to "contentDeepToString")
 private val ARRAY_OF_ARRAY_REPLACEMENT = mapOf("contentHashCode" to "contentDeepHashCode", "contentToString" to "contentDeepToString")
 
-@org.sonarsource.kotlin.api.frontend.K1only
+@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S2116")
 class ArrayHashCodeAndToStringCheck : CallAbstractCheck() {
 

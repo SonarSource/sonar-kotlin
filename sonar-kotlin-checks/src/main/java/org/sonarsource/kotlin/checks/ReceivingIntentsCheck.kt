@@ -25,10 +25,9 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.isNull
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@K1only
+@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S5322")
 class ReceivingIntentsCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(

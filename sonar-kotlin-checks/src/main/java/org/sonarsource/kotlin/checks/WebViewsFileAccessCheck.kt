@@ -52,7 +52,7 @@ private val ANDROID_FILE_ACCESS_MATCHER = FunMatcher(definingSupertype = "androi
     withArguments("kotlin.Boolean")
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only
+@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S6363")
 class WebViewsFileAccessCheck : CallAbstractCheck() {
 

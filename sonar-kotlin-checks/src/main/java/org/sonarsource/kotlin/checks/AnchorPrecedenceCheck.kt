@@ -25,7 +25,7 @@ import org.sonarsource.analyzer.commons.regex.finders.AnchorPrecedenceFinder
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.RegexContext
 
-@org.sonarsource.kotlin.api.frontend.K1only
+@org.sonarsource.kotlin.api.frontend.K1only("regex")
 @Rule(key = "S5850")
 class AnchorPrecedenceCheck : AbstractRegexCheck() {
     // TODO regex

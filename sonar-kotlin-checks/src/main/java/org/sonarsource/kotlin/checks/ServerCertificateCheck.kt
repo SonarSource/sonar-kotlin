@@ -31,7 +31,6 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.determineType
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 
@@ -47,7 +46,7 @@ private val funMatchers = listOf(
         withNames("checkClientTrusted", "checkServerTrusted")
     })
 
-@K1only
+@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S4830")
 class ServerCertificateCheck : AbstractCheck() {
     // TODO determineType

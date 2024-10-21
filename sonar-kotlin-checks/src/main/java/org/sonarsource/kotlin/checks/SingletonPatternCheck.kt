@@ -41,7 +41,6 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.ConstructorMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.KtTreeVisitor
 
@@ -50,7 +49,7 @@ private val lazyInitializationMatcher = FunMatcher(
     definingSupertype = "kotlin"
 )
 
-@K1only
+@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S6515")
 class SingletonPatternCheck : AbstractCheck() {
 

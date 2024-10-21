@@ -30,14 +30,13 @@ import org.sonarsource.kotlin.api.checks.KOTLINX_COROUTINES_PACKAGE
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.checks.resolveReferenceTarget
 import org.sonarsource.kotlin.api.checks.scope
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.secondaryOf
 
 private const val MESSAGE = "Avoid hardcoded dispatchers."
 private const val DISPATCHERS_OBJECT = "$KOTLINX_COROUTINES_PACKAGE.Dispatchers"
 
-@K1only
+@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S6310")
 class InjectableDispatchersCheck : CallAbstractCheck() {
     override val functionsToVisit = FUNS_ACCEPTING_DISPATCHERS

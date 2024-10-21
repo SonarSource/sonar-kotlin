@@ -35,7 +35,7 @@ import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@org.sonarsource.kotlin.api.frontend.K1only
+@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S4423")
 class WeakSSLContextCheck : AbstractCheck() {
     private val WEAK_FOR_OK_HTTP = setOf(

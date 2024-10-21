@@ -26,7 +26,6 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.visiting.analyze
 
@@ -49,7 +48,7 @@ private val SEQUENCE_MATCHER = FunMatcher(qualifier = "kotlin.sequences") {
     )
 }
 
-@K1only
+@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S3958")
 class StreamNotConsumedCheck : CallAbstractCheck() {
 

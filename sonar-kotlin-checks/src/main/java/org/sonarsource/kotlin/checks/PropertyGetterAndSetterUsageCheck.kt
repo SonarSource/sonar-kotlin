@@ -38,14 +38,13 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.isAbstract
 import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.checks.returnType
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.secondaryOf
 
 private val GETTER_PREFIX = Regex("""^(get|is)\p{javaUpperCase}""")
 private val SETTER_PREFIX = Regex("""^set\p{javaUpperCase}""")
 
-@K1only
+@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S6512")
 class PropertyGetterAndSetterUsageCheck : AbstractCheck() {
 

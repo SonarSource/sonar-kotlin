@@ -23,13 +23,12 @@ import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.finders.ComplexRegexFinder
-import org.sonarsource.kotlin.api.frontend.K1only
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.RegexContext
 
 private const val DEFAULT_MAX = 20
 
-@K1only
+@org.sonarsource.kotlin.api.frontend.K1only("regex")
 @Rule(key = "S5843")
 class RegexComplexityCheck : AbstractRegexCheck() {
 
