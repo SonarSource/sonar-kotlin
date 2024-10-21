@@ -19,6 +19,11 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.signatures.KaCallableSignature
+import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
+import org.jetbrains.kotlin.codegen.optimization.common.analyze
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -28,6 +33,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.visiting.analyze
 
 private const val MESSAGE = "Make sure that using this pseudorandom number generator is safe here."
 
@@ -50,25 +56,26 @@ private val RANDOM_CONSTRUCTOR_TYPES = setOf(
     "org.apache.commons.lang.math.JVMRandom"
 )
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S2245")
 class PseudoRandomCheck : AbstractCheck() {
 
-    override fun visitCallExpression(expression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        val bindingContext = kotlinFileContext.bindingContext
-        val calleeExpression = expression.calleeExpression ?: return
+    override fun visitCallExpression(expression: KtCallExpression, kotlinFileContext: KotlinFileContext) = analyze {
+        val calleeExpression = expression.calleeExpression ?: return@analyze
         
-        if (MATH_RANDOM_MATCHER.matches(expression, bindingContext) || KOTLIN_RANDOM_MATCHER.matches(expression, bindingContext))
+        if (MATH_RANDOM_MATCHER.matches(expression) || KOTLIN_RANDOM_MATCHER.matches(expression))
             kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
 
-        when(val resultingDescriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor) {
-            is ConstructorDescriptor -> {
-                resultingDescriptor.constructedClass.fqNameOrNull()?.asString()?.let { 
+        // TODO see similar code in FunMatcher
+        when (val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.partiallyAppliedSymbol?.symbol) {
+            null -> {
+            }
+            is KaConstructorSymbol -> {
+                symbol.containingClassId?.asFqNameString()?.let {
                     if (RANDOM_CONSTRUCTOR_TYPES.contains(it)) kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
                 }
             }
             else -> {
-                resultingDescriptor?.fqNameOrNull()?.asString()?.substringBeforeLast(".")?.let {
+                symbol.callableId?.asSingleFqName()?.parent()?.asString()?.let {
                     if (RANDOM_STATIC_TYPES.contains(it) && !expression.isChainedMethodInvocation())
                         kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
                 }
