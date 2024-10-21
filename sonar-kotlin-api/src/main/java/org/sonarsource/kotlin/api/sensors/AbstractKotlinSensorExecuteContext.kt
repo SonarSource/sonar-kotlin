@@ -137,8 +137,11 @@ abstract class AbstractKotlinSensorExecuteContext(
     private val diagnostics: Map<PsiFile, List<Diagnostic>> by lazy {
         measureDuration("Diagnostics") {
             // FIXME
-            val result = bindingContext.diagnostics.noSuppression().groupBy { it.psiFile }.toMap()
-            (bindingContext.diagnostics as MutableDiagnosticsWithSuppression).clear()
+            val diagnostics = bindingContext.diagnostics
+            val result = diagnostics.noSuppression().groupBy { it.psiFile }.toMap()
+            if (diagnostics is MutableDiagnosticsWithSuppression) {
+                diagnostics.clear()
+            }
             return@measureDuration result
         }
     }

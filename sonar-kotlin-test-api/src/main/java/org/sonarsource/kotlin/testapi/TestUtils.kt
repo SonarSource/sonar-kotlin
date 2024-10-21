@@ -41,9 +41,10 @@ fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile
         listOf(ktFile),
     ) else BindingContext.EMPTY
 
-    val diagnosticsList = bindingContext.diagnostics.noSuppression().toList()
-    if (environment.session == null) {
-        (bindingContext.diagnostics as MutableDiagnosticsWithSuppression).clear()
+    val diagnostics = bindingContext.diagnostics;
+    val diagnosticsList = diagnostics.noSuppression().toList()
+    if (diagnostics is MutableDiagnosticsWithSuppression) {
+        diagnostics.clear()
     }
 
     return KotlinTree(ktFile, document, bindingContext, providedDiagnostics ?: diagnosticsList, RegexCache())
