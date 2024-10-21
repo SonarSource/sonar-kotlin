@@ -51,6 +51,7 @@ import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFunction
@@ -349,6 +350,7 @@ private fun KtProperty.determineType(bindingContext: BindingContext) =
     (typeReference?.let { bindingContext[BindingContext.TYPE, it] }
         ?: bindingContext[BindingContext.EXPRESSION_TYPE_INFO, initializer]?.type)
 
+@Deprecated("")
 fun KtProperty.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
@@ -358,8 +360,16 @@ fun KtExpression.determineTypeAsString(bindingContext: BindingContext, printType
 private fun KtParameter.determineType(bindingContext: BindingContext) =
     bindingContext[BindingContext.TYPE, typeReference]
 
+@Deprecated("")
 fun KtParameter.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
+
+/**
+ * TODO see also [FunMatcherImpl.checkReturnType]
+ */
+fun KtDeclaration.determineTypeAsString() = analyze {
+    (this@determineTypeAsString.returnType as? KaClassType)?.classId?.asFqNameString()
+}
 
 private fun KtTypeReference.determineType(bindingContext: BindingContext) =
     bindingContext[BindingContext.TYPE, this]

@@ -38,17 +38,16 @@ private val DISALLOWED_TYPES = listOf(
 
 private const val MESSAGE = "Don't expose mutable flow types."
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S6305")
 class ExposedMutableFlowCheck : AbstractCheck() {
     override fun visitProperty(property: KtProperty, kotlinFileContext: KotlinFileContext) {
-        if (isEligible(property) && property.determineTypeAsString(kotlinFileContext.bindingContext) in DISALLOWED_TYPES) {
+        if (isEligible(property) && property.determineTypeAsString() in DISALLOWED_TYPES) {
             kotlinFileContext.reportIssue(property, MESSAGE)
         }
     }
 
     override fun visitParameter(parameter: KtParameter, kotlinFileContext: KotlinFileContext) {
-        if (isEligible(parameter) && parameter.determineTypeAsString(kotlinFileContext.bindingContext) in DISALLOWED_TYPES) {
+        if (isEligible(parameter) && parameter.determineTypeAsString() in DISALLOWED_TYPES) {
             kotlinFileContext.reportIssue(parameter, MESSAGE)
         }
     }
