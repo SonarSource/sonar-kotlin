@@ -20,10 +20,10 @@
 package org.sonarsource.kotlin.api.checks
 
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
-import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.signatures.KaCallableSignature
+import org.jetbrains.kotlin.analysis.api.signatures.KaFunctionSignature
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
@@ -118,7 +118,7 @@ class FunMatcherImpl(
             checkReturnType(functionDescriptor) &&
             checkCallParameters(functionDescriptor)
 
-    private fun matches(callableSignature: KaCallableSignature<*>?): Boolean {
+    private fun matches(callableSignature: KaFunctionSignature<KaFunctionSymbol>?): Boolean {
         return callableSignature != null &&
 //            FIXME checkIsDynamic(callableSignature) &&
 //            FIXME checkIsExtensionFunction(callableSignature) &&
@@ -135,11 +135,13 @@ class FunMatcherImpl(
         qualifiersOrDefiningSupertypes.isEmpty() || qualifiersOrDefiningSupertypes.contains(getActualQualifier(functionDescriptor)) ||
             !definingSupertypes.isNullOrEmpty() && checkSubType(functionDescriptor)
 
-    private fun checkTypeOrSupertype(callableSignature: KaCallableSignature<*>): Boolean {
+    private fun checkTypeOrSupertype(callableSignature: KaFunctionSignature<KaFunctionSymbol>): Boolean {
         if (qualifiersOrDefiningSupertypes.isEmpty()) return true
-        // TODO checkSubType
-        return qualifiersOrDefiningSupertypes.contains(getActualQualifier(callableSignature))
+        if (qualifiersOrDefiningSupertypes.contains(getActualQualifier(callableSignature))) return true
+        if (!definingSupertypes.isNullOrEmpty() && checkSubType(callableSignature)) return true
+        return false
     }
+
 
     @Deprecated("")
     private fun getActualQualifier(functionDescriptor: CallableDescriptor) =
@@ -160,6 +162,7 @@ class FunMatcherImpl(
         }
     }
 
+    @Deprecated("")
     private fun checkSubType(functionDescriptor: CallableDescriptor): Boolean =
         when (functionDescriptor) {
             is ConstructorDescriptor -> false
@@ -176,6 +179,14 @@ class FunMatcherImpl(
                 }
             }
         }
+
+    private fun checkSubType(functionDescriptor: KaFunctionSignature<KaFunctionSymbol>): Boolean = analyze {
+        if (functionDescriptor is ConstructorDescriptor) return false
+        return functionDescriptor.symbol.allOverriddenSymbols.any {
+            val className: String? = it.callableId?.asSingleFqName()?.parent()?.asString()
+            definingSupertypes.contains(className)
+        }
+    }
 
     @Deprecated("")
     private fun checkName(functionDescriptor: CallableDescriptor): Boolean =
