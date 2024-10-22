@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.metrics
 
-import com.intellij.openapi.util.Disposer
 import org.assertj.core.api.Assertions
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.Test
@@ -61,11 +60,8 @@ internal class StatementsVisitorTest {
 }
 
 private fun statements(content: String): Int {
-    val environment = /* Disposed below */ Environment(emptyList(), LanguageVersion.LATEST_STABLE)
-    val ktFile = environment.ktPsiFactory.createFile(content)
+    val ktFile = Environment(emptyList(), LanguageVersion.LATEST_STABLE).ktPsiFactory.createFile(content)
     val statementsVisitor = StatementsVisitor()
     ktFile.accept(statementsVisitor)
-    val result = statementsVisitor.statements
-    Disposer.dispose(environment.disposable)
-    return result
+    return statementsVisitor.statements
 }

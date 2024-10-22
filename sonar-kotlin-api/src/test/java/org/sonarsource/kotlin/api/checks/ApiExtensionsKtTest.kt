@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.api.checks
 
-import com.intellij.openapi.util.Disposer
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.ObjectAssert
 import com.intellij.psi.PsiElement
@@ -51,7 +50,6 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import org.sonar.api.SonarEdition
@@ -67,7 +65,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import java.util.TreeMap
 
-private class ApiExtensionsKtTest : AbstractApiExtensionsKtTest() {
+internal class ApiExtensionsKtTest {
 
     @Test
     fun `test isLocalVariable`() {
@@ -288,7 +286,7 @@ private class ApiExtensionsKtTest : AbstractApiExtensionsKtTest() {
     }
 }
 
-private class ApiExtensionsKtDetermineTypeTest : AbstractApiExtensionsKtTest() {
+class ApiExtensionsKtDetermineTypeTest {
     private val bindingContext: BindingContext
     private val ktFile: KtFile
 
@@ -514,7 +512,7 @@ private class ApiExtensionsKtDetermineTypeTest : AbstractApiExtensionsKtTest() {
     }
 }
 
-private class ApiExtensionsKtDetermineSignatureTest : AbstractApiExtensionsKtTest() {
+class ApiExtensionsKtDetermineSignatureTest {
     private val bindingContext: BindingContext
     private val ktFile: KtFile
 
@@ -549,8 +547,9 @@ private class ApiExtensionsKtDetermineSignatureTest : AbstractApiExtensionsKtTes
     }
 }
 
-private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKtTest() {
-    private fun generateAst(funContent: String) = """
+class ApiExtensionsScopeFunctionResolutionTest {
+    companion object {
+        private fun generateAst(funContent: String) = """
             package bar
 
             class Foo {
@@ -561,6 +560,7 @@ private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKt
                 }
             }
         """.let { parse(it) }.let { it.psiFile to it.bindingContext }
+    }
 
     @Test
     fun `resolve this as arg in with`() {
@@ -701,36 +701,28 @@ private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKt
     }
 }
 
-private abstract class AbstractApiExtensionsKtTest {
-    /**
-     * Disposed in [afterEach]
-     */
-    private val environment = Environment(
+private fun parse(code: String) = kotlinTreeOf(
+    code,
+    Environment(
+        listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(File.pathSeparatorChar),
+        LanguageVersion.LATEST_STABLE
+    ),
+    TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
+        .setCharset(StandardCharsets.UTF_8)
+        .initMetadata(code)
+        .build()
+)
+
+private fun parseWithoutParsingExceptions(code: String): KtFile {
+    val environment = Environment(
         listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(File.pathSeparatorChar),
         LanguageVersion.LATEST_STABLE
     )
-
-    fun parse(code: String) = kotlinTreeOf(
-        code,
-        environment,
-        TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
-            .setCharset(StandardCharsets.UTF_8)
-            .initMetadata(code)
-            .build()
-    )
-
-    fun parseWithoutParsingExceptions(code: String): KtFile {
-        val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
-            .setCharset(StandardCharsets.UTF_8)
-            .initMetadata(code)
-            .build()
-        return environment.ktPsiFactory.createFile(inputFile.uri().path, code.replace("""\r\n?""".toRegex(), "\n"))
-    }
-
-    @AfterEach
-    fun afterEach() {
-        Disposer.dispose(environment.disposable)
-    }
+    val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
+        .setCharset(StandardCharsets.UTF_8)
+        .initMetadata(code)
+        .build()
+    return environment.ktPsiFactory.createFile(inputFile.uri().path, code.replace("""\r\n?""".toRegex(), "\n"))
 }
 
 private class KtExpressionAssert(expression: KtExpression?) : ObjectAssert<KtExpression>(expression) {

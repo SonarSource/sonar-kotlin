@@ -19,7 +19,6 @@
  */
 package org.sonarsource.kotlin.api.checks
 
-import com.intellij.openapi.util.Disposer
 import io.mockk.Called
 import io.mockk.spyk
 import io.mockk.unmockkAll
@@ -32,7 +31,6 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.jetbrains.kotlin.types.typeUtil.TypeNullability
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.api.frontend.Environment
@@ -43,11 +41,7 @@ import java.nio.file.Paths
 
 class FunMatcherTest {
 
-    /**
-     * Disposed in [afterEach]
-     */
     val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
-
     val path = Paths.get("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
     val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin.kt")
@@ -618,10 +612,4 @@ class FunMatcherTest {
             }
         }
     }
-
-    @AfterEach
-    fun afterEach() {
-        Disposer.dispose(environment.disposable)
-    }
-
 }

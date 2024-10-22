@@ -19,11 +19,9 @@
  */
 package org.sonarsource.kotlin.plugin.cpd
 
-import com.intellij.openapi.util.Disposer
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.ObjectAssert
 import org.jetbrains.kotlin.config.LanguageVersion
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.api.io.TempDir
@@ -58,11 +56,6 @@ private val content = """
 
 class CopyPasteDetectorTest {
 
-    /**
-     * Disposed in [afterEach]
-     */
-    private val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
-
     @JvmField
     @TempDir
     var tmpFolder: Path? = null
@@ -80,7 +73,7 @@ class CopyPasteDetectorTest {
             .setContents(content)
             .build()
 
-        val root = kotlinTreeOf(content, environment, inputFile)
+        val root = kotlinTreeOf(content, Environment(emptyList(), LanguageVersion.LATEST_STABLE), inputFile)
         val ctx = InputFileContextImpl(sensorContext, inputFile, false)
         CopyPasteDetector().scan(ctx, root)
 
@@ -131,7 +124,7 @@ class CopyPasteDetectorTest {
             .setContents(content)
             .build()
 
-        val root = kotlinTreeOf(content, environment, inputFile)
+        val root = kotlinTreeOf(content, Environment(emptyList(), LanguageVersion.LATEST_STABLE), inputFile)
         val ctx = InputFileContextImpl(sensorContext, inputFile, false)
 
         val readCache = DummyReadCache(emptyMap())
@@ -163,7 +156,7 @@ class CopyPasteDetectorTest {
             .setContents(content)
             .build()
 
-        val root = kotlinTreeOf(content, environment, inputFile)
+        val root = kotlinTreeOf(content, Environment(emptyList(), LanguageVersion.LATEST_STABLE), inputFile)
         val ctx = InputFileContextImpl(sensorContext, inputFile, false)
 
         val readCache = DummyReadCache(emptyMap())
@@ -181,11 +174,6 @@ class CopyPasteDetectorTest {
         Assertions.assertThat(logs)
             .hasSize(1)
             .containsExactly("No CPD tokens cached for next analysis of input file moduleKey:dummy.kt.")
-    }
-
-    @AfterEach
-    fun afterEach() {
-        Disposer.dispose(environment.disposable)
     }
 }
 

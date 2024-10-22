@@ -82,7 +82,6 @@ class IssueSuppressionVisitorTest {
         )
 
     private fun scanFile(path: Path, suppress: Boolean, check: AbstractCheck, vararg checks: AbstractCheck): SingleFileVerifier {
-        // TODO dispose
         val env = Environment(System.getProperty("java.class.path").split(File.pathSeparatorChar) + DEFAULT_KOTLIN_CLASSPATH, LanguageVersion.LATEST_STABLE)
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
