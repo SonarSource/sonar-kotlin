@@ -19,19 +19,20 @@
  */
 package org.sonarsource.kotlin.api.frontend
 
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISession
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
+import org.jetbrains.kotlin.cli.jvm.compiler.CliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
-import com.intellij.openapi.Disposable
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.Disposer
-import org.jetbrains.kotlin.cli.jvm.compiler.CliBindingTrace
 import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -59,7 +60,7 @@ class Environment(
     val classpath: List<String>,
     kotlinLanguageVersion: LanguageVersion,
     javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8,
-    useK2: Boolean = false,
+    val useK2: Boolean = false,
     numberOfThreads: Int? = null
 ) {
     val disposable = Disposer.newDisposable()
@@ -68,11 +69,11 @@ class Environment(
     val env = kotlinCoreEnvironment(configuration, disposable)
     val ktPsiFactory: KtPsiFactory = KtPsiFactory(env.project, false)
     // K2
-    val session = if (useK2) createAnalysisSession(disposable, configuration) else null
+    var k2session: StandaloneAnalysisAPISession? = null
 
     init {
         if (!useK2) {
-            configureAnalysisApiServices(env)
+            configureK1AnalysisApiServices(env)
         }
     }
 }
@@ -97,6 +98,7 @@ fun kotlinCoreEnvironment(
 }
 
 // FIXME(Godin): remove?
+@Deprecated("")
 fun bindingContext(
     environment: KotlinCoreEnvironment,
     classpath: List<String>,

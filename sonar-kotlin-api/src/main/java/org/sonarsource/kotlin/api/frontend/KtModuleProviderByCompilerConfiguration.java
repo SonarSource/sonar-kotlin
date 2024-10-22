@@ -35,7 +35,7 @@ import java.util.List;
 final class KtModuleProviderByCompilerConfiguration {
 
     @SuppressWarnings("KotlinInternalInJava")
-    static KotlinStaticProjectStructureProvider build(
+    public static KotlinStaticProjectStructureProvider build(
             KotlinCoreProjectEnvironment kotlinCoreProjectEnvironment,
             CompilerConfiguration compilerConfig,
             List<KtFile> ktFiles

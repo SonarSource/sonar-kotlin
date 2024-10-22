@@ -48,7 +48,7 @@ import org.jetbrains.kotlin.resolve.extensions.AnalysisHandlerExtension
 @Deprecated("")
 annotation class K1only(val comments: String = "")
 
-internal fun configureAnalysisApiServices(env: KotlinCoreEnvironment) {
+internal fun configureK1AnalysisApiServices(env: KotlinCoreEnvironment) {
     val application = env.projectEnvironment.environment.application
     if (application.getServiceIfCreated(KtFe10ReferenceResolutionHelper::class.java) == null) {
         AnalysisApiFe10ServiceRegistrar.registerApplicationServices(application)

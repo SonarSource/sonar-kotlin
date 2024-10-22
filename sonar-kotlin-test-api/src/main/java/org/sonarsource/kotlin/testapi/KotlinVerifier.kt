@@ -80,6 +80,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
         )
         val converter = { content: String ->
             val inputFile = TestInputFileBuilder("moduleKey", filePath.fileName.pathString)
+//                .setModuleBaseDir(filePath.parent) // otherwise projectKey "moduleKey" leaks into absolutePath
                 .setCharset(StandardCharsets.UTF_8)
                 .initMetadata(content).build()
 

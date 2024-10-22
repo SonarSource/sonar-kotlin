@@ -44,10 +44,13 @@ data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val
         @JvmStatic
         fun of(content: String, environment: Environment, inputFile: InputFile): KotlinSyntaxStructure {
 
-            val psiFile: KtFile = if (environment.session != null) {
+            val psiFile: KtFile = if (environment.k2session != null) {
                 // FIXME quick hack
-                environment.session.modulesWithFiles.values.first()
-                    .find { inputFile.filename() == it.name } as KtFile
+                environment.k2session!!.modulesWithFiles.values.first()
+                    .find {
+                        // FIXME fails on Windows?
+                        it.virtualFile.path == inputFile.uri().path
+                    } as KtFile
             } else
                 environment.ktPsiFactory.createFile(inputFile.uri().path, normalizeEol(content))
 
