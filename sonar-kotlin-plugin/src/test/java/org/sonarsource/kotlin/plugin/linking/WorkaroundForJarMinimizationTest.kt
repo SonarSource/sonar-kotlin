@@ -25,6 +25,6 @@ import org.junit.jupiter.api.Test
 internal class WorkaroundForJarMinimizationTest {
     @Test
     fun minimizing_class_count() {
-        assertThat(WorkaroundForJarMinimization.CLASSES_TO_KEEP_WHEN_MINIMIZING_JAR).hasSize(7)
+        assertThat(WorkaroundForJarMinimization.CLASSES_TO_KEEP_WHEN_MINIMIZING_JAR).hasSize(16)
     }
 }
