@@ -44,13 +44,31 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
 
+/**
+ * @param disposable
+ * see [documentation](https://jetbrains.org/intellij/sdk/docs/basics/disposers.html) for more details
+ */
 class Environment(
+    val disposable: Disposable,
     val classpath: List<String>,
     kotlinLanguageVersion: LanguageVersion,
     javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8,
-    numberOfThreads: Int? = null
+    numberOfThreads: Int? = null,
 ) {
-    val disposable = Disposer.newDisposable()
+    @Deprecated("use explicit disposable")
+    constructor(
+        classpath: List<String>,
+        kotlinLanguageVersion: LanguageVersion,
+        javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8,
+        numberOfThreads: Int? = null,
+    ) : this(
+        Disposer.newDisposable(),
+        classpath,
+        kotlinLanguageVersion,
+        javaLanguageVersion,
+        numberOfThreads,
+    )
+
     val configuration = compilerConfiguration(classpath, kotlinLanguageVersion, javaLanguageVersion, numberOfThreads)
     val env = kotlinCoreEnvironment(configuration, disposable)
     val ktPsiFactory: KtPsiFactory = KtPsiFactory(env.project, false)
