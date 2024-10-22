@@ -43,7 +43,7 @@ import org.sonarsource.kotlin.api.visiting.analyze
 
 private val JAVA_CLASS_KEYWORDS = listOf("java", "javaClass")
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
+@org.sonarsource.kotlin.api.frontend.K1only("rewritten, but K2 differs")
 @Rule(key = "S6202")
 class IsInstanceMethodCheck : CallAbstractCheck() {
 

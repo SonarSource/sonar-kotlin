@@ -49,7 +49,7 @@ private val lazyInitializationMatcher = FunMatcher(
     definingSupertype = "kotlin"
 )
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
+@org.sonarsource.kotlin.api.frontend.K1only("easy? try next")
 @Rule(key = "S6515")
 class SingletonPatternCheck : AbstractCheck() {
 

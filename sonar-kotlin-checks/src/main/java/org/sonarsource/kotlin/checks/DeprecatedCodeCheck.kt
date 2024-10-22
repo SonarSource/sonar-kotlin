@@ -31,7 +31,7 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.annotatedElement
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
+@org.sonarsource.kotlin.api.frontend.K1only("easy? try next")
 @Rule(key = "S1133")
 class DeprecatedCodeCheck : AbstractCheck() {
 

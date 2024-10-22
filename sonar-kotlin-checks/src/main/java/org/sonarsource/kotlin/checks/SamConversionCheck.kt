@@ -28,7 +28,7 @@ import org.sonarsource.kotlin.api.checks.isFunctionalInterface
 import org.sonarsource.kotlin.api.checks.merge
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
+@org.sonarsource.kotlin.api.frontend.K1only("easy? try next")
 @Rule(key = "S6516")
 class SamConversionCheck : AbstractCheck() {
 
