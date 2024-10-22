@@ -30,7 +30,6 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.isExhaustive
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S6510")
 class LiftReturnStatementCheck : AbstractCheck() {
 

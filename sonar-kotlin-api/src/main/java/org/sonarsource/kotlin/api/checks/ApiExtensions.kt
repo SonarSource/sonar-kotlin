@@ -23,6 +23,7 @@ import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.LeafPsiElement
+import org.jetbrains.kotlin.analysis.api.KaIdeApi
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
@@ -648,8 +649,10 @@ fun SensorContext.hasCacheEnabled(): Boolean {
         isCacheEnabled
 }
 
-fun KtWhenExpression.isExhaustive(context: KotlinFileContext): Boolean {
-    return entries.any { it.isElse } || context.bindingContext[BindingContext.EXHAUSTIVE_WHEN, this] == true
+@OptIn(KaIdeApi::class)
+fun KtWhenExpression.isExhaustive(context: KotlinFileContext): Boolean = analyze {
+    return entries.any { it.isElse} || this@isExhaustive.computeMissingCases().isEmpty()
+//    return entries.any { it.isElse } || context.bindingContext[BindingContext.EXHAUSTIVE_WHEN, this] == true
 }
 
 val PropertyDescriptor.unwrappedGetMethod: FunctionDescriptor?
