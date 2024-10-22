@@ -21,7 +21,9 @@ package org.sonarsource.kotlin.api.checks
 
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaReceiverValue
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.signatures.KaCallableSignature
 import org.jetbrains.kotlin.analysis.api.signatures.KaFunctionSignature
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
@@ -80,7 +82,8 @@ class FunMatcherImpl(
     }
 
     fun matches(node: KtCallExpression): Boolean = analyze {
-        return matches(node.resolveToCall()?.successfulFunctionCallOrNull()?.partiallyAppliedSymbol?.signature)
+        val call = node.resolveToCall()?.successfulFunctionCallOrNull()
+        return call != null && matches(call)
     }
 
     @Deprecated("use kotlin-analysis-api", replaceWith = ReplaceWith("matches(node)"))
@@ -91,7 +94,8 @@ class FunMatcherImpl(
 
     @OptIn(KaExperimentalApi::class)
     fun matches(node: KtNamedFunction): Boolean = analyze {
-        return matches(node.symbol.asSignature())
+        // TODO try node.resolveToCall
+        return matches(null, node.symbol.asSignature())
     }
 
     fun matches(call: Call, bindingContext: BindingContext) = preCheckArgumentCount(call) &&
@@ -103,7 +107,10 @@ class FunMatcherImpl(
 
     fun matches(resolvedCall: KaFunctionCall<*>) =
         // TODO preCheckArgumentCount?
-        matches(resolvedCall.partiallyAppliedSymbol.signature)
+        matches(
+            resolvedCall.partiallyAppliedSymbol.dispatchReceiver,
+            resolvedCall.partiallyAppliedSymbol.signature,
+        )
 
     private fun preCheckArgumentCount(call: Call?) = call == null || call.valueArguments.size <= maxArgumentCount
 
@@ -118,7 +125,10 @@ class FunMatcherImpl(
             checkReturnType(functionDescriptor) &&
             checkCallParameters(functionDescriptor)
 
-    private fun matches(callableSignature: KaFunctionSignature<KaFunctionSymbol>?): Boolean {
+    private fun matches(
+        dispatchReceiver: KaReceiverValue?,
+        callableSignature: KaFunctionSignature<KaFunctionSymbol>?
+    ): Boolean {
         return callableSignature != null &&
 //            FIXME checkIsDynamic(callableSignature) &&
 //            FIXME checkIsExtensionFunction(callableSignature) &&
@@ -126,7 +136,7 @@ class FunMatcherImpl(
             checkIsOperator(callableSignature) &&
             checkReturnType(callableSignature) &&
             checkName(callableSignature) &&
-            checkTypeOrSupertype(callableSignature) &&
+            checkTypeOrSupertype(dispatchReceiver, callableSignature) &&
             checkCallParameters(callableSignature)
     }
 
@@ -135,13 +145,19 @@ class FunMatcherImpl(
         qualifiersOrDefiningSupertypes.isEmpty() || qualifiersOrDefiningSupertypes.contains(getActualQualifier(functionDescriptor)) ||
             !definingSupertypes.isNullOrEmpty() && checkSubType(functionDescriptor)
 
-    private fun checkTypeOrSupertype(callableSignature: KaFunctionSignature<KaFunctionSymbol>): Boolean {
+    private fun checkTypeOrSupertype(
+        dispatchReceiver: KaReceiverValue?,
+        callableSignature: KaFunctionSignature<KaFunctionSymbol>,
+    ): Boolean {
         if (qualifiersOrDefiningSupertypes.isEmpty()) return true
+        // TODO try to use only dispatchReceiver?
+        // java.lang.Math.random has kotlin/Unit receiver type in K2 and null in K1?
+        val receiverFQN = (dispatchReceiver?.type as? KaClassType)?.classId?.asFqNameString();
+        if (qualifiersOrDefiningSupertypes.contains(receiverFQN)) return true
         if (qualifiersOrDefiningSupertypes.contains(getActualQualifier(callableSignature))) return true
         if (!definingSupertypes.isNullOrEmpty() && checkSubType(callableSignature)) return true
         return false
     }
-
 
     @Deprecated("")
     private fun getActualQualifier(functionDescriptor: CallableDescriptor) =
