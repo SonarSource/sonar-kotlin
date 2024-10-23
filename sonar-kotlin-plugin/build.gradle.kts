@@ -6,6 +6,7 @@ import java.util.jar.JarInputStream
 plugins {
     id("com.gradleup.shadow") version "8.3.1"
     kotlin("jvm")
+    id("jacoco-report-aggregation")
 }
 
 dependencies {
@@ -140,4 +141,9 @@ fun checkJarEntriesPathUniqueness(file: File) {
     if (duplicatedNames.isNotEmpty()) {
         throw GradleException("Duplicated entries in the jar: '${file.path}': ${duplicatedNames.joinToString(", ")}")
     }
+}
+
+tasks.check {
+    // Generate aggregate coverage report
+    dependsOn(tasks.named<JacocoReport>("testCodeCoverageReport"))
 }
