@@ -19,10 +19,12 @@
  */
 package org.sonarsource.kotlin.api.checks
 
+import com.intellij.openapi.util.Disposer
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.DefaultInputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
@@ -32,6 +34,23 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+
+class ExampleTest {
+    @Test
+    fun test() {
+        for (i in 1..10_000) {
+            println("Iteration $i")
+            val e = Environment(
+                listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"),
+                LanguageVersion.LATEST_STABLE
+            )
+            // OOME on iteration 91 without dispose and with configureAnalysisApiServices
+            // OOME on iteration 525 without dispose and without configureAnalysisApiServices
+            // OOME on iteration 83 with jvmArgs("-Xmx100m")
+//            Disposer.dispose(e.disposable)
+        }
+    }
+}
 
 class FieldMatcherTest {
 
@@ -62,6 +81,9 @@ class FieldMatcherTest {
         36, // 10: listContainer.listContainer.customizedList.size
     )
 
+    // OOME on 50 with -Xmx100m WITHOUT configureAnalysisApiServices
+    // OOME on 7 with -Xmx100m WITH configureAnalysisApiServices
+    @RepeatedTest(10 * 10)
     @Test
     fun `match field by name`() {
         check(FieldMatcher {

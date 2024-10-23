@@ -62,7 +62,7 @@ class Environment(
 
     init {
         if (!useK2) {
-            configureAnalysisApiServices(env)
+//            configureAnalysisApiServices(env)
         }
     }
 }

@@ -29,6 +29,8 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.api.frontend.Environment
+import org.sonarsource.kotlin.api.frontend.bindingContext
+import java.io.File
 
 internal class CyclomaticComplexityVisitorTest {
 
@@ -132,18 +134,27 @@ internal class CyclomaticComplexityVisitorTest {
 
     @Test
     fun `test function without body`() {
-        val content =
-            """abstract class X() {
-                   fun f(x: Int)
+        for (i in 1..1000) {
+            println("Iteration $i")
+            val content =
+                """abstract class X() {
+                   fun f(x: Int, y: sample.Foo1)
              }""".trimMargin()
 
-        val trees = getComplexityTrees(content)
-        Assertions.assertThat(trees).isEmpty()
+            val trees = getComplexityTrees(content)
+            Assertions.assertThat(trees).isEmpty()
+        }
     }
 
     private fun getComplexityTrees(content: String): List<PsiElement> {
         val env = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
         val ktFile = env.ktPsiFactory.createFile(content)
+        bindingContext(
+            env.env,
+            System.getProperty("java.class.path").split(File.pathSeparatorChar),
+//            listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"),
+            listOf(ktFile)
+        )
         val cyclomaticComplexityVisitor = CyclomaticComplexityVisitor()
         ktFile.accept(cyclomaticComplexityVisitor)
         return cyclomaticComplexityVisitor.complexityTrees()

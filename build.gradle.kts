@@ -144,6 +144,9 @@ subprojects {
     }
 
     tasks.test {
+//        jvmArgs("-XX:+HeapDumpOnOutOfMemoryError")
+        jvmArgs("-Xmx100m")
+
         testLogging {
             exceptionFormat =
                 org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL // log the full stack trace (default is the 1st line of the stack trace)
