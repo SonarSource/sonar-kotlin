@@ -69,9 +69,9 @@ dependencyResolutionManagement {
         }
 
         create("testLibs") {
+            from(files("gradle/testLibs.versions.toml"))
             val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
             val assertj = version("assertj", "3.24.2")
-            val junit = version("junit", "5.10.1")
             val mockito = version("mockito", "5.7.0")
             val mockk = version("mockk", "1.13.3")
             val orchestrator = version("orchestrator", "5.0.0.2065")
@@ -79,7 +79,6 @@ dependencyResolutionManagement {
             val sonarqube = version("sonarqube", "10.0.0.68432")
 
             library("assertj-core", "org.assertj", "assertj-core").versionRef(assertj)
-            library("junit-jupiter", "org.junit.jupiter", "junit-jupiter").versionRef(junit)
             library("mockito-core", "org.mockito", "mockito-core").versionRef(mockito)
             library("mockk", "io.mockk", "mockk").versionRef(mockk)
             library("sonar-analyzer-test-commons", "org.sonarsource.analyzer-commons", "sonar-analyzer-test-commons")
