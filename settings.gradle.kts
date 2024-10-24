@@ -29,12 +29,12 @@ dependencyResolutionManagement {
     versionCatalogs {
 
         val kotlinVersion: String by extra
-        val analyzerCommonsVersionStr = "2.7.0.1482"
+        val analyzerCommons = "2.7.0.1482"
         val sonarPluginApi = "10.3.0.1951"
         val slf4jApi = "1.7.30"
 
         create("libs") {
-            val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
+            val analyzerCommons = version("analyzerCommons", analyzerCommons)
             val gson = version("gson", "2.10.1")
             val staxmate = version("staxmate", "2.4.1")
 
@@ -42,7 +42,7 @@ dependencyResolutionManagement {
             library("kotlin-compiler", "org.jetbrains.kotlin", "kotlin-compiler").version(kotlinVersion)
             library("sonar-analyzer-commons", "org.sonarsource.analyzer-commons", "sonar-analyzer-commons").versionRef(analyzerCommons)
             library("sonar-analyzer-commons-recognizers", "org.sonarsource.analyzer-commons", "sonar-analyzer-recognizers")
-                .versionRef(analyzerCommons)
+                .versionRef("analyzerCommons")
             library("sonar-performance-measure", "org.sonarsource.analyzer-commons", "sonar-performance-measure")
                 .versionRef(analyzerCommons)
             library("sonar-plugin-api", "org.sonarsource.api.plugin", "sonar-plugin-api").version(sonarPluginApi)
@@ -69,7 +69,7 @@ dependencyResolutionManagement {
         }
 
         create("testLibs") {
-            val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
+            val analyzerCommons = version("analyzerCommons", analyzerCommons)
             val assertj = version("assertj", "3.24.2")
             val junit = version("junit", "5.10.1")
             val mockito = version("mockito", "5.7.0")
