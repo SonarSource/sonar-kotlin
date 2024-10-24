@@ -188,5 +188,10 @@ class RedundantMethodsInDataClassesCheckSample {
         override fun hashCode() = this.a + a // Compliant
     }
 
+    data class Person22(val name: String, val age: Int) {
+        val a = arrayOf(name, age)
+
+        override fun hashCode() = Arrays.hashCode(a) // FN
+    }
 
 }
