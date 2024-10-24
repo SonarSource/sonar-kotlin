@@ -1,0 +1,43 @@
+{
+"kotlin-corda-project:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/AssociatedList.kt": [
+55,
+55
+],
+"kotlin-corda-project:sources/kotlin/corda/experimental/behave/src/scenario/kotlin/net/corda/behave/scenarios/helpers/Cash.kt": [
+21
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/SerialFilter.kt": [
+32,
+33
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/utilities/AppendOnlyPersistentMap.kt": [
+145,
+146
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/utilities/ObjectDiffer.kt": [
+86,
+86
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/AppendOnlyPersistentMapTest.kt": [
+218,
+227,
+257
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/ByteBufferStreams.kt": [
+41
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/PropertySerializers.kt": [
+67
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/PrivatePropertyTests.kt": [
+195,
+215
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationOutputTests.kt": [
+1158
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationPropertyOrdering.kt": [
+112,
+120
+]
+}

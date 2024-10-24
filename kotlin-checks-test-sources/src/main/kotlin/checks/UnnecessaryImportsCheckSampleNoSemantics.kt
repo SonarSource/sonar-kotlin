@@ -3,15 +3,15 @@ package checks
 // same package/file
 import checks.ClassInSameFileB // Noncompliant {{Remove this redundant import.}}
 // same package
-import checks.DelicateCoroutinesApi // Noncompliant {{Remove this redundant import.}}
+import checks.DelicateCoroutinesApi // FN
 // unused
-import com.google.common.collect.ImmutableList // Noncompliant {{Remove this unused import.}}
+import com.google.common.collect.ImmutableList // FN
 // unused
-import com.google.common.collect.ImmutableList.copyOf // Noncompliant {{Remove this unused import.}}
+import com.google.common.collect.ImmutableList.copyOf // FN
 import com.google.common.collect.ImmutableList.of
 import com.google.common.collect.ImmutableSet.of as immutable_set_of
 // unused
-import com.google.common.io.Files // Noncompliant {{Remove this unused import.}}
+import com.google.common.io.Files // FN
 import com.google.common.io.Files.isFile
 import okhttp3.TlsVersion
 import org.apache.commons.lang.StringUtils
@@ -35,10 +35,10 @@ import java.util.BitSet // Compliant (KDoc usage)
 import java.util.Date // Noncompliant {{Remove this unused import.}}
 import java.util.Timer
 // kotlin.* is automatically imported
-import kotlin.Any // Noncompliant {{Remove this redundant import.}}
+import kotlin.Any // FN
 import okhttp3.TlsVersion.TLS_1_1
 // unused
-import okhttp3.TlsVersion.TLS_1_2 // Noncompliant {{Remove this unused import.}}
+import okhttp3.TlsVersion.TLS_1_2 // FN
 import operators.OperatorsContainer
 import otherpackage.OtherClass
 import otherpackage.OtherClass2.plus
@@ -50,7 +50,7 @@ import otherpackage.stringExtFun2
 import java.io.InputStream
 import java.lang.reflect.Method
 import kotlin.reflect.jvm.kotlinFunction
-import okhttp3.TlsVersion.SSL_3_0 as TLS3 // Noncompliant {{Remove this unused import.}}
+import okhttp3.TlsVersion.SSL_3_0 as TLS3 // FN
 import okhttp3.TlsVersion.TLS_1_3 as TLS13
 import java.beans.* // Non|compliant FN (we currently ignore all wildcard imports)
 import kotlin.test.* // Non|compliant FN (we currently ignore all wildcard imports)
@@ -75,11 +75,11 @@ import operators.unaryPlus
 import operators.get
 import operators.invoke
 import operators.set
-import operators.plusAssign // Noncompliant
-import operators.minusAssign // Noncompliant
-import operators.timesAssign // Noncompliant
-import operators.divAssign // Noncompliant
-import operators.remAssign // Noncompliant
+import operators.plusAssign // FN
+import operators.minusAssign // FN
+import operators.timesAssign // FN
+import operators.divAssign // FN
+import operators.remAssign // FN
 import operators.provideDelegate // FN due to missing binding context
 
 class SomeClassWithDelegateNoSemantics(var delegate: OperatorsContainer) {

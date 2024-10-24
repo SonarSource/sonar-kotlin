@@ -1,0 +1,15 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/SMAP.kt": [
+367
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/checkers/LoggingStorageManager.kt": [
+38,
+48
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/JavaToKotlinConverter.kt": [
+223
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/typeAlias/src/main/kotlin/UseCurry.kt": [
+10
+]
+}

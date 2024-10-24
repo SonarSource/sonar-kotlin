@@ -1,0 +1,9 @@
+{
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/CustomSerializer.kt": [
+90
+],
+"kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/MockServices.kt": [
+269,
+270
+]
+}

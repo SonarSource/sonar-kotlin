@@ -1,0 +1,136 @@
+{
+"kotlin-corda-project:sources/kotlin/corda/client/jackson/src/main/kotlin/net/corda/client/jackson/StringToMethodCallParser.kt": [
+113
+],
+"kotlin-corda-project:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/model/Models.kt": [
+70
+],
+"kotlin-corda-project:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/AggregatedList.kt": [
+106,
+117
+],
+"kotlin-corda-project:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/AssociatedList.kt": [
+48
+],
+"kotlin-corda-project:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/MapValuesList.kt": [
+37
+],
+"kotlin-corda-project:sources/kotlin/corda/client/mock/src/main/kotlin/net/corda/client/mock/Generator.kt": [
+70
+],
+"kotlin-corda-project:sources/kotlin/corda/client/rpc/src/main/kotlin/net/corda/client/rpc/internal/RPCClientProxyHandler.kt": [
+419
+],
+"kotlin-corda-project:sources/kotlin/corda/confidential-identities/src/main/kotlin/net/corda/confidential/IdentitySyncFlow.kt": [
+49
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/contracts/ContractsDSL.kt": [
+24
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/crypto/CompositeKey.kt": [
+283
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/crypto/Crypto.kt": [
+510,
+511
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/crypto/CryptoUtils.kt": [
+94
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/internal/InternalUtils.kt": [
+91
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/ContractUpgradeTransactions.kt": [
+139
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/SignedTransaction.kt": [
+204,
+219
+],
+"kotlin-corda-project:sources/kotlin/corda/experimental/corda-utils/src/main/kotlin/io/cryptoblk/core/StatusTransitions.kt": [
+50,
+80
+],
+"kotlin-corda-project:sources/kotlin/corda/experimental/kryo-hook/src/main/kotlin/net/corda/kryohook/KryoHook.kt": [
+140
+],
+"kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/protonwrapper/netty/AMQPClient.kt": [
+214
+],
+"kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/protonwrapper/netty/AMQPServer.kt": [
+173
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/AbstractNode.kt": [
+592,
+783
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/CheckpointVerifier.kt": [
+49
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/NetworkParametersReader.kt": [
+63,
+69
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/serialization/kryo/CordaClosureSerializer.kt": [
+12
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/messaging/P2PMessagingClient.kt": [
+607
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/messaging/RPCServer.kt": [
+134
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/ActionExecutorImpl.kt": [
+196
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/FlowStateMachineImpl.kt": [
+389
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SingleThreadedStateMachineManager.kt": [
+168,
+242
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/utilities/AffinityExecutor.kt": [
+21
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/events/ScheduledFlowTests.kt": [
+162,
+167
+],
+"kotlin-corda-project:sources/kotlin/corda/samples/irs-demo/src/system-test/kotlin/net/corda/irs/IRSDemoDockerTest.kt": [
+20
+],
+"kotlin-corda-project:sources/kotlin/corda/samples/network-visualiser/src/main/kotlin/net/corda/netmap/simulation/Simulation.kt": [
+50
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/AllButBlacklisted.kt": [
+127
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/UseCaseAwareness.kt": [
+10
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/MapSerializer.kt": [
+123,
+134,
+141
+],
+"kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/driver/DriverDSL.kt": [
+34
+],
+"kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/DriverDSLImpl.kt": [
+751
+],
+"kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/InternalMockNetwork.kt": [
+149,
+343
+],
+"kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/NodeBasedTest.kt": [
+104
+],
+"kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/dsl/TestDSL.kt": [
+315
+],
+"kotlin-corda-project:sources/kotlin/corda/tools/loadtest/src/main/kotlin/net/corda/loadtest/Main.kt": [
+63
+]
+}

@@ -1,0 +1,32 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/stubindex/KotlinFileFacadeClassByPackageIndex.kt": [
+35
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/stubindex/KotlinFileFacadeFqNameIndex.kt": [
+35
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/stubindex/KotlinFileFacadeShortNameIndex.kt": [
+35
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/stubindex/KotlinFilePartClassIndex.kt": [
+36
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/stubindex/KotlinMultifileClassPartIndex.kt": [
+36
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/stubindex/KotlinOverridableInternalMembersShortNameIndex.kt": [
+35
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/stubindex/KotlinScriptFqnIndex.kt": [
+36
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/stubindex/KotlinTopLevelExtensionsByReceiverTypeIndex.kt": [
+36
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.frontend/src/org/jetbrains/kotlin/js/patterns/typePredicates/typePredicates.kt": [
+25
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/io/SerializableTest.kt": [
+26
+]
+}

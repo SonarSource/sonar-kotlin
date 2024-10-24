@@ -5,27 +5,32 @@ class UnusedLocalVariableCheckSampleNoSemantics {
 
     val f =  { i: Int ->
         if (i == 0) {
-            val toExpr = " "
+            val toExpr = " " // Noncompliant
+//              ^^^^^^
         }
     }
     
     val hcek = 0
 
     init {
-        var i: Int
+        var i: Int // Noncompliant
+//          ^
     }
 
     constructor() {
-        val i = 90
+        val i = 90 // Noncompliant
+///         ^
     }
     var global = 0
 
     fun fooBar() {
         val a = 0
 
-        val b: String
+        val b: String // Noncompliant
+//          ^
 
-        var c: String
+        var c: String // Noncompliant
+//          ^
 
         var d: Int
         d = 0
@@ -36,19 +41,22 @@ class UnusedLocalVariableCheckSampleNoSemantics {
 
         val f =  { i: Int ->
             if (i == 0) {
-                val toExpr = " "
+                val toExpr = " " // Noncompliant
+//                  ^^^^^^
             }
         }
         
         f(0)
         
         fun fff() {
-            var b = 0
+            var b = 0 // Noncompliant
+//              ^
         }
     }
 
     fun String.extension() {
-        val unused = 0
+        val unused = 0 // Noncompliant
+//          ^^^^^^
     }
 }
 
