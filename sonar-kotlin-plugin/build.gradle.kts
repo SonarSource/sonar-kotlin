@@ -6,10 +6,7 @@ import java.util.jar.JarInputStream
 plugins {
     id("com.gradleup.shadow") version "8.3.1"
     kotlin("jvm")
-}
-
-repositories {
-    maven { url = uri("https://repo.gradle.org/gradle/libs-releases") }
+    id("jacoco-report-aggregation")
 }
 
 dependencies {
@@ -96,10 +93,10 @@ val javadocJar = tasks.javadocJar
 tasks.shadowJar {
     minimize {}
     exclude("META-INF/native/**/*jansi*")
-    exclude("org/jetbrains/kotlin/org/jline/**")
-    exclude("org/jetbrains/kotlin/net/jpountz/**")
+    exclude("org/jline/**")
+    exclude("net/jpountz/**")
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 38_100_000L, 38_600_000L)
+        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 37_500_000L, 38_000_000L)
     }
 }
 
@@ -144,4 +141,9 @@ fun checkJarEntriesPathUniqueness(file: File) {
     if (duplicatedNames.isNotEmpty()) {
         throw GradleException("Duplicated entries in the jar: '${file.path}': ${duplicatedNames.joinToString(", ")}")
     }
+}
+
+tasks.check {
+    // Generate aggregate coverage report
+    dependsOn(tasks.named<JacocoReport>("testCodeCoverageReport"))
 }

@@ -232,6 +232,18 @@ sonarqube {
     }
 }
 
+subprojects {
+    sonarqube.properties {
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            listOf(
+                "build/reports/jacoco/test/jacocoTestReport.xml",
+                "${project.rootDir}/sonar-kotlin-plugin/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
+            ).joinToString(",")
+        )
+    }
+}
+
 artifactory {
     clientConfig.info.buildName = "sonar-kotlin"
     clientConfig.info.buildNumber = System.getenv("BUILD_NUMBER")
