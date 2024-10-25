@@ -2,10 +2,6 @@ plugins {
     kotlin("jvm")
 }
 
-repositories {
-    maven { url = uri("https://repo.gradle.org/gradle/libs-releases") }
-}
-
 dependencies {
     compileOnly(libs.sonar.plugin.api)
     compileOnly(libs.slf4j.api)

@@ -21,9 +21,8 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.resolve.calls.callUtil.getCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.utils.IDEAPluginsCompatibilityAPI
+import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
@@ -42,7 +41,6 @@ class SimplifyFilteringBeforeTerminalOperationCheck : CallAbstractCheck() {
         }
     )
 
-    @OptIn(IDEAPluginsCompatibilityAPI::class)
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
         callExpression.parent
             .let { it as? KtDotQualifiedExpression }
