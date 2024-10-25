@@ -153,7 +153,10 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
                 val functionDescriptor = call.getResolvedCall(bindingContext)?.resultingDescriptor
                 val parameterTypes = functionDescriptor?.valueParameters
                 if (parameterTypes != null) {
-                    val fullyQualifiedTypes = parameterTypes.map { it.type.getKotlinTypeFqName(false) }
+                    val fullyQualifiedTypes = parameterTypes.map {
+                        if (it.type.constructor.declarationDescriptor == null) null
+                        else it.type.getKotlinTypeFqName(false)
+                    }
                     call.valueArguments.zip(fullyQualifiedTypes).filter { it.second in mutableCollections }.map { it.first }
                 } else {
                     call.valueArguments
