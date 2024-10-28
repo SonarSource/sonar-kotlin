@@ -26,7 +26,6 @@ import org.sonar.api.config.Configuration
 import org.sonar.api.notifications.AnalysisWarnings
 import org.sonarsource.kotlin.api.common.RULE_REPOSITORY_LANGUAGE
 import org.sonarsource.kotlin.api.frontend.AbstractPropertyHandlerSensor
-import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import java.io.File
 import java.io.FileInputStream
 
@@ -85,15 +84,12 @@ private fun saveIssue(context: SensorContext, id: String, file: String, line: St
     }
     val externalRuleLoader = RULE_LOADER
 
-    val ruleKey =
-        if (externalRuleLoader.ruleKeys().contains(id)) id
-        else FALLBACK_RULE_KEY
 
     val newExternalIssue = context.newExternalIssue()
     newExternalIssue
-        .type(externalRuleLoader.ruleType(ruleKey))
-        .severity(externalRuleLoader.ruleSeverity(ruleKey))
-        .remediationEffortMinutes(externalRuleLoader.ruleConstantDebtMinutes(ruleKey))
+        .type(externalRuleLoader.ruleType(id))
+        .severity(externalRuleLoader.ruleSeverity(id))
+        .remediationEffortMinutes(externalRuleLoader.ruleConstantDebtMinutes(id))
     val primaryLocation = newExternalIssue.newLocation()
         .message(message)
         .on(inputFile)
@@ -103,6 +99,6 @@ private fun saveIssue(context: SensorContext, id: String, file: String, line: St
     newExternalIssue
         .at(primaryLocation)
         .engineId(AndroidLintSensor.LINTER_KEY)
-        .ruleId(ruleKey)
+        .ruleId(id)
         .save()
 }
