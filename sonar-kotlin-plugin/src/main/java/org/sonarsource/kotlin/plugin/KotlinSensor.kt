@@ -95,12 +95,13 @@ class KotlinSensor(
         if (sensorContext.runtime().product == SonarProduct.SONARLINT) {
             listOf(
                 IssueSuppressionVisitor(),
+                MetricVisitor(fileLinesContextFactory, noSonarFilter, reportMetrics = false),
                 KtChecksVisitor(checks),
             )
         } else {
             listOf(
                 IssueSuppressionVisitor(),
-                MetricVisitor(fileLinesContextFactory, noSonarFilter),
+                MetricVisitor(fileLinesContextFactory, noSonarFilter, reportMetrics = true),
                 KtChecksVisitor(checks),
                 CopyPasteDetector(),
                 SyntaxHighlighter(),
