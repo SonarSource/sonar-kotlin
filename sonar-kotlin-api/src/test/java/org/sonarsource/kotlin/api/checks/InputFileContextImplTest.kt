@@ -98,7 +98,7 @@ class InputFileContextImplTest {
 
         verify(exactly = 1) { newLocation.message("plain text code more text") }
         verify(exactly = 1) { newLocation.message("message2") }
-        assertThat(logTester.logs(Level.WARN))
-            .containsOnlyOnce("Could not report issue with code highlighting, using plain text instead. Check whether the product is outdated.")
+        assertThat(logTester.logs(Level.INFO))
+            .containsOnlyOnce("Code highlighting in issue messages is not supported, using plain text instead.")
     }
 }
