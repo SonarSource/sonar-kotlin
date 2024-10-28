@@ -101,7 +101,7 @@ class KtlintSensorTest {
 
         val fifth = externalIssues[4]
         assertThat(fifth.primaryLocation().inputComponent().key()).isEqualTo("ktlint-project:Foo.kt")
-        assertThat(fifth.ruleKey().rule()).isEqualTo("external.catchall")
+        assertThat(fifth.ruleKey().rule()).isEqualTo("Unknown-Or-Custom-Rule-Key")
         assertThat(fifth.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(fifth.severity()).isEqualTo(Severity.MAJOR)
         assertThat(fifth.primaryLocation().message()).isEqualTo("""Custom rule""")

@@ -22,7 +22,6 @@ package org.sonarsource.kotlin.externalreport.ktlint
 import org.slf4j.LoggerFactory
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.notifications.AnalysisWarnings
-import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintRulesDefinition.Companion.EXPERIMENTAL_RULE_PREFIX
 import java.io.File
 
@@ -64,13 +63,9 @@ internal class ReportImporter(val analysisWarnings: AnalysisWarnings, val contex
         val ruleLoader = KtlintRulesDefinition.RULE_LOADER
         linterFindings.forEach { (line, _, message, preliminaryRuleKey) ->
 
-            val truncatedPrelimRuleKey =
+            val ruleKey =
                 if (preliminaryRuleKey.startsWith(EXPERIMENTAL_RULE_PREFIX)) preliminaryRuleKey.substring(EXPERIMENTAL_RULE_PREFIX.length)
                 else preliminaryRuleKey
-
-            val ruleKey =
-                if (KtlintRulesDefinition.RULE_LOADER.ruleKeys().contains(truncatedPrelimRuleKey)) truncatedPrelimRuleKey
-                else FALLBACK_RULE_KEY
 
             context.newExternalIssue().apply {
                 type(ruleLoader.ruleType(ruleKey))
