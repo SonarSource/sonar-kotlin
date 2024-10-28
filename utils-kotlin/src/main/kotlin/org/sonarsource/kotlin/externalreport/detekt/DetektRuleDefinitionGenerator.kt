@@ -29,7 +29,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.sonarsource.kotlin.externalreport.ExternalRule
-import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import org.sonarsource.kotlin.externalreport.common.Translator
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -107,19 +106,8 @@ internal object DetektRuleDefinitionGenerator {
             )
         }.sortedBy { it.key }
 
-        val fallbackRule = ExternalRule(
-            key = FALLBACK_RULE_KEY,
-            name = "Detekt Rule",
-            description = "This reporting may be triggered by a custom Detekt rule or by a default Detekt rule that has not yet " +
-                "been added to the Sonar Kotlin plugin.",
-            url = BASE_URL,
-            tags = emptySet(),
-            type = "CODE_SMELL",
-            constantDebtMinutes = 0L,
-        )
-
         val gson = GsonBuilder().setPrettyPrinting().create()
-        return gson.toJson(externalRules + fallbackRule)
+        return gson.toJson(externalRules)
     }
 
     private fun pascalCaseToTitle(id: String): String {

@@ -23,7 +23,6 @@ import com.google.gson.GsonBuilder
 import com.pinterest.ktlint.rule.engine.core.api.Rule
 import com.pinterest.ktlint.ruleset.standard.StandardRuleSetProvider
 import org.sonarsource.kotlin.externalreport.ExternalRule
-import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -62,19 +61,7 @@ fun generateRuleDefinitionsJson(): String {
         println("Importing ${it.size} experimental rules")
     }
 
-    val fallbackRule = ExternalRule(
-        key = FALLBACK_RULE_KEY,
-        name = "Ktlint Rule",
-        description = "This reporting may be triggered by a custom ktlint rule or by a default ktlint rule that has not yet " +
-            "been added to the Sonar Kotlin plugin.",
-        url = KTLINT_RULES_WEBPAGE,
-        tags = TAGS,
-        type = DEFAULT_RULE_TYPE,
-        severity = DEFAULT_RULE_SEVERITY,
-        constantDebtMinutes = DEFAULT_DEBT,
-    )
-
-    return (standardRules + experimentalRules + fallbackRule)
+    return (standardRules + experimentalRules)
         .let { ktlintRules ->
             GsonBuilder().setPrettyPrinting().create().toJson(ktlintRules)
         }

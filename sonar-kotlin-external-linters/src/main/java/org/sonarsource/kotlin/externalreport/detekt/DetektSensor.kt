@@ -26,7 +26,6 @@ import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.api.frontend.AbstractPropertyHandlerSensor
 import org.sonarsource.kotlin.api.common.RULE_REPOSITORY_LANGUAGE
 import org.sonarsource.kotlin.externalreport.common.CheckstyleFormatImporterWithRuleLoader
-import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import java.io.File
 
 class DetektSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandlerSensor(

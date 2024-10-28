@@ -49,12 +49,12 @@ public class ExternalReportTest extends TestBase {
     assertThat(first.getSeverity().name()).isEqualTo("CRITICAL");
     assertThat(first.getDebt()).isEqualTo("5min");
 
-    Issue second = issues.stream().filter(issue -> issue.getRule().equals("external_detekt:external.catchall")).findFirst().orElse(null);
+    Issue second = issues.stream().filter(issue -> issue.getRule().equals("external_detekt:CustomIssue")).findFirst().orElse(null);
     assertThat(second.getComponent()).isEqualTo(projectKey + ":main.kt");
     assertThat(second.getLine()).isEqualTo(2);
     assertThat(second.getMessage()).isEqualTo("My custom issue.");
     assertThat(second.getSeverity().name()).isEqualTo("MAJOR");
-    assertThat(second.getDebt()).isEqualTo("0min");
+    assertThat(second.getDebt()).isEqualTo("5min");
   }
 
   @Test
@@ -78,11 +78,11 @@ public class ExternalReportTest extends TestBase {
     assertThat(secondIssue.getSeverity().name()).isEqualTo("MINOR");
     assertThat(secondIssue.getDebt()).isEqualTo("5min");
 
-    Issue third = issues.stream().filter(issue -> issue.getRule().equals("external_android-lint:external.catchall")).findFirst().orElse(null);
+    Issue third = issues.stream().filter(issue -> issue.getRule().equals("external_android-lint:UnknownIssue")).findFirst().orElse(null);
     assertThat(third.getLine()).isEqualTo(2);
     assertThat(third.getMessage()).isEqualTo("My custom issue");
     assertThat(third.getSeverity().name()).isEqualTo("MAJOR");
-    assertThat(third.getDebt()).isEqualTo("0min");
+    assertThat(third.getDebt()).isEqualTo("5min");
   }
 
   @Test
@@ -101,12 +101,12 @@ public class ExternalReportTest extends TestBase {
     assertThat(first.getSeverity().name()).isEqualTo("MAJOR");
     assertThat(first.getDebt()).isEqualTo("0min");
 
-    Issue second = issues.stream().filter(issue -> issue.getRule().equals("external_ktlint:external.catchall")).findFirst().orElse(null);
+    Issue second = issues.stream().filter(issue -> issue.getRule().equals("external_ktlint:CustomIssue")).findFirst().orElse(null);
     assertThat(second.getComponent()).isEqualTo(projectKey + ":main.kt");
     assertThat(second.getLine()).isEqualTo(2);
     assertThat(second.getMessage()).isEqualTo("My custom issue.");
     assertThat(second.getSeverity().name()).isEqualTo("MAJOR");
-    assertThat(second.getDebt()).isEqualTo("0min");
+    assertThat(second.getDebt()).isEqualTo("5min");
   }
 
   private List<Issue> getExternalIssues(String componentKey) {

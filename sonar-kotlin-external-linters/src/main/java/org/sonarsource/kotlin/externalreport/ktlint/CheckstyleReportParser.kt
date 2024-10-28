@@ -23,7 +23,6 @@ import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintRulesDefinition.Companion.EXPERIMENTAL_RULE_PREFIX
 import org.sonarsource.kotlin.externalreport.common.CheckstyleFormatImporterWithRuleLoader
-import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 
 internal class CheckstyleReportParser(context: SensorContext) : CheckstyleFormatImporterWithRuleLoader(
     context,
@@ -31,13 +30,9 @@ internal class CheckstyleReportParser(context: SensorContext) : CheckstyleFormat
     KtlintRulesDefinition.RULE_LOADER,
 ) {
     override fun createRuleKey(source: String): RuleKey? {
-        val preliminaryRuleKey =
+        val ruleKey =
             if (source.startsWith(EXPERIMENTAL_RULE_PREFIX)) source.substring(EXPERIMENTAL_RULE_PREFIX.length)
             else source
-
-        val ruleKey =
-            if (KtlintRulesDefinition.RULE_LOADER.ruleKeys().contains(preliminaryRuleKey)) preliminaryRuleKey
-            else FALLBACK_RULE_KEY
 
         return super.createRuleKey(ruleKey)
     }
