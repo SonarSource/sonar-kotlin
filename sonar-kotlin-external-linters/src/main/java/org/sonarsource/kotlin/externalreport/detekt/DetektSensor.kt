@@ -48,19 +48,11 @@ class DetektSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandler
         ) : CheckstyleFormatImporterWithRuleLoader(context, LINTER_KEY, DetektRulesDefinition.RULE_LOADER) {
 
             override fun createRuleKey(source: String): RuleKey? {
-                val preliminaryRuleKey =
-                    if (source.startsWith(DETEKT_PREFIX)) {
-                        source.substring(DETEKT_PREFIX.length)
-                    } else {
-                        LOG.debug("Unexpected rule key without '{}' suffix: '{}'", DETEKT_PREFIX, source)
-                        return null
-                    }
-
-                val ruleKey =
-                    if (DetektRulesDefinition.RULE_LOADER.ruleKeys().contains(preliminaryRuleKey)) preliminaryRuleKey
-                    else FALLBACK_RULE_KEY
-
-                return super.createRuleKey(ruleKey)
+                if (!source.startsWith(DETEKT_PREFIX)) {
+                    LOG.debug("Unexpected rule key without '{}' suffix: '{}'", DETEKT_PREFIX, source)
+                    return null
+                }
+                return super.createRuleKey(source.substring(DETEKT_PREFIX.length))
             }
         }
     }
