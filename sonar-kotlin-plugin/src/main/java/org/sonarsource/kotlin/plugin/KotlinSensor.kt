@@ -45,7 +45,7 @@ import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
 import org.sonarsource.kotlin.metrics.IssueSuppressionVisitor
 import org.sonarsource.kotlin.metrics.MetricVisitor
 import org.sonarsource.kotlin.metrics.SyntaxHighlighter
-import org.sonarsource.kotlin.visiting.KtChecksVisitor
+import org.sonarsource.kotlin.api.visiting.KtChecksVisitor
 
 import kotlin.jvm.optionals.getOrElse
 

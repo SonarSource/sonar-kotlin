@@ -44,8 +44,8 @@ import org.sonarsource.kotlin.api.common.COMPILER_THREAD_COUNT_PROPERTY
 import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_VERSION
 import org.sonarsource.kotlin.api.common.KotlinLanguage
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.KtChecksVisitor
 import org.sonarsource.kotlin.testapi.AbstractSensorTest
-import org.sonarsource.kotlin.visiting.KtChecksVisitor
 
 class AbstractKotlinSensorTest : AbstractSensorTest() {
 
