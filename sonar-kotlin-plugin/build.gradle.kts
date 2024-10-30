@@ -39,6 +39,7 @@ dependencies {
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
 
     testImplementation(project(":sonar-kotlin-test-api"))
+    jacocoAggregation(project(":sonar-kotlin-test-api"))
 }
 
 val test: Test by tasks
