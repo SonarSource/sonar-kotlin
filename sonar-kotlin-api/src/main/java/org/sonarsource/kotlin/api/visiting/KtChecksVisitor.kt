@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.visiting
+package org.sonarsource.kotlin.api.visiting
 
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtElement
@@ -25,7 +25,6 @@ import org.sonar.api.batch.rule.Checks
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.common.measureDuration
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
 
 class KtChecksVisitor(val checks: Checks<out AbstractCheck>) : KotlinFileVisitor() {
 
