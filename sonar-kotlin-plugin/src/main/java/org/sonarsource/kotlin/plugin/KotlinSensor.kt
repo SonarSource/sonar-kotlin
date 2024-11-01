@@ -31,6 +31,7 @@ import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContextFactory
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.checks.hasCacheEnabled
+import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_VERSION
 import org.sonarsource.kotlin.api.common.KotlinLanguage
 import org.sonarsource.kotlin.api.common.measureDuration
 import org.sonarsource.kotlin.api.frontend.bindingContext
@@ -65,6 +66,13 @@ class KotlinSensor(
         descriptor
             .onlyOnLanguage(language.key)
             .name(language.name + " Sensor")
+    }
+
+    override fun execute(sensorContext: SensorContext) {
+        sensorContext.config()[KOTLIN_LANGUAGE_VERSION].ifPresent { value ->
+            sensorContext.addTelemetryProperty("kotlin.languageVersion", value)
+        }
+        super.execute(sensorContext)
     }
 
     override fun getExecuteContext(
