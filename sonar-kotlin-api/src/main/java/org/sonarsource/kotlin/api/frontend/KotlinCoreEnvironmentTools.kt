@@ -19,9 +19,6 @@
  */
 package org.sonarsource.kotlin.api.frontend
 
-import com.intellij.openapi.Disposable
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISession
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
@@ -30,9 +27,11 @@ import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.CliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -47,7 +46,12 @@ import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import org.jetbrains.kotlin.util.slicedMap.WritableSlice
+
 import java.io.File
+import kotlin.random.Random
+
+private val random = Random(System.nanoTime())
+var I = 0
 
 /**
  * DO NOT FORGET TO CALL
@@ -118,41 +122,34 @@ fun analyzeAndGetBindingContext(
         env.configuration.languageVersionSettings,
         false
     )
-    analyzer.analyzeAndReport(ktFiles) {
-        TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
-            env.project,
-            ktFiles,
-            NoScopeRecordCliBindingTrace(env.project),
-            env.configuration,
-            env::createPackagePartProvider,
-            ::FileBasedDeclarationProviderFactory
-        )
+    val trace = CustomTrace(env.project)
+    try {
+
+        analyzer.analyzeAndReport(ktFiles) {
+            TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
+                env.project,
+                ktFiles,
+                trace,
+                env.configuration,
+                env::createPackagePartProvider,
+                ::FileBasedDeclarationProviderFactory
+            )
+        }
+    } catch (e: Throwable) {
+        return trace.bindingContext
     }
     return analyzer.analysisResult.bindingContext
 }
 
-/**
- * TODO Attempt to improve performance of "corda" project analysis
- * according to VisualVM Sampler bottleneck seems to be in
- * org.jetbrains.kotlin.analysis.api.descriptors.components.KaFe10Resolver.getDiagnosticToReport
- */
-class MyNoScopeRecordCliBindingTrace(project: Project) : CliBindingTrace(project) {
-    override fun <K, V> record(slice: WritableSlice<K, V>, key: K, value: V) {
-        if (slice == BindingContext.LEXICAL_SCOPE || slice == BindingContext.DATA_FLOW_INFO_BEFORE) {
-            // In the compiler there's no need to keep scopes
-            return
+class CustomTrace(project: Project) : CliBindingTrace(project) {
+
+    override fun <K : Any?> record(slice: WritableSlice<K, Boolean>?, key: K) {
+        super.record(slice, key)
+        if (I == 0) {
+            I++
+            TODO("Not yet implemented")
         }
-        super.record(slice, key, value)
-    }
 
-    override fun toString(): String {
-        return NoScopeRecordCliBindingTrace::class.java.name
-    }
-
-    override fun wantsDiagnostics(): Boolean = false
-
-    override fun report(diagnostic: Diagnostic) {
-        // ignore
     }
 }
 
