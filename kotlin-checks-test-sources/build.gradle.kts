@@ -21,7 +21,7 @@ dependencies {
     implementation("commons-lang:commons-lang:2.6")
 }
 
-sonarqube.isSkipProject = true
+//sonarqube.isSkipProject = true
 
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.compilerOptions {
