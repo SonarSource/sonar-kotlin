@@ -43,12 +43,13 @@ import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
+import java.net.URLClassLoader
 
 class Environment(
     val classpath: List<String>,
     kotlinLanguageVersion: LanguageVersion,
     javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8,
-    numberOfThreads: Int? = null
+    numberOfThreads: Int? = null,
 ) {
     val disposable = Disposer.newDisposable()
     val configuration = compilerConfiguration(classpath, kotlinLanguageVersion, javaLanguageVersion, numberOfThreads)
@@ -114,6 +115,9 @@ fun compilerConfiguration(
     numberOfThreads: Int?,
 ): CompilerConfiguration {
     val classpathFiles = classpath.map(::File)
+
+    println(version(classpathFiles))
+
     val versionSettings = LanguageVersionSettingsImpl(
         languageVersion,
         ApiVersion.createByLanguageVersion(languageVersion),
@@ -128,3 +132,22 @@ fun compilerConfiguration(
     }
 }
 
+fun version(classpathFiles: List<File>): String {
+    class Loader(classpath: List<File>) : URLClassLoader(classpath.map { it.toURI().toURL() }.toTypedArray(), null) {
+        override fun loadClass(name: String): Class<*> {
+            if (name.startsWith("java.lang.")) {
+                return super.loadClass(name)
+            }
+            val loadedClass = findLoadedClass(name)
+            if (loadedClass != null) {
+                return loadedClass
+            }
+            return findClass(name);
+        }
+    }
+    Loader(classpathFiles).use {
+        // FIXME ClassNotFoundException, NoSuchFieldException
+        val kotlinVersion = it.loadClass("kotlin.KotlinVersion").getField("CURRENT").get(null)
+        return kotlinVersion.javaClass.getMethod("toString").invoke(kotlinVersion).toString()
+    }
+}
