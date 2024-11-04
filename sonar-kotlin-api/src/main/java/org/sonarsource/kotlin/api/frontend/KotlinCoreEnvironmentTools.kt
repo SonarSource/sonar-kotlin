@@ -114,7 +114,7 @@ fun compilerConfiguration(
     languageVersion: LanguageVersion,
     jvmTarget: JvmTarget,
 ): CompilerConfiguration {
-    val classpathFiles = classpath.map(::File).filter { it.isDirectory || it.isJar() }
+    val classpathFiles = classpath.map(::File).filter { it.isDirectory || (it.isFile && it.isJar()) }
     val versionSettings = LanguageVersionSettingsImpl(
         languageVersion,
         ApiVersion.createByLanguageVersion(languageVersion),
@@ -129,7 +129,9 @@ fun compilerConfiguration(
 }
 
 private fun File.isJar(): Boolean {
-    return inputStream().readInt() == ZIPFILE
+    return inputStream().use {
+        it.readInt() == ZIPFILE
+    }
 }
 
 private fun InputStream.readInt(): Int {

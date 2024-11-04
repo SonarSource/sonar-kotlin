@@ -61,4 +61,15 @@ class KotlinCoreEnvironmentToolsTest {
 
     assertThat(configuration.get(CLIConfigurationKeys.CONTENT_ROOTS)).isNull()
   }
+
+  @Test
+  fun testClasspathWithNonExistingFile() {
+    val configuration = compilerConfiguration(
+      listOf("src/test/resources/environment/nonexisting.xml"),
+      LanguageVersion.KOTLIN_1_4,
+      JvmTarget.JVM_1_8,
+    )
+
+    assertThat(configuration.get(CLIConfigurationKeys.CONTENT_ROOTS)).isNull()
+  }
 }
