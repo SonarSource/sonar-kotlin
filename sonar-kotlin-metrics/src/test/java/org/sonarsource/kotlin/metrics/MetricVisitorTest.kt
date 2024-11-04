@@ -19,8 +19,6 @@
  */
 package org.sonarsource.kotlin.metrics
 
-import io.mockk.spyk
-import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.BeforeEach
@@ -50,7 +48,6 @@ internal class MetricVisitorTest {
     private lateinit var visitor: MetricVisitor
     private lateinit var sensorContext: SensorContextTester
     private lateinit var inputFile: DefaultInputFile
-    private lateinit var mockFileLinesContextFactory: FileLinesContextFactory
 
     @JvmField
     @TempDir
@@ -58,9 +55,9 @@ internal class MetricVisitorTest {
 
     @BeforeEach
     fun setUp() {
-        sensorContext = spyk(SensorContextTester.create(tempFolder!!.root))
+        sensorContext = SensorContextTester.create(tempFolder!!.root)
         val mockFileLinesContext = Mockito.mock(FileLinesContext::class.java)
-        mockFileLinesContextFactory = Mockito.mock(
+        val mockFileLinesContextFactory = Mockito.mock(
             FileLinesContextFactory::class.java
         )
         mockNoSonarFilter = Mockito.mock(NoSonarFilter::class.java)
@@ -71,7 +68,7 @@ internal class MetricVisitorTest {
                 )
             )
         ).thenReturn(mockFileLinesContext)
-        visitor = MetricVisitor(mockFileLinesContextFactory, mockNoSonarFilter, true)
+        visitor = MetricVisitor(mockFileLinesContextFactory, mockNoSonarFilter)
     }
 
     @Test
@@ -245,36 +242,6 @@ internal class MetricVisitorTest {
         )
         assertThat(visitor.commentLines()).containsExactly(7, 8, 16, 13, 14, 15)
         assertThat(visitor.nosonarLines()).containsExactly(11, 18)
-    }
-
-    @Test
-    fun `no metrics were reported if reportMetrics is false`() {
-
-        visitor = MetricVisitor(mockFileLinesContextFactory, mockNoSonarFilter, false);
-        scan(
-            """
-            
-    /*
-     * Header comment
-     */
-    package b
-      
-    // This is a comment
-    // for the variable my_c
-    val my_c = 2
-     
-    // NOSONAR comment
-    
-    /**
-     * A KDoc comment
-     */
-    fun function1(x: Int) { x + 1 } // A comment
-
-    // NOSONAR comment
-    """.trimIndent()
-        )
-
-        verify(exactly = 0) { sensorContext.newMeasure<Int>() }
     }
 
     @Test

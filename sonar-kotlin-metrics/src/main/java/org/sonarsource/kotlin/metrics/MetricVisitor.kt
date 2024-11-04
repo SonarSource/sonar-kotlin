@@ -49,7 +49,6 @@ const val NOSONAR_PREFIX = "NOSONAR"
 class MetricVisitor(
     private val fileLinesContextFactory: FileLinesContextFactory,
     private val noSonarFilter: NoSonarFilter,
-    private val reportMetrics: Boolean,
 ) : KotlinFileVisitor() {
     private lateinit var ktMetricVisitor: KtMetricVisitor
 
@@ -57,32 +56,30 @@ class MetricVisitor(
         ktMetricVisitor = KtMetricVisitor()
         val (ctx, file) = kotlinFileContext
         file.accept(ktMetricVisitor)
-        if (reportMetrics) {
-            saveMetric(ctx, CoreMetrics.NCLOC, ktMetricVisitor.linesOfCode.size)
-            saveMetric(ctx, CoreMetrics.COMMENT_LINES, ktMetricVisitor.commentLines.size)
-            saveMetric(ctx, CoreMetrics.FUNCTIONS, ktMetricVisitor.numberOfFunctions)
-            saveMetric(ctx, CoreMetrics.CLASSES, ktMetricVisitor.numberOfClasses)
-            saveMetric(ctx, CoreMetrics.COMPLEXITY, ktMetricVisitor.complexity)
-            saveMetric(ctx, CoreMetrics.STATEMENTS, ktMetricVisitor.statements)
-            saveMetric(ctx, CoreMetrics.COGNITIVE_COMPLEXITY, ktMetricVisitor.cognitiveComplexity)
+        saveMetric(ctx, CoreMetrics.NCLOC, ktMetricVisitor.linesOfCode.size)
+        saveMetric(ctx, CoreMetrics.COMMENT_LINES, ktMetricVisitor.commentLines.size)
+        saveMetric(ctx, CoreMetrics.FUNCTIONS, ktMetricVisitor.numberOfFunctions)
+        saveMetric(ctx, CoreMetrics.CLASSES, ktMetricVisitor.numberOfClasses)
+        saveMetric(ctx, CoreMetrics.COMPLEXITY, ktMetricVisitor.complexity)
+        saveMetric(ctx, CoreMetrics.STATEMENTS, ktMetricVisitor.statements)
+        saveMetric(ctx, CoreMetrics.COGNITIVE_COMPLEXITY, ktMetricVisitor.cognitiveComplexity)
 
-            val fileLinesContext = fileLinesContextFactory.createFor(ctx.inputFile)
-            ktMetricVisitor.linesOfCode.forEach { line ->
-                fileLinesContext.setIntValue(
-                    CoreMetrics.NCLOC_DATA_KEY,
-                    line,
-                    1
-                )
-            }
-            ktMetricVisitor.executableLines.forEach { line ->
-                fileLinesContext.setIntValue(
-                    CoreMetrics.EXECUTABLE_LINES_DATA_KEY,
-                    line,
-                    1
-                )
-            }
-            fileLinesContext.save()
+        val fileLinesContext = fileLinesContextFactory.createFor(ctx.inputFile)
+        ktMetricVisitor.linesOfCode.forEach { line ->
+            fileLinesContext.setIntValue(
+                CoreMetrics.NCLOC_DATA_KEY,
+                line,
+                1
+            )
         }
+        ktMetricVisitor.executableLines.forEach { line ->
+            fileLinesContext.setIntValue(
+                CoreMetrics.EXECUTABLE_LINES_DATA_KEY,
+                line,
+                1
+            )
+        }
+        fileLinesContext.save()
         noSonarFilter.noSonarInFile(ctx.inputFile, ktMetricVisitor.nosonarLines)
     }
 
