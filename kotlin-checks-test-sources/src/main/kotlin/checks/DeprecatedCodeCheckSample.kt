@@ -1,6 +1,9 @@
 package checks
 
 @Deprecated("")
+const val x = ""
+
+@Deprecated("")
 class DeprecatedCodeCheckSample { // Noncompliant {{Do not forget to remove this deprecated code someday.}}
 //    ^^^^^^^^^^^^^^^^^^^^^^^^^
 

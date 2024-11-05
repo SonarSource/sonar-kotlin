@@ -48,7 +48,7 @@ dependencyResolutionManagement {
             library("sonar-plugin-api", "org.sonarsource.api.plugin", "sonar-plugin-api").version(sonarPluginApi)
             library("slf4j-api", "org.slf4j", "slf4j-api").version(slf4jApi)
             library("sonar-regex-parsing", "org.sonarsource.analyzer-commons", "sonar-regex-parsing").versionRef(analyzerCommons)
-            library("sonar-xml-parsing", "org.sonarsource.analyzer-commons", "sonar-xml-parsing").versionRef(analyzerCommons)
+            library("sonar-xml-parsing", "org.sonarsource.analyzer-commons", "sonar-xml-parsing").version("2.12.0.2964")
             library("staxmate", "com.fasterxml.staxmate", "staxmate").versionRef(staxmate)
         }
 
