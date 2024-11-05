@@ -33,6 +33,7 @@ const val KOTLIN_LANGUAGE_VERSION = "sonar.kotlin.source.version"
 
 val DEFAULT_KOTLIN_LANGUAGE_VERSION = LanguageVersion.LATEST_STABLE
 const val FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast"
+@Deprecated("no replacement")
 const val COMPILER_THREAD_COUNT_PROPERTY = "sonar.kotlin.threads"
 
 const val SONAR_ANDROID_DETECTED = "sonar.android.detected"
