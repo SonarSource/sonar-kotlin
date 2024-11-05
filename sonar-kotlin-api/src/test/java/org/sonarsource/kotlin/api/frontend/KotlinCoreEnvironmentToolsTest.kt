@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
 
-class KotlinCoreEnviromentToolsTest {
+class KotlinCoreEnvironmentToolsTest {
 
   @Test
   fun testEmptyBindingContext() {
