@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
@@ -29,7 +30,7 @@ import org.sonarsource.kotlin.api.regex.PATTERN_COMPILE_MATCHER
 import org.sonarsource.kotlin.api.regex.RegexContext
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@org.sonarsource.kotlin.api.frontend.K1only("regex")
+@KaExperimentalApi
 @Rule(key = "S5867")
 class UnicodeAwareCharClassesCheck : AbstractRegexCheck() {
     // TODO regex

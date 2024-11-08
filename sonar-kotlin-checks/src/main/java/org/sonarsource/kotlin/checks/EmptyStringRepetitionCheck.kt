@@ -19,16 +19,17 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.finders.EmptyStringRepetitionFinder
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.RegexContext
 
-@org.sonarsource.kotlin.api.frontend.K1only("regex")
+@KaExperimentalApi
 @Rule(key = "S5842")
 class EmptyStringRepetitionCheck : AbstractRegexCheck() {
-    // TODO regex
+
     override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {
         EmptyStringRepetitionFinder(regexContext::reportIssue).visit(regex)
     }

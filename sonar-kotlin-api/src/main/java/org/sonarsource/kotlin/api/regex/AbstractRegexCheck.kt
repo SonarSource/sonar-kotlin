@@ -19,6 +19,13 @@
  */
 package org.sonarsource.kotlin.api.regex
 
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.resolution.KaCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaExplicitReceiverValue
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaImplicitReceiverValue
+import org.jetbrains.kotlin.analysis.api.symbols.name
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -27,26 +34,19 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getReceiverExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.api.batch.fs.TextRange
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.ast.FlagSet
-import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.checks.ConstructorMatcher
-import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.FunMatcherImpl
-import org.sonarsource.kotlin.api.checks.INT_TYPE
-import org.sonarsource.kotlin.api.checks.JAVA_STRING
-import org.sonarsource.kotlin.api.checks.STRING_TYPE
-import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
+import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.TextRangeTracker
 import org.sonarsource.kotlin.api.checks.isPlus as isConcat
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.api.visiting.analyze
 import java.util.regex.Pattern
 
 val PATTERN_COMPILE_MATCHER = FunMatcher(qualifier = "java.util.regex.Pattern", name = "compile")
@@ -57,8 +57,20 @@ private fun argGetter(argIndex: Int) = { resolvedCall: ResolvedCall<*> ->
     resolvedCall.valueArgumentsByIndex?.getOrNull(argIndex)?.arguments?.getOrNull(0)?.getArgumentExpression()
 }
 
+private fun kaArgGetter(argIndex: Int) = { resolvedCall: KaFunctionCall<*> ->
+    val arguments = resolvedCall.argumentMapping.keys.toList()
+    if (argIndex < arguments.size) arguments[argIndex] else null
+}
+
 private val referenceTargetGetter = { resolvedCall: ResolvedCall<*> ->
     resolvedCall.getReceiverExpression()
+}
+
+private val kaReferenceTargetGetter = { resolvedCall: KaFunctionCall<*> ->
+    when (val receiver = resolvedCall.partiallyAppliedSymbol.extensionReceiver) {
+        is KaExplicitReceiverValue -> receiver.expression
+        else -> null
+    }
 }
 
 // TODO: add org.apache.commons.lang3.RegExUtils
@@ -72,6 +84,18 @@ private val REGEX_FUNCTIONS: Map<FunMatcherImpl, Pair<(ResolvedCall<*>) -> KtExp
         withArguments(STRING_TYPE)
         withArguments(STRING_TYPE, INT_TYPE)
     } to (argGetter(0) to { null }),
+)
+
+private val KA_REGEX_FUNCTIONS: Map<FunMatcherImpl, Pair<(KaFunctionCall<*>) -> KtExpression?, (KaFunctionCall<*>) -> KtExpression?>> = mapOf(
+    REGEX_MATCHER to (kaArgGetter(0) to kaArgGetter(1)),
+    TO_REGEX_MATCHER to (kaReferenceTargetGetter to kaArgGetter(0)),
+    PATTERN_COMPILE_MATCHER to (kaArgGetter(0) to kaArgGetter(1)),
+    FunMatcher(qualifier = JAVA_STRING) {
+        withNames("replaceAll", "replaceFirst", "split", "matches")
+        withArguments(STRING_TYPE, STRING_TYPE)
+        withArguments(STRING_TYPE)
+        withArguments(STRING_TYPE, INT_TYPE)
+    } to (kaArgGetter(0) to { null }),
 )
 
 private val FLAGS = mapOf(
@@ -90,6 +114,7 @@ private val FLAGS = mapOf(
 
 private const val REGEX_CALL_LOC_MSG = "Function call of which the argument is interpreted as regular expression."
 
+@KaExperimentalApi
 abstract class AbstractRegexCheck : CallAbstractCheck() {
     override val functionsToVisit = REGEX_FUNCTIONS.keys
 
@@ -105,13 +130,14 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext
     ) {
-        REGEX_FUNCTIONS[matchedFun]!!.let { (regexStringArgExtractor, flagsArgExtractor) ->
+
+        KA_REGEX_FUNCTIONS[matchedFun]!!.let { (regexStringArgExtractor, flagsArgExtractor) ->
             val regexCtx = regexStringArgExtractor(resolvedCall)
-                .collectResolvedListOfStringTemplates(kotlinFileContext.bindingContext)
+                .collectResolvedListOfStringTemplates()
                 // For now, we simply don't use any sequence that contains nulls (i.e. non-resolvable parts)
                 .takeIf { null !in it }?.filterNotNull()
                 ?.flatMap { it.entries.asSequence() }
@@ -121,7 +147,7 @@ abstract class AbstractRegexCheck : CallAbstractCheck() {
                     RegexContext(sourceTemplates.asIterable(), kotlinFileContext)
                 } ?: return
 
-            flagsArgExtractor(resolvedCall).extractRegexFlags(kotlinFileContext.bindingContext)
+            flagsArgExtractor(resolvedCall).extractRegexFlags()
                 .takeIf { flags -> Pattern.LITERAL !in flags }
                 ?.let { flags ->
 
@@ -171,24 +197,30 @@ private data class AnalyzerIssueReportInfo(
     val gap: Double?,
 )
 
-private fun KtExpression?.extractRegexFlags(bindingContext: BindingContext): FlagSet =
+@KaExperimentalApi
+private fun KtExpression?.extractRegexFlags(): FlagSet =
     FlagSet(
         this?.collectDescendantsOfType<KtReferenceExpression>()
-            ?.map { it.predictRuntimeValueExpression(bindingContext) }
+            ?.map {
+                it.predictRuntimeValueExpression()
+            }
             ?.flatMap { it.collectDescendantsOfType<KtNameReferenceExpression>() }
-            ?.mapNotNull { bindingContext[BindingContext.REFERENCE_TARGET, it] }
-            ?.mapNotNull { FLAGS[it.name.asString()] }
+            ?.mapNotNull {
+                analyze { it.mainReference.resolveToSymbol()?.name?.asString() }
+            }
+            ?.mapNotNull { FLAGS[it] }
             ?.fold(0, Int::or)
             ?: 0
     )
 
-private fun KtExpression?.collectResolvedListOfStringTemplates(bindingContext: BindingContext): Sequence<KtStringTemplateExpression?> =
-    this?.predictRuntimeValueExpression(bindingContext).let { predictedValue ->
+@KaExperimentalApi
+private fun KtExpression?.collectResolvedListOfStringTemplates(): Sequence<KtStringTemplateExpression?> =
+    this?.predictRuntimeValueExpression().let { predictedValue ->
         when {
             predictedValue is KtStringTemplateExpression -> sequenceOf(predictedValue)
             predictedValue is KtBinaryExpression && predictedValue.isConcat() ->
-                predictedValue.left.collectResolvedListOfStringTemplates(bindingContext) +
-                    predictedValue.right.collectResolvedListOfStringTemplates(bindingContext)
+                predictedValue.left.collectResolvedListOfStringTemplates() +
+                    predictedValue.right.collectResolvedListOfStringTemplates()
             else -> sequenceOf(null)
         }
     }

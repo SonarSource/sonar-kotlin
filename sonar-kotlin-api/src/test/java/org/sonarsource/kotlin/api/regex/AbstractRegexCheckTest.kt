@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.api.regex
 
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.junit.jupiter.api.Test
 import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexIssueLocation
@@ -27,6 +28,7 @@ import org.sonarsource.analyzer.commons.regex.ast.CharacterClassTree
 import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor
 import org.sonarsource.kotlin.testapi.KotlinVerifier
 
+@KaExperimentalApi
 class AbstractRegexCheckTest {
     @Test
     fun `test dummy regex check`() {
@@ -47,6 +49,7 @@ class AbstractRegexCheckTest {
     }
 }
 
+@KaExperimentalApi
 @Rule(key = "Dummy")
 private class ReportEveryRegexDummyCheck : AbstractRegexCheck() {
     override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {
@@ -54,6 +57,7 @@ private class ReportEveryRegexDummyCheck : AbstractRegexCheck() {
     }
 }
 
+@KaExperimentalApi
 @Rule(key = "Dummy")
 private class ReportEveryRegexDummyCheck2 : AbstractRegexCheck() {
     private var counter = 0
@@ -70,6 +74,7 @@ private class ReportEveryRegexDummyCheck2 : AbstractRegexCheck() {
 
 }
 
+@KaExperimentalApi
 @Rule(key = "Dummy")
 private class ReportCharacterClassRegexDummyCheck : AbstractRegexCheck() {
     override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {

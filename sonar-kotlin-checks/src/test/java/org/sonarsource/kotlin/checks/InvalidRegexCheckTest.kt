@@ -19,4 +19,7 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+
+@KaExperimentalApi
 class InvalidRegexCheckTest : CheckTest(InvalidRegexCheck())

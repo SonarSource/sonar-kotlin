@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
@@ -30,7 +31,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE_MULTIPLE_ERRORS = "Fix the syntax errors inside this regex."
 
-@org.sonarsource.kotlin.api.frontend.K1only("regex")
+@KaExperimentalApi
 @Rule(key = "S5856")
 class InvalidRegexCheck : AbstractRegexCheck() {
 

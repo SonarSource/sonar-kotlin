@@ -19,16 +19,17 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.finders.ReluctantQuantifierFinder
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.RegexContext
 
-@org.sonarsource.kotlin.api.frontend.K1only("regex")
+@OptIn(KaExperimentalApi::class)
 @Rule(key = "S5857")
 class ReluctantQuantifierCheck : AbstractRegexCheck() {
-    // TODO regex
+
     override fun visitRegex(regex: RegexParseResult, regexContext: RegexContext) {
         ReluctantQuantifierFinder(regexContext::reportIssue).visit(regex)
     }

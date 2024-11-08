@@ -17,8 +17,11 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+@file:OptIn(KaExperimentalApi::class)
+
 package org.sonarsource.kotlin.plugin
 
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.sonarsource.kotlin.checks.AbstractClassShouldBeInterfaceCheck
 import org.sonarsource.kotlin.checks.AllBranchesIdenticalCheck
 import org.sonarsource.kotlin.checks.AnchorPrecedenceCheck

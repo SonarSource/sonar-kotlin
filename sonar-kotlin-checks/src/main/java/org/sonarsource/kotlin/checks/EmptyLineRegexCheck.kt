@@ -17,11 +17,14 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+@file:OptIn(KaExperimentalApi::class)
+
 package org.sonarsource.kotlin.checks
 
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -75,7 +78,6 @@ class EmptyLineRegexCheck : AbstractRegexCheck() {
 
     override val functionsToVisit = setOf(PATTERN_COMPILE_MATCHER, REGEX_MATCHER, TO_REGEX_MATCHER)
 
-    // TODO regex
     override fun visitRegex(
         regex: RegexParseResult,
         regexContext: RegexContext,
