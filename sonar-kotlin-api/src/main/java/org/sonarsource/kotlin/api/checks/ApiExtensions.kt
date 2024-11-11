@@ -746,6 +746,21 @@ fun KtExpression?.setterMatches(
     else -> false
 }
 
+@Rewritten
+fun KtExpression?.setterMatches(
+    propertyName: String,
+    matcher: FunMatcherImpl
+): Boolean = analyze {
+    when (this@setterMatches) {
+        is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
+                (matcher.matches(this@setterMatches.resolveToCall()?.successfulVariableAccessCall() ?: return false))
+
+        is KtQualifiedExpression -> selectorExpression.setterMatches(propertyName, matcher)
+        else -> false
+    }
+}
+
+
 fun KtExpression?.getterMatches(
     bindingContext: BindingContext,
     propertyName: String,

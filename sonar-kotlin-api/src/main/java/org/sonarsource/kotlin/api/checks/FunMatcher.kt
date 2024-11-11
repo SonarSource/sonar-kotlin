@@ -20,16 +20,11 @@
 package org.sonarsource.kotlin.api.checks
 
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
-import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
-import org.jetbrains.kotlin.analysis.api.resolution.KaReceiverValue
-import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
-import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.resolution.*
 import org.jetbrains.kotlin.analysis.api.signatures.KaCallableSignature
 import org.jetbrains.kotlin.analysis.api.signatures.KaFunctionSignature
-import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
-import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
-import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
-import org.jetbrains.kotlin.analysis.api.symbols.name
+import org.jetbrains.kotlin.analysis.api.signatures.KaVariableSignature
+import org.jetbrains.kotlin.analysis.api.symbols.*
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.backend.common.descriptors.isSuspend
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
@@ -112,6 +107,13 @@ class FunMatcherImpl(
             resolvedCall.partiallyAppliedSymbol.signature,
         )
 
+    fun matches(resolvedCall: KaVariableAccessCall) =
+        // TODO preCheckArgumentCount?
+        matches(
+            resolvedCall.partiallyAppliedSymbol.dispatchReceiver,
+            resolvedCall.partiallyAppliedSymbol.signature,
+        )
+
     private fun preCheckArgumentCount(call: Call?) = call == null || call.valueArguments.size <= maxArgumentCount
 
     fun matches(functionDescriptor: CallableDescriptor?) =
@@ -140,6 +142,15 @@ class FunMatcherImpl(
             checkCallParameters(callableSignature)
     }
 
+    private fun matches(
+        dispatchReceiver: KaReceiverValue?,
+        callableSignature: KaVariableSignature<KaVariableSymbol>,
+    ): Boolean {
+        return callableSignature != null &&
+                checkName(callableSignature) &&
+                checkTypeOrSupertype(dispatchReceiver, callableSignature)
+    }
+
     @Deprecated("")
     private fun checkTypeOrSupertype(functionDescriptor: CallableDescriptor) =
         qualifiersOrDefiningSupertypes.isEmpty() || qualifiersOrDefiningSupertypes.contains(getActualQualifier(functionDescriptor)) ||
@@ -147,7 +158,7 @@ class FunMatcherImpl(
 
     private fun checkTypeOrSupertype(
         dispatchReceiver: KaReceiverValue?,
-        callableSignature: KaFunctionSignature<KaFunctionSymbol>,
+        callableSignature: KaCallableSignature<*>,
     ): Boolean {
         if (qualifiersOrDefiningSupertypes.isEmpty()) return true
         // TODO try to use only dispatchReceiver?
@@ -196,7 +207,7 @@ class FunMatcherImpl(
             }
         }
 
-    private fun checkSubType(functionDescriptor: KaFunctionSignature<KaFunctionSymbol>): Boolean = analyze {
+    private fun checkSubType(functionDescriptor: KaCallableSignature<*>): Boolean = analyze {
         if (functionDescriptor.symbol is KaConstructorSymbol) return false
         return functionDescriptor.symbol.allOverriddenSymbols.any {
             val className: String? = it.callableId?.asSingleFqName()?.parent()?.asString()
