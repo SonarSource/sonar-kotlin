@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-@file:OptIn(KaExperimentalApi::class)
+@file:OptIn(KaExperimentalApi::class, KaExperimentalApi::class)
 
 package org.sonarsource.kotlin.api.checks
 
@@ -119,6 +119,11 @@ fun KtExpression.predictRuntimeIntValue(bindingContext: BindingContext) =
         }
     }
 
+@Rewritten
+fun KtExpression.predictRuntimeIntValue(): Int? = analyze {
+    predictRuntimeValueExpression()?.evaluate()?.value as? Int
+}
+
 fun KtExpression.predictRuntimeBooleanValue(bindingContext: BindingContext) =
     predictRuntimeValueExpression(bindingContext).let { runtimeValueExpression ->
         runtimeValueExpression.getType(bindingContext)?.let {
@@ -162,7 +167,6 @@ fun KtExpression.predictRuntimeValueExpression(
     } ?: deparenthesized as? KtExpression
 } ?: this
 
-@KaExperimentalApi
 @Rewritten
 fun KtExpression.predictRuntimeValueExpression(
     declarations: MutableList<PsiElement> = mutableListOf(),
@@ -212,7 +216,7 @@ fun KtCallExpression.predictReceiverExpression(
     return resolvedCall?.getImplicitReceiverValue()?.extractWithRunApplyTargetExpression(this, bindingContext)
 }
 
-@KaExperimentalApi
+
 @Rewritten
 fun KtCallExpression.predictReceiverExpression(
 ): KtExpression? =
@@ -343,7 +347,7 @@ private fun KtReferenceExpression.extractFromInitializer(
         } else null
     }
 
-@KaExperimentalApi
+
 @Rewritten
 private fun KtReferenceExpression.extractFromInitializer(
     declarations: MutableList<PsiElement> = mutableListOf(),
@@ -366,7 +370,7 @@ private fun KtReferenceExpression.extractFromInitializer(
 private fun KtReferenceExpression.extractLetAlsoTargetExpression(bindingContext: BindingContext) =
     findReceiverScopeFunctionLiteral(bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
 
-@KaExperimentalApi
+
 @Rewritten
 private fun KtReferenceExpression.extractLetAlsoTargetExpression() =
     findReceiverScopeFunctionLiteral()?.findLetAlsoRunWithTargetExpression()
@@ -380,7 +384,7 @@ private fun ImplicitReceiver.extractWithRunApplyTargetExpression(
 ) =
     findReceiverScopeFunctionLiteral(startNode, bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
 
-@KaExperimentalApi
+
 @Rewritten
 private fun KaImplicitReceiverValue.extractWithRunApplyTargetExpression(
     startNode: PsiElement
@@ -420,7 +424,7 @@ private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(bindingContext:
         }
     }
 
-@KaExperimentalApi
+
 @Rewritten
 private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(): KtExpression? =
     analyze {
@@ -621,16 +625,34 @@ fun KtExpression.getCalleeOrUnwrappedGetMethod(bindingContext: BindingContext) =
         }
     } ?: this.getResolvedCall(bindingContext)?.resultingDescriptor
 
+@Rewritten
+fun KtExpression.getCalleeOrUnwrappedGetMethod(): KaFunctionSymbol? = analyze {
+    (this@getCalleeOrUnwrappedGetMethod as? KtDotQualifiedExpression)?.let { dotQualifiedExpression ->
+        (dotQualifiedExpression.selectorExpression as? KtNameReferenceExpression)?.let { nameSelector ->
+            (nameSelector.mainReference.resolveToSymbol() as? KaPropertySymbol)?.getter
+        }
+    } ?: this@getCalleeOrUnwrappedGetMethod.resolveToCall()?.successfulFunctionCallOrNull()
+        ?.partiallyAppliedSymbol?.symbol
+}
+
 /**
  * Checks whether the expression is a call, matches the FunMatchers in [STRING_TO_BYTE_FUNS] and is called on a constant string value.
  */
 fun KtExpression.isBytesInitializedFromString(bindingContext: BindingContext) =
     getCalleeOrUnwrappedGetMethod(bindingContext)?.let { callee ->
         STRING_TO_BYTE_FUNS.any { it.matches(callee) } &&
-                (getCall(bindingContext)?.explicitReceiver as? ExpressionReceiver)?.expression?.predictRuntimeStringValue(
-                    bindingContext
-                ) != null
+                (getCall(bindingContext)?.explicitReceiver as? ExpressionReceiver)?.expression
+                    ?.predictRuntimeStringValue() != null
     } ?: false
+
+@Rewritten
+fun KtExpression.isBytesInitializedFromString() = analyze {
+    this@isBytesInitializedFromString.resolveToCall()?.successfulFunctionCallOrNull()?.let { callee ->
+        STRING_TO_BYTE_FUNS.any { it.matches(callee) }
+                && (callee.partiallyAppliedSymbol.extensionReceiver as? KaExplicitReceiverValue)?.expression
+            ?.predictRuntimeStringValue() != null
+    } ?: false
+}
 
 fun ResolvedCall<*>.simpleArgExpressionOrNull(index: Int) =
     this.valueArgumentsByIndex

@@ -23,19 +23,13 @@ package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.checks.ConstructorMatcher
-import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.INT_TYPE
-import org.sonarsource.kotlin.api.checks.isBytesInitializedFromString
-import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
+import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
-import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.analyze
@@ -50,18 +44,16 @@ private val GCM_PARAMETER_SPEC_MATCHER = ConstructorMatcher("javax.crypto.spec.G
 
 private val GET_BYTES_MATCHER = FunMatcher(qualifier = "kotlin.text", name = "toByteArray")
 
-@org.sonarsource.kotlin.api.frontend.K1only("predictRuntimeIntValue")
 @Rule(key = "S6432")
 class CipherModeOperationCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(CIPHER_INIT_MATCHER)
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
-        kotlinFileContext: KotlinFileContext,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext
     ) {
-        val bindingContext = kotlinFileContext.bindingContext
-
         // Call expression already matched three arguments
         val firstArgument = callExpression.valueArguments[0].getArgumentExpression()!!
         val thirdArgument = callExpression.valueArguments[2].getArgumentExpression()!!
@@ -72,7 +64,7 @@ class CipherModeOperationCheck : CallAbstractCheck() {
         val byteExpression = thirdArgument.getGCMExpression(secondaries)
             ?.getByteExpression(secondaries) ?: return
 
-        if (firstArgument.predictRuntimeIntValue(bindingContext) == 1 && byteExpression.isBytesInitializedFromString(bindingContext)) {
+        if (firstArgument.predictRuntimeIntValue() == 1 && byteExpression.isBytesInitializedFromString()) {
             kotlinFileContext.reportIssue(
                 calleeExpression,
                 "Use a dynamically-generated initialization vector (IV) to avoid IV-key pair reuse.",
