@@ -56,6 +56,7 @@ class MetricVisitor(
         ktMetricVisitor = KtMetricVisitor()
         val (ctx, file) = kotlinFileContext
         file.accept(ktMetricVisitor)
+
         saveMetric(ctx, CoreMetrics.NCLOC, ktMetricVisitor.linesOfCode.size)
         saveMetric(ctx, CoreMetrics.COMMENT_LINES, ktMetricVisitor.commentLines.size)
         saveMetric(ctx, CoreMetrics.FUNCTIONS, ktMetricVisitor.numberOfFunctions)
@@ -65,20 +66,8 @@ class MetricVisitor(
         saveMetric(ctx, CoreMetrics.COGNITIVE_COMPLEXITY, ktMetricVisitor.cognitiveComplexity)
 
         val fileLinesContext = fileLinesContextFactory.createFor(ctx.inputFile)
-        ktMetricVisitor.linesOfCode.forEach { line ->
-            fileLinesContext.setIntValue(
-                CoreMetrics.NCLOC_DATA_KEY,
-                line,
-                1
-            )
-        }
-        ktMetricVisitor.executableLines.forEach { line ->
-            fileLinesContext.setIntValue(
-                CoreMetrics.EXECUTABLE_LINES_DATA_KEY,
-                line,
-                1
-            )
-        }
+        ktMetricVisitor.linesOfCode.forEach { line -> fileLinesContext.setIntValue(CoreMetrics.NCLOC_DATA_KEY, line, 1) }
+        ktMetricVisitor.executableLines.forEach { line -> fileLinesContext.setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, line, 1) }
         fileLinesContext.save()
         noSonarFilter.noSonarInFile(ctx.inputFile, ktMetricVisitor.nosonarLines)
     }

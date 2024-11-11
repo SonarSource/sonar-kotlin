@@ -244,6 +244,7 @@ internal class MetricVisitorTest {
         assertThat(visitor.nosonarLines()).containsExactly(11, 18)
     }
 
+
     @Test
     fun functions() {
         scan(

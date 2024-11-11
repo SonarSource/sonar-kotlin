@@ -92,34 +92,26 @@ public class SonarLintTest {
 
   @Test
   void test_kotlin() throws Exception {
-    ClientInputFile inputFile1 = prepareInputFile("foo1.kt",
+    ClientInputFile inputFile = prepareInputFile("foo.kt",
       "fun foo_bar() {\n" +
         "    if (true) { \n" +
         "        val password = \"blabla\"\n" +
         "    } \n" +
-        "}",
-      false, "kotlin");
-
-    ClientInputFile inputFile2 = prepareInputFile("foo2.kt",
-      "fun foo_bar() { // NOSONAR \n" +
-        "    if (true) { // NOSONAR \n" +
-        "        val password = \"blabla\"\n" +
-        "    } \n" +
-        "}",
+        "}\n" +
+        "\n" +
+        "fun foo_bar_nosonar() {} // NOSONAR \n",
       false, "kotlin");
 
     List<Issue> issues = new ArrayList<>();
     StandaloneAnalysisConfiguration standaloneAnalysisConfiguration = StandaloneAnalysisConfiguration.builder()
       .setBaseDir(baseDir.toPath())
-      .addInputFile(inputFile1)
-      .addInputFile(inputFile2)
+      .addInputFile(inputFile)
       .build();
     sonarlintEngine.analyze(standaloneAnalysisConfiguration, issues::add, null, null);
 
     assertThat(issues).extracting(Issue::getRuleKey, Issue::getStartLine, issue -> issue.getInputFile().getPath(), Issue::getSeverity).containsOnly(
-      tuple("kotlin:S100", 1, inputFile1.getPath(), IssueSeverity.MINOR),
-      tuple("kotlin:S1145", 2, inputFile1.getPath(), IssueSeverity.MAJOR)
-    );
+      tuple("kotlin:S100", 1, inputFile.getPath(), IssueSeverity.MINOR),
+      tuple("kotlin:S1145", 2, inputFile.getPath(), IssueSeverity.MAJOR));
   }
 
   private ClientInputFile prepareInputFile(String relativePath, String content, final boolean isTest, String language) throws IOException {
