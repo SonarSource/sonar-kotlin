@@ -96,8 +96,10 @@ private const val MAX_AST_PARENT_TRAVERSALS = 25
 
 private val STRING_TO_BYTE_FUNS = listOf(
     FunMatcher(qualifier = "kotlin.text", name = "toByteArray"),
-    FunMatcher(qualifier = "java.lang.String", name = "getBytes")
+    FunMatcher(qualifier = "java.lang.String", name = "getBytes"),
 )
+
+private val STRING_BYTES = FunMatcher(qualifier = "java.lang.String", name = "bytes")
 
 fun KtExpression.predictRuntimeStringValue(bindingContext: BindingContext) =
     predictRuntimeValueExpression(bindingContext).stringValue(bindingContext)
@@ -307,10 +309,9 @@ private fun KtExpression.stringValue(
         is KtNameReferenceExpression -> {
             (this@stringValue.mainReference.resolveToSymbol() as? KaVariableSymbol)
                 ?.let {
-                    if(it.isVal) {
+                    if (it.isVal) {
                         (it.psi as? KtProperty)?.delegateExpressionOrInitializer?.stringValue(declarations)
-                    }
-                    else null
+                    } else null
                 }
         }
 
@@ -329,7 +330,7 @@ private fun Call.predictValueExpression(bindingContext: BindingContext) =
         valueArguments[1].getArgumentExpression()
     } else null
 
-private fun KaFunctionCall<*>.predictValueExpression() : KtExpression? =
+private fun KaFunctionCall<*>.predictValueExpression(): KtExpression? =
     if (GET_PROP_WITH_DEFAULT_MATCHER.matches(this)) {
         partiallyAppliedSymbol.signature.valueParameters[1].symbol.psi as? KtExpression
     } else null
@@ -354,13 +355,12 @@ private fun KtReferenceExpression.extractFromInitializer(
 ) = analyze {
     (this@extractFromInitializer.mainReference.resolveToSymbol() as? KaVariableSymbol)
         ?.let {
-            if(it.isVal) {
+            if (it.isVal) {
                 (it.psi as? KtProperty)
                     ?.apply { declarations.add(this) }
                     ?.delegateExpressionOrInitializer
                     ?.predictRuntimeValueExpression(declarations)
-            }
-            else null
+            } else null
         }
 }
 
@@ -428,7 +428,7 @@ private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(bindingContext:
 @Rewritten
 private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(): KtExpression? =
     analyze {
-        (getParentCall() as? KaFunctionCall<*>) ?.let { larwCallCandidate ->
+        (getParentCall() as? KaFunctionCall<*>)?.let { larwCallCandidate ->
             analyze {
                 when (larwCallCandidate.partiallyAppliedSymbol.symbol.name?.asString()) {
                     in KOTLIN_CHAIN_CALL_CONSTRUCTS -> {
@@ -647,9 +647,20 @@ fun KtExpression.isBytesInitializedFromString(bindingContext: BindingContext) =
 
 @Rewritten
 fun KtExpression.isBytesInitializedFromString() = analyze {
-    this@isBytesInitializedFromString.resolveToCall()?.successfulFunctionCallOrNull()?.let { callee ->
-        STRING_TO_BYTE_FUNS.any { it.matches(callee) }
-                && (callee.partiallyAppliedSymbol.extensionReceiver as? KaExplicitReceiverValue)?.expression
+    val resolveToCall = this@isBytesInitializedFromString.resolveToCall()
+
+    val functionCall = resolveToCall?.successfulFunctionCallOrNull()
+    if (functionCall != null) {
+        return STRING_TO_BYTE_FUNS.any { it.matches(functionCall) }
+                && ((functionCall.partiallyAppliedSymbol.extensionReceiver
+            ?: functionCall.partiallyAppliedSymbol.dispatchReceiver) as? KaExplicitReceiverValue)?.expression
+            ?.predictRuntimeStringValue() != null
+    }
+    resolveToCall?.singleVariableAccessCall()?.let { callee ->
+        STRING_BYTES.matches(callee) &&
+                ((callee.partiallyAppliedSymbol.extensionReceiver
+                    ?: callee.partiallyAppliedSymbol.dispatchReceiver)
+                as? KaExplicitReceiverValue)?.expression
             ?.predictRuntimeStringValue() != null
     } ?: false
 }
@@ -714,6 +725,15 @@ fun KtProperty.findUsages(
 fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression, bindingContext: BindingContext): Boolean {
     return this !is KtNameReferenceExpression || this.findUsages(searchStartNode) {
         it.getParentOfType<KtCallExpression>(false).getResolvedCall(bindingContext) matches SECURE_RANDOM_FUNS
+    }.isEmpty()
+}
+
+fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression): Boolean {
+    return this !is KtNameReferenceExpression || this.findUsages(searchStartNode) {
+        analyze {
+            it.getParentOfType<KtCallExpression>(false)?.resolveToCall()
+                ?.successfulFunctionCallOrNull() matches SECURE_RANDOM_FUNS
+        }
     }.isEmpty()
 }
 
