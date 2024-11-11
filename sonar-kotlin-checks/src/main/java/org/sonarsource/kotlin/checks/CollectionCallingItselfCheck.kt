@@ -19,13 +19,11 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.predictReceiverExpression
-import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
+import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val MUTABLE_COLLECTION_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections.MutableCollection") {
@@ -36,24 +34,32 @@ private val COLLECTIONS_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.col
     withNames("containsAll", "addAll", "removeAll", "retainAll", "fill")
 }
 
+/*
+* In K1 symbol.allOverriddenSymbols returns [kotlin.collections.List.containsAll, kotlin.collections.Collection.containsAll]
+* In K2 it only returns [kotlin.collections.List.containsAll]
+* This sounds like a regression as according to documentation it is supposed to return all
+* Requires further investigation */
+private val LIST_CONTAINS_ALL_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections.List") {
+    withNames("containsAll")
+}
+
 private const val MESSAGE = "Collections should not be passed as arguments to their own methods."
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
+@org.sonarsource.kotlin.api.frontend.K1only("incorrect result")
 @Rule(key = "S2114")
 class CollectionCallingItselfCheck : CallAbstractCheck() {
-    override val functionsToVisit = listOf(MUTABLE_COLLECTION_FUN_MATCHER, COLLECTIONS_FUN_MATCHER)
+    override val functionsToVisit = listOf(MUTABLE_COLLECTION_FUN_MATCHER, COLLECTIONS_FUN_MATCHER, LIST_CONTAINS_ALL_FUN_MATCHER)
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
-        kotlinFileContext: KotlinFileContext,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext
     ) {
-        val bindingContext = kotlinFileContext.bindingContext
-
-        val receiver = callExpression.predictReceiverExpression(bindingContext)?.predictRuntimeValueExpression(bindingContext) ?: return
+        val receiver = callExpression.predictReceiverExpression()?.predictRuntimeValueExpression() ?: return
         val argument = callExpression.valueArguments[0].getArgumentExpression()!!
 
-        val argumentValue = argument.predictRuntimeValueExpression(bindingContext)
+        val argumentValue = argument.predictRuntimeValueExpression()
 
         if (receiver === argumentValue) {
             kotlinFileContext.reportIssue(argument, MESSAGE)
