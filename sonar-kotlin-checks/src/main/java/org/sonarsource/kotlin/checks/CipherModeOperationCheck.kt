@@ -17,14 +17,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+@file:OptIn(KaExperimentalApi::class)
+
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.ConstructorMatcher
@@ -36,6 +38,7 @@ import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
 private val CIPHER_INIT_MATCHER = FunMatcher(qualifier = "javax.crypto.Cipher", name = "init") {
     withArguments(INT_TYPE, "java.security.Key", "java.security.spec.AlgorithmParameterSpec")
@@ -47,7 +50,7 @@ private val GCM_PARAMETER_SPEC_MATCHER = ConstructorMatcher("javax.crypto.spec.G
 
 private val GET_BYTES_MATCHER = FunMatcher(qualifier = "kotlin.text", name = "toByteArray")
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
+@org.sonarsource.kotlin.api.frontend.K1only("predictRuntimeIntValue")
 @Rule(key = "S6432")
 class CipherModeOperationCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(CIPHER_INIT_MATCHER)
@@ -66,8 +69,8 @@ class CipherModeOperationCheck : CallAbstractCheck() {
 
         val secondaries = mutableListOf<PsiElement>()
         secondaries.add(thirdArgument)
-        val byteExpression = thirdArgument.getGCMExpression(bindingContext, secondaries)
-            ?.getByteExpression(bindingContext, secondaries) ?: return
+        val byteExpression = thirdArgument.getGCMExpression(secondaries)
+            ?.getByteExpression(secondaries) ?: return
 
         if (firstArgument.predictRuntimeIntValue(bindingContext) == 1 && byteExpression.isBytesInitializedFromString(bindingContext)) {
             kotlinFileContext.reportIssue(
@@ -88,19 +91,27 @@ private fun generateSecondaryLocations(secondaries: List<PsiElement>, kotlinFile
         }
     }
 
-private fun KtExpression.getByteExpression(bindingContext: BindingContext, secondaries: MutableList<PsiElement>) =
-    with(predictRuntimeValueExpression(bindingContext, secondaries)) {
-        getCall(bindingContext)?.let {
-            if (GET_BYTES_MATCHER.matches(it, bindingContext)) this
-            else null
+private fun KtExpression.getByteExpression(secondaries: MutableList<PsiElement>) =
+    with(predictRuntimeValueExpression(secondaries)) {
+        analyze {
+            this@with.resolveToCall()
+                ?.successfulFunctionCallOrNull()
+                ?.let {
+                    if (GET_BYTES_MATCHER.matches(it)) this@with
+                    else null
+                }
         }
     }
 
-private fun KtExpression.getGCMExpression(bindingContext: BindingContext, secondaries: MutableList<PsiElement>) =
-    predictRuntimeValueExpression(bindingContext)
-        .getCall(bindingContext)?.let {
-            if (GCM_PARAMETER_SPEC_MATCHER.matches(it, bindingContext)) {
-                secondaries.add(it.valueArguments[1].asElement())
-                it.valueArguments[1].getArgumentExpression()
+private fun KtExpression.getGCMExpression(secondaries: MutableList<PsiElement>) = analyze {
+    predictRuntimeValueExpression()
+        .resolveToCall()
+        ?.successfulFunctionCallOrNull()
+        ?.let {
+            if (GCM_PARAMETER_SPEC_MATCHER.matches(it)) {
+                val expression = it.argumentMapping.keys.toList()[1]
+                secondaries.add(expression)
+                expression
             } else null
         }
+}

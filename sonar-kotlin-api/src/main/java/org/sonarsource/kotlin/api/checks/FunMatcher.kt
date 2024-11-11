@@ -381,5 +381,8 @@ fun ConstructorMatcher(
 
 infix fun ResolvedCall<*>?.matches(funMatcher: FunMatcherImpl): Boolean = funMatcher.matches(this)
 
+infix fun KaFunctionCall<*>?.matches(funMatcher: FunMatcherImpl): Boolean =
+    this?.let {funMatcher.matches(this) } ?: false
+
 private fun Set<String>.addIfNonEmpty(optionalString: String?): Set<String> =
     if (optionalString.isNullOrEmpty()) this else this + optionalString

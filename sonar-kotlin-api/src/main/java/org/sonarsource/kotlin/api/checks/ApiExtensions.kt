@@ -17,6 +17,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+@file:OptIn(KaExperimentalApi::class)
+
 package org.sonarsource.kotlin.api.checks
 
 import com.intellij.psi.PsiComment
@@ -100,6 +102,10 @@ private val STRING_TO_BYTE_FUNS = listOf(
 fun KtExpression.predictRuntimeStringValue(bindingContext: BindingContext) =
     predictRuntimeValueExpression(bindingContext).stringValue(bindingContext)
 
+@Rewritten
+fun KtExpression.predictRuntimeStringValue() =
+    predictRuntimeValueExpression().stringValue()
+
 fun KtExpression.predictRuntimeStringValueWithSecondaries(bindingContext: BindingContext) =
     mutableListOf<PsiElement>().let {
         predictRuntimeValueExpression(bindingContext, it)
@@ -157,6 +163,7 @@ fun KtExpression.predictRuntimeValueExpression(
 } ?: this
 
 @KaExperimentalApi
+@Rewritten
 fun KtExpression.predictRuntimeValueExpression(
     declarations: MutableList<PsiElement> = mutableListOf(),
 ): KtExpression = this.deparenthesize().let { deparenthesized ->
@@ -177,7 +184,11 @@ fun KtExpression.predictRuntimeValueExpression(
         )
 
         is KtThisExpression -> analyze {
-            deparenthesized.instanceReference.mainReference.resolveToSymbol()?.findFunctionLiteral(deparenthesized)
+            var symbol = deparenthesized.instanceReference.mainReference.resolveToSymbol()
+            // In K1 the symbol is anonymous function symbol, in K2 it is a parameter
+            if (symbol !is KaAnonymousFunctionSymbol) symbol = symbol?.containingSymbol
+            symbol?.findFunctionLiteral(deparenthesized)
+                ?.findLetAlsoRunWithTargetExpression()
         }
 
         else -> analyze {
@@ -202,14 +213,17 @@ fun KtCallExpression.predictReceiverExpression(
 }
 
 @KaExperimentalApi
+@Rewritten
 fun KtCallExpression.predictReceiverExpression(
 ): KtExpression? =
     analyze {
         val call = this@predictReceiverExpression.resolveToCall()?.successfulFunctionCallOrNull()
-        val receiver = call?.partiallyAppliedSymbol?.dispatchReceiver
+        val symbol = call?.partiallyAppliedSymbol
+        val receiver = symbol?.extensionReceiver ?: symbol?.dispatchReceiver
         when (receiver) {
             is KaExplicitReceiverValue -> receiver.expression.predictRuntimeValueExpression()
-            is KaImplicitReceiverValue -> this@predictReceiverExpression.extractLetAlsoTargetExpression()
+            is KaImplicitReceiverValue -> receiver.symbol.containingSymbol
+                ?.findFunctionLiteral(this@predictReceiverExpression)?.findLetAlsoRunWithTargetExpression()
             else -> null
         }
     }
@@ -274,6 +288,38 @@ private fun KtExpression.stringValue(
     else -> null
 }
 
+@Rewritten
+private fun KtExpression.stringValue(
+    declarations: MutableList<PsiElement> = mutableListOf(),
+): String? = analyze {
+    when (this@stringValue) {
+        is KtStringTemplateExpression -> {
+            val entries = entries.map {
+                if (it.expression != null) it.expression!!.stringValue(declarations) else it.text
+            }
+            if (entries.all { it != null }) entries.joinToString("") else null
+        }
+
+        is KtNameReferenceExpression -> {
+            (this@stringValue.mainReference.resolveToSymbol() as? KaVariableSymbol)
+                ?.let {
+                    if(it.isVal) {
+                        (it.psi as? KtProperty)?.delegateExpressionOrInitializer?.stringValue(declarations)
+                    }
+                    else null
+                }
+        }
+
+        is KtDotQualifiedExpression -> selectorExpression?.stringValue(declarations)
+        is KtBinaryExpression ->
+            if (operationToken == KtTokens.PLUS)
+                left?.stringValue(declarations)?.plus(right?.stringValue(declarations))
+            else null
+
+        else -> null
+    }
+}
+
 private fun Call.predictValueExpression(bindingContext: BindingContext) =
     if (GET_PROP_WITH_DEFAULT_MATCHER.matches(this, bindingContext)) {
         valueArguments[1].getArgumentExpression()
@@ -305,7 +351,10 @@ private fun KtReferenceExpression.extractFromInitializer(
     (this@extractFromInitializer.mainReference.resolveToSymbol() as? KaVariableSymbol)
         ?.let {
             if(it.isVal) {
-                (it.psi as? KtProperty)?.delegateExpressionOrInitializer?.predictRuntimeValueExpression(declarations)
+                (it.psi as? KtProperty)
+                    ?.apply { declarations.add(this) }
+                    ?.delegateExpressionOrInitializer
+                    ?.predictRuntimeValueExpression(declarations)
             }
             else null
         }
@@ -379,12 +428,12 @@ private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(): KtExpression
             analyze {
                 when (larwCallCandidate.partiallyAppliedSymbol.symbol.name?.asString()) {
                     in KOTLIN_CHAIN_CALL_CONSTRUCTS -> {
-                        (larwCallCandidate.partiallyAppliedSymbol.dispatchReceiver as? KaExplicitReceiverValue)?.expression?.predictRuntimeValueExpression()
+                        (larwCallCandidate.partiallyAppliedSymbol.extensionReceiver as? KaExplicitReceiverValue)?.expression?.predictRuntimeValueExpression()
                     }
 
                     "with" -> {
                         val argumentMapping = larwCallCandidate.argumentMapping
-                        val argument = if (argumentMapping.size == 1) argumentMapping.keys.first() else null
+                        val argument = if (argumentMapping.size >= 1) argumentMapping.keys.toList()[0] else null
                         return argument?.predictRuntimeValueExpression()
                     }
 
@@ -435,7 +484,7 @@ private fun KaSymbol.findFunctionLiteral(
     var curNode: PsiElement? = startNode
     for (i in 0 until MAX_AST_PARENT_TRAVERSALS) {
         curNode = curNode?.parent ?: break
-        if (curNode is KtFunctionLiteral && curNode.symbol === this)
+        if (curNode is KtFunctionLiteral && curNode.symbol == this@findFunctionLiteral)
             return curNode
     }
     return null
