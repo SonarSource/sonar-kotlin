@@ -95,6 +95,7 @@ class KotlinSensor(
         if (sensorContext.runtime().product == SonarProduct.SONARLINT) {
             listOf(
                 IssueSuppressionVisitor(),
+                MetricVisitor(fileLinesContextFactory, noSonarFilter),
                 KtChecksVisitor(checks),
             )
         } else {
