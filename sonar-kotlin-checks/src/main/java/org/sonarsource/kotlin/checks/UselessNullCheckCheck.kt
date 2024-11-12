@@ -55,14 +55,12 @@ class UselessNullCheckCheck : AbstractCheck() {
 
 
     override fun visitBinaryExpression(binaryExpression: KtBinaryExpression, kotlinFileContext: KotlinFileContext) {
-        val bc = kotlinFileContext.bindingContext
-
         when (binaryExpression.operationToken) {
-            KtTokens.EQEQ -> binaryExpression.operandComparedToNull(bc)?.let {
+            KtTokens.EQEQ -> binaryExpression.operandComparedToNull()?.let {
                 handleNullCheck(kotlinFileContext, it, binaryExpression) { +"null check" }
             }
 
-            KtTokens.EXCLEQ -> binaryExpression.operandComparedToNull(bc)?.let {
+            KtTokens.EXCLEQ -> binaryExpression.operandComparedToNull()?.let {
                 handleNonNullCheck(kotlinFileContext, it, binaryExpression) { +"non-null check" }
             }
 
@@ -113,9 +111,9 @@ class UselessNullCheckCheck : AbstractCheck() {
         }
     }
 
-    private fun KtBinaryExpression.operandComparedToNull(bc: BindingContext): KtExpression? {
-        val leftResolved = left?.predictRuntimeValueExpression(bc) ?: return null
-        val rightResolved = right?.predictRuntimeValueExpression(bc) ?: return null
+    private fun KtBinaryExpression.operandComparedToNull(): KtExpression? {
+        val leftResolved = left?.predictRuntimeValueExpression() ?: return null
+        val rightResolved = right?.predictRuntimeValueExpression() ?: return null
 
         return when {
             leftResolved.isNull() -> right

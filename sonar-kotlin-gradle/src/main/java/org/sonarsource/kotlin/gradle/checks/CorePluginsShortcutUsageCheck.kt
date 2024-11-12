@@ -20,11 +20,12 @@
 package org.sonarsource.kotlin.gradle.checks
 
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.message
 
@@ -39,7 +40,7 @@ class CorePluginsShortcutUsageCheck : AbstractCheck() {
         if (callExpr.valueArguments.size != 1 || referencedName != "id") return
 
         val argAsString = callExpr.valueArguments.first().getArgumentExpression()
-            ?.predictRuntimeStringValue(kotlinFileContext.bindingContext) ?: return
+            ?.stringValue() ?: return
         if (argAsString.matches(corePluginMatcherRegex)) {
             val canonicalName = argAsString.substring(PREFIX_LENGTH).let {
                 if (it.contains('-')) "`$it`"
@@ -48,6 +49,15 @@ class CorePluginsShortcutUsageCheck : AbstractCheck() {
             kotlinFileContext.reportIssue(callExpr, message(canonicalName))
         }
     }
+}
+
+private fun KtExpression?.stringValue(): String? {
+    return if (this is KtStringTemplateExpression) {
+        val entries = entries.map {
+            if (it.expression != null) it.expression!!.stringValue() else it.text
+        }
+        if (entries.all { it != null }) entries.joinToString("") else null
+    } else null
 }
 
 private fun message(canonicalName: String) =

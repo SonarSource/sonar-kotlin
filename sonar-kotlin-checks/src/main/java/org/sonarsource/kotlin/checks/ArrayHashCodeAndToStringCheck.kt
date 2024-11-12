@@ -19,9 +19,11 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
@@ -55,7 +57,7 @@ private val PRIMITIVE_ARRAY_REPLACEMENT = mapOf("hashCode" to "contentHashCode",
 private val OBJECT_ARRAY_REPLACEMENT = mapOf("hashCode" to "contentDeepHashCode", "toString" to "contentDeepToString")
 private val ARRAY_OF_ARRAY_REPLACEMENT = mapOf("contentHashCode" to "contentDeepHashCode", "contentToString" to "contentDeepToString")
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
+@org.sonarsource.kotlin.api.frontend.K1only("determineType")
 @Rule(key = "S2116")
 class ArrayHashCodeAndToStringCheck : CallAbstractCheck() {
 
@@ -63,11 +65,11 @@ class ArrayHashCodeAndToStringCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
-        val methodName = resolvedCall.resultingDescriptor.name.asString()
+        val methodName = resolvedCall.partiallyAppliedSymbol.symbol.name?.asString()
         val replacement = when (matchedFun) {
             OBJECT_ARRAY_MATCHER -> OBJECT_ARRAY_REPLACEMENT[methodName]
             ARRAY_CONTENT_MATCHER -> if (receiverIsArrayOfArray(callExpression, kotlinFileContext))
@@ -82,7 +84,7 @@ class ArrayHashCodeAndToStringCheck : CallAbstractCheck() {
 
     private fun receiverIsArrayOfArray(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext): Boolean {
         val bindingContext = kotlinFileContext.bindingContext
-        return callExpression.predictReceiverExpression(bindingContext)?.determineType(bindingContext)?.arguments
+        return callExpression.predictReceiverExpression()?.determineType(bindingContext)?.arguments
                 ?.any { ARRAY_QUALIFIERS.contains(it.type.getKotlinTypeFqName(false)) }
             ?: false
     }

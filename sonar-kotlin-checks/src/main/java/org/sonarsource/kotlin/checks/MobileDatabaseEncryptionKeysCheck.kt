@@ -76,7 +76,7 @@ class MobileDatabaseEncryptionKeysCheck : CallAbstractCheck() {
         val argExpr = (arg as? ExpressionValueArgument)?.valueArgument?.getArgumentExpression() ?: return
 
         val secondaries = mutableListOf<PsiElement>()
-        val argValueExpr = argExpr.predictRuntimeValueExpression(bindingContext, secondaries)
+        val argValueExpr = argExpr.predictRuntimeValueExpression(secondaries)
         if (argValueExpr.isHardCoded(bindingContext, secondaries)) {
             val parameter = if (functionName == ENCRYPTION_KEY) ENCRYPTION_KEY else "password"
 
@@ -97,7 +97,7 @@ private fun KtElement.isHardCoded(bindingContext: BindingContext, secondaries: M
         is KtDotQualifiedExpression ->
             (selectorExpression?.isHardCoded(bindingContext, secondaries) ?: false)
                 || receiverExpression
-                .predictRuntimeValueExpression(bindingContext, secondaries)
+                .predictRuntimeValueExpression(secondaries)
                 .isHardCoded(bindingContext, secondaries)
         is KtCallExpression ->
             if (CREATE_CHAR_BYTE_ARRAY.matches(this, bindingContext)) {

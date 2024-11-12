@@ -82,7 +82,8 @@ private val lengthFieldMatcher = FieldMatcher {
     withQualifiers("kotlin.String")
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
+// TODO Remove field matcher
+@org.sonarsource.kotlin.api.frontend.K1only("fieldMatcher")
 @Rule(key = "S6529")
 class SimplifySizeExpressionCheck : CallAbstractCheck() {
 
@@ -128,8 +129,8 @@ class SimplifySizeExpressionCheck : CallAbstractCheck() {
         }
 
         val bindingContext = kotlinFileContext.bindingContext
-        if (((operationTokenId != LT_Id) && isIntZeroLiteral(sizeTest.right, bindingContext)) ||
-            ((operationTokenId != GT_Id) && isIntZeroLiteral(sizeTest.left, bindingContext))
+        if (((operationTokenId != LT_Id) && isIntZeroLiteral(sizeTest.right)) ||
+            ((operationTokenId != GT_Id) && isIntZeroLiteral(sizeTest.left))
         ) {
             checkNullTestOrReportSize(sizeTest, isSizeEquals, true, expression.parent as? KtDotQualifiedExpression, kotlinFileContext)
         }
@@ -209,8 +210,8 @@ private fun getNullTestReference(referenceExpression: KtExpression?, nullExpress
 private fun expandOptionalQualifier(element: PsiElement): PsiElement =
     if (element is KtDotQualifiedExpression) element.parent else element
 
-private fun isIntZeroLiteral(expression: KtExpression?, bindingContext: BindingContext) =
-    (expression as? KtConstantExpression)?.predictRuntimeIntValue(bindingContext) == 0
+private fun isIntZeroLiteral(expression: KtExpression?) =
+    (expression as? KtConstantExpression)?.predictRuntimeIntValue() == 0
 
 private fun KtExpression.getOperationTokenId() = ((when (this) {
     is KtUnaryExpression -> operationToken

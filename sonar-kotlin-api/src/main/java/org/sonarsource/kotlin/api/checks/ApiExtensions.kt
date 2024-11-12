@@ -99,9 +99,6 @@ private val STRING_TO_BYTE_FUNS = listOf(
 
 private val STRING_BYTES = FunMatcher(qualifier = "java.lang.String", name = "bytes")
 
-fun KtExpression.predictRuntimeStringValue(bindingContext: BindingContext) =
-    predictRuntimeValueExpression(bindingContext).stringValue(bindingContext)
-
 @Rewritten
 fun KtExpression.predictRuntimeStringValue() =
     predictRuntimeValueExpression().stringValue()

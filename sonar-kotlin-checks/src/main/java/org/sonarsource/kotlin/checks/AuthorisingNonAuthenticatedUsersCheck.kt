@@ -42,7 +42,7 @@ private val KEY_GEN_BUILDER_SET_AUTH_MATCHER = FunMatcher(qualifier = BUILDER, n
     withArguments("kotlin.Boolean")
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
+@org.sonarsource.kotlin.api.frontend.K1only("determineType")
 @Rule(key = "S6288")
 class AuthorisingNonAuthenticatedUsersCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(KEY_GEN_BUILDER_BUILD_MATCHER)

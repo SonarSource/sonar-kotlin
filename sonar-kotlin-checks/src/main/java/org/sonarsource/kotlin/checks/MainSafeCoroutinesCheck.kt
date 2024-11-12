@@ -130,7 +130,7 @@ private fun ResolvedCall<*>.usesNonSafeDispatcher(bindingContext: BindingContext
     val argValue = ((arg as? ExpressionValueArgument)
         ?.valueArgument
         ?.getArgumentExpression()
-        ?.predictRuntimeValueExpression(bindingContext) as? KtDotQualifiedExpression)
+        ?.predictRuntimeValueExpression() as? KtDotQualifiedExpression)
         ?.resolveReferenceTarget(bindingContext)
         ?.fqNameOrNull()
         ?.asString()
