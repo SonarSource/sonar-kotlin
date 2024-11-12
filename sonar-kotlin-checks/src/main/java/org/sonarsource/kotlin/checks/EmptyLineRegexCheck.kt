@@ -24,24 +24,14 @@ package org.sonarsource.kotlin.checks
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.analysis.api.resolution.KaExplicitReceiverValue
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.KtBinaryExpression
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtNameReferenceExpression
-import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi2ir.deparenthesize
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
-import org.jetbrains.kotlin.resolve.calls.util.getParentResolvedCall
-import org.jetbrains.kotlin.resolve.calls.util.getReceiverExpression
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.ast.BoundaryTree
@@ -49,13 +39,7 @@ import org.sonarsource.analyzer.commons.regex.ast.NonCapturingGroupTree
 import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree
 import org.sonarsource.analyzer.commons.regex.ast.SequenceTree
-import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.FunMatcherImpl
-import org.sonarsource.kotlin.api.checks.JAVA_UTIL_PATTERN
-import org.sonarsource.kotlin.api.checks.KOTLIN_TEXT
-import org.sonarsource.kotlin.api.checks.findUsages
-import org.sonarsource.kotlin.api.checks.matches
-import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
+import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.PATTERN_COMPILE_MATCHER
 import org.sonarsource.kotlin.api.regex.REGEX_MATCHER
@@ -63,6 +47,7 @@ import org.sonarsource.kotlin.api.regex.RegexContext
 import org.sonarsource.kotlin.api.regex.TO_REGEX_MATCHER
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.secondaryOf
+import org.sonarsource.kotlin.api.visiting.analyze
 
 private const val MESSAGE = "Remove MULTILINE mode or change the regex."
 
@@ -72,7 +57,6 @@ private val PATTERN_FIND = FunMatcher(qualifier = "java.util.regex.Matcher", nam
 private val STRING_IS_EMPTY = FunMatcher(qualifier = KOTLIN_TEXT, name = "isEmpty")
 private val REGEX_FIND = FunMatcher(qualifier = "kotlin.text.Regex", name = "find")
 
-@org.sonarsource.kotlin.api.frontend.K1only("regex")
 @Rule(key = "S5846")
 class EmptyLineRegexCheck : AbstractRegexCheck() {
 
@@ -89,14 +73,14 @@ class EmptyLineRegexCheck : AbstractRegexCheck() {
         visitor.visit(regex)
         if (visitor.containEmptyLine) {
             val (secondaries, main) = when (matchedFun) {
-                PATTERN_COMPILE_MATCHER -> getSecondariesForPattern(callExpression, kotlinFileContext.bindingContext)
+                PATTERN_COMPILE_MATCHER -> getSecondariesForPattern(callExpression)
                 REGEX_MATCHER -> {
                     checkRegexInReplace(callExpression, kotlinFileContext, callExpression.parent)
-                    getSecondariesForRegex(callExpression, kotlinFileContext.bindingContext)
+                    getSecondariesForRegex(callExpression)
                 }
                 TO_REGEX_MATCHER -> {
                     checkRegexInReplace(callExpression, kotlinFileContext, callExpression.parent.parent)
-                    getSecondariesForToRegex(callExpression, kotlinFileContext.bindingContext)
+                    getSecondariesForToRegex(callExpression)
                 }
                 else -> emptyList<KtElement>() to null
             }
@@ -110,43 +94,49 @@ class EmptyLineRegexCheck : AbstractRegexCheck() {
         }
     }
 
-    private fun getSecondariesForPattern(callExpression: KtCallExpression, bindingContext: BindingContext): Pair<List<KtElement>, KtElement> =
-        getSecondaries(bindingContext, callExpression.parent?.parent, ::getStringInMatcherFind) to callExpression.valueArguments[0]
+    private fun getSecondariesForPattern(callExpression: KtCallExpression): Pair<List<KtElement>, KtElement> =
+        getSecondaries(callExpression.parent?.parent, ::getStringInMatcherFind) to callExpression.valueArguments[0]
 
-    private fun getSecondariesForRegex(callExpression: KtCallExpression, bindingContext: BindingContext): Pair<List<KtElement>, KtElement> =
-        getSecondaries(bindingContext, callExpression.parent, ::getStringInRegexFind) to callExpression.valueArguments[0]
+    private fun getSecondariesForRegex(callExpression: KtCallExpression): Pair<List<KtElement>, KtElement> =
+        getSecondaries(callExpression.parent, ::getStringInRegexFind) to callExpression.valueArguments[0]
 
-    private fun getSecondariesForToRegex(callExpression: KtCallExpression, bindingContext: BindingContext): Pair<List<KtElement>, KtElement?> =
-        getSecondaries(bindingContext, callExpression.parent?.parent, ::getStringInRegexFind) to
-            (callExpression.parent as? KtExpression)?.getResolvedCall(bindingContext)?.getReceiverExpression()
+    private fun getSecondariesForToRegex(
+        callExpression: KtCallExpression
+    ): Pair<List<KtElement>, KtElement?> = analyze {
+        getSecondaries(callExpression.parent?.parent, ::getStringInRegexFind) to
+                (callExpression.parent as? KtExpression)?.resolveToCall()
+                    ?.successfulFunctionCallOrNull()?.getReceiverExpression()
+    }
 
     private fun getSecondaries(
-        bindingContext: BindingContext,
         parent: PsiElement?,
-        findMapper: (KtElement, BindingContext) -> KtExpression?,
+        findMapper: (KtElement) -> KtExpression?,
     ): List<KtElement> = when (parent) {
         is KtProperty -> {
             parent.findUsages()
-                .mapNotNull { findMapper(it, bindingContext) }
-                .filter { it.canBeEmpty(bindingContext) }
+                .mapNotNull { findMapper(it) }
+                .filter { it.canBeEmpty() }
         }
         is KtDotQualifiedExpression -> {
-            findMapper(parent.selectorExpression!!, bindingContext)
-                ?.let { if (it.canBeEmpty(bindingContext)) listOf(it) else emptyList()} ?: emptyList()
+            findMapper(parent.selectorExpression!!)
+                ?.let { if (it.canBeEmpty()) listOf(it) else emptyList()} ?: emptyList()
         }
         else -> {
             emptyList()
         }
     }
 
-    private fun checkRegexInReplace(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext, parent: PsiElement) {
-        val bindingContext = kotlinFileContext.bindingContext
+    private fun checkRegexInReplace(
+        callExpression: KtCallExpression,
+        kotlinFileContext: KotlinFileContext,
+        parent: PsiElement,
+    ) {
         when (parent) {
             is KtProperty -> {
                 parent.findUsages()
-                    .mapNotNull { it.getParentResolvedCall(bindingContext) }
+                    .mapNotNull { it.getParentCall() }
                     .firstOrNull {
-                        it matches STRING_REPLACE && it.getReceiverExpression()?.canBeEmpty(bindingContext) == true
+                        it matches STRING_REPLACE && it.getReceiverExpression()?.canBeEmpty() == true
                     }
                     ?.let {
                         kotlinFileContext.reportIssue(
@@ -157,15 +147,24 @@ class EmptyLineRegexCheck : AbstractRegexCheck() {
                     }
             }
             else -> {
-                val resolvedCall = callExpression.getParentResolvedCall(bindingContext)
+                val resolvedCall = callExpression.getParentCall()
                 if (
                     resolvedCall matches STRING_REPLACE
-                    && resolvedCall?.getReceiverExpression()?.canBeEmpty(bindingContext) == true
+                    && resolvedCall?.getReceiverExpression()?.canBeEmpty() == true
                 ) {
                     kotlinFileContext.reportIssue(resolvedCall.getFirstArgumentExpression()!!, MESSAGE)
                 }
             }
         }
+    }
+}
+
+private fun KaFunctionCall<*>?.getReceiverExpression(): KtExpression? {
+    val partiallyAppliedSymbol = this?.partiallyAppliedSymbol
+    val receiverValue = partiallyAppliedSymbol?.dispatchReceiver ?: partiallyAppliedSymbol?.extensionReceiver
+    return when (receiverValue) {
+        is KaExplicitReceiverValue -> receiverValue.expression
+        else -> return null
     }
 }
 
@@ -203,31 +202,36 @@ private fun isNonCapturingWithoutChild(tree: RegexTree): Boolean {
     return tree.`is`(RegexTree.Kind.NON_CAPTURING_GROUP) && (tree as NonCapturingGroupTree).element == null
 }
 
-private fun getStringInMatcherFind(ref: KtElement, bindingContext: BindingContext): KtExpression? {
-    val resolvedCall = (ref.parent as? KtExpression)?.getResolvedCall(bindingContext) ?: return null
+private fun getStringInMatcherFind(ref: KtElement): KtExpression? = analyze {
+    val resolvedCall =
+        (ref.parent as? KtExpression)?.resolveToCall()?.successfulFunctionCallOrNull() ?: return null
+
     if (!(resolvedCall matches PATTERN_MATCHER)) return null
 
     return when (val preParent = ref.parent.parent) {
-        is KtExpression -> if (preParent.getResolvedCall(bindingContext) matches PATTERN_FIND) extractArgument(resolvedCall) else null
-        is KtProperty -> if (preParent.findUsages().any { it.getParentResolvedCall(bindingContext) matches PATTERN_FIND }) {
-            extractArgument(resolvedCall)
-        } else null
+        is KtExpression ->
+            if (preParent.resolveToCall()?.successfulFunctionCallOrNull() matches PATTERN_FIND)
+                extractArgument(resolvedCall)
+            else null
+        is KtProperty ->
+            if (preParent.findUsages().any { it.getParentCall() matches PATTERN_FIND })
+                extractArgument(resolvedCall)
+            else null
         else -> null
     }
 }
 
-private fun getStringInRegexFind(ref: KtElement, bindingContext: BindingContext): KtExpression? {
-    val resolvedCall = (ref.parent as? KtExpression)?.getResolvedCall(bindingContext) ?: return null
+private fun getStringInRegexFind(ref: KtElement): KtExpression? {
+    val resolvedCall = analyze {
+        (ref.parent as? KtExpression)?.resolveToCall()?.successfulFunctionCallOrNull() ?: return null
+    }
     return if (resolvedCall matches REGEX_FIND) extractArgument(resolvedCall) else null
 }
 
-private fun extractArgument(resolvedCall: ResolvedCall<out CallableDescriptor>): KtExpression? {
-    val arguments = resolvedCall.valueArgumentsByIndex
-    return if (arguments.isNullOrEmpty()
-        || arguments[0] == null
-        || arguments[0] !is ExpressionValueArgument
-    ) null
-    else (arguments[0] as ExpressionValueArgument).valueArgument?.getArgumentExpression()
+private fun extractArgument(resolvedCall: KaFunctionCall<*>): KtExpression? {
+    val arguments = resolvedCall.argumentMapping.keys.toList()
+    return if (arguments.isEmpty()) null
+    else arguments[0]
 }
 
 /**
@@ -238,23 +242,37 @@ private fun extractArgument(resolvedCall: ResolvedCall<out CallableDescriptor>):
  *     - a variable, that was not tested with "isEmpty()" and could contain empty string
  *     - an empty String constant
  */
-private fun KtExpression.canBeEmpty(bindingContext: BindingContext): Boolean =
+private fun KtExpression.canBeEmpty(): Boolean =
     when (val deparenthesized = this.deparenthesize()) {
         is KtNameReferenceExpression -> {
-            val runtimeStringValue = deparenthesized.predictRuntimeStringValue(bindingContext)
+            val runtimeStringValue = deparenthesized.predictRuntimeStringValue()
             runtimeStringValue?.isEmpty()
                 ?: deparenthesized.findUsages(allUsages = true) {
-                    (it.parent as? KtExpression)?.getResolvedCall(bindingContext) matches STRING_IS_EMPTY ||
-                        (it.parent as? KtBinaryExpression).isEmptinessCheck(bindingContext)
+                    analyze {
+                        (it.parent as? KtExpression)?.resolveToCall()
+                            ?.successfulFunctionCallOrNull() matches STRING_IS_EMPTY ||
+                                (it.parent as? KtBinaryExpression).isEmptinessCheck()
+                    }
                 }.isEmpty()
         }
         else ->
-            predictRuntimeStringValue(bindingContext)?.isEmpty() ?: false
+            predictRuntimeStringValue()?.isEmpty() ?: false
     }
 
-private fun KtBinaryExpression?.isEmptinessCheck(bindingContext: BindingContext) =
+private fun KtBinaryExpression?.isEmptinessCheck() =
     this?.let {
         operationToken in setOf(KtTokens.EQEQ, KtTokens.EXCLEQ) &&
-            (left?.predictRuntimeStringValue(bindingContext)?.isEmpty() ?: false
-                || right?.predictRuntimeStringValue(bindingContext)?.isEmpty() ?: false)
+            (left?.predictRuntimeStringValue()?.isEmpty() ?: false
+                || right?.predictRuntimeStringValue()?.isEmpty() ?: false)
     } ?: false
+
+fun KtElement.getParentCall(): KaFunctionCall<*>? {
+    val callExpressionTypes = arrayOf(
+        KtSimpleNameExpression::class.java, KtCallElement::class.java, KtBinaryExpression::class.java,
+        KtUnaryExpression::class.java, KtArrayAccessExpression::class.java
+    )
+
+    val parent = PsiTreeUtil.getParentOfType(this, *callExpressionTypes)
+
+    return analyze { parent?.resolveToCall()?.successfulFunctionCallOrNull() }
+}
