@@ -23,16 +23,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.checks.ArgumentMatcher
-import org.sonarsource.kotlin.api.checks.ConstructorMatcher
-import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.FunMatcherImpl
-import org.sonarsource.kotlin.api.checks.INT_TYPE
-import org.sonarsource.kotlin.api.checks.matches
-import org.sonarsource.kotlin.api.checks.predictReceiverExpression
-import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
-import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
+import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.analyze
 
@@ -142,9 +133,6 @@ class RobustCryptographicKeysCheck : AbstractCheck() {
             }
         }
     }
-
-    private fun KaFunctionCall<*>.getFirstArgumentExpression() =
-        argumentMapping.keys.toList().firstOrNull()
 }
 
 private fun msg(minKeySize: Int, algorithm: String) = "Use a key length of at least $minKeySize bits for $algorithm cipher algorithm."

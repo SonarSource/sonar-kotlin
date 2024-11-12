@@ -127,6 +127,13 @@ fun KtExpression.predictRuntimeBooleanValue(bindingContext: BindingContext) =
         }
     }
 
+@Rewritten
+fun KtExpression.predictRuntimeBooleanValue() = analyze {
+    predictRuntimeValueExpression().let { runtimeValueExpression ->
+        runtimeValueExpression.evaluate()?.value as? Boolean
+    }
+}
+
 /**
  * In Kotlin, we may often be dealing with expressions that can already statically be resolved to prior and more accurate expressions that
  * they will alias at runtime. A good example of this are `it` within `let` and `also` scopes, as well as `this` within `with`, `apply`
@@ -440,6 +447,9 @@ private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(): KtExpression
             }
         }
     }
+
+fun KaFunctionCall<*>.getFirstArgumentExpression() =
+    argumentMapping.keys.toList().firstOrNull()
 
 fun KtElement.getParentCall(): KaCall? {
     val callExpressionTypes = arrayOf(
