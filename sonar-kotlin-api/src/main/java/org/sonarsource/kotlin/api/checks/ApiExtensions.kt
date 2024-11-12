@@ -330,8 +330,12 @@ fun KtQualifiedExpression.resolveReferenceTarget(bindingContext: BindingContext)
 
 fun DeclarationDescriptor.scope() = fqNameSafe.asString().substringBeforeLast(".")
 
-fun KtCallExpression.expressionTypeFqn(bindingContext: BindingContext) =
-    bindingContext[BindingContext.EXPRESSION_TYPE_INFO, this]?.type?.getKotlinTypeFqName(false)
+fun KtCallExpression.expressionTypeFqn(bindingContext: BindingContext): String? {
+    val type = bindingContext[BindingContext.EXPRESSION_TYPE_INFO, this]?.type
+    if (/* intersection type */ type?.constructor?.declarationDescriptor == null) return null
+    // Note that for intersection type next method throws IllegalArgumentException
+    return type.getKotlinTypeFqName(false)
+}
 
 private fun KtProperty.determineType(bindingContext: BindingContext) =
     (typeReference?.let { bindingContext[BindingContext.TYPE, it] }
