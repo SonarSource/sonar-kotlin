@@ -32,7 +32,7 @@ import org.sonarsource.kotlin.api.common.KOTLIN_REPOSITORY_KEY
 import org.sonarsource.kotlin.api.common.KotlinLanguage
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensor
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
-import org.sonarsource.kotlin.visiting.KtChecksVisitor
+import org.sonarsource.kotlin.api.visiting.KtChecksVisitor
 import java.io.File
 
 const val GRADLE_PROJECT_ROOT_PROPERTY = "sonar.kotlin.gradleProjectRoot"

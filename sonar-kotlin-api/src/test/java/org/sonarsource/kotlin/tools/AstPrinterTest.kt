@@ -17,11 +17,9 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.dev
+package org.sonarsource.kotlin.tools
 
 import org.jetbrains.kotlin.config.LanguageVersion
-import org.sonarsource.kotlin.tools.AstPrinter
-import org.sonarsource.kotlin.tools.DotNode
 import java.nio.file.Path
 import kotlin.io.path.readText
 import org.assertj.core.api.Assertions

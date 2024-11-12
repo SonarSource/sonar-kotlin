@@ -101,9 +101,8 @@ class InputFileContextImpl(
         }.onFailure { e ->
             if (!alreadyLoggedIssueMessageWithHighlightingFailed) {
                 alreadyLoggedIssueMessageWithHighlightingFailed = true
-                LOG.warn(
-                    "Could not report issue with code highlighting, using plain text instead. Check whether the product is outdated.",
-                    e
+                LOG.info(
+                    "Code highlighting in issue messages is not supported, using plain text instead.",
                 )
             }
             message(message.text)

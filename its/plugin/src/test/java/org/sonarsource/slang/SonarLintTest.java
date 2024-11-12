@@ -97,7 +97,9 @@ public class SonarLintTest {
         "    if (true) { \n" +
         "        val password = \"blabla\"\n" +
         "    } \n" +
-        "}",
+        "}\n" +
+        "\n" +
+        "fun foo_bar_nosonar() {} // NOSONAR \n",
       false, "kotlin");
 
     List<Issue> issues = new ArrayList<>();
