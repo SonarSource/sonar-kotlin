@@ -19,30 +19,41 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.predictRuntimeBooleanValue
+import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Make sure this debug feature is deactivated before delivering the code in production."
 
-@org.sonarsource.kotlin.api.frontend.K1only("predictBooleanValue")
 @Rule(key = "S4507")
 class DebugFeatureEnabledCheck : CallAbstractCheck() {
 
     override val functionsToVisit = listOf(
-        FunMatcher(definingSupertype = "android.webkit.WebView", name = "setWebContentsDebuggingEnabled")
-        { withArguments("kotlin.Boolean") },
-        FunMatcher(definingSupertype = "android.webkit.WebViewFactoryProvider.Statics", name = "setWebContentsDebuggingEnabled")
-        { withArguments("kotlin.Boolean") },
+        FunMatcher(
+            definingSupertype = "android.webkit.WebView",
+            name = "setWebContentsDebuggingEnabled",
+        ) {
+            withArguments("kotlin.Boolean")
+          },
+        FunMatcher(
+            definingSupertype = "android.webkit.WebViewFactoryProvider.Statics",
+            name = "setWebContentsDebuggingEnabled"
+        ) {
+            withArguments("kotlin.Boolean")
+          },
     )
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
-        if (resolvedCall.getFirstArgumentExpression()?.predictRuntimeBooleanValue(kotlinFileContext.bindingContext) == true) {
+    override fun visitFunctionCall(
+        callExpression: KtCallExpression,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext
+    ) {
+        if (resolvedCall.getFirstArgumentExpression()
+                ?.predictRuntimeBooleanValue() == true
+        ) {
             kotlinFileContext.reportIssue(callExpression, MESSAGE)
         }
     }
