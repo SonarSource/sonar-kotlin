@@ -42,16 +42,14 @@ private const val msg = "Use a strong cipher algorithm."
 private val cipherGetInstanceMatcher = FunMatcher(qualifier = "javax.crypto.Cipher", name = "getInstance")
 private val nullCipherConstructorMatcher = ConstructorMatcher("javax.crypto.NullCipher")
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S5547")
 class StrongCipherAlgorithmCheck : AbstractCheck() {
     override fun visitCallExpression(callExpr: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        val (_, _, bindingContext) = kotlinFileContext
-        if (nullCipherConstructorMatcher.matches(callExpr, bindingContext)) {
+        if (nullCipherConstructorMatcher.matches(callExpr)) {
             kotlinFileContext.reportIssue(callExpr, msg)
-        } else if (cipherGetInstanceMatcher.matches(callExpr, bindingContext)) {
+        } else if (cipherGetInstanceMatcher.matches(callExpr)) {
             callExpr.valueArguments.firstOrNull()?.let { arg ->
-                arg.getArgumentExpression()?.predictRuntimeStringValue(bindingContext)?.uppercase()?.let { candidateString ->
+                arg.getArgumentExpression()?.predictRuntimeStringValue()?.uppercase()?.let { candidateString ->
                     if (weakCiphers.any { cipher -> candidateString == cipher || candidateString.startsWith("$cipher/") }) {
                         kotlinFileContext.reportIssue(arg, msg)
                     }
