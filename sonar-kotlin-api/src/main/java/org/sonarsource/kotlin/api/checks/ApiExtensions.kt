@@ -585,40 +585,9 @@ fun Call.findCallInPrecedingCallChain(
     return receiver to receiverResolved
 }
 
-fun ResolvedValueArgument.isNull(bindingContext: BindingContext) = (
-        (this as? ExpressionValueArgument)
-            ?.valueArgument
-            ?.getArgumentExpression()
-            ?.predictRuntimeValueExpression(bindingContext)
-        )?.isNull() ?: false
-
-fun KtExpression.getCalleeOrUnwrappedGetMethod(bindingContext: BindingContext) =
-    (this as? KtDotQualifiedExpression)?.let { dotQualifiedExpression ->
-        (dotQualifiedExpression.selectorExpression as? KtNameReferenceExpression)?.let { nameSelector ->
-            (bindingContext[BindingContext.REFERENCE_TARGET, nameSelector] as? PropertyDescriptor)?.unwrappedGetMethod
-        }
-    } ?: this.getResolvedCall(bindingContext)?.resultingDescriptor
-
-@Rewritten
-fun KtExpression.getCalleeOrUnwrappedGetMethod(): KaFunctionSymbol? = analyze {
-    (this@getCalleeOrUnwrappedGetMethod as? KtDotQualifiedExpression)?.let { dotQualifiedExpression ->
-        (dotQualifiedExpression.selectorExpression as? KtNameReferenceExpression)?.let { nameSelector ->
-            (nameSelector.mainReference.resolveToSymbol() as? KaPropertySymbol)?.getter
-        }
-    } ?: this@getCalleeOrUnwrappedGetMethod.resolveToCall()?.successfulFunctionCallOrNull()
-        ?.partiallyAppliedSymbol?.symbol
-}
-
 /**
  * Checks whether the expression is a call, matches the FunMatchers in [STRING_TO_BYTE_FUNS] and is called on a constant string value.
  */
-fun KtExpression.isBytesInitializedFromString(bindingContext: BindingContext) =
-    getCalleeOrUnwrappedGetMethod(bindingContext)?.let { callee ->
-        STRING_TO_BYTE_FUNS.any { it.matches(callee) } &&
-                (getCall(bindingContext)?.explicitReceiver as? ExpressionReceiver)?.expression
-                    ?.predictRuntimeStringValue() != null
-    } ?: false
-
 @Rewritten
 fun KtExpression.isBytesInitializedFromString() = analyze {
     val resolveToCall = this@isBytesInitializedFromString.resolveToCall()

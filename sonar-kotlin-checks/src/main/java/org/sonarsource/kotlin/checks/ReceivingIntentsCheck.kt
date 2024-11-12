@@ -22,12 +22,10 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.psiUtil.isNull
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
-import org.sonarsource.kotlin.api.checks.isNull
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S5322")
@@ -36,7 +34,6 @@ class ReceivingIntentsCheck : CallAbstractCheck() {
         FunMatcher(definingSupertype = "android.content.Context", name = "registerReceiver")
     )
 
-    // TODO easy?
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
         resolvedCall: KaFunctionCall<*>,
