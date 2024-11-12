@@ -21,7 +21,6 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.ANY
 import org.sonarsource.kotlin.api.checks.AbstractCheck
@@ -98,19 +97,17 @@ private val WEAK_METHOD_MATCHERS = listOf(
 private val DEPRECATED_SPRING_PASSWORD_ENCODER_METHODS = DEPRECATED_SPRING_PASSWORD_ENCODERS.map(::ConstructorMatcher).toList() +
         FunMatcher(qualifier = "org.springframework.security.crypto.password.NoOpPasswordEncoder", name = GET_INSTANCE)
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S4790")
 class DataHashingCheck : AbstractCheck() {
 
     override fun visitCallExpression(expression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        val bindingContext = kotlinFileContext.bindingContext
         val calleeExpression = expression.calleeExpression ?: return
 
-        if (DEPRECATED_SPRING_PASSWORD_ENCODER_METHODS.any { it.matches(expression, bindingContext) }) {
+        if (DEPRECATED_SPRING_PASSWORD_ENCODER_METHODS.any { it.matches(expression) }) {
             kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
-        } else if (WEAK_METHOD_MATCHERS.any { it.matches(expression, bindingContext) }) {
+        } else if (WEAK_METHOD_MATCHERS.any { it.matches(expression) }) {
             val algorithm = ALGORITHM_BY_METHOD_NAME[calleeExpression.text]
-                ?: algorithm(expression.valueArguments.firstOrNull()?.getArgumentExpression(), bindingContext)
+                ?: algorithm(expression.valueArguments.firstOrNull()?.getArgumentExpression())
             algorithm?.let { kotlinFileContext.reportIssue(calleeExpression, MESSAGE) }
         }
     }
@@ -137,7 +134,7 @@ enum class InsecureAlgorithm {
     }
 }
 
-private fun algorithm(invocationArgument: KtExpression?, bindingContext: BindingContext) =
-    invocationArgument?.predictRuntimeStringValue(bindingContext)?.let { algorithmName ->
-        InsecureAlgorithm.values().firstOrNull { it.match(algorithmName) }
+private fun algorithm(invocationArgument: KtExpression?) =
+    invocationArgument?.predictRuntimeStringValue()?.let { algorithmName ->
+        InsecureAlgorithm.entries.firstOrNull { it.match(algorithmName) }
     }

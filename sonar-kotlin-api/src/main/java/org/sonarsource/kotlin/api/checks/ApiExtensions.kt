@@ -332,7 +332,7 @@ private fun Call.predictValueExpression(bindingContext: BindingContext) =
 
 private fun KaFunctionCall<*>.predictValueExpression(): KtExpression? =
     if (GET_PROP_WITH_DEFAULT_MATCHER.matches(this)) {
-        partiallyAppliedSymbol.signature.valueParameters[1].symbol.psi as? KtExpression
+        argumentMapping.keys.toList()[1]
     } else null
 
 private fun KtReferenceExpression.extractFromInitializer(
