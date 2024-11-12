@@ -19,8 +19,8 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
 import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 import org.sonar.check.Rule
@@ -69,7 +69,7 @@ val funMatcherToArgumentIndexMap = mapOf(
 
 const val ISSUE_MESSAGE = "This key/object cannot ever be present in the collection"
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
+@org.sonarsource.kotlin.api.frontend.K1only("determineType")
 @Rule(key = "S2175")
 class CollectionInappropriateCallsCheck : CallAbstractCheck() {
 
@@ -78,9 +78,9 @@ class CollectionInappropriateCallsCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
         val ctx = kotlinFileContext.bindingContext
 
@@ -88,7 +88,7 @@ class CollectionInappropriateCallsCheck : CallAbstractCheck() {
         val arg = callExpression.valueArguments.first()
         var argType = arg.determineType(ctx) ?: return
 
-        val collectionType = callExpression.predictReceiverExpression(ctx).determineType(ctx) ?: return
+        val collectionType = callExpression.predictReceiverExpression().determineType(ctx) ?: return
         // If collection type arguments aren't present, this rule shouldn't be triggered
         if (collectionType.arguments.isEmpty()) return
 

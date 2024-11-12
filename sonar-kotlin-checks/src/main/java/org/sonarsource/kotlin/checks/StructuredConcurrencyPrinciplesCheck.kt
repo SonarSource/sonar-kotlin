@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
@@ -29,15 +30,8 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.TYPE
 import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.checks.FUNS_ACCEPTING_DISPATCHERS
-import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.KOTLINX_COROUTINES_PACKAGE
-import org.sonarsource.kotlin.api.checks.determineTypeAsString
-import org.sonarsource.kotlin.api.checks.predictReceiverExpression
+import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val JOB_CONSTRUCTOR = FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = "Job")
@@ -45,25 +39,29 @@ private val SUPERVISOR_JOB_CONSTRUCTOR = FunMatcher(qualifier = KOTLINX_COROUTIN
 private const val MESSAGE_ENDING = " here leads to the breaking of structured concurrency principles."
 private const val DELICATE_API_CLASS_TYPE = "kotlin.reflect.KClass<kotlinx.coroutines.DelicateCoroutinesApi>"
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
+@org.sonarsource.kotlin.api.frontend.K1only("type")
 @Rule(key = "S6306")
 class StructuredConcurrencyPrinciplesCheck : CallAbstractCheck() {
 
     override val functionsToVisit = FUNS_ACCEPTING_DISPATCHERS
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
+    override fun visitFunctionCall(
+        callExpression: KtCallExpression,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext
+    ) {
         val bindingContext = kotlinFileContext.bindingContext
-        val receiver = callExpression.predictReceiverExpression(bindingContext) as? KtNameReferenceExpression
+        val receiver = callExpression.predictReceiverExpression() as? KtNameReferenceExpression
         if (receiver?.getReferencedName() == "GlobalScope" && !callExpression.checkOptInDelicateApi(bindingContext)) {
             kotlinFileContext.reportIssue(receiver, """Using "GlobalScope"$MESSAGE_ENDING""")
         } else {
-            resolvedCall.valueArgumentsByIndex?.let { args ->
-                if (args.isEmpty()) return
-                val argExprCall = (args[0] as? ExpressionValueArgument)?.valueArgument?.getArgumentExpression() as? KtCallExpression ?: return
-                if (JOB_CONSTRUCTOR.matches(argExprCall, bindingContext) || SUPERVISOR_JOB_CONSTRUCTOR.matches(argExprCall, bindingContext)
-                ) {
-                    kotlinFileContext.reportIssue(argExprCall, """Using "${argExprCall.text}"$MESSAGE_ENDING""")
-                }
+            val args = resolvedCall.argumentMapping.keys.toList()
+            if (args.isEmpty()) return
+            val argExprCall = args[0] as? KtCallExpression ?: return
+            if (JOB_CONSTRUCTOR.matches(argExprCall) || SUPERVISOR_JOB_CONSTRUCTOR.matches(argExprCall)
+            ) {
+                kotlinFileContext.reportIssue(argExprCall, """Using "${argExprCall.text}"$MESSAGE_ENDING""")
             }
         }
     }
