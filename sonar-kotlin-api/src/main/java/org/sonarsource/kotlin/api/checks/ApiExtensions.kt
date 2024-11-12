@@ -31,7 +31,6 @@ import org.jetbrains.kotlin.analysis.api.KaIdeApi
 import org.jetbrains.kotlin.analysis.api.resolution.*
 import org.jetbrains.kotlin.analysis.api.symbols.*
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
-import org.jetbrains.kotlin.coroutines.hasSuspendFunctionType
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
@@ -64,7 +63,6 @@ import org.jetbrains.kotlin.resolve.calls.util.getImplicitReceiverValue
 import org.jetbrains.kotlin.resolve.calls.util.getParentCall
 import org.jetbrains.kotlin.resolve.calls.util.getReceiverExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.constants.ArrayValue
 import org.jetbrains.kotlin.resolve.constants.KClassValue
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
@@ -560,17 +558,6 @@ fun KtNamedFunction.returnTypeAsString(bindingContext: BindingContext, printType
 
 fun KtNamedFunction.returnType(bindingContext: BindingContext) =
     createTypeBindingForReturnType(bindingContext)?.type
-
-fun KtLambdaArgument.isSuspending(
-    bindingContext: BindingContext,
-) = (parent as? KtCallExpression)
-    ?.getResolvedCall(bindingContext)
-    ?.resultingDescriptor
-    ?.valueParameters
-    // using .lastOrNull() instead of .last() due to possible NoSuchElementException in case of incomplete semantic
-    ?.lastOrNull()
-    ?.hasSuspendFunctionType
-    ?: false
 
 fun CallableDescriptor.throwsExceptions(exceptions: Collection<String>) =
     annotations.any { annotation ->

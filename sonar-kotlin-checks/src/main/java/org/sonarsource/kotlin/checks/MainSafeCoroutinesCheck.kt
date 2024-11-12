@@ -19,6 +19,8 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.coroutines.hasSuspendFunctionType
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -38,7 +40,6 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FUNS_ACCEPTING_DISPATCHERS
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.KOTLINX_COROUTINES_PACKAGE
-import org.sonarsource.kotlin.api.checks.isSuspending
 import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.checks.resolveReferenceTarget
@@ -70,7 +71,7 @@ val BLOCKING_ANNOTATIONS = setOf(
     "javax.net.ssl.SSLException",
 )
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
+@org.sonarsource.kotlin.api.frontend.K1only("complex")
 @Rule(key = "S6307")
 class MainSafeCoroutinesCheck : AbstractCheck() {
 
@@ -135,7 +136,18 @@ private fun ResolvedCall<*>.usesNonSafeDispatcher(bindingContext: BindingContext
         ?.asString()
 
     return arg == null
-        || arg is DefaultValueArgument
-        || argValue == "$KOTLINX_COROUTINES_PACKAGE.Dispatchers.Main"
-        || argValue == "$KOTLINX_COROUTINES_PACKAGE.Dispatchers.Default"
+            || arg is DefaultValueArgument
+            || argValue == "$KOTLINX_COROUTINES_PACKAGE.Dispatchers.Main"
+            || argValue == "$KOTLINX_COROUTINES_PACKAGE.Dispatchers.Default"
 }
+
+private fun KtLambdaArgument.isSuspending(
+    bindingContext: BindingContext,
+) = (parent as? KtCallExpression)
+    ?.getResolvedCall(bindingContext)
+    ?.resultingDescriptor
+    ?.valueParameters
+// using .lastOrNull() instead of .last() due to possible NoSuchElementException in case of incomplete semantic
+    ?.lastOrNull()
+    ?.hasSuspendFunctionType
+    ?: false
