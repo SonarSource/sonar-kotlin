@@ -725,6 +725,7 @@ fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression, binding
     }.isEmpty()
 }
 
+@Rewritten
 fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression): Boolean {
     return this !is KtNameReferenceExpression || this.findUsages(searchStartNode) {
         analyze {

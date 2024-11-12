@@ -20,18 +20,19 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.tree.IElementType
+import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
 val COLLECTION_SIZE_METHOD = FunMatcher(qualifier = "kotlin.collections.Collection", name = "size") {
     withNoArguments()
@@ -46,21 +47,19 @@ val ISSUE_MESSAGE_SIZE_NEVER_LT = """The size of an array/collection is never "<
 val ISSUE_MESSAGE_SIZE_ALWAYS_GTEQ =
     """The size of an array/collection is always ">=0", update this test to either ".isNotEmpty()" or ".isEmpty()"."""
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S3981")
 class CollectionSizeAndArrayLengthCheck : AbstractCheck() {
 
     override fun visitBinaryExpression(bet: KtBinaryExpression, fileCtx: KotlinFileContext) {
-        val ctx = fileCtx.bindingContext
         val opToken = bet.operationToken
 
-        val leftIntValue = bet.left?.predictRuntimeIntValue(ctx)
-        val rightIntValue = bet.right?.predictRuntimeIntValue(ctx)
+        val leftIntValue = bet.left?.predictRuntimeIntValue()
+        val rightIntValue = bet.right?.predictRuntimeIntValue()
 
         val msg = if (leftIntValue.isZeroOrNegative()) {
-            checkConditionsAndSelectMessage(ctx, opToken, bet.right, leftIntValue, KtTokens.LTEQ, KtTokens.GT)
+            checkConditionsAndSelectMessage(opToken, bet.right, leftIntValue, KtTokens.LTEQ, KtTokens.GT)
         } else if (rightIntValue.isZeroOrNegative()) {
-            checkConditionsAndSelectMessage(ctx, opToken, bet.left, rightIntValue, KtTokens.GTEQ, KtTokens.LT)
+            checkConditionsAndSelectMessage(opToken, bet.left, rightIntValue, KtTokens.GTEQ, KtTokens.LT)
         } else {
             null
         }
@@ -70,14 +69,17 @@ class CollectionSizeAndArrayLengthCheck : AbstractCheck() {
     }
 
     private fun checkConditionsAndSelectMessage(
-        ctx: BindingContext,
         opToken: IElementType,
         testedExpr: KtExpression?,
         integerValue: Int?,
         opWithEq: KtSingleValueToken,
         opWithoutEq: KtSingleValueToken,
     ): String? {
-        if (testedExpr is KtDotQualifiedExpression && MATCHERS.any { it.matches(testedExpr.getResolvedCall(ctx)) }) {
+        if (testedExpr is KtDotQualifiedExpression &&
+            analyze {
+                val functionCall = testedExpr.resolveToCall()?.singleVariableAccessCall() ?: return null
+                MATCHERS.any { it.matches(functionCall) }
+            }) {
             if (opToken == opWithEq) {
                 return ISSUE_MESSAGE_SIZE_ALWAYS_GTEQ
             } else if (opToken == opWithoutEq || (integerValue.isNegative() && opToken == KtTokens.EQEQ)) {
