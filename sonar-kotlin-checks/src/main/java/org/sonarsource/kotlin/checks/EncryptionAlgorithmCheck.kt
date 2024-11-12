@@ -19,15 +19,16 @@
  */
 package org.sonarsource.kotlin.checks
 
+import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.psi.KtExpression
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
-import org.sonarsource.kotlin.api.checks.predictRuntimeStringValueWithSecondaries
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
 private val ALGORITHM_PATTERN = Regex("([^/]+)/([^/]+)/([^/]+)")
 
@@ -36,7 +37,6 @@ val CIPHER_GET_INSTANCE_MATCHER = FunMatcher {
     name = "getInstance"
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S5542")
 class EncryptionAlgorithmCheck : CallAbstractCheck() {
 
@@ -44,13 +44,13 @@ class EncryptionAlgorithmCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
-        kotlinFileContext: KotlinFileContext,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext
     ) {
-        val bindingContext = kotlinFileContext.bindingContext
         callExpression.valueArguments.firstOrNull()?.let { argument ->
             argument.getArgumentExpression()!!
-                .predictRuntimeStringValueWithSecondaries(bindingContext).let { (algorithm, secondaries) ->
+                .predictRuntimeStringValueWithSecondaries().let { (algorithm, secondaries) ->
                     algorithm?.getInsecureAlgorithmMessage()?.let { errorMessage ->
                         val locations = secondaries.map { secondaryLocation ->
                             SecondaryLocation(kotlinFileContext.textRange(secondaryLocation), "Transformation definition")
@@ -76,4 +76,11 @@ private fun String.getInsecureAlgorithmMessage(): String? {
     }
     // By default, ECB is used.
         ?: return "Use secure mode and padding scheme."
+}
+
+private fun KtExpression.predictRuntimeStringValueWithSecondaries() = analyze {
+    mutableListOf<PsiElement>().let {
+        predictRuntimeValueExpression(it)
+            .stringValue(it) to it
+    }
 }

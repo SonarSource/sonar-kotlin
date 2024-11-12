@@ -108,12 +108,6 @@ fun KtExpression.predictRuntimeStringValue(bindingContext: BindingContext) =
 fun KtExpression.predictRuntimeStringValue() =
     predictRuntimeValueExpression().stringValue()
 
-fun KtExpression.predictRuntimeStringValueWithSecondaries(bindingContext: BindingContext) =
-    mutableListOf<PsiElement>().let {
-        predictRuntimeValueExpression(bindingContext, it)
-            .stringValue(bindingContext, it) to it
-    }
-
 fun KtExpression.predictRuntimeIntValue(bindingContext: BindingContext) =
     predictRuntimeValueExpression(bindingContext).let { runtimeValueExpression ->
         runtimeValueExpression.getType(bindingContext)?.let {
@@ -295,7 +289,7 @@ private fun KtExpression.stringValue(
 }
 
 @Rewritten
-private fun KtExpression.stringValue(
+fun KtExpression.stringValue(
     declarations: MutableList<PsiElement> = mutableListOf(),
 ): String? = analyze {
     when (this@stringValue) {
