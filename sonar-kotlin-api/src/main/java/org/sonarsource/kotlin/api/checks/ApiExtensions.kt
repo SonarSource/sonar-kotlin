@@ -120,13 +120,6 @@ fun KtExpression.predictRuntimeIntValue(): Int? = analyze {
     predictRuntimeValueExpression()?.evaluate()?.value as? Int
 }
 
-fun KtExpression.predictRuntimeBooleanValue(bindingContext: BindingContext) =
-    predictRuntimeValueExpression(bindingContext).let { runtimeValueExpression ->
-        runtimeValueExpression.getType(bindingContext)?.let {
-            bindingContext[BindingContext.COMPILE_TIME_VALUE, runtimeValueExpression]?.getValue(it) as? Boolean
-        }
-    }
-
 @Rewritten
 fun KtExpression.predictRuntimeBooleanValue() = analyze {
     predictRuntimeValueExpression().let { runtimeValueExpression ->

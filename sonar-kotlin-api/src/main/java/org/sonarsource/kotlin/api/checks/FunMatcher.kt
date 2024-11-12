@@ -212,7 +212,10 @@ class FunMatcherImpl(
         return functionDescriptor.symbol.allOverriddenSymbols.any {
             val className: String? = it.callableId?.asSingleFqName()?.parent()?.asString()
             definingSupertypes.contains(className)
-        }
+        } || functionDescriptor.symbol.receiverType?.allSupertypes?.any {
+            val className: String? = (it as? KaClassType)?.classId?.asFqNameString()
+            definingSupertypes.contains(className)
+        } ?: false
     }
 
     @Deprecated("")
