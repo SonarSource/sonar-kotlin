@@ -51,7 +51,7 @@ class VerifiedServerHostnamesCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val (_, _, bindingContext) = kotlinFileContext
-        if (VERIFY_MATCHER.matches(function, bindingContext)) {
+        if (VERIFY_MATCHER.matches(function)) {
             val listStatements = function.listStatements()
             if (listStatements.size == 1 && onlyReturnsTrue(listStatements[0], bindingContext)) {
                 kotlinFileContext.reportIssue(function.nameIdentifier!!, MESSAGE)

@@ -50,13 +50,13 @@ private val EQUALS_MATCHER = FunMatcher {
     withArguments(ANY_TYPE)
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
+@org.sonarsource.kotlin.api.frontend.K1only("determineType")
 @Rule(key = "S2097")
 class EqualsArgumentTypeCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, ctx: KotlinFileContext) {
         val bindingContext = ctx.bindingContext
-        if (!EQUALS_MATCHER.matches(function, bindingContext)) return
+        if (!EQUALS_MATCHER.matches(function)) return
         if (!function.hasBody()) return
 
         val klass = function.containingClass() ?: return

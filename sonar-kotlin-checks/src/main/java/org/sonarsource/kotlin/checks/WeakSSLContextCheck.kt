@@ -71,9 +71,9 @@ class WeakSSLContextCheck : AbstractCheck() {
     override fun visitCallExpression(node: KtCallExpression, kotlinFileContext: KotlinFileContext) {
         val bindingContext = kotlinFileContext.bindingContext
         when {
-            SSL_CONTEXT_MATCHER.matches(node, bindingContext) ->
+            SSL_CONTEXT_MATCHER.matches(node) ->
                 handleSSL(node, bindingContext, kotlinFileContext)
-            OKHTTP_MATCHER.matches(node, bindingContext) ->
+            OKHTTP_MATCHER.matches(node) ->
                 handleOkHttp(node, bindingContext, kotlinFileContext)
         }
     }

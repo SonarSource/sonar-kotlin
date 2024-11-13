@@ -46,15 +46,15 @@ private val funMatchers = listOf(
         withNames("checkClientTrusted", "checkServerTrusted")
     })
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
+@org.sonarsource.kotlin.api.frontend.K1only("determineType")
 @Rule(key = "S4830")
 class ServerCertificateCheck : AbstractCheck() {
     // TODO determineType
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val (_, _, bindingContext) = kotlinFileContext
 
-        if (function.belongsToTrustManagerClass(bindingContext)
-            && !function.callsCheckTrusted(bindingContext)
+        if (function.belongsToTrustManagerClass()
+            && !function.callsCheckTrusted()
             && !function.throwsCertificateExceptionWithoutCatching(bindingContext)
         ) {
             kotlinFileContext.reportIssue(function.nameIdentifier ?: function,
@@ -62,18 +62,18 @@ class ServerCertificateCheck : AbstractCheck() {
         }
     }
 
-    private fun KtNamedFunction.belongsToTrustManagerClass(bindingContext: BindingContext): Boolean =
-        funMatchers.any { it.matches(this, bindingContext) }
+    private fun KtNamedFunction.belongsToTrustManagerClass(): Boolean =
+        funMatchers.any { it.matches(this) }
 
     /*
      * Returns true if a function contains a call to "checkClientTrusted" or "checkServerTrusted".
      */
-    private fun KtNamedFunction.callsCheckTrusted(bindingContext: BindingContext): Boolean {
+    private fun KtNamedFunction.callsCheckTrusted(): Boolean {
         val visitor = object : KtVisitorVoid() {
             private var foundCheckTrustedCall: Boolean = false
 
             override fun visitCallExpression(expression: KtCallExpression) {
-                foundCheckTrustedCall = foundCheckTrustedCall || funMatchers.any { it.matches(expression, bindingContext) }
+                foundCheckTrustedCall = foundCheckTrustedCall || funMatchers.any { it.matches(expression) }
             }
 
             fun callsCheckTrusted(): Boolean = foundCheckTrustedCall
