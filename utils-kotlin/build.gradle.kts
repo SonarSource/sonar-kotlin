@@ -8,6 +8,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(utilLibs.bundles.detekt)
     implementation(utilLibs.bundles.ktlint)
+    runtimeOnly("org.slf4j:slf4j-simple:1.6.1")
 
     implementation(project(":sonar-kotlin-external-linters")) {
         // detekt needs strict specific version of kotlin-compiler-embeddable which differs from our
