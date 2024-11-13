@@ -23,15 +23,13 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getParentCall
-import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.predictRuntimeBooleanValue
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S5527")
 class VerifiedServerHostnamesCheck : AbstractCheck() {
 
@@ -50,21 +48,19 @@ class VerifiedServerHostnamesCheck : AbstractCheck() {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        val (_, _, bindingContext) = kotlinFileContext
         if (VERIFY_MATCHER.matches(function)) {
             val listStatements = function.listStatements()
-            if (listStatements.size == 1 && onlyReturnsTrue(listStatements[0], bindingContext)) {
+            if (listStatements.size == 1 && onlyReturnsTrue(listStatements[0])) {
                 kotlinFileContext.reportIssue(function.nameIdentifier!!, MESSAGE)
             }
         }
     }
 
     override fun visitLambdaExpression(expression: KtLambdaExpression, kotlinFileContext: KotlinFileContext) {
-        val (_, _, bindingContext) = kotlinFileContext
-        expression.getParentCall(bindingContext)?.let {
-            if (HOSTNAME_VERIFIER_MATCHER.matches(it, bindingContext)) {
+        expression.getParentCall()?.let {
+            if (HOSTNAME_VERIFIER_MATCHER.matches(it)) {
                 val listStatements = expression.bodyExpression?.statements
-                if (listStatements?.size == 1 && listStatements[0].isTrueConstant(bindingContext)) {
+                if (listStatements?.size == 1 && listStatements[0].isTrueConstant()) {
                     kotlinFileContext.reportIssue(expression, MESSAGE)
                 }
             }
@@ -73,16 +69,12 @@ class VerifiedServerHostnamesCheck : AbstractCheck() {
 
     private fun onlyReturnsTrue(
         ktExpression: KtExpression,
-        bindingContext: BindingContext,
     ): Boolean = when (ktExpression) {
         is KtReturnExpression ->
-            ktExpression.returnedExpression?.isTrueConstant(bindingContext) ?: false
+            ktExpression.returnedExpression?.isTrueConstant() ?: false
         else -> false
     }
 
-    private fun KtExpression.isTrueConstant(
-        bindingContext: BindingContext,
-    ) = getType(bindingContext)?.let {
-        bindingContext[BindingContext.COMPILE_TIME_VALUE, this]?.getValue(it) == true
-    } ?: false
+    private fun KtExpression.isTrueConstant(): Boolean =
+        analyze { predictRuntimeBooleanValue() ?: false }
 }
