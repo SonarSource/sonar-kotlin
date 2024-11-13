@@ -22,10 +22,12 @@ package org.sonarsource.kotlin.api.frontend
 import org.assertj.core.api.Assertions.assertThat
 import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
+import org.jetbrains.kotlin.cli.jvm.config.JvmClasspathRoot
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
+import java.io.File
 
 class KotlinCoreEnvironmentToolsTest {
 
@@ -52,24 +54,29 @@ class KotlinCoreEnvironmentToolsTest {
   }
 
   @Test
-  fun testClasspathWithPomXml() {
+  fun filter_non_jar_files_from_classpath() {
+    val nonJar = File("./build.gradle.kts")
+    assertThat(nonJar).exists()
+    val nonExisting = File("./nonexisting")
+    assertThat(nonExisting).doesNotExist()
+    val jar = File("../kotlin-checks-test-sources/build/test-jars/jsr305-3.0.2.jar")
+    assertThat(jar).isFile()
+    val dir = File(".")
+
     val configuration = compilerConfiguration(
-      listOf("src/test/resources/environment/pom.xml"),
+      listOf(
+          nonExisting.path,
+          nonJar.path,
+          dir.path,
+          jar.path,
+      ),
       LanguageVersion.KOTLIN_1_4,
       JvmTarget.JVM_1_8,
     )
-
-    assertThat(configuration.get(CLIConfigurationKeys.CONTENT_ROOTS)).isNull()
-  }
-
-  @Test
-  fun testClasspathWithNonExistingFile() {
-    val configuration = compilerConfiguration(
-      listOf("src/test/resources/environment/nonexisting.xml"),
-      LanguageVersion.KOTLIN_1_4,
-      JvmTarget.JVM_1_8,
+    assertThat(configuration.get(CLIConfigurationKeys.CONTENT_ROOTS)).containsExactly(
+      JvmClasspathRoot(dir),
+      JvmClasspathRoot(jar),
     )
-
-    assertThat(configuration.get(CLIConfigurationKeys.CONTENT_ROOTS)).isNull()
   }
+
 }
