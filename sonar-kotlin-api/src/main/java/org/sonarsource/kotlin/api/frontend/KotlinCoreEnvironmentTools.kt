@@ -111,7 +111,6 @@ fun compilerConfiguration(
     languageVersion: LanguageVersion,
     jvmTarget: JvmTarget,
 ): CompilerConfiguration {
-    val classpathFiles = classpath.map(::File)
     val versionSettings = LanguageVersionSettingsImpl(
         languageVersion,
         ApiVersion.createByLanguageVersion(languageVersion),
@@ -121,7 +120,20 @@ fun compilerConfiguration(
         put(CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS, versionSettings)
         put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
         put(JVMConfigurationKeys.JDK_HOME, File(System.getProperty("java.home")))
-        addJvmClasspathRoots(classpathFiles)
+        addJvmClasspathRoots(classpathRoots(classpath))
     }
 }
 
+/**
+ * Non-JAR files are filtered-out to avoid invocation of [com.intellij.openapi.diagnostic.Logger.warn] in
+ * [org.jetbrains.kotlin.cli.jvm.compiler.jarfs.FastJarHandler] and
+ * [com.intellij.openapi.vfs.impl.ArchiveHandler.getEntriesMap].
+ */
+private fun classpathRoots(classpath: List<String>): List<File> =
+    classpath.map(::File).filter { it.isDirectory || it.isJar() }
+
+private fun File.isJar(): Boolean =
+    this.isFile && inputStream().use {
+        val header = (it.read() shl 24) or (it.read() shl 16) or (it.read() shl 8) or it.read()
+        header == 0x504b0304
+    }
