@@ -245,7 +245,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         context.fileSystem().add(inputFile)
         populateCacheWithExpectedEntries(listOf(inputFile), context)
         mockkStatic("org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContextKt")
-        every { environment(any(), any()) } returns Environment(listOf("file1.kt"), LanguageVersion.LATEST_STABLE)
+        every { environment(any(), any()) } returns Environment(listOf("src/test/resources/classpath/file1.kt"), LanguageVersion.LATEST_STABLE)
         mockkStatic("org.sonarsource.kotlin.api.frontend.KotlinCoreEnvironmentToolsKt")
         every { analyzeAndGetBindingContext(any(), any()) } throws IOException("Boom!")
 
@@ -297,7 +297,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     @Test
     fun test_with_classpath() {
         val settings = MapSettings()
-        settings.setProperty(SONAR_JAVA_BINARIES, "classes/")
+        settings.setProperty(SONAR_JAVA_BINARIES, "src/test/resources/classpath/classes/")
         context.setSettings(settings)
         val inputFile = createInputFile("file1.kt", "class A { fun f() = TODO() }")
         context.fileSystem().add(inputFile)

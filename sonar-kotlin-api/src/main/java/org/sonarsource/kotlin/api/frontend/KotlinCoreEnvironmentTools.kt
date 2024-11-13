@@ -19,6 +19,8 @@
  */
 package org.sonarsource.kotlin.api.frontend
 
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
@@ -28,8 +30,6 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
-import com.intellij.openapi.Disposable
-import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -43,6 +43,9 @@ import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
+import java.io.InputStream
+
+private const val ZIPFILE = 0x504b0304
 
 class Environment(
     val classpath: List<String>,
@@ -111,7 +114,7 @@ fun compilerConfiguration(
     languageVersion: LanguageVersion,
     jvmTarget: JvmTarget,
 ): CompilerConfiguration {
-    val classpathFiles = classpath.map(::File)
+    val classpathFiles = classpath.map(::File).filter { it.isDirectory || it.isJar() }
     val versionSettings = LanguageVersionSettingsImpl(
         languageVersion,
         ApiVersion.createByLanguageVersion(languageVersion),
@@ -125,3 +128,10 @@ fun compilerConfiguration(
     }
 }
 
+private fun File.isJar(): Boolean {
+    return inputStream().readInt() == ZIPFILE
+}
+
+private fun InputStream.readInt(): Int {
+    return read() shl 24 or (read() shl 16) or (read() shl 8) or read()
+}

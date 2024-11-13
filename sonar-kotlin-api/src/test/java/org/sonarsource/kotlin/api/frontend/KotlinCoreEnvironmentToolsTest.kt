@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.api.frontend
 
 import org.assertj.core.api.Assertions.assertThat
 import com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -48,5 +49,16 @@ class KotlinCoreEnvironmentToolsTest {
 
     assertThat(bindingContext(kotlinCoreEnvironment, listOf(""), emptyList()))
       .isNotEqualTo(BindingContext.EMPTY)
+  }
+
+  @Test
+  fun testClasspathWithPomXml() {
+    val configuration = compilerConfiguration(
+      listOf("src/test/resources/environment/pom.xml"),
+      LanguageVersion.KOTLIN_1_4,
+      JvmTarget.JVM_1_8,
+    )
+
+    assertThat(configuration.get(CLIConfigurationKeys.CONTENT_ROOTS)).isNull()
   }
 }
