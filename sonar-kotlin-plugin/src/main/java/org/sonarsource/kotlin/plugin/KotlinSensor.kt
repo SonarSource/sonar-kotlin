@@ -33,7 +33,7 @@ import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.checks.hasCacheEnabled
 import org.sonarsource.kotlin.api.common.KotlinLanguage
 import org.sonarsource.kotlin.api.common.measureDuration
-import org.sonarsource.kotlin.api.frontend.bindingContext
+import org.sonarsource.kotlin.api.frontend.analyzeAndGetBindingContext
 import org.sonarsource.kotlin.api.logging.trace
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensor
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
@@ -78,9 +78,8 @@ class KotlinSensor(
         override val bindingContext: BindingContext by lazy {
             runCatching {
                 measureDuration("BindingContext") {
-                    bindingContext(
+                    analyzeAndGetBindingContext(
                         environment.env,
-                        environment.classpath,
                         kotlinFiles.map { it.ktFile }.filter { !it.isScript() },
                     )
                 }

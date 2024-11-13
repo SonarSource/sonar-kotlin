@@ -29,19 +29,6 @@ import org.junit.jupiter.api.Test
 
 class KotlinCoreEnvironmentToolsTest {
 
-  // FIXME
-  @Disabled
-  @Test
-  fun testEmptyBindingContext() {
-    val kotlinCoreEnvironment = kotlinCoreEnvironment(
-      compilerConfiguration(emptyList(), LanguageVersion.KOTLIN_1_4, JvmTarget.JVM_1_8),
-      Disposer.newDisposable()
-    )
-
-    assertThat(bindingContext(kotlinCoreEnvironment, emptyList(), emptyList()))
-      .isEqualTo(BindingContext.EMPTY)
-  }
-
   @Test
   fun testNonEmptyBindingContext() {
     val kotlinCoreEnvironment = kotlinCoreEnvironment(
@@ -49,7 +36,8 @@ class KotlinCoreEnvironmentToolsTest {
       Disposer.newDisposable()
     )
 
-    assertThat(bindingContext(kotlinCoreEnvironment, listOf(""), emptyList()))
+    assertThat(analyzeAndGetBindingContext(kotlinCoreEnvironment, emptyList()))
       .isNotEqualTo(BindingContext.EMPTY)
   }
+
 }
