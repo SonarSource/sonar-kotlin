@@ -31,7 +31,7 @@ class KotlinCoreEnvironmentToolsTest {
   @Test
   fun testEmptyBindingContext() {
     val kotlinCoreEnvironment = kotlinCoreEnvironment(
-      compilerConfiguration(emptyList(), LanguageVersion.KOTLIN_1_4, JvmTarget.JVM_1_8, null),
+      compilerConfiguration(emptyList(), LanguageVersion.KOTLIN_1_4, JvmTarget.JVM_1_8),
       Disposer.newDisposable()
     )
 
@@ -42,7 +42,7 @@ class KotlinCoreEnvironmentToolsTest {
   @Test
   fun testNonEmptyBindingContext() {
     val kotlinCoreEnvironment = kotlinCoreEnvironment(
-      compilerConfiguration(emptyList(), LanguageVersion.KOTLIN_1_4, JvmTarget.JVM_1_8, null),
+      compilerConfiguration(emptyList(), LanguageVersion.KOTLIN_1_4, JvmTarget.JVM_1_8),
       Disposer.newDisposable()
     )
 

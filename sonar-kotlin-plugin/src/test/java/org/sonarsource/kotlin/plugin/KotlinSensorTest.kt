@@ -26,7 +26,6 @@ import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -51,7 +50,6 @@ import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.utils.Version
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.common.COMPILER_THREAD_COUNT_PROPERTY
 import org.sonarsource.kotlin.api.common.FAIL_FAST_PROPERTY_NAME
 import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_VERSION
 import org.sonarsource.kotlin.api.common.SONAR_ANDROID_DETECTED
@@ -443,78 +441,6 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertThat(logTester.logs(Level.WARN)).isEmpty()
         assertThat(logTester.logs(Level.DEBUG))
             .contains("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
-    }
-
-    @Test
-    fun `not setting the amount of threads to use explicitly will not set anything in the environment`() {
-        logTester.setLevel(Level.DEBUG)
-
-        val sensorContext = mockk<SensorContext> {
-            every { config() } returns ConfigurationBridge(MapSettings())
-        }
-
-        val environment = environment(sensorContext, LOG)
-
-        assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
-        assertThat(logTester.logs(Level.WARN)).isEmpty()
-        assertThat(logTester.logs(Level.DEBUG))
-            .contains("Using the default amount of threads")
-    }
-
-    @Test
-    fun `setting the amount of threads to use is reflected in the environment`() {
-        logTester.setLevel(Level.DEBUG)
-
-        val sensorContext = mockk<SensorContext> {
-            every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(COMPILER_THREAD_COUNT_PROPERTY, "42")
-            })
-        }
-
-        val environment = environment(sensorContext, LOG)
-
-        assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isEqualTo(42)
-        assertThat(logTester.logs(Level.WARN)).isEmpty()
-        assertThat(logTester.logs(Level.DEBUG))
-            .contains("Using 42 threads")
-    }
-
-    @Test
-    fun `setting the amount of threads to use to an invalid integer value produces warning`() {
-        logTester.setLevel(Level.DEBUG)
-
-        val sensorContext = mockk<SensorContext> {
-            every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(COMPILER_THREAD_COUNT_PROPERTY, "0")
-            })
-        }
-
-        val environment = environment(sensorContext, LOG)
-
-        assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
-        assertThat(logTester.logs(Level.WARN))
-            .containsExactly("Invalid amount of threads specified for ${COMPILER_THREAD_COUNT_PROPERTY}: '0'.")
-        assertThat(logTester.logs(Level.DEBUG))
-            .contains("Using the default amount of threads")
-    }
-
-    @Test
-    fun `setting the amount of threads to use to an invalid non-integer value produces warning`() {
-        logTester.setLevel(Level.DEBUG)
-
-        val sensorContext = mockk<SensorContext> {
-            every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(COMPILER_THREAD_COUNT_PROPERTY, "foo")
-            })
-        }
-
-        val environment = environment(sensorContext, LOG)
-
-        assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
-        assertThat(logTester.logs(Level.WARN))
-            .containsExactly("${COMPILER_THREAD_COUNT_PROPERTY} needs to be set to an integer value. Could not interpret 'foo' as integer.")
-        assertThat(logTester.logs(Level.DEBUG))
-            .contains("Using the default amount of threads")
     }
 
     @Test

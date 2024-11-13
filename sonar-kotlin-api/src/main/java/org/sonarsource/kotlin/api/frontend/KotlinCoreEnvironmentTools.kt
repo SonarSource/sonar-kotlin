@@ -48,10 +48,9 @@ class Environment(
     val classpath: List<String>,
     kotlinLanguageVersion: LanguageVersion,
     javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8,
-    numberOfThreads: Int? = null
 ) {
     val disposable = Disposer.newDisposable()
-    val configuration = compilerConfiguration(classpath, kotlinLanguageVersion, javaLanguageVersion, numberOfThreads)
+    val configuration = compilerConfiguration(classpath, kotlinLanguageVersion, javaLanguageVersion)
     val env = kotlinCoreEnvironment(configuration, disposable)
     val ktPsiFactory: KtPsiFactory = KtPsiFactory(env.project, false)
 }
@@ -111,7 +110,6 @@ fun compilerConfiguration(
     classpath: List<String>,
     languageVersion: LanguageVersion,
     jvmTarget: JvmTarget,
-    numberOfThreads: Int?,
 ): CompilerConfiguration {
     val classpathFiles = classpath.map(::File)
     val versionSettings = LanguageVersionSettingsImpl(
@@ -123,7 +121,6 @@ fun compilerConfiguration(
         put(CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS, versionSettings)
         put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
         put(JVMConfigurationKeys.JDK_HOME, File(System.getProperty("java.home")))
-        numberOfThreads?.let { put(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS, it) }
         addJvmClasspathRoots(classpathFiles)
     }
 }
