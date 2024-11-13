@@ -22,15 +22,15 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.name
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
-import org.sonarsource.kotlin.api.checks.determineType
 import org.sonarsource.kotlin.api.checks.predictReceiverExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
 private val OBJECT_ARRAY_MATCHER = FunMatcher(qualifier = "kotlin.Array") {
     withNames("hashCode", "toString")
@@ -57,7 +57,6 @@ private val PRIMITIVE_ARRAY_REPLACEMENT = mapOf("hashCode" to "contentHashCode",
 private val OBJECT_ARRAY_REPLACEMENT = mapOf("hashCode" to "contentDeepHashCode", "toString" to "contentDeepToString")
 private val ARRAY_OF_ARRAY_REPLACEMENT = mapOf("contentHashCode" to "contentDeepHashCode", "contentToString" to "contentDeepToString")
 
-@org.sonarsource.kotlin.api.frontend.K1only("determineType")
 @Rule(key = "S2116")
 class ArrayHashCodeAndToStringCheck : CallAbstractCheck() {
 
@@ -72,7 +71,7 @@ class ArrayHashCodeAndToStringCheck : CallAbstractCheck() {
         val methodName = resolvedCall.partiallyAppliedSymbol.symbol.name?.asString()
         val replacement = when (matchedFun) {
             OBJECT_ARRAY_MATCHER -> OBJECT_ARRAY_REPLACEMENT[methodName]
-            ARRAY_CONTENT_MATCHER -> if (receiverIsArrayOfArray(callExpression, kotlinFileContext))
+            ARRAY_CONTENT_MATCHER -> if (receiverIsArrayOfArray(callExpression))
                 ARRAY_OF_ARRAY_REPLACEMENT[methodName] else null
 
             else -> PRIMITIVE_ARRAY_REPLACEMENT[methodName]
@@ -82,11 +81,9 @@ class ArrayHashCodeAndToStringCheck : CallAbstractCheck() {
         }
     }
 
-    private fun receiverIsArrayOfArray(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext): Boolean {
-        val bindingContext = kotlinFileContext.bindingContext
-        return callExpression.predictReceiverExpression()?.determineType(bindingContext)?.arguments
-                ?.any { ARRAY_QUALIFIERS.contains(it.type.getKotlinTypeFqName(false)) }
-            ?: false
+    private fun receiverIsArrayOfArray(callExpression: KtCallExpression): Boolean = analyze {
+        val argument = callExpression.predictReceiverExpression()?.expressionType?.arrayElementType
+        return ARRAY_QUALIFIERS.contains(argument?.symbol?.classId?.asFqNameString())
     }
 
 }
