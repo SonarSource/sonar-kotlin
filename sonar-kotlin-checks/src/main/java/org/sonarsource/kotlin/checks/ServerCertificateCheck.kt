@@ -20,18 +20,18 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtVisitorVoid
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.determineType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
 
 private const val CERTIFICATE_EXCEPTION = "java.security.cert.CertificateException"
@@ -46,16 +46,13 @@ private val funMatchers = listOf(
         withNames("checkClientTrusted", "checkServerTrusted")
     })
 
-@org.sonarsource.kotlin.api.frontend.K1only("determineType")
 @Rule(key = "S4830")
 class ServerCertificateCheck : AbstractCheck() {
-    // TODO determineType
-    override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        val (_, _, bindingContext) = kotlinFileContext
 
+    override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         if (function.belongsToTrustManagerClass()
             && !function.callsCheckTrusted()
-            && !function.throwsCertificateExceptionWithoutCatching(bindingContext)
+            && !function.throwsCertificateExceptionWithoutCatching()
         ) {
             kotlinFileContext.reportIssue(function.nameIdentifier ?: function,
                 "Enable server certificate validation on this SSL/TLS connection.")
@@ -85,24 +82,26 @@ class ServerCertificateCheck : AbstractCheck() {
     /*
      * Returns true only when the function throws a CertificateException without a catch against it.
      */
-    private fun KtNamedFunction.throwsCertificateExceptionWithoutCatching(bindingContext: BindingContext): Boolean {
-        val visitor = ThrowCatchVisitor(bindingContext)
+    private fun KtNamedFunction.throwsCertificateExceptionWithoutCatching(): Boolean {
+        val visitor = ThrowCatchVisitor()
         this.acceptRecursively(visitor)
         return visitor.throwsCertificateExceptionWithoutCatching()
     }
 
-    private class ThrowCatchVisitor(private val bindingContext: BindingContext) : KtVisitorVoid() {
+    private class ThrowCatchVisitor : KtVisitorVoid() {
         private var throwFound: Boolean = false
         private var catchFound: Boolean = false
 
-        override fun visitThrowExpression(expression: KtThrowExpression) {
+        override fun visitThrowExpression(expression: KtThrowExpression) = analyze {
             throwFound =
-                throwFound || CERTIFICATE_EXCEPTION == expression.thrownExpression.determineType(bindingContext)?.getKotlinTypeFqName(false)
+                throwFound || CERTIFICATE_EXCEPTION ==
+                        expression.thrownExpression?.expressionType?.symbol?.classId?.asFqNameString()
         }
 
-        override fun visitCatchSection(catchClause: KtCatchClause) {
+        override fun visitCatchSection(catchClause: KtCatchClause) = analyze {
             catchFound =
-                catchFound || CERTIFICATE_EXCEPTION == catchClause.catchParameter.determineType(bindingContext)?.getKotlinTypeFqName(false)
+                catchFound || CERTIFICATE_EXCEPTION ==
+                        catchClause.catchParameter?.determineType()?.symbol?.classId?.asFqNameString()
         }
 
         fun throwsCertificateExceptionWithoutCatching(): Boolean {
