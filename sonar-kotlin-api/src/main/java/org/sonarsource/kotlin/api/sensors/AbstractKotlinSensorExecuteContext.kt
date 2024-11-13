@@ -31,7 +31,6 @@ import org.sonar.api.batch.sensor.SensorContext
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.checks.InputFileContextImpl
-import org.sonarsource.kotlin.api.common.COMPILER_THREAD_COUNT_PROPERTY
 import org.sonarsource.kotlin.api.common.DEFAULT_KOTLIN_LANGUAGE_VERSION
 import org.sonarsource.kotlin.api.common.FAIL_FAST_PROPERTY_NAME
 import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_VERSION
@@ -155,29 +154,7 @@ fun environment(sensorContext: SensorContext, logger: Logger): Environment = Env
     sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
         sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
     determineKotlinLanguageVersion(sensorContext, logger),
-    numberOfThreads = determineNumberOfThreadsToUse(sensorContext, logger)
 )
-
-private fun determineNumberOfThreadsToUse(sensorContext: SensorContext, logger: Logger) =
-    sensorContext.config()[COMPILER_THREAD_COUNT_PROPERTY].map { stringInput ->
-        runCatching {
-            stringInput.trim().toInt()
-        }.getOrElse {
-            logger.warn(
-                "$COMPILER_THREAD_COUNT_PROPERTY needs to be set to an integer value. Could not interpret '$stringInput' as integer."
-            )
-            null
-        }?.let { threadCount ->
-            if (threadCount > 0) {
-                threadCount
-            } else {
-                logger.warn("Invalid amount of threads specified for $COMPILER_THREAD_COUNT_PROPERTY: '$stringInput'.")
-                null
-            }
-        }
-    }.orElse(null).also {
-        logger.debug { "Using ${it ?: "the default amount of"} threads" }
-    }
 
 private fun determineKotlinLanguageVersion(sensorContext: SensorContext, logger: Logger) =
     (sensorContext.config()[KOTLIN_LANGUAGE_VERSION].map { versionString ->
