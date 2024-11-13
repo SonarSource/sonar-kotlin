@@ -19,17 +19,20 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.unwrappedGetMethod
+import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
 private const val MESSAGE = "Make sure accessing the Android external storage is safe here."
 
@@ -53,7 +56,27 @@ private val HOTSPOT_FUNS = listOf(
     }
 )
 
-private val HOTSPOT_PROPS = listOf(
+private val HOTSPOT_PROPS_MATCHERS = listOf(
+    FunMatcher(definingSupertype = "android.os.Environment") {
+        withNames(
+            "externalStorageDirectory",
+            "gexternalStoragePublicDirectory"
+        )
+    },
+    FunMatcher(definingSupertype = "android.content.Context") {
+        withNames(
+            "externalFilesDir",
+            "externalFilesDirs",
+            "externalCacheDir",
+            "externalCacheDirs",
+            "externalMediaDirs",
+            "obbDir",
+            "obbDirs",
+        )
+    }
+)
+
+private val HOTSPOT_PROPS_NAMES = listOf(
     "externalCacheDir",
     "externalCacheDirs",
     "externalMediaDirs",
@@ -61,21 +84,28 @@ private val HOTSPOT_PROPS = listOf(
     "obbDirs",
 )
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S5324")
 class ExternalAndroidStorageAccessCheck : CallAbstractCheck() {
     override val functionsToVisit = HOTSPOT_FUNS
 
     // TODO easy?
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
+    override fun visitFunctionCall(
+        callExpression: KtCallExpression,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext
+    ) {
         kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
     }
 
     override fun visitReferenceExpression(expression: KtReferenceExpression, kotlinFileContext: KotlinFileContext) {
-        if (expression is KtNameReferenceExpression && expression.getReferencedName() in HOTSPOT_PROPS) {
-            val prop = kotlinFileContext.bindingContext[BindingContext.REFERENCE_TARGET, expression] as? PropertyDescriptor
-            if (prop != null && HOTSPOT_FUNS.any { it.matches(prop.unwrappedGetMethod) }) {
-                kotlinFileContext.reportIssue(expression, MESSAGE)
+        if (expression is KtNameReferenceExpression && expression.getReferencedName() in HOTSPOT_PROPS_NAMES) {
+            analyze {
+                val successfulVariableAccessCall = expression.resolveToCall()?.successfulVariableAccessCall()
+                if (successfulVariableAccessCall != null &&
+                    HOTSPOT_PROPS_MATCHERS.any { it.matches(successfulVariableAccessCall) }) {
+                    kotlinFileContext.reportIssue(expression, MESSAGE)
+                }
             }
         }
     }
