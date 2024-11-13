@@ -26,6 +26,9 @@ dependencies {
     testImplementation(project(":sonar-kotlin-test-api"))
 }
 
+val test: Test by tasks
+test.dependsOn(project(":kotlin-checks-test-sources").tasks.named("build"))
+
 task<JavaExec>("printAst") {
     group = "Application"
     classpath = sourceSets.main.get().runtimeClasspath
