@@ -44,7 +44,6 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
 
-// FIXME(Godin): trace calls when classpath is empty?
 class Environment(
     val classpath: List<String>,
     kotlinLanguageVersion: LanguageVersion,
@@ -74,17 +73,6 @@ fun kotlinCoreEnvironment(
         EnvironmentConfigFiles.JVM_CONFIG_FILES,
     )
 }
-
-// FIXME(Godin): remove?
-fun bindingContext(
-    environment: KotlinCoreEnvironment,
-    classpath: List<String>,
-    files: List<KtFile>,
-): BindingContext =
-//    if (classpath.isEmpty())
-//        BindingContext.EMPTY
-//    else
-        analyzeAndGetBindingContext(environment, files)
 
 fun analyzeAndGetBindingContext(
     env: KotlinCoreEnvironment,

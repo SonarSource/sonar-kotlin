@@ -27,14 +27,13 @@ import org.sonarsource.kotlin.api.frontend.Environment
 import org.sonarsource.kotlin.api.frontend.KotlinSyntaxStructure
 import org.sonarsource.kotlin.api.frontend.KotlinTree
 import org.sonarsource.kotlin.api.frontend.RegexCache
-import org.sonarsource.kotlin.api.frontend.bindingContext
+import org.sonarsource.kotlin.api.frontend.analyzeAndGetBindingContext
 
 fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile, doResolve: Boolean = true, providedDiagnostics: List<Diagnostic>? = null): KotlinTree {
     val (ktFile, document) = KotlinSyntaxStructure.of(content, environment, inputFile)
 
-    val bindingContext = if (doResolve) bindingContext(
+    val bindingContext = if (doResolve) analyzeAndGetBindingContext(
         environment.env,
-        environment.classpath,
         listOf(ktFile),
     ) else BindingContext.EMPTY
     return KotlinTree(ktFile, document, bindingContext, providedDiagnostics ?: bindingContext.diagnostics.noSuppression().toList(), RegexCache())
