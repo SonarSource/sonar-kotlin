@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.analysis.api.KaIdeApi
 import org.jetbrains.kotlin.analysis.api.resolution.*
 import org.jetbrains.kotlin.analysis.api.symbols.*
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
+import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
@@ -786,6 +787,7 @@ fun KotlinFileContext.merge(firstElement: PsiElement, lastElement: PsiElement) =
 
 fun KotlinType.simpleName(): String = getKotlinTypeFqName(false).substringAfterLast(".")
 
+@Deprecated("Use Kotlin Ananlsis API instead")
 fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
     this?.let {
         when (this) {
@@ -803,6 +805,33 @@ fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
         }
 
     }
+
+fun PsiElement?.determineType(): KaType? = analyze {
+    this?.let {
+        when (this@determineType) {
+            is KtCallExpression -> determineTypeFromCall()
+            is KtParameter -> symbol.returnType
+            is KtTypeReference -> type
+            is KtProperty -> determineTypeFromCall()
+            is KtDotQualifiedExpression -> determineTypeFromCall()
+            is KtReferenceExpression -> determineTypeFromCall()
+            is KtFunction -> (symbol as KaFunctionSymbol).returnType
+            is KtClass -> returnType
+            is KtExpression -> determineTypeFromCall()
+            is KtValueArgument -> this@determineType.getArgumentExpression()?.determineType()
+            else -> null
+        }
+
+    }
+}
+
+private fun KtElement.determineTypeFromCall(): KaType? = analyze {
+    this@determineTypeFromCall.resolveToCall()?.let {
+        (it.successfulFunctionCallOrNull() ?: it.singleVariableAccessCall())
+            ?.partiallyAppliedSymbol?.symbol?.returnType
+    }
+}
+
 
 fun KotlinType.isSupertypeOf(other: KotlinType): Boolean {
     return findCorrespondingSupertype(other, this).let { it != null && it != other }

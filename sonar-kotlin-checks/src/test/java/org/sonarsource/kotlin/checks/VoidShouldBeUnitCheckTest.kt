@@ -22,7 +22,8 @@ package org.sonarsource.kotlin.checks
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.testapi.KotlinVerifier
 
-internal class VoidShouldBeUnitCheckTest : CheckTestWithNoSemantics(VoidShouldBeUnitCheck(), shouldReport = true) {
+internal class VoidShouldBeUnitCheckTest : CheckTestWithNoSemantics(
+    VoidShouldBeUnitCheck(), shouldReport = true, sampleFileK2 = "VoidShouldBeUnitCheckK2Sample.kt" ) {
 
     @Test
     fun `should not report on custom Void type`() {

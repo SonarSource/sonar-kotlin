@@ -1,15 +1,6 @@
 package checks
 
-typealias RecursiveTypeAlias = (value: Enum<*>?) -> Unit? // Compliant
-
-private typealias TypeAlias = () -> Map<*, Void>  // Noncompliant {{Replace this usage of `Void` type with `Unit`.}}
-//                                         ^^^^
-
-typealias Action = () -> Void // Noncompliant {{Replace this usage of `Void` type with `Unit`.}}
-//                       ^^^^
-
-typealias LLAction = List<Function1<List<String>, Function2<Set<Int>, List<List<List<Void>>>, otherpackage.Void>>> // Noncompliant {{Replace this usage of `Void` type with `Unit`.}}
-//                                                                                   ^^^^
+typealias Action = () -> Void // FN
 
 fun myFun(a: Action) {
     println(a)

@@ -30,6 +30,7 @@ private const val TEST_FILE_POSTFIX = "Sample.kt"
 abstract class CheckTest(
     val check: AbstractCheck,
     val sampleFileSemantics: String? = null,
+    val sampleFileK2: String? = sampleFileSemantics,
     val classpath: List<String>? = null,
     val dependencies: List<String>? = null,
     val isAndroid: Boolean = false
@@ -42,7 +43,7 @@ abstract class CheckTest(
     @DisabledIf("k1only")
     fun `with k2 semantics`() {
         KotlinVerifier(check) {
-            this.fileName = sampleFileSemantics ?: "$checkName$TEST_FILE_POSTFIX"
+            this.fileName = sampleFileK2 ?: "$checkName$TEST_FILE_POSTFIX"
             this@CheckTest.classpath?.let { this.classpath = it }
             this@CheckTest.dependencies?.let { this.deps = it }
             this.useK2 = true

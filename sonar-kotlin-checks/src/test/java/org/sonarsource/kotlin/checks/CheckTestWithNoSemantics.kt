@@ -28,6 +28,7 @@ private const val NO_SEMANTICS_TEST_FILE_POSTFIX = "SampleNoSemantics.kt"
 abstract class CheckTestWithNoSemantics(
     check: AbstractCheck,
     sampleFileSemantics: String? = null,
+    sampleFileK2: String? = sampleFileSemantics,
     val sampleFileNoSemantics: String? = null,
     classpath: List<String>? = null,
     dependencies: List<String>? = null,
@@ -35,6 +36,7 @@ abstract class CheckTestWithNoSemantics(
 ) : CheckTest(
     check = check,
     sampleFileSemantics = sampleFileSemantics,
+    sampleFileK2 = sampleFileK2,
     classpath = classpath,
     dependencies = dependencies
 ) {
