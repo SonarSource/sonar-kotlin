@@ -817,6 +817,9 @@ fun PsiElement?.determineType(): KaType? = analyze {
             is KtReferenceExpression -> determineTypeFromCall()
             is KtFunction -> (symbol as KaFunctionSymbol).returnType
             is KtClass -> returnType
+            is KtConstantExpression -> this@determineType.expressionType
+            is KtStringTemplateExpression -> this@determineType.expressionType
+            is KtLambdaExpression -> this@determineType.expressionType
             is KtExpression -> determineTypeFromCall()
             is KtValueArgument -> this@determineType.getArgumentExpression()?.determineType()
             else -> null
