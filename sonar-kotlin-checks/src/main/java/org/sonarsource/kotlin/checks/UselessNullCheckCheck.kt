@@ -20,6 +20,11 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.name
+import org.jetbrains.kotlin.analysis.api.types.KaErrorType
+import org.jetbrains.kotlin.analysis.api.types.KaTypeNullability
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -30,29 +35,22 @@ import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.psi.psiUtil.isNull
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getArgumentByParameterIndex
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.types.checker.SimpleClassicTypeSystemContext.isError
-import org.jetbrains.kotlin.types.typeUtil.TypeNullability
-import org.jetbrains.kotlin.types.typeUtil.nullability
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.determineType
 import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.Message
+import org.sonarsource.kotlin.api.visiting.analyze
 
 private val NON_NULL_CHECK_FUNS = FunMatcher("kotlin") {
     withNames("requireNotNull", "checkNotNull")
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only("determineType")
+@org.sonarsource.kotlin.api.frontend.K1only("result differs in fixing 1 FN")
 @Rule(key = "S6619")
 class UselessNullCheckCheck : AbstractCheck() {
-
 
     override fun visitBinaryExpression(binaryExpression: KtBinaryExpression, kotlinFileContext: KotlinFileContext) {
         when (binaryExpression.operationToken) {
@@ -97,16 +95,17 @@ class UselessNullCheckCheck : AbstractCheck() {
     }
 
     override fun visitCallExpression(callExpression: KtCallExpression, kfc: KotlinFileContext) {
-        val resolvedCall = callExpression.getResolvedCall(kfc.bindingContext)
+        val resolvedCall = analyze { callExpression.resolveToCall()?.successfulFunctionCallOrNull() } ?: return
         if (resolvedCall matches NON_NULL_CHECK_FUNS) {
+            val argExpression = resolvedCall.argumentMapping.keys.toList().first()
             // requireNotNull and checkNotNull have no implementations without parameters. The first parameter is always the value to check.
             handleNonNullCheck(
                 kfc,
-                callExpression.getArgumentByParameterIndex(0, kfc.bindingContext).first().getArgumentExpression()!!,
+                argExpression,
                 callExpression
             ) {
                 +"non-null check "
-                code(resolvedCall!!.resultingDescriptor.name.asString())
+                code(resolvedCall.partiallyAppliedSymbol.symbol.name.toString())
             }
         }
     }
@@ -147,13 +146,13 @@ class UselessNullCheckCheck : AbstractCheck() {
     ) {
         if (kfc.mayBeAffectedByErrorInSemantics()) return
 
-        val resolvedExpression = expression.predictRuntimeValueExpression(kfc.bindingContext)
+        val resolvedExpression = expression.predictRuntimeValueExpression()
 
         val result = if (resolvedExpression.isNull()) {
             if (comparesToNull) "succeeds" else "fails"
         } else if (
         // We are not using the resolvedExpression on purpose here, as it can cause FPs. See SONARKT-373.
-            expression.isNotNullable(kfc.bindingContext)
+            expression.isNotNullable()
         ) {
             if (comparesToNull) "fails" else "succeeds"
         } else {
@@ -177,11 +176,13 @@ class UselessNullCheckCheck : AbstractCheck() {
  */
 private fun KotlinFileContext.mayBeAffectedByErrorInSemantics() = diagnostics.any { it.factory == Errors.MISSING_BUILT_IN_DECLARATION }
 
-private fun KtExpression.isNotNullable(bc: BindingContext) =
+private fun KtExpression.isNotNullable() =
     when (this) {
         is KtConstantExpression -> !isNull()
         is KtStringTemplateExpression -> true
-        else -> determineType(bc)?.let { resolvedType ->
-            !resolvedType.isError() && resolvedType.nullability() == TypeNullability.NOT_NULL
+        else -> analyze {
+            this@isNotNullable.expressionType
+        }?.let { resolvedType ->
+            resolvedType !is KaErrorType && resolvedType.nullability == KaTypeNullability.NON_NULLABLE
         } == true
     }
