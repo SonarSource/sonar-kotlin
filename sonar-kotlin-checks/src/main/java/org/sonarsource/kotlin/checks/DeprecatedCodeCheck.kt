@@ -20,26 +20,31 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtPropertyAccessor
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.annotatedElement
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy? try next")
+
 @Rule(key = "S1133")
 class DeprecatedCodeCheck : AbstractCheck() {
 
-    // TODO easy
     override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry, context: KotlinFileContext) {
-        val descriptor = context.bindingContext[BindingContext.ANNOTATION, annotationEntry]
-        if ("kotlin.Deprecated" == descriptor?.fqName?.asString()) {
-            context.reportIssue(annotationEntry.elementToReport(), "Do not forget to remove this deprecated code someday.")
+        analyze {
+            val annotationType = annotationEntry.typeReference?.type?.symbol?.classId?.asFqNameString()
+            if ("kotlin.Deprecated" == annotationType) {
+                context.reportIssue(
+                    annotationEntry.elementToReport(),
+                    "Do not forget to remove this deprecated code someday."
+                )
+            }
         }
     }
 }
