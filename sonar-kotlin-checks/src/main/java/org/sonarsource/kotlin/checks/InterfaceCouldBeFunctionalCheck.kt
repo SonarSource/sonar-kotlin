@@ -19,17 +19,16 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.checks.getType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S6517")
 class InterfaceCouldBeFunctionalCheck : AbstractCheck() {
 
@@ -51,7 +50,7 @@ class InterfaceCouldBeFunctionalCheck : AbstractCheck() {
 
     private fun checkFunctionalInterfaceAnnotation(klass: KtClass, context: KotlinFileContext) {
         klass.annotationEntries.forEach {
-            if (isFunctionalInterfaceAnnotation(it, context)) {
+            if (isFunctionalInterfaceAnnotation(it)) {
                 context.reportIssue(it, """"@FunctionalInterface" annotation has no effect in Kotlin""")
             }
         }
@@ -69,8 +68,6 @@ private fun hasExactlyOneFunctionAndNoProperties(klass: KtClass): Boolean {
     } && functionCount > 0
 }
 
-// TODO easy
-private fun isFunctionalInterfaceAnnotation(annotation: KtAnnotationEntry, context: KotlinFileContext): Boolean {
-    val annotationType = annotation.typeReference.getType(context.bindingContext)
-    return (annotationType?.getKotlinTypeFqName(false) == "java.lang.FunctionalInterface")
+private fun isFunctionalInterfaceAnnotation(annotation: KtAnnotationEntry): Boolean = analyze {
+    annotation.typeReference?.type?.symbol?.classId?.asFqNameString()  == "java.lang.FunctionalInterface"
 }
