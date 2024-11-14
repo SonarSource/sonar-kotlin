@@ -19,26 +19,35 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.KtProperty
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.checks.getType
-import org.sonarsource.kotlin.api.checks.hasExactlyOneFunctionAndNoProperties
-import org.sonarsource.kotlin.api.checks.isFunctionalInterface
 import org.sonarsource.kotlin.api.checks.merge
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy? try next")
 @Rule(key = "S6516")
 class SamConversionCheck : AbstractCheck() {
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration, context: KotlinFileContext) {
         val superTypeEntry = declaration.superTypeListEntries.singleOrNull() ?: return
-        val superType = superTypeEntry.typeReference?.getType(context.bindingContext) ?: return
 
-        if (superType.isFunctionalInterface() && declaration.hasExactlyOneFunctionAndNoProperties()) {
-            val textRange = context.merge(declaration.getDeclarationKeyword()!!, superTypeEntry)
-            context.reportIssue(textRange, "Replace explicit functional interface implementation with lambda expression.")
+        analyze {
+            val typeReference = superTypeEntry.typeReference ?: return
+            if (typeReference.type.isFunctionalInterface && declaration.hasExactlyOneFunctionAndNoProperties()) {
+                val textRange = context.merge(declaration.getDeclarationKeyword()!!, superTypeEntry)
+                context.reportIssue(textRange, "Replace explicit functional interface implementation with lambda expression.")
+            }
         }
     }
+}
+
+private fun KtClassOrObject.hasExactlyOneFunctionAndNoProperties(): Boolean {
+    var functionCount = 0
+    return declarations.all {
+        it !is KtProperty && (it !is KtNamedFunction || functionCount++ == 0)
+    } && functionCount > 0
 }

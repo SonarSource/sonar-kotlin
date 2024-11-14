@@ -775,13 +775,6 @@ fun PsiElement?.getVariableType(bindingContext: BindingContext) =
 fun KtTypeReference?.getType(bindingContext: BindingContext): KotlinType? =
     this?.let { bindingContext[BindingContext.TYPE, it] }
 
-fun KtClassOrObject.hasExactlyOneFunctionAndNoProperties(): Boolean {
-    var functionCount = 0
-    return declarations.all {
-        it !is KtProperty && (it !is KtNamedFunction || functionCount++ == 0)
-    } && functionCount > 0
-}
-
 fun KotlinType.isFunctionalInterface(): Boolean =
     (constructor.declarationDescriptor as? ClassDescriptor)?.let(::getSingleAbstractMethodOrNull) != null
 
