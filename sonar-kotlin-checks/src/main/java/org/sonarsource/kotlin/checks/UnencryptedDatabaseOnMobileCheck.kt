@@ -19,15 +19,15 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.util.getCall
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
+import org.jetbrains.kotlin.psi.KtExpression
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.findCallInPrecedingCallChain
-import org.sonarsource.kotlin.api.checks.matches
+import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
 private val PROBLEMATIC_SIMPLE_CALLS = listOf(
     FunMatcher(definingSupertype = "android.app.Activity", name = "getPreferences"),
@@ -41,19 +41,29 @@ private val REALM_ENC_KEY_FUN = FunMatcher(definingSupertype = "io.realm.RealmCo
 
 private const val MESSAGE = "Make sure using an unencrypted database is safe here."
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict via findCallInPrecedingCallChain")
 @Rule(key = "S6291")
 class UnencryptedDatabaseOnMobileCheck : AbstractCheck() {
     override fun visitCallExpression(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        val bindingContext = kotlinFileContext.bindingContext
-        val resolvedCall = callExpression.getResolvedCall(bindingContext)
+        val resolvedCall = analyze { callExpression.resolveToCall()?.successfulFunctionCallOrNull() }
         if (PROBLEMATIC_SIMPLE_CALLS.any { resolvedCall matches it }) {
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
         } else if (
             resolvedCall matches PROBLEMATIC_REALM_CALL &&
-            callExpression.getCall(bindingContext)?.findCallInPrecedingCallChain(REALM_ENC_KEY_FUN, bindingContext) == null
+            callExpression.findCallInPrecedingCallChain(REALM_ENC_KEY_FUN) == null
         ) {
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
         }
     }
+}
+
+private fun KtExpression.findCallInPrecedingCallChain(
+    matcher: FunMatcherImpl,
+): Pair<KtExpression, KaFunctionCall<*>>? = analyze {
+    var receiver = this@findCallInPrecedingCallChain
+    var receiverResolved = receiver.resolveToCall()?.successfulFunctionCallOrNull() ?: return null
+    while (!matcher.matches(receiverResolved)) {
+        receiver = receiver.predictReceiverExpression() ?: return null
+        receiverResolved = receiver.resolveToCall()?.singleFunctionCallOrNull() ?: return null
+    }
+    return receiver to receiverResolved
 }

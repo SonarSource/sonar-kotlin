@@ -201,7 +201,7 @@ fun KtCallExpression.predictReceiverExpression(
 
 
 @Rewritten
-fun KtCallExpression.predictReceiverExpression(
+fun KtExpression.predictReceiverExpression(
 ): KtExpression? =
     analyze {
         val call = this@predictReceiverExpression.resolveToCall()?.successfulFunctionCallOrNull()
@@ -574,20 +574,6 @@ fun CallableDescriptor.throwsExceptions(exceptions: Collection<String>) =
     }
 
 fun KtNamedFunction.isInfix() = hasModifier(KtTokens.INFIX_KEYWORD)
-
-fun Call.findCallInPrecedingCallChain(
-    matcher: FunMatcherImpl,
-    bindingContext: BindingContext
-): Pair<Call, ResolvedCall<*>>? {
-    var receiver = this
-    var receiverResolved = receiver.getResolvedCall(bindingContext) ?: return null
-    while (!matcher.matches(receiverResolved)) {
-        val callElement = receiver.callElement as? KtCallExpression ?: return null
-        receiver = callElement.predictReceiverExpression(bindingContext)?.getCall(bindingContext) ?: return null
-        receiverResolved = receiver.getResolvedCall(bindingContext) ?: return null
-    }
-    return receiver to receiverResolved
-}
 
 /**
  * Checks whether the expression is a call, matches the FunMatchers in [STRING_TO_BYTE_FUNS] and is called on a constant string value.
