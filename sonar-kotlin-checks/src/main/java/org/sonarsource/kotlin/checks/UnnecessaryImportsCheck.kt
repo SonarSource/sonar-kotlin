@@ -57,7 +57,7 @@ private const val MESSAGE_REDUNDANT = "Remove this redundant import."
 private val DELEGATES_IMPORTED_NAMES = setOf("getValue", "setValue", "provideDelegate")
 private val ARRAY_ACCESS_IMPORTED_NAMES = setOf("get", "set")
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
+@org.sonarsource.kotlin.api.frontend.K1only("complex")
 @Rule(key = "S1128")
 class UnnecessaryImportsCheck : AbstractCheck() {
 
