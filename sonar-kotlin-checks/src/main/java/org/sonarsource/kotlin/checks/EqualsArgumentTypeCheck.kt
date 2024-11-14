@@ -19,6 +19,7 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.lexer.KtTokens.THIS_KEYWORD
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -35,27 +36,23 @@ import org.jetbrains.kotlin.psi.KtWhenConditionIsPattern
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.ANY_TYPE
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.EQUALS_METHOD_NAME
 import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.determineType
-import org.sonarsource.kotlin.api.checks.isSupertypeOf
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
 private val EQUALS_MATCHER = FunMatcher {
     name = EQUALS_METHOD_NAME
     withArguments(ANY_TYPE)
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only("determineType")
 @Rule(key = "S2097")
 class EqualsArgumentTypeCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, ctx: KotlinFileContext) {
-        val bindingContext = ctx.bindingContext
         if (!EQUALS_MATCHER.matches(function)) return
         if (!function.hasBody()) return
 
@@ -63,8 +60,8 @@ class EqualsArgumentTypeCheck : AbstractCheck() {
         val parameter = function.valueParameters.first()
 
 
-        if (checkIsExpression(function, parameter, klass, bindingContext) &&
-            checkWhenExpression(function, parameter, klass, bindingContext) &&
+        if (checkIsExpression(function, parameter, klass) &&
+            checkWhenExpression(function, parameter, klass) &&
             checkBinaryExpression(function, parameter, klass) &&
             checkBinaryExpressionRHS(function, parameter, klass)
         ) {
@@ -89,35 +86,32 @@ class EqualsArgumentTypeCheck : AbstractCheck() {
     private fun checkWhenExpression(
         function: KtNamedFunction,
         parameter: KtParameter,
-        klass: KtClass,
-        bindingContext: BindingContext
+        klass: KtClass
     ) =
         function.collectDescendantsOfType<KtWhenExpression> { parameter.name == (it.subjectExpression as? KtNameReferenceExpression)?.getReferencedName() }
             .none {
                 it.collectDescendantsOfType<KtWhenConditionIsPattern>().any { whenConditionIsPattern ->
                     // typeReference is always present
-                    isExpressionCorrectType(whenConditionIsPattern.typeReference!!, klass, bindingContext)
+                    isExpressionCorrectType(whenConditionIsPattern.typeReference!!, klass)
                 }
             }
 
     private fun checkIsExpression(
         function: KtNamedFunction,
         parameter: KtParameter,
-        klass: KtClass,
-        bindingContext: BindingContext
+        klass: KtClass
     ) =
         function.collectDescendantsOfType<KtIsExpression> { parameter.name == (it.leftHandSide as? KtNameReferenceExpression)?.getReferencedName() }
             .none {
                 // typeReference is always present
-                isExpressionCorrectType(it.typeReference!!, klass, bindingContext)
+                isExpressionCorrectType(it.typeReference!!, klass)
             }
 
-    private fun isExpressionCorrectType(typeReference: KtTypeReference, klass: KtClass, bindingContext: BindingContext): Boolean {
+    private fun isExpressionCorrectType(typeReference: KtTypeReference, klass: KtClass): Boolean = analyze {
         val name = typeReference.nameForReceiverLabel()
         val parentNames = klass.superTypeListEntries.mapNotNull { it.typeReference!!.nameForReceiverLabel() }
         return klass.name == name || parentNames.contains(name) ||
-            typeReference.determineType(bindingContext)
-                ?.let { type -> klass.determineType(bindingContext)?.isSupertypeOf(type) } == true
+                typeReference.type.allSupertypes.any { klass.classSymbol?.classId == it.symbol?.classId }
     }
 
     private fun isBinaryExpressionWithTypeCorrect(
