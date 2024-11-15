@@ -831,13 +831,6 @@ fun DeclarationDescriptor?.determineType(): KotlinType? =
         else -> null
     }
 
-fun KtQualifiedExpression?.determineSignature(bindingContext: BindingContext): DeclarationDescriptor? =
-    when (val selectorExpr = this?.selectorExpression) {
-        is KtCallExpression -> bindingContext[BindingContext.REFERENCE_TARGET, selectorExpr.getCallNameExpression()]
-        is KtSimpleNameExpression -> bindingContext[BindingContext.REFERENCE_TARGET, selectorExpr]
-        else -> null
-    }
-
 fun KtAnnotationEntry.annotatedElement(): KtAnnotated {
     var annotated = parent
     while (annotated !is KtAnnotated) annotated = annotated.parent

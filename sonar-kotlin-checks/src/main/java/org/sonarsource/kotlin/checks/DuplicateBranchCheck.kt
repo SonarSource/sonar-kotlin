@@ -19,17 +19,16 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtQualifiedExpression
-import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
+import org.jetbrains.kotlin.idea.references.mainReference
+import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.determineSignature
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S1871")
 class DuplicateBranchCheck : AbstractBranchDuplication() {
 
@@ -39,7 +38,7 @@ class DuplicateBranchCheck : AbstractBranchDuplication() {
             group.asSequence()
                 .drop(1)
                 .filter { spansMultipleLines(it, ctx) }
-                .filter { it !is KtQualifiedExpression || it.hasSameSignature(original as KtQualifiedExpression, ctx.bindingContext) }
+                .filter { it !is KtQualifiedExpression || it.hasSameSignature(original as KtQualifiedExpression) }
                 .forEach { duplicated ->
                     val originalRange = ctx.textRange(original)
                     ctx.reportIssue(
@@ -56,14 +55,24 @@ class DuplicateBranchCheck : AbstractBranchDuplication() {
     }
 }
 
-private fun KtQualifiedExpression.hasSameSignature(other: KtQualifiedExpression, bindingContext: BindingContext): Boolean =
-    this.determineSignature(bindingContext) == other.determineSignature(bindingContext)
+private fun KtQualifiedExpression.hasSameSignature(other: KtQualifiedExpression): Boolean = analyze {
+    this@hasSameSignature.determineSignature() == other.determineSignature()
+}
 
+private fun KtQualifiedExpression?.determineSignature(): KaSymbol? = analyze {
+    when (val selectorExpr = this@determineSignature?.selectorExpression) {
+        is KtCallExpression ->
+            selectorExpr.getCallNameExpression()?.mainReference?.resolveToSymbol()
+        is KtSimpleNameExpression ->
+            selectorExpr.mainReference.resolveToSymbol()
+        else -> null
+    }
+}
 
 private fun spansMultipleLines(tree: KtElement, ctx: KotlinFileContext): Boolean {
     if (tree is KtBlockExpression) {
         val statements = tree.statements
-        if (statements.isNullOrEmpty()) {
+        if (statements.isEmpty()) {
             return false
         }
         val firstStatement = statements[0]

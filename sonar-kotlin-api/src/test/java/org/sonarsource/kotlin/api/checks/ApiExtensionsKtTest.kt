@@ -42,7 +42,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
@@ -50,7 +49,6 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -536,17 +534,6 @@ private class ApiExtensionsKtDetermineSignatureTest : AbstractApiExtensionsKtTes
         ktFile = kotlinTree.psiFile
     }
 
-    @Test
-    fun `determineSignature of KtQualifiedExpression`() {
-        val expr = ktFile.findDescendantOfType<KtQualifiedExpression> { it.text == "this.prop" }!!
-
-        assertThat(expr.determineSignature(bindingContext)?.fqNameOrNull()?.asString()).isEqualTo("bar.Foo.prop")
-    }
-
-    @Test
-    fun `determineSignature of a null KtQualifiedExpression`() {
-        assertThat(null.determineSignature(bindingContext)).isNull()
-    }
 }
 
 private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKtTest() {
