@@ -19,23 +19,22 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.analysis.api.symbols.KaEnumEntrySymbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.BindingContext.REFERENCE_TARGET
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S4423")
 class WeakSSLContextCheck : AbstractCheck() {
     private val WEAK_FOR_OK_HTTP = setOf(
@@ -69,38 +68,36 @@ class WeakSSLContextCheck : AbstractCheck() {
     }
 
     override fun visitCallExpression(node: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        val bindingContext = kotlinFileContext.bindingContext
+        kotlinFileContext.bindingContext
         when {
             SSL_CONTEXT_MATCHER.matches(node) ->
-                handleSSL(node, bindingContext, kotlinFileContext)
+                handleSSL(node, kotlinFileContext)
             OKHTTP_MATCHER.matches(node) ->
-                handleOkHttp(node, bindingContext, kotlinFileContext)
+                handleOkHttp(node, kotlinFileContext)
         }
     }
 
     private fun handleSSL(
         node: KtCallExpression,
-        bindingContext: BindingContext,
         kotlinFileContext: KotlinFileContext,
-    ) {
+    ) = analyze {
         node.valueArguments
             .firstOrNull()
             ?.getArgumentExpression()
             ?.let {
-                if (WEAK_FOR_SSL.contains(it.value(bindingContext)))
+                if (WEAK_FOR_SSL.contains(it.value()))
                     reportUnsecureSSLContext(listOf(it), kotlinFileContext)
             }
     }
 
     private fun handleOkHttp(
         node: KtCallExpression,
-        bindingContext: BindingContext,
         kotlinFileContext: KotlinFileContext,
     ) {
         val unsecureVersions = node.valueArguments
             .mapNotNull { it.getArgumentExpression() }
             .filter {
-                WEAK_FOR_OK_HTTP.contains(it.value(bindingContext))
+                WEAK_FOR_OK_HTTP.contains(it.value())
             }
 
         reportUnsecureSSLContext(unsecureVersions, kotlinFileContext)
@@ -122,21 +119,15 @@ class WeakSSLContextCheck : AbstractCheck() {
         }
     }
 
-    private fun KtExpression.value(
-        bindingContext: BindingContext,
-    ): String? = when (this) {
-        is KtStringTemplateExpression -> asConstant()
-        is KtNameReferenceExpression -> {
-            val descriptor = bindingContext[REFERENCE_TARGET, this]
-            if (descriptor is PropertyDescriptor) descriptor.compileTimeInitializer?.boxedValue().toString()
-            else null
+    private fun KtExpression.value(): String? = analyze {
+        when (this@value) {
+            is KtStringTemplateExpression -> asConstant()
+            is KtNameReferenceExpression -> predictRuntimeStringValue()
+            is KtDotQualifiedExpression -> {
+                (selectorExpression?.mainReference?.resolveToSymbol() as? KaEnumEntrySymbol)
+                    ?.callableId?.asSingleFqName()?.asString()
+            }
+            else -> null
         }
-        is KtDotQualifiedExpression -> {
-            val selectorExpression = selectorExpression
-            if (selectorExpression is KtNameReferenceExpression)
-                bindingContext[REFERENCE_TARGET, selectorExpression]?.fqNameOrNull()?.asString()
-            else null
-        }
-        else -> null
     }
 }
