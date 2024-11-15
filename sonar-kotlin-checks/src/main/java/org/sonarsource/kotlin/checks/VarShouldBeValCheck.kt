@@ -19,7 +19,10 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
@@ -35,20 +38,15 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.BindingContext.DECLARATION_TO_DESCRIPTOR
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.message
+import org.sonarsource.kotlin.api.visiting.analyze
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S3353")
 class VarShouldBeValCheck : AbstractCheck() {
     override fun visitKtFile(file: KtFile, data: KotlinFileContext) {
-        val bindingContext: BindingContext = data.bindingContext
-
         val binaryAssignments = file.collectDescendantsOfType<KtBinaryExpression> { it.isAssignment() }
         val unaryAssignments = file.collectDescendantsOfType<KtUnaryExpression> { it.isAssignment() }
         val callableVarReference = file.collectDescendantsOfType<KtCallableReferenceExpression>()
@@ -57,12 +55,13 @@ class VarShouldBeValCheck : AbstractCheck() {
             unaryAssignments.mapNotNull { it.reference() },
             callableVarReference.map { it.callableReference }).flatten()
 
-        val assignedDeclarations = assignedExpressions
-            .mapNotNull { it.getResolvedCall(bindingContext)?.resultingDescriptor?.original }
-            .toSet()
-
-        val assignedNames = assignedExpressions
-            .map { it.getReferencedName() }
+        val assignedDeclarations2 = assignedExpressions
+            .mapNotNull {
+                analyze {
+                    val successfulVariableAccessCall = it.resolveToCall()?.successfulVariableAccessCall()
+                    successfulVariableAccessCall?.symbol ?: it.mainReference.resolveToSymbol()
+                }
+            }
             .toSet()
 
         val varProperties = file.collectDescendantsOfType<KtProperty> {
@@ -78,7 +77,7 @@ class VarShouldBeValCheck : AbstractCheck() {
         }
 
         varProperties
-            .filter { it.isNotReferenced(assignedDeclarations, assignedNames, bindingContext) }
+            .filter { it.isNotReferenced(assignedDeclarations2) }
             .forEach { variable ->
                 data.reportIssue(variable.valOrVarKeyword, msg)
             }
@@ -87,7 +86,7 @@ class VarShouldBeValCheck : AbstractCheck() {
         destructedDeclaration
             .filter {
                 it.collectDescendantsOfType<KtDestructuringDeclarationEntry>()
-                    .all { variable -> variable.isNotReferenced(assignedDeclarations, assignedNames, bindingContext) }
+                    .all { variable -> variable.isNotReferenced(assignedDeclarations2) }
             }
             .forEach { variable ->
                 data.reportIssue(variable.valOrVarKeyword!!, msg)
@@ -97,19 +96,11 @@ class VarShouldBeValCheck : AbstractCheck() {
     private fun KtProperty.isLateInit(): Boolean = hasModifier(KtTokens.LATEINIT_KEYWORD)
     private fun KtProperty.localVar(): Boolean = this.isLocal && this.isVar
     private fun KtProperty.privateClassVar(): Boolean = this.isPrivate() && this.isVar
-    private fun KtNamedDeclaration.isNotReferenced(
-        assignedDeclarations: Set<CallableDescriptor>,
-        assignedNames: Set<String>,
-        bindingContext: BindingContext,
-    ): Boolean {
-        val descriptor = bindingContext[DECLARATION_TO_DESCRIPTOR, this]
-        val name = this.name!!
 
-        return if (descriptor != null) {
-            !assignedDeclarations.contains(descriptor)
-        } else {
-            !assignedNames.contains(name)
-        }
+    private fun KtNamedDeclaration.isNotReferenced(
+        assignedDeclarations: Set<KaSymbol>,
+    ): Boolean = analyze {
+        !assignedDeclarations.contains(this@isNotReferenced.symbol)
     }
 
     private fun KtBinaryExpression.isAssignment(): Boolean {
