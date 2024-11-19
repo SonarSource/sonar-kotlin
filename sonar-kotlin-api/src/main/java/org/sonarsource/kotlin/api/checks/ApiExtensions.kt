@@ -104,14 +104,19 @@ fun KtExpression.predictRuntimeStringValue() =
 
 @Rewritten
 fun KtExpression.predictRuntimeIntValue(): Int? = analyze {
-    predictRuntimeValueExpression()?.evaluate()?.value as? Int
+    val valueExpression = predictRuntimeValueExpression()
+    if (valueExpression.expressionType?.isIntType == true) {
+        valueExpression?.evaluate()?.value as? Int
+    } else null
 }
 
 @Rewritten
 fun KtExpression.predictRuntimeBooleanValue() = analyze {
-    predictRuntimeValueExpression().let { runtimeValueExpression ->
-        runtimeValueExpression.evaluate()?.value as? Boolean
-    }
+
+    val valueExpression = predictRuntimeValueExpression()
+    if (valueExpression.expressionType?.isBooleanType == true) {
+        valueExpression?.evaluate()?.value as? Boolean
+    } else null
 }
 
 /**
@@ -211,6 +216,7 @@ fun KtExpression.predictReceiverExpression(
             is KaExplicitReceiverValue -> receiver.expression.predictRuntimeValueExpression()
             is KaImplicitReceiverValue -> receiver.symbol.containingSymbol
                 ?.findFunctionLiteral(this@predictReceiverExpression)?.findLetAlsoRunWithTargetExpression()
+
             else -> null
         }
     }
@@ -593,8 +599,8 @@ fun KtExpression.isBytesInitializedFromString() = analyze {
         STRING_BYTES.matches(callee) &&
                 ((callee.partiallyAppliedSymbol.extensionReceiver
                     ?: callee.partiallyAppliedSymbol.dispatchReceiver)
-                as? KaExplicitReceiverValue)?.expression
-            ?.predictRuntimeStringValue() != null
+                        as? KaExplicitReceiverValue)?.expression
+                    ?.predictRuntimeStringValue() != null
     } ?: false
 }
 

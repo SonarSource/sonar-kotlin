@@ -25,7 +25,7 @@ class CollectionSizeAndArrayLengthCheckSample {
         }
     }
 
-    fun compliant(intArray: Array<Int>, intColl: Collection<Int>) {
+    fun compliant(intArray: Array<Int>, intColl: Collection<Int>, str1: String, str2: String, t: TestEnum) {
         if (intArray.size >= 3) {
             println("test")
         }
@@ -38,6 +38,15 @@ class CollectionSizeAndArrayLengthCheckSample {
         if (2 > intColl.size) {
             println("test")
         }
+
+        if (str1 == "") {}
+        if (str1 == str2) {}
+        if (t == TestEnum.TEST1) {}
     }
 
+}
+
+enum class TestEnum {
+    TEST1,
+    TEST2,
 }
