@@ -180,8 +180,8 @@ subprojects {
                     }
                     licenses {
                         license {
-                            name.set("GNU LPGL 3")
-                            url.set("http://www.gnu.org/licenses/lgpl.txt")
+                            name.set("SSALv1")
+                            url.set("https://sonarsource.com/license/ssal/")
                             distribution.set("repo")
                         }
                     }
