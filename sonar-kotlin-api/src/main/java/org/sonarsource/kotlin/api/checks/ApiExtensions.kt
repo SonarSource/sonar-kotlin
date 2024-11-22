@@ -522,7 +522,10 @@ fun KtProperty.determineTypeAsString(bindingContext: BindingContext, printTypeAr
     determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
 fun KtExpression.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
+    determineType(bindingContext)?.let {
+        if (it.constructor.declarationDescriptor != null) it.getKotlinTypeFqName(printTypeArguments)
+        else null
+    }
 
 private fun KtParameter.determineType(bindingContext: BindingContext) =
     bindingContext[BindingContext.TYPE, typeReference]

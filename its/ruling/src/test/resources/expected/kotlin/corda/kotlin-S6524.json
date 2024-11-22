@@ -1,0 +1,14 @@
+{
+"kotlin-corda-project:sources/kotlin/corda/experimental/behave/src/main/kotlin/net/corda/behave/file/LogSource.kt": [
+27
+],
+"kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/network/NetworkBootstrapper.kt": [
+170
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/PersistentMapTests.kt": [
+152
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/EnumEvolvabilityTests.kt": [
+183
+]
+}
