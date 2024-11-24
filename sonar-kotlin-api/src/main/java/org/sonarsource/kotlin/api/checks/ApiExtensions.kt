@@ -33,7 +33,6 @@ import org.jetbrains.kotlin.analysis.api.symbols.*
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.analysis.api.types.symbol
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
@@ -47,7 +46,6 @@ import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 import org.jetbrains.kotlin.psi2ir.deparenthesize
@@ -62,8 +60,6 @@ import org.jetbrains.kotlin.resolve.calls.util.getImplicitReceiverValue
 import org.jetbrains.kotlin.resolve.calls.util.getParentCall
 import org.jetbrains.kotlin.resolve.calls.util.getReceiverExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.constants.ArrayValue
-import org.jetbrains.kotlin.resolve.constants.KClassValue
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.sam.getSingleAbstractMethodOrNull
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
@@ -568,19 +564,6 @@ fun KtNamedFunction.returnTypeAsString(bindingContext: BindingContext, printType
 
 fun KtNamedFunction.returnType(bindingContext: BindingContext) =
     createTypeBindingForReturnType(bindingContext)?.type
-
-fun CallableDescriptor.throwsExceptions(exceptions: Collection<String>) =
-    annotations.any { annotation ->
-        annotation.fqName?.asString() == THROWS_FQN &&
-                (annotation.allValueArguments.asSequence()
-                    .find { (k, _) -> k.asString() == "exceptionClasses" }
-                    ?.value as? ArrayValue)
-                    ?.value
-                    ?.mapNotNull { it.value as? KClassValue.Value.NormalClass }
-                    ?.map { it.value.toString().replace("/", ".") }
-                    ?.any(exceptions::contains)
-                ?: false
-    }
 
 fun KtNamedFunction.isInfix() = hasModifier(KtTokens.INFIX_KEYWORD)
 
