@@ -100,6 +100,13 @@ class FunMatcherImpl(
     fun matches(resolvedCall: ResolvedCall<*>?) = preCheckArgumentCount(resolvedCall?.call) &&
         matches(resolvedCall?.resultingDescriptor)
 
+    fun matches(resolvedCall: KaCallableMemberCall<*,*>?) =
+        when (resolvedCall) {
+            is KaFunctionCall -> matches(resolvedCall)
+            is KaVariableAccessCall -> matches(resolvedCall)
+            else -> false
+        }
+
     fun matches(resolvedCall: KaFunctionCall<*>) =
         // TODO preCheckArgumentCount?
         matches(
