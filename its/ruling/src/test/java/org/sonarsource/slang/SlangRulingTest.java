@@ -103,7 +103,7 @@ public class SlangRulingTest {
   }
 
   @Test
-  //@EnabledIfEnvironmentVariable(named = "KOTLIN_COMPILER_IT_ENABLED", matches = "true")
+  @EnabledIfEnvironmentVariable(named = "KOTLIN_COMPILER_IT_ENABLED", matches = "true")
   void test_kotlin_compiler() throws IOException {
     List<String> exclusions = List.of(
       "**/testData/**/*",
