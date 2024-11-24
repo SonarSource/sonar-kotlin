@@ -21,25 +21,24 @@ package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
+import org.jetbrains.kotlin.analysis.api.types.KaClassType
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.BindingContext.TYPE
-import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
 private val JOB_CONSTRUCTOR = FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = "Job")
 private val SUPERVISOR_JOB_CONSTRUCTOR = FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = "SupervisorJob")
 private const val MESSAGE_ENDING = " here leads to the breaking of structured concurrency principles."
-private const val DELICATE_API_CLASS_TYPE = "kotlin.reflect.KClass<kotlinx.coroutines.DelicateCoroutinesApi>"
+private const val CLASS_TYPE = "kotlin.reflect.KClass"
+private const val DELICATE_API_TYPE = "kotlinx.coroutines.DelicateCoroutinesApi"
 
-@org.sonarsource.kotlin.api.frontend.K1only("type")
 @Rule(key = "S6306")
 class StructuredConcurrencyPrinciplesCheck : CallAbstractCheck() {
 
@@ -51,9 +50,8 @@ class StructuredConcurrencyPrinciplesCheck : CallAbstractCheck() {
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext
     ) {
-        val bindingContext = kotlinFileContext.bindingContext
         val receiver = callExpression.predictReceiverExpression() as? KtNameReferenceExpression
-        if (receiver?.getReferencedName() == "GlobalScope" && !callExpression.checkOptInDelicateApi(bindingContext)) {
+        if (receiver?.getReferencedName() == "GlobalScope" && !callExpression.checkOptInDelicateApi()) {
             kotlinFileContext.reportIssue(receiver, """Using "GlobalScope"$MESSAGE_ENDING""")
         } else {
             val args = resolvedCall.argumentMapping.keys.toList()
@@ -67,26 +65,33 @@ class StructuredConcurrencyPrinciplesCheck : CallAbstractCheck() {
     }
 }
 
-private fun KtExpression.checkOptInDelicateApi(bindingContext: BindingContext): Boolean {
+private fun KtExpression.checkOptInDelicateApi(): Boolean {
     var parent: PsiElement? = this
     while (parent != null) {
         val annotations = (parent as? KtAnnotated)?.annotationEntries
-        if (annotations.isAnnotatedWithOptInDelicateApi(bindingContext)) return true
+        if (annotations.isAnnotatedWithOptInDelicateApi()) return true
         parent = parent.parent
     }
     return false
 }
 
-private fun MutableList<KtAnnotationEntry>?.isAnnotatedWithOptInDelicateApi(bindingContext: BindingContext) =
+private fun MutableList<KtAnnotationEntry>?.isAnnotatedWithOptInDelicateApi() =
     this?.let {
-        it.any { annotation ->
-            bindingContext[TYPE, annotation.typeReference]
-            val typeFqn = annotation.typeReference?.determineTypeAsString(bindingContext)
-            typeFqn == "kotlinx.coroutines.DelicateCoroutinesApi" ||
-                (typeFqn == "kotlin.OptIn"
-                    && annotation.valueArguments.any { valueArgument ->
-                    valueArgument.getArgumentExpression()?.getType(bindingContext)
-                        ?.getKotlinTypeFqName(true) == DELICATE_API_CLASS_TYPE
-                })
+        analyze {
+            it.any { annotation ->
+                val typeFqn = annotation.typeReference?.determineTypeAsString()
+                typeFqn == "kotlinx.coroutines.DelicateCoroutinesApi" ||
+                        (typeFqn == "kotlin.OptIn"
+                                && annotation.valueArguments.any { valueArgument ->
+
+                            val expressionType = valueArgument.getArgumentExpression()?.expressionType
+                            val asFqNameString = expressionType
+                                ?.symbol?.classId?.asFqNameString()
+
+                            asFqNameString == CLASS_TYPE && (expressionType as? KaClassType)?.typeArguments?.any {
+                                it.type?.symbol?.classId?.asFqNameString() == DELICATE_API_TYPE
+                            } ?: false
+                        })
+            }
         }
     } ?: false
