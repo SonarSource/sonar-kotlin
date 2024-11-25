@@ -17,14 +17,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.plugin.linking
+package org.sonarsource.kotlin.checks;
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import org.jetbrains.kotlin.analysis.api.KaSession;
+import org.jetbrains.kotlin.analysis.api.fir.KaFirSession;
 
-internal class WorkaroundForJarMinimizationTest {
-    @Test
-    fun minimizing_class_count() {
-        assertThat(WorkaroundForJarMinimization.CLASSES_TO_KEEP_WHEN_MINIMIZING_JAR).hasSize(18)
-    }
+public class UnnecessaryImportsHelper {
+  public static boolean isK2(KaSession session) {
+    return session instanceof KaFirSession;
+  }
 }

@@ -49,6 +49,8 @@ public class WorkaroundForJarMinimization {
           org.jetbrains.kotlin.analysis.api.descriptors.KaFe10SessionProvider.class,
           org.jetbrains.kotlin.references.fe10.base.KtFe10KotlinReferenceProviderContributor.class,
           org.jetbrains.kotlin.analysis.api.descriptors.references.ReadWriteAccessCheckerDescriptorsImpl.class,
+          org.jetbrains.kotlin.analysis.api.descriptors.modification.KaFe10SourceModificationService.class,
+          org.jetbrains.kotlin.analysis.api.fir.KaFirSession.class,
 
           /** Used to have proper named groups behavior in regular expressions */
           kotlin.internal.jdk8.JDK8PlatformImplementations.class
