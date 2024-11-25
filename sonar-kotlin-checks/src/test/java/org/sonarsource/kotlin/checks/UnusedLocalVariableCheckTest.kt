@@ -24,7 +24,7 @@ import org.sonarsource.kotlin.testapi.DEFAULT_KOTLIN_CLASSPATH
 import org.sonarsource.kotlin.testapi.KotlinVerifier
 import java.io.File
 
-class UnusedLocalVariableCheckTest : CheckTestWithNoSemantics(UnusedLocalVariableCheck()) {
+class UnusedLocalVariableCheckTest : CheckTestWithNoSemantics(UnusedLocalVariableCheck(), shouldReport = true) {
 
     @Test
     fun `with partial semantics`() {

@@ -74,16 +74,6 @@ fun kotlinCoreEnvironment(
     )
 }
 
-fun bindingContext(
-    environment: KotlinCoreEnvironment,
-    classpath: List<String>,
-    files: List<KtFile>,
-): BindingContext =
-    if (classpath.isEmpty())
-        BindingContext.EMPTY
-    else
-        analyzeAndGetBindingContext(environment, files)
-
 fun analyzeAndGetBindingContext(
     env: KotlinCoreEnvironment,
     ktFiles: List<KtFile>,

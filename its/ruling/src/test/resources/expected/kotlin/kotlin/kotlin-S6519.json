@@ -1,0 +1,48 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/constants/evaluate/ConstantExpressionEvaluator.kt": [
+1024,
+1026
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/constants/evaluate/OperationsMapGenerated.kt": [
+109,
+124,
+156,
+172,
+215,
+259,
+308,
+356,
+388
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ast/Class.kt": [
+62
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/io/files/Utils.kt": [
+334,
+362
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/text/StringsJVM.kt": [
+51
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/MapWithDefault.kt": [
+68,
+84
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/TuplesTest.kt": [
+32,
+82
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/js/JsCollectionsTest.kt": [
+59
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/ranges/CoercionTest.kt": [
+84,
+85
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/text/StringTest.kt": [
+829,
+834,
+839,
+844
+]
+}

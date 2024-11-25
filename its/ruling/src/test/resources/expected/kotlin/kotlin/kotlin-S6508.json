@@ -1,0 +1,49 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/CompilerCallbackServicesFacade.kt": [
+84
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/lazy/FileScopeFactory.kt": [
+293,
+293
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/lazy/descriptors/LazyAnnotations.kt": [
+142,
+142
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/descriptors/IrBuiltinsPackageFragmentDescriptorImpl.kt": [
+45,
+45
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/asJava/AbstractCompilerLightClassTest.kt": [
+52
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors.runtime/tests/org/jetbrains/kotlin/jvm/runtime/AbstractJvmRuntimeDescriptorLoaderTest.kt": [
+217,
+217
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors/src/org/jetbrains/kotlin/resolve/constants/constantValues.kt": [
+172
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/kdoc/IdeSampleResolutionService.kt": [
+130,
+130
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/vfilefinder/IDEVirtualFileFinder.kt": [
+56,
+57
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-android/src/org/jetbrains/kotlin/android/configure/KotlinAndroidGradleLibraryDataService.kt": [
+36
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/src/org/jetbrains/kotlin/idea/configuration/KotlinGradleSourceSetDataService.kt": [
+66,
+86,
+107
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/versions/KotlinJsMetadataVersionIndex.kt": [
+40
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/versions/KotlinJvmMetadataVersionIndex.kt": [
+48
+]
+}

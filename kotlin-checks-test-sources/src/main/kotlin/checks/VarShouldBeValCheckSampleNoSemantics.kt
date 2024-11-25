@@ -73,7 +73,8 @@ class VarShouldBeValCheckSampleNoSemantics {
     }
 
     fun nested(): Int {
-        var shadowed = 0 // compliant, cannot be found with no semantics
+        var shadowed = 0 // Noncompliant
+//      ^^^
         var z = 0 // compliant
         fun nestedFun(x : Int): Unit {
            var shadowed = 1 // compliant
