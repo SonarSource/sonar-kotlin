@@ -19,6 +19,8 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.KaIdeApi
+import org.jetbrains.kotlin.analysis.api.descriptors.KaFe10Session
 import org.jetbrains.kotlin.descriptors.VariableAccessorDescriptor
 import org.jetbrains.kotlin.descriptors.VariableDescriptorWithAccessors
 import org.jetbrains.kotlin.descriptors.accessors
@@ -51,17 +53,36 @@ import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.analyze
 
 private const val MESSAGE_UNUSED = "Remove this unused import."
 private const val MESSAGE_REDUNDANT = "Remove this redundant import."
 private val DELEGATES_IMPORTED_NAMES = setOf("getValue", "setValue", "provideDelegate")
 private val ARRAY_ACCESS_IMPORTED_NAMES = setOf("get", "set")
 
-@org.sonarsource.kotlin.api.frontend.K1only("complex")
+@org.sonarsource.kotlin.api.frontend.K1only("rewritten, results differ, fixed FNs, some issue disappeared, consistent with IDE")
 @Rule(key = "S1128")
 class UnnecessaryImportsCheck : AbstractCheck() {
 
+    @OptIn(KaIdeApi::class)
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
+
+        analyze {
+            if (this !is KaFe10Session) {
+                val analyzeImportsToOptimize = analyzeImportsToOptimize(file)
+
+                file.importDirectives.mapNotNull { import -> import.importedFqName?.let { import to it } }
+                    .filter { (_, fqName: FqName) ->
+                        !analyzeImportsToOptimize.unresolvedNames.contains(fqName.shortName()) &&
+                                analyzeImportsToOptimize.usedDeclarations[fqName].isNullOrEmpty()
+                    }.map { it.first }
+                    .forEach { importDirective ->
+                    // We could not find any usages for anything remaining at this point. Hence, report!
+                    importDirective.importedReference?.let { context.reportIssue(it, MESSAGE_UNUSED) }
+                }
+                return
+            }
+        }
 
         val (references, arrayAccesses, kDocLinks, delegateImports, calls) = collectReferences(file)
 
