@@ -1,30 +1,91 @@
 {
+"kotlin-kotlin-project:sources/kotlin/kotlin/buildSrc/src/main/kotlin/pill/plugin.kt": [
+28
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/builtinSpecialBridges.kt": [
+56
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/InliningContext.kt": [
 88
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/src/org/jetbrains/kotlin/cli/js/dce/K2JSDce.kt": [
+85
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/DaemonParams.kt": [
+279
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/KotlinCompileDaemon.kt": [
+95
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowProcessor.kt": [
+1532
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/cfg/pseudocode/instructions/jumps/NondeterministicJumpInstruction.kt": [
 76
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.common/src/org/jetbrains/kotlin/backend/common/Utils.kt": [
-30
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/extensions/SyntheticResolveExtension.kt": [
+89,
+96,
+105,
+114
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/inference/InferenceUtils.kt": [
-74
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/src/org/jetbrains/kotlin/incremental/IncrementalJvmCompilerRunner.kt": [
+292
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.js/src/org/jetbrains/kotlin/ir/backend/js/lower/CallableReferenceLowering.kt": [
+267
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/light-classes/src/org/jetbrains/kotlin/asJava/elements/KtLightModifierList.kt": [
+80
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/results/OverloadingConflictResolver.kt": [
+164
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/test/CompilerTestUtil.kt": [
+57
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/util/CommentSaver.kt": [
+408
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertSecondaryConstructorToPrimaryIntention.kt": [
 119
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/pullUp/KotlinPullUpHelper.kt": [
+150
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/src/org/jetbrains/kotlin/jps/build/KotlinBuilder.kt": [
 436
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/collections/GroupingJVM.kt": [
-47
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.inliner/src/org/jetbrains/kotlin/js/inline/ExpressionDecomposer.kt": [
+348
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/MapAccessors.kt": [
-35,
-42
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.translator/src/org/jetbrains/kotlin/js/translate/reference/CallArgumentTranslator.kt": [
+235
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/Maps.kt": [
-296
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/annotation-processor-example/src/main/kotlin/example/ExampleAnnotationProcessor.kt": [
+39
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/collections/MutableCollectionsJVMTest.kt": [
+17
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/samples/test/samples/collections/collections.kt": [
+299
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/samples/test/samples/collections/maps.kt": [
+146,
+180
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/collections/MapTest.kt": [
+121
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/annotation-based-compiler-plugins-ide-support/src/AbstractMavenImportHandler.kt": [
+55
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/test/org/jetbrains/kotlin/kapt3/test/JavaKaptContextTest.kt": [
+61
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/test/org/jetbrains/kotlin/kapt3/test/KotlinKapt3IntegrationTests.kt": [
+48,
+117
 ]
 }

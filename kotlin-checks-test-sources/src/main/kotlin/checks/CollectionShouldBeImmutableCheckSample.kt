@@ -1,10 +1,28 @@
 package checks
 
+fun compliantScopedFunctions(
+    a: MutableList<Int>, // Compliant
+    b: MutableList<Int>, // Compliant
+    c: MutableList<Int>, // Compliant
+    d: MutableList<Int>, // Compliant
+    e: MutableList<Int>, // Compliant
+    f: MutableList<Int>, // Compliant
+    crazy: MutableList<Int>,
+): Unit { // Compliant
+    a.let { it.add(1) }
+    b.also { it.add(1) }
+    c.apply { add(1) }
+    d.run { add(1) }
+    with(e) { add(1) }
+    f.let { it.let { it.let { it.add(1) } } }
+    crazy.let { it.also { it.apply { it.run { with(this) { it.add(1) } } } } }
+}
+
 class CollectionShouldBeImmutableCheckSample {
-    fun MutableCollection<Int>.doSomething(): Unit {} // Noncompliant
+    fun MutableCollection<Int>.doSomething(): Unit {} // Don't report extension functions
 
     //let also apply run with
-    fun nonCompliant(
+    fun nonCompliantXYZ(
         x: MutableList<Int>, // Noncompliant {{Make this collection immutable.}}
         y: MutableSet<String>,  // Noncompliant
 //      ^^^^^^^^^^^^^^^^^^^^^
@@ -37,31 +55,15 @@ class CollectionShouldBeImmutableCheckSample {
     fun List<Int>.toList(): List<Int> = this // compliant
     fun baz(list : MutableList<Int>): Unit {} // Noncompliant
 
+
+    //Declared on immutable
     fun List<Int>.foo(): Unit {} // Compliant
     fun doNothing(a : List<Int>, b : Set<String>, c : Map<Int,Int>): Unit {}
     fun doNothing(a : List<Int>): List<Int> { return a } // Compliant
 
     fun <A>id(a : A): A = a // Compliant
 
-    fun compliantScopedFunctions(
-        a: MutableList<Int>, // Compliant
-        b: MutableList<Int>, // Compliant
-        c: MutableList<Int>, // Compliant
-        d: MutableList<Int>, // Compliant
-        e: MutableList<Int>, // Compliant
-        f: MutableList<Int>, // Compliant
-        crazy: MutableList<Int>,
-    ): Unit { // Compliant
-        a.let { it.add(1) }
-        b.also { it.add(1) }
-        c.apply { add(1) }
-        d.run { add(1) }
-        with(e) { add(1) }
-        f.let { it.let { it.let { it.add(1) } } }
-        crazy.let { it.also { it.apply { it.run { with(this) { it.add(1) } } } } }
-    }
-
-    fun MutableList<Int>.doSomething2(): MutableList<Int> { return this } // Noncompliant
+    fun MutableList<Int>.doSomething2(): MutableList<Int> { return this } // Don't report extension functions
 
     fun compliantFunctionsCalledOn(
         a: MutableList<Int>, // Compliant
@@ -163,8 +165,7 @@ class CollectionShouldBeImmutableCheckSample {
         if(add(1)) {}
     }
 
-    fun MutableList<Int>.noncompliantDelegate(): Int { // Noncompliant
-//      ^^^^^^^^^^^^^^^^
+    fun MutableList<Int>.noncompliantDelegate(): Int { // Don't report extension functions
         return reduce { acc, it -> acc + it}
     }
 
@@ -229,7 +230,7 @@ class CollectionShouldBeImmutableCheckSample {
 
     interface A {
         fun foo(list : MutableList<Int>): Unit // compliant
-        fun bar(list : MutableList<Int>): Int { // compliant
+        fun bar(list : MutableList<Int>): Int { // Noncompliant
             return list.reduce { acc, it -> acc + it}
         }
     }
@@ -253,3 +254,11 @@ private fun nonCompliantParameterOnFileLevel(list: MutableList<Int>): Int { // N
 
 // https://sonarsource.atlassian.net/browse/SONARKT-388
 private fun <T> intersectionType(t: T) = if (t is String) listOf(t) else emptyList()
+
+fun sum123(acc: List<Int>): Int {
+    val list = mutableListOf(1,2,3) // Noncompliant
+    val list2: List<Int> = mutableListOf(1,2,3) // Compliant, immutable type specified
+
+    list2.size
+    return list.reduce { acc, item -> acc + item}
+}
