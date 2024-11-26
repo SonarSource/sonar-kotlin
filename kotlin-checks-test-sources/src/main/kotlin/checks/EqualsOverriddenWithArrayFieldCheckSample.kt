@@ -95,7 +95,7 @@ class EqualsOverriddenWithArrayFieldCheckSample {
         }
     }
 
-    data class WithInBodyProperty(val age: Int) { // Noncompliant {{Override equals and hashCode to consider array content in the method.}}
+    data class WithInBodyProperty(val age: Int) { // compliant
         val names: Array<String> = arrayOf("Alice")
         override fun toString(): String {
             return "$names\n$age"
@@ -156,8 +156,13 @@ class EqualsOverriddenWithArrayFieldCheckSample {
     data class EmptyBody(val names: Array<String>) { // Noncompliant {{Override equals and hashCode to consider array content in the method.}}
     }
 
-    data class ArrayInBody(val age: Int) { // Noncompliant {{Override equals and hashCode to consider array content in the method.}}
+    data class ArrayInBody(val age: Int) { // Compliant
         val employers = arrayOf("SonarSource")
+    }
+
+    data class ArrayGetterInBody(val age: Int) { // Compliant
+        val employers
+            get() = arrayOf("SonarSource")
     }
 
     data class NoArray(val age: Int) { // Compliant
