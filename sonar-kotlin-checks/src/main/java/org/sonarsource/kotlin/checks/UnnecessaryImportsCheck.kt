@@ -20,26 +20,13 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.analysis.api.KaIdeApi
+import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.descriptors.VariableAccessorDescriptor
 import org.jetbrains.kotlin.descriptors.VariableDescriptorWithAccessors
 import org.jetbrains.kotlin.descriptors.accessors
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocLink
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.psi.KtArrayAccessExpression
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtImportDirective
-import org.jetbrains.kotlin.psi.KtImportList
-import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
-import org.jetbrains.kotlin.psi.KtPackageDirective
-import org.jetbrains.kotlin.psi.KtPrefixExpression
-import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtPropertyDelegate
-import org.jetbrains.kotlin.psi.KtReferenceExpression
-import org.jetbrains.kotlin.psi.KtSimpleNameExpression
-import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
-import org.jetbrains.kotlin.psi.KtUserType
+import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi2ir.deparenthesize
@@ -53,8 +40,8 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.analyze
-import org.sonarsource.kotlin.checks.UnnecessaryImportsHelper.isK2
 
+private const val KA_FIR_SESSION = "org.jetbrains.kotlin.analysis.api.fir.KaFirSession"
 private const val MESSAGE_UNUSED = "Remove this unused import."
 private const val MESSAGE_REDUNDANT = "Remove this redundant import."
 private val DELEGATES_IMPORTED_NAMES = setOf("getValue", "setValue", "provideDelegate")
@@ -68,7 +55,7 @@ class UnnecessaryImportsCheck : AbstractCheck() {
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
 
         analyze {
-            if (isK2(this)) {
+            if (isK2()) {
                 val analyzeImportsToOptimize = analyzeImportsToOptimize(file)
 
                 file.importDirectives.mapNotNull { import -> import.importedFqName?.let { import to it } }
@@ -285,3 +272,6 @@ private fun KtReferenceExpression.importableSimpleName() =
         is KtSimpleNameExpression -> getReferencedName()
         else -> null
     }
+
+fun KaSession.isK2(): Boolean =
+    KA_FIR_SESSION == javaClass.name

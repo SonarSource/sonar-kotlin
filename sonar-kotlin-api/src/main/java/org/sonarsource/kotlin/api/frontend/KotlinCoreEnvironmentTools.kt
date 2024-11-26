@@ -47,7 +47,7 @@ import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import org.jetbrains.kotlin.util.slicedMap.WritableSlice
-import org.sonarsource.kotlin.api.frontend.K1J.configureK1AnalysisApiServices
+import org.sonarsource.kotlin.api.frontend.K1.configureK1AnalysisApiServices
 import java.io.File
 
 /**

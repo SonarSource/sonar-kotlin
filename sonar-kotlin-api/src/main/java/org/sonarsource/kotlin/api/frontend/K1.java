@@ -48,7 +48,11 @@ import org.jetbrains.kotlin.resolve.extensions.AnalysisHandlerExtension;
 import java.util.Collections;
 
 @SuppressWarnings("ALL")
-public class K1J {
+public class K1 {
+
+  private K1() {
+    // Utility class
+  }
 
   public static void configureK1AnalysisApiServices(KotlinCoreEnvironment env) {
     MockApplication application = env.getProjectEnvironment().getEnvironment().getApplication();
@@ -88,48 +92,50 @@ public class K1J {
       )
     );
   }
-}
 
-class AnalysisApiFe10ServiceRegistrar extends AnalysisApiSimpleServiceRegistrar {
-  public static final AnalysisApiSimpleServiceRegistrar INSTANCE = new AnalysisApiFe10ServiceRegistrar();
-  private static final String PLUGIN_RELATIVE_PATH = "/META-INF/analysis-api/analysis-api-fe10.xml";
+  private static class AnalysisApiFe10ServiceRegistrar extends AnalysisApiSimpleServiceRegistrar {
+    public static final AnalysisApiSimpleServiceRegistrar INSTANCE = new AnalysisApiFe10ServiceRegistrar();
+    private static final String PLUGIN_RELATIVE_PATH = "/META-INF/analysis-api/analysis-api-fe10.xml";
 
-  private AnalysisApiFe10ServiceRegistrar() {
-  }
+    private AnalysisApiFe10ServiceRegistrar() {
+    }
 
-  public void registerApplicationServices(MockApplication application) {
-    PluginStructureProvider.INSTANCE.registerApplicationServices(application, PLUGIN_RELATIVE_PATH);
-    application.registerService(
-      KtFe10ReferenceResolutionHelper.class,
-      DummyKtFe10ReferenceResolutionHelper.INSTANCE
-    );
-
-
-    final var applicationArea = application.getExtensionArea();
-    if (!applicationArea.hasExtensionPoint(ClassTypePointerFactory.EP_NAME)) {
-      CoreApplicationEnvironment.registerApplicationExtensionPoint(
-        ClassTypePointerFactory.EP_NAME,
-        ClassTypePointerFactory.class
+    @Override
+    public void registerApplicationServices(MockApplication application) {
+      PluginStructureProvider.INSTANCE.registerApplicationServices(application, PLUGIN_RELATIVE_PATH);
+      application.registerService(
+        KtFe10ReferenceResolutionHelper.class,
+        DummyKtFe10ReferenceResolutionHelper.INSTANCE
       );
-      applicationArea
-        .getExtensionPoint(ClassTypePointerFactory.EP_NAME)
-        .registerExtension(new PsiClassReferenceTypePointerFactory(), application);
+
+      final var applicationArea = application.getExtensionArea();
+      if (!applicationArea.hasExtensionPoint(ClassTypePointerFactory.EP_NAME)) {
+        CoreApplicationEnvironment.registerApplicationExtensionPoint(
+          ClassTypePointerFactory.EP_NAME,
+          ClassTypePointerFactory.class
+        );
+        applicationArea
+          .getExtensionPoint(ClassTypePointerFactory.EP_NAME)
+          .registerExtension(new PsiClassReferenceTypePointerFactory(), application);
+      }
+    }
+
+    @Override
+    public void registerProjectExtensionPoints(MockProject project) {
+      AnalysisHandlerExtension.Companion.registerExtensionPoint(project);
+      PluginStructureProvider.INSTANCE.registerProjectExtensionPoints(project, PLUGIN_RELATIVE_PATH);
+    }
+
+    @Override
+    public void registerProjectServices(MockProject project) {
+      PluginStructureProvider.INSTANCE.registerProjectServices(project, PLUGIN_RELATIVE_PATH);
+      PluginStructureProvider.INSTANCE.registerProjectListeners(project, PLUGIN_RELATIVE_PATH);
+    }
+
+    @Override
+    public void registerProjectModelServices(MockProject project, Disposable disposable) {
+      project.registerService(Fe10AnalysisFacade.class, new CliFe10AnalysisFacade());
+      AnalysisHandlerExtension.Companion.registerExtension(project, new KaFe10AnalysisHandlerExtension());
     }
   }
-
-  public void registerProjectExtensionPoints(MockProject project) {
-    AnalysisHandlerExtension.Companion.registerExtensionPoint(project);
-    PluginStructureProvider.INSTANCE.registerProjectExtensionPoints(project, PLUGIN_RELATIVE_PATH);
-  }
-
-  public void registerProjectServices(MockProject project) {
-    PluginStructureProvider.INSTANCE.registerProjectServices(project, PLUGIN_RELATIVE_PATH);
-    PluginStructureProvider.INSTANCE.registerProjectListeners(project, PLUGIN_RELATIVE_PATH);
-  }
-
-  public void registerProjectModelServices(MockProject project, Disposable disposable) {
-    project.registerService(Fe10AnalysisFacade.class, new CliFe10AnalysisFacade());
-    AnalysisHandlerExtension.Companion.registerExtension(project, new KaFe10AnalysisHandlerExtension());
-  }
 }
-
