@@ -20,9 +20,11 @@
 package org.sonarsource.kotlin.api.sensors
 
 import com.intellij.openapi.util.Disposer
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.diagnostics.Diagnostic
+import org.jetbrains.kotlin.parsing.parseBoolean
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.diagnostics.MutableDiagnosticsWithSuppression
@@ -32,22 +34,13 @@ import org.sonar.api.batch.sensor.SensorContext
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.checks.InputFileContextImpl
-import org.sonarsource.kotlin.api.common.COMPILER_THREAD_COUNT_PROPERTY
-import org.sonarsource.kotlin.api.common.DEFAULT_KOTLIN_LANGUAGE_VERSION
-import org.sonarsource.kotlin.api.common.FAIL_FAST_PROPERTY_NAME
-import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_VERSION
-import org.sonarsource.kotlin.api.common.KOTLIN_REPOSITORY_KEY
-import org.sonarsource.kotlin.api.common.SONAR_ANDROID_DETECTED
-import org.sonarsource.kotlin.api.common.SONAR_JAVA_BINARIES
-import org.sonarsource.kotlin.api.common.SONAR_JAVA_LIBRARIES
-import org.sonarsource.kotlin.api.common.measureDuration
-import org.sonarsource.kotlin.api.frontend.Environment
-import org.sonarsource.kotlin.api.frontend.KotlinSyntaxStructure
-import org.sonarsource.kotlin.api.frontend.KotlinTree
-import org.sonarsource.kotlin.api.frontend.ParseException
-import org.sonarsource.kotlin.api.frontend.RegexCache
+import org.sonarsource.kotlin.api.common.*
+import org.sonarsource.kotlin.api.frontend.*
 import org.sonarsource.kotlin.api.logging.debug
+import org.sonarsource.kotlin.api.logging.info
 import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
+import java.io.File
+import java.io.IOException
 
 private val EMPTY_FILE_CONTENT_PATTERN = Regex("""\s*+""")
 
@@ -64,7 +57,7 @@ abstract class AbstractKotlinSensorExecuteContext(
     }
 
     val environment: Environment by lazy {
-        environment(sensorContext, logger)
+        environment(sensorContext, logger, virtualFiles = virtualFiles)
     }
 
     val kotlinFiles: List<KotlinSyntaxStructure> by lazy {
@@ -80,6 +73,20 @@ abstract class AbstractKotlinSensorExecuteContext(
                 val parseException = toParseException("read", it, e)
                 logParsingError(it, parseException)
                 inputFileContext.reportAnalysisParseError(KOTLIN_REPOSITORY_KEY, it, parseException.position)
+                null
+            }
+        }
+    }
+
+    val virtualFiles: List<VirtualFile> by lazy {
+        inputFiles.mapNotNull {
+            try {
+                KotlinVirtualFile(
+                    KotlinFileSystem(),
+                    File(it.uri().path),
+                    it.contents(),
+                )
+            } catch (e: IOException) {
                 null
             }
         }
@@ -160,10 +167,16 @@ abstract class AbstractKotlinSensorExecuteContext(
 }
 
 
-fun environment(sensorContext: SensorContext, logger: Logger): Environment = Environment(
+fun environment(
+    sensorContext: SensorContext,
+    logger: Logger,
+    virtualFiles: List<VirtualFile> = emptyList())
+: Environment = Environment(
     sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
         sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
     determineKotlinLanguageVersion(sensorContext, logger),
+    useK2 = determineUseK2(sensorContext, logger),
+    virtualFiles = virtualFiles,
     numberOfThreads = determineNumberOfThreadsToUse(sensorContext, logger)
 )
 
@@ -197,6 +210,15 @@ private fun determineKotlinLanguageVersion(sensorContext: SensorContext, logger:
         }
     }.orElse(null) ?: DEFAULT_KOTLIN_LANGUAGE_VERSION)
         .also { logger.debug { "Using Kotlin ${it.versionString} to parse source code" } }
+
+private fun determineUseK2(sensorContext: SensorContext, logger: Logger) =
+    (sensorContext.config()[KOTLIN_K2].map { useK2 ->
+        useK2.toBoolean().also {
+            if (it) logger.debug { "Using Kotlin K2 compiler." }
+            else logger.debug { "Using Kotlin K1 compiler." }
+        }
+    }.orElse(null) ?: false)
+        .also { logger.debug { "Using Kotlin K1 compiler." } }
 
 private fun toParseException(action: String, inputFile: InputFile, cause: Throwable) =
     ParseException("Cannot $action '$inputFile': ${cause.message}", (cause as? ParseException)?.position, cause)

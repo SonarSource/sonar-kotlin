@@ -96,6 +96,7 @@ val javadocJar = tasks.javadocJar
 tasks.shadowJar {
     minimize {}
     // TODO do we need META-INF/*.kotlin_module ?
+    // include("META-INF/analysis-api/analysis-api-fir.xml")
     exclude("META-INF/native/**/*jansi*")
     exclude("org/jline/**")
     exclude("net/jpountz/**")
@@ -104,8 +105,8 @@ tasks.shadowJar {
 //    exclude("org/jetbrains/kotlin/codegen/*.class") // ?
 //    exclude("org/jetbrains/kotlin/backend/**") // ?
     dependencies {
-        exclude(dependency("org.jetbrains.kotlin:high-level-api-fir-for-ide"))
-        exclude(dependency("org.jetbrains.kotlin:low-level-api-fir-for-ide"))
+        // exclude(dependency("org.jetbrains.kotlin:high-level-api-fir-for-ide"))
+        // exclude(dependency("org.jetbrains.kotlin:low-level-api-fir-for-ide"))
     }
     doLast {
 //        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 52_500_000L, 53_000_000L)

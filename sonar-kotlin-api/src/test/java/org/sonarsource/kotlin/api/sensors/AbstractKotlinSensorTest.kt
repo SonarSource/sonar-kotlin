@@ -101,7 +101,7 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             every { config() } returns ConfigurationBridge(MapSettings())
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
@@ -121,7 +121,7 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         val expectedKotlinVersion = LanguageVersion.KOTLIN_1_3
 
@@ -141,7 +141,7 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
@@ -162,7 +162,7 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
@@ -180,7 +180,7 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             every { config() } returns ConfigurationBridge(MapSettings())
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
         assertThat(logTester.logs(Level.WARN)).isEmpty()
@@ -198,7 +198,7 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isEqualTo(42)
         assertThat(logTester.logs(Level.WARN)).isEmpty()
@@ -216,7 +216,7 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
         assertThat(logTester.logs(Level.WARN))
@@ -235,7 +235,7 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
         assertThat(logTester.logs(Level.WARN))

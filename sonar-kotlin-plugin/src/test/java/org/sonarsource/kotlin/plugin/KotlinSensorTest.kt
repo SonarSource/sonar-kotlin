@@ -261,7 +261,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         populateCacheWithExpectedEntries(listOf(inputFile), context)
         mockkStatic("org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContextKt")
         // TODO dispose
-        every { environment(any(), any()) } returns Environment(listOf("file1.kt"), LanguageVersion.LATEST_STABLE)
+        every { environment(any(), any(),) } returns Environment(listOf("file1.kt"), LanguageVersion.LATEST_STABLE)
         mockkStatic("org.sonarsource.kotlin.api.frontend.KotlinCoreEnvironmentToolsKt")
         every { analyzeAndGetBindingContext(any(), any()) } throws IOException("Boom!")
 
@@ -388,7 +388,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             every { config() } returns ConfigurationBridge(MapSettings())
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
@@ -408,7 +408,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         val expectedKotlinVersion = LanguageVersion.KOTLIN_1_3
 
@@ -428,7 +428,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
@@ -449,7 +449,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
@@ -467,7 +467,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             every { config() } returns ConfigurationBridge(MapSettings())
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
         assertThat(logTester.logs(Level.WARN)).isEmpty()
@@ -485,7 +485,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isEqualTo(42)
         assertThat(logTester.logs(Level.WARN)).isEmpty()
@@ -503,7 +503,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
         assertThat(logTester.logs(Level.WARN))
@@ -522,7 +522,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(sensorContext, LOG,)
 
         assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
         assertThat(logTester.logs(Level.WARN))

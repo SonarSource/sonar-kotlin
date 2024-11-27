@@ -51,8 +51,18 @@ public class WorkaroundForJarMinimization {
           org.jetbrains.kotlin.analysis.api.descriptors.references.ReadWriteAccessCheckerDescriptorsImpl.class,
           org.jetbrains.kotlin.analysis.api.descriptors.modification.KaFe10SourceModificationService.class,
           org.jetbrains.kotlin.analysis.api.fir.KaFirSession.class,
+          org.jetbrains.kotlin.analysis.low.level.api.fir.services.LLRealFirElementByPsiElementChooser.class,
+          org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.LLFirSessionInvalidationService.class,
+          org.jetbrains.kotlin.light.classes.symbol.SymbolKotlinAsJavaSupport.class,
+          org.jetbrains.kotlin.analysis.api.fir.KaFirSessionProvider.class,
+          org.jetbrains.kotlin.analysis.api.fir.modification.KaFirSourceModificationService.class,
+          org.jetbrains.kotlin.analysis.api.fir.references.KotlinFirReferenceContributor.class,
+          org.jetbrains.kotlin.analysis.api.fir.references.ReadWriteAccessCheckerFirImpl.class,
+          org.jetbrains.kotlin.analysis.api.standalone.base.declarations.KotlinStandaloneFirDirectInheritorsProvider.class,
+    org.jetbrains.kotlin.analysis.api.platform.projectStructure.KotlinSimpleGlobalSearchScopeMerger.class,
+    org.jetbrains.kotlin.resolve.jvm.diagnostics.DefaultErrorMessagesJvm.class,
 
-          /** Used to have proper named groups behavior in regular expressions */
+    /** Used to have proper named groups behavior in regular expressions */
           kotlin.internal.jdk8.JDK8PlatformImplementations.class
   );
 

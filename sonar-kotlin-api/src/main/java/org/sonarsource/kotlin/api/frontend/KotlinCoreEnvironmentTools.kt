@@ -22,6 +22,7 @@ package org.sonarsource.kotlin.api.frontend
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
+import com.intellij.openapi.vfs.VirtualFile
 import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISession
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
@@ -62,6 +63,7 @@ class Environment(
     kotlinLanguageVersion: LanguageVersion,
     javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8,
     val useK2: Boolean = false,
+    virtualFiles: List<VirtualFile> = emptyList(),
     numberOfThreads: Int? = null
 ) {
     val disposable = Disposer.newDisposable()
@@ -73,7 +75,9 @@ class Environment(
     var k2session: StandaloneAnalysisAPISession? = null
 
     init {
-        if (!useK2) {
+        if (useK2) {
+            k2session = createK2AnalysisSession(disposable, configuration, virtualFiles)
+        } else {
             configureK1AnalysisApiServices(env)
         }
     }

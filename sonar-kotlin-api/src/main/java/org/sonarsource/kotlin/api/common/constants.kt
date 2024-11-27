@@ -30,6 +30,7 @@ const val KOTLIN_LANGUAGE_NAME = "Kotlin"
 const val KOTLIN_FILE_SUFFIXES_KEY = "sonar.kotlin.file.suffixes"
 const val KOTLIN_FILE_SUFFIXES_DEFAULT_VALUE = ".kt,.kts"
 const val KOTLIN_LANGUAGE_VERSION = "sonar.kotlin.source.version"
+const val KOTLIN_K2 = "sonar.kotlin.compiler.k2"
 
 val DEFAULT_KOTLIN_LANGUAGE_VERSION = LanguageVersion.LATEST_STABLE
 const val FAIL_FAST_PROPERTY_NAME = "sonar.internal.analysis.failFast"
