@@ -20,6 +20,7 @@
 package org.sonarsource.kotlin.api.frontend
 
 import com.intellij.openapi.editor.Document
+import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.PsiFile
@@ -45,11 +46,10 @@ data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val
         fun of(content: String, environment: Environment, inputFile: InputFile): KotlinSyntaxStructure {
 
             val psiFile: KtFile = if (environment.k2session != null) {
-                // FIXME quick hack
+                val inputFilePath = FileUtil.toSystemIndependentName(inputFile.file().path)
                 environment.k2session!!.modulesWithFiles.values.first()
                     .find {
-                        // FIXME fails on Windows?
-                        it.virtualFile.path == inputFile.uri().path
+                        it.virtualFile.path == inputFilePath
                     } as KtFile
             } else
                 environment.ktPsiFactory.createFile(inputFile.uri().path, normalizeEol(content))
