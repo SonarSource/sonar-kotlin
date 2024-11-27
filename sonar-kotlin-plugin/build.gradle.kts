@@ -71,7 +71,7 @@ tasks.jar {
                 "Plugin-Homepage" to "https://redirect.sonarsource.com/plugins/kotlin.html",
                 "Plugin-IssueTrackerUrl" to "https://sonarsource.atlassian.net/browse/SONARKT",
                 "Plugin-Key" to "kotlin",
-                "Plugin-License" to "GNU LGPL 3",
+                "Plugin-License" to "SSALv1",
                 "Plugin-Name" to "Kotlin Code Quality and Security",
                 "Plugin-Organization" to "SonarSource",
                 "Plugin-OrganizationUrl" to "https://www.sonarsource.com",
