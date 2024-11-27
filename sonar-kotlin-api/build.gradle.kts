@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.staxmate)
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
+    implementation("com.github.ben-manes.caffeine:caffeine:2.9.3")
 
     testImplementation(testLibs.junit.jupiter)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

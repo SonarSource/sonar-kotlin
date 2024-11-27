@@ -21,21 +21,142 @@ package org.sonarsource.kotlin.api.frontend
 
 import com.intellij.openapi.util.Disposer
 import com.intellij.psi.util.descendantsOfType
+import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
+import org.jetbrains.kotlin.analysis.api.diagnostics.KaSeverity
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
-import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.diagnostics.Severity
+import org.jetbrains.kotlin.psi.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.File
+
+private const val TYPE_RESOLUTION_SAMPLE = """
+package org.example
+
+class Cat {
+    fun purr() {
+        println("Purr purr")
+    }
+}
+
+fun petAnimal(animal: Any) {
+    val isCat = animal is Cat
+    if (isCat) {
+        animal.purr() // doesn't work in 1.9
+    }
+}
+
+fun main() {
+    val kitty = Cat()
+    petAnimal(kitty)
+} """
 
 class K2Test {
 
     @Test
-    fun test() {
+    fun `test with Kotlin 1_9 resolves to Any`() {
+        analyzeContent(LanguageVersion.KOTLIN_1_9, TYPE_RESOLUTION_SAMPLE) {
+            org.jetbrains.kotlin.analysis.api.analyze(this) {
+                val type = ((((declarations[1] as KtNamedFunction).bodyBlockExpression
+                    ?.statements!![1] as KtIfExpression).then as KtBlockExpression)
+                    .statements[0] as KtDotQualifiedExpression)
+                    .receiverExpression.expressionType
+                assertThat(type?.isAnyType).isTrue()
+            }
+        }
+    }
+
+    @Test
+    fun `test with Kotlin 2+ resolves to correct type Cat`() {
+        analyzeContent(LanguageVersion.LATEST_STABLE, TYPE_RESOLUTION_SAMPLE) {
+            org.jetbrains.kotlin.analysis.api.analyze(this) {
+                val type = ((((declarations[1] as KtNamedFunction).bodyBlockExpression
+                    ?.statements!![1] as KtIfExpression).then as KtBlockExpression)
+                    .statements[0] as KtDotQualifiedExpression)
+                    .receiverExpression.expressionType
+                assertThat(type?.symbol?.classId?.asFqNameString()).isEqualTo("org.example.Cat")
+            }
+        }
+    }
+
+    @Test
+    fun `test with Kotlin 1_7+ non-exhaustive 'when' is an Error`() {
+        analyzeContent(LanguageVersion.LATEST_STABLE, """
+                        fun f(s: String){
+                            when(s.isEmpty()) {
+                                true -> println(s)
+                            }
+                        }
+                    """
+        ) {
+            org.jetbrains.kotlin.analysis.api.analyze(this) {
+                assertThat(collectDiagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS)
+                    .first().severity).isEqualTo(KaSeverity.ERROR)
+            }
+        }
+    }
+
+    @Test
+    fun `test with Kotlin 1_6 non-exhaustive 'when' is a Warning`() {
+        analyzeContent(LanguageVersion.KOTLIN_1_6, """
+                        fun f(s: String){
+                            when(s.isEmpty()) {
+                                true -> println(s)
+                            }
+                        }
+                    """
+        ) {
+            org.jetbrains.kotlin.analysis.api.analyze(this) {
+                assertThat(collectDiagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS)
+                    .first().severity).isEqualTo(KaSeverity.WARNING)
+            }
+        }
+    }
+
+    @Test
+    fun `test with Kotlin 1_5 non-exhaustive 'when' is a Warning as 1_5 API is unsupported`() {
+        analyzeContent(LanguageVersion.KOTLIN_1_5, """
+                        fun f(s: String){
+                            when(s.isEmpty()) {
+                                true -> println(s)
+                            }
+                        }
+                    """
+        ) {
+            org.jetbrains.kotlin.analysis.api.analyze(this) {
+                assertThat(collectDiagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS)
+                    .first().severity).isEqualTo(KaSeverity.WARNING)
+            }
+        }
+    }
+
+    @Test
+    fun `test Kotlin 1_4 API is unsupported`() {
+        analyzeContent(LanguageVersion.KOTLIN_1_4, """
+                        sealed interface MyInterface
+                    """
+        ) {
+            org.jetbrains.kotlin.analysis.api.analyze(this) {
+                assertThat(collectDiagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS))
+                    .isEmpty()
+            }
+        }
+    }
+
+    private fun analyzeContent(
+        version: LanguageVersion,
+        content: String,
+        assertion: KtFile.() -> Unit
+    ) {
         val disposable = Disposer.newDisposable()
         val compilerConfiguration = compilerConfiguration(
             System.getProperty("java.class.path").split(File.pathSeparatorChar),
-            LanguageVersion.LATEST_STABLE,
+            version,
             JvmTarget.JVM_1_8,
             0
         )
@@ -44,19 +165,14 @@ class K2Test {
             compilerConfiguration,
             listOf(
                 KotlinVirtualFile(
-                    KotlinFileSystem(), File("/fake.kt"), """
-                    fun main() {
-                      return 0
-                    }
-                    """.trimIndent()
+                    KotlinFileSystem(),
+                    File("/fake.kt"), content.trimIndent(),
                 )
             ),
         )
         val ktFile: KtFile = analysisSession.modulesWithFiles.entries.first().value[0] as KtFile
         org.jetbrains.kotlin.analysis.api.analyze(ktFile) {
-            ktFile.descendantsOfType<KtExpression>().forEach {
-                println(it.expressionType)
-            }
+            ktFile.assertion()
         }
         Disposer.dispose(disposable)
     }

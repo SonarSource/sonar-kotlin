@@ -32,6 +32,7 @@ import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSourceModule
 import org.jetbrains.kotlin.cli.common.CliModuleVisibilityManagerImpl
 import org.jetbrains.kotlin.cli.jvm.config.jvmClasspathRoots
+import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.load.kotlin.ModuleVisibilityManager
@@ -54,13 +55,15 @@ fun createK2AnalysisSession(
         // https://github.com/JetBrains/kotlin/blob/a9ff22693479cabd201909a06e6764c00eddbf7b/analysis/analysis-api-fe10/tests/org/jetbrains/kotlin/analysis/api/fe10/test/configurator/AnalysisApiFe10TestServiceRegistrar.kt#L49
         registerProjectService(ModuleVisibilityManager::class.java, CliModuleVisibilityManagerImpl(enabled = true))
 
-        // TODO language version, jvm target, etc
         val platform = JvmPlatforms.defaultJvmPlatform
         buildKtModuleProvider {
             this.platform = platform
             addModule(buildKtSourceModule {
                 this.platform = platform
                 moduleName = "module"
+                compilerConfiguration[CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS]?.let {
+                    languageVersionSettings = it
+                }
                 addSourceVirtualFiles(virtualFiles)
                 addRegularDependency(buildKtLibraryModule {
                     this.platform = platform
