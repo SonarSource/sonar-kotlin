@@ -4,18 +4,15 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.testapi
 
@@ -30,9 +27,9 @@ import org.sonarsource.kotlin.api.frontend.KotlinSyntaxStructure
 import org.sonarsource.kotlin.api.frontend.KotlinTree
 import org.sonarsource.kotlin.api.frontend.KotlinVirtualFile
 import org.sonarsource.kotlin.api.frontend.RegexCache
-import org.sonarsource.kotlin.api.frontend.bindingContext
 import org.sonarsource.kotlin.api.frontend.createK2AnalysisSession
 import java.io.File
+import org.sonarsource.kotlin.api.frontend.analyzeAndGetBindingContext
 
 fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile, doResolve: Boolean = true, providedDiagnostics: List<Diagnostic>? = null): KotlinTree {
     if (environment.useK2) {
@@ -50,9 +47,8 @@ fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile
 
     val (ktFile, document) = KotlinSyntaxStructure.of(content, environment, inputFile)
 
-    val bindingContext = if (!environment.useK2 && doResolve) bindingContext(
+    val bindingContext = if (!environment.useK2 && doResolve) analyzeAndGetBindingContext(
         environment.env,
-        environment.classpath,
         listOf(ktFile),
     ) else BindingContext.EMPTY
 

@@ -4,18 +4,15 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.api.frontend
 
@@ -61,10 +58,9 @@ class Environment(
     kotlinLanguageVersion: LanguageVersion,
     javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8,
     val useK2: Boolean = false,
-    numberOfThreads: Int? = null
 ) {
     val disposable = Disposer.newDisposable()
-    val configuration = compilerConfiguration(classpath, kotlinLanguageVersion, javaLanguageVersion, numberOfThreads)
+    val configuration = compilerConfiguration(classpath, kotlinLanguageVersion, javaLanguageVersion)
     // K1
     val env = kotlinCoreEnvironment(configuration, disposable)
     val ktPsiFactory: KtPsiFactory = KtPsiFactory(env.project, false)
@@ -96,18 +92,6 @@ fun kotlinCoreEnvironment(
         EnvironmentConfigFiles.JVM_CONFIG_FILES,
     )
 }
-
-// FIXME(Godin): remove?
-@Deprecated("")
-fun bindingContext(
-    environment: KotlinCoreEnvironment,
-    classpath: List<String>,
-    files: List<KtFile>,
-): BindingContext =
-//    if (classpath.isEmpty())
-//        BindingContext.EMPTY
-//    else
-        analyzeAndGetBindingContext(environment, files)
 
 fun analyzeAndGetBindingContext(
     env: KotlinCoreEnvironment,
@@ -160,9 +144,7 @@ fun compilerConfiguration(
     classpath: List<String>,
     languageVersion: LanguageVersion,
     jvmTarget: JvmTarget,
-    numberOfThreads: Int?,
 ): CompilerConfiguration {
-    val classpathFiles = classpath.map(::File)
     val versionSettings = LanguageVersionSettingsImpl(
         languageVersion,
         ApiVersion.createByLanguageVersion(languageVersion),
@@ -172,8 +154,20 @@ fun compilerConfiguration(
         put(CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS, versionSettings)
         put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
         put(JVMConfigurationKeys.JDK_HOME, File(System.getProperty("java.home")))
-        numberOfThreads?.let { put(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS, it) }
-        addJvmClasspathRoots(classpathFiles)
+        addJvmClasspathRoots(classpathRoots(classpath))
     }
 }
 
+/**
+ * Non-JAR files are filtered-out to avoid invocation of [com.intellij.openapi.diagnostic.Logger.warn] in
+ * [org.jetbrains.kotlin.cli.jvm.compiler.jarfs.FastJarHandler] and
+ * [com.intellij.openapi.vfs.impl.ArchiveHandler.getEntriesMap].
+ */
+private fun classpathRoots(classpath: List<String>): List<File> =
+    classpath.map(::File).filter { it.isDirectory || it.isJar() }
+
+private fun File.isJar(): Boolean =
+    this.isFile && inputStream().use {
+        val header = (it.read() shl 24) or (it.read() shl 16) or (it.read() shl 8) or it.read()
+        header == 0x504b0304
+    }

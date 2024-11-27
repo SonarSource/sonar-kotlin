@@ -145,3 +145,13 @@ See [this README in the utils](utils-kotlin/README.md).
 
 If you want a graphical output of ASTs, see [this README in the utils](utils-kotlin/README.md) for more info on how to convert an AST into a
 DOT format.
+
+# License
+
+Copyright 2018-2024 SonarSource.
+
+SonarQube analyzers released after November 29, 2024, including patch fixes for prior versions,
+are published under the [Sonar Source-Available License Version 1 (SSALv1)](LICENSE.txt).
+
+See individual files for details that specify the license applicable to each file.
+Files subject to the SSALv1 will be noted in their headers.

@@ -1,5 +1,5 @@
 {
-  "title": "Hashes should include an unpredictable salt",
+  "title": "Password hashing functions should use an unpredictable salt",
   "type": "VULNERABILITY",
   "code": {
     "impacts": {
@@ -35,6 +35,9 @@
     ],
     "PCI DSS 4.0": [
       "6.2.4"
+    ],
+    "STIG ASD_V5R3": [
+      "V-222542"
     ]
   },
   "quickfix": "unknown"

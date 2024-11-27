@@ -4,24 +4,20 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.externalreport.androidlint
 
 import com.google.gson.GsonBuilder
 import org.sonarsource.kotlin.externalreport.ExternalRule
-import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import org.sonarsource.kotlin.externalreport.common.Translator
 import java.io.IOException
 import java.nio.charset.StandardCharsets
@@ -91,19 +87,8 @@ private object AndroidLintDefinitionGenerator {
         }
         externalRules.sortBy { it.key }
 
-        val fallbackRule = ExternalRule(
-            key = FALLBACK_RULE_KEY,
-            name = "Android Lint Rule",
-            description = "This reporting may be triggered by a custom Android Lint rule or by a default Android Lint rule that has " +
-                "not yet been added to the Sonar Kotlin plugin.",
-            url = null,
-            tags = setOf("android"),
-            type = "CODE_SMELL",
-            constantDebtMinutes = 0,
-        )
-
         val gson = GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create()
-        return gson.toJson(externalRules + fallbackRule)
+        return gson.toJson(externalRules)
     }
 }
 

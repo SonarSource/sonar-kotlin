@@ -4,25 +4,21 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.api.sensors
 
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.*
-import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -40,12 +36,11 @@ import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.KotlinCheck
-import org.sonarsource.kotlin.api.common.COMPILER_THREAD_COUNT_PROPERTY
 import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_VERSION
 import org.sonarsource.kotlin.api.common.KotlinLanguage
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.KtChecksVisitor
 import org.sonarsource.kotlin.testapi.AbstractSensorTest
-import org.sonarsource.kotlin.visiting.KtChecksVisitor
 
 class AbstractKotlinSensorTest : AbstractSensorTest() {
 
@@ -172,77 +167,6 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             .contains("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
     }
 
-    @Test
-    fun `not setting the amount of threads to use explicitly will not set anything in the environment`() {
-        logTester.setLevel(Level.DEBUG)
-
-        val sensorContext = mockk<SensorContext> {
-            every { config() } returns ConfigurationBridge(MapSettings())
-        }
-
-        val environment = environment(sensorContext, LOG)
-
-        assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
-        assertThat(logTester.logs(Level.WARN)).isEmpty()
-        assertThat(logTester.logs(Level.DEBUG))
-            .contains("Using the default amount of threads")
-    }
-
-    @Test
-    fun `setting the amount of threads to use is reflected in the environment`() {
-        logTester.setLevel(Level.DEBUG)
-
-        val sensorContext = mockk<SensorContext> {
-            every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(COMPILER_THREAD_COUNT_PROPERTY, "42")
-            })
-        }
-
-        val environment = environment(sensorContext, LOG)
-
-        assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isEqualTo(42)
-        assertThat(logTester.logs(Level.WARN)).isEmpty()
-        assertThat(logTester.logs(Level.DEBUG))
-            .contains("Using 42 threads")
-    }
-
-    @Test
-    fun `setting the amount of threads to use to an invalid integer value produces warning`() {
-        logTester.setLevel(Level.DEBUG)
-
-        val sensorContext = mockk<SensorContext> {
-            every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(COMPILER_THREAD_COUNT_PROPERTY, "0")
-            })
-        }
-
-        val environment = environment(sensorContext, LOG)
-
-        assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
-        assertThat(logTester.logs(Level.WARN))
-            .containsExactly("Invalid amount of threads specified for $COMPILER_THREAD_COUNT_PROPERTY: '0'.")
-        assertThat(logTester.logs(Level.DEBUG))
-            .contains("Using the default amount of threads")
-    }
-
-    @Test
-    fun `setting the amount of threads to use to an invalid non-integer value produces warning`() {
-        logTester.setLevel(Level.DEBUG)
-
-        val sensorContext = mockk<SensorContext> {
-            every { config() } returns ConfigurationBridge(MapSettings().apply {
-                setProperty(COMPILER_THREAD_COUNT_PROPERTY, "foo")
-            })
-        }
-
-        val environment = environment(sensorContext, LOG)
-
-        assertThat(environment.configuration.get(CommonConfigurationKeys.PARALLEL_BACKEND_THREADS)).isNull()
-        assertThat(logTester.logs(Level.WARN))
-            .containsExactly("$COMPILER_THREAD_COUNT_PROPERTY needs to be set to an integer value. Could not interpret 'foo' as integer.")
-        assertThat(logTester.logs(Level.DEBUG))
-            .contains("Using the default amount of threads")
-    }
     private fun sensor() = DummyKotlinSensor(checkFactory("DummyKotlinCheck"), language(), listOf(DummyKotlinCheck::class.java))
 }
 

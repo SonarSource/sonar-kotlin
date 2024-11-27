@@ -6,10 +6,7 @@ import java.util.jar.JarInputStream
 plugins {
     id("com.gradleup.shadow") version "8.3.1"
     kotlin("jvm")
-}
-
-repositories {
-    maven { url = uri("https://repo.gradle.org/gradle/libs-releases") }
+    id("jacoco-report-aggregation")
 }
 
 dependencies {
@@ -42,6 +39,7 @@ dependencies {
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
 
     testImplementation(project(":sonar-kotlin-test-api"))
+    jacocoAggregation(project(":sonar-kotlin-test-api"))
 }
 
 val test: Test by tasks
@@ -153,4 +151,9 @@ fun checkJarEntriesPathUniqueness(file: File) {
     if (duplicatedNames.isNotEmpty()) {
         throw GradleException("Duplicated entries in the jar: '${file.path}': ${duplicatedNames.joinToString(", ")}")
     }
+}
+
+tasks.check {
+    // Generate aggregate coverage report
+    dependsOn(tasks.named<JacocoReport>("testCodeCoverageReport"))
 }
