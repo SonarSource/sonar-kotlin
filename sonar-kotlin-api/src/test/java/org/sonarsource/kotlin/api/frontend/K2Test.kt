@@ -34,7 +34,6 @@ class K2Test {
             System.getProperty("java.class.path").split(File.pathSeparatorChar),
             LanguageVersion.LATEST_STABLE,
             JvmTarget.JVM_1_8,
-            0
         )
         val analysisSession = createK2AnalysisSession(
             disposable,
