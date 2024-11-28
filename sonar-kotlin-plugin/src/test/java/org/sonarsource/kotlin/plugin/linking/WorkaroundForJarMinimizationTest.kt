@@ -19,12 +19,13 @@
  */
 package org.sonarsource.kotlin.plugin.linking
 
+import com.github.benmanes.caffeine.cache.WorkaroundForJarMinimization
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 internal class WorkaroundForJarMinimizationTest {
     @Test
     fun minimizing_class_count() {
-        assertThat(WorkaroundForJarMinimization.CLASSES_TO_KEEP_WHEN_MINIMIZING_JAR).hasSize(28)
+        assertThat(WorkaroundForJarMinimization.CLASSES_TO_KEEP_WHEN_MINIMIZING_JAR).hasSize(33)
     }
 }

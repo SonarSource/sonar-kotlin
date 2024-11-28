@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package org.sonarsource.kotlin.plugin.linking;
+package com.github.benmanes.caffeine.cache;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class WorkaroundForJarMinimization {
 
   /** Without this declaration JAR minimization can't detect that these classes should not be removed. */
   @SuppressWarnings("unused")
-  static final List<Class<?>> CLASSES_TO_KEEP_WHEN_MINIMIZING_JAR = List.of(
+  public static final List<Class<?>> CLASSES_TO_KEEP_WHEN_MINIMIZING_JAR = List.of(
           /** META-INF/services/org.jetbrains.kotlin.builtins.BuiltInsLoader */
           org.jetbrains.kotlin.serialization.deserialization.builtins.BuiltInsLoaderImpl.class,
           /** META-INF/services/org.jetbrains.kotlin.util.ModuleVisibilityHelper */
@@ -61,6 +61,12 @@ public class WorkaroundForJarMinimization {
           org.jetbrains.kotlin.analysis.api.standalone.base.declarations.KotlinStandaloneFirDirectInheritorsProvider.class,
     org.jetbrains.kotlin.analysis.api.platform.projectStructure.KotlinSimpleGlobalSearchScopeMerger.class,
     org.jetbrains.kotlin.resolve.jvm.diagnostics.DefaultErrorMessagesJvm.class,
+    org.jetbrains.kotlin.js.resolve.diagnostics.DefaultErrorMessagesJs.class,
+    org.jetbrains.kotlin.resolve.konan.diagnostics.DefaultErrorMessagesNative.class,
+    org.jetbrains.kotlin.wasm.resolve.diagnostics.DefaultErrorMessagesWasm.class,
+
+    com.github.benmanes.caffeine.cache.SI.class,
+    com.github.benmanes.caffeine.cache.PW.class,
 
     /** Used to have proper named groups behavior in regular expressions */
           kotlin.internal.jdk8.JDK8PlatformImplementations.class

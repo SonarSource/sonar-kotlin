@@ -21,6 +21,7 @@ package org.sonarsource.kotlin.checks
 
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.testapi.KotlinVerifier
+import java.nio.file.Paths
 
 internal class VoidShouldBeUnitCheckTest : CheckTestWithNoSemantics(
     VoidShouldBeUnitCheck(), shouldReport = true, sampleFileK2 = "VoidShouldBeUnitCheckK2Sample.kt" ) {
@@ -30,6 +31,18 @@ internal class VoidShouldBeUnitCheckTest : CheckTestWithNoSemantics(
         KotlinVerifier(check) {
             this.fileName = sampleFileSemantics ?: "${checkName}SampleCustomVoid.kt"
         }.verify()
+    }
+
+    @Test
+    fun `ruling`() {
+        KotlinVerifier(check) {
+
+            // sources/kotlin/corda/testing/test-utils/src/test/kotlin/net/corda/testing/internal/RigorousMockTest.kt
+            this.baseDir = Paths.get("..", "its", "sources", "kotlin", "corda", "testing", "test-utils",
+                "src", "test", "kotlin", "net", "corda", "testing", "internal")
+            this.fileName = "RigorousMockTest.kt"
+            useK2 = true
+        }.verifyNoIssue()
     }
 
 }

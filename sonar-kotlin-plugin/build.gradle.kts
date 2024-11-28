@@ -30,6 +30,7 @@ dependencies {
     implementation(project(":sonar-kotlin-gradle"))
     implementation(project(":sonar-kotlin-surefire"))
     implementation(project(":sonar-kotlin-checks"))
+    implementation("com.github.ben-manes.caffeine:caffeine:2.9.3")
 
     testImplementation(testLibs.junit.jupiter)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -105,6 +106,7 @@ tasks.shadowJar {
 //    exclude("org/jetbrains/kotlin/codegen/*.class") // ?
 //    exclude("org/jetbrains/kotlin/backend/**") // ?
     dependencies {
+        // include(dependency("com.github.ben-manes.caffeine:caffeine"))
         // exclude(dependency("org.jetbrains.kotlin:high-level-api-fir-for-ide"))
         // exclude(dependency("org.jetbrains.kotlin:low-level-api-fir-for-ide"))
     }
