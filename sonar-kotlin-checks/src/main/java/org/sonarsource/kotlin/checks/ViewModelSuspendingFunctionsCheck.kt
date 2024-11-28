@@ -28,6 +28,7 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.suspendModifier
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6313")
 class ViewModelSuspendingFunctionsCheck : AbstractCheck() {
 

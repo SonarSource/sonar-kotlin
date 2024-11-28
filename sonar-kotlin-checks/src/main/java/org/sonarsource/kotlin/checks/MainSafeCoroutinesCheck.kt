@@ -67,6 +67,7 @@ val BLOCKING_ANNOTATIONS = setOf(
     "javax.net.ssl.SSLException",
 )
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6307")
 class MainSafeCoroutinesCheck : AbstractCheck() {
 

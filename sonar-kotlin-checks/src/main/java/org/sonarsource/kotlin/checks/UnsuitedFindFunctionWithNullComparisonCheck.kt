@@ -42,6 +42,7 @@ import org.sonarsource.kotlin.api.reporting.message
  *
  * The rule suggests to replace the pattern with `any(predicate)`, `none(predicate)`, and `contains(element)` depending on the case.
  */
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6528")
 class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
 

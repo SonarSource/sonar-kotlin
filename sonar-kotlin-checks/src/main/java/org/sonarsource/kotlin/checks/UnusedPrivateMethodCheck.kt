@@ -46,6 +46,7 @@ private val COMMON_ANNOTATIONS = listOf(
     "kotlin.jvm.Throws",
 )
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S1144")
 class UnusedPrivateMethodCheck : AbstractCheck() {
 

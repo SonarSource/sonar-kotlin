@@ -33,6 +33,7 @@ private val ANDROIDX_AUTH = FunMatcher(qualifier = "androidx.biometric.Biometric
 
 private const val MESSAGE = """Make sure performing a biometric authentication without a "CryptoObject" is safe here."""
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6293")
 class BiometricAuthWithoutCryptoCheck : CallAbstractCheck() {
     override val functionsToVisit = setOf(ANDROID_HARDWARE_AUTH, ANDROIDX_AUTH)

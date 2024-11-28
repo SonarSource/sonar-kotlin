@@ -22,6 +22,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6530")
 class ReasonableTypeCastsCheck : AbstractCheck() {
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {

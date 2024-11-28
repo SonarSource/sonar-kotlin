@@ -27,6 +27,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Unused coroutines Flow."
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6314")
 class FinalFlowOperationCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(FunMatcher(returnType = COROUTINES_FLOW))

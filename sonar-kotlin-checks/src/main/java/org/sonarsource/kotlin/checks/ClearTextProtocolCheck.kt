@@ -60,6 +60,7 @@ private val ANDROID_SET_MIXED_CONTENT_MODE = FunMatcher(definingSupertype = "and
 
 private fun msg(insecure: String, replaceWith: String) = "Using $insecure is insecure. Use $replaceWith instead."
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S5332")
 class ClearTextProtocolCheck : CallAbstractCheck() {
 

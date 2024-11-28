@@ -35,6 +35,7 @@ private val STICKY_BROADCAST_NAMES = setOf(
     "sendStickyOrderedBroadcastAsUser",
 )
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S5320")
 class AndroidBroadcastingCheck : CallAbstractCheck() {
 

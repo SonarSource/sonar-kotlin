@@ -37,6 +37,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 private const val MESSAGE = "Change this seed value to something unpredictable, or remove the seed."
 private const val SECURE_RANDOM = "java.security.SecureRandom"
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S4347")
 class UnpredictableSecureRandomSaltCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(

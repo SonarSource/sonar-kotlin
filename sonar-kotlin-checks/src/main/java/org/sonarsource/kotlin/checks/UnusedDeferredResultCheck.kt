@@ -24,6 +24,7 @@ import org.sonarsource.kotlin.api.checks.DEFERRED_FQN
 import org.sonarsource.kotlin.api.checks.expressionTypeFqn
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6315")
 class UnusedDeferredResultCheck : AbstractCheck() {
 

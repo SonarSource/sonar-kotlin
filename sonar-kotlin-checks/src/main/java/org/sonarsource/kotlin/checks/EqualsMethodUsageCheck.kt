@@ -33,6 +33,7 @@ import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6519")
 class EqualsMethodUsageCheck : CallAbstractCheck() {
     override val functionsToVisit = setOf(FunMatcher { name = EQUALS_METHOD_NAME; withArguments(ANY_TYPE) })

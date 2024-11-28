@@ -26,6 +26,7 @@ import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6518")
 class IndexedAccessCheck : CallAbstractCheck() {
 

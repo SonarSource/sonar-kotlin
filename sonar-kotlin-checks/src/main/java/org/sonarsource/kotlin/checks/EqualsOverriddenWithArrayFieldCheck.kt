@@ -41,6 +41,7 @@ private val EXPECTED_OVERRIDES = listOf(
     }
 )
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6218")
 class EqualsOverriddenWithArrayFieldCheck : AbstractCheck() {
     override fun visitClass(klass: KtClass, context: KotlinFileContext) {

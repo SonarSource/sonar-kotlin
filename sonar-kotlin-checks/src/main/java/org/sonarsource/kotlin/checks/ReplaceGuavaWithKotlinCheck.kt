@@ -72,6 +72,7 @@ private val REPLACEMENT_TYPES = mapOf(
     GUAVA_OPTIONAL to """Use "java.util.Optional" instead.""",
 )
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S4738")
 class ReplaceGuavaWithKotlinCheck : CallAbstractCheck() {
 
