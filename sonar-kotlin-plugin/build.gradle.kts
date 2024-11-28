@@ -96,8 +96,14 @@ tasks.shadowJar {
     exclude("META-INF/native/**/*jansi*")
     exclude("org/jline/**")
     exclude("net/jpountz/**")
+    dependencies {
+        // include only K1, and exclude K2 for the time being
+        exclude(dependency("org.jetbrains.kotlin:analysis-api-k2-for-ide"))
+        exclude(dependency("org.jetbrains.kotlin:low-level-api-fir-for-ide"))
+        exclude(dependency("org.jetbrains.kotlin:symbol-light-classes-for-ide"))
+    }
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 37_500_000L, 38_000_000L)
+        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 45_800_000L, 46_200_000L)
     }
 }
 

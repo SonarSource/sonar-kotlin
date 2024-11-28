@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISession
 import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -52,10 +52,20 @@ class Environment(
     val classpath: List<String>,
     kotlinLanguageVersion: LanguageVersion,
     javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8,
+    val useK2: Boolean = false,
 ) {
     val configuration = compilerConfiguration(classpath, kotlinLanguageVersion, javaLanguageVersion)
+    // K1
     val env = kotlinCoreEnvironment(configuration, disposable)
     val ktPsiFactory: KtPsiFactory = KtPsiFactory(env.project, false)
+    // K2
+    var k2session: StandaloneAnalysisAPISession? = null
+
+    init {
+        if (!useK2) {
+            configureK1AnalysisApiServices(env)
+        }
+    }
 }
 
 fun kotlinCoreEnvironment(
