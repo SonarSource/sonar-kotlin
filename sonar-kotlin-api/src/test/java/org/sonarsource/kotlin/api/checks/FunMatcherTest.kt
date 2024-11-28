@@ -39,12 +39,14 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 class FunMatcherTest {
+    private val disposable = Disposer.newDisposable()
 
-    /**
-     * Disposed in [afterEach]
-     */
-    val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
+    @AfterEach
+    fun dispose() {
+        Disposer.dispose(disposable)
+    }
 
+    val environment = Environment(disposable, listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
     val path = Paths.get("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
     val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin.kt")
@@ -614,11 +616,6 @@ class FunMatcherTest {
                     .isEqualTo(expected[index])
             }
         }
-    }
-
-    @AfterEach
-    fun afterEach() {
-        Disposer.dispose(environment.disposable)
     }
 
 }

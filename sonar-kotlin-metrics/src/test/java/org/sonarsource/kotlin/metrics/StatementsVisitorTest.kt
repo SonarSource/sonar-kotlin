@@ -58,11 +58,10 @@ internal class StatementsVisitorTest {
 }
 
 private fun statements(content: String): Int {
-    val environment = /* Disposed below */ Environment(emptyList(), LanguageVersion.LATEST_STABLE)
-    val ktFile = environment.ktPsiFactory.createFile(content)
+    val disposable = Disposer.newDisposable()
+    val ktFile = Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE).ktPsiFactory.createFile(content)
     val statementsVisitor = StatementsVisitor()
     ktFile.accept(statementsVisitor)
-    val result = statementsVisitor.statements
-    Disposer.dispose(environment.disposable)
-    return result
+    Disposer.dispose(disposable)
+    return statementsVisitor.statements
 }

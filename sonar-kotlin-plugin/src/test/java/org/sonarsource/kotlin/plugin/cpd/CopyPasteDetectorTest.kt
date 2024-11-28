@@ -55,10 +55,12 @@ private val content = """
 
 class CopyPasteDetectorTest {
 
-    /**
-     * Disposed in [afterEach]
-     */
-    private val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
+    private val disposable = Disposer.newDisposable()
+
+    @AfterEach
+    fun dispose() {
+        Disposer.dispose(disposable)
+    }
 
     @JvmField
     @TempDir
@@ -77,7 +79,7 @@ class CopyPasteDetectorTest {
             .setContents(content)
             .build()
 
-        val root = kotlinTreeOf(content, environment, inputFile)
+        val root = kotlinTreeOf(content, Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE), inputFile)
         val ctx = InputFileContextImpl(sensorContext, inputFile, false)
         CopyPasteDetector().scan(ctx, root)
 
@@ -128,7 +130,7 @@ class CopyPasteDetectorTest {
             .setContents(content)
             .build()
 
-        val root = kotlinTreeOf(content, environment, inputFile)
+        val root = kotlinTreeOf(content, Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE), inputFile)
         val ctx = InputFileContextImpl(sensorContext, inputFile, false)
 
         val readCache = DummyReadCache(emptyMap())
@@ -160,7 +162,7 @@ class CopyPasteDetectorTest {
             .setContents(content)
             .build()
 
-        val root = kotlinTreeOf(content, environment, inputFile)
+        val root = kotlinTreeOf(content, Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE), inputFile)
         val ctx = InputFileContextImpl(sensorContext, inputFile, false)
 
         val readCache = DummyReadCache(emptyMap())
@@ -178,11 +180,6 @@ class CopyPasteDetectorTest {
         Assertions.assertThat(logs)
             .hasSize(1)
             .containsExactly("No CPD tokens cached for next analysis of input file moduleKey:dummy.kt.")
-    }
-
-    @AfterEach
-    fun afterEach() {
-        Disposer.dispose(environment.disposable)
     }
 }
 

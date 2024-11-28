@@ -41,12 +41,14 @@ import kotlin.io.path.createTempFile
 import kotlin.io.path.name
 
 internal class MetricVisitorTest {
+    private val disposable = Disposer.newDisposable()
 
-    /**
-     * Disposed in [afterEach]
-     */
-    private val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
+    @AfterEach
+    fun dispose() {
+        Disposer.dispose(disposable)
+    }
 
+    private val environment = Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE)
     private lateinit var mockNoSonarFilter: NoSonarFilter
     private lateinit var visitor: MetricVisitor
     private lateinit var sensorContext: SensorContextTester
@@ -345,11 +347,6 @@ internal class MetricVisitorTest {
             .initMetadata(code).build()
         val ctx = InputFileContextImpl(sensorContext, inputFile, false)
         visitor.scan(ctx, kotlinTreeOf(code, environment, inputFile))
-    }
-
-    @AfterEach
-    fun afterEach() {
-        Disposer.dispose(environment.disposable)
     }
 
 }

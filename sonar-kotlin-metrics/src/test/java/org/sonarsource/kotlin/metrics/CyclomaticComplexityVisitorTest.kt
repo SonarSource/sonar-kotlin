@@ -140,21 +140,19 @@ internal class CyclomaticComplexityVisitorTest {
         Assertions.assertThat(trees).isEmpty()
     }
 
+    private val disposable = Disposer.newDisposable()
+
+    @AfterEach
+    fun dispose() {
+        Disposer.dispose(disposable)
+    }
+
     private fun getComplexityTrees(content: String): List<PsiElement> {
+        val env = Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE)
         val ktFile = env.ktPsiFactory.createFile(content)
         val cyclomaticComplexityVisitor = CyclomaticComplexityVisitor()
         ktFile.accept(cyclomaticComplexityVisitor)
         return cyclomaticComplexityVisitor.complexityTrees()
-    }
-
-    /**
-     * Disposed in [afterEach]
-     */
-    private val env = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
-
-    @AfterEach
-    fun afterEach() {
-        Disposer.dispose(env.disposable)
     }
 
 }

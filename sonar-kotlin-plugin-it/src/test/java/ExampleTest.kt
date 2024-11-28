@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.plugin;
 
+import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.LanguageVersion;
 import org.junit.jupiter.api.Test;
 import org.sonarsource.kotlin.api.frontend.Environment;
@@ -25,11 +26,13 @@ internal class ExampleTest {
 
     @Test
     fun test() {
-        val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE, useK2 = false)
+        val disposable = Disposer.newDisposable()
+        val environment = Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE, useK2 = false)
         val ktFile = environment.ktPsiFactory.createFile("example.kt", "")
         analyzeAndGetBindingContext(environment.env, listOf(ktFile))
 //        analyze(ktFile) {
 //        }
+        Disposer.dispose(disposable)
     }
 
 }

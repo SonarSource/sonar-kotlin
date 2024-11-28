@@ -47,19 +47,18 @@ import org.jetbrains.kotlin.util.slicedMap.WritableSlice
 import java.io.File
 
 /**
- * DO NOT FORGET TO CALL
- *
- * ```
- * Disposer.dispose(environment.disposable)
- * ```
+ * @param disposable
+ * manages objects requiring cleanup,
+ * can be created using [Disposer.newDisposable] and cleanup must be done by [Disposer.dispose].
+ * See [documentation](https://jetbrains.org/intellij/sdk/docs/basics/disposers.html) for more details.
  */
 class Environment(
+    val disposable: Disposable,
     val classpath: List<String>,
     kotlinLanguageVersion: LanguageVersion,
     javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8,
     val useK2: Boolean = false,
 ) {
-    val disposable = Disposer.newDisposable()
     val configuration = compilerConfiguration(classpath, kotlinLanguageVersion, javaLanguageVersion)
     // K1
     val env = kotlinCoreEnvironment(configuration, disposable)

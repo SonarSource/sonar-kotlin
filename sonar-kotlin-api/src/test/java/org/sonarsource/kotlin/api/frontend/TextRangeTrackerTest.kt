@@ -73,6 +73,13 @@ private class TextRangeTrackerAssert(actual: TextRangeTracker) : ObjectAssert<Te
 private fun assertThat(actual: TextRangeTracker) = TextRangeTrackerAssert(actual)
 
 internal class TextRangeTrackerTest {
+    private val disposer = Disposer.newDisposable()
+
+    @AfterEach
+    fun dispose() {
+        Disposer.dispose(disposer)
+    }
+
     @Test
     fun `single-quoted with new line`() {
         assertThat(textRangeTrackerOf(""""hello\nworld"""")).hasRangesAtIndexes(
@@ -132,7 +139,7 @@ internal class TextRangeTrackerTest {
             val x = 
             $regex
         """.trimIndent(),
-            environment,
+            environment = Environment(disposer, emptyList(), LanguageVersion.LATEST_STABLE),
             inputFile = DummyInputFile()
         )
 
@@ -140,16 +147,6 @@ internal class TextRangeTrackerTest {
             .flatMap { it.entries.asSequence() }
 
         return TextRangeTracker.of(entries, DummyInputFile(), tree.document)
-    }
-
-    /**
-     * Disposed in [afterEach]
-     */
-    private val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
-
-    @AfterEach
-    fun afterEach() {
-        Disposer.dispose(environment.disposable)
     }
 
 }

@@ -23,6 +23,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.testapi.kotlinTreeOf
@@ -30,9 +31,16 @@ import java.nio.charset.StandardCharsets
 
 class KotlinTreeTest {
 
+  private val disposable = Disposer.newDisposable()
+
+  @AfterEach
+  fun dispose() {
+    Disposer.dispose(disposable)
+  }
+
   @Test
   fun testCreateKotlinTree() {
-    val environment = /* Disposed below */ Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
+    val environment = Environment(disposable, listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
     val path = Path.of("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
     val inputFile = TestInputFileBuilder("moduleKey",  "src/org/foo/kotlin.kt")
@@ -49,7 +57,5 @@ class KotlinTreeTest {
     val call = tree.bindingContext.get(BindingContext.CALL, ktCallExpression)
     val resolvedCall = tree.bindingContext.get(BindingContext.RESOLVED_CALL, call)
     assertThat(resolvedCall).isNotNull
-
-    Disposer.dispose(environment.disposable)
   }
 }

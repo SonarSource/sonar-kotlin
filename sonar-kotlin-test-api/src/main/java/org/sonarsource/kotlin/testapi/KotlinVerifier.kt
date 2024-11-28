@@ -70,7 +70,9 @@ class KotlinVerifier(private val check: AbstractCheck) {
         val filePath = baseDir.resolve(fileName)
         val isScriptFile = filePath.extension == "kts"
 
+        val disposable = Disposer.newDisposable()
         val environment = Environment(
+            disposable,
             classpath + deps,
             LanguageVersion.LATEST_STABLE,
             useK2 = useK2,
@@ -92,7 +94,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
         try {
             createVerifier(converter, filePath).verify()
         } finally {
-            Disposer.dispose(environment.disposable)
+            Disposer.dispose(disposable)
         }
     }
 

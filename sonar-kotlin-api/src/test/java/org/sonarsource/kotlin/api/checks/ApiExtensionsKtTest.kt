@@ -21,6 +21,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.ObjectAssert
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
+import io.mockk.impl.platform.Disposable
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
@@ -686,17 +687,20 @@ private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKt
 }
 
 private abstract class AbstractApiExtensionsKtTest {
-    /**
-     * Disposed in [afterEach]
-     */
-    private val environment = Environment(
-        listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(File.pathSeparatorChar),
-        LanguageVersion.LATEST_STABLE
-    )
+    private val disposable = Disposer.newDisposable()
+
+    @AfterEach
+    fun dispose() {
+        Disposer.dispose(disposable)
+    }
 
     fun parse(code: String) = kotlinTreeOf(
         code,
-        environment,
+        Environment(
+            disposable,
+            listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(File.pathSeparatorChar),
+            LanguageVersion.LATEST_STABLE
+        ),
         TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(code)
@@ -704,6 +708,11 @@ private abstract class AbstractApiExtensionsKtTest {
     )
 
     fun parseWithoutParsingExceptions(code: String): KtFile {
+        val environment = Environment(
+            disposable,
+            listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(File.pathSeparatorChar),
+            LanguageVersion.LATEST_STABLE
+        )
         val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(code)
@@ -711,10 +720,6 @@ private abstract class AbstractApiExtensionsKtTest {
         return environment.ktPsiFactory.createFile(inputFile.uri().path, code.replace("""\r\n?""".toRegex(), "\n"))
     }
 
-    @AfterEach
-    fun afterEach() {
-        Disposer.dispose(environment.disposable)
-    }
 }
 
 private class KtExpressionAssert(expression: KtExpression?) : ObjectAssert<KtExpression>(expression) {

@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.api.frontend
 
+import com.intellij.openapi.util.Disposer
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.PsiFile
@@ -33,7 +34,12 @@ import org.sonarsource.analyzer.commons.recognizers.LanguageFootprint
 
 object KotlinCodeVerifier {
 
-    private val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
+    /**
+     * TODO get rid of this static (introduced by https://github.com/SonarSource/sonar-kotlin/commit/4a9410053ca901fd73a0074770b9469eb3b14aa2):
+     *   for example maybe [org.jetbrains.kotlin.psi.KtPsiFactory.contextual] can be used instead?
+     */
+    private val disposable = Disposer.newDisposable()
+    private val environment = Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE)
     private val codeRecognizer = CodeRecognizer(0.9, KotlinFootprint)
 
     private val KDOC_TAGS = listOf(

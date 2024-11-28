@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import com.intellij.openapi.util.Disposer
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -68,6 +69,12 @@ private val LOG = LoggerFactory.getLogger(KotlinSensor::class.java)
 
 @ExperimentalTime
 internal class KotlinSensorTest : AbstractSensorTest() {
+    private val disposable = Disposer.newDisposable()
+
+    @AfterEach
+    fun dispose() {
+        Disposer.dispose(disposable)
+    }
 
     @AfterEach
     fun cleanupMocks() {
@@ -256,8 +263,8 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         context.fileSystem().add(inputFile)
         populateCacheWithExpectedEntries(listOf(inputFile), context)
         mockkStatic("org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContextKt")
-        // TODO dispose
-        every { environment(any(), any()) } returns Environment(
+        every { environment(any(), any(), any()) } returns Environment(
+            disposable,
             System.getProperty("java.class.path").split(File.pathSeparatorChar),
             LanguageVersion.LATEST_STABLE
         )
@@ -387,7 +394,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             every { config() } returns ConfigurationBridge(MapSettings())
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(disposable, sensorContext, LOG)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
@@ -407,7 +414,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(disposable, sensorContext, LOG)
 
         val expectedKotlinVersion = LanguageVersion.KOTLIN_1_3
 
@@ -427,7 +434,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(disposable, sensorContext, LOG)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
@@ -448,7 +455,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(disposable, sensorContext, LOG)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
