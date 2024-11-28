@@ -16,10 +16,12 @@
  */
 package org.sonarsource.kotlin.api.checks
 
+import com.intellij.openapi.util.Disposer
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.DefaultInputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
@@ -31,8 +33,14 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 class FieldMatcherTest {
+    private val disposable = Disposer.newDisposable()
 
-    val environment = Environment(listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
+    @AfterEach
+    fun dispose() {
+        Disposer.dispose(disposable)
+    }
+
+    val environment = Environment(disposable, listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
 
     val path: Path = Paths.get("../kotlin-checks-test-sources/src/main/kotlin/sample/fields.kt")
 

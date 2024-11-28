@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.metrics
 
+import com.intellij.openapi.util.Disposer
 import org.assertj.core.api.Assertions
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
@@ -24,6 +25,7 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtWhenEntry
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.api.frontend.Environment
 
@@ -138,8 +140,15 @@ internal class CyclomaticComplexityVisitorTest {
         Assertions.assertThat(trees).isEmpty()
     }
 
+    private val disposable = Disposer.newDisposable()
+
+    @AfterEach
+    fun dispose() {
+        Disposer.dispose(disposable)
+    }
+
     private fun getComplexityTrees(content: String): List<PsiElement> {
-        val env = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
+        val env = Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE)
         val ktFile = env.ktPsiFactory.createFile(content)
         val cyclomaticComplexityVisitor = CyclomaticComplexityVisitor()
         ktFile.accept(cyclomaticComplexityVisitor)

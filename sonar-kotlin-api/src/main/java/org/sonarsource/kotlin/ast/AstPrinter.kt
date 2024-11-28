@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.ast
 
+import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.sonarsource.kotlin.api.frontend.Environment
 import org.sonarsource.kotlin.tools.AstPrinter
@@ -31,18 +32,25 @@ fun main(vararg args: String) {
 
     val mode = args[0].lowercase()
     val inputFile = resolveDir(args[1])
-    val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
+    val disposable = Disposer.newDisposable()
+    try {
+        val environment = Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE)
 
-    val ktFile by lazy { environment.ktPsiFactory.createFile(inputFile.readText()) }
+        val ktFile by lazy { environment.ktPsiFactory.createFile(inputFile.readText()) }
 
-    when (mode) {
-        "dot" ->
-            if (args.size > 2) AstPrinter.dotPrint(ktFile, resolveDir(args[2]))
-            else println(AstPrinter.dotPrint(ktFile))
-        "txt" ->
-            if (args.size > 2) AstPrinter.txtPrint(ktFile, resolveDir(args[2]), ktFile.viewProvider.document)
-            else println(AstPrinter.txtPrint(ktFile, ktFile.viewProvider.document))
-        else -> exitWithUsageInfoAndError()
+        when (mode) {
+            "dot" ->
+                if (args.size > 2) AstPrinter.dotPrint(ktFile, resolveDir(args[2]))
+                else println(AstPrinter.dotPrint(ktFile))
+
+            "txt" ->
+                if (args.size > 2) AstPrinter.txtPrint(ktFile, resolveDir(args[2]), ktFile.viewProvider.document)
+                else println(AstPrinter.txtPrint(ktFile, ktFile.viewProvider.document))
+
+            else -> exitWithUsageInfoAndError()
+        }
+    } finally {
+        Disposer.dispose(disposable)
     }
 }
 

@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.api.sensors
 
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.Disposer
 import com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.config.LanguageVersion
@@ -59,7 +60,8 @@ abstract class AbstractKotlinSensorExecuteContext(
     }
 
     val environment: Environment by lazy {
-        environment(sensorContext, logger)
+        /** [analyzeFiles] */
+        environment(Disposer.newDisposable(), sensorContext, logger)
     }
 
     val kotlinFiles: List<KotlinSyntaxStructure> by lazy {
@@ -146,8 +148,8 @@ abstract class AbstractKotlinSensorExecuteContext(
     }
 }
 
-
-fun environment(sensorContext: SensorContext, logger: Logger): Environment = Environment(
+fun environment(disposer: Disposable, sensorContext: SensorContext, logger: Logger) = Environment(
+    disposer,
     sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
         sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
     determineKotlinLanguageVersion(sensorContext, logger),

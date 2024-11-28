@@ -69,7 +69,8 @@ class KotlinVerifier(private val check: AbstractCheck) {
         val filePath = baseDir.resolve(fileName)
         val isScriptFile = filePath.extension == "kts"
 
-        val environment = Environment(classpath + deps, LanguageVersion.LATEST_STABLE)
+        val disposable = Disposer.newDisposable()
+        val environment = Environment(disposable, classpath + deps, LanguageVersion.LATEST_STABLE)
         val converter = { content: String ->
             val inputFile = TestInputFileBuilder("moduleKey", filePath.fileName.pathString)
                 .setCharset(StandardCharsets.UTF_8)
@@ -83,8 +84,11 @@ class KotlinVerifier(private val check: AbstractCheck) {
                 kotlinTreeOf(content, environment, inputFile, true, customDiagnostics) to inputFile
             }
         }
-        createVerifier(converter, filePath).verify()
-        Disposer.dispose(environment.disposable)
+        try {
+            createVerifier(converter, filePath).verify()
+        } finally {
+            Disposer.dispose(disposable)
+        }
     }
 
 

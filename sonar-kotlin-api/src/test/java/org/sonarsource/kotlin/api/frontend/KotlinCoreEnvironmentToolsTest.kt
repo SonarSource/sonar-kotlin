@@ -18,22 +18,26 @@ package org.sonarsource.kotlin.api.frontend
 
 import org.assertj.core.api.Assertions.assertThat
 import com.intellij.openapi.util.Disposer
-import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
-import org.jetbrains.kotlin.cli.jvm.config.JvmClasspathRoot
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import java.io.File
 
 class KotlinCoreEnvironmentToolsTest {
+
+  private val disposable = Disposer.newDisposable()
+
+  @AfterEach
+  fun dispose() {
+    Disposer.dispose(disposable)
+  }
 
   @Test
   fun testNonEmptyBindingContext() {
     val kotlinCoreEnvironment = kotlinCoreEnvironment(
       compilerConfiguration(emptyList(), LanguageVersion.KOTLIN_1_4, JvmTarget.JVM_1_8),
-      Disposer.newDisposable()
+      disposable
     )
 
     assertThat(analyzeAndGetBindingContext(kotlinCoreEnvironment, emptyList()))

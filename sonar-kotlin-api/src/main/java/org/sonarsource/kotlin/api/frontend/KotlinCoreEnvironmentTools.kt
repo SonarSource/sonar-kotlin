@@ -41,12 +41,18 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
 
+/**
+ * @param disposable
+ * manages objects requiring cleanup,
+ * can be created using [Disposer.newDisposable] and cleanup must be done by [Disposer.dispose].
+ * See [documentation](https://jetbrains.org/intellij/sdk/docs/basics/disposers.html) for more details.
+ */
 class Environment(
+    val disposable: Disposable,
     val classpath: List<String>,
     kotlinLanguageVersion: LanguageVersion,
     javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8,
 ) {
-    val disposable = Disposer.newDisposable()
     val configuration = compilerConfiguration(classpath, kotlinLanguageVersion, javaLanguageVersion)
     val env = kotlinCoreEnvironment(configuration, disposable)
     val ktPsiFactory: KtPsiFactory = KtPsiFactory(env.project, false)
