@@ -380,9 +380,12 @@ private fun KaImplicitReceiverValue.findReceiverScopeFunctionLiteral(
 @Rewritten
 private fun KtReferenceExpression.findReceiverScopeFunctionLiteral(): KtFunctionLiteral? =
     analyze {
-        this@findReceiverScopeFunctionLiteral.mainReference.resolveToSymbol()?.containingSymbol?.findFunctionLiteral(
-            this@findReceiverScopeFunctionLiteral
-        )
+        when (val resolvedSymbol = this@findReceiverScopeFunctionLiteral.mainReference.resolveToSymbol()) {
+                        is KaValueParameterSymbol -> resolvedSymbol.containingSymbol?.findFunctionLiteral(
+                            this@findReceiverScopeFunctionLiteral
+                        )
+            else -> null
+        }
     }
 
 
