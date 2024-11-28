@@ -102,8 +102,10 @@ tasks.shadowJar {
 //    exclude("org/jetbrains/kotlin/codegen/*.class") // ?
 //    exclude("org/jetbrains/kotlin/backend/**") // ?
     dependencies {
-        exclude(dependency("org.jetbrains.kotlin:high-level-api-fir-for-ide"))
+        // include only K1, and exclude K2 for the time being
+        exclude(dependency("org.jetbrains.kotlin:analysis-api-k2-for-ide"))
         exclude(dependency("org.jetbrains.kotlin:low-level-api-fir-for-ide"))
+        exclude(dependency("org.jetbrains.kotlin:symbol-light-classes-for-ide"))
     }
     doLast {
 //        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 52_500_000L, 53_000_000L)
