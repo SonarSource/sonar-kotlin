@@ -16,7 +16,9 @@
  */
 package org.sonarsource.kotlin.metrics
 
+import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.LanguageVersion
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
@@ -42,6 +44,13 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 class IssueSuppressionVisitorTest {
+    private val disposable = Disposer.newDisposable()
+
+    @AfterEach
+    fun dispose() {
+        Disposer.dispose(disposable)
+    }
+
     @Test
     fun `verify we actually suppress issues on various AST nodes`() {
         val withSuppressionTestFile = KOTLIN_BASE_DIR.resolve("../sample/IssueSuppressionSample.kt")
@@ -79,7 +88,7 @@ class IssueSuppressionVisitorTest {
         )
 
     private fun scanFile(path: Path, suppress: Boolean, check: AbstractCheck, vararg checks: AbstractCheck): SingleFileVerifier {
-        val env = Environment(System.getProperty("java.class.path").split(File.pathSeparatorChar) + DEFAULT_KOTLIN_CLASSPATH, LanguageVersion.LATEST_STABLE)
+        val env = Environment(disposable, System.getProperty("java.class.path").split(File.pathSeparatorChar) + DEFAULT_KOTLIN_CLASSPATH, LanguageVersion.LATEST_STABLE)
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
         val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")

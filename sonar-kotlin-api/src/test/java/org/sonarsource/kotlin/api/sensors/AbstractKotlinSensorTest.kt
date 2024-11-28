@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.api.sensors
 
+import com.intellij.openapi.util.Disposer
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.*
@@ -23,6 +24,7 @@ import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
@@ -43,6 +45,13 @@ import org.sonarsource.kotlin.api.visiting.KtChecksVisitor
 import org.sonarsource.kotlin.testapi.AbstractSensorTest
 
 class AbstractKotlinSensorTest : AbstractSensorTest() {
+
+    private val disposable = Disposer.newDisposable()
+
+    @AfterEach
+    fun dispose() {
+        Disposer.dispose(disposable)
+    }
 
     @Test
     fun test_one_file() {
@@ -96,7 +105,7 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             every { config() } returns ConfigurationBridge(MapSettings())
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(disposable, sensorContext, LOG)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
@@ -116,7 +125,7 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(disposable, sensorContext, LOG)
 
         val expectedKotlinVersion = LanguageVersion.KOTLIN_1_3
 
@@ -136,7 +145,7 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(disposable, sensorContext, LOG)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
@@ -157,7 +166,7 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(sensorContext, LOG)
+        val environment = environment(disposable, sensorContext, LOG)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 

@@ -16,8 +16,10 @@
  */
 package org.sonarsource.kotlin.metrics
 
+import com.intellij.openapi.util.Disposer
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.LanguageVersion
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -39,8 +41,14 @@ import kotlin.io.path.createTempFile
 import kotlin.io.path.name
 
 internal class MetricVisitorTest {
+    private val disposable = Disposer.newDisposable()
 
-    private val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
+    @AfterEach
+    fun dispose() {
+        Disposer.dispose(disposable)
+    }
+
+    private val environment = Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE)
     private lateinit var mockNoSonarFilter: NoSonarFilter
     private lateinit var visitor: MetricVisitor
     private lateinit var sensorContext: SensorContextTester
