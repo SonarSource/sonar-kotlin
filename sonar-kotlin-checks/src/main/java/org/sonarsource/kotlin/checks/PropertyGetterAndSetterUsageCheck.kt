@@ -16,8 +16,10 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
+import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -26,22 +28,18 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isProtected
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.isNullable
 import org.jetbrains.kotlin.util.isAnnotated
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.isAbstract
 import org.sonarsource.kotlin.api.checks.overrides
-import org.sonarsource.kotlin.api.checks.returnType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.secondaryOf
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val GETTER_PREFIX = Regex("""^(get|is)\p{javaUpperCase}""")
 private val SETTER_PREFIX = Regex("""^set\p{javaUpperCase}""")
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6512")
 class PropertyGetterAndSetterUsageCheck : AbstractCheck() {
 
@@ -52,23 +50,22 @@ class PropertyGetterAndSetterUsageCheck : AbstractCheck() {
             .groupBy { it.name ?: "" }
 
         if (javaAccessors.isEmpty()) return
-        val bindingCtx = ctx.bindingContext
         classBody.properties
             .filter { it.isReadyForAccessorsConversion() }
-            .forEach { checkProperty(it, javaAccessors, ctx, bindingCtx) }
+            .forEach { checkProperty(it, javaAccessors, ctx) }
     }
 
     private fun checkProperty(
-        prop: KtProperty, javaAccessors: Map<String, List<KtNamedFunction>>, ctx: KotlinFileContext, bindingCtx: BindingContext
-    ) {
+        prop: KtProperty, javaAccessors: Map<String, List<KtNamedFunction>>, ctx: KotlinFileContext
+    ): Unit = withKaSession {
         prop.nameIdentifier?.let { propIdentifier ->
-            prop.typeReference?.let { bindingCtx[BindingContext.TYPE, it] }?.let { propType ->
+            prop.typeReference?.type?.let {
                 val propName = prop.name!!
-                val getterFunc = findJavaStyleGetterFunc(propName, propType, javaAccessors, bindingCtx)
+                val getterFunc = findJavaStyleGetterFunc(propName, it, javaAccessors)
                 val getterName = getterFunc?.nameIdentifier
                 if (getterName == null || getterFunc.isIncompatiblePropertyAccessor()) return
                 val secondaries = mutableListOf(ctx.secondaryOf(propIdentifier, """Property "$propName""""))
-                val setterFunc = findJavaStyleSetterFunc(propName, propType, javaAccessors, bindingCtx)
+                val setterFunc = findJavaStyleSetterFunc(propName, it, javaAccessors)
                 if (setterFunc != null) {
                     if (setterFunc.isIncompatiblePropertyAccessor() || getterFunc.isLessVisibleThan(setterFunc)) return
                     setterFunc.nameIdentifier?.let { secondaries += ctx.secondaryOf(it, """Setter to convert to a "set(value)"""") }
@@ -86,37 +83,42 @@ private fun isGetterOrSetter(parameterCount: Int, functionName: String) =
         (parameterCount == 1 && SETTER_PREFIX.find(functionName) != null)
 
 private fun findJavaStyleGetterFunc(
-    propName: String, propType: KotlinType, javaAccessors: Map<String, List<KtNamedFunction>>, bindingCtx: BindingContext
-): KtNamedFunction? {
+    propName: String, kaType: KaType, javaAccessors: Map<String, List<KtNamedFunction>>
+): KtNamedFunction? = withKaSession {
     val capitalizedName = capitalize(propName)
-    val functionsPrefixedByIs = if (propType.matches("kotlin.Boolean")) {
+    val functionsPrefixedByIs = if (kaType.isNotNullable(StandardClassIds.Boolean)) {
         javaAccessors.getOrElse("is${capitalizedName}") { emptyList() }
     } else {
         emptyList()
     }
     return (javaAccessors.getOrElse("get${capitalizedName}") { emptyList() } + functionsPrefixedByIs)
-        .filter { it.returnType(bindingCtx) == propType }
+        .filter { kaType.semanticallyEquals(it.returnType) }
         .unambiguousFunction()
 }
 
-private fun parameterMatchesType(parameter: KtParameter, type: KotlinType, bindingCtx: BindingContext): Boolean {
-    return !parameter.isVarArg && type == (parameter.typeReference?.let { bindingCtx[BindingContext.TYPE, it] })
+private fun parameterMatchesType(parameter: KtParameter, kaType: KaType): Boolean = withKaSession {
+    return !parameter.isVarArg && parameter.typeReference?.type?.semanticallyEquals(kaType) ?: false
 }
 
 private fun findJavaStyleSetterFunc(
-    propName: String, propType: KotlinType, javaAccessors: Map<String, List<KtNamedFunction>>, bindingCtx: BindingContext
-): KtNamedFunction? =
+    propName: String,
+    kaType: KaType,
+    javaAccessors: Map<String, List<KtNamedFunction>>
+): KtNamedFunction? = withKaSession {
     javaAccessors.getOrElse("set${capitalize(propName)}") { emptyList() }
-        .filter { it.returnType(bindingCtx)?.matches("kotlin.Unit") ?: false }
+        .filter { it.returnType.isNotNullable(StandardClassIds.Unit) }
         // isGetterOrSetter ensures setters have: valueParameters.size == 1
-        .filter { parameterMatchesType(it.valueParameters[0], propType, bindingCtx) }
+        .filter { parameterMatchesType(it.valueParameters[0], kaType) }
         .unambiguousFunction()
+}
 
 private fun List<KtNamedFunction>.unambiguousFunction() = if (this.size == 1) this[0] else null /* empty or ambiguous */
 
 private fun capitalize(name: String): String = name.replaceFirstChar { it.uppercase() }
 
-private fun KotlinType.matches(qualifiedTypeName: String) = !isNullable() && getKotlinTypeFqName(true) == qualifiedTypeName
+private fun KaType.isNotNullable(classId: ClassId) = withKaSession {
+    !nullability.isNullable && this@isNotNullable.isClassType(classId)
+}
 
 private fun KtNamedFunction.isIncompatiblePropertyAccessor(): Boolean = isAbstract() || overrides() || isAnnotated
 
