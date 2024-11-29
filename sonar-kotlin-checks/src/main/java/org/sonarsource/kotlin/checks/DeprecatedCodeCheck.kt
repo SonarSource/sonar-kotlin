@@ -17,30 +17,29 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtPropertyAccessor
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.annotatedElement
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S1133")
 class DeprecatedCodeCheck : AbstractCheck() {
-    
-    override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry, context: KotlinFileContext) {
-        val descriptor = context.bindingContext[BindingContext.ANNOTATION, annotationEntry]
-        if ("kotlin.Deprecated" == descriptor?.fqName?.asString()) {
+
+    override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry, context: KotlinFileContext) = withKaSession {
+        if (annotationEntry.typeReference?.type?.isClassType(StandardClassIds.Annotations.Deprecated) == true) {
             context.reportIssue(annotationEntry.elementToReport(), "Do not forget to remove this deprecated code someday.")
         }
     }
 }
 
-private fun KtAnnotationEntry.elementToReport(): PsiElement = 
+private fun KtAnnotationEntry.elementToReport(): PsiElement =
     when (val annotated = annotatedElement()) {
         // Deprecated Primary constructor should always have a "constructor" keyword 
         is KtPrimaryConstructor -> annotated.getConstructorKeyword()!!
