@@ -71,7 +71,7 @@ import org.sonar.api.utils.Version
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.merge
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 annotation class Rewritten
 
@@ -96,7 +96,7 @@ fun KtExpression.predictRuntimeStringValue() =
     predictRuntimeValueExpression().stringValue()
 
 @Rewritten
-fun KtExpression.predictRuntimeIntValue(): Int? = analyze {
+fun KtExpression.predictRuntimeIntValue(): Int? = withKaSession {
     val valueExpression = predictRuntimeValueExpression()
     if (valueExpression.expressionType?.isIntType == true) {
         valueExpression?.evaluate()?.value as? Int
@@ -104,7 +104,7 @@ fun KtExpression.predictRuntimeIntValue(): Int? = analyze {
 }
 
 @Rewritten
-fun KtExpression.predictRuntimeBooleanValue() = analyze {
+fun KtExpression.predictRuntimeBooleanValue() = withKaSession {
 
     val valueExpression = predictRuntimeValueExpression()
     if (valueExpression.expressionType?.isBooleanType == true) {
@@ -168,7 +168,7 @@ fun KtExpression.predictRuntimeValueExpression(
             declarations
         )
 
-        is KtThisExpression -> analyze {
+        is KtThisExpression -> withKaSession {
             var symbol = deparenthesized.instanceReference.mainReference.resolveToSymbol()
             // In K1 the symbol is anonymous function symbol, in K2 it is a parameter
             if (symbol !is KaAnonymousFunctionSymbol) symbol = symbol?.containingSymbol
@@ -176,7 +176,7 @@ fun KtExpression.predictRuntimeValueExpression(
                 ?.findLetAlsoRunWithTargetExpression()
         }
 
-        else -> analyze {
+        else -> withKaSession {
             deparenthesized.resolveToCall()?.successfulFunctionCallOrNull()?.predictValueExpression()
         }
     } ?: deparenthesized as? KtExpression
@@ -201,7 +201,7 @@ fun KtCallExpression.predictReceiverExpression(
 @Rewritten
 fun KtExpression.predictReceiverExpression(
 ): KtExpression? =
-    analyze {
+    withKaSession {
         val call = this@predictReceiverExpression.resolveToCall()?.successfulFunctionCallOrNull()
         val symbol = call?.partiallyAppliedSymbol
         val receiver = symbol?.extensionReceiver ?: symbol?.dispatchReceiver
@@ -277,7 +277,7 @@ private fun KtExpression.stringValue(
 @Rewritten
 fun KtExpression.stringValue(
     declarations: MutableList<PsiElement> = mutableListOf(),
-): String? = analyze {
+): String? = withKaSession {
     when (this@stringValue) {
         is KtStringTemplateExpression -> {
             val entries = entries.map {
@@ -332,7 +332,7 @@ private fun KtReferenceExpression.extractFromInitializer(
 @Rewritten
 private fun KtReferenceExpression.extractFromInitializer(
     declarations: MutableList<PsiElement> = mutableListOf(),
-) = analyze {
+) = withKaSession {
     (this@extractFromInitializer.mainReference.resolveToSymbol() as? KaVariableSymbol)
         ?.let {
             if (it.isVal) {
@@ -379,7 +379,7 @@ private fun KaImplicitReceiverValue.findReceiverScopeFunctionLiteral(
 
 @Rewritten
 private fun KtReferenceExpression.findReceiverScopeFunctionLiteral(): KtFunctionLiteral? =
-    analyze {
+    withKaSession {
         when (val resolvedSymbol = this@findReceiverScopeFunctionLiteral.mainReference.resolveToSymbol()) {
                         is KaValueParameterSymbol -> resolvedSymbol.containingSymbol?.findFunctionLiteral(
                             this@findReceiverScopeFunctionLiteral
@@ -410,9 +410,9 @@ private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(bindingContext:
 
 @Rewritten
 private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(): KtExpression? =
-    analyze {
+    withKaSession {
         (getParentCall() as? KaFunctionCall<*>)?.let { larwCallCandidate ->
-            analyze {
+            withKaSession {
                 when (larwCallCandidate.partiallyAppliedSymbol.symbol.name?.asString()) {
                     in KOTLIN_CHAIN_CALL_CONSTRUCTS -> {
                         (larwCallCandidate.partiallyAppliedSymbol.extensionReceiver as? KaExplicitReceiverValue)?.expression?.predictRuntimeValueExpression()
@@ -439,7 +439,7 @@ fun KtElement.getParentCall(): KaCall? {
         KtUnaryExpression::class.java, KtArrayAccessExpression::class.java
     )
     val parentOfType = PsiTreeUtil.getParentOfType(this, *callExpressionTypes)
-    return analyze { parentOfType?.resolveToCall()?.successfulCallOrNull() }
+    return withKaSession { parentOfType?.resolveToCall()?.successfulCallOrNull() }
 }
 
 
@@ -470,7 +470,7 @@ private fun DeclarationDescriptor.findFunctionLiteral(
 @Rewritten
 private fun KaSymbol.findFunctionLiteral(
     startNode: PsiElement,
-): KtFunctionLiteral? = analyze {
+): KtFunctionLiteral? = withKaSession {
     var curNode: PsiElement? = startNode
     for (i in 0 until MAX_AST_PARENT_TRAVERSALS) {
         curNode = curNode?.parent ?: break
@@ -534,7 +534,7 @@ fun KtParameter.determineTypeAsString(bindingContext: BindingContext, printTypeA
 /**
  * TODO see also [FunMatcherImpl.checkReturnType]
  */
-fun KtDeclaration.determineTypeAsString() = analyze {
+fun KtDeclaration.determineTypeAsString() = withKaSession {
     (this@determineTypeAsString.returnType as? KaClassType)?.classId?.asFqNameString()
 }
 
@@ -545,13 +545,13 @@ private fun KtTypeReference.determineType(bindingContext: BindingContext) =
 fun KtTypeReference.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
-fun KtTypeReference.determineTypeAsString() = analyze {
+fun KtTypeReference.determineTypeAsString() = withKaSession {
     this@determineTypeAsString.type.symbol?.classId?.asFqNameString()
 }
 
 fun KtNamedFunction.returnTypeAsString(): String? {
     val namedFunction = this
-    analyze {
+    withKaSession {
         when (val returnType = namedFunction.returnType) {
             is KaClassType -> return returnType.classId.asFqNameString()
             else -> return null
@@ -572,7 +572,7 @@ fun KtNamedFunction.isInfix() = hasModifier(KtTokens.INFIX_KEYWORD)
  * Checks whether the expression is a call, matches the FunMatchers in [STRING_TO_BYTE_FUNS] and is called on a constant string value.
  */
 @Rewritten
-fun KtExpression.isBytesInitializedFromString() = analyze {
+fun KtExpression.isBytesInitializedFromString() = withKaSession {
     val resolveToCall = this@isBytesInitializedFromString.resolveToCall()
 
     val functionCall = resolveToCall?.successfulFunctionCallOrNull()
@@ -657,7 +657,7 @@ fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression, binding
 @Rewritten
 fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression): Boolean {
     return this !is KtNameReferenceExpression || this.findUsages(searchStartNode) {
-        analyze {
+        withKaSession {
             it.getParentOfType<KtCallExpression>(false)?.resolveToCall()
                 ?.successfulFunctionCallOrNull() matches SECURE_RANDOM_FUNS
         }
@@ -676,7 +676,7 @@ fun KtExpression?.isLocalVariable(bindingContext: BindingContext) =
 fun KtExpression?.isLocalVariable(): Boolean {
     if (this !is KtNameReferenceExpression) return false
     val expression = this
-    analyze {
+    withKaSession {
         return expression.mainReference.resolveToSymbol() is KaLocalVariableSymbol
     }
 }
@@ -697,7 +697,7 @@ fun KtExpression?.setterMatches(
 fun KtExpression?.setterMatches(
     propertyName: String,
     matcher: FunMatcherImpl
-): Boolean = analyze {
+): Boolean = withKaSession {
     when (this@setterMatches) {
         is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
                 (matcher.matches(this@setterMatches.resolveToCall()?.successfulVariableAccessCall() ?: return false))
@@ -781,7 +781,7 @@ fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
 
     }
 
-fun PsiElement?.determineType(): KaType? = analyze {
+fun PsiElement?.determineType(): KaType? = withKaSession {
     this?.let {
         when (this@determineType) {
             is KtCallExpression -> determineTypeFromCall()
@@ -803,7 +803,7 @@ fun PsiElement?.determineType(): KaType? = analyze {
     }
 }
 
-private fun KtElement.determineTypeFromCall(): KaType? = analyze {
+private fun KtElement.determineTypeFromCall(): KaType? = withKaSession {
     this@determineTypeFromCall.resolveToCall()?.let {
         (it.successfulFunctionCallOrNull() ?: it.singleVariableAccessCall())
             ?.partiallyAppliedSymbol?.symbol?.returnType
@@ -838,7 +838,7 @@ fun SensorContext.hasCacheEnabled(): Boolean {
 }
 
 @OptIn(KaIdeApi::class)
-fun KtWhenExpression.isExhaustive(context: KotlinFileContext): Boolean = analyze {
+fun KtWhenExpression.isExhaustive(context: KotlinFileContext): Boolean = withKaSession {
     return entries.any { it.isElse } || this@isExhaustive.computeMissingCases().isEmpty()
 //    return entries.any { it.isElse } || context.bindingContext[BindingContext.EXHAUSTIVE_WHEN, this] == true
 }

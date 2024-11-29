@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.resolve.calls.tasks.isDynamic
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
 import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequence
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val VARARG_PREFIX = "vararg ";
 
@@ -73,7 +73,7 @@ class FunMatcherImpl(
             matches(bindingContext[RESOLVED_CALL, call]?.resultingDescriptor)
     }
 
-    fun matches(node: KtCallExpression): Boolean = analyze {
+    fun matches(node: KtCallExpression): Boolean = withKaSession {
         val call = node.resolveToCall()?.successfulFunctionCallOrNull()
         return call != null && matches(call)
     }
@@ -85,7 +85,7 @@ class FunMatcherImpl(
     }
 
     @OptIn(KaExperimentalApi::class)
-    fun matches(node: KtNamedFunction): Boolean = analyze {
+    fun matches(node: KtNamedFunction): Boolean = withKaSession {
         // TODO try node.resolveToCall
         return matches(null, node.symbol.asSignature())
     }
@@ -211,7 +211,7 @@ class FunMatcherImpl(
             }
         }
 
-    private fun checkSubType(functionDescriptor: KaCallableSignature<*>): Boolean = analyze {
+    private fun checkSubType(functionDescriptor: KaCallableSignature<*>): Boolean = withKaSession {
         if (functionDescriptor.symbol is KaConstructorSymbol) return false
         return functionDescriptor.symbol.allOverriddenSymbols.any {
             val className: String? = it.callableId?.asSingleFqName()?.parent()?.asString()

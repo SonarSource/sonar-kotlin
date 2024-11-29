@@ -24,7 +24,7 @@ import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val STREAM_MESSAGE = "Refactor the code so this stream pipeline is used."
 
@@ -76,7 +76,7 @@ class StreamNotConsumedCheck : CallAbstractCheck() {
         resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext,
-    ) = analyze {
+    ) = withKaSession {
         if (!callExpression.isUsedAsExpression) {
             val message = if (matchedFun == SEQUENCE_MATCHER) SEQUENCE_MESSAGE else STREAM_MESSAGE;
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, message)

@@ -27,26 +27,23 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.annotatedElement
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
-
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 @Rule(key = "S1133")
 class DeprecatedCodeCheck : AbstractCheck() {
 
-    override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry, context: KotlinFileContext) {
-        analyze {
-            val annotationType = annotationEntry.typeReference?.type?.symbol?.classId?.asFqNameString()
-            if ("kotlin.Deprecated" == annotationType) {
-                context.reportIssue(
-                    annotationEntry.elementToReport(),
-                    "Do not forget to remove this deprecated code someday."
-                )
-            }
+    override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry, context: KotlinFileContext) = withKaSession {
+        val annotationTypeFqName = annotationEntry.typeReference?.type?.symbol?.classId?.asFqNameString()
+        if ("kotlin.Deprecated" == annotationTypeFqName) {
+            context.reportIssue(
+                annotationEntry.elementToReport(),
+                "Do not forget to remove this deprecated code someday."
+            )
         }
     }
 }
 
-private fun KtAnnotationEntry.elementToReport(): PsiElement = 
+private fun KtAnnotationEntry.elementToReport(): PsiElement =
     when (val annotated = annotatedElement()) {
         // Deprecated Primary constructor should always have a "constructor" keyword 
         is KtPrimaryConstructor -> annotated.getConstructorKeyword()!!

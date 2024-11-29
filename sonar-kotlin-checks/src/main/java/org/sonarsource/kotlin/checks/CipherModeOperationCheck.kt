@@ -29,7 +29,7 @@ import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val CIPHER_INIT_MATCHER = FunMatcher(qualifier = "javax.crypto.Cipher", name = "init") {
     withArguments(INT_TYPE, "java.security.Key", "java.security.spec.AlgorithmParameterSpec")
@@ -82,7 +82,7 @@ private fun generateSecondaryLocations(secondaries: List<PsiElement>, kotlinFile
 
 private fun KtExpression.getByteExpression(secondaries: MutableList<PsiElement>) =
     with(predictRuntimeValueExpression(secondaries)) {
-        analyze {
+        withKaSession {
             this@with.resolveToCall()
                 ?.successfulFunctionCallOrNull()
                 ?.let {
@@ -92,7 +92,7 @@ private fun KtExpression.getByteExpression(secondaries: MutableList<PsiElement>)
         }
     }
 
-private fun KtExpression.getGCMExpression(secondaries: MutableList<PsiElement>) = analyze {
+private fun KtExpression.getGCMExpression(secondaries: MutableList<PsiElement>) = withKaSession {
     predictRuntimeValueExpression()
         .resolveToCall()
         ?.successfulFunctionCallOrNull()

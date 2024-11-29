@@ -32,7 +32,7 @@ import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val MESSAGE = """Use "withTimeoutOrNull { }" instead of manual delayed cancellation."""
 
@@ -53,7 +53,7 @@ class CoroutinesTimeoutApiUnusedCheck : CallAbstractCheck() {
     ) {
         val cancelCallCalleeExpression = callExpression.calleeExpression ?: return
 
-        val kaSymbol = analyze {
+        val kaSymbol = withKaSession {
             (callExpression.context as? KtDotQualifiedExpression)
                 ?.receiverExpression?.mainReference?.resolveToSymbol()
         } ?: return
@@ -78,7 +78,7 @@ class CoroutinesTimeoutApiUnusedCheck : CallAbstractCheck() {
         )
     }
 
-    private fun asDelayCallIfMatching(element: PsiElement): KtExpression? = analyze {
+    private fun asDelayCallIfMatching(element: PsiElement): KtExpression? = withKaSession {
         if (element is KtCallExpression &&
             element.resolveToCall()?.successfulFunctionCallOrNull() matches DELAY_MATCHER) {
             element.calleeExpression
@@ -88,7 +88,7 @@ class CoroutinesTimeoutApiUnusedCheck : CallAbstractCheck() {
     private fun asInitializerCallIfMatching(
         element: PsiElement,
         targetInitializer: KaSymbol?,
-    ): KtExpression? = analyze {
+    ): KtExpression? = withKaSession {
         if (element is KtProperty && element.symbol == targetInitializer) {
             val initializer = element.initializer as? KtCallExpression ?: return null
             if (initializer.resolveToCall()?.successfulFunctionCallOrNull() matches LAUNCH_ASYNC_MATCHER) {

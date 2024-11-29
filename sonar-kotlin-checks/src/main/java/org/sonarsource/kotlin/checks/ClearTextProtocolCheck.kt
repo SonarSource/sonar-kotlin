@@ -30,7 +30,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.KtTreeVisitor
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val CLEARTEXT_FQN = "okhttp3.ConnectionSpec.Companion.CLEARTEXT"
 
@@ -81,7 +81,7 @@ class ClearTextProtocolCheck : CallAbstractCheck() {
         if (matchedFun in UNSAFE_CALLS_OK_HTTP) {
             analyzeOkHttpCall(kotlinFileContext, callExpression)
         } else if (matchedFun == ANDROID_SET_MIXED_CONTENT_MODE) {
-            analyze {
+            withKaSession {
                 checkAndroidMixedContentArgument(
                     kotlinFileContext,
                     deparenthesize(
@@ -94,7 +94,7 @@ class ClearTextProtocolCheck : CallAbstractCheck() {
     }
 
     override fun visitBinaryExpression(expression: KtBinaryExpression, ctx: KotlinFileContext) {
-        analyze {
+        withKaSession {
             val left = deparenthesize(expression.left) ?: return
             left.predictRuntimeValueExpression()
             if (expression.operationToken == KtTokens.EQ &&
@@ -121,7 +121,7 @@ private class OkHttpArgumentFinder(
     private val issueReporter: (KtSimpleNameExpression) -> Unit,
 ) : KtTreeVisitor() {
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
-        analyze {
+        withKaSession {
             if (expression.mainReference.resolveToSymbol()?.importableFqName?.asString() == CLEARTEXT_FQN) issueReporter(
                 expression
             )

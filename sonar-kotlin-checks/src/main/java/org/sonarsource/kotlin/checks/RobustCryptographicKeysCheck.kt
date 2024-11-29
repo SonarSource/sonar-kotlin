@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val ASYMMETRIC_INITIALIZE_MATCHER = FunMatcher {
     qualifier = "java.security.KeyPairGenerator"
@@ -67,7 +67,7 @@ private const val EC_MIN_KEY_SIZE = 224
 class RobustCryptographicKeysCheck : AbstractCheck() {
 
     override fun visitCallExpression(callExpr: KtCallExpression, context: KotlinFileContext) {
-        analyze {
+        withKaSession {
             callExpr.resolveToCall()?.successfulFunctionCallOrNull()?.let { resolvedCall ->
                 when {
                     resolvedCall matches ASYMMETRIC_INITIALIZE_MATCHER -> handleKeyGeneratorAndKeyPairGenerator(
@@ -108,7 +108,7 @@ class RobustCryptographicKeysCheck : AbstractCheck() {
         getInstanceMatcher: FunMatcherImpl,
         context: KotlinFileContext,
     ) {
-        analyze {
+        withKaSession {
             val keySizeExpression = resolvedCall.getFirstArgumentExpression() ?: return
             val keySize = keySizeExpression.predictRuntimeIntValue()
             if (keySize != null && keySize < minKeySize) {

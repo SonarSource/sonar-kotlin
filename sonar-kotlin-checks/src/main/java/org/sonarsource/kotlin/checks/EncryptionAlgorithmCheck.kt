@@ -25,7 +25,7 @@ import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val ALGORITHM_PATTERN = Regex("([^/]+)/([^/]+)/([^/]+)")
 
@@ -75,7 +75,7 @@ private fun String.getInsecureAlgorithmMessage(): String? {
         ?: return "Use secure mode and padding scheme."
 }
 
-private fun KtExpression.predictRuntimeStringValueWithSecondaries() = analyze {
+private fun KtExpression.predictRuntimeStringValueWithSecondaries() = withKaSession {
     mutableListOf<PsiElement>().let {
         predictRuntimeValueExpression(it)
             .stringValue(it) to it

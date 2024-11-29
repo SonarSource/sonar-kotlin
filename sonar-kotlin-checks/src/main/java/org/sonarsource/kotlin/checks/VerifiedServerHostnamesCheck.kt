@@ -25,7 +25,7 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.predictRuntimeBooleanValue
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 @Rule(key = "S5527")
 class VerifiedServerHostnamesCheck : AbstractCheck() {
@@ -73,5 +73,5 @@ class VerifiedServerHostnamesCheck : AbstractCheck() {
     }
 
     private fun KtExpression.isTrueConstant(): Boolean =
-        analyze { predictRuntimeBooleanValue() ?: false }
+        withKaSession { predictRuntimeBooleanValue() ?: false }
 }

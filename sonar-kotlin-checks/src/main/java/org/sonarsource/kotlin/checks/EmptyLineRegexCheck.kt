@@ -44,7 +44,7 @@ import org.sonarsource.kotlin.api.regex.RegexContext
 import org.sonarsource.kotlin.api.regex.TO_REGEX_MATCHER
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.secondaryOf
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val MESSAGE = "Remove MULTILINE mode or change the regex."
 
@@ -99,7 +99,7 @@ class EmptyLineRegexCheck : AbstractRegexCheck() {
 
     private fun getSecondariesForToRegex(
         callExpression: KtCallExpression
-    ): Pair<List<KtElement>, KtElement?> = analyze {
+    ): Pair<List<KtElement>, KtElement?> = withKaSession {
         getSecondaries(callExpression.parent?.parent, ::getStringInRegexFind) to
                 (callExpression.parent as? KtExpression)?.resolveToCall()
                     ?.successfulFunctionCallOrNull()?.getReceiverExpression()
@@ -199,7 +199,7 @@ private fun isNonCapturingWithoutChild(tree: RegexTree): Boolean {
     return tree.`is`(RegexTree.Kind.NON_CAPTURING_GROUP) && (tree as NonCapturingGroupTree).element == null
 }
 
-private fun getStringInMatcherFind(ref: KtElement): KtExpression? = analyze {
+private fun getStringInMatcherFind(ref: KtElement): KtExpression? = withKaSession {
     val resolvedCall =
         (ref.parent as? KtExpression)?.resolveToCall()?.successfulFunctionCallOrNull() ?: return null
 
@@ -219,7 +219,7 @@ private fun getStringInMatcherFind(ref: KtElement): KtExpression? = analyze {
 }
 
 private fun getStringInRegexFind(ref: KtElement): KtExpression? {
-    val resolvedCall = analyze {
+    val resolvedCall = withKaSession {
         (ref.parent as? KtExpression)?.resolveToCall()?.successfulFunctionCallOrNull() ?: return null
     }
     return if (resolvedCall matches REGEX_FIND) extractArgument(resolvedCall) else null
@@ -245,7 +245,7 @@ private fun KtExpression.canBeEmpty(): Boolean =
             val runtimeStringValue = deparenthesized.predictRuntimeStringValue()
             runtimeStringValue?.isEmpty()
                 ?: deparenthesized.findUsages(allUsages = true) {
-                    analyze {
+                    withKaSession {
                         (it.parent as? KtExpression)?.resolveToCall()
                             ?.successfulFunctionCallOrNull() matches STRING_IS_EMPTY ||
                                 (it.parent as? KtBinaryExpression).isEmptinessCheck()
@@ -271,5 +271,5 @@ fun KtElement.getParentCall(): KaFunctionCall<*>? {
 
     val parent = PsiTreeUtil.getParentOfType(this, *callExpressionTypes)
 
-    return analyze { parent?.resolveToCall()?.successfulFunctionCallOrNull() }
+    return withKaSession { parent?.resolveToCall()?.successfulFunctionCallOrNull() }
 }

@@ -30,7 +30,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FUNS_ACCEPTING_DISPATCHERS
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 @Rule(key = "S6311")
 class SuspendingFunCallerDispatcherCheck : CallAbstractCheck() {
@@ -41,7 +41,7 @@ class SuspendingFunCallerDispatcherCheck : CallAbstractCheck() {
         resolvedCall: KaFunctionCall<*>,
 //        resolvedCall: ResolvedCall<*>,
         kotlinFileContext: KotlinFileContext,
-    ) = analyze {
+    ) = withKaSession {
         val bindingContext = kotlinFileContext.bindingContext
 
 //        val arguments = resolvedCall.valueArgumentsByIndex

@@ -43,7 +43,7 @@ import org.sonarsource.kotlin.api.frontend.TextRangeTracker
 import org.sonarsource.kotlin.api.checks.isPlus as isConcat
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 import java.util.regex.Pattern
 
 val PATTERN_COMPILE_MATCHER = FunMatcher(qualifier = "java.util.regex.Pattern", name = "compile")
@@ -203,7 +203,7 @@ private fun KtExpression?.extractRegexFlags(): FlagSet =
             }
             ?.flatMap { it.collectDescendantsOfType<KtNameReferenceExpression>() }
             ?.mapNotNull {
-                analyze { it.mainReference.resolveToSymbol()?.name?.asString() }
+                withKaSession { it.mainReference.resolveToSymbol()?.name?.asString() }
             }
             ?.mapNotNull { FLAGS[it] }
             ?.fold(0, Int::or)

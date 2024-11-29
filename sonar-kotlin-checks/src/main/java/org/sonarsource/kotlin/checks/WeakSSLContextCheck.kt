@@ -30,7 +30,7 @@ import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 @Rule(key = "S4423")
 class WeakSSLContextCheck : AbstractCheck() {
@@ -77,7 +77,7 @@ class WeakSSLContextCheck : AbstractCheck() {
     private fun handleSSL(
         node: KtCallExpression,
         kotlinFileContext: KotlinFileContext,
-    ) = analyze {
+    ) = withKaSession {
         node.valueArguments
             .firstOrNull()
             ?.getArgumentExpression()
@@ -116,7 +116,7 @@ class WeakSSLContextCheck : AbstractCheck() {
         }
     }
 
-    private fun KtExpression.value(): String? = analyze {
+    private fun KtExpression.value(): String? = withKaSession {
         when (this@value) {
             is KtStringTemplateExpression -> asConstant()
             is KtNameReferenceExpression -> predictRuntimeStringValue()

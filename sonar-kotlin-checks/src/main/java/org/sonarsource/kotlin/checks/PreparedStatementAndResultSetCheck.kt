@@ -31,7 +31,7 @@ import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val PREPARE_STATEMENT = FunMatcher(qualifier = "java.sql.Connection", name = "prepareStatement")
 
@@ -82,7 +82,7 @@ class PreparedStatementAndResultSetCheck : CallAbstractCheck() {
     }
 }
 
-private fun getNumberOfParameters(receiver: KtExpression) = analyze {
+private fun getNumberOfParameters(receiver: KtExpression) = withKaSession {
     receiver.predictRuntimeValueExpression()
         .resolveToCall()?.successfulFunctionCallOrNull()
         ?.let {

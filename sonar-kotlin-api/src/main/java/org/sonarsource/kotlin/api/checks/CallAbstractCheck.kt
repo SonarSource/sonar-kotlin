@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 abstract class CallAbstractCheck : AbstractCheck() {
     abstract val functionsToVisit: Iterable<FunMatcherImpl>
@@ -48,7 +48,7 @@ abstract class CallAbstractCheck : AbstractCheck() {
     open fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) = Unit
 
     final override fun visitCallExpression(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        analyze {
+        withKaSession {
             val resolvedCall = callExpression.resolveToCall()?.singleFunctionCallOrNull() ?: return
             functionsToVisit.firstOrNull { it.matches(resolvedCall) }
                 ?.let { visitFunctionCall(callExpression, resolvedCall, it, kotlinFileContext) }

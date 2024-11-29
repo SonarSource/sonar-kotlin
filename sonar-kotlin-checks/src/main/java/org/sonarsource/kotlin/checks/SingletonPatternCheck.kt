@@ -38,7 +38,7 @@ import org.sonarsource.kotlin.api.checks.ConstructorMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.KtTreeVisitor
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val lazyInitializationMatcher = FunMatcher(
     name = "lazy",
@@ -97,7 +97,7 @@ private class SingleConstructorCallExtractor(
     override fun visitCallExpression(expression: KtCallExpression) {
         if (singletonClassCandidates.isEmpty() || !constructorMatcher.matches(expression)) return
 
-        analyze {
+        withKaSession {
             val kaConstructorSymbol = expression.resolveToCall()?.successfulFunctionCallOrNull()
                 ?.partiallyAppliedSymbol?.symbol as? KaConstructorSymbol ?: return
             val fqName = kaConstructorSymbol.containingClassId?.asFqNameString() ?: return

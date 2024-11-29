@@ -27,7 +27,7 @@ import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.checks.predictReceiverExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val OBJECT_ARRAY_MATCHER = FunMatcher(qualifier = "kotlin.Array") {
     withNames("hashCode", "toString")
@@ -78,7 +78,7 @@ class ArrayHashCodeAndToStringCheck : CallAbstractCheck() {
         }
     }
 
-    private fun receiverIsArrayOfArray(callExpression: KtCallExpression): Boolean = analyze {
+    private fun receiverIsArrayOfArray(callExpression: KtCallExpression): Boolean = withKaSession {
         val argument = callExpression.predictReceiverExpression()?.expressionType?.arrayElementType
         return ARRAY_QUALIFIERS.contains(argument?.symbol?.classId?.asFqNameString())
     }

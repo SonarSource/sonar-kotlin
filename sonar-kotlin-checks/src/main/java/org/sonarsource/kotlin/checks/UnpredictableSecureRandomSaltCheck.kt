@@ -24,7 +24,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.secondaryOf
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val MESSAGE = "Change this seed value to something unpredictable, or remove the seed."
 private const val SECURE_RANDOM = "java.security.SecureRandom"
@@ -47,7 +47,7 @@ class UnpredictableSecureRandomSaltCheck : CallAbstractCheck() {
         val saltArg = resolvedCall.argumentMapping.keys.toList().firstOrNull() ?: return
         val predictedSaltValue = saltArg.predictRuntimeValueExpression()
 
-        analyze {
+        withKaSession {
             if (
                 (predictedSaltValue is KtConstantExpression || predictedSaltValue.isBytesInitializedFromString()) ||
                 (predictedSaltValue.resolveToCall()

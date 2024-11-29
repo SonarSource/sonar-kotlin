@@ -39,7 +39,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.message
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 @Rule(key = "S3353")
 class VarShouldBeValCheck : AbstractCheck() {
@@ -54,7 +54,7 @@ class VarShouldBeValCheck : AbstractCheck() {
 
         val assignedDeclarations2 = assignedExpressions
             .mapNotNull {
-                analyze {
+                withKaSession {
                     val successfulVariableAccessCall = it.resolveToCall()?.successfulVariableAccessCall()
                     successfulVariableAccessCall?.symbol ?: it.mainReference.resolveToSymbol()
                 }
@@ -96,7 +96,7 @@ class VarShouldBeValCheck : AbstractCheck() {
 
     private fun KtNamedDeclaration.isNotReferenced(
         assignedDeclarations: Set<KaSymbol>,
-    ): Boolean = analyze {
+    ): Boolean = withKaSession {
         !assignedDeclarations.contains(this@isNotReferenced.symbol)
     }
 

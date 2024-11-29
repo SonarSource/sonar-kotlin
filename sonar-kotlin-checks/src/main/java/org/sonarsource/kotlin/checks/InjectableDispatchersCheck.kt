@@ -26,7 +26,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.secondaryOf
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val MESSAGE = "Avoid hardcoded dispatchers."
 private const val DISPATCHERS_OBJECT = "$KOTLINX_COROUTINES_PACKAGE.Dispatchers"
@@ -46,7 +46,7 @@ class InjectableDispatchersCheck : CallAbstractCheck() {
 
         val argExpr = arguments.first()
         val argValueExpr = argExpr.predictRuntimeValueExpression() as? KtQualifiedExpression ?: return
-        val variableAccessCall: KaVariableAccessCall = analyze {
+        val variableAccessCall: KaVariableAccessCall = withKaSession {
             argValueExpr.resolveToCall()?.singleVariableAccessCall() ?: return
         }
         val receiverFqn = (variableAccessCall.partiallyAppliedSymbol.dispatchReceiver?.type as? KaClassType)

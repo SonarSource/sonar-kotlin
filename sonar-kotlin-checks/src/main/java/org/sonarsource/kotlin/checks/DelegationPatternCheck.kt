@@ -27,13 +27,13 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 @Rule(key = "S6514")
 class DelegationPatternCheck : AbstractCheck() {
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject, context: KotlinFileContext) {
-        analyze {
+        withKaSession {
             val classSymbol = classOrObject.classSymbol ?: return
             if (classSymbol.classKind == KaClassKind.INTERFACE) return
             val superInterfaces: Set<KaClassSymbol> = classSymbol.getSuperInterfaces()
@@ -67,7 +67,7 @@ class DelegationPatternCheck : AbstractCheck() {
 private fun isFunctionInInterface(
     function: KtNamedFunction,
     superInterface1: KaClassSymbol
-): Boolean = analyze {
+): Boolean = withKaSession {
     val classDeclaration = superInterface1.psi as? KtClass ?: return false
     return classDeclaration.declarations.any {
         it is KtNamedFunction && haveCompatibleFunctionSignature(it.symbol, function.symbol)
@@ -77,7 +77,7 @@ private fun isFunctionInInterface(
 private fun haveCompatibleFunctionSignature(
     function1: KaFunctionSymbol,
     function2: KaFunctionSymbol,
-) = analyze {
+) = withKaSession {
     function1.returnType.sameOrTypeParam(function2.returnType) &&
             function1.name == function2.name &&
             function1.valueParameters.allPaired(function2.valueParameters) { p1, p2 ->
@@ -85,7 +85,7 @@ private fun haveCompatibleFunctionSignature(
             }
 }
 
-fun KaType.sameOrTypeParam(other: KaType): Boolean = analyze {
+fun KaType.sameOrTypeParam(other: KaType): Boolean = withKaSession {
     if (this@sameOrTypeParam is KaTypeParameterType && other is KaTypeParameterType) return true
     return symbol != null && other.symbol != null && symbol == other.symbol
 }
@@ -98,7 +98,7 @@ fun getCommonSuperInterfaces(superInterfaces: Set<KaClassSymbol>, otherType: KaT
 fun KaType.getSuperInterfaces(): Set<KaClassSymbol> =
     (symbol as? KaClassSymbol)?.getSuperInterfaces() ?: emptySet()
 
-fun KaClassSymbol.getSuperInterfaces(): Set<KaClassSymbol> = analyze {
+fun KaClassSymbol.getSuperInterfaces(): Set<KaClassSymbol> = withKaSession {
     val superTypes = this@getSuperInterfaces.superTypes.filter { !it.isAnyType }
     val symbols: Collection<KaClassSymbol> = superTypes.mapNotNull { it.symbol as? KaClassSymbol }
     val hierarchy: List<KaClassSymbol> = superTypes.flatMap { it.getSuperInterfaces() }
@@ -107,7 +107,7 @@ fun KaClassSymbol.getSuperInterfaces(): Set<KaClassSymbol> = analyze {
         .toSet()
 }
 
-private fun getDelegeeOrNull(function: KtNamedFunction): KtNameReferenceExpression? = analyze {
+private fun getDelegeeOrNull(function: KtNamedFunction): KtNameReferenceExpression? = withKaSession {
     val qualifiedCallExpression = getFunctionSingleBodyElementOrNull(function) as? KtDotQualifiedExpression ?: return null
     val receiverExpression = qualifiedCallExpression.receiverExpression as? KtNameReferenceExpression ?: return null
     val callExpression = qualifiedCallExpression.selectorExpression as? KtCallExpression ?: return null
@@ -120,7 +120,7 @@ private fun getDelegeeOrNull(function: KtNamedFunction): KtNameReferenceExpressi
         }) receiverExpression else null
 }
 
-private fun isDelegatedParameter(parameter: KtParameter, arguments: KtValueArgument): Boolean = analyze {
+private fun isDelegatedParameter(parameter: KtParameter, arguments: KtValueArgument): Boolean = withKaSession {
     val argumentExpression = arguments.getArgumentExpression() as? KtNameReferenceExpression ?: return false
     if (parameter.name != argumentExpression.getReferencedName()) return false
     val argumentType = argumentExpression.determineType() ?: return false

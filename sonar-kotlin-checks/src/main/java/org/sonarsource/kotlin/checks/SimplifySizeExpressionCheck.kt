@@ -44,7 +44,7 @@ import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val PACKAGE_KOTLIN_COLLECTION = "kotlin.collections"
 private const val PACKAGE_KOTLIN_TEXT = "kotlin.text"
@@ -103,7 +103,7 @@ class SimplifySizeExpressionCheck : CallAbstractCheck() {
     override fun visitReferenceExpression(
         expression: KtReferenceExpression,
         kotlinFileContext: KotlinFileContext,
-    ) = analyze {
+    ) = withKaSession {
         val resolvedCall = expression.resolveToCall()?.successfulVariableAccessCall() ?: return
         if (sizeFieldMatcher.matches(resolvedCall) || lengthFieldMatcher.matches(resolvedCall)) {
             checkSizeTest(expression, kotlinFileContext)

@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val nonMutatingFunctions = FunMatcher {
     withDefiningSupertypes(
@@ -115,7 +115,7 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
         private fun PsiElement?.isMutatingUsage(): Boolean {
             return when(this) {
 
-                is KtDotQualifiedExpression -> analyze {
+                is KtDotQualifiedExpression -> withKaSession {
 
                     val resolveToCall = this@isMutatingUsage.resolveToCall()
                     val kaCallableMemberCall: KaCallableMemberCall<*,*>? =
@@ -129,7 +129,7 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
                             receiverType !in imMutableCollections
                 }
 
-                is KtValueArgument -> analyze {
+                is KtValueArgument -> withKaSession {
                     val resolveToCall = parent.parentOfType<KtCallExpression>()?.resolveToCall()
 
                     val parameterIndex = (parent as? KtValueArgumentList)?.arguments?.indexOf(this@isMutatingUsage) ?: -1

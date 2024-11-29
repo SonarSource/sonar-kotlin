@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 val THREAD_SLEEP_MATCHER = FunMatcher(qualifier = "java.lang.Thread", name = "sleep")
 
@@ -68,7 +68,7 @@ class MainSafeCoroutinesCheck : AbstractCheck() {
         }
     }
 
-    private fun KtElement.reportBlockingFunctionCalls(context: KotlinFileContext) = analyze {
+    private fun KtElement.reportBlockingFunctionCalls(context: KotlinFileContext) = withKaSession {
         forEachDescendantOfType<KtCallExpression> { call ->
             val resolvedCall1 = call.resolveToCall()?.successfulFunctionCallOrNull()
             if (resolvedCall1 matches THREAD_SLEEP_MATCHER) {
@@ -87,7 +87,7 @@ class MainSafeCoroutinesCheck : AbstractCheck() {
     }
 }
 
-private fun KtCallExpression.isInsideNonSafeDispatcher(): Boolean = analyze {
+private fun KtCallExpression.isInsideNonSafeDispatcher(): Boolean = withKaSession {
     var parentCallExpr: KtElement? = getParentCallExpr() ?: return true
     var resolvedCall1 = parentCallExpr?.resolveToCall()?.successfulFunctionCallOrNull() ?: return false
 
@@ -103,7 +103,7 @@ private fun KtCallExpression.isInsideNonSafeDispatcher(): Boolean = analyze {
     return resolvedCall1.usesNonSafeDispatcher()
 }
 
-private fun KaFunctionCall<*>.usesNonSafeDispatcher(): Boolean = analyze {
+private fun KaFunctionCall<*>.usesNonSafeDispatcher(): Boolean = withKaSession {
     val arg = argumentMapping.entries
         .find { (_, signature) -> signature.name.asString() == "context" }
         ?.key
@@ -116,7 +116,7 @@ private fun KaFunctionCall<*>.usesNonSafeDispatcher(): Boolean = analyze {
             || argValue == "$KOTLINX_COROUTINES_PACKAGE.Dispatchers.Default"
 }
 
-private fun KtLambdaArgument.isSuspending() = analyze {
+private fun KtLambdaArgument.isSuspending() = withKaSession {
     (parent as? KtCallExpression)
         ?.resolveToCall()
         ?.successfulFunctionCallOrNull()

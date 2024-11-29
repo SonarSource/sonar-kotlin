@@ -28,7 +28,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.isInfix
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 // Serializable method should not raise any issue in Kotlin.
 private val IGNORED_METHODS: Set<String> = setOf(
@@ -75,7 +75,7 @@ class UnusedPrivateMethodCheck : AbstractCheck() {
             && !hasModifier(KtTokens.OPERATOR_KEYWORD)
             && (annotationEntries.isEmpty() || annotatedWithCommonAnnotations())
 
-    private fun KtNamedFunction.annotatedWithCommonAnnotations() = analyze {
+    private fun KtNamedFunction.annotatedWithCommonAnnotations() = withKaSession {
         symbol.annotations.all {
             it.classId?.asFqNameString() in COMMON_ANNOTATIONS
         }

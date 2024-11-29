@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 @Rule(key = "S6517")
 class InterfaceCouldBeFunctionalCheck : AbstractCheck() {
@@ -65,6 +65,6 @@ private fun hasExactlyOneFunctionAndNoProperties(klass: KtClass): Boolean {
     } && functionCount > 0
 }
 
-private fun isFunctionalInterfaceAnnotation(annotation: KtAnnotationEntry): Boolean = analyze {
+private fun isFunctionalInterfaceAnnotation(annotation: KtAnnotationEntry): Boolean = withKaSession {
     annotation.typeReference?.type?.symbol?.classId?.asFqNameString()  == "java.lang.FunctionalInterface"
 }

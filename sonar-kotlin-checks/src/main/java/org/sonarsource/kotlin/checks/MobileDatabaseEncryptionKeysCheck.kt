@@ -36,7 +36,7 @@ import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val SQLITE = "net.sqlcipher.database.SQLiteDatabase"
 private const val ENCRYPTION_KEY = "encryptionKey"
@@ -101,7 +101,7 @@ private fun KtElement.isHardCoded(secondaries: MutableList<PsiElement>): Boolean
     }
 
 fun KtCallExpression.returnsHardcoded(secondaries: MutableList<PsiElement>): Boolean =
-    analyze {
+    withKaSession {
         val resultingDescriptor = this@returnsHardcoded.resolveToCall()?.successfulFunctionCallOrNull() ?: return false
         val declaration = resultingDescriptor.partiallyAppliedSymbol.symbol.psi as? KtNamedFunction ?: return false
 

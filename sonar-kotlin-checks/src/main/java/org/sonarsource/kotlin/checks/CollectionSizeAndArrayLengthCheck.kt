@@ -29,7 +29,7 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 val COLLECTION_SIZE_METHOD = FunMatcher(qualifier = "kotlin.collections.Collection", name = "size") {
     withNoArguments()
@@ -73,7 +73,7 @@ class CollectionSizeAndArrayLengthCheck : AbstractCheck() {
         opWithoutEq: KtSingleValueToken,
     ): String? {
         if (testedExpr is KtDotQualifiedExpression &&
-            analyze {
+            withKaSession {
                 val functionCall = testedExpr.resolveToCall()?.singleVariableAccessCall() ?: return null
                 MATCHERS.any { it.matches(functionCall) }
             }) {

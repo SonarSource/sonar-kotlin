@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val PROBLEMATIC_SIMPLE_CALLS = listOf(
     FunMatcher(definingSupertype = "android.app.Activity", name = "getPreferences"),
@@ -41,7 +41,7 @@ private const val MESSAGE = "Make sure using an unencrypted database is safe her
 @Rule(key = "S6291")
 class UnencryptedDatabaseOnMobileCheck : AbstractCheck() {
     override fun visitCallExpression(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        val resolvedCall = analyze { callExpression.resolveToCall()?.successfulFunctionCallOrNull() }
+        val resolvedCall = withKaSession { callExpression.resolveToCall()?.successfulFunctionCallOrNull() }
         if (PROBLEMATIC_SIMPLE_CALLS.any { resolvedCall matches it }) {
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
         } else if (
@@ -55,7 +55,7 @@ class UnencryptedDatabaseOnMobileCheck : AbstractCheck() {
 
 private fun KtExpression.findCallInPrecedingCallChain(
     matcher: FunMatcherImpl,
-): Pair<KtExpression, KaFunctionCall<*>>? = analyze {
+): Pair<KtExpression, KaFunctionCall<*>>? = withKaSession {
     var receiver = this@findCallInPrecedingCallChain
     var receiverResolved = receiver.resolveToCall()?.successfulFunctionCallOrNull() ?: return null
     while (!matcher.matches(receiverResolved)) {

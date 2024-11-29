@@ -29,7 +29,7 @@ import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val MESSAGE = "Make sure accessing the Android external storage is safe here."
 
@@ -97,7 +97,7 @@ class ExternalAndroidStorageAccessCheck : CallAbstractCheck() {
 
     override fun visitReferenceExpression(expression: KtReferenceExpression, kotlinFileContext: KotlinFileContext) {
         if (expression is KtNameReferenceExpression && expression.getReferencedName() in HOTSPOT_PROPS_NAMES) {
-            analyze {
+            withKaSession {
                 val successfulVariableAccessCall = expression.resolveToCall()?.successfulVariableAccessCall()
                 if (successfulVariableAccessCall != null &&
                     HOTSPOT_PROPS_MATCHERS.any { it.matches(successfulVariableAccessCall) }) {

@@ -25,7 +25,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.merge
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 @Rule(key = "S6516")
 class SamConversionCheck : AbstractCheck() {
@@ -34,7 +34,7 @@ class SamConversionCheck : AbstractCheck() {
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration, context: KotlinFileContext) {
         val superTypeEntry = declaration.superTypeListEntries.singleOrNull() ?: return
 
-        analyze {
+        withKaSession {
             val typeReference = superTypeEntry.typeReference ?: return
             if ((typeReference.type.isFunctionalInterface || typeReference.type.functionTypeKind != null) && declaration.hasExactlyOneFunctionAndNoProperties()) {
                 val textRange = context.merge(declaration.getDeclarationKeyword()!!, superTypeEntry)

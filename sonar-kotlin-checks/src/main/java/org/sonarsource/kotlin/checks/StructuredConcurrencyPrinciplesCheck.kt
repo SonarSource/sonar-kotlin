@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val JOB_CONSTRUCTOR = FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = "Job")
 private val SUPERVISOR_JOB_CONSTRUCTOR = FunMatcher(qualifier = KOTLINX_COROUTINES_PACKAGE, name = "SupervisorJob")
@@ -74,7 +74,7 @@ private fun KtExpression.checkOptInDelicateApi(): Boolean {
 
 private fun MutableList<KtAnnotationEntry>?.isAnnotatedWithOptInDelicateApi() =
     this?.let {
-        analyze {
+        withKaSession {
             it.any { annotation ->
                 val typeFqn = annotation.typeReference?.determineTypeAsString()
                 typeFqn == "kotlinx.coroutines.DelicateCoroutinesApi" ||

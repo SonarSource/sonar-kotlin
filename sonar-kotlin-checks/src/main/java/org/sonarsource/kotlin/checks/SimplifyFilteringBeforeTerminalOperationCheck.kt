@@ -28,7 +28,7 @@ import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.message
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val KOTLIN_COLLECTIONS_QUALIFIER = "kotlin.collections"
 private val FILTER_MATCHER = FunMatcher(qualifier = KOTLIN_COLLECTIONS_QUALIFIER, name = "filter") { withArguments("kotlin.Function1") }
@@ -42,7 +42,7 @@ class SimplifyFilteringBeforeTerminalOperationCheck : CallAbstractCheck() {
         }
     )
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext): Unit = analyze {
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext): Unit = withKaSession {
         val x = callExpression.parent
             .let { it as? KtDotQualifiedExpression }
             ?.receiverExpression

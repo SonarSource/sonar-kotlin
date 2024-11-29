@@ -32,7 +32,7 @@ import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.secondaryOf
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val SPECS_PACKAGE = "javax.crypto.spec"
 private const val KEY_SPEC_FUN_NAME = "PBEKeySpec"
@@ -78,7 +78,7 @@ class UnpredictableHashSaltCheck : CallAbstractCheck() {
             return
         }
 
-        val saltInitializer = analyze { predictedSaltValue.resolveToCall()?.successfulFunctionCallOrNull()
+        val saltInitializer = withKaSession { predictedSaltValue.resolveToCall()?.successfulFunctionCallOrNull()
             ?.takeIf { it matches BYTE_ARRAY_CONSTRUCTOR } ?: return }
 
         if (saltInitializer.byteArrayInitSizeTooSmall()) {

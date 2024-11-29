@@ -50,7 +50,7 @@ import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val MESSAGE_UNUSED = "Remove this unused import."
 private const val MESSAGE_REDUNDANT = "Remove this redundant import."
@@ -64,7 +64,7 @@ class UnnecessaryImportsCheck : AbstractCheck() {
     @OptIn(KaIdeApi::class)
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
 
-        analyze {
+        withKaSession {
             if (this !is KaFe10Session) {
                 val analyzeImportsToOptimize = analyzeImportsToOptimize(file)
 

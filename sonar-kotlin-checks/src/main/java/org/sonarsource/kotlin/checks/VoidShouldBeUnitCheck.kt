@@ -32,7 +32,7 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.isAbstract
 import org.sonarsource.kotlin.api.reporting.message
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val message = message {
     +"Replace this usage of "
@@ -83,7 +83,7 @@ private tailrec fun flattenTypeProjections(
 
 private fun List<TypeProjection>.withoutStarProjection() = filter { projection -> projection !is StarProjectionImpl }
 
-private fun KtTypeReference.isVoidTypeRef() = analyze {
+private fun KtTypeReference.isVoidTypeRef() = withKaSession {
     this@isVoidTypeRef.type.symbol?.classId?.asFqNameString() == "java.lang.Void"
 }
 

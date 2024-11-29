@@ -38,7 +38,7 @@ import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val GUAVA_OPTIONAL = "com.google.common.base.Optional"
 
@@ -130,7 +130,7 @@ class ReplaceGuavaWithKotlinCheck : CallAbstractCheck() {
         else -> false
     }
 
-    private fun KtParameter.hasReferencesIn(elementToVisit: KtElement?): Boolean = analyze {
+    private fun KtParameter.hasReferencesIn(elementToVisit: KtElement?): Boolean = withKaSession {
         val variableSymbol = this@hasReferencesIn.symbol
 
         return elementToVisit?.collectDescendantsOfType<KtReferenceExpression>() { expression ->
@@ -138,7 +138,7 @@ class ReplaceGuavaWithKotlinCheck : CallAbstractCheck() {
         }?.isNotEmpty() ?: false
     }
 
-    private fun KtTypeReference.ifTypeReplacement(action: (String) -> Unit) = analyze {
+    private fun KtTypeReference.ifTypeReplacement(action: (String) -> Unit) = withKaSession {
         this@ifTypeReplacement.type.symbol?.classId?.asFqNameString()
             ?.let { REPLACEMENT_TYPES[it]?.let(action) }
     }

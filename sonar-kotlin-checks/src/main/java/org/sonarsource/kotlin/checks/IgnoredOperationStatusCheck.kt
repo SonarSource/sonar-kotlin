@@ -34,7 +34,7 @@ import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.simpleName
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 @Rule(key = "S899")
 class IgnoredOperationStatusCheck : CallAbstractCheck() {
@@ -64,7 +64,7 @@ class IgnoredOperationStatusCheck : CallAbstractCheck() {
         },
     )
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) = analyze {
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) = withKaSession {
         if (!callExpression.isUsedAsExpression) {
 //            resolvedCall.resultingDescriptor?.let { resultingDescriptor ->
             val name = resolvedCall.partiallyAppliedSymbol.signature.symbol.name
@@ -82,7 +82,7 @@ class IgnoredOperationStatusCheck : CallAbstractCheck() {
      * Replacement for [org.sonarsource.kotlin.api.checks.simpleName] ?
      */
     @OptIn(KaExperimentalApi::class)
-    private fun KaType.simpleName(): String? = analyze {
+    private fun KaType.simpleName(): String? = withKaSession {
         this@simpleName.lowerBoundIfFlexible().symbol?.name?.asString()
 //        this@simpleName.render(
 //            KaTypeRendererForSource.WITH_SHORT_NAMES,

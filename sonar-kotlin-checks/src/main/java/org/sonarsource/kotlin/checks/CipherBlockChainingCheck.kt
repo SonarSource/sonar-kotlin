@@ -36,7 +36,7 @@ import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val CIPHER_INIT_MATCHER = FunMatcher(qualifier = "javax.crypto.Cipher", name = "init") {
     withArguments(INT_TYPE, "java.security.Key", "java.security.spec.AlgorithmParameterSpec")
@@ -69,7 +69,7 @@ class CipherBlockChainingCheck : CallAbstractCheck() {
     }
 }
 
-private fun KtExpression.isInitializedWithToByteArray() = analyze {
+private fun KtExpression.isInitializedWithToByteArray() = withKaSession {
     firstArgumentOfInitializer(IV_PARAMETER_SPEC_MATCHER)
         ?.predictRuntimeValueExpression()
         ?.resolveToCall()
@@ -85,7 +85,7 @@ private fun KtExpression.isCBC() =
         ?.contains("CBC", ignoreCase = true)
         ?: false
 
-private fun KtExpression.firstArgumentOfInitializer(matcher: FunMatcherImpl) = analyze {
+private fun KtExpression.firstArgumentOfInitializer(matcher: FunMatcherImpl) = withKaSession {
     predictRuntimeValueExpression()
         .resolveToCall()
         ?.successfulFunctionCallOrNull()?.let {

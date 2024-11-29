@@ -39,7 +39,7 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.EQUALS_METHOD_NAME
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val EQUALS_MATCHER = FunMatcher {
     name = EQUALS_METHOD_NAME
@@ -104,7 +104,7 @@ class EqualsArgumentTypeCheck : AbstractCheck() {
                 isExpressionCorrectType(it.typeReference!!, klass)
             }
 
-    private fun isExpressionCorrectType(typeReference: KtTypeReference, klass: KtClass): Boolean = analyze {
+    private fun isExpressionCorrectType(typeReference: KtTypeReference, klass: KtClass): Boolean = withKaSession {
         val name = typeReference.nameForReceiverLabel()
         val parentNames = klass.superTypeListEntries.mapNotNull { it.typeReference!!.nameForReceiverLabel() }
         return klass.name == name || parentNames.contains(name) ||

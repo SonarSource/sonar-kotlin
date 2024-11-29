@@ -28,7 +28,7 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.determineType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 
 private const val CERTIFICATE_EXCEPTION = "java.security.cert.CertificateException"
@@ -89,13 +89,13 @@ class ServerCertificateCheck : AbstractCheck() {
         private var throwFound: Boolean = false
         private var catchFound: Boolean = false
 
-        override fun visitThrowExpression(expression: KtThrowExpression) = analyze {
+        override fun visitThrowExpression(expression: KtThrowExpression) = withKaSession {
             throwFound =
                 throwFound || CERTIFICATE_EXCEPTION ==
                         expression.thrownExpression?.expressionType?.symbol?.classId?.asFqNameString()
         }
 
-        override fun visitCatchSection(catchClause: KtCatchClause) = analyze {
+        override fun visitCatchSection(catchClause: KtCatchClause) = withKaSession {
             catchFound =
                 catchFound || CERTIFICATE_EXCEPTION ==
                         catchClause.catchParameter?.determineType()?.symbol?.classId?.asFqNameString()

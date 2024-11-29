@@ -30,7 +30,7 @@ import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.reporting.message
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 @Rule(key = "S6611")
 class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
@@ -65,7 +65,7 @@ class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
         }
     }
 
-    private fun checkSuperType(arrayAccessExpression: KtArrayAccessExpression): Boolean = analyze {
+    private fun checkSuperType(arrayAccessExpression: KtArrayAccessExpression): Boolean = withKaSession {
         val type = arrayAccessExpression.arrayExpression?.expressionType ?: return false
         if (checkIfSubtype(type)) return true
         return type.allSupertypes.any {

@@ -24,7 +24,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 @Rule(key = "S1871")
 class DuplicateBranchCheck : AbstractBranchDuplication() {
@@ -52,11 +52,11 @@ class DuplicateBranchCheck : AbstractBranchDuplication() {
     }
 }
 
-private fun KtQualifiedExpression.hasSameSignature(other: KtQualifiedExpression): Boolean = analyze {
+private fun KtQualifiedExpression.hasSameSignature(other: KtQualifiedExpression): Boolean = withKaSession {
     this@hasSameSignature.determineSignature() == other.determineSignature()
 }
 
-private fun KtQualifiedExpression?.determineSignature(): KaSymbol? = analyze {
+private fun KtQualifiedExpression?.determineSignature(): KaSymbol? = withKaSession {
     when (val selectorExpr = this@determineSignature?.selectorExpression) {
         is KtCallExpression ->
             selectorExpr.getCallNameExpression()?.mainReference?.resolveToSymbol()

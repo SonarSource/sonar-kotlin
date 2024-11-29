@@ -34,7 +34,7 @@ import org.sonarsource.kotlin.api.checks.isAbstract
 import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.secondaryOf
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val GETTER_PREFIX = Regex("""^(get|is)\p{javaUpperCase}""")
 private val SETTER_PREFIX = Regex("""^set\p{javaUpperCase}""")
@@ -56,7 +56,7 @@ class PropertyGetterAndSetterUsageCheck : AbstractCheck() {
 
     private fun checkProperty(
         prop: KtProperty, javaAccessors: Map<String, List<KtNamedFunction>>, ctx: KotlinFileContext
-    ): Unit = analyze {
+    ): Unit = withKaSession {
         prop.nameIdentifier?.let { propIdentifier ->
             prop.typeReference?.type?.let {
                 val propName = prop.name!!
@@ -83,7 +83,7 @@ private fun isGetterOrSetter(parameterCount: Int, functionName: String) =
 
 private fun findJavaStyleGetterFunc(
     propName: String, kaType: KaType, javaAccessors: Map<String, List<KtNamedFunction>>
-): KtNamedFunction? = analyze {
+): KtNamedFunction? = withKaSession {
     val capitalizedName = capitalize(propName)
     val functionsPrefixedByIs = if (kaType.matches("kotlin.Boolean")) {
         javaAccessors.getOrElse("is${capitalizedName}") { emptyList() }
@@ -95,7 +95,7 @@ private fun findJavaStyleGetterFunc(
         .unambiguousFunction()
 }
 
-private fun parameterMatchesType(parameter: KtParameter, kaType: KaType): Boolean = analyze {
+private fun parameterMatchesType(parameter: KtParameter, kaType: KaType): Boolean = withKaSession {
     return !parameter.isVarArg && parameter.typeReference?.type?.semanticallyEquals(kaType) ?: false
 }
 
@@ -103,7 +103,7 @@ private fun findJavaStyleSetterFunc(
     propName: String,
     kaType: KaType,
     javaAccessors: Map<String, List<KtNamedFunction>>
-): KtNamedFunction? = analyze {
+): KtNamedFunction? = withKaSession {
     javaAccessors.getOrElse("set${capitalize(propName)}") { emptyList() }
         .filter { it.returnType.matches("kotlin.Unit") }
         // isGetterOrSetter ensures setters have: valueParameters.size == 1

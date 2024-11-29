@@ -37,7 +37,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.Message
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val NON_NULL_CHECK_FUNS = FunMatcher("kotlin") {
     withNames("requireNotNull", "checkNotNull")
@@ -101,7 +101,7 @@ class UselessNullCheckCheck : AbstractCheck() {
     }
 
     override fun visitCallExpression(callExpression: KtCallExpression, kfc: KotlinFileContext) {
-        val resolvedCall = analyze { callExpression.resolveToCall()?.successfulFunctionCallOrNull() } ?: return
+        val resolvedCall = withKaSession { callExpression.resolveToCall()?.successfulFunctionCallOrNull() } ?: return
         if (resolvedCall matches NON_NULL_CHECK_FUNS) {
             val argExpression = resolvedCall.argumentMapping.keys.toList().first()
             // requireNotNull and checkNotNull have no implementations without parameters. The first parameter is always the value to check.
@@ -174,7 +174,7 @@ private fun KtExpression.isNotNullable(): Boolean =
         is KtConstantExpression -> !isNull()
         is KtStringTemplateExpression -> true
 
-        else -> analyze {
+        else -> withKaSession {
             this@isNotNullable.expressionType?.let { resolvedType ->
                 resolvedType !is KaErrorType &&
                         // TODO Remove when migrate to K2 mode

@@ -31,7 +31,7 @@ import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val BUILDER = "android.security.keystore.KeyGenParameterSpec.Builder"
 
@@ -52,14 +52,14 @@ class AuthorisingNonAuthenticatedUsersCheck : CallAbstractCheck() {
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext
     ) {
-        var receiver = analyze { callExpression.resolveToCall()?.successfulFunctionCallOrNull() } ?: return
+        var receiver = withKaSession { callExpression.resolveToCall()?.successfulFunctionCallOrNull() } ?: return
         var callElement = callExpression
         val secondaryLocations = mutableListOf<SecondaryLocation>()
 
         while (!KEY_GEN_BUILDER_MATCHER.matches(receiver)) {
 
             if (KEY_GEN_BUILDER_SET_AUTH_MATCHER.matches(receiver)) {
-               analyze {
+               withKaSession {
                    if (receiver.argumentMapping.keys.toList().first().predictRuntimeBooleanValue() != false)
                        return
                    secondaryLocations.add(SecondaryLocation(kotlinFileContext.textRange(callElement.calleeExpression!!)))
@@ -72,7 +72,7 @@ class AuthorisingNonAuthenticatedUsersCheck : CallAbstractCheck() {
                 else -> null
             } ?: return
 
-            receiver = analyze { receiverExpression?.resolveToCall()?.singleFunctionCallOrNull() } ?: return
+            receiver = withKaSession { receiverExpression?.resolveToCall()?.singleFunctionCallOrNull() } ?: return
         }
         kotlinFileContext.reportIssue(callElement.calleeExpression!!,
             "Make sure authorizing non-authenticated users to use this key is safe here.",

@@ -23,9 +23,6 @@ import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.KotlinTree
 
-@Deprecated("use withKaSession instead", ReplaceWith("withKaSession(action)"))
-inline fun <R> analyze(action: KaSession.() -> R) = withKaSession(action)
-
 /**
  * Executes the given [action] in a [KaSession] context
  * providing access to [Kotlin Analysis API](https://kotl.in/analysis-api).

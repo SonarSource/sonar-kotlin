@@ -28,7 +28,7 @@ import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.checks.predictReceiverExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 const val qualifier = "kotlin.collections"
 
@@ -78,7 +78,7 @@ class CollectionInappropriateCallsCheck : CallAbstractCheck() {
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext
     ) {
-        analyze {
+        withKaSession {
             // all evaluated methods have one and one only argument
             val arg = callExpression.valueArguments.first()
             var argType = arg.getArgumentExpression()?.expressionType ?: return

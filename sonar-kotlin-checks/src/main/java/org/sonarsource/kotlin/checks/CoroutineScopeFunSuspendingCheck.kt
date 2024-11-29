@@ -24,7 +24,7 @@ import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.checks.suspendModifier
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.analyze
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val COROUTINE_SCOPE = "kotlinx.coroutines.CoroutineScope"
 private const val MESSAGE = "Extension functions on CoroutineScope should not be suspending."
@@ -35,7 +35,7 @@ class CoroutineScopeFunSuspendingCheck : AbstractCheck() {
         // Only applicable for suspending extension functions
         val suspendModifier = function.suspendModifier() ?: return
         val receiverType = function.receiverTypeReference ?: return
-        analyze {
+        withKaSession {
             receiverType.type.allSupertypes
             if (receiverType.type.symbol?.classId?.asFqNameString() == COROUTINE_SCOPE ||
                 receiverType.type.allSupertypes.any { it.symbol?.classId?.asFqNameString() == COROUTINE_SCOPE }
