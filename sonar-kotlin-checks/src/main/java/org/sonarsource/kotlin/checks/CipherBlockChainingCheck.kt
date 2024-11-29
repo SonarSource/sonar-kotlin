@@ -46,6 +46,7 @@ private val GET_INSTANCE_MATCHER = FunMatcher(qualifier = "javax.crypto.Cipher",
 private val GET_BYTES_MATCHER = FunMatcher(qualifier = "kotlin.text", name = "toByteArray")
 private val IV_PARAMETER_SPEC_MATCHER = ConstructorMatcher("javax.crypto.spec.IvParameterSpec")
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S3329")
 class CipherBlockChainingCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(CIPHER_INIT_MATCHER)

@@ -27,6 +27,7 @@ import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.checks.suspendModifier
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6318")
 class RedundantSuspendModifierCheck : AbstractCheck() {
 

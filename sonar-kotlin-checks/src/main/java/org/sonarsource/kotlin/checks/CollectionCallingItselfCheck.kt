@@ -35,6 +35,7 @@ private val COLLECTIONS_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.col
 
 private const val MESSAGE = "Collections should not be passed as arguments to their own methods."
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S2114")
 class CollectionCallingItselfCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(MUTABLE_COLLECTION_FUN_MATCHER, COLLECTIONS_FUN_MATCHER)

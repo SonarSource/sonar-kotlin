@@ -44,6 +44,7 @@ private val SEQUENCE_MATCHER = FunMatcher(qualifier = "kotlin.sequences") {
     )
 }
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S3958")
 class StreamNotConsumedCheck : CallAbstractCheck() {
 

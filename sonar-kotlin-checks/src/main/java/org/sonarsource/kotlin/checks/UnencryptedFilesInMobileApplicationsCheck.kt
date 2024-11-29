@@ -26,6 +26,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Make sure using unencrypted files is safe here."
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6300")
 class UnencryptedFilesInMobileApplicationsCheck : CallAbstractCheck() {
     override val functionsToVisit = setOf(

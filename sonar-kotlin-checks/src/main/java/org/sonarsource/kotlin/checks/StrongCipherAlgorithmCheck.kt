@@ -39,6 +39,7 @@ private const val msg = "Use a strong cipher algorithm."
 private val cipherGetInstanceMatcher = FunMatcher(qualifier = "javax.crypto.Cipher", name = "getInstance")
 private val nullCipherConstructorMatcher = ConstructorMatcher("javax.crypto.NullCipher")
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S5547")
 class StrongCipherAlgorithmCheck : AbstractCheck() {
     override fun visitCallExpression(callExpr: KtCallExpression, kotlinFileContext: KotlinFileContext) {

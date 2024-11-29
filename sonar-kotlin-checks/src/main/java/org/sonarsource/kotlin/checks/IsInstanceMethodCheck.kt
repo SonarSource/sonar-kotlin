@@ -35,6 +35,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val JAVA_CLASS_KEYWORDS = listOf("java", "javaClass")
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6202")
 class IsInstanceMethodCheck : CallAbstractCheck() {
 

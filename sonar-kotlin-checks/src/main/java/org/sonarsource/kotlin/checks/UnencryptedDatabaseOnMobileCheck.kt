@@ -38,6 +38,7 @@ private val REALM_ENC_KEY_FUN = FunMatcher(definingSupertype = "io.realm.RealmCo
 
 private const val MESSAGE = "Make sure using an unencrypted database is safe here."
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6291")
 class UnencryptedDatabaseOnMobileCheck : AbstractCheck() {
     override fun visitCallExpression(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext) {

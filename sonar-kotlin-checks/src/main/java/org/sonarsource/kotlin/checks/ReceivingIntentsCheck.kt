@@ -24,6 +24,7 @@ import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.isNull
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S5322")
 class ReceivingIntentsCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(

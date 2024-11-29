@@ -27,6 +27,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Make sure this debug feature is deactivated before delivering the code in production."
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S4507")
 class DebugFeatureEnabledCheck : CallAbstractCheck() {
 

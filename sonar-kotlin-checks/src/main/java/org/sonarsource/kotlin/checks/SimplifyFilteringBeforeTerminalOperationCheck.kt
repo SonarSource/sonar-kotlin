@@ -29,6 +29,7 @@ import org.sonarsource.kotlin.api.reporting.message
 private const val KOTLIN_COLLECTIONS_QUALIFIER = "kotlin.collections"
 private val FILTER_MATCHER = FunMatcher(qualifier = KOTLIN_COLLECTIONS_QUALIFIER, name = "filter") { withArguments("kotlin.Function1") }
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6527")
 class SimplifyFilteringBeforeTerminalOperationCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(

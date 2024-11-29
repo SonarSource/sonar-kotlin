@@ -52,6 +52,7 @@ private val HASHCODE_MATCHER = FunMatcher {
 private val OBJECTS_HASH_MATCHER = FunMatcher(qualifier = "java.util.Objects", name = "hash")
 private val ARRAYS_HASHCODE_MATCHER = FunMatcher(qualifier = "java.util.Arrays", name = "hashCode")
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6207")
 class RedundantMethodsInDataClassesCheck : AbstractCheck() {
 

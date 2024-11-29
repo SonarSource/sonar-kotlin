@@ -33,6 +33,7 @@ import org.sonarsource.kotlin.api.frontend.secondaryOf
 private const val MESSAGE = "Avoid hardcoded dispatchers."
 private const val DISPATCHERS_OBJECT = "$KOTLINX_COROUTINES_PACKAGE.Dispatchers"
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6310")
 class InjectableDispatchersCheck : CallAbstractCheck() {
     override val functionsToVisit = FUNS_ACCEPTING_DISPATCHERS

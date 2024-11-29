@@ -85,6 +85,8 @@ class KotlinSensor(
                 BindingContext.EMPTY
             }
         }
+
+        override val doResolve: Boolean = true
     }
 
     private fun visitors(sensorContext: SensorContext): List<KotlinFileVisitor> =

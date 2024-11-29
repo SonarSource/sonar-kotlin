@@ -41,6 +41,7 @@ import org.sonarsource.kotlin.api.frontend.secondaryOf
 private val GETTER_PREFIX = Regex("""^(get|is)\p{javaUpperCase}""")
 private val SETTER_PREFIX = Regex("""^set\p{javaUpperCase}""")
 
+@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6512")
 class PropertyGetterAndSetterUsageCheck : AbstractCheck() {
 
