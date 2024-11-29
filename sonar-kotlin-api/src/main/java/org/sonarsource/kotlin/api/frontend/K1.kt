@@ -42,6 +42,11 @@ import org.jetbrains.kotlin.references.fe10.base.DummyKtFe10ReferenceResolutionH
 import org.jetbrains.kotlin.references.fe10.base.KtFe10ReferenceResolutionHelper
 import org.jetbrains.kotlin.resolve.extensions.AnalysisHandlerExtension
 
+/**
+ * Marker indicating that
+ * annotated [org.sonarsource.kotlin.api.checks.KotlinCheck]
+ * can be executed only in K1 mode.
+ */
 @Deprecated("")
 annotation class K1only(val comments: String = "")
 

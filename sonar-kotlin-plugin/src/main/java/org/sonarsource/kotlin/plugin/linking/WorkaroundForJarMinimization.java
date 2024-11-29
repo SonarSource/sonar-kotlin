@@ -35,7 +35,7 @@ public class WorkaroundForJarMinimization {
           /** META-INF/services/org.jetbrains.kotlin.resolve.jvm.jvmSignature.KotlinToJvmSignatureMapper */
           org.jetbrains.kotlin.codegen.signature.KotlinToJvmSignatureMapperImpl.class,
 
-          // META-INF/analysis-api/analysis-api-impl-bsase.xml
+          // META-INF/analysis-api/analysis-api-impl-base.xml
           org.jetbrains.kotlin.analysis.api.impl.base.java.source.JavaElementSourceWithSmartPointerFactory.class,
           org.jetbrains.kotlin.analysis.api.impl.base.references.HLApiReferenceProviderService.class,
           org.jetbrains.kotlin.analysis.api.impl.base.projectStructure.KaBaseModuleProvider.class,

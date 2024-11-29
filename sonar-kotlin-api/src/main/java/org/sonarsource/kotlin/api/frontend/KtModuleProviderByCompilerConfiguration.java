@@ -31,21 +31,21 @@ import java.util.List;
 @Deprecated(forRemoval = true)
 final class KtModuleProviderByCompilerConfiguration {
 
-    @SuppressWarnings("KotlinInternalInJava")
-    public static KotlinStaticProjectStructureProvider build(
-            KotlinCoreProjectEnvironment kotlinCoreProjectEnvironment,
-            CompilerConfiguration compilerConfig,
-            List<KtFile> ktFiles
-    ) {
-        return org.jetbrains.kotlin.analysis.project.structure.impl
-                .KaModuleUtilsKt.buildKtModuleProviderByCompilerConfiguration(
-                        kotlinCoreProjectEnvironment,
-                        compilerConfig,
-                        ktFiles
-                );
-    }
+  @SuppressWarnings("KotlinInternalInJava")
+  static KotlinStaticProjectStructureProvider build(
+      KotlinCoreProjectEnvironment kotlinCoreProjectEnvironment,
+      CompilerConfiguration compilerConfig,
+      List<KtFile> ktFiles
+  ) {
+    return org.jetbrains.kotlin.analysis.project.structure.impl
+        .KaModuleUtilsKt.buildKtModuleProviderByCompilerConfiguration(
+            kotlinCoreProjectEnvironment,
+            compilerConfig,
+            ktFiles
+        );
+  }
 
-    private KtModuleProviderByCompilerConfiguration() {
-    }
+  private KtModuleProviderByCompilerConfiguration() {
+  }
 
 }

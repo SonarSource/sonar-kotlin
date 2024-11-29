@@ -71,16 +71,11 @@ class KotlinVerifier(private val check: AbstractCheck) {
         val isScriptFile = filePath.extension == "kts"
 
         val disposable = Disposer.newDisposable()
-        val environment = Environment(
-            disposable,
-            classpath + deps,
-            LanguageVersion.LATEST_STABLE,
-            useK2 = useK2,
-        )
+        val environment = Environment(disposable, classpath + deps, LanguageVersion.LATEST_STABLE, useK2 = useK2)
         val converter = { content: String ->
             val inputFile = TestInputFileBuilder("moduleKey", filePath.fileName.pathString)
-                .setModuleBaseDir(filePath.parent) // otherwise projectKey "moduleKey" leaks into absolutePath
                 .setCharset(StandardCharsets.UTF_8)
+                .setModuleBaseDir(baseDir)
                 .initMetadata(content).build()
 
             if (isScriptFile) {

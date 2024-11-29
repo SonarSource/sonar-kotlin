@@ -44,10 +44,9 @@ data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val
 
             val psiFile: KtFile = if (environment.k2session != null) {
                 val inputFilePath = FileUtil.toSystemIndependentName(inputFile.file().path)
-                environment.k2session!!.modulesWithFiles.values.first()
-                    .find {
-                        it.virtualFile.path == inputFilePath
-                    } as KtFile
+                environment.k2session!!.modulesWithFiles.values.first().find {
+                    it.virtualFile.path == inputFilePath
+                } as KtFile
             } else
                 environment.ktPsiFactory.createFile(inputFile.uri().path, normalizeEol(content))
 

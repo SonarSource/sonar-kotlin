@@ -49,7 +49,7 @@ abstract class CheckTest(
     }
 
     @Test
-    fun `with semantics`() {
+    fun `with k1 semantics`() {
         KotlinVerifier(check) {
             this.fileName = sampleFileSemantics ?: "$checkName$TEST_FILE_POSTFIX"
             this@CheckTest.classpath?.let { this.classpath = it }

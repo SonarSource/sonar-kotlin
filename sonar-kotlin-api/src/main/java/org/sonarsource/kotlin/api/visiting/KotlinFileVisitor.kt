@@ -18,31 +18,48 @@ package org.sonarsource.kotlin.api.visiting
 
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.psi.KtFile
 import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.KotlinTree
 
+@Deprecated("use withKaSession instead", ReplaceWith("withKaSession(action)"))
+inline fun <R> analyze(action: KaSession.() -> R) = withKaSession(action)
+
+/**
+ * Executes the given [action] in a [KaSession] context
+ * providing access to [Kotlin Analysis API](https://kotl.in/analysis-api).
+ */
+inline fun <R> withKaSession(action: KaSession.() -> R): R = action(kaSession!!)
+
 @PublishedApi
 internal var kaSession: KaSession? = null
 
-inline fun <R> analyze(action: KaSession.() -> R): R = action(kaSession!!)
+/**
+ * Manages lifetime of [kaSession].
+ */
+internal inline fun kaSession(ktFile: KtFile, action: () -> Unit) {
+    check(kaSession == null)
+    try {
+        analyze(ktFile) {
+            kaSession = this
+            action()
+        }
+    } finally {
+        kaSession = null
+    }
+}
 
 abstract class KotlinFileVisitor {
     fun scan(fileContext: InputFileContext, root: KotlinTree) {
         val kotlinFileContext =
             KotlinFileContext(fileContext, root.psiFile, root.bindingContext, root.diagnostics, root.regexCache)
-        if (!root.doResolve) {
-            visit(kotlinFileContext)
-        } else {
-            check(kaSession == null)
-            try {
-                analyze(root.psiFile) {
-                    kaSession = this
-                    visit(kotlinFileContext)
-                }
-            } finally {
-                kaSession = null
+        if (root.doResolve) {
+            kaSession(root.psiFile) {
+                visit(kotlinFileContext)
             }
+        } else {
+            visit(kotlinFileContext)
         }
     }
 

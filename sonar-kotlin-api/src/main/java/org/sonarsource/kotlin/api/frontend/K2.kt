@@ -22,7 +22,6 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileSystem
 import com.intellij.openapi.vfs.local.CoreLocalFileSystem
 import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISession
-import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISessionBuilder
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtLibraryModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule
@@ -38,7 +37,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 /**
- * See also [StandaloneAnalysisAPISessionBuilder.buildKtModuleProviderByCompilerConfiguration]
+ * @see [org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISessionBuilder.buildKtModuleProviderByCompilerConfiguration]
  */
 fun createK2AnalysisSession(
     parentDisposable: Disposable,
@@ -64,7 +63,7 @@ fun createK2AnalysisSession(
                     libraryName = "library"
                     addBinaryRoots(compilerConfiguration.jvmClasspathRoots.map { it.toPath() })
                 })
-                compilerConfiguration.get(JVMConfigurationKeys.JDK_HOME)?.let { jdkHome ->
+                compilerConfiguration[JVMConfigurationKeys.JDK_HOME]?.let { jdkHome ->
                     addRegularDependency(buildKtSdkModule {
                         this.platform = platform
                         addBinaryRootsFromJdkHome(jdkHome.toPath(), isJre = false)
@@ -77,7 +76,9 @@ fun createK2AnalysisSession(
 }
 
 class KotlinFileSystem : CoreLocalFileSystem() {
-    // TODO null if file does not exist
+    /**
+     * TODO return null if file does not exist - see [CoreLocalFileSystem.findFileByNioFile]
+     */
     override fun findFileByPath(path: String): VirtualFile? =
         KotlinVirtualFile(this, File(path))
 }

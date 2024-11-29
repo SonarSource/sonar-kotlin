@@ -41,7 +41,7 @@ fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile
         environment.k2session = createK2AnalysisSession(
             environment.disposable,
             environment.configuration,
-            listOf(virtualFile)
+            listOf(virtualFile),
         )
     }
 

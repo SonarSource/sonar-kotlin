@@ -223,21 +223,26 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     /**
      * ```
      * java.lang.IllegalStateException: Resolution is not performed
-     * 	at org.jetbrains.kotlin.analysis.api.descriptors.CliFe10AnalysisFacade.orThrowResolutionNotPerformedError(CliFe10AnalysisFacade.kt:78)
-     * 	at org.jetbrains.kotlin.analysis.api.descriptors.CliFe10AnalysisFacade.getAnalysisContext(CliFe10AnalysisFacade.kt:52)
-     * 	at org.jetbrains.kotlin.analysis.api.descriptors.CliFe10AnalysisFacade.getAnalysisContext(CliFe10AnalysisFacade.kt:41)
-     * 	at org.jetbrains.kotlin.analysis.api.descriptors.KaFe10SessionProvider.getAnalysisSession(KaFe10SessionProvider.kt:24)
-     * 	at org.sonarsource.kotlin.api.visiting.KotlinFileVisitor.scan(KotlinFileVisitor.kt:57)
+     *     at org.jetbrains.kotlin.analysis.api.descriptors.CliFe10AnalysisFacade.orThrowResolutionNotPerformedError(CliFe10AnalysisFacade.kt:78)
+     *     at org.jetbrains.kotlin.analysis.api.descriptors.CliFe10AnalysisFacade.getAnalysisContext(CliFe10AnalysisFacade.kt:52)
+     *     at org.jetbrains.kotlin.analysis.api.descriptors.CliFe10AnalysisFacade.getAnalysisContext(CliFe10AnalysisFacade.kt:41)
+     *     at org.jetbrains.kotlin.analysis.api.descriptors.KaFe10SessionProvider.getAnalysisSession(KaFe10SessionProvider.kt:24)
+     *     at org.sonarsource.kotlin.api.visiting.KotlinFileVisitor.scan(KotlinFileVisitor.kt:48)
      * ```
-     *
-     * TODO try to mock analyzeDeclarations in TopDownAnalyzerFacadeForJVM which is after analysisHandlerExtensions
+     * thrown by [org.jetbrains.kotlin.analysis.api.analyze]
      */
-    @org.junit.jupiter.api.Disabled
     @Test
     fun `Ensure compiler crashes during BindingContext generation don't crash engine`() {
         context.setCanSkipUnchangedFiles(false)
         executeAnalysisWithInvalidBindingContext()
-        assertThat(logTester.logs(Level.ERROR)).containsExactly("Could not generate binding context. Proceeding without semantics.")
+        assertThat(logTester.logs(Level.ERROR)).containsExactly(
+            "Could not generate binding context. Proceeding without semantics.",
+            "Cannot analyse 'file1.kt' with 'IssueSuppressionVisitor': Resolution is not performed",
+            "Cannot analyse 'file1.kt' with 'MetricVisitor': Resolution is not performed",
+            "Cannot analyse 'file1.kt' with 'KtChecksVisitor': Resolution is not performed",
+            "Cannot analyse 'file1.kt' with 'CopyPasteDetector': Resolution is not performed",
+            "Cannot analyse 'file1.kt' with 'SyntaxHighlighter': Resolution is not performed",
+        )
     }
 
     @Test
