@@ -16,32 +16,28 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.types.typeUtil.supertypes
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.checks.suspendModifier
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
-private const val COROUTINE_SCOPE = "kotlinx.coroutines.CoroutineScope"
 private const val MESSAGE = "Extension functions on CoroutineScope should not be suspending."
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6312")
 class CoroutineScopeFunSuspendingCheck : AbstractCheck() {
-    override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
+    private val coroutineScopeClassId = ClassId.fromString("kotlinx/coroutines/CoroutineScope")
+
+    override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) = withKaSession {
         // Only applicable for suspending extension functions
         val suspendModifier = function.suspendModifier() ?: return
         val receiverType = function.receiverTypeReference ?: return
-        val resolvedReceiverType = kotlinFileContext.bindingContext[BindingContext.TYPE, receiverType] ?: return
-
-        if (
-            (resolvedReceiverType.getKotlinTypeFqName(false) == COROUTINE_SCOPE ||
-                resolvedReceiverType.supertypes().any { it.getKotlinTypeFqName(false) == COROUTINE_SCOPE })
+        if (receiverType.type.isClassType(coroutineScopeClassId) ||
+            receiverType.type.allSupertypes.any { it.isClassType(coroutineScopeClassId) }
         ) {
             val secondaries = listOf(SecondaryLocation(kotlinFileContext.textRange(receiverType)))
             kotlinFileContext.reportIssue(suspendModifier, MESSAGE, secondaries)
