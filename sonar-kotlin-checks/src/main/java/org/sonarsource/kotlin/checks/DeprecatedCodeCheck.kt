@@ -17,7 +17,7 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
@@ -33,12 +33,8 @@ import org.sonarsource.kotlin.api.visiting.withKaSession
 class DeprecatedCodeCheck : AbstractCheck() {
 
     override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry, context: KotlinFileContext) = withKaSession {
-        val annotationTypeFqName = annotationEntry.typeReference?.type?.symbol?.classId?.asFqNameString()
-        if ("kotlin.Deprecated" == annotationTypeFqName) {
-            context.reportIssue(
-                annotationEntry.elementToReport(),
-                "Do not forget to remove this deprecated code someday."
-            )
+        if (annotationEntry.typeReference?.type?.isClassType(StandardClassIds.Annotations.Deprecated) == true) {
+            context.reportIssue(annotationEntry.elementToReport(), "Do not forget to remove this deprecated code someday.")
         }
     }
 }

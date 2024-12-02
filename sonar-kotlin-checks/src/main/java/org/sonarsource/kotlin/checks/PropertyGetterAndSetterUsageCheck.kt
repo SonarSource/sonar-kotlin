@@ -17,8 +17,9 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.analysis.api.types.KaType
-import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -85,7 +86,7 @@ private fun findJavaStyleGetterFunc(
     propName: String, kaType: KaType, javaAccessors: Map<String, List<KtNamedFunction>>
 ): KtNamedFunction? = withKaSession {
     val capitalizedName = capitalize(propName)
-    val functionsPrefixedByIs = if (kaType.matches("kotlin.Boolean")) {
+    val functionsPrefixedByIs = if (kaType.isNotNullable(StandardClassIds.Boolean)) {
         javaAccessors.getOrElse("is${capitalizedName}") { emptyList() }
     } else {
         emptyList()
@@ -105,7 +106,7 @@ private fun findJavaStyleSetterFunc(
     javaAccessors: Map<String, List<KtNamedFunction>>
 ): KtNamedFunction? = withKaSession {
     javaAccessors.getOrElse("set${capitalize(propName)}") { emptyList() }
-        .filter { it.returnType.matches("kotlin.Unit") }
+        .filter { it.returnType.isNotNullable(StandardClassIds.Unit) }
         // isGetterOrSetter ensures setters have: valueParameters.size == 1
         .filter { parameterMatchesType(it.valueParameters[0], kaType) }
         .unambiguousFunction()
@@ -115,7 +116,9 @@ private fun List<KtNamedFunction>.unambiguousFunction() = if (this.size == 1) th
 
 private fun capitalize(name: String): String = name.replaceFirstChar { it.uppercase() }
 
-private fun KaType.matches(qualifiedTypeName: String) = !nullability.isNullable && this.symbol?.classId?.asFqNameString() == qualifiedTypeName
+private fun KaType.isNotNullable(classId: ClassId) = withKaSession {
+    !nullability.isNullable && this@isNotNullable.isClassType(classId)
+}
 
 private fun KtNamedFunction.isIncompatiblePropertyAccessor(): Boolean = isAbstract() || overrides() || isAnnotated
 

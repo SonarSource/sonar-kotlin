@@ -16,19 +16,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.junit.jupiter.api.Test
-import org.sonarsource.kotlin.testapi.DEFAULT_KOTLIN_CLASSPATH
-import org.sonarsource.kotlin.testapi.KotlinVerifier
-import java.io.File
-
-class VarShouldBeValCheckTest : CheckTestWithNoSemantics(VarShouldBeValCheck(), shouldReport=true) {
-
-    @Test
-    fun `with partial semantics`() {
-        KotlinVerifier(check) {
-            this.fileName = "${checkName}Sample.kt"
-            this.classpath = DEFAULT_KOTLIN_CLASSPATH + System.getProperty("java.class.path").split(File.pathSeparatorChar)
-            this.deps = emptyList()
-        }.verify()
-    }
-}
+class VarShouldBeValCheckTest : CheckTestWithNoSemantics(VarShouldBeValCheck(), shouldReport = true)

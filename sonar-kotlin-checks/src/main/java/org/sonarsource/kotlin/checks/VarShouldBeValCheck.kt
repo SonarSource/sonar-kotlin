@@ -52,7 +52,7 @@ class VarShouldBeValCheck : AbstractCheck() {
             unaryAssignments.mapNotNull { it.reference() },
             callableVarReference.map { it.callableReference }).flatten()
 
-        val assignedDeclarations2 = assignedExpressions
+        val assignedDeclarations = assignedExpressions
             .mapNotNull {
                 withKaSession {
                     val successfulVariableAccessCall = it.resolveToCall()?.successfulVariableAccessCall()
@@ -74,7 +74,7 @@ class VarShouldBeValCheck : AbstractCheck() {
         }
 
         varProperties
-            .filter { it.isNotReferenced(assignedDeclarations2) }
+            .filter { it.isNotReferenced(assignedDeclarations) }
             .forEach { variable ->
                 data.reportIssue(variable.valOrVarKeyword, msg)
             }
@@ -83,7 +83,7 @@ class VarShouldBeValCheck : AbstractCheck() {
         destructedDeclaration
             .filter {
                 it.collectDescendantsOfType<KtDestructuringDeclarationEntry>()
-                    .all { variable -> variable.isNotReferenced(assignedDeclarations2) }
+                    .all { variable -> variable.isNotReferenced(assignedDeclarations) }
             }
             .forEach { variable ->
                 data.reportIssue(variable.valOrVarKeyword!!, msg)
