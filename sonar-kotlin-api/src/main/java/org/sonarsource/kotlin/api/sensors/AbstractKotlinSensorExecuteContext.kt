@@ -42,6 +42,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinSyntaxStructure
 import org.sonarsource.kotlin.api.frontend.KotlinTree
 import org.sonarsource.kotlin.api.frontend.ParseException
 import org.sonarsource.kotlin.api.frontend.RegexCache
+import org.sonarsource.kotlin.api.frontend.transferDiagnostics
 import org.sonarsource.kotlin.api.logging.debug
 import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
 
@@ -135,7 +136,7 @@ abstract class AbstractKotlinSensorExecuteContext(
 
     private val diagnostics: Map<PsiFile, List<Diagnostic>> by lazy {
         measureDuration("Diagnostics") {
-            bindingContext.diagnostics.noSuppression().groupBy { it.psiFile }.toMap()
+            transferDiagnostics(bindingContext).groupBy { it.psiFile }.toMap()
         }
     }
 

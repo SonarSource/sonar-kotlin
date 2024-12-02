@@ -346,7 +346,7 @@ fun KtCallExpression.expressionTypeFqn(bindingContext: BindingContext): String? 
  * > Avoid using [org.jetbrains.kotlin.name.FqName]s or raw strings for type comparison.
  * > Use [org.jetbrains.kotlin.name.ClassId]s instead
  */
-private fun KaType.asFqNameString(): String? = withKaSession {
+internal fun KaType.asFqNameString(): String? = withKaSession {
     (lowerBoundIfFlexible() as? KaClassType)?.classId?.asFqNameString()
 }
 

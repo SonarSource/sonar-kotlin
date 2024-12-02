@@ -35,9 +35,11 @@ import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.jetbrains.kotlin.config.languageVersionSettings
+import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.diagnostics.MutableDiagnosticsWithSuppression
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
 
@@ -107,6 +109,20 @@ fun analyzeAndGetBindingContext(
         )
     }
     return analyzer.analysisResult.bindingContext
+}
+
+/**
+ * Workaround to avoid performance-costly traversal of all diagnostics in
+ * [org.jetbrains.kotlin.analysis.api.descriptors.components.KaFe10Resolver.handleResolveErrors]
+ * ([see its source code](https://github.com/JetBrains/kotlin/blob/v2.0.21/analysis/analysis-api-fe10/src/org/jetbrains/kotlin/analysis/api/descriptors/components/KaFe10Resolver.kt#L604)).
+ */
+fun transferDiagnostics(bindingContext: BindingContext): List<Diagnostic> {
+    val diagnostics = bindingContext.diagnostics
+    val diagnosticsList = diagnostics.noSuppression().toList()
+    if (diagnostics is MutableDiagnosticsWithSuppression) {
+        diagnostics.clear()
+    } else check(diagnostics === BindingContext.EMPTY.diagnostics)
+    return diagnosticsList
 }
 
 fun compilerConfiguration(

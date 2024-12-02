@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.api.checks
 
+import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
@@ -37,20 +38,33 @@ class ArgumentMatcher(
         val ANY = ArgumentMatcher()
     }
 
+    @Deprecated("use kotlin-analysis-api instead")
     fun matches(descriptor: ValueParameterDescriptor) = (isVararg == (descriptor.varargElementType != null)) &&
         matchesNullability(descriptor) && matchesName(if (isVararg) descriptor.varargElementType else descriptor.type)
 
+    fun matches(valueParameter: KaValueParameterSymbol): Boolean {
+        if (!qualified) TODO()
+        if (nullability != null) TODO()
+        if (isVararg) TODO()
+        if (typeName == null) return true
+        return typeName == valueParameter.returnType.asFqNameString()
+    }
+
+    @Deprecated("use kotlin-analysis-api instead")
     private fun matchesName(kotlinType: KotlinType?) =
         if (qualified) matchesQualifiedName(kotlinType) else matchesUnqualifiedName(kotlinType)
 
+    @Deprecated("use kotlin-analysis-api instead")
     private fun matchesNullability(descriptor: ValueParameterDescriptor) =
         nullability?.let { it == descriptor.type.nullability() } ?: true
 
+    @Deprecated("use kotlin-analysis-api instead")
     private fun matchesQualifiedName(kotlinType: KotlinType?) =
         // Note that getKotlinTypeFqName(...) is from the kotlin.js package. We use it anyway,
         // as it seems to be the best option to get a type's fully qualified name
         typeName?.let { it == kotlinType?.getKotlinTypeFqName(false) } ?: true
 
+    @Deprecated("use kotlin-analysis-api instead")
     private fun matchesUnqualifiedName(kotlinType: KotlinType?) =
         // Note that nameIfStandardType is from the kotlin.js package. We use it anyway,
         // as it seems to be the best option to get a type's simple name
