@@ -185,8 +185,8 @@ subprojects {
                     }
                     licenses {
                         license {
-                            name.set("GNU LPGL 3")
-                            url.set("http://www.gnu.org/licenses/lgpl.txt")
+                            name.set("SSALv1")
+                            url.set("https://sonarsource.com/license/ssal/")
                             distribution.set("repo")
                         }
                     }
@@ -234,6 +234,18 @@ sonarqube {
         property("sonar.links.scm", "https://github.com/SonarSource/sonar-kotlin")
         property("sonar.links.issue", "https://jira.sonarsource.com/browse/SONARKT")
         property("sonar.exclusions", "**/build/**/*")
+    }
+}
+
+subprojects {
+    sonarqube.properties {
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            listOf(
+                "build/reports/jacoco/test/jacocoTestReport.xml",
+                "${project.rootDir}/sonar-kotlin-plugin/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
+            ).joinToString(",")
+        )
     }
 }
 

@@ -4,30 +4,28 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
+import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
+import org.jetbrains.kotlin.psi.KtExpression
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
-import org.sonarsource.kotlin.api.checks.predictRuntimeStringValueWithSecondaries
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val ALGORITHM_PATTERN = Regex("([^/]+)/([^/]+)/([^/]+)")
 
@@ -36,7 +34,6 @@ val CIPHER_GET_INSTANCE_MATCHER = FunMatcher {
     name = "getInstance"
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S5542")
 class EncryptionAlgorithmCheck : CallAbstractCheck() {
 
@@ -44,13 +41,13 @@ class EncryptionAlgorithmCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
-        kotlinFileContext: KotlinFileContext,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext
     ) {
-        val bindingContext = kotlinFileContext.bindingContext
         callExpression.valueArguments.firstOrNull()?.let { argument ->
             argument.getArgumentExpression()!!
-                .predictRuntimeStringValueWithSecondaries(bindingContext).let { (algorithm, secondaries) ->
+                .predictRuntimeStringValueWithSecondaries().let { (algorithm, secondaries) ->
                     algorithm?.getInsecureAlgorithmMessage()?.let { errorMessage ->
                         val locations = secondaries.map { secondaryLocation ->
                             SecondaryLocation(kotlinFileContext.textRange(secondaryLocation), "Transformation definition")
@@ -76,4 +73,11 @@ private fun String.getInsecureAlgorithmMessage(): String? {
     }
     // By default, ECB is used.
         ?: return "Use secure mode and padding scheme."
+}
+
+private fun KtExpression.predictRuntimeStringValueWithSecondaries() = withKaSession {
+    mutableListOf<PsiElement>().let {
+        predictRuntimeValueExpression(it)
+            .stringValue(it) to it
+    }
 }

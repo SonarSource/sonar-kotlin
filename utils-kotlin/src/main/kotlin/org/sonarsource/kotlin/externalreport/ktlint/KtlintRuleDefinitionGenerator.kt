@@ -4,18 +4,15 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.externalreport.ktlint
 
@@ -23,7 +20,6 @@ import com.google.gson.GsonBuilder
 import com.pinterest.ktlint.rule.engine.core.api.Rule
 import com.pinterest.ktlint.ruleset.standard.StandardRuleSetProvider
 import org.sonarsource.kotlin.externalreport.ExternalRule
-import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -62,19 +58,7 @@ fun generateRuleDefinitionsJson(): String {
         println("Importing ${it.size} experimental rules")
     }
 
-    val fallbackRule = ExternalRule(
-        key = FALLBACK_RULE_KEY,
-        name = "Ktlint Rule",
-        description = "This reporting may be triggered by a custom ktlint rule or by a default ktlint rule that has not yet " +
-            "been added to the Sonar Kotlin plugin.",
-        url = KTLINT_RULES_WEBPAGE,
-        tags = TAGS,
-        type = DEFAULT_RULE_TYPE,
-        severity = DEFAULT_RULE_SEVERITY,
-        constantDebtMinutes = DEFAULT_DEBT,
-    )
-
-    return (standardRules + experimentalRules + fallbackRule)
+    return (standardRules + experimentalRules)
         .let { ktlintRules ->
             GsonBuilder().setPrettyPrinting().create().toJson(ktlintRules)
         }

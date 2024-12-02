@@ -4,34 +4,31 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtVisitorVoid
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.determineType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 
 private const val CERTIFICATE_EXCEPTION = "java.security.cert.CertificateException"
@@ -46,34 +43,31 @@ private val funMatchers = listOf(
         withNames("checkClientTrusted", "checkServerTrusted")
     })
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S4830")
 class ServerCertificateCheck : AbstractCheck() {
-    // TODO determineType
-    override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        val (_, _, bindingContext) = kotlinFileContext
 
-        if (function.belongsToTrustManagerClass(bindingContext)
-            && !function.callsCheckTrusted(bindingContext)
-            && !function.throwsCertificateExceptionWithoutCatching(bindingContext)
+    override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
+        if (function.belongsToTrustManagerClass()
+            && !function.callsCheckTrusted()
+            && !function.throwsCertificateExceptionWithoutCatching()
         ) {
             kotlinFileContext.reportIssue(function.nameIdentifier ?: function,
                 "Enable server certificate validation on this SSL/TLS connection.")
         }
     }
 
-    private fun KtNamedFunction.belongsToTrustManagerClass(bindingContext: BindingContext): Boolean =
-        funMatchers.any { it.matches(this, bindingContext) }
+    private fun KtNamedFunction.belongsToTrustManagerClass(): Boolean =
+        funMatchers.any { it.matches(this) }
 
     /*
      * Returns true if a function contains a call to "checkClientTrusted" or "checkServerTrusted".
      */
-    private fun KtNamedFunction.callsCheckTrusted(bindingContext: BindingContext): Boolean {
+    private fun KtNamedFunction.callsCheckTrusted(): Boolean {
         val visitor = object : KtVisitorVoid() {
             private var foundCheckTrustedCall: Boolean = false
 
             override fun visitCallExpression(expression: KtCallExpression) {
-                foundCheckTrustedCall = foundCheckTrustedCall || funMatchers.any { it.matches(expression, bindingContext) }
+                foundCheckTrustedCall = foundCheckTrustedCall || funMatchers.any { it.matches(expression) }
             }
 
             fun callsCheckTrusted(): Boolean = foundCheckTrustedCall
@@ -85,24 +79,26 @@ class ServerCertificateCheck : AbstractCheck() {
     /*
      * Returns true only when the function throws a CertificateException without a catch against it.
      */
-    private fun KtNamedFunction.throwsCertificateExceptionWithoutCatching(bindingContext: BindingContext): Boolean {
-        val visitor = ThrowCatchVisitor(bindingContext)
+    private fun KtNamedFunction.throwsCertificateExceptionWithoutCatching(): Boolean {
+        val visitor = ThrowCatchVisitor()
         this.acceptRecursively(visitor)
         return visitor.throwsCertificateExceptionWithoutCatching()
     }
 
-    private class ThrowCatchVisitor(private val bindingContext: BindingContext) : KtVisitorVoid() {
+    private class ThrowCatchVisitor : KtVisitorVoid() {
         private var throwFound: Boolean = false
         private var catchFound: Boolean = false
 
-        override fun visitThrowExpression(expression: KtThrowExpression) {
+        override fun visitThrowExpression(expression: KtThrowExpression) = withKaSession {
             throwFound =
-                throwFound || CERTIFICATE_EXCEPTION == expression.thrownExpression.determineType(bindingContext)?.getKotlinTypeFqName(false)
+                throwFound || CERTIFICATE_EXCEPTION ==
+                        expression.thrownExpression?.expressionType?.symbol?.classId?.asFqNameString()
         }
 
-        override fun visitCatchSection(catchClause: KtCatchClause) {
+        override fun visitCatchSection(catchClause: KtCatchClause) = withKaSession {
             catchFound =
-                catchFound || CERTIFICATE_EXCEPTION == catchClause.catchParameter.determineType(bindingContext)?.getKotlinTypeFqName(false)
+                catchFound || CERTIFICATE_EXCEPTION ==
+                        catchClause.catchParameter?.determineType()?.symbol?.classId?.asFqNameString()
         }
 
         fun throwsCertificateExceptionWithoutCatching(): Boolean {

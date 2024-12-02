@@ -1,10 +1,8 @@
 package checks
 
-typealias ActionN = () -> Void // Noncompliant
-//                        ^^^^
+typealias ActionN = () -> Void // FN
 
-typealias LLActionN = List<Function1<List<String>, Function2<Set<Int>, List<List<List<Void>>>, otherpackage.Void>>> // Noncompliant
-//                                                                                    ^^^^
+typealias LLActionN = List<Function1<List<String>, Function2<Set<Int>, List<List<List<Void>>>, otherpackage.Void>>> // FN
 
 fun myFunN(a: Action) {
     println(a)

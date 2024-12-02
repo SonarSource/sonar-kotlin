@@ -4,23 +4,22 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtElement
@@ -33,12 +32,13 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val GUAVA_OPTIONAL = "com.google.common.base.Optional"
 
@@ -75,13 +75,17 @@ private val REPLACEMENT_TYPES = mapOf(
     GUAVA_OPTIONAL to """Use "java.util.Optional" instead.""",
 )
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S4738")
 class ReplaceGuavaWithKotlinCheck : CallAbstractCheck() {
 
     override val functionsToVisit = REPLACEMENT_FUNCTIONS.keys
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
+    override fun visitFunctionCall(
+        callExpression: KtCallExpression,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext
+    ) {
         val calleeExpression = callExpression.calleeExpression ?: return
         REPLACEMENT_FUNCTIONS
             .filter { it.key.matches(resolvedCall) }
@@ -90,7 +94,7 @@ class ReplaceGuavaWithKotlinCheck : CallAbstractCheck() {
 
     override fun visitParameter(parameter: KtParameter, ctx: KotlinFileContext) {
         parameter.typeReference?.let { typeReference ->
-            typeReference.ifTypeReplacement(ctx) { replacement ->
+            typeReference.ifTypeReplacement { replacement ->
                 if (typeReference.isInNonOverrideContext(ctx, parameter)) {
                     ctx.reportIssue(typeReference, replacement)
                 }
@@ -100,7 +104,7 @@ class ReplaceGuavaWithKotlinCheck : CallAbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, ctx: KotlinFileContext) {
         function.typeReference?.let { typeReference ->
-            typeReference.ifTypeReplacement(ctx) { replacement ->
+            typeReference.ifTypeReplacement { replacement ->
                 if (typeReference.isInNonOverrideContext(ctx)) {
                     ctx.reportIssue(typeReference, replacement)
                 }
@@ -110,7 +114,7 @@ class ReplaceGuavaWithKotlinCheck : CallAbstractCheck() {
 
     override fun visitProperty(property: KtProperty, ctx: KotlinFileContext) {
         property.typeReference?.let { typeReference ->
-            typeReference.ifTypeReplacement(ctx) { replacement ->
+            typeReference.ifTypeReplacement { replacement ->
                 ctx.reportIssue(typeReference, replacement)
             }
         }
@@ -118,7 +122,7 @@ class ReplaceGuavaWithKotlinCheck : CallAbstractCheck() {
 
     private fun PsiElement?.isInNonOverrideContext(ctx: KotlinFileContext, parameter: KtParameter? = null): Boolean = when (this) {
         is KtNamedFunction -> this.hasBody() && !this.overrides()
-        is KtClass -> !(parameter?.hasReferencesIn(ctx, this.getSuperTypeList()) ?: false)
+        is KtClass -> !(parameter?.hasReferencesIn(this.getSuperTypeList()) ?: false)
         is KtTypeReference -> this.parent.isInNonOverrideContext(ctx, parameter)
         is KtParameter -> this.parent.isInNonOverrideContext(ctx, parameter)
         is KtParameterList -> this.parent.isInNonOverrideContext(ctx, parameter)
@@ -126,16 +130,16 @@ class ReplaceGuavaWithKotlinCheck : CallAbstractCheck() {
         else -> false
     }
 
-    private fun KtParameter.hasReferencesIn(ctx: KotlinFileContext, elementToVisit: KtElement?): Boolean {
-        val parameterDeclaration = ctx.bindingContext[BindingContext.VALUE_PARAMETER, this] ?: return false
+    private fun KtParameter.hasReferencesIn(elementToVisit: KtElement?): Boolean = withKaSession {
+        val variableSymbol = this@hasReferencesIn.symbol
+
         return elementToVisit?.collectDescendantsOfType<KtReferenceExpression>() { expression ->
-            ctx.bindingContext[BindingContext.REFERENCE_TARGET, expression] == parameterDeclaration
+            expression.mainReference.resolveToSymbol() == variableSymbol
         }?.isNotEmpty() ?: false
     }
 
-    private fun KtTypeReference.ifTypeReplacement(ctx: KotlinFileContext, action: (String) -> Unit) {
-        ctx.bindingContext[BindingContext.TYPE, this]
-            ?.getKotlinTypeFqName(false)
+    private fun KtTypeReference.ifTypeReplacement(action: (String) -> Unit) = withKaSession {
+        this@ifTypeReplacement.type.symbol?.classId?.asFqNameString()
             ?.let { REPLACEMENT_TYPES[it]?.let(action) }
     }
 

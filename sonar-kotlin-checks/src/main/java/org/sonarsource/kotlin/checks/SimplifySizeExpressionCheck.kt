@@ -4,22 +4,22 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
 import org.jetbrains.kotlin.lexer.KtToken
 import org.jetbrains.kotlin.lexer.KtTokens.ANDAND_Id
 import org.jetbrains.kotlin.lexer.KtTokens.EQEQ_Id
@@ -38,15 +38,13 @@ import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.psi.psiUtil.isNull
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.checks.FieldMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val PACKAGE_KOTLIN_COLLECTION = "kotlin.collections"
 private const val PACKAGE_KOTLIN_TEXT = "kotlin.text"
@@ -72,17 +70,16 @@ private val isNotEmptyMatcher = FunMatcher {
     withNoArguments()
 }
 
-private val sizeFieldMatcher = FieldMatcher {
+private val sizeFieldMatcher = FunMatcher {
     withNames("size")
-    withDefiningTypes(INTERFACE_KOTLIN_COLLECTION, INTERFACE_KOTLIN_MAP)
+    withDefiningSupertypes(INTERFACE_KOTLIN_COLLECTION, INTERFACE_KOTLIN_MAP)
 }
 
-private val lengthFieldMatcher = FieldMatcher {
+private val lengthFieldMatcher = FunMatcher {
     withNames("length")
     withQualifiers("kotlin.String")
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S6529")
 class SimplifySizeExpressionCheck : CallAbstractCheck() {
 
@@ -90,12 +87,11 @@ class SimplifySizeExpressionCheck : CallAbstractCheck() {
         countMatcher, isEmptyMatcher, isNotEmptyMatcher
     )
 
-    // TODO easy?
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
         if (matchedFun == countMatcher) {
             checkSizeTest(callExpression, kotlinFileContext)
@@ -107,10 +103,9 @@ class SimplifySizeExpressionCheck : CallAbstractCheck() {
     override fun visitReferenceExpression(
         expression: KtReferenceExpression,
         kotlinFileContext: KotlinFileContext,
-    ) {
-        if (expression is KtNameReferenceExpression && (sizeFieldMatcher.matches(expression, kotlinFileContext.bindingContext) ||
-                lengthFieldMatcher.matches(expression, kotlinFileContext.bindingContext))
-        ) {
+    ) = withKaSession {
+        val resolvedCall = expression.resolveToCall()?.successfulVariableAccessCall() ?: return
+        if (sizeFieldMatcher.matches(resolvedCall) || lengthFieldMatcher.matches(resolvedCall)) {
             checkSizeTest(expression, kotlinFileContext)
         }
     }
@@ -127,9 +122,8 @@ class SimplifySizeExpressionCheck : CallAbstractCheck() {
             else -> return
         }
 
-        val bindingContext = kotlinFileContext.bindingContext
-        if (((operationTokenId != LT_Id) && isIntZeroLiteral(sizeTest.right, bindingContext)) ||
-            ((operationTokenId != GT_Id) && isIntZeroLiteral(sizeTest.left, bindingContext))
+        if (((operationTokenId != LT_Id) && isIntZeroLiteral(sizeTest.right)) ||
+            ((operationTokenId != GT_Id) && isIntZeroLiteral(sizeTest.left))
         ) {
             checkNullTestOrReportSize(sizeTest, isSizeEquals, true, expression.parent as? KtDotQualifiedExpression, kotlinFileContext)
         }
@@ -209,8 +203,8 @@ private fun getNullTestReference(referenceExpression: KtExpression?, nullExpress
 private fun expandOptionalQualifier(element: PsiElement): PsiElement =
     if (element is KtDotQualifiedExpression) element.parent else element
 
-private fun isIntZeroLiteral(expression: KtExpression?, bindingContext: BindingContext) =
-    (expression as? KtConstantExpression)?.predictRuntimeIntValue(bindingContext) == 0
+private fun isIntZeroLiteral(expression: KtExpression?) =
+    (expression as? KtConstantExpression)?.predictRuntimeIntValue() == 0
 
 private fun KtExpression.getOperationTokenId() = ((when (this) {
     is KtUnaryExpression -> operationToken

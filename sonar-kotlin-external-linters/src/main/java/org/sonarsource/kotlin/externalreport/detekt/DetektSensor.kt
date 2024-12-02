@@ -4,18 +4,15 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.externalreport.detekt
 
@@ -26,7 +23,6 @@ import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.api.frontend.AbstractPropertyHandlerSensor
 import org.sonarsource.kotlin.api.common.RULE_REPOSITORY_LANGUAGE
 import org.sonarsource.kotlin.externalreport.common.CheckstyleFormatImporterWithRuleLoader
-import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import java.io.File
 
 class DetektSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandlerSensor(
@@ -48,19 +44,11 @@ class DetektSensor(analysisWarnings: AnalysisWarnings) : AbstractPropertyHandler
         ) : CheckstyleFormatImporterWithRuleLoader(context, LINTER_KEY, DetektRulesDefinition.RULE_LOADER) {
 
             override fun createRuleKey(source: String): RuleKey? {
-                val preliminaryRuleKey =
-                    if (source.startsWith(DETEKT_PREFIX)) {
-                        source.substring(DETEKT_PREFIX.length)
-                    } else {
-                        LOG.debug("Unexpected rule key without '{}' suffix: '{}'", DETEKT_PREFIX, source)
-                        return null
-                    }
-
-                val ruleKey =
-                    if (DetektRulesDefinition.RULE_LOADER.ruleKeys().contains(preliminaryRuleKey)) preliminaryRuleKey
-                    else FALLBACK_RULE_KEY
-
-                return super.createRuleKey(ruleKey)
+                if (!source.startsWith(DETEKT_PREFIX)) {
+                    LOG.debug("Unexpected rule key without '{}' suffix: '{}'", DETEKT_PREFIX, source)
+                    return null
+                }
+                return super.createRuleKey(source.substring(DETEKT_PREFIX.length))
             }
         }
     }

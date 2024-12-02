@@ -4,18 +4,15 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.externalreport.detekt
 
@@ -30,7 +27,6 @@ import org.sonar.api.batch.sensor.issue.ExternalIssue
 import org.sonar.api.rules.RuleType
 import org.sonar.api.testfixtures.log.LogTesterJUnit5
 import org.sonarsource.kotlin.externalreport.common.ExternalReportTestUtils
-import org.sonarsource.kotlin.externalreport.common.FALLBACK_RULE_KEY
 import java.nio.file.Paths
 
 internal class DetektSensorTest {
@@ -94,7 +90,7 @@ internal class DetektSensorTest {
 
         val fourth = externalIssues[3]
         assertThat(fourth.primaryLocation().inputComponent().key()).isEqualTo("detekt-project:A.kt")
-        assertThat(fourth.ruleKey().rule()).isEqualTo(FALLBACK_RULE_KEY)
+        assertThat(fourth.ruleKey().rule()).isEqualTo("Unknown-Or-Custom-Rule")
         assertThat(fourth.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(fourth.severity()).isEqualTo(Severity.MAJOR)
         assertThat(fourth.primaryLocation().message()).isEqualTo("Custom rule")
@@ -179,7 +175,7 @@ internal class DetektSensorTest {
         assertThat(externalIssues).hasSize(1)
         val first = externalIssues[0]
         assertThat(first.primaryLocation().inputComponent().key()).isEqualTo("detekt-project:main.kt")
-        assertThat(first.ruleKey().rule()).isEqualTo(FALLBACK_RULE_KEY)
+        assertThat(first.ruleKey().rule()).isEqualTo("UnknownRuleKey")
         assertThat(first.type()).isEqualTo(RuleType.CODE_SMELL)
         assertThat(first.severity()).isEqualTo(Severity.MAJOR)
         assertThat(first.primaryLocation().message()).isEqualTo("Error at file level with an unknown rule key.")

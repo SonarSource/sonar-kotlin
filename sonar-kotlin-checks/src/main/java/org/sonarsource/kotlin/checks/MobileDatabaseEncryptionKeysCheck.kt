@@ -4,22 +4,24 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
@@ -29,26 +31,18 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi2ir.deparenthesize
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.checks.ConstructorMatcher
-import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
-import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val SQLITE = "net.sqlcipher.database.SQLiteDatabase"
 private const val ENCRYPTION_KEY = "encryptionKey"
 private const val CHANGE_PASSWORD = "changePassword"
 private val CREATE_CHAR_BYTE_ARRAY = FunMatcher(qualifier = "kotlin") { withNames("byteArrayOf", "charArrayOf") }
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S6301")
 class MobileDatabaseEncryptionKeysCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(
@@ -61,27 +55,26 @@ class MobileDatabaseEncryptionKeysCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext
     ) {
-        val bindingContext = kotlinFileContext.bindingContext
-        val functionName = resolvedCall.resultingDescriptor.name.asString()
-
-        val valueArgumentsList = resolvedCall.valueArgumentsByIndex
-        if (valueArgumentsList == null || (valueArgumentsList.size < 2 && functionName != ENCRYPTION_KEY)) return
+        val symbol = resolvedCall.partiallyAppliedSymbol.symbol
+        val functionName = if (symbol is KaConstructorSymbol) "<init>" else symbol.name?.asString() ?: return
+        val valueArgumentsList = resolvedCall.argumentMapping.keys.toList()
+        if (valueArgumentsList.size < 2 && functionName != ENCRYPTION_KEY) return
 
         val arg = if (functionName in setOf(ENCRYPTION_KEY, CHANGE_PASSWORD)) {
             valueArgumentsList[0]
         } else valueArgumentsList[1]
-        val argExpr = (arg as? ExpressionValueArgument)?.valueArgument?.getArgumentExpression() ?: return
 
         val secondaries = mutableListOf<PsiElement>()
-        val argValueExpr = argExpr.predictRuntimeValueExpression(bindingContext, secondaries)
-        if (argValueExpr.isHardCoded(bindingContext, secondaries)) {
+        val argValueExpr = arg.predictRuntimeValueExpression(secondaries)
+        if (argValueExpr.isHardCoded(secondaries)) {
             val parameter = if (functionName == ENCRYPTION_KEY) ENCRYPTION_KEY else "password"
 
             kotlinFileContext.reportIssue(
-                argExpr,
+                arg,
                 """The "$parameter" parameter should not be hardcoded.""",
                 secondaries.map { SecondaryLocation(kotlinFileContext.textRange(it)) },
             )
@@ -89,32 +82,33 @@ class MobileDatabaseEncryptionKeysCheck : CallAbstractCheck() {
     }
 }
 
-private fun KtElement.isHardCoded(bindingContext: BindingContext, secondaries: MutableList<PsiElement>): Boolean =
+private fun KtElement.isHardCoded(secondaries: MutableList<PsiElement>): Boolean =
     when (this) {
         is KtStringTemplateExpression -> true
         is KtParenthesizedExpression ->
-            deparenthesize().apply { secondaries.add(this) }.isHardCoded(bindingContext, secondaries)
+            deparenthesize().apply { secondaries.add(this) }.isHardCoded(secondaries)
         is KtDotQualifiedExpression ->
-            (selectorExpression?.isHardCoded(bindingContext, secondaries) ?: false)
+            (selectorExpression?.isHardCoded(secondaries) ?: false)
                 || receiverExpression
-                .predictRuntimeValueExpression(bindingContext, secondaries)
-                .isHardCoded(bindingContext, secondaries)
+                .predictRuntimeValueExpression(secondaries)
+                .isHardCoded(secondaries)
         is KtCallExpression ->
-            if (CREATE_CHAR_BYTE_ARRAY.matches(this, bindingContext)) {
+            if (CREATE_CHAR_BYTE_ARRAY.matches(this)) {
                 secondaries.add(calleeExpression!!)
                 true
-            } else returnsHardcoded(bindingContext, secondaries)
+            } else returnsHardcoded(secondaries)
         else -> false
     }
 
-fun KtCallExpression.returnsHardcoded(bindingContext: BindingContext, secondaries: MutableList<PsiElement>) : Boolean {
-    val resultingDescriptor = this.getResolvedCall(bindingContext)?.resultingDescriptor ?: return false
-    val declaration = DescriptorToSourceUtils.descriptorToDeclaration(resultingDescriptor) as? KtNamedFunction ?: return false
+fun KtCallExpression.returnsHardcoded(secondaries: MutableList<PsiElement>): Boolean =
+    withKaSession {
+        val resultingDescriptor = this@returnsHardcoded.resolveToCall()?.successfulFunctionCallOrNull() ?: return false
+        val declaration = resultingDescriptor.partiallyAppliedSymbol.symbol.psi as? KtNamedFunction ?: return false
 
-    if (!declaration.hasBody()) return false
-    return if (declaration.hasBlockBody()) {
-        declaration.anyDescendantOfType<KtReturnExpression> {
-            it.returnedExpression?.isHardCoded(bindingContext, secondaries) ?: false
-        }
-    } else declaration.bodyExpression?.isHardCoded(bindingContext, secondaries) ?: false
-}
+        if (!declaration.hasBody()) return false
+        return if (declaration.hasBlockBody()) {
+            declaration.anyDescendantOfType<KtReturnExpression> {
+                it.returnedExpression?.isHardCoded(secondaries) ?: false
+            }
+        } else declaration.bodyExpression?.isHardCoded(secondaries) ?: false
+    }

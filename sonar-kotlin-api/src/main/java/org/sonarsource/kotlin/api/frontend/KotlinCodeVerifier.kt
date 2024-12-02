@@ -4,21 +4,19 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.api.frontend
 
+import com.intellij.openapi.util.Disposer
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.PsiFile
@@ -36,7 +34,12 @@ import org.sonarsource.analyzer.commons.recognizers.LanguageFootprint
 
 object KotlinCodeVerifier {
 
-    private val environment = Environment(emptyList(), LanguageVersion.LATEST_STABLE)
+    /**
+     * TODO get rid of this static (introduced by https://github.com/SonarSource/sonar-kotlin/commit/4a9410053ca901fd73a0074770b9469eb3b14aa2):
+     *   for example maybe [org.jetbrains.kotlin.psi.KtPsiFactory.contextual] can be used instead?
+     */
+    private val disposable = Disposer.newDisposable()
+    private val environment = Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE)
     private val codeRecognizer = CodeRecognizer(0.9, KotlinFootprint)
 
     private val KDOC_TAGS = listOf(

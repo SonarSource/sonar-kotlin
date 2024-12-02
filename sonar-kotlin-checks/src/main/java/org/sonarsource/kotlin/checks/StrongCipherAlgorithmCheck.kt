@@ -4,18 +4,15 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
@@ -42,16 +39,14 @@ private const val msg = "Use a strong cipher algorithm."
 private val cipherGetInstanceMatcher = FunMatcher(qualifier = "javax.crypto.Cipher", name = "getInstance")
 private val nullCipherConstructorMatcher = ConstructorMatcher("javax.crypto.NullCipher")
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S5547")
 class StrongCipherAlgorithmCheck : AbstractCheck() {
     override fun visitCallExpression(callExpr: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        val (_, _, bindingContext) = kotlinFileContext
-        if (nullCipherConstructorMatcher.matches(callExpr, bindingContext)) {
+        if (nullCipherConstructorMatcher.matches(callExpr)) {
             kotlinFileContext.reportIssue(callExpr, msg)
-        } else if (cipherGetInstanceMatcher.matches(callExpr, bindingContext)) {
+        } else if (cipherGetInstanceMatcher.matches(callExpr)) {
             callExpr.valueArguments.firstOrNull()?.let { arg ->
-                arg.getArgumentExpression()?.predictRuntimeStringValue(bindingContext)?.uppercase()?.let { candidateString ->
+                arg.getArgumentExpression()?.predictRuntimeStringValue()?.uppercase()?.let { candidateString ->
                     if (weakCiphers.any { cipher -> candidateString == cipher || candidateString.startsWith("$cipher/") }) {
                         kotlinFileContext.reportIssue(arg, msg)
                     }

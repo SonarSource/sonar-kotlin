@@ -6,10 +6,7 @@ import java.util.jar.JarInputStream
 plugins {
     id("com.gradleup.shadow") version "8.3.1"
     kotlin("jvm")
-}
-
-repositories {
-    maven { url = uri("https://repo.gradle.org/gradle/libs-releases") }
+    id("jacoco-report-aggregation")
 }
 
 dependencies {
@@ -42,6 +39,7 @@ dependencies {
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
 
     testImplementation(project(":sonar-kotlin-test-api"))
+    jacocoAggregation(project(":sonar-kotlin-test-api"))
 }
 
 val test: Test by tasks
@@ -73,7 +71,7 @@ tasks.jar {
                 "Plugin-Homepage" to "https://redirect.sonarsource.com/plugins/kotlin.html",
                 "Plugin-IssueTrackerUrl" to "https://sonarsource.atlassian.net/browse/SONARKT",
                 "Plugin-Key" to "kotlin",
-                "Plugin-License" to "GNU LGPL 3",
+                "Plugin-License" to "SSALv1",
                 "Plugin-Name" to "Kotlin Code Quality and Security",
                 "Plugin-Organization" to "SonarSource",
                 "Plugin-OrganizationUrl" to "https://www.sonarsource.com",
@@ -104,8 +102,10 @@ tasks.shadowJar {
 //    exclude("org/jetbrains/kotlin/codegen/*.class") // ?
 //    exclude("org/jetbrains/kotlin/backend/**") // ?
     dependencies {
-        exclude(dependency("org.jetbrains.kotlin:high-level-api-fir-for-ide"))
+        // include only K1, and exclude K2 for the time being
+        exclude(dependency("org.jetbrains.kotlin:analysis-api-k2-for-ide"))
         exclude(dependency("org.jetbrains.kotlin:low-level-api-fir-for-ide"))
+        exclude(dependency("org.jetbrains.kotlin:symbol-light-classes-for-ide"))
     }
     doLast {
 //        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 52_500_000L, 53_000_000L)
@@ -153,4 +153,9 @@ fun checkJarEntriesPathUniqueness(file: File) {
     if (duplicatedNames.isNotEmpty()) {
         throw GradleException("Duplicated entries in the jar: '${file.path}': ${duplicatedNames.joinToString(", ")}")
     }
+}
+
+tasks.check {
+    // Generate aggregate coverage report
+    dependsOn(tasks.named<JacocoReport>("testCodeCoverageReport"))
 }

@@ -4,34 +4,34 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.calls
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.checks.ConstructorMatcher
-import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
-import org.sonarsource.kotlin.api.checks.predictReceiverExpression
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val BUILDER = "android.security.keystore.KeyGenParameterSpec.Builder"
 
@@ -42,38 +42,39 @@ private val KEY_GEN_BUILDER_SET_AUTH_MATCHER = FunMatcher(qualifier = BUILDER, n
     withArguments("kotlin.Boolean")
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S6288")
 class AuthorisingNonAuthenticatedUsersCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(KEY_GEN_BUILDER_BUILD_MATCHER)
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
-        kotlinFileContext: KotlinFileContext,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext
     ) {
-        val bindingContext = kotlinFileContext.bindingContext
-        val call = callExpression.getCall(bindingContext) ?: return
-        var receiver = call
+        var receiver = withKaSession { callExpression.resolveToCall()?.successfulFunctionCallOrNull() } ?: return
+        var callElement = callExpression
         val secondaryLocations = mutableListOf<SecondaryLocation>()
 
-        while (!KEY_GEN_BUILDER_MATCHER.matches(receiver, bindingContext)) {
-            val callElement = receiver.callElement as? KtCallExpression ?: return
+        while (!KEY_GEN_BUILDER_MATCHER.matches(receiver)) {
 
-            if (KEY_GEN_BUILDER_SET_AUTH_MATCHER.matches(receiver, bindingContext)) {
-                val argumentExpression = receiver.valueArguments[0]?.getArgumentExpression()!!
-                argumentExpression.getType(bindingContext)?.let {
-                    val argValue = bindingContext[BindingContext.COMPILE_TIME_VALUE, argumentExpression]
-                        ?.getValue(it) as? Boolean
-                    if (argValue != false) return
-                    secondaryLocations.add(SecondaryLocation(kotlinFileContext.textRange(callElement.calleeExpression!!)))
-                }
+            if (KEY_GEN_BUILDER_SET_AUTH_MATCHER.matches(receiver)) {
+               withKaSession {
+                   if (receiver.argumentMapping.keys.toList().first().predictRuntimeBooleanValue() != false)
+                       return
+                   secondaryLocations.add(SecondaryLocation(kotlinFileContext.textRange(callElement.calleeExpression!!)))
+               }
             }
+            val receiverExpression = callElement.predictReceiverExpression()
+            callElement = when(receiverExpression) {
+                is KtCallExpression -> receiverExpression
+                is KtDotQualifiedExpression -> receiverExpression.selectorExpression as? KtCallExpression
+                else -> null
+            } ?: return
 
-            receiver = callElement.predictReceiverExpression(bindingContext)
-                ?.getCall(bindingContext) ?: return
+            receiver = withKaSession { receiverExpression?.resolveToCall()?.singleFunctionCallOrNull() } ?: return
         }
-        kotlinFileContext.reportIssue(receiver.calleeExpression!!,
+        kotlinFileContext.reportIssue(callElement.calleeExpression!!,
             "Make sure authorizing non-authenticated users to use this key is safe here.",
             secondaryLocations)
     }

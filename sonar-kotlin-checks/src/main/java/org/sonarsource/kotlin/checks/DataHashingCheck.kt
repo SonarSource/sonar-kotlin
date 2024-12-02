@@ -4,24 +4,20 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.ANY
 import org.sonarsource.kotlin.api.checks.AbstractCheck
@@ -98,19 +94,17 @@ private val WEAK_METHOD_MATCHERS = listOf(
 private val DEPRECATED_SPRING_PASSWORD_ENCODER_METHODS = DEPRECATED_SPRING_PASSWORD_ENCODERS.map(::ConstructorMatcher).toList() +
         FunMatcher(qualifier = "org.springframework.security.crypto.password.NoOpPasswordEncoder", name = GET_INSTANCE)
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S4790")
 class DataHashingCheck : AbstractCheck() {
 
     override fun visitCallExpression(expression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        val bindingContext = kotlinFileContext.bindingContext
         val calleeExpression = expression.calleeExpression ?: return
 
-        if (DEPRECATED_SPRING_PASSWORD_ENCODER_METHODS.any { it.matches(expression, bindingContext) }) {
+        if (DEPRECATED_SPRING_PASSWORD_ENCODER_METHODS.any { it.matches(expression) }) {
             kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
-        } else if (WEAK_METHOD_MATCHERS.any { it.matches(expression, bindingContext) }) {
+        } else if (WEAK_METHOD_MATCHERS.any { it.matches(expression) }) {
             val algorithm = ALGORITHM_BY_METHOD_NAME[calleeExpression.text]
-                ?: algorithm(expression.valueArguments.firstOrNull()?.getArgumentExpression(), bindingContext)
+                ?: algorithm(expression.valueArguments.firstOrNull()?.getArgumentExpression())
             algorithm?.let { kotlinFileContext.reportIssue(calleeExpression, MESSAGE) }
         }
     }
@@ -137,7 +131,7 @@ enum class InsecureAlgorithm {
     }
 }
 
-private fun algorithm(invocationArgument: KtExpression?, bindingContext: BindingContext) =
-    invocationArgument?.predictRuntimeStringValue(bindingContext)?.let { algorithmName ->
-        InsecureAlgorithm.values().firstOrNull { it.match(algorithmName) }
+private fun algorithm(invocationArgument: KtExpression?) =
+    invocationArgument?.predictRuntimeStringValue()?.let { algorithmName ->
+        InsecureAlgorithm.entries.firstOrNull { it.match(algorithmName) }
     }

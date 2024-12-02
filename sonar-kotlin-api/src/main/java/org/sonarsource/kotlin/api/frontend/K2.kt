@@ -4,18 +4,15 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.api.frontend
 
@@ -25,7 +22,6 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileSystem
 import com.intellij.openapi.vfs.local.CoreLocalFileSystem
 import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISession
-import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISessionBuilder
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtLibraryModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule
@@ -41,7 +37,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 /**
- * See also [StandaloneAnalysisAPISessionBuilder.buildKtModuleProviderByCompilerConfiguration]
+ * @see [org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISessionBuilder.buildKtModuleProviderByCompilerConfiguration]
  */
 fun createK2AnalysisSession(
     parentDisposable: Disposable,
@@ -67,7 +63,7 @@ fun createK2AnalysisSession(
                     libraryName = "library"
                     addBinaryRoots(compilerConfiguration.jvmClasspathRoots.map { it.toPath() })
                 })
-                compilerConfiguration.get(JVMConfigurationKeys.JDK_HOME)?.let { jdkHome ->
+                compilerConfiguration[JVMConfigurationKeys.JDK_HOME]?.let { jdkHome ->
                     addRegularDependency(buildKtSdkModule {
                         this.platform = platform
                         addBinaryRootsFromJdkHome(jdkHome.toPath(), isJre = false)
@@ -80,7 +76,9 @@ fun createK2AnalysisSession(
 }
 
 class KotlinFileSystem : CoreLocalFileSystem() {
-    // TODO null if file does not exist
+    /**
+     * TODO return null if file does not exist - see [CoreLocalFileSystem.findFileByNioFile]
+     */
     override fun findFileByPath(path: String): VirtualFile? =
         KotlinVirtualFile(this, File(path))
 }

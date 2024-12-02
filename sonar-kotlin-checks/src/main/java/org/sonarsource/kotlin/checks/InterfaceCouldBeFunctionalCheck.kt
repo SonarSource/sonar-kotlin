@@ -4,32 +4,28 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.checks.getType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S6517")
 class InterfaceCouldBeFunctionalCheck : AbstractCheck() {
 
@@ -51,7 +47,7 @@ class InterfaceCouldBeFunctionalCheck : AbstractCheck() {
 
     private fun checkFunctionalInterfaceAnnotation(klass: KtClass, context: KotlinFileContext) {
         klass.annotationEntries.forEach {
-            if (isFunctionalInterfaceAnnotation(it, context)) {
+            if (isFunctionalInterfaceAnnotation(it)) {
                 context.reportIssue(it, """"@FunctionalInterface" annotation has no effect in Kotlin""")
             }
         }
@@ -69,8 +65,6 @@ private fun hasExactlyOneFunctionAndNoProperties(klass: KtClass): Boolean {
     } && functionCount > 0
 }
 
-// TODO easy
-private fun isFunctionalInterfaceAnnotation(annotation: KtAnnotationEntry, context: KotlinFileContext): Boolean {
-    val annotationType = annotation.typeReference.getType(context.bindingContext)
-    return (annotationType?.getKotlinTypeFqName(false) == "java.lang.FunctionalInterface")
+private fun isFunctionalInterfaceAnnotation(annotation: KtAnnotationEntry): Boolean = withKaSession {
+    annotation.typeReference?.type?.symbol?.classId?.asFqNameString()  == "java.lang.FunctionalInterface"
 }

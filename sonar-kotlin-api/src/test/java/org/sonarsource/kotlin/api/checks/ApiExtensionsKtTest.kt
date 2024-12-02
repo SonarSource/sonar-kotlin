@@ -4,18 +4,15 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.api.checks
 
@@ -24,6 +21,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.ObjectAssert
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
+import io.mockk.impl.platform.Disposable
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
@@ -42,7 +40,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
@@ -50,7 +47,6 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -536,17 +532,6 @@ private class ApiExtensionsKtDetermineSignatureTest : AbstractApiExtensionsKtTes
         ktFile = kotlinTree.psiFile
     }
 
-    @Test
-    fun `determineSignature of KtQualifiedExpression`() {
-        val expr = ktFile.findDescendantOfType<KtQualifiedExpression> { it.text == "this.prop" }!!
-
-        assertThat(expr.determineSignature(bindingContext)?.fqNameOrNull()?.asString()).isEqualTo("bar.Foo.prop")
-    }
-
-    @Test
-    fun `determineSignature of a null KtQualifiedExpression`() {
-        assertThat(null.determineSignature(bindingContext)).isNull()
-    }
 }
 
 private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKtTest() {
@@ -702,17 +687,20 @@ private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKt
 }
 
 private abstract class AbstractApiExtensionsKtTest {
-    /**
-     * Disposed in [afterEach]
-     */
-    private val environment = Environment(
-        listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(File.pathSeparatorChar),
-        LanguageVersion.LATEST_STABLE
-    )
+    private val disposable = Disposer.newDisposable()
+
+    @AfterEach
+    fun dispose() {
+        Disposer.dispose(disposable)
+    }
 
     fun parse(code: String) = kotlinTreeOf(
         code,
-        environment,
+        Environment(
+            disposable,
+            listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(File.pathSeparatorChar),
+            LanguageVersion.LATEST_STABLE
+        ),
         TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(code)
@@ -720,6 +708,11 @@ private abstract class AbstractApiExtensionsKtTest {
     )
 
     fun parseWithoutParsingExceptions(code: String): KtFile {
+        val environment = Environment(
+            disposable,
+            listOf("build/classes/kotlin/main") + System.getProperty("java.class.path").split(File.pathSeparatorChar),
+            LanguageVersion.LATEST_STABLE
+        )
         val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(code)
@@ -727,10 +720,6 @@ private abstract class AbstractApiExtensionsKtTest {
         return environment.ktPsiFactory.createFile(inputFile.uri().path, code.replace("""\r\n?""".toRegex(), "\n"))
     }
 
-    @AfterEach
-    fun afterEach() {
-        Disposer.dispose(environment.disposable)
-    }
 }
 
 private class KtExpressionAssert(expression: KtExpression?) : ObjectAssert<KtExpression>(expression) {

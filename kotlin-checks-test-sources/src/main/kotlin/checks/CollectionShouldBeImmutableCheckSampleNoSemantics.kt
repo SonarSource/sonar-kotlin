@@ -1,8 +1,7 @@
 package checks
 
 class CollectionShouldBeImmutableCheckSampleNoSemantics {
-    fun MutableCollection<Int>.doSomething(): Unit {} // Noncompliant
-//      ^^^^^^^^^^^^^^^^^^^^^^
+    fun MutableCollection<Int>.doSomething(): Unit {} // Don't report extension functions
 
     //let also apply run with
     fun nonCompliant(
@@ -63,8 +62,7 @@ class CollectionShouldBeImmutableCheckSampleNoSemantics {
         crazy.let { it.also { it.apply { it.run { with(this) { it.add(1) } } } } }
     }
 
-    fun MutableList<Int>.doSomething2(): MutableList<Int> { return this } // Noncompliant
-//      ^^^^^^^^^^^^^^^^
+    fun MutableList<Int>.doSomething2(): MutableList<Int> { return this } // Don't report extension functions
 
     fun compliantFunctionsCalledOn(
         a: MutableList<Int>, // Compliant

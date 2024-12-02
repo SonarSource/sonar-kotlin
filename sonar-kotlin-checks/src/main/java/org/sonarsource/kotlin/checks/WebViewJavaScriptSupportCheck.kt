@@ -4,21 +4,19 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -27,36 +25,49 @@ import org.jetbrains.kotlin.psi.KtPsiUtil.deparenthesize
 import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.CallAbstractCheck
-import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.predictRuntimeBooleanValue
-import org.sonarsource.kotlin.api.checks.setterMatches
+import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Make sure that enabling JavaScript support is safe here."
 private val ANDROID_SET_JAVASCRIPT_ENABLED =
-    FunMatcher(definingSupertype = "android.webkit.WebSettings", name = "setJavaScriptEnabled") { withArguments("kotlin.Boolean") }
+    FunMatcher(
+        definingSupertype = "android.webkit.WebSettings",
+        name = "setJavaScriptEnabled"
+    ) { withArguments("kotlin.Boolean") }
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
+private val ANDROID_PROP_JAVASCRIPT_ENABLED =
+    FunMatcher(
+        definingSupertype = "android.webkit.WebSettings",
+        name = "javaScriptEnabled"
+    )
+
 @Rule(key = "S6362")
 class WebViewJavaScriptSupportCheck : CallAbstractCheck() {
 
     override val functionsToVisit = listOf(ANDROID_SET_JAVASCRIPT_ENABLED)
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
+    override fun visitFunctionCall(
+        callExpression: KtCallExpression,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext
+    ) {
         checkJavaScriptEnabledArgument(kotlinFileContext, resolvedCall.getFirstArgumentExpression())
     }
 
     override fun visitBinaryExpression(expression: KtBinaryExpression, ctx: KotlinFileContext) {
         if (expression.operationToken == KtTokens.EQ &&
-            deparenthesize(expression.left).setterMatches(ctx.bindingContext, "javaScriptEnabled", ANDROID_SET_JAVASCRIPT_ENABLED)
+            deparenthesize(expression.left).setterMatches(
+                "javaScriptEnabled",
+                ANDROID_PROP_JAVASCRIPT_ENABLED
+            )
         ) {
             checkJavaScriptEnabledArgument(ctx, expression.right)
         }
     }
 
     private fun checkJavaScriptEnabledArgument(ctx: KotlinFileContext, argument: KtExpression?) {
-        if (argument?.predictRuntimeBooleanValue(ctx.bindingContext) == true) {
+        if (argument?.predictRuntimeBooleanValue() == true) {
             ctx.reportIssue(argument, MESSAGE)
         }
     }

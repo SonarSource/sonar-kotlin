@@ -4,18 +4,15 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
@@ -30,6 +27,7 @@ private const val TEST_FILE_POSTFIX = "Sample.kt"
 abstract class CheckTest(
     val check: AbstractCheck,
     val sampleFileSemantics: String? = null,
+    val sampleFileK2: String? = sampleFileSemantics,
     val classpath: List<String>? = null,
     val dependencies: List<String>? = null,
     val isAndroid: Boolean = false
@@ -42,7 +40,7 @@ abstract class CheckTest(
     @DisabledIf("k1only")
     fun `with k2 semantics`() {
         KotlinVerifier(check) {
-            this.fileName = sampleFileSemantics ?: "$checkName$TEST_FILE_POSTFIX"
+            this.fileName = sampleFileK2 ?: "$checkName$TEST_FILE_POSTFIX"
             this@CheckTest.classpath?.let { this.classpath = it }
             this@CheckTest.dependencies?.let { this.deps = it }
             this.useK2 = true
@@ -51,7 +49,7 @@ abstract class CheckTest(
     }
 
     @Test
-    fun `with semantics`() {
+    fun `with k1 semantics`() {
         KotlinVerifier(check) {
             this.fileName = sampleFileSemantics ?: "$checkName$TEST_FILE_POSTFIX"
             this@CheckTest.classpath?.let { this.classpath = it }

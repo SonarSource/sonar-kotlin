@@ -4,29 +4,28 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedValueArgument
+import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.isNull
+import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Make sure that broadcasting intents is safe here."
@@ -38,7 +37,6 @@ private val STICKY_BROADCAST_NAMES = setOf(
     "sendStickyOrderedBroadcastAsUser",
 )
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S5320")
 class AndroidBroadcastingCheck : CallAbstractCheck() {
 
@@ -55,40 +53,38 @@ class AndroidBroadcastingCheck : CallAbstractCheck() {
         )
     })
 
-    // TODO easy?
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext
     ) {
-        val arguments = resolvedCall.valueArgumentsByIndex ?: return
-        val name = resolvedCall.resultingDescriptor.name.asString()
+        val arguments = resolvedCall.argumentMapping.keys.toList()
+        val name = resolvedCall.partiallyAppliedSymbol.symbol.name?.asString() ?: return
 
         if (
-            with(kotlinFileContext.bindingContext) {
-                name in STICKY_BROADCAST_NAMES
-                    || isSendBroadcast(name, arguments)
-                    || isSendBroadcastAsUser(name, arguments)
-                    || isSendOrderedBroadcast(name, arguments)
-                    || isSendOrderedBroadcastAsUser(name, arguments)
-            }
+            name in STICKY_BROADCAST_NAMES ||
+            isSendBroadcast(name, arguments) ||
+            isSendBroadcastAsUser(name, arguments) ||
+            isSendOrderedBroadcast(name, arguments) ||
+            isSendOrderedBroadcastAsUser(name, arguments)
         ) {
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
         }
     }
 
-    private fun BindingContext.isSendOrderedBroadcastAsUser(
+    private fun isSendOrderedBroadcastAsUser(
         name: String,
-        argumentsByIndex: List<ResolvedValueArgument>
-    ) = name == "sendOrderedBroadcastAsUser" && (argumentsByIndex.getOrNull(2)?.isNull(this) ?: false)
+        argumentsByIndex: List<KtExpression>
+    ) = name == "sendOrderedBroadcastAsUser" && (argumentsByIndex.getOrNull(2)?.isNull() ?: false)
 
-    private fun BindingContext.isSendOrderedBroadcast(name: String, argumentsByIndex: List<ResolvedValueArgument>) =
-        name == "sendOrderedBroadcast" && (argumentsByIndex.getOrNull(1)?.isNull(this) ?: false)
+    private fun isSendOrderedBroadcast(name: String, argumentsByIndex: List<KtExpression>) =
+        name == "sendOrderedBroadcast" && (argumentsByIndex.getOrNull(1)?.isNull() ?: false)
 
-    private fun BindingContext.isSendBroadcastAsUser(name: String, argumentsByIndex: List<ResolvedValueArgument>) =
-        name == "sendBroadcast" && (argumentsByIndex.getOrNull(1)?.isNull(this) ?: true)
+    private fun isSendBroadcastAsUser(name: String, argumentsByIndex: List<KtExpression>) =
+        name == "sendBroadcast" && (argumentsByIndex.getOrNull(1)?.isNull() ?: true)
 
-    private fun BindingContext.isSendBroadcast(name: String, argumentsByIndex: List<ResolvedValueArgument>) =
-        name == "sendBroadcastAsUser" && (argumentsByIndex.getOrNull(2)?.isNull(this) ?: true)
+    private fun isSendBroadcast(name: String, argumentsByIndex: List<KtExpression>) =
+        name == "sendBroadcastAsUser" && (argumentsByIndex.getOrNull(2)?.isNull() ?: true)
 
 }

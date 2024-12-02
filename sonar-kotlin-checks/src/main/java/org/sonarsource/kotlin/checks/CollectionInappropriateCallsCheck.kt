@@ -4,34 +4,31 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.types.KaClassType
+import org.jetbrains.kotlin.analysis.api.types.KaTypeNullability
+import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
-import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.ArgumentMatcher
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
-import org.sonarsource.kotlin.api.checks.determineType
-import org.sonarsource.kotlin.api.checks.isSupertypeOf
 import org.sonarsource.kotlin.api.checks.predictReceiverExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 const val qualifier = "kotlin.collections"
 
@@ -69,7 +66,6 @@ val funMatcherToArgumentIndexMap = mapOf(
 
 const val ISSUE_MESSAGE = "This key/object cannot ever be present in the collection"
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S2175")
 class CollectionInappropriateCallsCheck : CallAbstractCheck() {
 
@@ -78,39 +74,39 @@ class CollectionInappropriateCallsCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
-        kotlinFileContext: KotlinFileContext,
+        kotlinFileContext: KotlinFileContext
     ) {
-        val ctx = kotlinFileContext.bindingContext
+        withKaSession {
+            // all evaluated methods have one and one only argument
+            val arg = callExpression.valueArguments.first()
+            var argType = arg.getArgumentExpression()?.expressionType ?: return
 
-        // all evaluated methods have one and one only argument
-        val arg = callExpression.valueArguments.first()
-        var argType = arg.determineType(ctx) ?: return
+            val collectionType = callExpression.predictReceiverExpression()?.expressionType as? KaClassType ?: return
+            val collectionArgumentIndex = funMatcherToArgumentIndexMap[matchedFun]!!
+            val collectionArgumentType = collectionType.arrayElementType?.withNullability(KaTypeNullability.NON_NULLABLE)
+                ?: collectionType.typeArguments[collectionArgumentIndex]
+                    .type?.withNullability(KaTypeNullability.NON_NULLABLE) ?: return
 
-        val collectionType = callExpression.predictReceiverExpression(ctx).determineType(ctx) ?: return
-        // If collection type arguments aren't present, this rule shouldn't be triggered
-        if (collectionType.arguments.isEmpty()) return
 
-        val collectionArgumentIndex = funMatcherToArgumentIndexMap[matchedFun]!!
-        val collectionArgumentType = collectionType.arguments[collectionArgumentIndex].type.makeNotNullable()
+            // for methods like removeAll, containsAll etc.. we pass a collection as argument,
+            // and so we want to check the type of the collection<argument> instead
+            if (matchedFun == COLLECTION_ARGUMENT_EXTENSIONS_MATCHER && argType is KaClassType) {
+                argType = argType.typeArguments.first().type ?: return
+            }
+            argType = argType.withNullability(KaTypeNullability.NON_NULLABLE)
 
-        // for methods like removeAll, containsAll etc.. we pass a collection as argument,
-        // and so we want to check the type of the collection<argument> instead
-        if (matchedFun == COLLECTION_ARGUMENT_EXTENSIONS_MATCHER) {
-            argType = argType.arguments.first().type
-        }
+            // We avoid raising FPs for unresolved generic types.
+            if (argType is KaTypeParameterType || collectionArgumentType is KaTypeParameterType) return
 
-        argType = argType.makeNotNullable()
-
-        // We avoid raising FPs for unresolved generic types.
-        if (argType.isTypeParameter() || collectionArgumentType.isTypeParameter()) return
-
-        if (argType != collectionArgumentType
-            && !collectionArgumentType.isSupertypeOf(argType)
-            && !argType.isSupertypeOf(collectionArgumentType)
-        ) {
-            kotlinFileContext.reportIssue(arg, ISSUE_MESSAGE)
+            if (
+                !argType.semanticallyEquals(collectionArgumentType) &&
+                !argType.allSupertypes.any { it.semanticallyEquals(collectionArgumentType) } &&
+                !collectionArgumentType.allSupertypes.any { it.semanticallyEquals(argType) }
+            ) {
+                kotlinFileContext.reportIssue(arg, ISSUE_MESSAGE)
+            }
         }
 
     }

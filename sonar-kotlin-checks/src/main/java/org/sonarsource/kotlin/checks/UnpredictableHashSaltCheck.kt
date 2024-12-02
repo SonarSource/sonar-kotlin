@@ -4,25 +4,21 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.BYTE_ARRAY_CONSTRUCTOR
 import org.sonarsource.kotlin.api.checks.BYTE_ARRAY_CONSTRUCTOR_SIZE_ARG_ONLY
@@ -34,9 +30,9 @@ import org.sonarsource.kotlin.api.checks.isInitializedPredictably
 import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
-import org.sonarsource.kotlin.api.checks.simpleArgExpressionOrNull
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.secondaryOf
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val SPECS_PACKAGE = "javax.crypto.spec"
 private const val KEY_SPEC_FUN_NAME = "PBEKeySpec"
@@ -52,14 +48,13 @@ private val matcherSaltIndexMap = mapOf(
     ConstructorMatcher("$SPECS_PACKAGE.$PARAMETER_SPEC_FUN_NAME") to 0,
 )
 
-@org.sonarsource.kotlin.api.frontend.K1only("predict")
 @Rule(key = "S2053")
 class UnpredictableHashSaltCheck : CallAbstractCheck() {
     override val functionsToVisit = matcherSaltIndexMap.keys
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext
     ) {
@@ -70,13 +65,11 @@ class UnpredictableHashSaltCheck : CallAbstractCheck() {
             return
         }
 
-        val bindingContext = kotlinFileContext.bindingContext
-        val saltArg = resolvedCall.valueArgumentsByIndex?.elementAtOrNull(saltArgIndex)
-            ?.arguments?.elementAtOrNull(0)?.getArgumentExpression() ?: return
+        val saltArg = resolvedCall.argumentMapping.keys.toList().elementAtOrNull(saltArgIndex) ?: return
 
-        val predictedSaltValue = saltArg.predictRuntimeValueExpression(bindingContext)
+        val predictedSaltValue = saltArg.predictRuntimeValueExpression()
 
-        if (predictedSaltValue.isBytesInitializedFromString(bindingContext)) {
+        if (predictedSaltValue.isBytesInitializedFromString()) {
             kotlinFileContext.reportIssue(
                 saltArg,
                 MSG_MAKE_UNPREDICTABLE,
@@ -85,15 +78,15 @@ class UnpredictableHashSaltCheck : CallAbstractCheck() {
             return
         }
 
-        val saltInitializer = predictedSaltValue.getResolvedCall(bindingContext)
-            ?.takeIf { it matches BYTE_ARRAY_CONSTRUCTOR } ?: return
+        val saltInitializer = withKaSession { predictedSaltValue.resolveToCall()?.successfulFunctionCallOrNull()
+            ?.takeIf { it matches BYTE_ARRAY_CONSTRUCTOR } ?: return }
 
-        if (saltInitializer.byteArrayInitSizeTooSmall(bindingContext)) {
+        if (saltInitializer.byteArrayInitSizeTooSmall()) {
             kotlinFileContext.reportIssue(saltArg, MSG_MIN_LEN, listOf(kotlinFileContext.secondaryOf(predictedSaltValue)))
         }
 
         if (saltInitializer matches BYTE_ARRAY_CONSTRUCTOR_SIZE_ARG_ONLY &&
-            saltArg.isInitializedPredictably(predictedSaltValue, bindingContext)
+            saltArg.isInitializedPredictably(predictedSaltValue)
         ) {
             kotlinFileContext.reportIssue(
                 saltArg,
@@ -106,6 +99,7 @@ class UnpredictableHashSaltCheck : CallAbstractCheck() {
     /**
      * Checks whether the first argument of the call is an integer that is at least 16
      */
-    private fun ResolvedCall<*>.byteArrayInitSizeTooSmall(bindingContext: BindingContext) =
-        (this.simpleArgExpressionOrNull(0)?.predictRuntimeIntValue(bindingContext) ?: 16) < 16
+    private fun KaFunctionCall<*>.byteArrayInitSizeTooSmall(): Boolean {
+        return (argumentMapping.keys.toList().firstOrNull()?.predictRuntimeIntValue() ?: 16) < 16
+    }
 }

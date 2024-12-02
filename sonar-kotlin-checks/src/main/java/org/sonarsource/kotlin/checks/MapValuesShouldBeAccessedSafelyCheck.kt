@@ -4,40 +4,34 @@
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * modify it under the terms of the Sonar Source-Available License Version 1, as published by SonarSource SA.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the Sonar Source-Available License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the Sonar Source-Available License
+ * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
+import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.KaTypeNullability
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getNextSiblingIgnoringWhitespace
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.typeUtil.supertypes
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.reporting.message
-import org.sonarsource.kotlin.api.checks.determineType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
-@org.sonarsource.kotlin.api.frontend.K1only("easy?")
 @Rule(key = "S6611")
 class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
 
@@ -61,7 +55,7 @@ class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
 
     override fun visitClass(klass: KtClass, context: KotlinFileContext) {
         val arrayAccessExpressions = klass.collectDescendantsOfType<KtArrayAccessExpression> {
-            checkSuperType(it, context.bindingContext)
+            checkSuperType(it)
         }
 
         arrayAccessExpressions.forEach {
@@ -71,15 +65,15 @@ class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
         }
     }
 
-    private fun checkSuperType(arrayAccessExpression: KtArrayAccessExpression, bindingContext: BindingContext): Boolean {
-        val type = arrayAccessExpression.arrayExpression.determineType(bindingContext) ?: return false
+    private fun checkSuperType(arrayAccessExpression: KtArrayAccessExpression): Boolean = withKaSession {
+        val type = arrayAccessExpression.arrayExpression?.expressionType ?: return false
         if (checkIfSubtype(type)) return true
-        return type.supertypes().any {
-            checkIfSubtype(it)
+        return type.allSupertypes.any {
+            checkIfSubtype(it.withNullability(KaTypeNullability.NON_NULLABLE))
         }
     }
 
-    private fun checkIfSubtype(type: KotlinType) = type.getKotlinTypeFqName(false) == "kotlin.collections.Map"
-            || type.getKotlinTypeFqName(false) == "kotlin.collections.MutableMap"
+    private fun checkIfSubtype(type: KaType) = type.symbol?.classId?.asFqNameString() == "kotlin.collections.Map"
+            || type.symbol?.classId?.asFqNameString() == "kotlin.collections.MutableMap"
 
 }
