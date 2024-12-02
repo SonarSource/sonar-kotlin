@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -23,7 +24,6 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtSuperExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.ANY_TYPE
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
@@ -33,12 +33,11 @@ import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6519")
 class EqualsMethodUsageCheck : CallAbstractCheck() {
     override val functionsToVisit = setOf(FunMatcher { name = EQUALS_METHOD_NAME; withArguments(ANY_TYPE) })
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) {
         val parent = callExpression.parent
         if (parent is KtDotQualifiedExpression && parent.selectorExpression == callExpression && !parent.receiverExpression.isSuperOrOuterClass()) {
             val grandParent = parent.parent.skipParentParentheses()
