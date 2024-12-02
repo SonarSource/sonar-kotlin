@@ -22,12 +22,11 @@ import com.intellij.mock.MockProject
 import com.intellij.openapi.Disposable
 import com.intellij.psi.ClassTypePointerFactory
 import com.intellij.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory
-import org.jetbrains.kotlin.analysis.api.KaAnalysisNonPublicApi
-import org.jetbrains.kotlin.analysis.api.descriptors.CliFe10AnalysisFacade
+import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
+import org.jetbrains.kotlin.analysis.api.KaPlatformInterface
 import org.jetbrains.kotlin.analysis.api.descriptors.Fe10AnalysisFacade
-import org.jetbrains.kotlin.analysis.api.descriptors.KaFe10AnalysisHandlerExtension
-import org.jetbrains.kotlin.analysis.api.platform.lifetime.KotlinAlwaysAccessibleLifetimeTokenProvider
-import org.jetbrains.kotlin.analysis.api.platform.lifetime.KotlinLifetimeTokenProvider
+import org.jetbrains.kotlin.analysis.api.platform.lifetime.KotlinAlwaysAccessibleLifetimeTokenFactory
+import org.jetbrains.kotlin.analysis.api.platform.lifetime.KotlinLifetimeTokenFactory
 import org.jetbrains.kotlin.analysis.api.platform.modification.KotlinGlobalModificationService
 import org.jetbrains.kotlin.analysis.api.platform.modification.KotlinModificationTrackerFactory
 import org.jetbrains.kotlin.analysis.api.platform.projectStructure.KotlinByModulesResolutionScopeProvider
@@ -38,7 +37,6 @@ import org.jetbrains.kotlin.analysis.api.standalone.base.modification.KotlinStan
 import org.jetbrains.kotlin.analysis.api.standalone.base.projectStructure.AnalysisApiSimpleServiceRegistrar
 import org.jetbrains.kotlin.analysis.api.standalone.base.projectStructure.PluginStructureProvider
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.references.fe10.base.DummyKtFe10ReferenceResolutionHelper
 import org.jetbrains.kotlin.references.fe10.base.KtFe10ReferenceResolutionHelper
 import org.jetbrains.kotlin.resolve.extensions.AnalysisHandlerExtension
 
@@ -49,6 +47,7 @@ import org.jetbrains.kotlin.resolve.extensions.AnalysisHandlerExtension
  */
 annotation class K1only
 
+@OptIn(KaPlatformInterface::class)
 internal fun configureK1AnalysisApiServices(env: KotlinCoreEnvironment) {
     val application = env.projectEnvironment.environment.application
     if (application.getServiceIfCreated(KtFe10ReferenceResolutionHelper::class.java) == null) {
@@ -70,8 +69,8 @@ internal fun configureK1AnalysisApiServices(env: KotlinCoreEnvironment) {
         KotlinStandaloneGlobalModificationService::class.java,
     )
     project.registerService(
-        KotlinLifetimeTokenProvider::class.java,
-        KotlinAlwaysAccessibleLifetimeTokenProvider::class.java,
+        KotlinLifetimeTokenFactory::class.java,
+        KotlinAlwaysAccessibleLifetimeTokenFactory::class.java,
     )
     project.registerService(
         KotlinResolutionScopeProvider::class.java,
@@ -87,7 +86,7 @@ internal fun configureK1AnalysisApiServices(env: KotlinCoreEnvironment) {
     )
 }
 
-@OptIn(KaAnalysisNonPublicApi::class)
+@OptIn(KaImplementationDetail::class, KaPlatformInterface::class)
 private object AnalysisApiFe10ServiceRegistrar : AnalysisApiSimpleServiceRegistrar() {
     private const val PLUGIN_RELATIVE_PATH = "/META-INF/analysis-api/analysis-api-fe10.xml"
 
@@ -95,7 +94,7 @@ private object AnalysisApiFe10ServiceRegistrar : AnalysisApiSimpleServiceRegistr
         PluginStructureProvider.registerApplicationServices(application, PLUGIN_RELATIVE_PATH)
         application.registerService(
             KtFe10ReferenceResolutionHelper::class.java,
-            DummyKtFe10ReferenceResolutionHelper,
+            K1internals.dummyKtFe10ReferenceResolutionHelper(),
         )
         val applicationArea = application.extensionArea
         if (!applicationArea.hasExtensionPoint(ClassTypePointerFactory.EP_NAME)) {
@@ -120,7 +119,7 @@ private object AnalysisApiFe10ServiceRegistrar : AnalysisApiSimpleServiceRegistr
     }
 
     override fun registerProjectModelServices(project: MockProject, disposable: Disposable) {
-        project.apply { registerService(Fe10AnalysisFacade::class.java, CliFe10AnalysisFacade()) }
-        AnalysisHandlerExtension.registerExtension(project, KaFe10AnalysisHandlerExtension())
+        project.apply { registerService(Fe10AnalysisFacade::class.java, K1internals.createCliFe10AnalysisFacade()) }
+        AnalysisHandlerExtension.registerExtension(project, K1internals.createKaFe10AnalysisHandlerExtension())
     }
 }
