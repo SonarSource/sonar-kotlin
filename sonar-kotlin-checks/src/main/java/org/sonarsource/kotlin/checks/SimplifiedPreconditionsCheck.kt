@@ -17,6 +17,7 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.impl.source.tree.LeafPsiElement
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -32,8 +33,6 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtWhenConditionWithExpression
 import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.kotlin.psi.psiUtil.isNull
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.ConstructorMatcher
@@ -52,7 +51,6 @@ private val ILLEGAL_ARGUMENT_EXCEPTION_CONSTRUCTOR_MATCH = ConstructorMatcher(ty
     withArguments("kotlin.String")
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6532")
 class SimplifiedPreconditionsCheck : CallAbstractCheck() {
 
@@ -65,7 +63,8 @@ class SimplifiedPreconditionsCheck : CallAbstractCheck() {
         }
     )
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, matchedFun: FunMatcherImpl, kotlinFileContext: KotlinFileContext) {
+
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) {
         val conditionExpression = callExpression.valueArguments.first().getArgumentExpression()
 
         if (conditionExpression.isNullCheckCondition(KtTokens.EXCLEQ)) {
@@ -79,15 +78,13 @@ class SimplifiedPreconditionsCheck : CallAbstractCheck() {
     }
 
     override fun visitThrowExpression(throwExpression: KtThrowExpression, kotlinFileContext: KotlinFileContext) {
-        val bindingContext = kotlinFileContext.bindingContext
-
         when {
-            throwExpression.matchesException(bindingContext, ILLEGAL_STATE_EXCEPTION_CONSTRUCTOR_MATCH) -> {
+            throwExpression.matchesException(ILLEGAL_STATE_EXCEPTION_CONSTRUCTOR_MATCH) -> {
                 processException(throwExpression, kotlinFileContext, "check")
                 processExceptionForError(throwExpression, kotlinFileContext)
             }
 
-            throwExpression.matchesException(bindingContext, ILLEGAL_ARGUMENT_EXCEPTION_CONSTRUCTOR_MATCH) ->
+            throwExpression.matchesException(ILLEGAL_ARGUMENT_EXCEPTION_CONSTRUCTOR_MATCH) ->
                 processException(throwExpression, kotlinFileContext, "require")
         }
     }
@@ -118,8 +115,8 @@ private fun KtExpression?.isNullCheckCondition(token: KtSingleValueToken) =
 
 private fun KtBinaryExpression.getNullCheckVariable() = with(left!!) { if (isNull()) right!!.text else text }
 
-private fun KtThrowExpression.matchesException(bindingContext: BindingContext, funMatcher: FunMatcherImpl) =
-    (thrownExpression as? KtCallExpression)?.let { funMatcher.matches(it, bindingContext) } ?: false
+private fun KtThrowExpression.matchesException(funMatcher: FunMatcherImpl) =
+    (thrownExpression as? KtCallExpression)?.let { funMatcher.matches(it) } ?: false
 
 private fun KtThrowExpression.getErrorMessage() =
     (thrownExpression as? KtCallExpression)?.valueArguments.let { if (it?.size == 1) it[0].text else null }
