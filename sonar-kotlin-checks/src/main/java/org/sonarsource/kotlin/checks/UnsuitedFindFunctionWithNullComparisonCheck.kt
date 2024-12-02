@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.lexer.KtTokens.EQEQ
 import org.jetbrains.kotlin.lexer.KtTokens.EXCLEQ
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -27,7 +28,6 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import org.jetbrains.kotlin.psi.psiUtil.isNull
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
@@ -42,7 +42,6 @@ import org.sonarsource.kotlin.api.reporting.message
  *
  * The rule suggests to replace the pattern with `any(predicate)`, `none(predicate)`, and `contains(element)` depending on the case.
  */
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6528")
 class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
 
@@ -51,7 +50,7 @@ class UnsuitedFindFunctionWithNullComparisonCheck : CallAbstractCheck() {
         withArguments("kotlin.Function1")
     })
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) {
         callExpression.findClosestAncestorOfType<KtBinaryExpression>()?.takeIf { it.right!!.isNull() || it.left!!.isNull() }
             ?.let { report(it, callExpression, kotlinFileContext) }
     }
