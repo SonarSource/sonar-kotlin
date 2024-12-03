@@ -21,6 +21,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import org.jetbrains.kotlin.analysis.api.KaIdeApi
 import org.jetbrains.kotlin.analysis.api.resolution.KaCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaExplicitReceiverValue
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
@@ -883,8 +884,9 @@ fun SensorContext.hasCacheEnabled(): Boolean {
         isCacheEnabled
 }
 
-fun KtWhenExpression.isExhaustive(context: KotlinFileContext): Boolean {
-    return entries.any { it.isElse } || context.bindingContext[BindingContext.EXHAUSTIVE_WHEN, this] == true
+@OptIn(KaIdeApi::class)
+fun KtWhenExpression.isExhaustive(): Boolean = withKaSession {
+    return entries.any { it.isElse } || computeMissingCases().isEmpty()
 }
 
 val PropertyDescriptor.unwrappedGetMethod: FunctionDescriptor?
