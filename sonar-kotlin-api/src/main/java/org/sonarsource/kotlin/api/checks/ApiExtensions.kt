@@ -865,9 +865,6 @@ fun KtClassOrObject.hasExactlyOneFunctionAndNoProperties(): Boolean {
     } && functionCount > 0
 }
 
-fun KotlinType.isFunctionalInterface(): Boolean =
-    (constructor.declarationDescriptor as? ClassDescriptor)?.let(::getSingleAbstractMethodOrNull) != null
-
 fun KotlinFileContext.merge(firstElement: PsiElement, lastElement: PsiElement) =
     merge(listOf(textRange(firstElement), textRange(lastElement)))
 

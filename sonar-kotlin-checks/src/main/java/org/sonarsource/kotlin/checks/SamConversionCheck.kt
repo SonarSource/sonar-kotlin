@@ -19,21 +19,18 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.checks.getType
 import org.sonarsource.kotlin.api.checks.hasExactlyOneFunctionAndNoProperties
-import org.sonarsource.kotlin.api.checks.isFunctionalInterface
 import org.sonarsource.kotlin.api.checks.merge
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6516")
 class SamConversionCheck : AbstractCheck() {
 
-    override fun visitObjectDeclaration(declaration: KtObjectDeclaration, context: KotlinFileContext) {
+    override fun visitObjectDeclaration(declaration: KtObjectDeclaration, context: KotlinFileContext) = withKaSession {
         val superTypeEntry = declaration.superTypeListEntries.singleOrNull() ?: return
-        val superType = superTypeEntry.typeReference?.getType(context.bindingContext) ?: return
-
-        if (superType.isFunctionalInterface() && declaration.hasExactlyOneFunctionAndNoProperties()) {
+        val typeReference = superTypeEntry.typeReference ?: return
+        if (typeReference.type.isFunctionalInterface && declaration.hasExactlyOneFunctionAndNoProperties()) {
             val textRange = context.merge(declaration.getDeclarationKeyword()!!, superTypeEntry)
             context.reportIssue(textRange, "Replace explicit functional interface implementation with lambda expression.")
         }
