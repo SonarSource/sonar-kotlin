@@ -20,7 +20,6 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.ANY
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.ArgumentMatcher
 import org.sonarsource.kotlin.api.checks.ConstructorMatcher
@@ -88,7 +87,7 @@ private val WEAK_METHOD_MATCHERS = listOf(
 ) + CRYPTO_APIS.map {
     FunMatcher(qualifier = it, name = GET_INSTANCE) {
         withArguments(STRING_TYPE)
-        withArguments(ArgumentMatcher(typeName = STRING_TYPE), ANY)
+        withArguments(ArgumentMatcher(typeName = STRING_TYPE), ArgumentMatcher.ANY)
     }
 }
 

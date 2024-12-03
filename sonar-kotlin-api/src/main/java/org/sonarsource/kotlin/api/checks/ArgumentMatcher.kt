@@ -56,5 +56,3 @@ class ArgumentMatcher(
         // as it seems to be the best option to get a type's simple name
         typeName?.let { it == kotlinType?.nameIfStandardType?.asString() } ?: true
 }
-
-val ANY = ArgumentMatcher()
