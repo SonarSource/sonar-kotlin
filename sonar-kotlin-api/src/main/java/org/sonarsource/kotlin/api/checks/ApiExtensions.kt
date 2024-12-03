@@ -598,6 +598,8 @@ fun KtBinaryExpression.isPlus() =
 fun PsiElement?.getVariableType(bindingContext: BindingContext) =
     this?.let { bindingContext[BindingContext.VARIABLE, it]?.type }
 
+/** Use [org.jetbrains.kotlin.analysis.api.components.KaTypeProvider.type] instead. */
+@Deprecated("use kotlin-analysis-api instead")
 fun KtTypeReference?.getType(bindingContext: BindingContext): KotlinType? =
     this?.let { bindingContext[BindingContext.TYPE, it] }
 

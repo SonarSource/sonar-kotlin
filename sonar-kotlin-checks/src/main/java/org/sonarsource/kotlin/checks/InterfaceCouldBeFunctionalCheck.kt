@@ -16,19 +16,18 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
-import org.jetbrains.kotlin.psi.KtAnnotationEntry
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.checks.getType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6517")
 class InterfaceCouldBeFunctionalCheck : AbstractCheck() {
+    private val functionalInterClassId = ClassId.fromString("java/lang/FunctionalInterface")
 
     override fun visitClass(klass: KtClass, context: KotlinFileContext) {
         checkFunctionalInterface(klass, context)
@@ -46,9 +45,9 @@ class InterfaceCouldBeFunctionalCheck : AbstractCheck() {
         }
     }
 
-    private fun checkFunctionalInterfaceAnnotation(klass: KtClass, context: KotlinFileContext) {
+    private fun checkFunctionalInterfaceAnnotation(klass: KtClass, context: KotlinFileContext) = withKaSession {
         klass.annotationEntries.forEach {
-            if (isFunctionalInterfaceAnnotation(it, context)) {
+            if (it.typeReference?.type?.isClassType(functionalInterClassId) == true) {
                 context.reportIssue(it, """"@FunctionalInterface" annotation has no effect in Kotlin""")
             }
         }
@@ -64,9 +63,4 @@ private fun hasExactlyOneFunctionAndNoProperties(klass: KtClass): Boolean {
     return klass.declarations.all {
         it !is KtProperty && (it !is KtNamedFunction || functionCount++ == 0)
     } && functionCount > 0
-}
-
-private fun isFunctionalInterfaceAnnotation(annotation: KtAnnotationEntry, context: KotlinFileContext): Boolean {
-    val annotationType = annotation.typeReference.getType(context.bindingContext)
-    return (annotationType?.getKotlinTypeFqName(false) == "java.lang.FunctionalInterface")
 }
