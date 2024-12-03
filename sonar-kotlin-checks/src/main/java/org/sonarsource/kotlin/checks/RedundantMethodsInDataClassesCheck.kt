@@ -28,7 +28,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.ANY_TYPE
 import org.sonarsource.kotlin.api.checks.AbstractCheck
@@ -52,7 +51,6 @@ private val HASHCODE_MATCHER = FunMatcher {
 private val OBJECTS_HASH_MATCHER = FunMatcher(qualifier = "java.util.Objects", name = "hash")
 private val ARRAYS_HASHCODE_MATCHER = FunMatcher(qualifier = "java.util.Arrays", name = "hashCode")
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6207")
 class RedundantMethodsInDataClassesCheck : AbstractCheck() {
 
@@ -68,8 +66,8 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
 
         klass.body?.functions?.forEach {
             when {
-                EQUALS_MATCHER.matches(it, context.bindingContext) -> equalsMethod = it
-                HASHCODE_MATCHER.matches(it, context.bindingContext) -> hashCodeMethod = it
+                EQUALS_MATCHER.matches(it) -> equalsMethod = it
+                HASHCODE_MATCHER.matches(it) -> hashCodeMethod = it
             }
         }
 
@@ -80,7 +78,7 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
         }
 
         hashCodeMethod?.let {
-            if (it.hashCodeHasDefaultImpl(klassParameters, context.bindingContext)) {
+            if (it.hashCodeHasDefaultImpl(klassParameters)) {
                 context.reportIssue(it.nameIdentifier!!, issueMessage)
             }
         }
@@ -89,33 +87,31 @@ class RedundantMethodsInDataClassesCheck : AbstractCheck() {
 
 private fun KtNamedFunction.hashCodeHasDefaultImpl(
     klassParameters: List<KtParameter>,
-    bindingContext: BindingContext
 ): Boolean {
     return if (hasBlockBody()) {
         val returnExpressions = collectDescendantsOfType<KtReturnExpression>()
         if (returnExpressions.size > 1) return false
-        checkHashExpression(returnExpressions[0].returnedExpression, bindingContext, klassParameters)
+        checkHashExpression(returnExpressions[0].returnedExpression, klassParameters)
     } else {
-        checkHashExpression(this.bodyExpression, bindingContext, klassParameters)
+        checkHashExpression(this.bodyExpression, klassParameters)
     }
 }
 
 private fun checkHashExpression(
     expression: KtExpression?,
-    bindingContext: BindingContext,
     klassParameters: List<KtParameter>
 ): Boolean {
     if (expression !is KtDotQualifiedExpression) return false
     if (expression.selectorExpression !is KtCallExpression) return false
 
     val callExpression = expression.selectorExpression as KtCallExpression
-    if (OBJECTS_HASH_MATCHER.matches(callExpression, bindingContext)) {
+    if (OBJECTS_HASH_MATCHER.matches(callExpression)) {
         if (callExpression.valueArguments.size != klassParameters.size) return false
         return callExpression.valueArguments.all {
             findParameter(it.getArgumentExpression(), klassParameters) != null
         }
     }
-    if (ARRAYS_HASHCODE_MATCHER.matches(callExpression, bindingContext)) {
+    if (ARRAYS_HASHCODE_MATCHER.matches(callExpression)) {
         val argumentExpression = callExpression.valueArguments[0].getArgumentExpression()
         if (argumentExpression !is KtCallExpression) return false
         val arguments = argumentExpression.valueArguments
