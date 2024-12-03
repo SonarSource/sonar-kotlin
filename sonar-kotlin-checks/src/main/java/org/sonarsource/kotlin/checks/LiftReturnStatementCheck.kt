@@ -47,7 +47,7 @@ class LiftReturnStatementCheck : AbstractCheck() {
             isReturnOrReturnBlock(it.expression!!)
         }
 
-        if (isAllBranchesReturn && expression.isExhaustive(context)) {
+        if (isAllBranchesReturn && expression.isExhaustive()) {
             reportIssue(expression.whenKeyword, context)
         }
     }
