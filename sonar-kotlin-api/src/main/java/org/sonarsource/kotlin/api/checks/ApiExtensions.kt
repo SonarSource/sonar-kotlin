@@ -403,11 +403,25 @@ private fun KtTypeReference.determineType(bindingContext: BindingContext) =
 fun KtTypeReference.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
+@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.returnTypeAsString()"))
 fun KtNamedFunction.returnTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     returnType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
+@Deprecated("use kotlin-analysis-api", ReplaceWith("this.returnType"))
 fun KtNamedFunction.returnType(bindingContext: BindingContext) =
     createTypeBindingForReturnType(bindingContext)?.type
+
+/**
+ * In the following example for the platform type `java.lang.String!`
+ * ```
+ * fun flexibleAkaPlatformType() = java.lang.String.valueOf(1)
+ * ```
+ * this function returns its lower bound `"java.lang.String"`.
+ * @see asFqNameString
+ */
+fun KtNamedFunction.returnTypeAsString(): String? = withKaSession {
+    returnType.asFqNameString()
+}
 
 fun KtLambdaArgument.isSuspending(
     bindingContext: BindingContext,
