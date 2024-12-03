@@ -20,6 +20,8 @@ import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.LeafPsiElement
+import org.jetbrains.kotlin.analysis.api.types.KaClassType
+import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.coroutines.hasSuspendFunctionType
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
@@ -96,6 +98,7 @@ import org.sonar.api.utils.Version
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.merge
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val GET_PROP_WITH_DEFAULT_MATCHER = FunMatcher {
     qualifier = "java.util.Properties"
@@ -334,12 +337,43 @@ fun KtCallExpression.expressionTypeFqn(bindingContext: BindingContext): String? 
     return type.getKotlinTypeFqName(false)
 }
 
+/**
+ * See examples of [org.jetbrains.kotlin.analysis.api.types.KaFlexibleType]
+ * (aka [platform type](https://kotlin.github.io/analysis-api/kaflexibletype.html)) in
+ * [KtNamedFunction.returnTypeAsString] and [KtProperty.determineTypeAsString].
+ *
+ * TODO according to [Kotlin Analysis API Documentation](https://kotlin.github.io/analysis-api/types.html#example)
+ * > Avoid using [org.jetbrains.kotlin.name.FqName]s or raw strings for type comparison.
+ * > Use [org.jetbrains.kotlin.name.ClassId]s instead
+ */
+private fun KaType.asFqNameString(): String? = withKaSession {
+    (lowerBoundIfFlexible() as? KaClassType)?.classId?.asFqNameString()
+}
+
+@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineType()"))
 private fun KtProperty.determineType(bindingContext: BindingContext) =
     (typeReference?.let { bindingContext[BindingContext.TYPE, it] }
         ?: bindingContext[BindingContext.EXPRESSION_TYPE_INFO, initializer]?.type)
 
+private fun KtProperty.determineType(): KaType? = withKaSession {
+    typeReference?.type ?: initializer?.expressionType
+}
+
+@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineTypeAsString()"))
 fun KtProperty.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
+
+/**
+ * In the following example for the platform type `java.lang.String!`
+ * ```
+ * val flexibleAkaPlatformType = java.lang.String.valueOf(1)
+ * ```
+ * this function returns its lower bound `"java.lang.String"`.
+ * @see asFqNameString
+ */
+fun KtProperty.determineTypeAsString(): String? = withKaSession {
+    determineType()?.asFqNameString()
+}
 
 fun KtExpression.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.let {
@@ -347,11 +381,21 @@ fun KtExpression.determineTypeAsString(bindingContext: BindingContext, printType
         else null
     }
 
+@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineType()"))
 private fun KtParameter.determineType(bindingContext: BindingContext) =
     bindingContext[BindingContext.TYPE, typeReference]
 
+private fun KtParameter.determineType(): KaType? = withKaSession {
+    typeReference?.type
+}
+
+@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineTypeAsString()"))
 fun KtParameter.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
+
+fun KtParameter.determineTypeAsString(): String? = withKaSession {
+    determineType()?.asFqNameString()
+}
 
 private fun KtTypeReference.determineType(bindingContext: BindingContext) =
     bindingContext[BindingContext.TYPE, this]
