@@ -13,7 +13,7 @@
     "constantCost": "5min"
   },
   "tags": [],
-  "defaultSeverity": "Minor",
+  "defaultSeverity": "Major",
   "ruleSpecification": "RSPEC-6524",
   "sqKey": "S6524",
   "scope": "All",
