@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.ArgumentMatcher
@@ -41,31 +40,30 @@ private val EXPECTED_OVERRIDES = listOf(
     }
 )
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6218")
 class EqualsOverriddenWithArrayFieldCheck : AbstractCheck() {
     override fun visitClass(klass: KtClass, context: KotlinFileContext) {
-        if (!klass.isData() || !klass.hasAnArrayProperty(context.bindingContext)) {
+        if (!klass.isData() || !klass.hasAnArrayProperty()) {
             return
         }
-        klass.buildIssueMessage(context.bindingContext)?.let { context.reportIssue(klass.nameIdentifier!!, it) }
+        klass.buildIssueMessage()?.let { context.reportIssue(klass.nameIdentifier!!, it) }
     }
 
-    private fun KtClass.hasAnArrayProperty(bindingContext: BindingContext): Boolean {
+    private fun KtClass.hasAnArrayProperty(): Boolean {
         // Because we only call this function on data classes, we can assume they have constructor
         val constructor = this.findDescendantOfType<KtPrimaryConstructor>()!!
-        val oneParameterIsAnArray = constructor.valueParameters.any { it.isAnArray(bindingContext) }
+        val oneParameterIsAnArray = constructor.valueParameters.any { it.isAnArray() }
         return if (oneParameterIsAnArray) {
             true
         } else {
-            this.body?.properties?.any { it.isAnArray(bindingContext) } ?: false
+            this.body?.properties?.any { it.isAnArray() } ?: false
         }
     }
 
-    private fun KtClass.buildIssueMessage(bindingContext: BindingContext): String? {
+    private fun KtClass.buildIssueMessage(): String? {
         val functions = this.collectOverridingFunctions()
         val missingFunctionNames = EXPECTED_OVERRIDES
-            .filter { matcher -> !functions.any { function -> matcher.matches(function, bindingContext) } }
+            .filter { matcher -> !functions.any { function -> matcher.matches(function) } }
             .map { it.names.first() }
         return when (missingFunctionNames.size) {
             1 -> "Override ${missingFunctionNames[0]} to consider array content in the method."
@@ -78,9 +76,9 @@ class EqualsOverriddenWithArrayFieldCheck : AbstractCheck() {
         this.collectDescendantsOfType<KtNamedFunction>()
             .filter { it.overrides() }
 
-    private fun KtParameter.isAnArray(bindingContext: BindingContext): Boolean =
-        this.determineTypeAsString(bindingContext, printTypeArguments = false) == "kotlin.Array"
+    private fun KtParameter.isAnArray(): Boolean =
+        this.determineTypeAsString() == "kotlin.Array"
 
-    private fun KtProperty.isAnArray(bindingContext: BindingContext): Boolean =
-        this.determineTypeAsString(bindingContext, printTypeArguments = false) == "kotlin.Array"
+    private fun KtProperty.isAnArray(): Boolean =
+        this.determineTypeAsString() == "kotlin.Array"
 }
