@@ -16,11 +16,10 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getCall
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.ConstructorMatcher
@@ -32,8 +31,8 @@ import org.sonarsource.kotlin.api.checks.STRING_TYPE
 import org.sonarsource.kotlin.api.checks.predictReceiverExpression
 import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
-
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val CIPHER_INIT_MATCHER = FunMatcher(qualifier = "javax.crypto.Cipher", name = "init") {
     withArguments(INT_TYPE, "java.security.Key", "java.security.spec.AlgorithmParameterSpec")
@@ -46,43 +45,48 @@ private val GET_INSTANCE_MATCHER = FunMatcher(qualifier = "javax.crypto.Cipher",
 private val GET_BYTES_MATCHER = FunMatcher(qualifier = "kotlin.text", name = "toByteArray")
 private val IV_PARAMETER_SPEC_MATCHER = ConstructorMatcher("javax.crypto.spec.IvParameterSpec")
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S3329")
 class CipherBlockChainingCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(CIPHER_INIT_MATCHER)
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext,
     ) {
-        val bindingContext = kotlinFileContext.bindingContext
         val calleeExpression = callExpression.calleeExpression ?: return
-        val receiverExpression = callExpression.predictReceiverExpression(bindingContext) ?: return
+        val receiverExpression = callExpression.predictReceiverExpression() ?: return
         val thirdArgument = callExpression.valueArguments[2].getArgumentExpression() ?: return
 
-        if (receiverExpression.isCBC(bindingContext) && thirdArgument.isInitializedWithToByteArray(bindingContext)) {
+        if (receiverExpression.isCBC() && thirdArgument.isInitializedWithToByteArray()) {
             kotlinFileContext.reportIssue(calleeExpression, "Use a dynamically-generated, random IV.")
         }
     }
 }
 
-private fun KtExpression.isInitializedWithToByteArray(bindingContext: BindingContext) =
-    firstArgumentOfInitializer(bindingContext, IV_PARAMETER_SPEC_MATCHER)
-        ?.predictRuntimeValueExpression(bindingContext)
-        ?.getCall(bindingContext)?.let { expr ->
-            GET_BYTES_MATCHER.matches(expr, bindingContext)
+private fun KtExpression.isInitializedWithToByteArray() = withKaSession {
+    firstArgumentOfInitializer(IV_PARAMETER_SPEC_MATCHER)
+        ?.predictRuntimeValueExpression()
+        ?.resolveToCall()
+        ?.successfulFunctionCallOrNull()
+        ?.let { expr ->
+            GET_BYTES_MATCHER.matches(expr)
         } ?: false
+}
 
-private fun KtExpression.isCBC(bindingContext: BindingContext) =
-    firstArgumentOfInitializer(bindingContext, GET_INSTANCE_MATCHER)
-        ?.predictRuntimeStringValue(bindingContext)
+private fun KtExpression.isCBC() =
+    firstArgumentOfInitializer(GET_INSTANCE_MATCHER)
+        ?.predictRuntimeStringValue()
         ?.contains("CBC", ignoreCase = true)
         ?: false
 
-private fun KtExpression.firstArgumentOfInitializer(bindingContext: BindingContext, matcher: FunMatcherImpl) =
-    predictRuntimeValueExpression(bindingContext)
-        .getCall(bindingContext)?.let {
-            if (matcher.matches(it, bindingContext)) it.valueArguments[0].getArgumentExpression()
-            else null
+private fun KtExpression.firstArgumentOfInitializer(matcher: FunMatcherImpl) = withKaSession {
+    predictRuntimeValueExpression()
+        .resolveToCall()
+        ?.successfulFunctionCallOrNull()?.let {
+            if (matcher.matches(it)) {
+                it.argumentMapping.keys.elementAt(0)
+            } else null
         }
+}
