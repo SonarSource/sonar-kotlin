@@ -30,13 +30,12 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 private val POSTFIX_INCREMENT_OPERATORS = listOf(KtTokens.PLUSPLUS, KtTokens.MINUSMINUS)
 private const val MESSAGE = "Remove this increment or correct the code not to waste it."
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S2123")
 class UselessIncrementCheck : AbstractCheck() {
 
     override fun visitReturnExpression(returnExpression: KtReturnExpression, ctx: KotlinFileContext) {
         returnExpression.returnedExpression.asPostfixIncrement()?.let {
-            if (it.baseExpression.isLocalVariable(ctx.bindingContext)) {
+            if (it.baseExpression.isLocalVariable()) {
                 ctx.reportIssue(it, MESSAGE)
             }
         }
