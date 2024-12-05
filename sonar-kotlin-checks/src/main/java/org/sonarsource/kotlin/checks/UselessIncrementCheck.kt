@@ -36,7 +36,7 @@ class UselessIncrementCheck : AbstractCheck() {
 
     override fun visitReturnExpression(returnExpression: KtReturnExpression, ctx: KotlinFileContext) {
         returnExpression.returnedExpression.asPostfixIncrement()?.let {
-            if (it.baseExpression.isLocalVariable(ctx.bindingContext)) {
+            if (it.baseExpression.isLocalVariable()) {
                 ctx.reportIssue(it, MESSAGE)
             }
         }

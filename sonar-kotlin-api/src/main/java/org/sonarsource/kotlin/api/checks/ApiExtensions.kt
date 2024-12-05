@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaAnonymousFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaLocalVariableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
@@ -764,8 +765,14 @@ fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression, binding
 /**
  * Checks if an expression is a function local variable
  */
+@Deprecated("use kotlin-analysis-api instead", replaceWith = ReplaceWith("isLocalVariable()"))
 fun KtExpression?.isLocalVariable(bindingContext: BindingContext) =
     (this is KtNameReferenceExpression) && (bindingContext[BindingContext.REFERENCE_TARGET, this] is LocalVariableDescriptor)
+
+fun KtExpression?.isLocalVariable(): Boolean = withKaSession {
+    if (this@isLocalVariable !is KtNameReferenceExpression) return false
+    return mainReference.resolveToSymbol() is KaLocalVariableSymbol
+}
 
 fun KtExpression?.setterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
     is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
