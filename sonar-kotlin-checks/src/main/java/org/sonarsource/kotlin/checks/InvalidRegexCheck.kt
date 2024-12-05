@@ -27,7 +27,6 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE_MULTIPLE_ERRORS = "Fix the syntax errors inside this regex."
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S5856")
 class InvalidRegexCheck : AbstractRegexCheck() {
 
