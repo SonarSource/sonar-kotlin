@@ -139,11 +139,12 @@ fun KtExpression.predictRuntimeStringValue(bindingContext: BindingContext) =
 fun KtExpression.predictRuntimeStringValue() =
     predictRuntimeValueExpression().stringValue()
 
-fun KtExpression.predictRuntimeStringValueWithSecondaries(bindingContext: BindingContext) =
+fun KtExpression.predictRuntimeStringValueWithSecondaries() = withKaSession {
     mutableListOf<PsiElement>().let {
-        predictRuntimeValueExpression(bindingContext, it)
-            .stringValue(bindingContext, it) to it
+        predictRuntimeValueExpression(it)
+            .stringValue(it) to it
     }
+}
 
 @Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.predictRuntimeIntValue()"))
 fun KtExpression.predictRuntimeIntValue(bindingContext: BindingContext) =
