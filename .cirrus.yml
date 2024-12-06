@@ -1,8 +1,4 @@
 env:
-  CIRRUS_VAULT_URL: https://vault.sonar.build:8200
-  CIRRUS_VAULT_AUTH_PATH: jwt-cirrusci
-  CIRRUS_VAULT_ROLE: cirrusci-${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}
-
   ARTIFACTORY_URL: VAULT[development/kv/data/repox data.url]
 
   ARTIFACTORY_PRIVATE_USERNAME: vault-${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-private-reader
@@ -17,6 +13,9 @@ env:
   ORG_GRADLE_PROJECT_signingKey: VAULT[development/kv/data/sign data.key]
   ORG_GRADLE_PROJECT_signingPassword: VAULT[development/kv/data/sign data.passphrase]
   ORG_GRADLE_PROJECT_signingKeyId: 0x7DCD4258
+
+  DEVELOCITY_TOKEN: VAULT[development/kv/data/develocity data.token]
+  DEVELOCITY_ACCESS_KEY: develocity.sonar.build=${DEVELOCITY_TOKEN}
 
   # Use bash (instead of sh on linux or cmd.exe on windows)
   CIRRUS_SHELL: bash
@@ -81,7 +80,7 @@ gradle_its_template: &GRADLE_ITS_TEMPLATE
         git submodule update --init --depth 1 "${GIT_SUB_MODULE}"
       fi
     - source cirrus-env QA
-    - ./gradlew "${GRADLE_TASK}" "-P${ITS_PROJECT}"
+    - ./gradlew "${GRADLE_TASK}" "-P${ITS_PROJECT}" -Dscan.tag.CI -Dscan.tag.${ITS_PROJECT} -Dscan.tag.SQ_${SQ_VERSION}
       "-Dsonar.runtimeVersion=${SQ_VERSION}"
       "-DbuildNumber=$BUILD_NUMBER"
       --info --console plain --no-daemon --build-cache
@@ -146,7 +145,7 @@ ws_scan_task:
     folder: ${CIRRUS_WORKING_DIR}/.m2/repository
   whitesource_script:
     - source cirrus-env QA
-    - ./gradlew clean assemble
+    - ./gradlew clean assemble -Dscan.tag.WS_BUILD
     - source ./export_ws_variables.sh
     - source ws_scan.sh
   allow_failures: "true"
@@ -202,7 +201,7 @@ qa_ruling_kotlin_compiler_task:
         git submodule update --init --depth 1 "${GIT_SUB_MODULE}"
       fi
     - source cirrus-env QA
-    - ./gradlew :its:ruling:test --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_compiler" -Pruling
+    - ./gradlew :its:ruling:test --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_compiler" -Pruling -Dscan.tag.CI -Dscan.tag.ruling -Dscan.tag.kotlin-compiler
       "-Dsonar.runtimeVersion=${SQ_VERSION}"
       "-DbuildNumber=$BUILD_NUMBER"
       --info --console plain --no-daemon --build-cache
