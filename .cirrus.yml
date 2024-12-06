@@ -1,8 +1,4 @@
 env:
-  CIRRUS_VAULT_URL: https://vault.sonar.build:8200
-  CIRRUS_VAULT_AUTH_PATH: jwt-cirrusci
-  CIRRUS_VAULT_ROLE: cirrusci-${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}
-
   ARTIFACTORY_URL: VAULT[development/kv/data/repox data.url]
 
   ARTIFACTORY_PRIVATE_USERNAME: vault-${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-private-reader
@@ -17,6 +13,9 @@ env:
   ORG_GRADLE_PROJECT_signingKey: VAULT[development/kv/data/sign data.key]
   ORG_GRADLE_PROJECT_signingPassword: VAULT[development/kv/data/sign data.passphrase]
   ORG_GRADLE_PROJECT_signingKeyId: 0x7DCD4258
+
+  DEVELOCITY_TOKEN: VAULT[development/kv/data/develocity data.token]
+  DEVELOCITY_ACCESS_KEY: develocity.sonar.build=${DEVELOCITY_TOKEN}
 
   # Use bash (instead of sh on linux or cmd.exe on windows)
   CIRRUS_SHELL: bash
@@ -74,18 +73,18 @@ cleanup_gradle_cache_script_template: &CLEANUP_GRADLE_CACHE_SCRIPT
     - rm -rf "${CIRRUS_WORKING_DIR}/.gradle/caches/build-cache-1/"
 
 gradle_its_template: &GRADLE_ITS_TEMPLATE
-  <<: *SETUP_GRADLE_CACHE
+  #<<: *SETUP_GRADLE_CACHE
   run_its_script:
     - |
       if [ -n "${GIT_SUB_MODULE}" ]; then
         git submodule update --init --depth 1 "${GIT_SUB_MODULE}"
       fi
     - source cirrus-env QA
-    - ./gradlew "${GRADLE_TASK}" "-P${ITS_PROJECT}"
+    - ./gradlew "${GRADLE_TASK}" "-P${ITS_PROJECT}" -Dscan.tag.CI -Dscan.tag.${ITS_PROJECT} -Dscan.tag.SQ_${SQ_VERSION}
       "-Dsonar.runtimeVersion=${SQ_VERSION}"
       "-DbuildNumber=$BUILD_NUMBER"
       --info --console plain --no-daemon --build-cache
-  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+  #<<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 only_if_sonarsource_qa_template: &ONLY_IF_SONARSOURCE_QA
   only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
@@ -97,7 +96,7 @@ qa_task_filter_template: &QA_TASK_FILTER
 
 build_task:
   <<: *LINUX_3_5_CPU_7G
-  <<: *SETUP_GRADLE_CACHE
+  #<<: *SETUP_GRADLE_CACHE
   env:
     # analysis on next
     SONAR_TOKEN: VAULT[development/kv/data/next data.token]
@@ -106,17 +105,17 @@ build_task:
     DEPLOY_PULL_REQUEST: true
   build_script:
     - source cirrus-env BUILD-PRIVATE
-    - regular_gradle_build_deploy_analyze -x test -x sonar
+    - regular_gradle_build_deploy_analyze -x test -x sonar -Dscan.tag.CI -Dscan.tag.build
   on_failure:
     error_log_artifacts:
       path: "hs_err_pid*.log"
     heap_dump_artifacts:
       path: "*.hprof"
-  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+  #<<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 build_test_analyze_task:
   <<: *LINUX_3_5_CPU_7G
-  <<: *SETUP_GRADLE_CACHE
+  #<<: *SETUP_GRADLE_CACHE
   env:
     # analysis on next
     SONAR_TOKEN: VAULT[development/kv/data/next data.token]
@@ -125,17 +124,17 @@ build_test_analyze_task:
     DEPLOY_PULL_REQUEST: true
   build_script:
     - source cirrus-env BUILD-PRIVATE
-    - regular_gradle_build_deploy_analyze -x artifactoryPublish
+    - regular_gradle_build_deploy_analyze -x artifactoryPublish -Dscan.tag.CI -Dscan.tag.test-analyze
   on_failure:
     error_log_artifacts:
       path: "hs_err_pid*.log"
     heap_dump_artifacts:
       path: "*.hprof"
-  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+  #<<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 ws_scan_task:
   <<: *LINUX_6_CPU_12G_JAVA_17
-  <<: *SETUP_GRADLE_CACHE
+  #<<: *SETUP_GRADLE_CACHE
   depends_on:
     - build
   # run only on master, long-term branches and mend-related branches
@@ -146,7 +145,7 @@ ws_scan_task:
     folder: ${CIRRUS_WORKING_DIR}/.m2/repository
   whitesource_script:
     - source cirrus-env QA
-    - ./gradlew clean assemble
+    - ./gradlew clean assemble -Dscan.tag.WS_BUILD
     - source ./export_ws_variables.sh
     - source ws_scan.sh
   allow_failures: "true"
@@ -195,23 +194,23 @@ qa_ruling_kotlin_compiler_task:
     SQ_VERSION: "LATEST_RELEASE"
     GIT_SUB_MODULE: "its/sources"
   <<: *LINUX_6_CPU_12G_JAVA_17
-  <<: *SETUP_GRADLE_CACHE
+  #<<: *SETUP_GRADLE_CACHE
   run_its_script:
     - |
       if [ -n "${GIT_SUB_MODULE}" ]; then
         git submodule update --init --depth 1 "${GIT_SUB_MODULE}"
       fi
     - source cirrus-env QA
-    - ./gradlew :its:ruling:test --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_compiler" -Pruling
+    - ./gradlew :its:ruling:test --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_compiler" -Pruling -Dscan.tag.CI -Dscan.tag.ruling -Dscan.tag.kotlin-compiler
       "-Dsonar.runtimeVersion=${SQ_VERSION}"
       "-DbuildNumber=$BUILD_NUMBER"
       --info --console plain --no-daemon --build-cache
-  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+  #<<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 build_win_task:
   <<: *QA_TASK_FILTER
   <<: *WINDOWS_16_CPU_32G
-  <<: *SETUP_GRADLE_CACHE
+  #<<: *SETUP_GRADLE_CACHE
   build_script:
     - ./gradlew build --info --console plain --no-daemon --build-cache
   on_failure:
@@ -219,7 +218,7 @@ build_win_task:
       path: "hs_err_pid*.log"
     heap_dump_artifacts:
       path: "*.hprof"
-  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+  #<<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 promote_task:
   depends_on:
