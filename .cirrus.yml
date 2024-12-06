@@ -73,7 +73,7 @@ cleanup_gradle_cache_script_template: &CLEANUP_GRADLE_CACHE_SCRIPT
     - rm -rf "${CIRRUS_WORKING_DIR}/.gradle/caches/build-cache-1/"
 
 gradle_its_template: &GRADLE_ITS_TEMPLATE
-  <<: *SETUP_GRADLE_CACHE
+  #<<: *SETUP_GRADLE_CACHE
   run_its_script:
     - |
       if [ -n "${GIT_SUB_MODULE}" ]; then
@@ -84,7 +84,7 @@ gradle_its_template: &GRADLE_ITS_TEMPLATE
       "-Dsonar.runtimeVersion=${SQ_VERSION}"
       "-DbuildNumber=$BUILD_NUMBER"
       --info --console plain --no-daemon --build-cache
-  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+  #<<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 only_if_sonarsource_qa_template: &ONLY_IF_SONARSOURCE_QA
   only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
@@ -96,7 +96,7 @@ qa_task_filter_template: &QA_TASK_FILTER
 
 build_task:
   <<: *LINUX_3_5_CPU_7G
-  <<: *SETUP_GRADLE_CACHE
+  #<<: *SETUP_GRADLE_CACHE
   env:
     # analysis on next
     SONAR_TOKEN: VAULT[development/kv/data/next data.token]
@@ -111,11 +111,11 @@ build_task:
       path: "hs_err_pid*.log"
     heap_dump_artifacts:
       path: "*.hprof"
-  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+  #<<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 build_test_analyze_task:
   <<: *LINUX_3_5_CPU_7G
-  <<: *SETUP_GRADLE_CACHE
+  #<<: *SETUP_GRADLE_CACHE
   env:
     # analysis on next
     SONAR_TOKEN: VAULT[development/kv/data/next data.token]
@@ -130,11 +130,11 @@ build_test_analyze_task:
       path: "hs_err_pid*.log"
     heap_dump_artifacts:
       path: "*.hprof"
-  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+  #<<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 ws_scan_task:
   <<: *LINUX_6_CPU_12G_JAVA_17
-  <<: *SETUP_GRADLE_CACHE
+  #<<: *SETUP_GRADLE_CACHE
   depends_on:
     - build
   # run only on master, long-term branches and mend-related branches
@@ -194,7 +194,7 @@ qa_ruling_kotlin_compiler_task:
     SQ_VERSION: "LATEST_RELEASE"
     GIT_SUB_MODULE: "its/sources"
   <<: *LINUX_6_CPU_12G_JAVA_17
-  <<: *SETUP_GRADLE_CACHE
+  #<<: *SETUP_GRADLE_CACHE
   run_its_script:
     - |
       if [ -n "${GIT_SUB_MODULE}" ]; then
@@ -205,12 +205,12 @@ qa_ruling_kotlin_compiler_task:
       "-Dsonar.runtimeVersion=${SQ_VERSION}"
       "-DbuildNumber=$BUILD_NUMBER"
       --info --console plain --no-daemon --build-cache
-  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+  #<<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 build_win_task:
   <<: *QA_TASK_FILTER
   <<: *WINDOWS_16_CPU_32G
-  <<: *SETUP_GRADLE_CACHE
+  #<<: *SETUP_GRADLE_CACHE
   build_script:
     - ./gradlew build --info --console plain --no-daemon --build-cache
   on_failure:
@@ -218,7 +218,7 @@ build_win_task:
       path: "hs_err_pid*.log"
     heap_dump_artifacts:
       path: "*.hprof"
-  <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+  #<<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 promote_task:
   depends_on:

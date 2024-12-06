@@ -110,7 +110,7 @@ buildCache {
         isEnabled = !isCI
     }
     remote(develocity.buildCache) {
-        //isEnabled = true
+        isEnabled = true
         isPush = isCI
     }
 }
