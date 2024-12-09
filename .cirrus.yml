@@ -124,7 +124,8 @@ build_test_analyze_task:
     DEPLOY_PULL_REQUEST: true
   build_script:
     - source cirrus-env BUILD-PRIVATE
-    - regular_gradle_build_deploy_analyze -x artifactoryPublish -Dscan.tag.CI -Dscan.tag.test-analyze
+    - ./gradlew build -Dscan.tag.CI -Dscan.tag.test
+    - regular_gradle_build_deploy_analyze -x build -x artifactoryPublish -Dscan.tag.CI -Dscan.tag.analyze
   on_failure:
     error_log_artifacts:
       path: "hs_err_pid*.log"
