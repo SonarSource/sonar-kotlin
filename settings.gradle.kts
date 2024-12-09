@@ -98,12 +98,15 @@ plugins {
     id("com.gradle.develocity") version("3.18.2")
 }
 
+val isCI: Boolean = System.getenv("CI") != null
+
 develocity {
     server = "https://develocity.sonar.build"
+    buildScan {
+      uploadInBackground.set(!isCI)
+    }
 
 }
-
-val isCI: Boolean = System.getenv("CI") != null
 
 buildCache {
     local {
