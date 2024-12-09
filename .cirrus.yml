@@ -212,7 +212,7 @@ build_win_task:
   <<: *WINDOWS_16_CPU_32G
   <<: *SETUP_GRADLE_CACHE
   build_script:
-    - ./gradlew build --info --console plain --no-daemon --build-cache
+    - ./gradlew build --info --console plain --no-daemon --build-cache -Dscan.tag.CI -Dscan.tag.build-win
   on_failure:
     error_log_artifacts:
       path: "hs_err_pid*.log"
