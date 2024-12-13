@@ -220,6 +220,11 @@
             <sha256 value="4c0fda2b1d317750d7ea324e36c70b2bc48310c0aaae67b98df0915d696d7111" origin="Verified"/>
          </artifact>
       </component>
+      <component group="com.gradle" name="common-custom-user-data-gradle-plugin" version="2.0.2">
+         <artifact name="common-custom-user-data-gradle-plugin-2.0.2.jar">
+            <sha256 value="1eefa516932eb306189fe0534db0bc06e423705f33ff664650efd58d50ea1f21" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="com.gradle" name="develocity-gradle-plugin" version="3.18.2">
          <artifact name="develocity-gradle-plugin-3.18.2.jar">
             <sha256 value="1cdc2770a1d01d99185a81a25b08bb749a0bc78aed6b3358e268060242e5719a" origin="Verified"/>
