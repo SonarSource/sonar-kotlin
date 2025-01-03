@@ -93,3 +93,23 @@ dependencyResolutionManagement {
         }
     }
 }
+
+plugins {
+    id("com.gradle.develocity") version("3.18.2")
+}
+
+develocity {
+    server = "https://develocity.sonar.build"
+}
+
+val isCI: Boolean = System.getenv("CI") != null
+
+buildCache {
+    local {
+        isEnabled = !isCI
+    }
+    remote(develocity.buildCache) {
+        isEnabled = true
+        isPush = isCI
+    }
+}
