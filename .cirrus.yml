@@ -14,10 +14,6 @@ env:
   ARTIFACTORY_DEPLOY_PASSWORD: VAULT[development/artifactory/token/${CIRRUS_REPO_OWNER}-${CIRRUS_REPO_NAME}-qa-deployer access_token]
   ARTIFACTORY_DEPLOY_REPO: sonarsource-public-qa
 
-  ORG_GRADLE_PROJECT_signingKey: VAULT[development/kv/data/sign data.key]
-  ORG_GRADLE_PROJECT_signingPassword: VAULT[development/kv/data/sign data.passphrase]
-  ORG_GRADLE_PROJECT_signingKeyId: 0x7DCD4258
-
   # Use bash (instead of sh on linux or cmd.exe on windows)
   CIRRUS_SHELL: bash
 
@@ -104,6 +100,10 @@ build_task:
     SONAR_HOST_URL: https://next.sonarqube.com/sonarqube
     #allow deployment of pull request artifacts to repox
     DEPLOY_PULL_REQUEST: true
+    # Develocity
+    ORG_GRADLE_PROJECT_signingKey: VAULT[development/kv/data/sign data.key]
+    ORG_GRADLE_PROJECT_signingPassword: VAULT[development/kv/data/sign data.passphrase]
+    ORG_GRADLE_PROJECT_signingKeyId: 0x7DCD4258
   build_script:
     - source cirrus-env BUILD-PRIVATE
     - regular_gradle_build_deploy_analyze -x test -x sonar
