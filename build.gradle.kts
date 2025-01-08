@@ -225,6 +225,20 @@ subprojects {
                 gradle.taskGraph.hasTask(":artifactoryPublish")
         }
     }
+    normalization {
+        runtimeClasspath {
+            metaInf {
+                ignoreAttribute("Implementation-Version")
+                ignoreAttribute("Version")
+                ignoreAttribute("Implementation-Build")
+                ignoreAttribute("Build-Time")
+                ignoreAttribute("Plugin-BuildDate")
+                ignoreAttribute("Plugin-Display-Version")
+                ignoreAttribute("Plugin-Version")
+                ignoreAttribute("Plugin-RequirePlugins")
+            }
+        }
+    }
 }
 
 sonarqube {
