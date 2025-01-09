@@ -93,3 +93,28 @@ dependencyResolutionManagement {
         }
     }
 }
+
+plugins {
+    id("com.gradle.develocity") version("3.18.2")
+}
+
+val isCI: Boolean = System.getenv("CI") != null
+
+develocity {
+    server = "https://develocity.sonar.build"
+    buildScan {
+        if (isCI) {
+            uploadInBackground.set(false)
+            tag("CI")
+            for (key in listOf(
+                "CIRRUS_BUILD_ID",
+                "CIRRUS_TASK_ID",
+                "CIRRUS_TASK_NAME",
+                "CIRRUS_BRANCH",
+                "CIRRUS_CHANGE_IN_REPO"
+            )) {
+                value(key, System.getenv(key))
+            }
+        }
+    }
+}
