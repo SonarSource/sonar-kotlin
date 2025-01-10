@@ -4,7 +4,7 @@ set -euox pipefail
 
 get_project_version() {
   local version_property
-  version_property=$(./gradlew properties | grep --extended-regexp "^version: (.*)")
+  version_property=$(./gradlew properties --no-scan | grep --extended-regexp "^version: (.*)")
   if [[ -z "${version_property}" ]]; then
     echo "Could not find property version in project" >&2
     exit 2
