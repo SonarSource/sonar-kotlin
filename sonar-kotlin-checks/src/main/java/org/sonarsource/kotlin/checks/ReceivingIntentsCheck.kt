@@ -16,15 +16,14 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.isNull
+import org.sonarsource.kotlin.api.checks.isPredictedNull
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S5322")
 class ReceivingIntentsCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(
@@ -33,11 +32,11 @@ class ReceivingIntentsCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         kotlinFileContext: KotlinFileContext
     ) {
-        val arguments = resolvedCall.valueArgumentsByIndex ?: return
-        if (arguments.size < 4 || arguments[2].isNull(kotlinFileContext.bindingContext)) {
+        val arguments = resolvedCall.argumentMapping.keys
+        if (arguments.size < 4 || arguments.elementAt(2).isPredictedNull()) {
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, "Make sure that intents are received safely here.")
         }
     }
