@@ -16,7 +16,15 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassLikeSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaTypeAliasSymbol
+import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.abbreviatedTypeOrSelf
+import org.jetbrains.kotlin.analysis.api.types.classSymbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.analysis.utils.collections.nullValueToNull
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.lexer.KtTokens.THIS_KEYWORD
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -107,8 +115,17 @@ class EqualsArgumentTypeCheck : AbstractCheck() {
     private fun isExpressionCorrectType(typeReference: KtTypeReference, klass: KtClass): Boolean = withKaSession {
         val name = typeReference.nameForReceiverLabel()
         val parentNames = klass.superTypeListEntries.mapNotNull { it.typeReference!!.nameForReceiverLabel() }
+
+        val symbol: KaClassSymbol? = typeReference.type.symbol as? KaClassSymbol
+        val symbol2: KaClassSymbol? = klass.classSymbol
+//        val old = typeReference.type.allSupertypes.any { klass.classSymbol?.classId == it.symbol?.classId }
+//        println("" + symbol?.name + " vs " + symbol2?.name + " " + old + " " + symbol?.isSubClassOf(symbol2!!))
+
+//        (klass.classSymbol as? KaNamedClassSymbol)?.defaultType.isSubtypeOf(type)
+//            .isSubClassOf(typeReference.type)
         return klass.name == name || parentNames.contains(name) ||
-                typeReference.type.allSupertypes.any { klass.classSymbol?.classId == it.symbol?.classId }
+                symbol != null && symbol2 != null && symbol.isSubClassOf(symbol2)
+//                typeReference.type.allSupertypes.any { klass.classSymbol?.classId == it.symbol?.classId }
     }
 
     private fun isBinaryExpressionWithTypeCorrect(
