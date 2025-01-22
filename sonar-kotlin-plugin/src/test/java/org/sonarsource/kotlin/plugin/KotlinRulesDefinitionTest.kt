@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import org.assertj.core.api.Assert
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.sonar.api.SonarEdition
@@ -38,7 +39,11 @@ internal class KotlinRulesDefinitionTest {
             .isEqualTo("Identical expressions should not be used on both sides of a binary operator")
         Assertions.assertThat(rule.type()).isEqualTo(RuleType.BUG)
         Assertions.assertThat(rule.scope()).isEqualTo(RuleScope.ALL)
-        Assertions.assertThat(rule.htmlDescription()).startsWith("<h2>Why is this an issue?</h2>\n<p>Using the same value on both sides")
+        val htmlDescription = rule.htmlDescription()?.lines();
+        Assertions.assertThat(htmlDescription?.getOrNull(0))
+            .startsWith("<h2>Why is this an issue?</h2>")
+        Assertions.assertThat(htmlDescription?.getOrNull(1))
+            .startsWith("<p>Using the same value on both sides")
         val ruleWithConfig = repository.rule("S100")
         val param = ruleWithConfig!!.param("format")
         Assertions.assertThat(param!!.defaultValue()).isEqualTo("^[a-zA-Z][a-zA-Z0-9]*$")
