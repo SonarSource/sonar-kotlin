@@ -16,11 +16,10 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.ArgumentMatcher
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
@@ -32,6 +31,7 @@ import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val PREPARE_STATEMENT = FunMatcher(qualifier = "java.sql.Connection", name = "prepareStatement")
 
@@ -44,7 +44,6 @@ private val RESULT_SET_GET = FunMatcher(qualifier = "java.sql.ResultSet", nameRe
     withArguments(ArgumentMatcher(INT_TYPE), ArgumentMatcher.ANY)
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S2695")
 class PreparedStatementAndResultSetCheck : CallAbstractCheck() {
 
@@ -52,15 +51,13 @@ class PreparedStatementAndResultSetCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext,
     ) {
-        val bindingContext = kotlinFileContext.bindingContext
-
         val firstArgument = callExpression.valueArguments[0].getArgumentExpression()!!
-        val receiver = callExpression.predictReceiverExpression(bindingContext) ?: return
-        val firstArgumentValue = firstArgument.predictRuntimeIntValue(bindingContext) ?: return
+        val receiver = callExpression.predictReceiverExpression() ?: return
+        val firstArgumentValue = firstArgument.predictRuntimeIntValue() ?: return
 
         when (matchedFun) {
             RESULT_SET_GET ->
@@ -70,7 +67,7 @@ class PreparedStatementAndResultSetCheck : CallAbstractCheck() {
                 if (firstArgumentValue == 0) {
                     kotlinFileContext.reportIssue(firstArgument, "PreparedStatement indices start at 1.")
                 } else {
-                    getNumberOfParameters(bindingContext, receiver)?.let {
+                    getNumberOfParameters(receiver)?.let {
                         if (firstArgumentValue > it) {
                             kotlinFileContext.reportIssue(
                                 firstArgument,
@@ -85,12 +82,14 @@ class PreparedStatementAndResultSetCheck : CallAbstractCheck() {
     }
 }
 
-private fun getNumberOfParameters(bindingContext: BindingContext, receiver: KtExpression) =
-    receiver.predictRuntimeValueExpression(bindingContext)
-        .getCall(bindingContext)?.let {
-            if (PREPARE_STATEMENT.matches(it, bindingContext)) {
-                it.valueArguments[0].getArgumentExpression()
-                    ?.predictRuntimeStringValue(bindingContext)
+private fun getNumberOfParameters(receiver: KtExpression) = withKaSession {
+    receiver.predictRuntimeValueExpression()
+        .resolveToCall()?.successfulFunctionCallOrNull()
+        ?.let {
+            if (PREPARE_STATEMENT.matches(it)) {
+                it.argumentMapping.keys.elementAt(0)
+                    .predictRuntimeStringValue()
                     ?.count { c -> c.toString() == "?" }
             } else null
         }
+}
