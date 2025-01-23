@@ -17,25 +17,26 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.siblings
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.checks.KOTLINX_COROUTINES_PACKAGE
 import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val MESSAGE = """Use "withTimeoutOrNull { }" instead of manual delayed cancellation."""
 
@@ -44,22 +45,21 @@ private val LAUNCH_ASYNC_MATCHER = FunMatcher(qualifier = KOTLINX_COROUTINES_PAC
     withNames("launch", "async")
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6316")
 class CoroutinesTimeoutApiUnusedCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(FunMatcher(definingSupertype = "$KOTLINX_COROUTINES_PACKAGE.Job", name = "cancel"))
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
-        kotlinFileContext: KotlinFileContext
-    ) {
-        val bindingContext = kotlinFileContext.bindingContext
-
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext,
+    ) = withKaSession {
         val cancelCallCalleeExpression = callExpression.calleeExpression ?: return
 
-        val jobDeclaration = (callExpression.context as? KtDotQualifiedExpression)
-            ?.receiverExpression?.getReferenceTargets(bindingContext)?.toList()?.getOrNull(0) ?: return
+        val kaSymbol = (callExpression.context as? KtDotQualifiedExpression)
+            ?.receiverExpression?.mainReference?.resolveToSymbol()
+            ?: return
 
         val siblingIter = callExpression.parent.siblings(forward = false, withItself = false)
             .filter { it is KtElement }
@@ -70,8 +70,8 @@ class CoroutinesTimeoutApiUnusedCheck : CallAbstractCheck() {
         // For now we only consider extremely simple cases where the job creation is directly followed by a delay(...) and subsequent
         // cancel() methods. If there is anything done in between we don't report anything, as it is non-trivial to check that this
         // rule remains valid.
-        val delayCall = asDelayCallIfMatching(siblingIter.next(), bindingContext) ?: return
-        val initializerCall = asInitializerCallIfMatching(siblingIter.next(), jobDeclaration, bindingContext) ?: return
+        val delayCall = asDelayCallIfMatching(siblingIter.next()) ?: return
+        val initializerCall = asInitializerCallIfMatching(siblingIter.next(), kaSymbol) ?: return
 
         kotlinFileContext.reportIssue(
             cancelCallCalleeExpression, MESSAGE, listOf(
@@ -81,19 +81,20 @@ class CoroutinesTimeoutApiUnusedCheck : CallAbstractCheck() {
         )
     }
 
-    private fun asDelayCallIfMatching(element: PsiElement, bindingContext: BindingContext) =
-        if (element is KtCallExpression && element.getResolvedCall(bindingContext) matches DELAY_MATCHER) {
+    private fun asDelayCallIfMatching(element: PsiElement): KtExpression? = withKaSession {
+        if (element is KtCallExpression &&
+            element.resolveToCall()?.successfulFunctionCallOrNull() matches DELAY_MATCHER) {
             element.calleeExpression
         } else null
+    }
 
     private fun asInitializerCallIfMatching(
         element: PsiElement,
-        targetInitializer: DeclarationDescriptor,
-        bindingContext: BindingContext,
-    ): KtExpression? {
-        if (element is KtProperty && bindingContext[BindingContext.VARIABLE, element] === targetInitializer) {
+        targetInitializer: KaSymbol?,
+    ): KtExpression? = withKaSession {
+        if (element is KtProperty && element.symbol == targetInitializer) {
             val initializer = element.initializer as? KtCallExpression ?: return null
-            if (initializer.getResolvedCall(bindingContext) matches LAUNCH_ASYNC_MATCHER) {
+            if (initializer.resolveToCall()?.successfulFunctionCallOrNull() matches LAUNCH_ASYNC_MATCHER) {
                 return initializer.calleeExpression
             }
         }
