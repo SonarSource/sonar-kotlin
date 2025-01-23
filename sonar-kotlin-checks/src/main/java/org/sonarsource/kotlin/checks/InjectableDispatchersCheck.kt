@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.sonar.check.Rule
@@ -38,14 +39,16 @@ private const val DISPATCHERS_OBJECT = "$KOTLINX_COROUTINES_PACKAGE.Dispatchers"
 @Rule(key = "S6310")
 class InjectableDispatchersCheck : CallAbstractCheck() {
     override val functionsToVisit = FUNS_ACCEPTING_DISPATCHERS
+    private val dispatchersClassId = ClassId.fromString(
+        DISPATCHERS_OBJECT.replace('.', '/'))
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
         resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext
-    ) {
-        val arguments = resolvedCall.argumentMapping.keys.toList()
+    ) = withKaSession {
+        val arguments = resolvedCall.argumentMapping.keys
         if (arguments.isEmpty()) return
 
         val argExpr = arguments.first()
@@ -53,10 +56,13 @@ class InjectableDispatchersCheck : CallAbstractCheck() {
         val variableAccessCall: KaVariableAccessCall = withKaSession {
             argValueExpr.resolveToCall()?.singleVariableAccessCall() ?: return
         }
-        val receiverFqn = (variableAccessCall.partiallyAppliedSymbol.dispatchReceiver?.type as? KaClassType)
-                ?.symbol?.classId?.asFqNameString()
+        val receiver = variableAccessCall.partiallyAppliedSymbol.dispatchReceiver?.type
+//        val receiver = (variableAccessCall.partiallyAppliedSymbol.dispatchReceiver?.type as? KaClassType)
+//            ?.classId?.asFqNameString()
+//                ?.symbol?.classId?.asFqNameString()
 
-        if (receiverFqn == DISPATCHERS_OBJECT) {
+        if (receiver?.isClassType(dispatchersClassId) == true) {
+//        if (receiverFqn == DISPATCHERS_OBJECT) {
             val secondaries = if (argExpr !== argValueExpr) {
                 listOf(kotlinFileContext.secondaryOf(argValueExpr, "Hard-coded dispatcher"))
             } else emptyList()
