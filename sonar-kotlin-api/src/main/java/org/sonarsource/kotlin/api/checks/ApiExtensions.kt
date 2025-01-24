@@ -676,12 +676,16 @@ fun Call.findCallInPrecedingCallChain(matcher: FunMatcherImpl, bindingContext: B
     return receiver to receiverResolved
 }
 
+@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.isPredictedNull()"))
 fun ResolvedValueArgument.isNull(bindingContext: BindingContext) = (
     (this as? ExpressionValueArgument)
         ?.valueArgument
         ?.getArgumentExpression()
         ?.predictRuntimeValueExpression(bindingContext)
     )?.isNull() ?: false
+
+fun KtExpression.isPredictedNull() =
+   predictRuntimeValueExpression().isNull()
 
 fun KtExpression.getCalleeOrUnwrappedGetMethod(bindingContext: BindingContext) =
     (this as? KtDotQualifiedExpression)?.let { dotQualifiedExpression ->
