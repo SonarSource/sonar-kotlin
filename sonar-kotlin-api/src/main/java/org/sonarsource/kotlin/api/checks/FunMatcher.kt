@@ -388,7 +388,13 @@ fun ConstructorMatcher(
     block: FunMatcherBuilderContext.() -> Unit = {}
 ) = FunMatcher(qualifier = typeName, matchConstructor = true, block = block)
 
+@Deprecated("use kotlin-analysis-api instead")
 infix fun ResolvedCall<*>?.matches(funMatcher: FunMatcherImpl): Boolean = funMatcher.matches(this)
+
+infix fun KaFunctionCall<*>?.matches(funMatcher: FunMatcherImpl): Boolean {
+    if (this == null) return false
+    return funMatcher.matches(this)
+}
 
 private fun Set<String>.addIfNonEmpty(optionalString: String?): Set<String> =
     if (optionalString.isNullOrEmpty()) this else this + optionalString
