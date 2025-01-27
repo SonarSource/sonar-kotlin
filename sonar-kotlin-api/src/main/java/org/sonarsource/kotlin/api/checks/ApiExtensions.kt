@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.KaCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaExplicitReceiverValue
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaImplicitReceiverValue
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
@@ -665,13 +666,14 @@ fun CallableDescriptor.throwsExceptions(exceptions: Collection<String>) =
 
 fun KtNamedFunction.isInfix() = hasModifier(KtTokens.INFIX_KEYWORD)
 
-fun Call.findCallInPrecedingCallChain(matcher: FunMatcherImpl, bindingContext: BindingContext): Pair<Call, ResolvedCall<*>>? {
-    var receiver = this
-    var receiverResolved = receiver.getResolvedCall(bindingContext) ?: return null
+fun KtExpression.findCallInPrecedingCallChain(
+    matcher: FunMatcherImpl,
+): Pair<KtExpression, KaFunctionCall<*>>? = withKaSession {
+    var receiver = this@findCallInPrecedingCallChain
+    var receiverResolved = receiver.resolveToCall()?.successfulFunctionCallOrNull() ?: return null
     while (!matcher.matches(receiverResolved)) {
-        val callElement = receiver.callElement as? KtCallExpression ?: return null
-        receiver = callElement.predictReceiverExpression(bindingContext)?.getCall(bindingContext) ?: return null
-        receiverResolved = receiver.getResolvedCall(bindingContext) ?: return null
+        receiver = receiver.predictReceiverExpression() ?: return null
+        receiverResolved = receiver.resolveToCall()?.singleFunctionCallOrNull() ?: return null
     }
     return receiver to receiverResolved
 }
