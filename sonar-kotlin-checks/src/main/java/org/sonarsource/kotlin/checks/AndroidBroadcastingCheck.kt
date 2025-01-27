@@ -16,14 +16,15 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedValueArgument
+import org.jetbrains.kotlin.psi.KtExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.isNull
+import org.sonarsource.kotlin.api.checks.isPredictedNull
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val MESSAGE = "Make sure that broadcasting intents is safe here."
@@ -35,7 +36,6 @@ private val STICKY_BROADCAST_NAMES = setOf(
     "sendStickyOrderedBroadcastAsUser",
 )
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S5320")
 class AndroidBroadcastingCheck : CallAbstractCheck() {
 
@@ -52,40 +52,37 @@ class AndroidBroadcastingCheck : CallAbstractCheck() {
         )
     })
 
-
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         kotlinFileContext: KotlinFileContext
     ) {
-        val arguments = resolvedCall.valueArgumentsByIndex ?: return
-        val name = resolvedCall.resultingDescriptor.name.asString()
+        val arguments = resolvedCall.argumentMapping.keys.toList()
+        val name = resolvedCall.partiallyAppliedSymbol.symbol.name?.asString() ?: return
 
         if (
-            with(kotlinFileContext.bindingContext) {
-                name in STICKY_BROADCAST_NAMES
-                    || isSendBroadcast(name, arguments)
-                    || isSendBroadcastAsUser(name, arguments)
-                    || isSendOrderedBroadcast(name, arguments)
-                    || isSendOrderedBroadcastAsUser(name, arguments)
-            }
+            name in STICKY_BROADCAST_NAMES ||
+            isSendBroadcast(name, arguments) ||
+            isSendBroadcastAsUser(name, arguments) ||
+            isSendOrderedBroadcast(name, arguments) ||
+            isSendOrderedBroadcastAsUser(name, arguments)
         ) {
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
         }
     }
 
-    private fun BindingContext.isSendOrderedBroadcastAsUser(
+    private fun isSendOrderedBroadcastAsUser(
         name: String,
-        argumentsByIndex: List<ResolvedValueArgument>
-    ) = name == "sendOrderedBroadcastAsUser" && (argumentsByIndex.getOrNull(2)?.isNull(this) ?: false)
+        argumentsByIndex: List<KtExpression>
+    ) = name == "sendOrderedBroadcastAsUser" && (argumentsByIndex.getOrNull(2)?.isPredictedNull() ?: false)
 
-    private fun BindingContext.isSendOrderedBroadcast(name: String, argumentsByIndex: List<ResolvedValueArgument>) =
-        name == "sendOrderedBroadcast" && (argumentsByIndex.getOrNull(1)?.isNull(this) ?: false)
+    private fun isSendOrderedBroadcast(name: String, argumentsByIndex: List<KtExpression>) =
+        name == "sendOrderedBroadcast" && (argumentsByIndex.getOrNull(1)?.isPredictedNull() ?: false)
 
-    private fun BindingContext.isSendBroadcastAsUser(name: String, argumentsByIndex: List<ResolvedValueArgument>) =
-        name == "sendBroadcast" && (argumentsByIndex.getOrNull(1)?.isNull(this) ?: true)
+    private fun isSendBroadcastAsUser(name: String, argumentsByIndex: List<KtExpression>) =
+        name == "sendBroadcast" && (argumentsByIndex.getOrNull(1)?.isPredictedNull() ?: true)
 
-    private fun BindingContext.isSendBroadcast(name: String, argumentsByIndex: List<ResolvedValueArgument>) =
-        name == "sendBroadcastAsUser" && (argumentsByIndex.getOrNull(2)?.isNull(this) ?: true)
+    private fun isSendBroadcast(name: String, argumentsByIndex: List<KtExpression>) =
+        name == "sendBroadcastAsUser" && (argumentsByIndex.getOrNull(2)?.isPredictedNull() ?: true)
 
 }
