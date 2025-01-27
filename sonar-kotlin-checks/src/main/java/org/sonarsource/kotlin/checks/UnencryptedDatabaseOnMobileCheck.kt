@@ -16,15 +16,15 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.util.getCall
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.findCallInPrecedingCallChain
 import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val PROBLEMATIC_SIMPLE_CALLS = listOf(
     FunMatcher(definingSupertype = "android.app.Activity", name = "getPreferences"),
@@ -38,17 +38,15 @@ private val REALM_ENC_KEY_FUN = FunMatcher(definingSupertype = "io.realm.RealmCo
 
 private const val MESSAGE = "Make sure using an unencrypted database is safe here."
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6291")
 class UnencryptedDatabaseOnMobileCheck : AbstractCheck() {
     override fun visitCallExpression(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        val bindingContext = kotlinFileContext.bindingContext
-        val resolvedCall = callExpression.getResolvedCall(bindingContext)
+        val resolvedCall = withKaSession { callExpression.resolveToCall()?.successfulFunctionCallOrNull() }
         if (PROBLEMATIC_SIMPLE_CALLS.any { resolvedCall matches it }) {
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
         } else if (
             resolvedCall matches PROBLEMATIC_REALM_CALL &&
-            callExpression.getCall(bindingContext)?.findCallInPrecedingCallChain(REALM_ENC_KEY_FUN, bindingContext) == null
+            callExpression.findCallInPrecedingCallChain(REALM_ENC_KEY_FUN) == null
         ) {
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
         }
