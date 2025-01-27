@@ -512,41 +512,6 @@ private class ApiExtensionsKtDetermineTypeTest : AbstractApiExtensionsKtTest() {
     }
 }
 
-private class ApiExtensionsKtDetermineSignatureTest : AbstractApiExtensionsKtTest() {
-    private val bindingContext: BindingContext
-    private val ktFile: KtFile
-
-    init {
-        val kotlinTree = parse(
-            """
-        package bar
-        
-        class Foo {
-            val prop: Int = 0
-        
-            fun aFun(param: Float): Long {
-                this.prop
-            }
-        }
-        """.trimIndent()
-        )
-        bindingContext = kotlinTree.bindingContext
-        ktFile = kotlinTree.psiFile
-    }
-
-    @Test
-    fun `determineSignature of KtQualifiedExpression`() {
-        val expr = ktFile.findDescendantOfType<KtQualifiedExpression> { it.text == "this.prop" }!!
-
-        assertThat(expr.determineSignature(bindingContext)?.fqNameOrNull()?.asString()).isEqualTo("bar.Foo.prop")
-    }
-
-    @Test
-    fun `determineSignature of a null KtQualifiedExpression`() {
-        assertThat(null.determineSignature(bindingContext)).isNull()
-    }
-}
-
 private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKtTest() {
     private fun generateAst(funContent: String) = """
             package bar

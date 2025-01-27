@@ -19,14 +19,12 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.determineSignature
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S1871")
 class DuplicateBranchCheck : AbstractBranchDuplication() {
 
@@ -36,7 +34,7 @@ class DuplicateBranchCheck : AbstractBranchDuplication() {
             group.asSequence()
                 .drop(1)
                 .filter { spansMultipleLines(it, ctx) }
-                .filter { it !is KtQualifiedExpression || it.hasSameSignature(original as KtQualifiedExpression, ctx.bindingContext) }
+                .filter { it !is KtQualifiedExpression || it.hasSameSignature(original as KtQualifiedExpression) }
                 .forEach { duplicated ->
                     val originalRange = ctx.textRange(original)
                     ctx.reportIssue(
@@ -53,14 +51,13 @@ class DuplicateBranchCheck : AbstractBranchDuplication() {
     }
 }
 
-private fun KtQualifiedExpression.hasSameSignature(other: KtQualifiedExpression, bindingContext: BindingContext): Boolean =
-    this.determineSignature(bindingContext) == other.determineSignature(bindingContext)
-
+private fun KtQualifiedExpression.hasSameSignature(other: KtQualifiedExpression): Boolean =
+    this@hasSameSignature.determineSignature() == other.determineSignature()
 
 private fun spansMultipleLines(tree: KtElement, ctx: KotlinFileContext): Boolean {
     if (tree is KtBlockExpression) {
         val statements = tree.statements
-        if (statements.isNullOrEmpty()) {
+        if (statements.isEmpty()) {
             return false
         }
         val firstStatement = statements[0]
