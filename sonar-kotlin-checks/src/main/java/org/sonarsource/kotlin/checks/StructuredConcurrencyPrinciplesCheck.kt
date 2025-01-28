@@ -17,6 +17,9 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.renderer.types.KaTypeRenderer
+import org.jetbrains.kotlin.analysis.api.renderer.types.impl.KaTypeRendererForSource
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.symbol
@@ -25,6 +28,7 @@ import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.types.Variance
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FUNS_ACCEPTING_DISPATCHERS
@@ -79,6 +83,7 @@ private fun KtExpression.checkOptInDelicateApi(): Boolean {
     return false
 }
 
+@OptIn(KaExperimentalApi::class)
 private fun MutableList<KtAnnotationEntry>?.isAnnotatedWithOptInDelicateApi() = withKaSession {
     this@isAnnotatedWithOptInDelicateApi?.let { it ->
         it.any { annotation ->
@@ -89,9 +94,17 @@ private fun MutableList<KtAnnotationEntry>?.isAnnotatedWithOptInDelicateApi() = 
 
                     val expressionType = valueArgument.getArgumentExpression()?.expressionType
                     val asFqNameString = expressionType?.asFqNameString()
-                    asFqNameString == CLASS_TYPE && (expressionType as? KaClassType)?.typeArguments?.any {
-                        it.type?.symbol?.classId?.asFqNameString() == DELICATE_API_TYPE
-                    } ?: false
+
+                    var render = expressionType?.render(position = Variance.INVARIANT)
+                    println(render)
+                    println(render == "kotlin.reflect.KClass<kotlinx.coroutines.DelicateCoroutinesApi>")
+                    render == "kotlin.reflect.KClass<kotlinx.coroutines.DelicateCoroutinesApi>"
+
+//                    var x = asFqNameString == CLASS_TYPE && (expressionType as? KaClassType)?.typeArguments?.any {
+//                        it.type?.asFqNameString() == DELICATE_API_TYPE
+//                    } ?: false
+//                    println(x)
+//                    x
                 })
         }
     } ?: false
