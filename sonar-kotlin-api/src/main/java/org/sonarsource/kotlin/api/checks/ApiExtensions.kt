@@ -877,12 +877,15 @@ fun DeclarationDescriptor?.determineType(): KotlinType? =
         else -> null
     }
 
-fun KtQualifiedExpression?.determineSignature(bindingContext: BindingContext): DeclarationDescriptor? =
-    when (val selectorExpr = this?.selectorExpression) {
-        is KtCallExpression -> bindingContext[BindingContext.REFERENCE_TARGET, selectorExpr.getCallNameExpression()]
-        is KtSimpleNameExpression -> bindingContext[BindingContext.REFERENCE_TARGET, selectorExpr]
+fun KtQualifiedExpression?.determineSignature(): KaSymbol? = withKaSession {
+    when (val selectorExpr = this@determineSignature?.selectorExpression) {
+        is KtCallExpression ->
+            selectorExpr.getCallNameExpression()?.mainReference?.resolveToSymbol()
+        is KtSimpleNameExpression ->
+            selectorExpr.mainReference.resolveToSymbol()
         else -> null
     }
+}
 
 fun KtAnnotationEntry.annotatedElement(): KtAnnotated {
     var annotated = parent
