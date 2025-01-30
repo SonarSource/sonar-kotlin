@@ -63,20 +63,9 @@ public abstract class TestBase {
   }
 
   protected Measure getMeasure(String projectKey, String metricKey) {
-    return getMeasure(projectKey, null, metricKey);
-  }
-
-  protected Measure getMeasure(String projectKey, @Nullable String componentKey, String metricKey) {
-    String component;
-    if (componentKey != null) {
-      component = projectKey + ":" + componentKey;
-    } else {
-      component = projectKey;
-    }
-    ComponentWsResponse response = newWsClient().measures().component(new ComponentRequest()
-      .setComponent(component)
-      .setMetricKeys(singletonList(metricKey)));
-    List<Measure> measures = response.getComponent().getMeasuresList();
+    var request = new ComponentRequest().setComponent(projectKey).setMetricKeys(singletonList(metricKey));
+    var response = newWsClient().measures().component(request);
+    var measures = response.getComponent().getMeasuresList();
     return measures.size() == 1 ? measures.get(0) : null;
   }
 
@@ -89,14 +78,14 @@ public abstract class TestBase {
       .collect(Collectors.toMap(Measure::getMetric, Function.identity()));
   }
 
-  protected List<Issues.Issue> getIssuesForRule(String componentKey, String rule) {
+  protected List<Issues.Issue> getIssuesForRule(String projectKey, String rule) {
     return newWsClient().issues().search(new SearchRequest()
       .setRules(Collections.singletonList(rule))
-      .setComponentKeys(Collections.singletonList(componentKey))).getIssuesList();
+      .setProjects(Collections.singletonList(projectKey))).getIssuesList();
   }
 
-  protected Integer getMeasureAsInt(String componentKey, String metricKey) {
-    Measure measure = getMeasure(componentKey, metricKey);
+  protected Integer getMeasureAsInt(String projectKey, String metricKey) {
+    var measure = getMeasure(projectKey, metricKey);
     return (measure == null) ? null : Integer.parseInt(measure.getValue());
   }
 
