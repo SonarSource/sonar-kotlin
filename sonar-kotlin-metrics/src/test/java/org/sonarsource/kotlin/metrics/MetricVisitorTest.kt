@@ -73,7 +73,7 @@ internal class MetricVisitorTest {
                 )
             )
         ).thenReturn(mockFileLinesContext)
-        visitor = MetricVisitor(mockFileLinesContextFactory, mockNoSonarFilter)
+        visitor = MetricVisitor(mockFileLinesContextFactory, mockNoSonarFilter, TelemetryData())
     }
 
     @Test
@@ -339,6 +339,42 @@ internal class MetricVisitorTest {
                }"""
         )
         assertThat(visitor.executableLines()).containsExactly(5, 10)
+    }
+
+    @Test
+    fun hasAndroidImports() {
+        fun assert(expected: Boolean, code: String) {
+            scan(code)
+            assertThat(visitor.hasAndroidImports()).isEqualTo(expected)
+        }
+
+        assert(true, "import android.content.Context")
+        assert(true, "import android.content.Context;")
+        assert(true, "import android.net.Uri")
+        assert(true, "import androidx.core.view.WindowCompat")
+        assert(true, "import android.graphics.*")
+        assert(true, "import android.content.Context as AndroidContext")
+
+        assert(false, "import java.io.ByteArrayOutputStream")
+        assert(false, "import kotlin.properties.ReadWriteProperty")
+        assert(false, "/* import android.content.Context */")
+        assert(false, """
+            // import android.content.Context
+        """.trimIndent())
+        assert(false, "import mylibrary.android.MyClass")
+        assert(false, "import androidy.core.view.WindowCompat")
+        assert(false, "package android")
+        assert(false, "class android {}")
+        assert(false, "fun android() = 42")
+
+        assert(true, """
+            import java.io.*
+            import android.content.SharedPreferences
+        """.trimIndent())
+        assert(true, """
+            import android.util.Log
+            import com.facebook.react.PackageList
+        """.trimIndent())
     }
 
     private fun scan(code: String) {

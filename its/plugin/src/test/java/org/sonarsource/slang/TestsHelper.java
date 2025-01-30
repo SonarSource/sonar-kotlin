@@ -47,6 +47,7 @@ public class TestsHelper {
             .setSonarVersion(System.getProperty(SQ_VERSION_PROPERTY, DEFAULT_SQ_VERSION))
             .restoreProfileAtStartup(FileLocation.of("src/test/resources/suppress-warnings-kotlin.xml"))
             .restoreProfileAtStartup(FileLocation.of("src/test/resources/norule.xml"))
+            .setServerProperty("sonar.telemetry.enable", "false")
             .build();
   }
 
