@@ -43,6 +43,7 @@ import org.sonarsource.kotlin.metrics.IssueSuppressionVisitor
 import org.sonarsource.kotlin.metrics.MetricVisitor
 import org.sonarsource.kotlin.metrics.SyntaxHighlighter
 import org.sonarsource.kotlin.api.visiting.KtChecksVisitor
+import org.sonarsource.kotlin.metrics.TelemetryData
 
 import kotlin.jvm.optionals.getOrElse
 
@@ -58,10 +59,21 @@ class KotlinSensor(
 ): AbstractKotlinSensor(
     checkFactory, language, KOTLIN_CHECKS
 ) {
+    private val telemetryData = TelemetryData()
+
     override fun describe(descriptor: SensorDescriptor) {
         descriptor
             .onlyOnLanguage(language.key)
             .name(language.name + " Sensor")
+    }
+
+    override fun execute(sensorContext: SensorContext) {
+        super.execute(sensorContext)
+        // The MetricsVisitor instantiated by the visitors method keeps a shared reference
+        // to the TelemetryData of this sensor, and updates it accordingly. The report method
+        // of TelemetryData takes care of not sending metrics more than once, when execute is
+        // run multiple times.
+        telemetryData.report(sensorContext)
     }
 
     override fun getExecuteContext(
@@ -93,13 +105,13 @@ class KotlinSensor(
         if (sensorContext.runtime().product == SonarProduct.SONARLINT) {
             listOf(
                 IssueSuppressionVisitor(),
-                MetricVisitor(fileLinesContextFactory, noSonarFilter),
+                MetricVisitor(fileLinesContextFactory, noSonarFilter, telemetryData),
                 KtChecksVisitor(checks),
             )
         } else {
             listOf(
                 IssueSuppressionVisitor(),
-                MetricVisitor(fileLinesContextFactory, noSonarFilter),
+                MetricVisitor(fileLinesContextFactory, noSonarFilter, telemetryData),
                 KtChecksVisitor(checks),
                 CopyPasteDetector(),
                 SyntaxHighlighter(),

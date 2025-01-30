@@ -21,6 +21,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -46,6 +47,7 @@ const val NOSONAR_PREFIX = "NOSONAR"
 class MetricVisitor(
     private val fileLinesContextFactory: FileLinesContextFactory,
     private val noSonarFilter: NoSonarFilter,
+    private val telemetryData: TelemetryData, // Some metrics are stored in telemetry
 ) : KotlinFileVisitor() {
     private lateinit var ktMetricVisitor: KtMetricVisitor
 
@@ -67,6 +69,8 @@ class MetricVisitor(
         ktMetricVisitor.executableLines.forEach { line -> fileLinesContext.setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, line, 1) }
         fileLinesContext.save()
         noSonarFilter.noSonarInFile(ctx.inputFile, ktMetricVisitor.nosonarLines)
+
+        telemetryData.hasAndroidImports = telemetryData.hasAndroidImports || ktMetricVisitor.hasAndroidImports
     }
 
     fun commentLines() = ktMetricVisitor.commentLines.toSet()
@@ -82,9 +86,17 @@ class MetricVisitor(
     fun cognitiveComplexity() = ktMetricVisitor.cognitiveComplexity
 
     fun executableLines() = ktMetricVisitor.executableLines
+
+    fun hasAndroidImports() = ktMetricVisitor.hasAndroidImports
 }
 
 private class KtMetricVisitor : KtTreeVisitorVoid() {
+    private companion object {
+        val ANDROID_PACKAGES = setOf(Name.identifier("android"), Name.identifier("androidx"))
+    }
+
+    // User metrics
+
     var linesOfCode: Set<Int> = mutableSetOf()
         private set
 
@@ -110,6 +122,11 @@ private class KtMetricVisitor : KtTreeVisitorVoid() {
         private set
 
     var cognitiveComplexity = 0
+        private set
+
+    // Telemetry metrics
+
+    var hasAndroidImports = false
         private set
 
     override fun visitKtFile(file: KtFile) {
@@ -151,6 +168,12 @@ private class KtMetricVisitor : KtTreeVisitorVoid() {
     override fun visitBlockExpression(expression: KtBlockExpression) {
         addExecutableLines(expression.statements, expression.containingKtFile.viewProvider.document!!)
         super.visitBlockExpression(expression)
+    }
+
+    override fun visitImportDirective(importDirective: KtImportDirective) {
+        hasAndroidImports = hasAndroidImports ||
+            ANDROID_PACKAGES.any { importDirective.importPath?.fqName?.startsWith(it) ?: false }
+        super.visitImportDirective(importDirective)
     }
 
     private fun addExecutableLines(elements: List<KtElement>, document: Document) {
