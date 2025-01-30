@@ -106,9 +106,12 @@ public class ExternalReportTest extends TestBase {
     assertThat(second.getDebt()).isEqualTo("5min");
   }
 
-  private List<Issue> getExternalIssues(String componentKey) {
-    return newWsClient().issues().search(new SearchRequest().setComponentKeys(Collections.singletonList(componentKey)))
-      .getIssuesList().stream()
+  private List<Issue> getExternalIssues(String projectKey) {
+    return newWsClient()
+      .issues()
+      .search(new SearchRequest().setProjects(Collections.singletonList(projectKey)))
+      .getIssuesList()
+      .stream()
       .filter(issue -> issue.getRule().startsWith("external_"))
       .collect(Collectors.toList());
   }

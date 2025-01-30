@@ -30,7 +30,7 @@ dependencyResolutionManagement {
 
         val kotlinVersion: String by extra
         val analyzerCommonsVersionStr = "2.16.0.3141"
-        val sonarPluginApi = "10.3.0.1951"
+        val sonarPluginApi = "11.1.0.2693"
         val slf4jApi = "1.7.30"
 
         create("libs") {
@@ -74,9 +74,9 @@ dependencyResolutionManagement {
             val junit = version("junit", "5.10.1")
             val mockito = version("mockito", "5.7.0")
             val mockk = version("mockk", "1.13.3")
-            val orchestrator = version("orchestrator", "5.0.0.2065")
-            val sonarlint = version("sonarlint", "9.5.0.76302")
-            val sonarqube = version("sonarqube", "10.0.0.68432")
+            val orchestrator = version("orchestrator", "5.1.0.2254")
+            val sonarlint = version("sonarlint", "10.13.0.79996")
+            val sonarqube = version("sonarqube", "25.1.0.102122")
 
             library("assertj-core", "org.assertj", "assertj-core").versionRef(assertj)
             library("junit-jupiter", "org.junit.jupiter", "junit-jupiter").versionRef(junit)
