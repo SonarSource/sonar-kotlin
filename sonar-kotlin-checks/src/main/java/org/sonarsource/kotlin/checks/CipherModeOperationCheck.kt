@@ -17,11 +17,12 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.ConstructorMatcher
@@ -33,6 +34,7 @@ import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val CIPHER_INIT_MATCHER = FunMatcher(qualifier = "javax.crypto.Cipher", name = "init") {
     withArguments(INT_TYPE, "java.security.Key", "java.security.spec.AlgorithmParameterSpec")
@@ -44,18 +46,15 @@ private val GCM_PARAMETER_SPEC_MATCHER = ConstructorMatcher("javax.crypto.spec.G
 
 private val GET_BYTES_MATCHER = FunMatcher(qualifier = "kotlin.text", name = "toByteArray")
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6432")
 class CipherModeOperationCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(CIPHER_INIT_MATCHER)
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         kotlinFileContext: KotlinFileContext,
     ) {
-        val bindingContext = kotlinFileContext.bindingContext
-
         // Call expression already matched three arguments
         val firstArgument = callExpression.valueArguments[0].getArgumentExpression()!!
         val thirdArgument = callExpression.valueArguments[2].getArgumentExpression()!!
@@ -63,10 +62,10 @@ class CipherModeOperationCheck : CallAbstractCheck() {
 
         val secondaries = mutableListOf<PsiElement>()
         secondaries.add(thirdArgument)
-        val byteExpression = thirdArgument.getGCMExpression(bindingContext, secondaries)
-            ?.getByteExpression(bindingContext, secondaries) ?: return
+        val byteExpression = thirdArgument.getGCMExpression(secondaries)
+            ?.getByteExpression(secondaries) ?: return
 
-        if (firstArgument.predictRuntimeIntValue(bindingContext) == 1 && byteExpression.isBytesInitializedFromString(bindingContext)) {
+        if (firstArgument.predictRuntimeIntValue() == 1 && byteExpression.isBytesInitializedFromString()) {
             kotlinFileContext.reportIssue(
                 calleeExpression,
                 "Use a dynamically-generated initialization vector (IV) to avoid IV-key pair reuse.",
@@ -85,19 +84,22 @@ private fun generateSecondaryLocations(secondaries: List<PsiElement>, kotlinFile
         }
     }
 
-private fun KtExpression.getByteExpression(bindingContext: BindingContext, secondaries: MutableList<PsiElement>) =
-    with(predictRuntimeValueExpression(bindingContext, secondaries)) {
-        getCall(bindingContext)?.let {
-            if (GET_BYTES_MATCHER.matches(it, bindingContext)) this
+private fun KtExpression.getByteExpression(secondaries: MutableList<PsiElement>) = withKaSession {
+    with(predictRuntimeValueExpression(secondaries)) {
+        resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()?.let {
+            if (GET_BYTES_MATCHER.matches(it)) this
             else null
         }
     }
+}
 
-private fun KtExpression.getGCMExpression(bindingContext: BindingContext, secondaries: MutableList<PsiElement>) =
-    predictRuntimeValueExpression(bindingContext)
-        .getCall(bindingContext)?.let {
-            if (GCM_PARAMETER_SPEC_MATCHER.matches(it, bindingContext)) {
-                secondaries.add(it.valueArguments[1].asElement())
-                it.valueArguments[1].getArgumentExpression()
+private fun KtExpression.getGCMExpression(secondaries: MutableList<PsiElement>) = withKaSession {
+    predictRuntimeValueExpression()
+        .resolveToCall()?.successfulFunctionCallOrNull()?.let {
+            if (GCM_PARAMETER_SPEC_MATCHER.matches(it)) {
+                val argumentExpression = it.argumentMapping.keys.elementAt(1)
+                secondaries.add(argumentExpression)
+                argumentExpression
             } else null
         }
+}
