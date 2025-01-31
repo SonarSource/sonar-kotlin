@@ -2,7 +2,6 @@ package checks
 
 class EqualsOverridenWithHashCodeCheckSample {
 
-
     override fun equals(other: Any?): Boolean { // Noncompliant {{This class overrides "equals()" and should therefore also override "hashCode()".}}
         return super.equals(other)
     }
@@ -86,6 +85,12 @@ abstract class AmbiguousParent3 {
         return super.hashCode()
     }
     fun equals(other: String?): Boolean {
+        return super.equals(other)
+    }
+}
+
+private val testAnonymousClass = object : Any() {
+    override fun equals(other: Any?): Boolean { // Noncompliant
         return super.equals(other)
     }
 }
