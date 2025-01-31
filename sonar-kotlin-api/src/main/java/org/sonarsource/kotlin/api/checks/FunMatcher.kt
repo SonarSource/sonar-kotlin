@@ -20,12 +20,17 @@ import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaReceiverValue
-import org.jetbrains.kotlin.analysis.api.resolution.KaVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaSimpleVariableAccess
+import org.jetbrains.kotlin.analysis.api.resolution.KaSimpleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.signatures.KaCallableSignature
+import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSyntheticJavaPropertySymbol
 import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.backend.common.descriptors.isSuspend
@@ -39,9 +44,9 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.RESOLVED_CALL
-import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.tasks.isDynamic
+import org.jetbrains.kotlin.resolve.calls.util.getCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.descriptorUtil.isExtension
 import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequence
@@ -91,7 +96,8 @@ class FunMatcherImpl(
 
     @OptIn(KaExperimentalApi::class)
     fun matches(node: KtNamedFunction): Boolean = withKaSession {
-        return matches(null, node.symbol.asSignature())
+        val symbol = node.symbol
+        return matches(null, symbol, symbol.asSignature())
     }
 
     @Deprecated("use kotlin-analysis-api instead")
@@ -102,17 +108,57 @@ class FunMatcherImpl(
     fun matches(resolvedCall: ResolvedCall<*>?) = preCheckArgumentCount(resolvedCall?.call) &&
         matches(resolvedCall?.resultingDescriptor)
 
-    fun matches(resolvedCall: KaCallableMemberCall<*, *>?) =
+    @OptIn(KaExperimentalApi::class)
+    fun matches(resolvedCall: KaCallableMemberCall<*, *>?): Boolean = withKaSession {
         when (resolvedCall) {
-            is KaFunctionCall -> matches(
-                resolvedCall.partiallyAppliedSymbol.dispatchReceiver,
-                resolvedCall.partiallyAppliedSymbol.signature
-            )
-            is KaVariableAccessCall ->
-                // TODO handle calls of getters and setters
-                false
-            else -> false
+            null -> false
+            is KaFunctionCall -> {
+                val symbol = resolvedCall.partiallyAppliedSymbol
+                matches(symbol.dispatchReceiver, symbol.signature.symbol, symbol.signature)
+            }
+            is KaSimpleVariableAccessCall -> {
+                val propertySymbol = (resolvedCall.symbol as? KaPropertySymbol) ?: return false
+                when (resolvedCall.simpleAccess) {
+                    is KaSimpleVariableAccess.Read -> {
+                        val symbolForNameCheck =
+                            /**
+                             * Note that this allows to use matcher with name `"getExample"`
+                             * for both function call `getExample(...)` and read by property name `example`.
+                             */
+                            if (propertySymbol is KaSyntheticJavaPropertySymbol)
+                                propertySymbol.javaGetterSymbol
+                            else
+                                propertySymbol
+                        val getterSignature = propertySymbol.getter?.asSignature() ?: return false
+                        checkName(symbolForNameCheck) &&
+                                checkCallParameters(getterSignature) &&
+                                checkReturnType(getterSignature) &&
+                                checkTypeOrSupertype(null, propertySymbol)
+                    }
+                    is KaSimpleVariableAccess.Write -> {
+                        val symbolForNameCheck =
+                            /**
+                             * Note that this allows to use matcher with name `"setExample"`
+                             * for both function call `setExample(...)` and write by property name `example`.
+                             */
+                            if (propertySymbol is KaSyntheticJavaPropertySymbol)
+                                propertySymbol.javaSetterSymbol ?: return false
+                            else
+                                propertySymbol
+                        val setterSignature = propertySymbol.setter?.asSignature() ?: return false
+                        checkName(symbolForNameCheck) &&
+                                checkCallParameters(setterSignature) &&
+                                checkReturnType(setterSignature) &&
+                                checkTypeOrSupertype(
+                                    null,
+                                    // TODO propertySymbol works only in K2 (see ScheduledThreadPoolExecutorZeroCheck):
+                                    symbolForNameCheck
+                                )
+                    }
+                }
+            }
         }
+    }
 
     private fun preCheckArgumentCount(call: Call?) = call == null || call.valueArguments.size <= maxArgumentCount
 
@@ -130,6 +176,7 @@ class FunMatcherImpl(
 
     private fun matches(
         dispatchReceiver: KaReceiverValue?,
+        symbol: KaCallableSymbol,
         callableSignature: KaCallableSignature<*>
     ): Boolean {
         if (isDynamic != null) TODO()
@@ -138,8 +185,8 @@ class FunMatcherImpl(
             checkIsSuspending(callableSignature) &&
             checkIsOperator(callableSignature) &&
             checkReturnType(callableSignature) &&
-            checkName(callableSignature) &&
-            checkTypeOrSupertype(dispatchReceiver, callableSignature) &&
+            checkName(symbol) &&
+            checkTypeOrSupertype(dispatchReceiver, symbol) &&
             checkCallParameters(callableSignature)
     }
 
@@ -150,7 +197,7 @@ class FunMatcherImpl(
 
     private fun checkTypeOrSupertype(
         dispatchReceiver: KaReceiverValue?,
-        callableSignature: KaCallableSignature<*>,
+        symbol: KaCallableSymbol,
     ): Boolean {
         if (qualifiersOrDefiningSupertypes.isEmpty()) return true
 
@@ -158,9 +205,9 @@ class FunMatcherImpl(
         // java.lang.Math.random has kotlin/Unit receiver type in K2 and null in K1?
         val receiverFQN = (dispatchReceiver?.type as? KaClassType)?.classId?.asFqNameString();
         if (qualifiersOrDefiningSupertypes.contains(receiverFQN)) return true
-        if (qualifiersOrDefiningSupertypes.contains(getActualQualifier(callableSignature))) return true
+        if (qualifiersOrDefiningSupertypes.contains(getActualQualifier(symbol))) return true
 
-        if (!definingSupertypes.isNullOrEmpty() && checkSubType(callableSignature)) return true
+        if (!definingSupertypes.isNullOrEmpty() && checkSubType(symbol)) return true
         return false
     }
 
@@ -174,8 +221,7 @@ class FunMatcherImpl(
 
     // TODO when null?
     /** @return dot-separated package name for top-level functions, class name otherwise */
-    private fun getActualQualifier(callableSignature: KaCallableSignature<*>): String? {
-        val symbol = callableSignature.symbol
+    private fun getActualQualifier(symbol: KaCallableSymbol): String? {
         return if (symbol is KaConstructorSymbol) {
             symbol.containingClassId?.asFqNameString()
         } else {
@@ -201,9 +247,9 @@ class FunMatcherImpl(
             }
         }
 
-    private fun checkSubType(callableSignature: KaCallableSignature<*>): Boolean = withKaSession {
-        if (callableSignature.symbol is KaConstructorSymbol) return false
-        return callableSignature.symbol.allOverriddenSymbols.any {
+    private fun checkSubType(symbol: KaCallableSymbol): Boolean = withKaSession {
+        if (symbol is KaConstructorSymbol) return false
+        return symbol.allOverriddenSymbols.any {
             val className: String? = it.callableId?.asSingleFqName()?.parent()?.asString()
             definingSupertypes.contains(className)
         }
@@ -218,9 +264,9 @@ class FunMatcherImpl(
             (nameRegex == null && names.isEmpty()) || name in names || (nameRegex != null && nameRegex.matches(name))
         } else false
 
-    private fun checkName(callableSignature: KaCallableSignature<*>): Boolean {
-        if (matchConstructor) return callableSignature.symbol is KaConstructorSymbol
-        val name = callableSignature.symbol.name?.asString() ?: return false
+    private fun checkName(symbol: KaCallableSymbol): Boolean {
+        if (matchConstructor) return symbol is KaConstructorSymbol
+        val name = symbol.name?.asString() ?: return false
         return (nameRegex == null && names.isEmpty()) || name in names || (nameRegex != null && nameRegex.matches(name))
     }
 
@@ -265,6 +311,11 @@ class FunMatcherImpl(
             else null
         } ?: true
 
+    /**
+     * Note that [KaCallableSignature] carries use-site type information,
+     * so for `fun <T> example(): T` matcher with [returnType] `"kotlin.String"`
+     * matches calls of `example<String>()`.
+     */
     private fun checkReturnType(callableSignature: KaCallableSignature<*>) =
        returnType?.let {
            it == callableSignature.returnType.asFqNameString()
