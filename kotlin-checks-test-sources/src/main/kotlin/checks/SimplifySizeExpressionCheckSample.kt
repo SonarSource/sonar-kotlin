@@ -2,12 +2,6 @@ package checks
 
 class SimplifySizeExpressionCheckSample {
 
-    fun wip(
-        list: ArrayList<String>
-    ) {
-        if (list.size > 0) foo() // Noncompliant
-    }
-
     fun sizeCheck(
         list: List<Int>,
         set: Set<Int>,
@@ -215,6 +209,13 @@ class SimplifySizeExpressionCheckSample {
         if (container.containers.first().containers[42].list.count() != 0) foo() // Noncompliant {{Replace collection size check with "isNotEmpty()"}}
         if (!container.containers.first().containers[42].list.isNotEmpty()) foo() // Noncompliant {{Replace collection size check with "isEmpty()"}}
     }
+
+    fun testArrayList(
+        list: ArrayList<String>
+    ) {
+        if (list.size > 0) foo() // Noncompliant
+    }
+
 }
 
 private fun foo(): Unit = TODO()
