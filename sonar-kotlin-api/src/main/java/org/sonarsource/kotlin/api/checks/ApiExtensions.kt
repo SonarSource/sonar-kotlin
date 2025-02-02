@@ -23,9 +23,11 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.analysis.api.KaIdeApi
 import org.jetbrains.kotlin.analysis.api.resolution.KaCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaExplicitReceiverValue
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaImplicitReceiverValue
+import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
@@ -689,6 +691,7 @@ fun ResolvedValueArgument.isNull(bindingContext: BindingContext) = (
 fun KtExpression.isPredictedNull() =
    predictRuntimeValueExpression().isNull()
 
+@Deprecated("use kotlin-analysis-api instead")
 fun KtExpression.getCalleeOrUnwrappedGetMethod(bindingContext: BindingContext) =
     (this as? KtDotQualifiedExpression)?.let { dotQualifiedExpression ->
         (dotQualifiedExpression.selectorExpression as? KtNameReferenceExpression)?.let { nameSelector ->
@@ -699,12 +702,24 @@ fun KtExpression.getCalleeOrUnwrappedGetMethod(bindingContext: BindingContext) =
 /**
  * Checks whether the expression is a call, matches the FunMatchers in [STRING_TO_BYTE_FUNS] and is called on a constant string value.
  */
+@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.isBytesInitializedFromString()"))
 fun KtExpression.isBytesInitializedFromString(bindingContext: BindingContext) =
     getCalleeOrUnwrappedGetMethod(bindingContext)?.let { callee ->
         STRING_TO_BYTE_FUNS.any { it.matches(callee) } &&
             (getCall(bindingContext)?.explicitReceiver as? ExpressionReceiver)?.expression?.predictRuntimeStringValue(bindingContext) != null
     } ?: false
 
+fun KtExpression.isBytesInitializedFromString(): Boolean = withKaSession {
+    val call = this@isBytesInitializedFromString.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
+        ?: return@withKaSession false
+    STRING_TO_BYTE_FUNS.any { it.matches(call) } &&
+            ((call.partiallyAppliedSymbol.extensionReceiver ?: call.partiallyAppliedSymbol.dispatchReceiver)
+                    as? KaExplicitReceiverValue)
+                ?.expression
+                ?.predictRuntimeStringValue() != null
+}
+
+@Deprecated("use kotlin-analysis-api instead")
 fun ResolvedCall<*>.simpleArgExpressionOrNull(index: Int) =
     this.valueArgumentsByIndex
         ?.getOrNull(index)
@@ -762,9 +777,19 @@ fun KtProperty.findUsages(
 /**
  * Checks whether the variable has been initialized with the help of a secure random function
  */
+@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.isInitializedPredictably(searchStartNode)"))
 fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression, bindingContext: BindingContext): Boolean {
     return this !is KtNameReferenceExpression || this.findUsages(searchStartNode) {
         it.getParentOfType<KtCallExpression>(false).getResolvedCall(bindingContext) matches SECURE_RANDOM_FUNS
+    }.isEmpty()
+}
+
+fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression): Boolean {
+    return this !is KtNameReferenceExpression || this.findUsages(searchStartNode) {
+        withKaSession {
+            it.getParentOfType<KtCallExpression>(false)?.resolveToCall()
+                ?.successfulFunctionCallOrNull() matches SECURE_RANDOM_FUNS
+        }
     }.isEmpty()
 }
 
