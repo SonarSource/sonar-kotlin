@@ -780,6 +780,7 @@ fun KtExpression?.isLocalVariable(): Boolean = withKaSession {
     return mainReference.resolveToSymbol() is KaLocalVariableSymbol
 }
 
+@Deprecated("use kotlin-analysis-api instead")
 fun KtExpression?.setterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
     is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
         (matcher.matches((bindingContext[BindingContext.REFERENCE_TARGET, this] as? PropertyDescriptor)?.unwrappedSetMethod))
