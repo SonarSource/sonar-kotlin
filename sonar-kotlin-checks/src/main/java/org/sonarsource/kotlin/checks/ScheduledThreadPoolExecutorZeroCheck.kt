@@ -16,20 +16,22 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil.deparenthesize
-import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.ConstructorMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.getFirstArgumentExpression
 import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
-import org.sonarsource.kotlin.api.checks.setterMatches
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val MESSAGE = """Increase the "corePoolSize"."""
 
@@ -39,29 +41,30 @@ private val THREAD_POOL_CONSTRUCTOR_MATCHER =
 private val POOL_SIZE_SETTER_MATCHER =
     FunMatcher(definingSupertype = "java.util.concurrent.ThreadPoolExecutor", name = "setCorePoolSize") { withArguments("kotlin.Int") }
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S2122")
 class ScheduledThreadPoolExecutorZeroCheck : CallAbstractCheck() {
 
     override val functionsToVisit = listOf(THREAD_POOL_CONSTRUCTOR_MATCHER, POOL_SIZE_SETTER_MATCHER)
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) = withKaSession {
         val corePoolSizeExpression = resolvedCall.getFirstArgumentExpression() ?: return
-        if (isZero(kotlinFileContext, deparenthesize(corePoolSizeExpression))) {
+        if (isZero(deparenthesize(corePoolSizeExpression))) {
             kotlinFileContext.reportIssue(corePoolSizeExpression, MESSAGE)
         }
     }
 
-    override fun visitBinaryExpression(expression: KtBinaryExpression, ctx: KotlinFileContext) {
+    override fun visitBinaryExpression(expression: KtBinaryExpression, ctx: KotlinFileContext) = withKaSession {
         if (expression.operationToken == KtTokens.EQ &&
-            isZero(ctx, deparenthesize(expression.right)) &&
-            deparenthesize(expression.left).setterMatches(ctx.bindingContext, "corePoolSize", POOL_SIZE_SETTER_MATCHER)
+            isZero(deparenthesize(expression.right)) &&
+            POOL_SIZE_SETTER_MATCHER.matches(
+                expression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
+            )
         ) {
             ctx.reportIssue(expression.right!!, MESSAGE)
         }
     }
 
-    private fun isZero(ctx: KotlinFileContext, expression: KtExpression?): Boolean =
-        expression?.predictRuntimeIntValue(ctx.bindingContext) == 0
+    private fun isZero(expression: KtExpression?): Boolean =
+        expression?.predictRuntimeIntValue() == 0
 
 }
