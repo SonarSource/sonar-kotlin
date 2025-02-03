@@ -23,6 +23,7 @@ dependencies {
             isTransitive = false
         }
     }
+    implementation("com.github.ben-manes.caffeine:caffeine:2.9.3")
 
     compileOnly(libs.sonar.plugin.api)
     compileOnly(libs.slf4j.api)
