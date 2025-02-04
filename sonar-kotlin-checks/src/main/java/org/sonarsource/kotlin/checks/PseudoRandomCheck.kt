@@ -16,13 +16,14 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val MESSAGE = "Make sure that using this pseudorandom number generator is safe here."
 
@@ -32,7 +33,7 @@ private val MATH_RANDOM_MATCHER = FunMatcher(qualifier = "java.lang.Math", name 
 
 private val KOTLIN_RANDOM_MATCHER = FunMatcher (qualifier = "kotlin.random", name = "Random")
 
-private val WIP = FunMatcher {
+private val RANDOM_TYPES_MATCHER = FunMatcher {
    qualifiers = setOf(
        "java.util.concurrent.ThreadLocalRandom",
        "org.apache.commons.lang.math.RandomUtils",
@@ -50,18 +51,22 @@ private val RANDOM_CONSTRUCTORS_MATCHER = FunMatcher(matchConstructor = true) {
 }
 
 @Rule(key = "S2245")
-class PseudoRandomCheck : AbstractCheck() {
+class PseudoRandomCheck : CallAbstractCheck() {
+    override val functionsToVisit = listOf(
+        MATH_RANDOM_MATCHER,
+        KOTLIN_RANDOM_MATCHER,
+        RANDOM_TYPES_MATCHER,
+        RANDOM_CONSTRUCTORS_MATCHER,
+    )
 
-    override fun visitCallExpression(expression: KtCallExpression, kotlinFileContext: KotlinFileContext) = withKaSession {
-        val calleeExpression = expression.calleeExpression ?: return@withKaSession
-        
-        if (MATH_RANDOM_MATCHER.matches(expression) || KOTLIN_RANDOM_MATCHER.matches(expression))
-            kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
-
-        if (RANDOM_CONSTRUCTORS_MATCHER.matches(expression))
-            kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
-
-        if (WIP.matches(expression) && !expression.isChainedMethodInvocation()) {
+    override fun visitFunctionCall(
+        callExpression: KtCallExpression,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext,
+    ) {
+        val calleeExpression = callExpression.calleeExpression ?: return
+        if (matchedFun != RANDOM_TYPES_MATCHER || !callExpression.isChainedMethodInvocation()) {
             kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
         }
     }
