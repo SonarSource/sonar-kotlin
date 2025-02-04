@@ -167,7 +167,6 @@ qa_plug_pub_lin_task:
     GRADLE_TASK: ":its:plugin:test"
     matrix:
       - SQ_VERSION: "DEV"
-      - SQ_VERSION: "LATEST_RELEASE[25.1]"
       - SQ_VERSION: "LATEST_RELEASE"
   <<: *LINUX_6_CPU_12G_JAVA_17
   <<: *GRADLE_ITS_TEMPLATE
