@@ -133,7 +133,9 @@ class FunMatcherImpl(
                         checkName(symbolForNameCheck) &&
                                 checkCallParameters(getterSignature) &&
                                 checkReturnType(getterSignature) &&
-                                checkTypeOrSupertype(null, propertySymbol)
+                                (checkTypeOrSupertype(null, propertySymbol) ||
+                                        // TODO propertySymbol works only in K2 (see ExternalAndroidStorageAccessCheck):
+                                        checkTypeOrSupertype(null, symbolForNameCheck))
                     }
                     is KaSimpleVariableAccess.Write -> {
                         val symbolForNameCheck =
