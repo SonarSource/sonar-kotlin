@@ -40,6 +40,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.coroutines.hasSuspendFunctionType
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
@@ -870,7 +871,17 @@ fun KotlinType.isFunctionalInterface(): Boolean =
 fun KotlinFileContext.merge(firstElement: PsiElement, lastElement: PsiElement) =
     merge(listOf(textRange(firstElement), textRange(lastElement)))
 
+@Deprecated("use kotlin-analysis-api instead")
 fun KotlinType.simpleName(): String = getKotlinTypeFqName(false).substringAfterLast(".")
+
+/**
+ * See examples of [org.jetbrains.kotlin.analysis.api.types.KaFlexibleType]
+ * (aka [platform type](https://kotlin.github.io/analysis-api/kaflexibletype.html)) in
+ * [KtNamedFunction.returnTypeAsString] and [KtProperty.determineTypeAsString].
+ */
+fun KaType.simpleName(): String? = withKaSession {
+    return lowerBoundIfFlexible().symbol?.name?.asString()
+}
 
 fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
     this?.let {

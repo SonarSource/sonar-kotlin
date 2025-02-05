@@ -16,16 +16,16 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsStatement
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.simpleName
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S899")
 class IgnoredOperationStatusCheck : CallAbstractCheck() {
 
@@ -54,13 +54,12 @@ class IgnoredOperationStatusCheck : CallAbstractCheck() {
         },
     )
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
-        if (callExpression.isUsedAsStatement(kotlinFileContext.bindingContext)) {
-            resolvedCall.resultingDescriptor?.let { resultingDescriptor ->
-                val returnType = resultingDescriptor.returnType?.simpleName() ?: "this method";
-                val message = """Do something with the "$returnType" value returned by "${resultingDescriptor.name}"."""
-                kotlinFileContext.reportIssue(callExpression.calleeExpression!!, message)
-            }
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) = withKaSession {
+        if (!callExpression.isUsedAsExpression) {
+            val name = resolvedCall.partiallyAppliedSymbol.signature.symbol.name
+            val returnType = resolvedCall.partiallyAppliedSymbol.signature.returnType.simpleName() ?: /* TODO improve message: */ "this method"
+            val message = """Do something with the "$returnType" value returned by "${name}"."""
+            kotlinFileContext.reportIssue(callExpression.calleeExpression!!, message)
         }
     }
 
