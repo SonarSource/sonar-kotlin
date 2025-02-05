@@ -16,17 +16,17 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.unwrappedGetMethod
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val MESSAGE = "Make sure accessing the Android external storage is safe here."
 
@@ -58,19 +58,17 @@ private val HOTSPOT_PROPS = listOf(
     "obbDirs",
 )
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S5324")
 class ExternalAndroidStorageAccessCheck : CallAbstractCheck() {
     override val functionsToVisit = HOTSPOT_FUNS
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) {
         kotlinFileContext.reportIssue(callExpression.calleeExpression!!, MESSAGE)
     }
 
-    override fun visitReferenceExpression(expression: KtReferenceExpression, kotlinFileContext: KotlinFileContext) {
+    override fun visitReferenceExpression(expression: KtReferenceExpression, kotlinFileContext: KotlinFileContext) = withKaSession {
         if (expression is KtNameReferenceExpression && expression.getReferencedName() in HOTSPOT_PROPS) {
-            val prop = kotlinFileContext.bindingContext[BindingContext.REFERENCE_TARGET, expression] as? PropertyDescriptor
-            if (prop != null && HOTSPOT_FUNS.any { it.matches(prop.unwrappedGetMethod) }) {
+            if (HOTSPOT_FUNS.any { it.matches(expression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()) }) {
                 kotlinFileContext.reportIssue(expression, MESSAGE)
             }
         }
