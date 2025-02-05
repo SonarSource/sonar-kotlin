@@ -16,39 +16,42 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
-import org.jetbrains.kotlin.resolve.calls.model.ExpressionValueArgument
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FUNS_ACCEPTING_DISPATCHERS
+import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.checks.KOTLINX_COROUTINES_PACKAGE
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
-import org.sonarsource.kotlin.api.checks.resolveReferenceTarget
-import org.sonarsource.kotlin.api.checks.scope
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.secondaryOf
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val MESSAGE = "Avoid hardcoded dispatchers."
 private const val DISPATCHERS_OBJECT = "$KOTLINX_COROUTINES_PACKAGE.Dispatchers"
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6310")
 class InjectableDispatchersCheck : CallAbstractCheck() {
     override val functionsToVisit = FUNS_ACCEPTING_DISPATCHERS
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
-        val bindingContext = kotlinFileContext.bindingContext
+    private val dispatchersClassId = ClassId.fromString(DISPATCHERS_OBJECT.replace('.', '/'))
 
-        val arguments = resolvedCall.valueArgumentsByIndex
-        if (arguments.isNullOrEmpty()) return
-
-        val argExpr = (arguments[0] as? ExpressionValueArgument)?.valueArgument?.getArgumentExpression() ?: return
-        val argValueExpr = argExpr.predictRuntimeValueExpression(bindingContext) as? KtQualifiedExpression ?: return
-        val argReference = argValueExpr.resolveReferenceTarget(bindingContext) ?: return
-
-        if (argReference.scope() == DISPATCHERS_OBJECT) {
+    override fun visitFunctionCall(
+        callExpression: KtCallExpression,
+        resolvedCall: KaFunctionCall<*>,
+        matchedFun: FunMatcherImpl,
+        kotlinFileContext: KotlinFileContext,
+    ) = withKaSession {
+        val argExpr = resolvedCall.argumentMapping.keys.firstOrNull() ?: return
+        val argValueExpr = argExpr.predictRuntimeValueExpression() as? KtQualifiedExpression ?: return
+        val variableAccessCall: KaVariableAccessCall = argValueExpr.resolveToCall()?.successfulVariableAccessCall() ?: return
+        val receiver = variableAccessCall.partiallyAppliedSymbol.dispatchReceiver?.type ?: return
+        if (receiver.isClassType(dispatchersClassId)) {
             val secondaries = if (argExpr !== argValueExpr) {
                 listOf(kotlinFileContext.secondaryOf(argValueExpr, "Hard-coded dispatcher"))
             } else emptyList()
