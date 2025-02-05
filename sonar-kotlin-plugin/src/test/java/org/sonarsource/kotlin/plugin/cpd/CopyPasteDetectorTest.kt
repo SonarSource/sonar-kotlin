@@ -104,22 +104,22 @@ class CopyPasteDetectorTest {
             .hasEndUnit(8)
 
         assertThat(cpdTokenLines[2])
-            .hasValue("""println("LITERAL")""")
+            .hasValue("""println(LITERAL)""")
             .hasStartLine(10)
             .hasStartUnit(9)
-            .hasEndUnit(14)
+            .hasEndUnit(12)
 
         assertThat(cpdTokenLines[3])
             .hasValue("}")
             .hasStartLine(11)
-            .hasStartUnit(15)
-            .hasEndUnit(15)
+            .hasStartUnit(13)
+            .hasEndUnit(13)
 
         assertThat(cpdTokenLines[4])
             .hasValue("}")
             .hasStartLine(12)
-            .hasStartUnit(16)
-            .hasEndUnit(16)
+            .hasStartUnit(14)
+            .hasEndUnit(14)
     }
 
     @Test
@@ -151,7 +151,7 @@ class CopyPasteDetectorTest {
 
         Assertions.assertThat(logs)
             .hasSize(1)
-            .containsExactly("Caching 16 CPD tokens for next analysis of input file moduleKey:dummy.kt.")
+            .containsExactly("Caching 14 CPD tokens for next analysis of input file moduleKey:dummy.kt.")
     }
 
     @Test
