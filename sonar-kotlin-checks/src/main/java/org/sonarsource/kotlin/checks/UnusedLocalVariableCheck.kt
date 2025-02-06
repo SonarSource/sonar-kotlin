@@ -25,17 +25,17 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.getVariableType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S1481")
 class UnusedLocalVariableCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
-        context.diagnostics
+        context.kaDiagnostics
             .filter {
-                it.factory == Errors.UNUSED_VARIABLE &&
-                    it.psiElement.getVariableType(context.bindingContext)?.getKotlinTypeFqName(false) != "kotlin.Nothing"
+                it.factoryName == Errors.UNUSED_VARIABLE.name &&
+                    // TODO remove after switch to K2:
+                    (it.psi as KtNamedDeclaration).getVariableType(context.bindingContext)?.getKotlinTypeFqName(false) != "kotlin.Nothing"
             }
-            .map { it.psiElement as KtNamedDeclaration }
+            .map { it.psi as KtNamedDeclaration }
             .forEach {
                 context.reportIssue(it.nameIdentifier!!, """Remove this unused "${it.name}" local variable.""")
             }
