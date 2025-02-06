@@ -21,6 +21,7 @@ import com.intellij.psi.util.parentOfType
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
@@ -47,6 +48,33 @@ private val nonMutatingFunctions = FunMatcher {
         "lastIndexOf",
         "containsKey",
         "containsValue",
+    )
+}
+
+private val mutatingFunctions = FunMatcher {
+    withDefiningSupertypes(
+        "kotlin.collections.MutableList",
+        "kotlin.collections.MutableSet",
+        "kotlin.collections.MutableMap",
+        "kotlin.collections.MutableCollection",
+    )
+    withNames(
+        "iterator",
+        "add",
+        "remove",
+        "addAll",
+        "removeAll",
+        "retainAll",
+        "clear",
+        "listIterator",
+        "removeAt",
+        "set",
+        "subList",
+        "put",
+        "putAll",
+        "keys",
+        "values",
+        "entries",
     )
 }
 
@@ -90,7 +118,6 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
         val mutableCollectionsVariables =
             function.collectDescendantsOfType<KtVariableDeclaration> {
                 it.returnType.asFqNameString() in mutableCollections
-//                it.determineTypeAsString() in mutableCollections
             }
 
         mutableCollectionsParameters.filter { !it.isMutated(function) }.forEach { parameter ->
@@ -117,15 +144,23 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
                 is KtDotQualifiedExpression -> withKaSession {
 
                     val resolveToCall = this@isMutatingUsage.resolveToCall()
-                    val kaCallableMemberCall: KaCallableMemberCall<*,*>? =
+                    val kaCallableMemberCall: KaCallableMemberCall<*,*> =
                         resolveToCall?.successfulFunctionCallOrNull() ?:
-                        resolveToCall?.successfulVariableAccessCall()
+                        resolveToCall?.successfulVariableAccessCall() ?: return true
 
-                    val receiverType = kaCallableMemberCall?.partiallyAppliedSymbol?.signature
-                        ?.receiverType?.symbol?.classId?.asFqNameString()
+                    if (mutatingFunctions.matches(kaCallableMemberCall)) return true
+                    if (nonMutatingFunctions.matches(kaCallableMemberCall)) return false
 
-                    !(nonMutatingFunctions.matches(kaCallableMemberCall)) &&
-                            receiverType !in imMutableCollections
+                    val kaCallableSymbol = kaCallableMemberCall.partiallyAppliedSymbol.symbol
+                    val receiverType = if (kaCallableSymbol.isExtension) {
+                        kaCallableMemberCall.partiallyAppliedSymbol.signature.receiverType
+                            ?.symbol?.classId?.asFqNameString()
+                    } else {
+                        kaCallableSymbol.fakeOverrideOriginal
+                            .callableId?.classId?.asFqNameString()
+                    }
+
+                    return receiverType !in imMutableCollections
                 }
 
                 is KtValueArgument -> withKaSession {
