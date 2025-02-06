@@ -17,10 +17,13 @@
 package org.sonarsource.kotlin.api.frontend;
 
 import kotlin.jvm.functions.Function1;
+import org.jetbrains.kotlin.analysis.api.descriptors.components.KaFe10Diagnostic;
+import org.jetbrains.kotlin.analysis.api.lifetime.KaLifetimeToken;
 import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISessionBuilder;
 import org.jetbrains.kotlin.analysis.api.standalone.base.projectStructure.KotlinStaticProjectStructureProvider;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreProjectEnvironment;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
+import org.jetbrains.kotlin.diagnostics.Diagnostic;
 import org.jetbrains.kotlin.psi.KtFile;
 
 import java.util.List;
@@ -46,6 +49,11 @@ final class KtModuleProviderByCompilerConfiguration {
   }
 
   private KtModuleProviderByCompilerConfiguration() {
+  }
+
+  @SuppressWarnings("KotlinInternalInJava")
+  static KaFe10Diagnostic kaFe10Diagnostic(Diagnostic diagnostic, KaLifetimeToken token) {
+    return new KaFe10Diagnostic(diagnostic, token);
   }
 
 }

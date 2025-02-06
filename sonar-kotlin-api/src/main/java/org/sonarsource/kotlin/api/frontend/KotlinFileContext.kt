@@ -17,12 +17,15 @@
 package org.sonarsource.kotlin.api.frontend
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
+import org.jetbrains.kotlin.analysis.api.diagnostics.KaDiagnosticWithPsi
 import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 data class KotlinFileContext(
     val inputFileContext: InputFileContext,
@@ -32,8 +35,19 @@ data class KotlinFileContext(
      */
     @Deprecated("use kotlin-analysis-api instead")
     val bindingContext: BindingContext,
+    @Deprecated("use kotlin-analysis-api instead", ReplaceWith("kaDiagnostics"))
     val diagnostics: List<Diagnostic>,
     val regexCache: RegexCache,
-)
+) {
+
+    val kaDiagnostics: Sequence<KaDiagnosticWithPsi<*>> by lazy {
+        withKaSession {
+            val k1 = diagnostics.asSequence().map { KtModuleProviderByCompilerConfiguration.kaFe10Diagnostic(it, token) }
+            val k2 = ktFile.collectDiagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS).asSequence()
+            return@lazy k1 + k2
+        }
+    }
+
+}
 
 fun KotlinFileContext.secondaryOf(psiElement: PsiElement, msg: String? = null) = SecondaryLocation(textRange(psiElement), msg)
