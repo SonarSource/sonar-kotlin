@@ -15,8 +15,9 @@ class DeprecatedCodeUsedCheckSample {
     fun usesDeprecated(kStr: DeprecatedString): String { // Noncompliant
 //                           ^^^^^^^^^^^^^^^^
 
-        //Noncompliant@+1
-        val d = DeprecatedCode("") // Noncompliant
+        DeprecatedConstructor("") // Noncompliant
+
+        val d = DeprecatedCode() // Noncompliant
 //              ^^^^^^^^^^^^^^
 
         d.prop // Noncompliant
@@ -34,19 +35,18 @@ class DeprecatedCodeUsedCheckSample {
 //      ^^^^^^^^^^^^^^^^^^
 
         return kStr - "" // Noncompliant
-//             ^^^^^^^^^
     }
 
 }
 
-@Deprecated("")
-open class DeprecatedCode {
-
+class DeprecatedConstructor {
     @Deprecated("")
     constructor(s: String) {
     }
+}
 
-    constructor() {}
+@Deprecated("")
+open class DeprecatedCode {
 
     @Deprecated("")
     val prop: String = ""
