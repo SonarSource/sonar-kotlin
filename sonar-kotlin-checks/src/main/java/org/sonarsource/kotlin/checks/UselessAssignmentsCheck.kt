@@ -23,26 +23,30 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6615")
 class UselessAssignmentsCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
-        context.diagnostics
+        context.kaDiagnostics
             .mapNotNull { diagnostic ->
-                when (diagnostic.factory) {
-                    Errors.VARIABLE_WITH_REDUNDANT_INITIALIZER ->
-                        diagnostic.psiElement to "Remove this useless initializer."
+                when (diagnostic.factoryName) {
+                    /** TODO replace [Errors] by [org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors] during switch to K2 */
+                    "VARIABLE_INITIALIZER_IS_REDUNDANT",
+                    Errors.VARIABLE_WITH_REDUNDANT_INITIALIZER.name ->
+                        diagnostic.psi to "Remove this useless initializer."
 
-                    Errors.ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE ->
-                        (diagnostic.psiElement as KtNamedDeclaration).identifyingElement!! to
+                    "VARIABLE_NEVER_READ",
+                    Errors.ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE.name ->
+                        (diagnostic.psi as KtNamedDeclaration).identifyingElement!! to
                         "Remove this variable, which is assigned but never accessed."
 
-                    Errors.UNUSED_VALUE ->
-                        diagnostic.psiElement to "The value assigned here is never used."
+                    "ASSIGNED_VALUE_IS_NEVER_READ" ->
+                        diagnostic.psi.parent to "The value assigned here is never used."
+                    Errors.UNUSED_VALUE.name ->
+                        diagnostic.psi to "The value assigned here is never used."
 
-                    Errors.UNUSED_CHANGED_VALUE ->
-                        diagnostic.psiElement to "The value changed here is never used."
+                    Errors.UNUSED_CHANGED_VALUE.name ->
+                        diagnostic.psi to "The value changed here is never used."
 
                     else -> null
                 }
