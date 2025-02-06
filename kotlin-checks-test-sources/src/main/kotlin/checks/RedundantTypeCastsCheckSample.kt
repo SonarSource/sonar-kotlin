@@ -10,6 +10,7 @@ class RedundantTypeCastsCheckSample {
         // downcasting
         val n2 = i as Number // Compliant
 
+        // TODO not found after previous finding on i
         i as Number // Noncompliant
 
         // always false
@@ -27,6 +28,15 @@ class RedundantTypeCastsCheckSample {
         }
 
         // Redundant after explicit type declaration
+        // TODO found after replacement of Number by Int
         val n3: Number = 5 as Number // Noncompliant
     }
+
+    // TODO from RSPEC
+    fun types(value: Int, elements: List<Number>) {
+        val a: Number = value as Number // Noncompliant
+        val b: Number? = value as? Number // Noncompliant
+    }
+
+
 }
