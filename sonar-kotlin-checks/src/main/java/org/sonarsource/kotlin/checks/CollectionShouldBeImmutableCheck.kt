@@ -36,6 +36,7 @@ private val nonMutatingFunctions = FunMatcher {
         "kotlin.collections.List",
         "kotlin.collections.Set",
         "kotlin.collections.Map",
+        // TODO all above seem useless because of below
         "kotlin.collections.Collection",
     )
     withNames(
@@ -148,7 +149,7 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
                         resolveToCall?.successfulFunctionCallOrNull() ?:
                         resolveToCall?.successfulVariableAccessCall() ?: return true
 
-                    if (mutatingFunctions.matches(kaCallableMemberCall)) return true
+//                    if (mutatingFunctions.matches(kaCallableMemberCall)) return true
                     if (nonMutatingFunctions.matches(kaCallableMemberCall)) return false
 
                     val kaCallableSymbol = kaCallableMemberCall.partiallyAppliedSymbol.symbol
@@ -156,8 +157,9 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
                         kaCallableMemberCall.partiallyAppliedSymbol.signature.receiverType
                             ?.symbol?.classId?.asFqNameString()
                     } else {
-                        kaCallableSymbol.fakeOverrideOriginal
-                            .callableId?.classId?.asFqNameString()
+//                        kaCallableSymbol.fakeOverrideOriginal
+//                            .callableId?.classId?.asFqNameString()
+                        null
                     }
 
                     return receiverType !in imMutableCollections
