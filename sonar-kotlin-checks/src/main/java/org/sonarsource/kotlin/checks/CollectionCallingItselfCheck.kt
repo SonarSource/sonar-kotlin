@@ -36,7 +36,8 @@ private val COLLECTIONS_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.col
 * In K2 it only returns [kotlin.collections.List.containsAll]
 * This sounds like a regression as according to documentation it is supposed to return all
 * Requires further investigation */
-private val LIST_CONTAINS_ALL_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections.List") {
+// FIXME Set is missing in test
+private val LIST_CONTAINS_ALL_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections.Collection") {
     withNames("containsAll")
 }
 
