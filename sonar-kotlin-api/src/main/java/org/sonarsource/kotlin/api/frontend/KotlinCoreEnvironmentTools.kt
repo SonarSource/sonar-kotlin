@@ -89,6 +89,7 @@ fun kotlinCoreEnvironment(
     )
 }
 
+@Deprecated("use K2 instead")
 fun analyzeAndGetBindingContext(
     env: KotlinCoreEnvironment,
     ktFiles: List<KtFile>,

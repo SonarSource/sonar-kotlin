@@ -38,13 +38,17 @@ import org.sonarsource.kotlin.api.common.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.api.common.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.api.common.measureDuration
 import org.sonarsource.kotlin.api.frontend.Environment
+import org.sonarsource.kotlin.api.frontend.KotlinFileSystem
 import org.sonarsource.kotlin.api.frontend.KotlinSyntaxStructure
 import org.sonarsource.kotlin.api.frontend.KotlinTree
+import org.sonarsource.kotlin.api.frontend.KotlinVirtualFile
 import org.sonarsource.kotlin.api.frontend.ParseException
 import org.sonarsource.kotlin.api.frontend.RegexCache
+import org.sonarsource.kotlin.api.frontend.createK2AnalysisSession
 import org.sonarsource.kotlin.api.frontend.transferDiagnostics
 import org.sonarsource.kotlin.api.logging.debug
 import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
+import java.io.File
 
 private val EMPTY_FILE_CONTENT_PATTERN = Regex("""\s*+""")
 
@@ -62,7 +66,21 @@ abstract class AbstractKotlinSensorExecuteContext(
 
     val environment: Environment by lazy {
         /** [analyzeFiles] */
-        environment(Disposer.newDisposable(), sensorContext, logger)
+        val env = environment(Disposer.newDisposable(), sensorContext, logger)
+        if (!env.useK2) return@lazy env
+        val virtualFileSystem = KotlinFileSystem()
+        env.k2session = createK2AnalysisSession(
+            env.disposable,
+            env.configuration,
+            inputFiles.map {
+                KotlinVirtualFile(
+                    virtualFileSystem,
+                    File(it.uri().path),
+                    it.contents(),
+                )
+            },
+        )
+        return@lazy env
     }
 
     val kotlinFiles: List<KotlinSyntaxStructure> by lazy {
@@ -156,6 +174,7 @@ fun environment(disposer: Disposable, sensorContext: SensorContext, logger: Logg
     sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
         sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
     determineKotlinLanguageVersion(sensorContext, logger),
+    useK2 = System.getProperty("sonar.kotlin.useK2") == "true"
 )
 
 private fun determineKotlinLanguageVersion(sensorContext: SensorContext, logger: Logger) =
