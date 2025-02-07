@@ -85,6 +85,7 @@ class KotlinSensor(
         sensorContext, filesToAnalyze, progressReport, visitors(sensorContext), filenames, LOG
     ) {
         override val bindingContext: BindingContext by lazy {
+            if (environment.useK2) return@lazy BindingContext.EMPTY
             runCatching {
                 measureDuration("BindingContext") {
                     analyzeAndGetBindingContext(
