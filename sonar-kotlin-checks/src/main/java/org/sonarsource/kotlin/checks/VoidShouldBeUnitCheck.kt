@@ -18,6 +18,7 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTypeAlias
@@ -30,10 +31,10 @@ import org.jetbrains.kotlin.types.StarProjectionImpl
 import org.jetbrains.kotlin.types.TypeProjection
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.checks.determineType
 import org.sonarsource.kotlin.api.checks.isAbstract
 import org.sonarsource.kotlin.api.reporting.message
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val message = message {
     +"Replace this usage of "
@@ -43,13 +44,12 @@ private val message = message {
     +"."
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6508")
 class VoidShouldBeUnitCheck : AbstractCheck() {
+    private val voidClassId = ClassId.fromString("java/lang/Void")
 
-    override fun visitTypeReference(typeReference: KtTypeReference, kotlinFileContext: KotlinFileContext) {
-
-        if (typeReference.isVoidTypeRef(kotlinFileContext.bindingContext) &&
+    override fun visitTypeReference(typeReference: KtTypeReference, kotlinFileContext: KotlinFileContext) = withKaSession {
+        if (typeReference.type.isClassType(voidClassId) &&
             !typeReference.isInheritedType() &&
             !isATypeArgumentOfAnInheritableClass(typeReference)
         ) {
@@ -62,6 +62,11 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
 
     // As type aliases are resolved lazily, we can't rely on 'determineType()' function.
     // So we check argument types of a typealias separately
+    /**
+     * TODO remove after switch to K2 where this case is handled by [visitTypeReference],
+     * in K1 for some reason type of [KtTypeAlias.getTypeReference] is [org.jetbrains.kotlin.analysis.api.types.KaErrorType]
+     */
+    @Deprecated("use K2 instead")
     override fun visitTypeAlias(typeAlias: KtTypeAlias, kotlinFileContext: KotlinFileContext) {
 
         val ktTypeReferences =
@@ -104,9 +109,6 @@ private tailrec fun flattenTypeProjections(
 private fun List<TypeProjection>.withoutStarProjection() = filter { projection -> projection !is StarProjectionImpl }
 
 private fun KotlinType.flattenTypeArguments(): List<KotlinType> = flattenTypeProjections(arguments).map { it.type }
-
-private fun KtTypeReference.isVoidTypeRef(bindingContext: BindingContext) =
-    determineType(bindingContext).isJavaLangVoid()
 
 private fun KotlinType?.isJavaLangVoid() = this?.getKotlinTypeFqName(false) == "java.lang.Void"
 
