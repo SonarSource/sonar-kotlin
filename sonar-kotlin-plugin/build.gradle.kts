@@ -92,22 +92,29 @@ val sourcesJar = tasks.sourcesJar
 val javadocJar = tasks.javadocJar
 
 tasks.shadowJar {
-//    minimize {}
+    minimize {
+        exclude(dependency("com.github.ben-manes.caffeine:caffeine"))
+    }
     exclude("META-INF/native/**/*jansi*")
     exclude("org/jline/**")
     exclude("net/jpountz/**")
     dependencies {
-        // K2 without K1 = 49310001
+        // K1 and K2 without minimize ~ 78M
+
+        // K1 and K2 ~ 62M
+
+//        // K2 without K1 ~ 61M ??? I believe that should be less
 //        exclude(dependency("org.jetbrains.kotlin:analysis-api-fe10-for-ide"))
 
+//        // K1 without K2 (baseline) ~ 45M
 //        // include only K1, and exclude K2 for the time being
 //        exclude(dependency("org.jetbrains.kotlin:analysis-api-k2-for-ide"))
 //        exclude(dependency("org.jetbrains.kotlin:low-level-api-fir-for-ide"))
 //        exclude(dependency("org.jetbrains.kotlin:symbol-light-classes-for-ide"))
     }
-    doLast {
+//    doLast {
 //        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 45_800_000L, 46_200_000L)
-    }
+//    }
 }
 
 artifacts {

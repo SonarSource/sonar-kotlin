@@ -36,6 +36,8 @@ public class WorkaroundForJarMinimization {
           org.jetbrains.kotlin.codegen.signature.KotlinToJvmSignatureMapperImpl.class,
 
           // META-INF/analysis-api/analysis-api-impl-base.xml
+          org.jetbrains.kotlin.analysis.api.resolve.extensions.KaResolveExtensionProvider.class,
+          org.jetbrains.kotlin.resolve.jvm.KotlinJavaPsiFacade.class,
           org.jetbrains.kotlin.analysis.api.impl.base.java.source.JavaElementSourceWithSmartPointerFactory.class,
           org.jetbrains.kotlin.analysis.api.impl.base.references.HLApiReferenceProviderService.class,
           org.jetbrains.kotlin.analysis.api.impl.base.projectStructure.KaBaseModuleProvider.class,
@@ -47,6 +49,33 @@ public class WorkaroundForJarMinimization {
           org.jetbrains.kotlin.analysis.api.descriptors.modification.KaFe10SourceModificationService.class,
           org.jetbrains.kotlin.references.fe10.base.KtFe10KotlinReferenceProviderContributor.class,
           org.jetbrains.kotlin.analysis.api.descriptors.references.ReadWriteAccessCheckerDescriptorsImpl.class,
+          // META-INF/analysis-api/low-level-api-fir.xml
+          org.jetbrains.kotlin.analysis.low.level.api.fir.services.LLRealFirElementByPsiElementChooser.class,
+
+          // TODO more?
+          org.jetbrains.kotlin.analysis.low.level.api.fir.projectStructure.LLFirBuiltinsSessionFactory.class,
+          org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.LLFirSessionCache.class,
+          org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.LLFirSessionInvalidationService.class,
+          org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.LLFirSessionInvalidationEventPublisher.class,
+          org.jetbrains.kotlin.analysis.low.level.api.fir.LLFirGlobalResolveComponents.class,
+          org.jetbrains.kotlin.analysis.low.level.api.fir.LLFirResolveSessionService.class,
+          org.jetbrains.kotlin.analysis.low.level.api.fir.file.structure.LLFirDeclarationModificationService.class,
+          org.jetbrains.kotlin.analysis.low.level.api.fir.file.structure.LLFirInBlockModificationTracker.class,
+
+          // META-INF/analysis-api/symbol-light-classes.xml
+          org.jetbrains.kotlin.light.classes.symbol.SymbolKotlinAsJavaSupport.class,
+          // META-INF/analysis-api/analysis-api-fir-standalone-base.xml
+          org.jetbrains.kotlin.analysis.api.standalone.base.declarations.KotlinStandaloneFirDirectInheritorsProvider.class,
+          org.jetbrains.kotlin.analysis.api.platform.projectStructure.KotlinSimpleGlobalSearchScopeMerger.class,
+          org.jetbrains.kotlin.analysis.decompiler.psi.BuiltinsVirtualFileProviderCliImpl.class,
+          // META-INF/analysis-api/analysis-api-fir.xml
+          org.jetbrains.kotlin.analysis.api.fir.KaFirSessionProvider.class,
+          org.jetbrains.kotlin.analysis.api.fir.modification.KaFirSourceModificationService.class,
+          org.jetbrains.kotlin.analysis.api.fir.references.KotlinFirReferenceContributor.class,
+          org.jetbrains.kotlin.analysis.api.fir.references.ReadWriteAccessCheckerFirImpl.class,
+
+          // META-INF/extensions/compiler.xml
+          org.jetbrains.kotlin.plugin.references.SimpleNameReferenceExtension.class,
 
           /** Used to have proper named groups behavior in regular expressions */
           kotlin.internal.jdk8.JDK8PlatformImplementations.class
