@@ -29,13 +29,17 @@ import org.jetbrains.kotlin.analysis.api.platform.lifetime.KotlinAlwaysAccessibl
 import org.jetbrains.kotlin.analysis.api.platform.lifetime.KotlinLifetimeTokenFactory
 import org.jetbrains.kotlin.analysis.api.platform.modification.KotlinGlobalModificationService
 import org.jetbrains.kotlin.analysis.api.platform.modification.KotlinModificationTrackerFactory
+import org.jetbrains.kotlin.analysis.api.platform.permissions.KotlinAnalysisPermissionOptions
 import org.jetbrains.kotlin.analysis.api.platform.projectStructure.KotlinByModulesResolutionScopeProvider
 import org.jetbrains.kotlin.analysis.api.platform.projectStructure.KotlinProjectStructureProvider
 import org.jetbrains.kotlin.analysis.api.platform.projectStructure.KotlinResolutionScopeProvider
 import org.jetbrains.kotlin.analysis.api.standalone.base.modification.KotlinStandaloneGlobalModificationService
 import org.jetbrains.kotlin.analysis.api.standalone.base.modification.KotlinStandaloneModificationTrackerFactory
+import org.jetbrains.kotlin.analysis.api.standalone.base.permissions.KotlinStandaloneAnalysisPermissionOptions
 import org.jetbrains.kotlin.analysis.api.standalone.base.projectStructure.AnalysisApiSimpleServiceRegistrar
 import org.jetbrains.kotlin.analysis.api.standalone.base.projectStructure.PluginStructureProvider
+import org.jetbrains.kotlin.analysis.decompiler.psi.BuiltinsVirtualFileProvider
+import org.jetbrains.kotlin.analysis.decompiler.psi.BuiltinsVirtualFileProviderCliImpl
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.references.fe10.base.KtFe10ReferenceResolutionHelper
 import org.jetbrains.kotlin.resolve.extensions.AnalysisHandlerExtension
@@ -47,13 +51,16 @@ import org.jetbrains.kotlin.resolve.extensions.AnalysisHandlerExtension
  */
 annotation class K1only
 
-@OptIn(KaPlatformInterface::class)
+@OptIn(KaPlatformInterface::class, KaImplementationDetail::class)
 internal fun configureK1AnalysisApiServices(env: KotlinCoreEnvironment) {
     val application = env.projectEnvironment.environment.application
     if (application.getServiceIfCreated(KtFe10ReferenceResolutionHelper::class.java) == null) {
         AnalysisApiFe10ServiceRegistrar.registerApplicationServices(application)
     }
     val project = env.projectEnvironment.project
+
+    PluginStructureProvider.registerProjectExtensionPoints(project, "/META-INF/analysis-api/analysis-api-platform-interface.xml")
+
     AnalysisApiFe10ServiceRegistrar.registerProjectServices(project)
     AnalysisApiFe10ServiceRegistrar.registerProjectModelServices(
         project,
@@ -95,6 +102,14 @@ private object AnalysisApiFe10ServiceRegistrar : AnalysisApiSimpleServiceRegistr
         application.registerService(
             KtFe10ReferenceResolutionHelper::class.java,
             K1internals.dummyKtFe10ReferenceResolutionHelper(),
+        )
+        application.registerService(
+            BuiltinsVirtualFileProvider::class.java,
+            BuiltinsVirtualFileProviderCliImpl::class.java,
+        )
+        application.registerService(
+            KotlinAnalysisPermissionOptions::class.java,
+            KotlinStandaloneAnalysisPermissionOptions::class.java,
         )
         val applicationArea = application.extensionArea
         if (!applicationArea.hasExtensionPoint(ClassTypePointerFactory.EP_NAME)) {
