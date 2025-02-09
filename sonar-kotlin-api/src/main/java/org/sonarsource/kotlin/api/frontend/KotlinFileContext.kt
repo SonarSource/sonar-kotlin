@@ -40,11 +40,12 @@ data class KotlinFileContext(
     val regexCache: RegexCache,
 ) {
 
+    internal var k2Diagnostics: Sequence<KaDiagnosticWithPsi<*>> = emptySequence()
+
     val kaDiagnostics: Sequence<KaDiagnosticWithPsi<*>> by lazy {
         withKaSession {
             val k1 = diagnostics.asSequence().map { KtModuleProviderByCompilerConfiguration.kaFe10Diagnostic(it, token) }
-            val k2 = ktFile.collectDiagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS).asSequence()
-            return@lazy k1 + k2
+            return@lazy k1 + k2Diagnostics
         }
     }
 
