@@ -17,7 +17,6 @@
 package org.sonarsource.kotlin.plugin.cpd
 
 import com.intellij.openapi.util.Disposer
-import net.bytebuddy.utility.JavaConstant.Dynamic
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.ObjectAssert
 import org.jetbrains.kotlin.config.LanguageVersion
@@ -36,7 +35,6 @@ import org.sonarsource.kotlin.plugin.DummyReadCache
 import org.sonarsource.kotlin.plugin.DummyWriteCache
 import org.sonarsource.kotlin.api.checks.InputFileContextImpl
 import org.sonarsource.kotlin.api.frontend.Environment
-import org.sonarsource.kotlin.testapi.DummyInputFile
 import org.sonarsource.kotlin.testapi.kotlinTreeOf
 import java.nio.file.Path
 import kotlin.io.path.createFile
