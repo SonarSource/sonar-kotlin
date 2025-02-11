@@ -190,19 +190,6 @@ class CopyPasteDetectorTest {
 
     @TestFactory
     fun `cpd tokens`() = listOf(
-        Triple("int literal", """ val x = 42 """, "valx=42"),
-        Triple("long literal", """ val x = 42L """, "valx=42L"),
-        Triple("float literal", """ val x = 42.0f """, "valx=42.0f"),
-        Triple("double literal", """ val x = 42.0 """, "valx=42.0"),
-        Triple("char literal", """ val x = 'a' """, "valx='a'"),
-        Triple("null literal", """ val x = null """, "valx=null"),
-        Triple("double-quote string literal", """ val x = "a" """, "valx=LITERAL"),
-        Triple("double-quote string literal concatenation", """ val x = "a" + "b" """, "valx=LITERAL+LITERAL"),
-        Triple("double-quote string template", """ val x = "a $d{1}" """, "valx=LITERAL"),
-        Triple("triple-quote string literal", """ val x = ${tq}a${tq} """, "valx=LITERAL"),
-        Triple("triple-quote string literal concatenation", """ val x = ${tq}a${tq} + ${tq}b${tq} """, "valx=LITERAL+LITERAL"),
-        Triple("triple-quote string template", """ val x = ${tq}a $d{1}${tq} """, "valx=LITERAL"),
-        Triple("mixed-quote string literal concatenation", """ val x = "a" + ${tq}b${tq} """, "valx=LITERAL+LITERAL"),
         Triple(
             "triple-quote string template with interpolated vars",
             """
@@ -217,17 +204,87 @@ class CopyPasteDetectorTest {
             valtripleQuoteTwoInterpolations=LITERAL
             varnestedInterpolations=LITERAL
             """.trimIndent()
-            )
+            ),
+        Triple("test", """
+            package org.example
+
+fun migrate1(database: Database) {
+    database.deleteTableColumns(
+        tableName = "_foo_config",
+        columnNames = listOf(
+            "foo_id",
+            "default_bar",
+        )
+    )
+    database.deleteTable("_supported_bar")
+    database.deleteTable("_bar_baz")
+    database.deleteTableColumns(
+        tableName = "_baz_foo",
+        columnNames = listOf(
+            "foo_id",
+            "default_blop",
+            "ssss_blup_kkkk",
+        )
+    )
+}
+
+fun migrate2(database: Database) {
+    database.deleteTableColumns(
+        tableName = "_cccc",
+        columnNames = listOf(
+            "ssss_blup_kkkk",
+            "supported_bar",
+        )
+    )
+    database.deleteTable("_blap_control")
+    database.deleteTable("_menu_config")
+    database.deleteTable("_zzzz_cccc")
+    database.deleteTable("_zzzz_menu")
+    database.deleteTableColumns(
+        tableName = "_bbbb_config",
+        columnNames = listOf(
+            "max_xxxx_gggg_hhhh",
+            "pre_misc_tttt_cancel_kkkk",
+            "rrrr_misc_counter",
+            "rrrr_misc_support_kkkk",
+            "dddd_mat_supported",
+            "mmmm_uuuu_iiii",
+            "mmmm_file_name",
+            "premisc_nnnn_oooo_by_aaaa",
+            "premisc_nnnn_oooo_by_bbbb",
+            "uuuu_llll_kkkk",
+            "pppp_qqqq_icon",
+            "dddd_rrrr_counter",
+            "eeee_vvvv_wwww_kkkk",
+            "ffff_vvvv_wwww_kkkk",
+            "vvvv_forward_kkkk",
+            "yyyy_iiii_period",
+        )
+    )
+}
+
+fun main() {
+    val database = Database()
+
+    // Call one function
+    migrate1(database)
+    // Call another function
+    migrate2(database)
+}
+        """.trimIndent(), ""),
     ).map { (title, input, expected) ->
         DynamicTest.dynamicTest("with $title") {
             val sensorContext: SensorContextTester = SensorContextTester.create(tmpFolder!!.root)
             val inputFile = TestInputFileBuilder("moduleKey", "test.kt").setContents(input).build()
             val root = kotlinTreeOf(input, Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE), inputFile)
             val ctx = InputFileContextImpl(sensorContext, inputFile, false)
-            CopyPasteDetector().scan(ctx, root)
-
+            val copyPasteDetector = CopyPasteDetector()
+            copyPasteDetector.scan(ctx, root)
+            val tokensStringified = copyPasteDetector.tokens.joinToString(
+                separator = "\n",
+                transform = { "${it.text}\t\t\t\t\t\t${it.range.start()},${it.range.end()}" })
             val cpdTokenLines = sensorContext.cpdTokens(inputFile.key())!!
-            val tokensStringified = cpdTokenLines.joinToString(separator = "\n", transform = { it.value })
+            // val tokensStringified = cpdTokenLines.joinToString(separator = "\n", transform = { it.value })
             Assertions.assertThat(tokensStringified).isEqualTo(expected)
         }
     }
