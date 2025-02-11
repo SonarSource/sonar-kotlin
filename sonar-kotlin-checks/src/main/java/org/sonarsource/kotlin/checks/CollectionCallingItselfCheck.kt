@@ -18,26 +18,22 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.*
+import org.sonarsource.kotlin.api.checks.CallAbstractCheck
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.predictReceiverExpression
+import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val MUTABLE_COLLECTION_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections.MutableCollection") {
-    withNames("containsAll", "addAll", "removeAll", "retainAll", "add")
+    withNames("addAll", "removeAll", "retainAll", "add")
 }
 
 private val COLLECTIONS_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections") {
     withNames("containsAll", "addAll", "removeAll", "retainAll", "fill")
 }
 
-/*
-* In K1 symbol.allOverriddenSymbols returns [kotlin.collections.List.containsAll, kotlin.collections.Collection.containsAll]
-* In K2 it only returns [kotlin.collections.List.containsAll]
-* This sounds like a regression as according to documentation it is supposed to return all
-* Requires further investigation */
-// FIXME Set is missing in test
-private val LIST_CONTAINS_ALL_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections.Collection") {
+private val COLLECTION_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections.Collection") {
     withNames("containsAll")
 }
 
@@ -45,7 +41,7 @@ private const val MESSAGE = "Collections should not be passed as arguments to th
 
 @Rule(key = "S2114")
 class CollectionCallingItselfCheck : CallAbstractCheck() {
-    override val functionsToVisit = listOf(MUTABLE_COLLECTION_FUN_MATCHER, COLLECTIONS_FUN_MATCHER, LIST_CONTAINS_ALL_FUN_MATCHER)
+    override val functionsToVisit = listOf(MUTABLE_COLLECTION_FUN_MATCHER, COLLECTIONS_FUN_MATCHER, COLLECTION_FUN_MATCHER)
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
