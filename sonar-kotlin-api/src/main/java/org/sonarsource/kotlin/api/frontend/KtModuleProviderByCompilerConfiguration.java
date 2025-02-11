@@ -51,9 +51,4 @@ final class KtModuleProviderByCompilerConfiguration {
   private KtModuleProviderByCompilerConfiguration() {
   }
 
-  @SuppressWarnings("KotlinInternalInJava")
-  static KaFe10Diagnostic kaFe10Diagnostic(Diagnostic diagnostic, KaLifetimeToken token) {
-    return new KaFe10Diagnostic(diagnostic, token);
-  }
-
 }

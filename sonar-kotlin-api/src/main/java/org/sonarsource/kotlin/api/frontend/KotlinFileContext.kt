@@ -42,7 +42,7 @@ data class KotlinFileContext(
 
     val kaDiagnostics: Sequence<KaDiagnosticWithPsi<*>> by lazy {
         withKaSession {
-            val k1 = diagnostics.asSequence().map { KtModuleProviderByCompilerConfiguration.kaFe10Diagnostic(it, token) }
+            val k1 = diagnostics.asSequence().map { K1internals.kaFe10Diagnostic(it, token) }
             val k2 = ktFile.collectDiagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS).asSequence()
             return@lazy k1 + k2
         }

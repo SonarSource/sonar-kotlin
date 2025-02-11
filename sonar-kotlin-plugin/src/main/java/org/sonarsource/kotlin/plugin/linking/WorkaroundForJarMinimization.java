@@ -44,6 +44,7 @@ public class WorkaroundForJarMinimization {
           org.jetbrains.kotlin.analysis.api.impl.base.lifetime.KaBaseLifetimeTracker.class,
           // META-INF/analysis-api/analysis-api-fe10.xml
           org.jetbrains.kotlin.analysis.api.descriptors.KaFe10SessionProvider.class,
+          org.jetbrains.kotlin.analysis.api.descriptors.modification.KaFe10SourceModificationService.class,
           org.jetbrains.kotlin.references.fe10.base.KtFe10KotlinReferenceProviderContributor.class,
           org.jetbrains.kotlin.analysis.api.descriptors.references.ReadWriteAccessCheckerDescriptorsImpl.class,
 
