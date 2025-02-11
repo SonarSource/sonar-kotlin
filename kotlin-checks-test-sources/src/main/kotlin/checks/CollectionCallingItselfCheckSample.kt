@@ -19,6 +19,9 @@ class CollectionCallingItselfCheckSample {
         val anys = mutableListOf<Any>()
         anys.add(anys) // Noncompliant
         anys.fill(anys) // Noncompliant
+
+        val set = setOf<Any>()
+        set.containsAll(set) // Noncompliant
     }
 
     fun compliant(newList: MutableList<String>) {
