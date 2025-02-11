@@ -1,20 +1,5 @@
 package checks
 
-typealias IntToInt = (Int) -> Int
-
-fun x(i: IntToInt): Unit {
-    i(777)
-}
-
-fun <T> functionNTest(t: T): T {
-    x(object : IntToInt { // Noncompliant
-        override fun invoke(p1: Int): Int {
-            return p1 + 5
-        }
-    })
-    return t
-}
-
 class SamConversionCheckSample {
 
     val resource = loadResource(object : ProgressCallback { // Noncompliant {{Replace explicit functional interface implementation with lambda expression.}}
@@ -85,6 +70,12 @@ class SamConversionCheckSample {
         }
 
         class NestedClass {
+            // ...
+        }
+    }
+
+    val functionN = object : (Int) -> Unit { // Noncompliant
+        override fun invoke(p: Int) {
             // ...
         }
     }
