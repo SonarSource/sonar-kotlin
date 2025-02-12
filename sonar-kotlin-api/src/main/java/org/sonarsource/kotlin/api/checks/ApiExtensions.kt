@@ -442,7 +442,7 @@ private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(bindingContext:
     }
 
 private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(): KtExpression? = withKaSession {
-    (getParentCall() as? KaFunctionCall<*>)?.let { larwCallCandidate ->
+    getParentCall()?.let { larwCallCandidate ->
         withKaSession {
             when (larwCallCandidate.partiallyAppliedSymbol.symbol.name?.asString()) {
                 in KOTLIN_CHAIN_CALL_CONSTRUCTS -> {
@@ -460,7 +460,7 @@ private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(): KtExpression
     }
 }
 
-fun KtElement.getParentCall(): KaCall? {
+fun KtElement.getParentCall(): KaFunctionCall<*>? {
     val callExpressionTypes = arrayOf(
         KtSimpleNameExpression::class.java,
         KtCallElement::class.java,
@@ -469,7 +469,7 @@ fun KtElement.getParentCall(): KaCall? {
         KtArrayAccessExpression::class.java
     )
     val parentOfType = PsiTreeUtil.getParentOfType(this, *callExpressionTypes)
-    return withKaSession { parentOfType?.resolveToCall()?.successfulCallOrNull() }
+    return withKaSession { parentOfType?.resolveToCall()?.successfulFunctionCallOrNull() }
 }
 
 fun KaFunctionCall<*>.getFirstArgumentExpression() =
