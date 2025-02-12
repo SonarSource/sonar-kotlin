@@ -17,10 +17,8 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
-import org.jetbrains.kotlin.analysis.api.types.KaType
-import org.jetbrains.kotlin.analysis.api.types.KaTypeNullability
-import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getNextSiblingIgnoringWhitespace
@@ -34,6 +32,7 @@ import org.sonarsource.kotlin.api.visiting.withKaSession
 
 @Rule(key = "S6611")
 class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
+    private val mapClassId = ClassId.fromString("kotlin/collections/Map")
 
     private val issueMessage = message {
         code("Map")
@@ -67,13 +66,7 @@ class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
 
     private fun checkSuperType(arrayAccessExpression: KtArrayAccessExpression): Boolean = withKaSession {
         val type = arrayAccessExpression.arrayExpression?.expressionType ?: return false
-        if (checkIfSubtype(type)) return true
-        return type.allSupertypes.any {
-            checkIfSubtype(it.withNullability(KaTypeNullability.NON_NULLABLE))
-        }
+        return type.isSubtypeOf(mapClassId)
     }
-
-    private fun checkIfSubtype(type: KaType) = type.symbol?.classId?.asFqNameString() == "kotlin.collections.Map"
-            || type.symbol?.classId?.asFqNameString() == "kotlin.collections.MutableMap"
 
 }
