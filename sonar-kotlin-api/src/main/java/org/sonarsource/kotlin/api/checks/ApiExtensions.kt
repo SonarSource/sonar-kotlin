@@ -22,17 +22,17 @@ import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.analysis.api.KaIdeApi
-import org.jetbrains.kotlin.analysis.api.resolution.KaCall
+import org.jetbrains.kotlin.analysis.api.annotations.KaAnnotationValue
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaExplicitReceiverValue
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaImplicitReceiverValue
-import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaAnonymousFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaLocalVariableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
@@ -41,8 +41,6 @@ import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.analysis.api.types.symbol
-import org.jetbrains.kotlin.coroutines.hasSuspendFunctionType
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
@@ -106,10 +104,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getParentCall
 import org.jetbrains.kotlin.resolve.calls.util.getReceiverExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.resolve.constants.ArrayValue
-import org.jetbrains.kotlin.resolve.constants.KClassValue
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
-import org.jetbrains.kotlin.resolve.sam.getSingleAbstractMethodOrNull
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
@@ -460,7 +455,7 @@ private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(): KtExpression
     }
 }
 
-fun KtElement.getParentCall(): KaFunctionCall<*>? {
+fun KtElement.getParentCallExpr(): KtElement? {
     val callExpressionTypes = arrayOf(
         KtSimpleNameExpression::class.java,
         KtCallElement::class.java,
@@ -468,8 +463,11 @@ fun KtElement.getParentCall(): KaFunctionCall<*>? {
         KtUnaryExpression::class.java,
         KtArrayAccessExpression::class.java
     )
-    val parentOfType = PsiTreeUtil.getParentOfType(this, *callExpressionTypes)
-    return withKaSession { parentOfType?.resolveToCall()?.successfulFunctionCallOrNull() }
+    return PsiTreeUtil.getParentOfType(this, *callExpressionTypes)
+}
+
+fun KtElement.getParentCall(): KaFunctionCall<*>? {
+    return withKaSession { getParentCallExpr()?.resolveToCall()?.successfulFunctionCallOrNull() }
 }
 
 fun KaFunctionCall<*>.getFirstArgumentExpression() =
@@ -643,26 +641,27 @@ fun KtNamedFunction.returnTypeAsString(): String? = withKaSession {
     returnType.asFqNameString()
 }
 
-fun KtLambdaArgument.isSuspending(
-    bindingContext: BindingContext,
-) = (parent as? KtCallExpression)
-    ?.getResolvedCall(bindingContext)
-    ?.resultingDescriptor
-    ?.valueParameters
-    // using .lastOrNull() instead of .last() due to possible NoSuchElementException in case of incomplete semantic
-    ?.lastOrNull()
-    ?.hasSuspendFunctionType
-    ?: false
+fun KtLambdaArgument.isSuspending() = withKaSession {
+    (parent as? KtCallExpression)
+        ?.resolveToCall()
+        ?.successfulFunctionCallOrNull()
+        ?.argumentMapping
+        ?.values
+        ?.lastOrNull()
+        ?.returnType
+        ?.isSuspendFunctionType
+        ?: return false
+}
 
-fun CallableDescriptor.throwsExceptions(exceptions: Collection<String>) =
+fun KaFunctionSymbol.throwsExceptions(exceptions: Collection<String>) =
     annotations.any { annotation ->
-        annotation.fqName?.asString() == THROWS_FQN &&
-            (annotation.allValueArguments.asSequence()
-                .find { (k, _) -> k.asString() == "exceptionClasses" }
-                ?.value as? ArrayValue)
-                ?.value
-                ?.mapNotNull { it.value as? KClassValue.Value.NormalClass }
-                ?.map { it.value.toString().replace("/", ".") }
+        annotation.classId?.asFqNameString() == THROWS_FQN &&
+            (annotation.arguments
+                .find { arg -> arg.name.asString() == "exceptionClasses" }
+                ?.expression as? KaAnnotationValue.ArrayValue)
+                ?.values
+                ?.mapNotNull { it as? KaAnnotationValue.ClassLiteralValue }
+                ?.map { it.classId?.asFqNameString() }
                 ?.any(exceptions::contains)
             ?: false
     }
