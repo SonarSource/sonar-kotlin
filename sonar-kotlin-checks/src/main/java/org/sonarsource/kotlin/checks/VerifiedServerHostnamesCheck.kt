@@ -56,7 +56,7 @@ class VerifiedServerHostnamesCheck : AbstractCheck() {
     }
 
     override fun visitLambdaExpression(expression: KtLambdaExpression, kotlinFileContext: KotlinFileContext) {
-        (expression.getParentCall() as? KaFunctionCall<*>)?.let {
+        expression.getParentCall()?.let {
             if (HOSTNAME_VERIFIER_MATCHER.matches(it)) {
                 val listStatements = expression.bodyExpression?.statements
                 if (listStatements?.size == 1 && listStatements[0].isTrueConstant()) {

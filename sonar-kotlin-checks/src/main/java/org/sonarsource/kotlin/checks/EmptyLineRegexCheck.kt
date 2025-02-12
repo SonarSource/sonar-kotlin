@@ -14,20 +14,22 @@
  * You should have received a copy of the Sonar Source-Available License
  * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
-@file:OptIn(KaExperimentalApi::class)
-
 package org.sonarsource.kotlin.checks
 
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.PsiTreeUtil
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.resolution.KaExplicitReceiverValue
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi2ir.deparenthesize
 import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
@@ -36,7 +38,15 @@ import org.sonarsource.analyzer.commons.regex.ast.NonCapturingGroupTree
 import org.sonarsource.analyzer.commons.regex.ast.RegexBaseVisitor
 import org.sonarsource.analyzer.commons.regex.ast.RegexTree
 import org.sonarsource.analyzer.commons.regex.ast.SequenceTree
-import org.sonarsource.kotlin.api.checks.*
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.FunMatcherImpl
+import org.sonarsource.kotlin.api.checks.JAVA_UTIL_PATTERN
+import org.sonarsource.kotlin.api.checks.KOTLIN_TEXT
+import org.sonarsource.kotlin.api.checks.findUsages
+import org.sonarsource.kotlin.api.checks.getFirstArgumentExpression
+import org.sonarsource.kotlin.api.checks.getParentCall
+import org.sonarsource.kotlin.api.checks.matches
+import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.PATTERN_COMPILE_MATCHER
 import org.sonarsource.kotlin.api.regex.REGEX_MATCHER
@@ -97,9 +107,7 @@ class EmptyLineRegexCheck : AbstractRegexCheck() {
     private fun getSecondariesForRegex(callExpression: KtCallExpression): Pair<List<KtElement>, KtElement> =
         getSecondaries(callExpression.parent, ::getStringInRegexFind) to callExpression.valueArguments[0]
 
-    private fun getSecondariesForToRegex(
-        callExpression: KtCallExpression
-    ): Pair<List<KtElement>, KtElement?> = withKaSession {
+    private fun getSecondariesForToRegex(callExpression: KtCallExpression): Pair<List<KtElement>, KtElement?> = withKaSession {
         getSecondaries(callExpression.parent?.parent, ::getStringInRegexFind) to
                 (callExpression.parent as? KtExpression)?.resolveToCall()
                     ?.successfulFunctionCallOrNull()?.getReceiverExpression()
@@ -123,11 +131,7 @@ class EmptyLineRegexCheck : AbstractRegexCheck() {
         }
     }
 
-    private fun checkRegexInReplace(
-        callExpression: KtCallExpression,
-        kotlinFileContext: KotlinFileContext,
-        parent: PsiElement,
-    ) {
+    private fun checkRegexInReplace(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext, parent: PsiElement) {
         when (parent) {
             is KtProperty -> {
                 parent.findUsages()
@@ -200,35 +204,25 @@ private fun isNonCapturingWithoutChild(tree: RegexTree): Boolean {
 }
 
 private fun getStringInMatcherFind(ref: KtElement): KtExpression? = withKaSession {
-    val resolvedCall =
-        (ref.parent as? KtExpression)?.resolveToCall()?.successfulFunctionCallOrNull() ?: return null
-
+    val resolvedCall = (ref.parent as? KtExpression)?.resolveToCall()?.successfulFunctionCallOrNull() ?: return null
     if (!(resolvedCall matches PATTERN_MATCHER)) return null
 
     return when (val preParent = ref.parent.parent) {
-        is KtExpression ->
-            if (preParent.resolveToCall()?.successfulFunctionCallOrNull() matches PATTERN_FIND)
-                extractArgument(resolvedCall)
-            else null
-        is KtProperty ->
-            if (preParent.findUsages().any { it.getParentCall() matches PATTERN_FIND })
-                extractArgument(resolvedCall)
-            else null
+        is KtExpression -> if (preParent.resolveToCall()?.successfulFunctionCallOrNull() matches PATTERN_FIND) extractArgument(resolvedCall) else null
+        is KtProperty -> if (preParent.findUsages().any { it.getParentCall() matches PATTERN_FIND }) {
+            extractArgument(resolvedCall)
+        } else null
         else -> null
     }
 }
 
-private fun getStringInRegexFind(ref: KtElement): KtExpression? {
-    val resolvedCall = withKaSession {
-        (ref.parent as? KtExpression)?.resolveToCall()?.successfulFunctionCallOrNull() ?: return null
-    }
+private fun getStringInRegexFind(ref: KtElement): KtExpression? = withKaSession {
+    val resolvedCall = (ref.parent as? KtExpression)?.resolveToCall()?.successfulFunctionCallOrNull() ?: return null
     return if (resolvedCall matches REGEX_FIND) extractArgument(resolvedCall) else null
 }
 
 private fun extractArgument(resolvedCall: KaFunctionCall<*>): KtExpression? {
-    val arguments = resolvedCall.argumentMapping.keys.toList()
-    return if (arguments.isEmpty()) null
-    else arguments[0]
+    return resolvedCall.argumentMapping.keys.firstOrNull()
 }
 
 /**
@@ -239,22 +233,21 @@ private fun extractArgument(resolvedCall: KaFunctionCall<*>): KtExpression? {
  *     - a variable, that was not tested with "isEmpty()" and could contain empty string
  *     - an empty String constant
  */
-private fun KtExpression.canBeEmpty(): Boolean =
-    when (val deparenthesized = this.deparenthesize()) {
+private fun KtExpression.canBeEmpty(): Boolean = withKaSession {
+    when (val deparenthesized = this@canBeEmpty.deparenthesize()) {
         is KtNameReferenceExpression -> {
             val runtimeStringValue = deparenthesized.predictRuntimeStringValue()
             runtimeStringValue?.isEmpty()
                 ?: deparenthesized.findUsages(allUsages = true) {
-                    withKaSession {
-                        (it.parent as? KtExpression)?.resolveToCall()
-                            ?.successfulFunctionCallOrNull() matches STRING_IS_EMPTY ||
-                                (it.parent as? KtBinaryExpression).isEmptinessCheck()
-                    }
+                    (it.parent as? KtExpression)?.resolveToCall()
+                        ?.successfulFunctionCallOrNull() matches STRING_IS_EMPTY ||
+                            (it.parent as? KtBinaryExpression).isEmptinessCheck()
                 }.isEmpty()
         }
         else ->
             predictRuntimeStringValue()?.isEmpty() ?: false
     }
+}
 
 private fun KtBinaryExpression?.isEmptinessCheck() =
     this?.let {
@@ -262,14 +255,3 @@ private fun KtBinaryExpression?.isEmptinessCheck() =
             (left?.predictRuntimeStringValue()?.isEmpty() ?: false
                 || right?.predictRuntimeStringValue()?.isEmpty() ?: false)
     } ?: false
-
-fun KtElement.getParentCall(): KaFunctionCall<*>? {
-    val callExpressionTypes = arrayOf(
-        KtSimpleNameExpression::class.java, KtCallElement::class.java, KtBinaryExpression::class.java,
-        KtUnaryExpression::class.java, KtArrayAccessExpression::class.java
-    )
-
-    val parent = PsiTreeUtil.getParentOfType(this, *callExpressionTypes)
-
-    return withKaSession { parent?.resolveToCall()?.successfulFunctionCallOrNull() }
-}
