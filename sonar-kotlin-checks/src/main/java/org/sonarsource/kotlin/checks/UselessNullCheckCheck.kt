@@ -34,7 +34,10 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.*
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.matches
+import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.Message
 import org.sonarsource.kotlin.api.visiting.withKaSession
@@ -43,7 +46,7 @@ private val NON_NULL_CHECK_FUNS = FunMatcher("kotlin") {
     withNames("requireNotNull", "checkNotNull")
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only("result differs in fixing 1 FN")
+@org.sonarsource.kotlin.api.frontend.K1only//("result differs in fixing 1 FN")
 @Rule(key = "S6619")
 class UselessNullCheckCheck : AbstractCheck() {
 
@@ -165,9 +168,7 @@ class UselessNullCheckCheck : AbstractCheck() {
  * Since it is not always clear where this diagnostic might be raised, we over-approximate and ignore all files where such an error is
  * found.
  */
-private fun KotlinFileContext.mayBeAffectedByErrorInSemantics() = diagnostics.any {
-    it.factory == Errors.MISSING_BUILT_IN_DECLARATION
-}
+private fun KotlinFileContext.mayBeAffectedByErrorInSemantics() = diagnostics.any { it.factory == Errors.MISSING_BUILT_IN_DECLARATION }
 
 private fun KtExpression.isNotNullable(): Boolean =
     when (this) {
@@ -179,7 +180,7 @@ private fun KtExpression.isNotNullable(): Boolean =
                 resolvedType !is KaErrorType &&
                         // TODO Remove when migrate to K2 mode
                         // In K1 mode in case of missing types the resolved type is Unit, which is NON_NULLABLE
-                        !resolvedType.isUnitType &&
+//                        !resolvedType.isUnitType &&
                         resolvedType !is KaTypeParameterType &&
                         resolvedType.nullability == KaTypeNullability.NON_NULLABLE
             }

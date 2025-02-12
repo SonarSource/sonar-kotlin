@@ -36,7 +36,7 @@ class UselessNullCheckCheckSample {
         null ?: doSomething() // Noncompliant
         null != "" // Noncompliant
         0 != null // Noncompliant
-        doSomething() ?: null // FN, don't support Unit type
+        doSomething() ?: null // Noncompliant
         42!! // Noncompliant
         42 != null // Noncompliant
     }
@@ -133,6 +133,10 @@ private class FooBar(
     private val someString: String? = something as? String
     val isString: Boolean
         get() = someString != null // Compliant
+}
+
+fun <T> example(list: List<T>): Int? {
+    return list.first()?.hashCode()
 }
 
 class ParametrisedClass<out T>(
