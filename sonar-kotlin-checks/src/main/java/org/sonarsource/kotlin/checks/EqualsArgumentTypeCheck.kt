@@ -16,7 +16,7 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.lexer.KtTokens.THIS_KEYWORD
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -107,8 +107,9 @@ class EqualsArgumentTypeCheck : AbstractCheck() {
     private fun isExpressionCorrectType(typeReference: KtTypeReference, klass: KtClass): Boolean = withKaSession {
         val name = typeReference.nameForReceiverLabel()
         val parentNames = klass.superTypeListEntries.mapNotNull { it.typeReference!!.nameForReceiverLabel() }
+        val klassSymbol: KaClassSymbol? = klass.classSymbol
         return klass.name == name || parentNames.contains(name) ||
-                typeReference.type.allSupertypes.any { klass.classSymbol?.classId == it.symbol?.classId }
+                klassSymbol != null && typeReference.type.isSubtypeOf(klassSymbol)
     }
 
     private fun isBinaryExpressionWithTypeCorrect(
