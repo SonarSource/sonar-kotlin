@@ -16,26 +16,23 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getNextSiblingIgnoringWhitespace
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.typeUtil.supertypes
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.reporting.message
-import org.sonarsource.kotlin.api.checks.determineType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6611")
 class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
+    private val mapClassId = ClassId.fromString("kotlin/collections/Map")
 
     private val issueMessage = message {
         code("Map")
@@ -48,7 +45,7 @@ class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
             }
     )
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) {
         val sibling = callExpression.getParentOfType<KtDotQualifiedExpression>(true)?.getNextSiblingIgnoringWhitespace()
         if (sibling is KtOperationReferenceExpression && sibling.operationSignTokenType == KtTokens.EXCLEXCL) {
             kotlinFileContext.reportIssue(callExpression.parent.parent, issueMessage)
@@ -57,7 +54,7 @@ class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
 
     override fun visitClass(klass: KtClass, context: KotlinFileContext) {
         val arrayAccessExpressions = klass.collectDescendantsOfType<KtArrayAccessExpression> {
-            checkSuperType(it, context.bindingContext)
+            checkSuperType(it)
         }
 
         arrayAccessExpressions.forEach {
@@ -67,15 +64,9 @@ class MapValuesShouldBeAccessedSafelyCheck : CallAbstractCheck() {
         }
     }
 
-    private fun checkSuperType(arrayAccessExpression: KtArrayAccessExpression, bindingContext: BindingContext): Boolean {
-        val type = arrayAccessExpression.arrayExpression.determineType(bindingContext) ?: return false
-        if (checkIfSubtype(type)) return true
-        return type.supertypes().any {
-            checkIfSubtype(it)
-        }
+    private fun checkSuperType(arrayAccessExpression: KtArrayAccessExpression): Boolean = withKaSession {
+        val type = arrayAccessExpression.arrayExpression?.expressionType ?: return false
+        return type.isSubtypeOf(mapClassId)
     }
-
-    private fun checkIfSubtype(type: KotlinType) = type.getKotlinTypeFqName(false) == "kotlin.collections.Map"
-            || type.getKotlinTypeFqName(false) == "kotlin.collections.MutableMap"
 
 }
