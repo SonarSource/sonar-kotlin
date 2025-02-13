@@ -129,10 +129,11 @@ class FunMatcherImpl(
                                 propertySymbol.javaGetterSymbol
                             else
                                 propertySymbol
-                        val getterSignature = propertySymbol.getter?.asSignature() ?: return false
+                        // FIXME hotfix MutableList.size
+//                        val getterSignature = propertySymbol.getter?.asSignature() ?: return false
                         checkName(symbolForNameCheck) &&
-                                checkCallParameters(getterSignature) &&
-                                checkReturnType(getterSignature) &&
+//                                checkCallParameters(getterSignature) &&
+//                                checkReturnType(getterSignature) &&
                                 (checkTypeOrSupertype(null, propertySymbol) ||
                                         // TODO propertySymbol works only in K2 (see ExternalAndroidStorageAccessCheck):
                                         checkTypeOrSupertype(null, symbolForNameCheck))

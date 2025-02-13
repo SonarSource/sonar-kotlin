@@ -564,7 +564,7 @@ fun KtCallExpression.expressionTypeFqn(bindingContext: BindingContext): String? 
  * > Avoid using [org.jetbrains.kotlin.name.FqName]s or raw strings for type comparison.
  * > Use [org.jetbrains.kotlin.name.ClassId]s instead
  */
-internal fun KaType.asFqNameString(): String? = withKaSession {
+fun KaType.asFqNameString(): String? = withKaSession {
     (lowerBoundIfFlexible() as? KaClassType)?.classId?.asFqNameString()
 }
 
@@ -603,7 +603,7 @@ fun KtExpression.determineTypeAsString(bindingContext: BindingContext, printType
 private fun KtParameter.determineType(bindingContext: BindingContext) =
     bindingContext[BindingContext.TYPE, typeReference]
 
-private fun KtParameter.determineType(): KaType? = withKaSession {
+fun KtParameter.determineType(): KaType? = withKaSession {
     typeReference?.type
 }
 
