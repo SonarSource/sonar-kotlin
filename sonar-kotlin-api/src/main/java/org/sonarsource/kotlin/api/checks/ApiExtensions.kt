@@ -564,7 +564,7 @@ fun KtCallExpression.expressionTypeFqn(bindingContext: BindingContext): String? 
  * > Avoid using [org.jetbrains.kotlin.name.FqName]s or raw strings for type comparison.
  * > Use [org.jetbrains.kotlin.name.ClassId]s instead
  */
-fun KaType.asFqNameString(): String? = withKaSession {
+internal fun KaType.asFqNameString(): String? = withKaSession {
     (lowerBoundIfFlexible() as? KaClassType)?.classId?.asFqNameString()
 }
 
@@ -618,13 +618,8 @@ fun KtParameter.determineTypeAsString(): String? = withKaSession {
 private fun KtTypeReference.determineType(bindingContext: BindingContext) =
     bindingContext[BindingContext.TYPE, this]
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineTypeAsString()"))
 fun KtTypeReference.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
     determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
-
-fun KtTypeReference.determineTypeAsString(): String? = withKaSession {
-   type.asFqNameString()
-}
 
 @Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.returnTypeAsString()"))
 fun KtNamedFunction.returnTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
