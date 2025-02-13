@@ -174,7 +174,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertThat(context.measure(inputFile.key(), CoreMetrics.FUNCTIONS).value()).isEqualTo(1)
         assertThat(context.measure(inputFile.key(), CoreMetrics.CLASSES).value()).isEqualTo(1)
         assertThat(context.cpdTokens(inputFile.key())!![1].value)
-            .isEqualTo("print(1==1);print(\"LITERAL\");}")
+            .isEqualTo("print(1==1);print(LITERAL);}")
         assertThat(context.measure(inputFile.key(), CoreMetrics.COMPLEXITY).value()).isEqualTo(1)
         assertThat(context.measure(inputFile.key(), CoreMetrics.STATEMENTS).value()).isEqualTo(2)
 
