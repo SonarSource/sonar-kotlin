@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.analysis.api.KaIdeApi
 import org.jetbrains.kotlin.analysis.api.descriptors.KaFe10Session
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtImportDirective
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
@@ -35,15 +36,26 @@ class UnnecessaryImportsCheck : AbstractCheck() {
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) = withKaSession {
         if (this is KaFe10Session) return
         val analyzeImportsToOptimize = analyzeImportsToOptimize(file)
-        file.importDirectives.mapNotNull { import -> import.importedFqName?.let { import to it } }
-            .filter { (_, fqName: FqName) ->
-                !analyzeImportsToOptimize.unresolvedNames.contains(fqName.shortName()) &&
-                        analyzeImportsToOptimize.usedDeclarations[fqName].isNullOrEmpty()
-            }.map { it.first }
-            .forEach { importDirective ->
-                // We could not find any usages for anything remaining at this point. Hence, report!
-                importDirective.importedReference?.let { context.reportIssue(it, MESSAGE_UNUSED) }
-            }
+        file.importDirectives.mapNotNull { importDirective: KtImportDirective ->
+            importDirective.importedFqName?.let { importDirective to it }
+        }.filter { (_, fqName: FqName) ->
+            !analyzeImportsToOptimize.unresolvedNames.contains(fqName.shortName())
+        }.filter { (imp, _) ->
+            // 1. Filter out & report all imports that import from kotlin.* or the same package as our file
+            if (imp.isImportedImplicitlyAlready(file.packageDirective?.qualifiedName)) {
+                imp.importedReference?.let { context.reportIssue(it, MESSAGE_REDUNDANT) }
+                false
+            } else true
+        }.filter { (_, fqName: FqName) ->
+            analyzeImportsToOptimize.usedDeclarations[fqName].isNullOrEmpty()
+        }.map { it.first }.forEach { importDirective ->
+            // We could not find any usages for anything remaining at this point. Hence, report!
+            importDirective.importedReference?.let { context.reportIssue(it, MESSAGE_UNUSED) }
+        }
     }
 
 }
+
+private fun KtImportDirective.isImportedImplicitlyAlready(containingPackage: String?) =
+    (this.importedName != null && this.importedFqName?.parent()?.asString()?.let { it == "kotlin" || it == containingPackage } ?: false) ||
+        (this.importedName == null && this.importedFqName?.asString() == "kotlin")
