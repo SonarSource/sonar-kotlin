@@ -14,6 +14,11 @@ import kotlinx.coroutines.withContext
 
 class StructuredConcurrencyPrinciplesCheckSample {
 
+    fun explicitlyOptInExpression() {
+        @OptIn(DelicateCoroutinesApi::class)
+        GlobalScope.launch { } // Compliant
+    }
+
     @OptIn(DelicateCoroutinesApi::class)
     fun explicitlyOptIn() {
         GlobalScope.launch { } // Compliant
