@@ -33,11 +33,13 @@ import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.psi.psiUtil.isNull
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
+import org.sonarsource.kotlin.api.frontend.K1internals
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.Message
 import org.sonarsource.kotlin.api.visiting.withKaSession
@@ -46,7 +48,7 @@ private val NON_NULL_CHECK_FUNS = FunMatcher("kotlin") {
     withNames("requireNotNull", "checkNotNull")
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only//("result differs in fixing 1 FN")
+//@org.sonarsource.kotlin.api.frontend.K1only//("result differs in fixing 1 FN")
 @Rule(key = "S6619")
 class UselessNullCheckCheck : AbstractCheck() {
 
@@ -146,7 +148,7 @@ class UselessNullCheckCheck : AbstractCheck() {
             if (comparesToNull) "succeeds" else "fails"
         } else if (
         // We are not using the resolvedExpression on purpose here, as it can cause FPs. See SONARKT-373.
-            expression.isNotNullable()
+            expression.isNotNullable(kfc.bindingContext)
         ) {
             if (comparesToNull) "fails" else "succeeds"
         } else {
@@ -170,7 +172,7 @@ class UselessNullCheckCheck : AbstractCheck() {
  */
 private fun KotlinFileContext.mayBeAffectedByErrorInSemantics() = diagnostics.any { it.factory == Errors.MISSING_BUILT_IN_DECLARATION }
 
-private fun KtExpression.isNotNullable(): Boolean =
+private fun KtExpression.isNotNullable(bc: BindingContext): Boolean =
     when (this) {
         is KtConstantExpression -> !isNull()
         is KtStringTemplateExpression -> true
@@ -180,6 +182,9 @@ private fun KtExpression.isNotNullable(): Boolean =
                 resolvedType !is KaErrorType &&
                         // TODO Remove when migrate to K2 mode
                         // In K1 mode in case of missing types the resolved type is Unit, which is NON_NULLABLE
+                        // TODO add link to source code
+                        // https://github.com/JetBrains/kotlin/blob/2.1.0/analysis/analysis-api-fe10/src/org/jetbrains/kotlin/analysis/api/descriptors/components/KaFe10ExpressionTypeProvider.kt#L68
+                        (!K1internals.isK1(this) || bc.getType(this@isNotNullable) != null) &&
 //                        !resolvedType.isUnitType &&
                         resolvedType !is KaTypeParameterType &&
                         resolvedType.nullability == KaTypeNullability.NON_NULLABLE

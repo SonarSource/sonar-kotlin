@@ -17,14 +17,19 @@
 package org.sonarsource.kotlin.api.frontend;
 
 import com.intellij.psi.PsiElement;
+import org.jetbrains.kotlin.analysis.api.KaSession;
 import org.jetbrains.kotlin.analysis.api.diagnostics.KaDiagnosticWithPsi;
 import org.jetbrains.kotlin.analysis.api.lifetime.KaLifetimeToken;
 import org.jetbrains.kotlin.diagnostics.Diagnostic;
 
 @SuppressWarnings("KotlinInternalInJava")
-final class K1internals {
+public final class K1internals {
 
   private K1internals() {
+  }
+
+  public static boolean isK1(KaSession kaSession) {
+    return kaSession instanceof org.jetbrains.kotlin.analysis.api.descriptors.KaFe10Session;
   }
 
   static org.jetbrains.kotlin.analysis.api.descriptors.CliFe10AnalysisFacade createCliFe10AnalysisFacade() {
