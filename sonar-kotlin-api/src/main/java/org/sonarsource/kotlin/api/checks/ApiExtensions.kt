@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.KaExplicitReceiverValue
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaImplicitReceiverValue
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
@@ -63,12 +64,14 @@ import org.jetbrains.kotlin.psi.KtCallElement
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtLambdaArgument
+import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
@@ -879,6 +882,7 @@ fun KaType.simpleName(): String? = withKaSession {
     return lowerBoundIfFlexible().symbol?.name?.asString()
 }
 
+@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineType()"))
 fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
     this?.let {
         when (this) {
@@ -896,6 +900,34 @@ fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
         }
 
     }
+
+fun PsiElement?.determineType(): KaType? = withKaSession {
+    this?.let {
+        when (this@determineType) {
+            is KtCallExpression -> determineTypeFromCall()
+            is KtParameter -> symbol.returnType
+            is KtTypeReference -> type
+            is KtProperty -> determineTypeFromCall()
+            is KtDotQualifiedExpression -> determineTypeFromCall()
+            is KtReferenceExpression -> determineTypeFromCall()
+            is KtFunction -> (symbol as KaFunctionSymbol).returnType
+            is KtClass -> returnType
+            is KtConstantExpression -> this@determineType.expressionType
+            is KtStringTemplateExpression -> this@determineType.expressionType
+            is KtLambdaExpression -> this@determineType.expressionType
+            is KtExpression -> determineTypeFromCall()
+            is KtValueArgument -> this@determineType.getArgumentExpression()?.determineType()
+            else -> null
+        }
+    }
+}
+
+private fun KtElement.determineTypeFromCall(): KaType? = withKaSession {
+    this@determineTypeFromCall.resolveToCall()?.let {
+        (it.successfulFunctionCallOrNull() ?: it.singleVariableAccessCall())
+            ?.partiallyAppliedSymbol?.symbol?.returnType
+    }
+}
 
 fun KotlinType.isSupertypeOf(other: KotlinType): Boolean {
     return findCorrespondingSupertype(other, this).let { it != null && it != other }
