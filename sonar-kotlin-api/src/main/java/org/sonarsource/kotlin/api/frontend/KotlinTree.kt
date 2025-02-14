@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.api.frontend
 
+import com.intellij.mock.MockProject
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.PsiElement
@@ -23,6 +24,7 @@ import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.api.batch.fs.InputFile
@@ -43,11 +45,12 @@ data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val
         fun of(content: String, environment: Environment, inputFile: InputFile): KotlinSyntaxStructure {
 
             val psiFile: KtFile = if (environment.k2session != null) {
-                val inputFilePath = FileUtil.toSystemIndependentName(inputFile.file().path)
-                // TODO inefficient
-                environment.k2session!!.modulesWithFiles.values.first().find {
-                    it.virtualFile.path == inputFilePath
-                } as KtFile
+//                val inputFilePath = FileUtil.toSystemIndependentName(inputFile.file().path)
+//                // TODO inefficient
+//                environment.k2session!!.modulesWithFiles.values.first().find {
+//                    it.virtualFile.path == inputFilePath
+//                } as KtFile
+                KtPsiFactory(environment.k2session!!.project).createFile(normalizeEol(content))
             } else
                 environment.ktPsiFactory.createFile(inputFile.uri().path, normalizeEol(content))
 
