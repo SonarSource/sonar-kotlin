@@ -603,7 +603,7 @@ fun KtExpression.determineTypeAsString(bindingContext: BindingContext, printType
 private fun KtParameter.determineType(bindingContext: BindingContext) =
     bindingContext[BindingContext.TYPE, typeReference]
 
-fun KtParameter.determineType(): KaType? = withKaSession {
+private fun KtParameter.determineType(): KaType? = withKaSession {
     typeReference?.type
 }
 
