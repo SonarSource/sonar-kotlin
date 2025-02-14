@@ -19,6 +19,8 @@ package org.sonarsource.kotlin.checks
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfType
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -112,7 +114,8 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
             return when(this) {
 
                 is KtDotQualifiedExpression -> withKaSession {
-                    val resolvedCall = this@isMutatingUsage.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>() ?: return true
+                    val resolvedCall = this@isMutatingUsage.resolveToCall()?.singleCallOrNull<KaCallableMemberCall<*, *>>() ?: return true
+//                    successfulCallOrNull<KaCallableMemberCall<*, *>>() ?: return true
                     !(resolvedCall matches nonMutatingFunctions) &&
                             resolvedCall.partiallyAppliedSymbol.signature.receiverType
                                 ?.asFqNameString() !in imMutableCollections
@@ -124,7 +127,8 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
                     if (parameterIndex < 0) {
                         false
                     } else {
-                        val fqNameString = resolveToCall?.successfulFunctionCallOrNull()
+                        val fqNameString = resolveToCall?.singleFunctionCallOrNull()
+//                        val fqNameString = resolveToCall?.successfulFunctionCallOrNull()
                             ?.argumentMapping
                             ?.values?.withIndex()?.first { it.index == parameterIndex }?.value
                             ?.returnType?.asFqNameString()
