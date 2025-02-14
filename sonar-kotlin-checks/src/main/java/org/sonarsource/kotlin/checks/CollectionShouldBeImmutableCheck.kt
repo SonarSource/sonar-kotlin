@@ -21,8 +21,6 @@ import com.intellij.psi.util.parentOfType
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
-import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
-import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
@@ -114,8 +112,10 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
             return when(this) {
 
                 is KtDotQualifiedExpression -> withKaSession {
+                    // TODO
+                    //   seems that `singleCallOrNull` better matches behavior prior to use of Kotlin Analysis API,
+                    //   however consider using `successfulCallOrNull` instead to avoid potential FPs
                     val resolvedCall = this@isMutatingUsage.resolveToCall()?.singleCallOrNull<KaCallableMemberCall<*, *>>() ?: return true
-//                    successfulCallOrNull<KaCallableMemberCall<*, *>>() ?: return true
                     !(resolvedCall matches nonMutatingFunctions) &&
                             resolvedCall.partiallyAppliedSymbol.signature.receiverType
                                 ?.asFqNameString() !in imMutableCollections
@@ -127,8 +127,10 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
                     if (parameterIndex < 0) {
                         false
                     } else {
+                        // TODO
+                        //   seems that `singleFunctionCallOrNull` better matches behavior prior to use of Kotlin Analysis API,
+                        //   however consider using `successfulFunctionCallOrNull` instead to avoid potential FPs
                         val fqNameString = resolveToCall?.singleFunctionCallOrNull()
-//                        val fqNameString = resolveToCall?.successfulFunctionCallOrNull()
                             ?.argumentMapping
                             ?.values?.withIndex()?.first { it.index == parameterIndex }?.value
                             ?.returnType?.asFqNameString()
