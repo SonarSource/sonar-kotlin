@@ -30,7 +30,7 @@ import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.withKaSession
 
-val COLLECTION_SIZE_METHOD = FunMatcher(qualifier = "kotlin.collections.Collection", name = "size") {
+val COLLECTION_SIZE_METHOD = FunMatcher(definingSupertype = "kotlin.collections.Collection", name = "size") {
     withNoArguments()
 }
 val ARRAY_SIZE_METHOD = FunMatcher(qualifier = "kotlin.Array", name = "size") {
