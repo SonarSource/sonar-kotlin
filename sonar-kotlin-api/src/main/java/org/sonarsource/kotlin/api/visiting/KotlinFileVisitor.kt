@@ -18,6 +18,8 @@ package org.sonarsource.kotlin.api.visiting
 
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
+import org.jetbrains.kotlin.analysis.low.level.api.fir.api.collectDiagnosticsForFile
 import org.jetbrains.kotlin.psi.KtFile
 import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
@@ -53,6 +55,9 @@ abstract class KotlinFileVisitor {
             KotlinFileContext(fileContext, root.psiFile, root.bindingContext, root.diagnostics, root.regexCache)
         if (root.doResolve) {
             kaSession(root.psiFile) {
+                kotlinFileContext.k2Diagnostics = withKaSession {
+                    root.psiFile.collectDiagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS).asSequence()
+                }
                 visit(kotlinFileContext)
             }
         } else {

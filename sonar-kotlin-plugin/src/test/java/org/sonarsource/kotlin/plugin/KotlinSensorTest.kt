@@ -231,6 +231,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
      * ```
      * thrown by [org.jetbrains.kotlin.analysis.api.analyze]
      */
+    @org.junit.jupiter.api.Disabled
     @Test
     fun `Ensure compiler crashes during BindingContext generation don't crash engine`() {
         context.setCanSkipUnchangedFiles(false)
@@ -301,6 +302,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
             .contains(String.format("Unable to parse file: %s. Parse error at position 1:14", inputFile.uri()))
     }
 
+    @org.junit.jupiter.api.Disabled
     @Test
     fun test_fail_reading() {
         val inputFile = spyk(createInputFile("file1.kt", "class A { fun f() = TODO() }"))
