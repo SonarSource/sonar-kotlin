@@ -18,7 +18,6 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
-import org.jetbrains.kotlin.analysis.api.types.KaTypeNullability
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.sonar.check.Rule
@@ -84,24 +83,23 @@ class CollectionInappropriateCallsCheck : CallAbstractCheck() {
 
         val collectionType = callExpression.predictReceiverExpression()?.expressionType as? KaClassType ?: return
         val collectionArgumentIndex = funMatcherToArgumentIndexMap[matchedFun]!!
-        val collectionArgumentType = collectionType.arrayElementType?.withNullability(KaTypeNullability.NON_NULLABLE)
-            ?: collectionType.typeArguments[collectionArgumentIndex]
-                .type?.withNullability(KaTypeNullability.NON_NULLABLE) ?: return
+        val collectionArgumentType = collectionType.arrayElementType
+            ?: collectionType.typeArguments[collectionArgumentIndex].type
+            ?: return
 
         // for methods like removeAll, containsAll etc.. we pass a collection as argument,
         // and so we want to check the type of the collection<argument> instead
         if (matchedFun == COLLECTION_ARGUMENT_EXTENSIONS_MATCHER && argType is KaClassType) {
             argType = argType.typeArguments.first().type ?: return
         }
-        argType = argType.withNullability(KaTypeNullability.NON_NULLABLE)
 
         // We avoid raising FPs for unresolved generic types.
         if (argType is KaTypeParameterType || collectionArgumentType is KaTypeParameterType) return
 
         if (
             !argType.semanticallyEquals(collectionArgumentType) &&
-            !argType.allSupertypes.any { it.semanticallyEquals(collectionArgumentType) } &&
-            !collectionArgumentType.allSupertypes.any { it.semanticallyEquals(argType) }
+            !argType.isSubtypeOf(collectionArgumentType) &&
+            !collectionArgumentType.isSubtypeOf(argType)
         ) {
             kotlinFileContext.reportIssue(arg, ISSUE_MESSAGE)
         }
