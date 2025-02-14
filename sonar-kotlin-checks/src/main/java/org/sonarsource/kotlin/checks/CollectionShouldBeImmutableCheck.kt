@@ -18,21 +18,24 @@ package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfType
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.*
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val nonMutatingFunctions = FunMatcher {
     withDefiningSupertypes(
         "kotlin.collections.List",
         "kotlin.collections.Set",
         "kotlin.collections.Map",
+        // TODO all above seem useless because of below
         "kotlin.collections.Collection",
     )
     withNames(
@@ -67,12 +70,10 @@ private val mutableCollections =
         "kotlin.collections.MutableCollection"
     )
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6524")
 class CollectionShouldBeImmutableCheck : AbstractCheck() {
 
-
-    override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
+    override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) = withKaSession {
         if (
             function.isAbstract() ||
             function.overrides() ||
@@ -82,55 +83,56 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
             !function.hasBody()
         ) return
 
-        val bindingContext = kotlinFileContext.bindingContext
         val mutableCollectionsParameters =
             function.valueParameters.filter {
-                it.determineType(bindingContext)?.getKotlinTypeFqName(false) in mutableCollections
+                it.determineType()?.symbol?.classId?.asFqNameString() in mutableCollections
             }
         val mutableCollectionsVariables =
             function.collectDescendantsOfType<KtVariableDeclaration> {
-                it.determineTypeAsString(bindingContext) in mutableCollections
+                it.returnType.asFqNameString() in mutableCollections
             }
 
-        mutableCollectionsParameters.filter { !it.isMutated(bindingContext, function) }.forEach { parameter ->
+        mutableCollectionsParameters.filter { !it.isMutated(function) }.forEach { parameter ->
             kotlinFileContext.reportIssue(parameter, "Make this collection immutable.")
         }
 
-        mutableCollectionsVariables.filter { !it.isMutated(bindingContext, function) }.forEach { parameter ->
+        mutableCollectionsVariables.filter { !it.isMutated(function) }.forEach { parameter ->
             kotlinFileContext.reportIssue(parameter, "Make this collection immutable.")
         }
 
     }
 
-    private fun KtCallableDeclaration.isMutated(bindingContext: BindingContext, function: KtNamedFunction): Boolean {
+    private fun KtCallableDeclaration.isMutated(function: KtNamedFunction): Boolean {
         val usages =
             function.collectDescendantsOfType<KtNameReferenceExpression> { ref -> ref.getReferencedName() == name }
         return usages.any {
-            it.parent.skipParentParentheses().isMutatingUsage(bindingContext)
+            it.parent.skipParentParentheses().isMutatingUsage()
         }
     }
 
-        private fun PsiElement?.isMutatingUsage(bindingContext: BindingContext): Boolean {
+        private fun PsiElement?.isMutatingUsage(): Boolean {
             return when(this) {
 
-                is KtDotQualifiedExpression -> {
-                    val resolvedCall = getResolvedCall(bindingContext)
+                is KtDotQualifiedExpression -> withKaSession {
+                    val resolvedCall = this@isMutatingUsage.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>() ?: return true
                     !(resolvedCall matches nonMutatingFunctions) &&
-                            resolvedCall?.resultingDescriptor?.extensionReceiverParameter?.type
-                                ?.getKotlinTypeFqName(false) !in imMutableCollections
+                            resolvedCall.partiallyAppliedSymbol.signature.receiverType
+                                ?.asFqNameString() !in imMutableCollections
                 }
 
-                is KtValueArgument -> {
-                    val resolvedCall = parent.parentOfType<KtCallExpression>().getResolvedCall(bindingContext)
-                    val parameterIndex = (parent as? KtValueArgumentList)?.arguments?.indexOf(this) ?: -1
+                is KtValueArgument -> withKaSession {
+                    val resolveToCall = parent.parentOfType<KtCallExpression>()?.resolveToCall()
+                    val parameterIndex = (parent as? KtValueArgumentList)?.arguments?.indexOf(this@isMutatingUsage) ?: -1
                     if (parameterIndex < 0) {
                         false
                     } else {
-                        resolvedCall?.resultingDescriptor?.valueParameters?.get(parameterIndex)?.type?.let {
-                            if (it.constructor.declarationDescriptor != null)
-                                it.getKotlinTypeFqName(false)
-                            else null
-                        } !in imMutableCollections
+                        val fqNameString = resolveToCall?.successfulFunctionCallOrNull()
+                            // TODO toList
+                            ?.argumentMapping?.values?.toList()?.get(parameterIndex)
+                            // TODO lowerboundIfFlexible?
+                            ?.returnType?.symbol?.classId?.asFqNameString()
+
+                        fqNameString !in imMutableCollections
                     }
                 }
 
@@ -144,7 +146,7 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
                 }
 
                 is KtUnaryExpression ->
-                    baseExpression?.isMutatingUsage(bindingContext) ?: true
+                    baseExpression?.isMutatingUsage() ?: true
 
                 is KtContainerNode ->
                     false

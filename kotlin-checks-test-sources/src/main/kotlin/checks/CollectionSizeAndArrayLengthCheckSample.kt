@@ -2,7 +2,12 @@ package checks
 
 class CollectionSizeAndArrayLengthCheckSample {
 
-    fun noncompliant(intArray: Array<Int>, intColl: Collection<Int>) {
+    fun noncompliant(
+        intArray: Array<Int>,
+        intColl: Collection<Int>,
+        list: List<String>,
+        map: Map<String, String>,
+    ) {
         if (intColl.size >= 0) { // Noncompliant {{The size of an array/collection is always ">=0", update this test to either ".isNotEmpty()" or ".isEmpty()".}}
             println("test")
         }
@@ -23,6 +28,9 @@ class CollectionSizeAndArrayLengthCheckSample {
         if (intColl.size == -1) { // Noncompliant
             println("test")
         }
+
+        list.size >= 0 // Noncompliant
+        map.size >= 0 // Noncompliant
     }
 
     fun compliant(intArray: Array<Int>, intColl: Collection<Int>) {
