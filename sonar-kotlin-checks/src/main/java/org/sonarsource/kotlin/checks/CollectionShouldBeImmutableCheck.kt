@@ -19,9 +19,8 @@ package org.sonarsource.kotlin.checks
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfType
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
-import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
-import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
@@ -52,33 +51,6 @@ private val nonMutatingFunctions = FunMatcher {
     )
 }
 
-private val mutatingFunctions = FunMatcher {
-    withDefiningSupertypes(
-        "kotlin.collections.MutableList",
-        "kotlin.collections.MutableSet",
-        "kotlin.collections.MutableMap",
-        "kotlin.collections.MutableCollection",
-    )
-    withNames(
-        "iterator",
-        "add",
-        "remove",
-        "addAll",
-        "removeAll",
-        "retainAll",
-        "clear",
-        "listIterator",
-        "removeAt",
-        "set",
-        "subList",
-        "put",
-        "putAll",
-        "keys",
-        "values",
-        "entries",
-    )
-}
-
 private val imMutableCollections =
     setOf(
         "kotlin.collections.Iterable",
@@ -98,7 +70,6 @@ private val mutableCollections =
         "kotlin.collections.MutableCollection"
     )
 
-//@org.sonarsource.kotlin.api.frontend.K1only // "Rewritten, 1 FN due to the bug? in K2 analysis API implementation"
 @Rule(key = "S6524")
 class CollectionShouldBeImmutableCheck : AbstractCheck() {
 
@@ -143,37 +114,22 @@ class CollectionShouldBeImmutableCheck : AbstractCheck() {
             return when(this) {
 
                 is KtDotQualifiedExpression -> withKaSession {
-
-                    val resolveToCall = this@isMutatingUsage.resolveToCall()
-                    val kaCallableMemberCall: KaCallableMemberCall<*,*> =
-                        resolveToCall?.successfulFunctionCallOrNull() ?:
-                        resolveToCall?.successfulVariableAccessCall() ?: return true
-
-//                    if (mutatingFunctions.matches(kaCallableMemberCall)) return true
-                    if (nonMutatingFunctions.matches(kaCallableMemberCall)) return false
-
-                    val kaCallableSymbol = kaCallableMemberCall.partiallyAppliedSymbol.symbol
-                    val receiverType = if (kaCallableSymbol.isExtension) {
-                        kaCallableMemberCall.partiallyAppliedSymbol.signature.receiverType
-                            ?.symbol?.classId?.asFqNameString()
-                    } else {
-//                        kaCallableSymbol.fakeOverrideOriginal
-//                            .callableId?.classId?.asFqNameString()
-                        null
-                    }
-
-                    return receiverType !in imMutableCollections
+                    val resolvedCall = this@isMutatingUsage.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>() ?: return true
+                    !(resolvedCall matches nonMutatingFunctions) &&
+                            resolvedCall.partiallyAppliedSymbol.signature.receiverType
+                                ?.asFqNameString() !in imMutableCollections
                 }
 
                 is KtValueArgument -> withKaSession {
                     val resolveToCall = parent.parentOfType<KtCallExpression>()?.resolveToCall()
-
                     val parameterIndex = (parent as? KtValueArgumentList)?.arguments?.indexOf(this@isMutatingUsage) ?: -1
                     if (parameterIndex < 0) {
                         false
                     } else {
                         val fqNameString = resolveToCall?.successfulFunctionCallOrNull()
+                            // TODO toList
                             ?.argumentMapping?.values?.toList()?.get(parameterIndex)
+                            // TODO lowerboundIfFlexible?
                             ?.returnType?.symbol?.classId?.asFqNameString()
 
                         fqNameString !in imMutableCollections

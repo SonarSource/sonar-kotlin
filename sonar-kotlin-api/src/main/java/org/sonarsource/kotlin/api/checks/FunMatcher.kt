@@ -133,7 +133,8 @@ class FunMatcherImpl(
 //                        val getterSignature = propertySymbol.getter?.asSignature() ?: return false
                         checkName(symbolForNameCheck) &&
 //                                checkCallParameters(getterSignature) &&
-//                                checkReturnType(getterSignature) &&
+                                (arguments.isEmpty() || arguments.any { argument -> argument.isEmpty() }) &&
+                                checkReturnType(propertySymbol.asSignature()) &&
                                 (checkTypeOrSupertype(null, propertySymbol) ||
                                         // TODO propertySymbol works only in K2 (see ExternalAndroidStorageAccessCheck):
                                         checkTypeOrSupertype(null, symbolForNameCheck))
@@ -445,7 +446,7 @@ fun ConstructorMatcher(
 @Deprecated("use kotlin-analysis-api instead")
 infix fun ResolvedCall<*>?.matches(funMatcher: FunMatcherImpl): Boolean = funMatcher.matches(this)
 
-infix fun KaFunctionCall<*>?.matches(funMatcher: FunMatcherImpl): Boolean {
+infix fun KaCallableMemberCall<*, *>?.matches(funMatcher: FunMatcherImpl): Boolean {
     if (this == null) return false
     return funMatcher.matches(this)
 }
