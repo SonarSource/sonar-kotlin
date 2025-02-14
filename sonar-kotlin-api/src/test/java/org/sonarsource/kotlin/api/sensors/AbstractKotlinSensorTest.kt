@@ -195,7 +195,8 @@ class DummyKotlinSensor(checkFactory: CheckFactory, language: KotlinLanguage, ch
         sensorContext, filesToAnalyze, progressReport, listOf(KtChecksVisitor(checks)), filenames, LOG
     ) {
         override val bindingContext: BindingContext = BindingContext.EMPTY
-        override val doResolve: Boolean = false
+        // TODO due to use of predictRuntimeStringValue
+        override val doResolve: Boolean = true
     }
 
     override fun getFilesToAnalyse(sensorContext: SensorContext): Iterable<InputFile> =
