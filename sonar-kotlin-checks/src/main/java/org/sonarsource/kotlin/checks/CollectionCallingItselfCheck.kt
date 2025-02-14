@@ -26,7 +26,11 @@ import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val MUTABLE_COLLECTION_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections.MutableCollection") {
-    withNames("containsAll", "addAll", "removeAll", "retainAll", "add")
+    withNames("addAll", "removeAll", "retainAll", "add")
+}
+
+private val COLLECTION_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections.Collection") {
+    withNames("containsAll")
 }
 
 private val COLLECTIONS_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.collections") {
@@ -38,7 +42,7 @@ private const val MESSAGE = "Collections should not be passed as arguments to th
 @org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S2114")
 class CollectionCallingItselfCheck : CallAbstractCheck() {
-    override val functionsToVisit = listOf(MUTABLE_COLLECTION_FUN_MATCHER, COLLECTIONS_FUN_MATCHER)
+    override val functionsToVisit = listOf(MUTABLE_COLLECTION_FUN_MATCHER, COLLECTION_FUN_MATCHER, COLLECTIONS_FUN_MATCHER)
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
