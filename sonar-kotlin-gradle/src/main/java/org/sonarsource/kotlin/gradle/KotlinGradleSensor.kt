@@ -59,7 +59,8 @@ class KotlinGradleSensor(
         sensorContext, filesToAnalyze, progressReport, listOf(KtChecksVisitor(checks)), filenames, LOG
     ) {
         override val bindingContext: BindingContext = BindingContext.EMPTY
-        override val doResolve: Boolean = false
+        // TODO due to use of predictRuntimeStringValue
+        override val doResolve: Boolean = System.getProperty("sonar.kotlin.ktsSema") == "true"
     }
 
     override fun getFilesToAnalyse(sensorContext: SensorContext): Iterable<InputFile> {
