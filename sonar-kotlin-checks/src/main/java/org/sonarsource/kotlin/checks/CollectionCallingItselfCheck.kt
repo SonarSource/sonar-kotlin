@@ -16,8 +16,8 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
@@ -39,22 +39,19 @@ private val COLLECTIONS_FUN_MATCHER = FunMatcher(definingSupertype = "kotlin.col
 
 private const val MESSAGE = "Collections should not be passed as arguments to their own methods."
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S2114")
 class CollectionCallingItselfCheck : CallAbstractCheck() {
     override val functionsToVisit = listOf(MUTABLE_COLLECTION_FUN_MATCHER, COLLECTION_FUN_MATCHER, COLLECTIONS_FUN_MATCHER)
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         kotlinFileContext: KotlinFileContext,
     ) {
-        val bindingContext = kotlinFileContext.bindingContext
-
-        val receiver = callExpression.predictReceiverExpression(bindingContext)?.predictRuntimeValueExpression(bindingContext) ?: return
+        val receiver = callExpression.predictReceiverExpression()?.predictRuntimeValueExpression() ?: return
         val argument = callExpression.valueArguments[0].getArgumentExpression()!!
 
-        val argumentValue = argument.predictRuntimeValueExpression(bindingContext)
+        val argumentValue = argument.predictRuntimeValueExpression()
 
         if (receiver === argumentValue) {
             kotlinFileContext.reportIssue(argument, MESSAGE)
