@@ -108,8 +108,8 @@ class UselessNullCheckCheck : AbstractCheck() {
     override fun visitCallExpression(callExpression: KtCallExpression, kfc: KotlinFileContext) {
         val resolvedCall = withKaSession { callExpression.resolveToCall()?.successfulFunctionCallOrNull() } ?: return
         if (resolvedCall matches NON_NULL_CHECK_FUNS) {
-            val argExpression = resolvedCall.argumentMapping.keys.toList().first()
             // requireNotNull and checkNotNull have no implementations without parameters. The first parameter is always the value to check.
+            val argExpression = resolvedCall.argumentMapping.keys.first()
             raiseIssueIfUselessCheck(
                 kfc,
                 argExpression,
