@@ -134,3 +134,16 @@ private class FooBar(
     val isString: Boolean
         get() = someString != null // Compliant
 }
+
+fun <T> example(list: List<T>): Int? {
+    return list.first()?.hashCode()
+}
+
+class ParametrisedClass<out T>(
+    val list: List<T>,
+) {
+    override fun hashCode(): Int {
+        var result = list.first()?.hashCode() ?: 0
+        return result
+    }
+}
