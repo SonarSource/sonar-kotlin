@@ -20,4 +20,9 @@ public class KeyProperties {
    */
   public static final String ENCRYPTION_PADDING_NONE = "NoPadding";
 
+  public static final String KEY_ALGORITHM_DES = "DES";
+  public static final String KEY_ALGORITHM_3DES = "DESede";
+  public static final String BLOCK_MODE_CBC = "CBC";
+  public static final String BLOCK_MODE_ECB = "ECB";
+  public static final String ENCRYPTION_PADDING_PKCS7 = "PKCS7Padding";
 }

@@ -1,10 +1,14 @@
 package checks
 
 import java.security.NoSuchAlgorithmException
+import java.security.Provider
 import java.util.Properties
 import javax.crypto.Cipher
 import javax.crypto.NoSuchPaddingException
 import javax.crypto.NullCipher
+import android.security.keystore.KeyProperties
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKeyFactory
 
 class StrongCipherAlgorithmCheckSample {
     private val DES = "DES"
@@ -12,6 +16,7 @@ class StrongCipherAlgorithmCheckSample {
     fun foo() {
         Cipher.getInstance("DESede/ECB/PKCS5Padding") // Noncompliant {{Use a strong cipher algorithm.}} [[sc=28;ec=53]]
         Cipher.getInstance("DES/ECB/PKCS5Padding") // Noncompliant
+        Cipher.getInstance("DES/ECB/PKCS5Padding (56)") // Noncompliant
         Cipher.getInstance("RC2/ECB/PKCS5Padding") // Noncompliant
         Cipher.getInstance("""DES""") // Noncompliant
         Cipher.getInstance("AES/GCM/NoPadding") //Compliant
@@ -76,6 +81,36 @@ class StrongCipherAlgorithmCheckSample {
         Cipher.getInstance("Blowfish/GCM/NoPadding") // Noncompliant
         Cipher.getInstance("Blowfish/GCM/PKCS5Padding") // Noncompliant
         Cipher.getInstance("AES/GCM/NoPadding") // Compliant
+
+        // Scenario 1: using var instead of val or literal parameter
+        var algo = "DES/ECB/PKCS5Padding"
+        Cipher.getInstance(algo) // FN (var algo may be in a companion)
+
+        // Scenario 2: using KeyProperties on Android, to get the transformation to pass to the Cipher.getInstance method
+        // https://developer.android.com/reference/android/security/keystore/KeyProperties
+        // https://developer.android.com/reference/android/security/keystore/KeyProperties#KEY_ALGORITHM_3DES
+        // - already deprecated in API level 28
+        Cipher.getInstance(
+            KeyProperties.KEY_ALGORITHM_3DES, "BC"
+        ) // FN
+        Cipher.getInstance(
+            "${KeyProperties.KEY_ALGORITHM_3DES}/${KeyProperties.BLOCK_MODE_ECB}/PKCS5Padding"
+        ) // FN
+        Cipher.getInstance(
+            KeyProperties.KEY_ALGORITHM_3DES + "/"
+                + KeyProperties.BLOCK_MODE_CBC + "/"
+                + KeyProperties.ENCRYPTION_PADDING_PKCS7
+        ) // FN
+
+        // Scenario 3.1 and 3.2: using javax.crypto.SecretKeyFactory and javax.crypto.KeyGenerator with unsecure algorithms
+        // https://docs.oracle.com/javase/7/docs/api/javax/crypto/SecretKeyFactory.html
+        // https://docs.oracle.com/javase/8/docs/api/javax/crypto/KeyGenerator.html
+        SecretKeyFactory.getInstance("DES") // FN
+        KeyGenerator.getInstance("DES") // FN
+        KeyGenerator.getInstance("DESede") // FN
+        KeyGenerator.getInstance("Blowfish") // FN
+        KeyGenerator.getInstance("RC2", "BC") // FN
+
     }
 
     @Throws(NoSuchAlgorithmException::class, NoSuchPaddingException::class)

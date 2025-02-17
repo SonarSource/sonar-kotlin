@@ -2,6 +2,7 @@ package checks
 
 import io.realm.RealmConfiguration
 import net.sqlcipher.database.SQLiteDatabase
+import okio.internal.commonAsUtf8ToByteArray
 
 // Noncompliant@+4 {{The "password" parameter should not be hardcoded.}}
 fun checkSecondary() {
@@ -30,7 +31,12 @@ class MobileDatabaseEncryptionKeysCheckSample(val k: Key) {
             .name("noncompliant-S6301-realm.db")
             .encryptionKey(stringKey.toByteArray()) // Noncompliant {{The "encryptionKey" parameter should not be hardcoded.}}
             .build()
-        
+
+        val config55 = RealmConfiguration.Builder()
+            .name("noncompliant-S6301-realm.db")
+            .encryptionKey(stringKey.commonAsUtf8ToByteArray()) // Noncompliant {{The "encryptionKey" parameter should not be hardcoded.}}
+            .build()
+
         val config0 = RealmConfiguration.Builder()
             .name("noncompliant-S6301-realm.db")
             .encryptionKey(stringKey2.toByteArray()) // Noncompliant {{The "encryptionKey" parameter should not be hardcoded.}}
