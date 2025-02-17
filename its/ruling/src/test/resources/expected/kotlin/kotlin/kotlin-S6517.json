@@ -240,9 +240,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/serialization/src/org/jetbrains/kotlin/serialization/SerializerExtension.kt": [
 22
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/scripts/ScriptTemplateTest.kt": [
-469
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/util/src/org/jetbrains/kotlin/load/kotlin/incremental/components/IncrementalCompilationComponents.kt": [
 21
 ],
@@ -440,10 +437,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.dom.events.kt": [
 482
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.dom.kt": [
-2871,
-3400
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.dom.svg.kt": [
 439

@@ -133,9 +133,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/checkers/LazyOperationsLog.kt": [
 155
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/scripts/ScriptTemplateTest.kt": [
-413
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/serialization/VersionRequirementTest.kt": [
 101
 ],
@@ -593,12 +590,6 @@
 412,
 498,
 508
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/src/org/jetbrains/uast/kotlin/declarations/KotlinUMethod.kt": [
-96
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/src/org/jetbrains/uast/kotlin/declarations/KotlinUVariable.kt": [
-51
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/src/org/jetbrains/uast/kotlin/evaluation/KotlinEvaluatorExtension.kt": [
 29

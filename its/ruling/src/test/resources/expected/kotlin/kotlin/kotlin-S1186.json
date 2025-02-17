@@ -185,9 +185,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/KtCodeFragment.kt": [
 159
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/KtFile.kt": [
-179
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/stubs/elements/StubIndexService.kt": [
 29,
 32,
@@ -237,11 +234,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/cli/FriendPathsTest.kt": [
 65
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/scripts/ScriptTemplateTest.kt": [
-613,
-614,
-615
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/util/ArgsToParamsMatchingTest.kt": [
 101,

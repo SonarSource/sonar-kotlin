@@ -18,12 +18,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/daemon/CompilerDaemonTest.kt": [
 927
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/scripts/ScriptTemplateTest.kt": [
-563,
-587,
-590,
-593
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/core/builtins/native/kotlin/Number.kt": [
 22
 ],

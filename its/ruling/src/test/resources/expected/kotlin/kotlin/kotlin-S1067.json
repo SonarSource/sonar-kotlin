@@ -76,9 +76,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/light-classes/src/org/jetbrains/kotlin/asJava/lightClassUtils.kt": [
 155
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/KtFile.kt": [
-195
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/components/ResolutionParts.kt": [
 229
 ],
@@ -455,9 +452,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/src/org/jetbrains/uast/kotlin/declarations/KotlinUAnnotation.kt": [
 78
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/src/org/jetbrains/uast/kotlin/declarations/KotlinUVariable.kt": [
-298
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/src/org/jetbrains/uast/kotlin/expressions/KotlinUFunctionCallExpression.kt": [
 44
