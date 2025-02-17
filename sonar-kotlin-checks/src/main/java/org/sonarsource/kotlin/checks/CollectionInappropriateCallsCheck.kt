@@ -16,19 +16,18 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.types.KaClassType
+import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
-import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.ArgumentMatcher
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
-import org.sonarsource.kotlin.api.checks.determineType
-import org.sonarsource.kotlin.api.checks.isSupertypeOf
 import org.sonarsource.kotlin.api.checks.predictReceiverExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 const val qualifier = "kotlin.collections"
 
@@ -66,7 +65,6 @@ val funMatcherToArgumentIndexMap = mapOf(
 
 const val ISSUE_MESSAGE = "This key/object cannot ever be present in the collection"
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S2175")
 class CollectionInappropriateCallsCheck : CallAbstractCheck() {
 
@@ -75,41 +73,37 @@ class CollectionInappropriateCallsCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext,
-    ) {
-        val ctx = kotlinFileContext.bindingContext
-
+    ) = withKaSession {
         // all evaluated methods have one and one only argument
         val arg = callExpression.valueArguments.first()
-        var argType = arg.determineType(ctx) ?: return
+        var argType = arg.getArgumentExpression()?.expressionType ?: return
 
-        val collectionType = callExpression.predictReceiverExpression(ctx).determineType(ctx) ?: return
-        // If collection type arguments aren't present, this rule shouldn't be triggered
-        if (collectionType.arguments.isEmpty()) return
-
+        val collectionType = callExpression.predictReceiverExpression()?.expressionType as? KaClassType ?: return
         val collectionArgumentIndex = funMatcherToArgumentIndexMap[matchedFun]!!
-        val collectionArgumentType = collectionType.arguments[collectionArgumentIndex].type.makeNotNullable()
+        val collectionArgumentType = collectionType.arrayElementType
+            ?: collectionType.typeArguments[collectionArgumentIndex].type
+            ?: return
 
         // for methods like removeAll, containsAll etc.. we pass a collection as argument,
         // and so we want to check the type of the collection<argument> instead
         if (matchedFun == COLLECTION_ARGUMENT_EXTENSIONS_MATCHER) {
-            argType = argType.arguments.first().type
+            if (argType !is KaClassType) return
+            argType = argType.typeArguments.first().type ?: return
         }
 
-        argType = argType.makeNotNullable()
-
         // We avoid raising FPs for unresolved generic types.
-        if (argType.isTypeParameter() || collectionArgumentType.isTypeParameter()) return
+        if (argType is KaTypeParameterType || collectionArgumentType is KaTypeParameterType) return
 
-        if (argType != collectionArgumentType
-            && !collectionArgumentType.isSupertypeOf(argType)
-            && !argType.isSupertypeOf(collectionArgumentType)
+        if (
+            !argType.semanticallyEquals(collectionArgumentType) &&
+            !argType.isSubtypeOf(collectionArgumentType) &&
+            !collectionArgumentType.isSubtypeOf(argType)
         ) {
             kotlinFileContext.reportIssue(arg, ISSUE_MESSAGE)
         }
-
     }
 
 }
