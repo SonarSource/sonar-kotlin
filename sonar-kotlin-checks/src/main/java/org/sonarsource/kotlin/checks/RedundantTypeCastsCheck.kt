@@ -24,15 +24,14 @@ import org.sonarsource.kotlin.api.reporting.Message
 import org.sonarsource.kotlin.api.reporting.message
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6531")
 class RedundantTypeCastsCheck : AbstractCheck() {
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
-        context.diagnostics
+        context.kaDiagnostics
             .mapNotNull { diagnostic ->
-                when (diagnostic.factory) {
-                    Errors.USELESS_CAST -> Message("Remove this useless cast.")
-                    Errors.USELESS_IS_CHECK -> message {
+                when (diagnostic.factoryName) {
+                    Errors.USELESS_CAST.name -> Message("Remove this useless cast.")
+                    Errors.USELESS_IS_CHECK.name -> message {
                         +"Remove this useless "
                         code("is")
                         +" check."
@@ -41,7 +40,7 @@ class RedundantTypeCastsCheck : AbstractCheck() {
                     else -> null
                 }?.let { diagnostic to it }
             }.forEach { (diagnostic, msg) ->
-                context.reportIssue(diagnostic.psiElement, msg)
+                context.reportIssue(diagnostic.psi, msg)
             }
     }
 }
