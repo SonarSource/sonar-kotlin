@@ -89,7 +89,8 @@ class CollectionInappropriateCallsCheck : CallAbstractCheck() {
 
         // for methods like removeAll, containsAll etc.. we pass a collection as argument,
         // and so we want to check the type of the collection<argument> instead
-        if (matchedFun == COLLECTION_ARGUMENT_EXTENSIONS_MATCHER && argType is KaClassType) {
+        if (matchedFun == COLLECTION_ARGUMENT_EXTENSIONS_MATCHER) {
+            if (argType !is KaClassType) return
             argType = argType.typeArguments.first().type ?: return
         }
 
