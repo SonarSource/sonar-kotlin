@@ -17,6 +17,12 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.name
+import org.jetbrains.kotlin.analysis.api.types.KaErrorType
+import org.jetbrains.kotlin.analysis.api.types.KaTypeNullability
+import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -28,45 +34,42 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getArgumentByParameterIndex
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.types.checker.SimpleClassicTypeSystemContext.isError
-import org.jetbrains.kotlin.types.typeUtil.TypeNullability
-import org.jetbrains.kotlin.types.typeUtil.nullability
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
-import org.sonarsource.kotlin.api.checks.determineType
 import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
+import org.sonarsource.kotlin.api.frontend.K1internals
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.Message
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val NON_NULL_CHECK_FUNS = FunMatcher("kotlin") {
     withNames("requireNotNull", "checkNotNull")
 }
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6619")
 class UselessNullCheckCheck : AbstractCheck() {
 
-
     override fun visitBinaryExpression(binaryExpression: KtBinaryExpression, kotlinFileContext: KotlinFileContext) {
-        val bc = kotlinFileContext.bindingContext
-
         when (binaryExpression.operationToken) {
-            KtTokens.EQEQ -> binaryExpression.operandComparedToNull(bc)?.let {
-                handleNullCheck(kotlinFileContext, it, binaryExpression) { +"null check" }
+            KtTokens.EQEQ -> binaryExpression.operandComparedToNull()?.let {
+                raiseIssueIfUselessCheck(kotlinFileContext, it, binaryExpression, comparesToNull = true) {
+                    +"null check"
+                }
             }
 
-            KtTokens.EXCLEQ -> binaryExpression.operandComparedToNull(bc)?.let {
-                handleNonNullCheck(kotlinFileContext, it, binaryExpression) { +"non-null check" }
+            KtTokens.EXCLEQ -> binaryExpression.operandComparedToNull()?.let {
+                raiseIssueIfUselessCheck(kotlinFileContext, it, binaryExpression, comparesToNull = false) {
+                    +"non-null check"
+                }
             }
 
-            KtTokens.ELVIS -> handleNonNullCheck(
+            KtTokens.ELVIS -> raiseIssueIfUselessCheck(
                 kotlinFileContext,
                 binaryExpression.left!!,
-                binaryExpression.operationReference
+                binaryExpression.operationReference,
+                comparesToNull = false,
             ) {
                 +"elvis operation "
                 code("?:")
@@ -76,7 +79,12 @@ class UselessNullCheckCheck : AbstractCheck() {
     }
 
     override fun visitSafeQualifiedExpression(safeDotExpression: KtSafeQualifiedExpression, kfc: KotlinFileContext) {
-        handleNonNullCheck(kfc, safeDotExpression.receiverExpression, safeDotExpression.operationTokenNode.psi) {
+        raiseIssueIfUselessCheck(
+            kfc,
+            safeDotExpression.receiverExpression,
+            safeDotExpression.operationTokenNode.psi,
+            comparesToNull = false,
+        ) {
             +"null-safe access "
             code("?.")
         }
@@ -84,10 +92,11 @@ class UselessNullCheckCheck : AbstractCheck() {
 
     override fun visitUnaryExpression(unaryExpression: KtUnaryExpression, kfc: KotlinFileContext) {
         if (unaryExpression.operationToken == KtTokens.EXCLEXCL) {
-            handleNonNullCheck(
+            raiseIssueIfUselessCheck(
                 kfc,
                 unaryExpression.baseExpression!!,
-                unaryExpression.operationReference
+                unaryExpression.operationReference,
+                comparesToNull = false,
             ) {
                 +"non-null assertion "
                 code("!!")
@@ -96,23 +105,25 @@ class UselessNullCheckCheck : AbstractCheck() {
     }
 
     override fun visitCallExpression(callExpression: KtCallExpression, kfc: KotlinFileContext) {
-        val resolvedCall = callExpression.getResolvedCall(kfc.bindingContext)
+        val resolvedCall = withKaSession { callExpression.resolveToCall()?.successfulFunctionCallOrNull() } ?: return
         if (resolvedCall matches NON_NULL_CHECK_FUNS) {
             // requireNotNull and checkNotNull have no implementations without parameters. The first parameter is always the value to check.
-            handleNonNullCheck(
+            val argExpression = resolvedCall.argumentMapping.keys.first()
+            raiseIssueIfUselessCheck(
                 kfc,
-                callExpression.getArgumentByParameterIndex(0, kfc.bindingContext).first().getArgumentExpression()!!,
-                callExpression
+                argExpression,
+                callExpression,
+                comparesToNull = false,
             ) {
                 +"non-null check "
-                code(resolvedCall!!.resultingDescriptor.name.asString())
+                code(resolvedCall.partiallyAppliedSymbol.symbol.name.toString())
             }
         }
     }
 
-    private fun KtBinaryExpression.operandComparedToNull(bc: BindingContext): KtExpression? {
-        val leftResolved = left?.predictRuntimeValueExpression(bc) ?: return null
-        val rightResolved = right?.predictRuntimeValueExpression(bc) ?: return null
+    private fun KtBinaryExpression.operandComparedToNull(): KtExpression? {
+        val leftResolved = left?.predictRuntimeValueExpression() ?: return null
+        val rightResolved = right?.predictRuntimeValueExpression() ?: return null
 
         return when {
             leftResolved.isNull() -> right
@@ -120,22 +131,6 @@ class UselessNullCheckCheck : AbstractCheck() {
             else -> null
         }
     }
-
-    private fun handleNullCheck(
-        kfc: KotlinFileContext,
-        expression: KtExpression,
-        issueLocation: PsiElement,
-        nullCheckTypeForMessage: Message.() -> Unit
-    ) =
-        raiseIssueIfUselessCheck(kfc, expression, issueLocation, true, nullCheckTypeForMessage)
-
-    private fun handleNonNullCheck(
-        kfc: KotlinFileContext,
-        expression: KtExpression,
-        issueLocation: PsiElement,
-        nullCheckTypeForMessage: Message.() -> Unit
-    ) =
-        raiseIssueIfUselessCheck(kfc, expression, issueLocation, false, nullCheckTypeForMessage)
 
     private fun raiseIssueIfUselessCheck(
         kfc: KotlinFileContext,
@@ -146,7 +141,7 @@ class UselessNullCheckCheck : AbstractCheck() {
     ) {
         if (kfc.mayBeAffectedByErrorInSemantics()) return
 
-        val resolvedExpression = expression.predictRuntimeValueExpression(kfc.bindingContext)
+        val resolvedExpression = expression.predictRuntimeValueExpression()
 
         val result = if (resolvedExpression.isNull()) {
             if (comparesToNull) "succeeds" else "fails"
@@ -176,11 +171,19 @@ class UselessNullCheckCheck : AbstractCheck() {
  */
 private fun KotlinFileContext.mayBeAffectedByErrorInSemantics() = diagnostics.any { it.factory == Errors.MISSING_BUILT_IN_DECLARATION }
 
-private fun KtExpression.isNotNullable(bc: BindingContext) =
+private fun KtExpression.isNotNullable(bc: BindingContext): Boolean =
     when (this) {
         is KtConstantExpression -> !isNull()
         is KtStringTemplateExpression -> true
-        else -> determineType(bc)?.let { resolvedType ->
-            !resolvedType.isError() && resolvedType.nullability() == TypeNullability.NOT_NULL
+
+        else -> withKaSession {
+            this@isNotNullable.expressionType?.let { resolvedType ->
+                resolvedType !is KaErrorType &&
+                        // TODO in K1 might be Unit when should be KaErrorType
+                        // https://github.com/JetBrains/kotlin/blob/2.1.0/analysis/analysis-api-fe10/src/org/jetbrains/kotlin/analysis/api/descriptors/components/KaFe10ExpressionTypeProvider.kt#L68
+                        (!K1internals.isK1(this) || !resolvedType.isUnitType || bc.getType(this@isNotNullable) != null) &&
+                        resolvedType !is KaTypeParameterType &&
+                        resolvedType.nullability == KaTypeNullability.NON_NULLABLE
+            }
         } == true
     }

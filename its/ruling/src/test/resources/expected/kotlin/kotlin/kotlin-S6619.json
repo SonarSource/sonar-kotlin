@@ -40,9 +40,6 @@
 78,
 82
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/ExpectedInfos.kt": [
-456
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/script/KotlinScriptDependenciesClassFinder.kt": [
 107
 ],
@@ -70,14 +67,8 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/MergeIfsIntention.kt": [
 43
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/SplitIfIntention.kt": [
-122
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/branchedTransformations/IfThenUtils.kt": [
 126
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/branchedTransformations/intentions/IfToWhenIntention.kt": [
-59
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/loopToCallChain/result/MaxOrMinTransformation.kt": [
 86,
@@ -111,9 +102,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/jps-tests/test/org/jetbrains/kotlin/jps/build/AbstractLookupTrackerTest.kt": [
 122
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/scripting/jvm/src/kotlin/script/experimental/jvm/runners/BasicJvmScriptEvaluator.kt": [
-26
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/samples/test/samples/misc/preconditions.kt": [
 13
