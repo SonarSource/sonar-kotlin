@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.KtFileAnnotationList
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPackageDirective
-import org.jetbrains.kotlin.psi.KtStringTemplateEntry
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.slf4j.LoggerFactory
 import org.sonar.api.batch.fs.InputFile
@@ -44,7 +44,7 @@ class CopyPasteDetector : KotlinFileVisitor() {
         val cpdTokens = sensorContext.newCpdTokens().onFile(kotlinFileContext.inputFileContext.inputFile)
 
         val tokens = collectCpdRelevantNodes(kotlinFileContext.ktFile).map { node ->
-            val text = if (node is KtStringTemplateEntry) "LITERAL" else node.text
+            val text = if (node is KtStringTemplateExpression) "LITERAL" else node.text
             val cpdToken = CPDToken(kotlinFileContext.textRange(node), text)
             cpdTokens.addToken(cpdToken.range, cpdToken.text)
             cpdToken
@@ -60,7 +60,7 @@ class CopyPasteDetector : KotlinFileVisitor() {
         acc: MutableList<PsiElement> = mutableListOf()
     ): List<PsiElement> {
         if (!isExcludedFromCpd(node)) {
-            if ((node is LeafPsiElement && node !is PsiWhiteSpace) || node is KtStringTemplateEntry) {
+            if ((node is LeafPsiElement && node !is PsiWhiteSpace) || node is KtStringTemplateExpression) {
                 acc.add(node)
             } else {
                 node.allChildren.forEach { collectCpdRelevantNodes(it, acc) }
