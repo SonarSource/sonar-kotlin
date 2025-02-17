@@ -48,7 +48,6 @@ private val NON_NULL_CHECK_FUNS = FunMatcher("kotlin") {
     withNames("requireNotNull", "checkNotNull")
 }
 
-//@org.sonarsource.kotlin.api.frontend.K1only//("result differs in fixing 1 FN")
 @Rule(key = "S6619")
 class UselessNullCheckCheck : AbstractCheck() {
 
@@ -108,8 +107,8 @@ class UselessNullCheckCheck : AbstractCheck() {
     override fun visitCallExpression(callExpression: KtCallExpression, kfc: KotlinFileContext) {
         val resolvedCall = withKaSession { callExpression.resolveToCall()?.successfulFunctionCallOrNull() } ?: return
         if (resolvedCall matches NON_NULL_CHECK_FUNS) {
-            val argExpression = resolvedCall.argumentMapping.keys.toList().first()
             // requireNotNull and checkNotNull have no implementations without parameters. The first parameter is always the value to check.
+            val argExpression = resolvedCall.argumentMapping.keys.first()
             raiseIssueIfUselessCheck(
                 kfc,
                 argExpression,

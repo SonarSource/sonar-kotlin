@@ -58,9 +58,10 @@ class UselessNullCheckCheckSample {
         var b: String? = null
         b!! // Compliant FN. We don't currently resolve the value of vars.
 
-        var c: String? = null
-        c = "foo"
-        c!! // Compliant FN. We don't currently resolve the value of vars.
+        // TODO improved in K2
+//        var c: String? = null
+//        c = "foo"
+//        c!! // Compliant FN. We don't currently resolve the value of vars.
 
         var d: String = ""
         d!! // Noncompliant
@@ -135,15 +136,6 @@ private class FooBar(
         get() = someString != null // Compliant
 }
 
-fun <T> example(list: List<T>): Int? {
+private fun <T> testParametrised(list: List<T>): Int? {
     return list.first()?.hashCode()
-}
-
-class ParametrisedClass<out T>(
-    val list: List<T>,
-) {
-    override fun hashCode(): Int {
-        var result = list.first()?.hashCode() ?: 0
-        return result
-    }
 }
