@@ -174,7 +174,7 @@ fun environment(disposer: Disposable, sensorContext: SensorContext, logger: Logg
     sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
         sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
     determineKotlinLanguageVersion(sensorContext, logger),
-    useK2 = System.getProperty("sonar.kotlin.useK2") == "true"
+    useK2 = System.getProperty("sonar.kotlin.useK2") != "false"
 )
 
 private fun determineKotlinLanguageVersion(sensorContext: SensorContext, logger: Logger) =
