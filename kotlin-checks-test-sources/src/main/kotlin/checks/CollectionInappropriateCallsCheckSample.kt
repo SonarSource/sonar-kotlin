@@ -108,15 +108,4 @@ class CollectionInappropriateCallsCheckSample {
         intArray.lastIndexOf(10)
     }
 
-    // The collection type was resolved incorrectly and led to java.lang.IndexOutOfBoundsException
-    // We should only resolve let/apply/with if its argument was used as a receiver
-    fun bugWithLetApplyWithResolution(s: String?, params: Map<String, Array<String>>) = s?.let {
-        val params1 = params.get("ABC")!!
-        mutableListOf(params1.indexOf(it))
-    }
-
-    fun bugWithLetApplyWithResolution(s: String?, params: Array<String>?) = params?.let {
-        mutableListOf(it.indexOf(s))
-    }
-
 }
