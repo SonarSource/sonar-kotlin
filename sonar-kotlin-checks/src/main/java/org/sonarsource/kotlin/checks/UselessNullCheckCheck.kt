@@ -179,12 +179,9 @@ private fun KtExpression.isNotNullable(bc: BindingContext): Boolean =
         else -> withKaSession {
             this@isNotNullable.expressionType?.let { resolvedType ->
                 resolvedType !is KaErrorType &&
-                        // TODO Remove when migrate to K2 mode
-                        // In K1 mode in case of missing types the resolved type is Unit, which is NON_NULLABLE
-                        // TODO add link to source code
+                        // TODO in K1 might be Unit when should be KaErrorType
                         // https://github.com/JetBrains/kotlin/blob/2.1.0/analysis/analysis-api-fe10/src/org/jetbrains/kotlin/analysis/api/descriptors/components/KaFe10ExpressionTypeProvider.kt#L68
-                        (!K1internals.isK1(this) || bc.getType(this@isNotNullable) != null) &&
-//                        !resolvedType.isUnitType &&
+                        (!K1internals.isK1(this) || !resolvedType.isUnitType || bc.getType(this@isNotNullable) != null) &&
                         resolvedType !is KaTypeParameterType &&
                         resolvedType.nullability == KaTypeNullability.NON_NULLABLE
             }

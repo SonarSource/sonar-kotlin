@@ -24,6 +24,8 @@ import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.testapi.KotlinVerifier
+import java.io.File
+import java.nio.file.Paths
 
 internal class UselessNullCheckCheckTest : CheckTestWithNoSemantics(UselessNullCheckCheck()) {
     @Test
@@ -38,6 +40,28 @@ internal class UselessNullCheckCheckTest : CheckTestWithNoSemantics(UselessNullC
         KotlinVerifier(check) {
             this.fileName = sampleFileNoSemantics ?: "UselessNullCheckCheckSampleWithErrorDiagnostics.kt"
             this.customDiagnostics = listOf(diagnostic)
+        }.verifyNoIssue()
+    }
+
+    @Test
+    fun `with partial semantics k1`() {
+        KotlinVerifier(check) {
+            this.baseDir = Paths.get("..", "kotlin-checks-test-sources", "src", "main", "files", "non-compiling", "checks")
+            this.fileName = "${checkName}SampleNonCompiling.kt"
+            this.classpath = System.getProperty("java.class.path").split(File.pathSeparatorChar)
+            this.deps = emptyList()
+            this.useK2 = false
+        }.verifyNoIssue()
+    }
+
+    @Test
+    fun `with partial semantics k2`() {
+        KotlinVerifier(check) {
+            this.baseDir = Paths.get("..", "kotlin-checks-test-sources", "src", "main", "files", "non-compiling", "checks")
+            this.fileName = "${checkName}SampleNonCompiling.kt"
+            this.classpath = System.getProperty("java.class.path").split(File.pathSeparatorChar)
+            this.deps = emptyList()
+            this.useK2 = true
         }.verifyNoIssue()
     }
 }
