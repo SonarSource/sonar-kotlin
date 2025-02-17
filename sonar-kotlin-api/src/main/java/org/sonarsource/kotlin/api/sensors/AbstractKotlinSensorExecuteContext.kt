@@ -69,7 +69,7 @@ abstract class AbstractKotlinSensorExecuteContext(
             Disposer.newDisposable(),
             classpath,
             determineKotlinLanguageVersion(sensorContext, logger),
-            useK2 = System.getProperty("sonar.kotlin.useK2") == "true"
+            useK2 = System.getProperty("sonar.kotlin.useK2") != "false"
         )
         if (!env.useK2) return@lazy env
         val virtualFileSystem = KotlinFileSystem()

@@ -54,6 +54,9 @@
 "kotlin-corda-project:sources/kotlin/corda/experimental/kryo-hook/src/main/kotlin/net/corda/kryohook/KryoHook.kt": [
 140
 ],
+"kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/RPCApi.kt": [
+294
+],
 "kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/protonwrapper/netty/AMQPClient.kt": [
 214
 ],
