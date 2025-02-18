@@ -858,18 +858,20 @@ fun PsiElement?.getVariableType(bindingContext: BindingContext) =
 fun KtTypeReference?.getType(bindingContext: BindingContext): KotlinType? =
     this?.let { bindingContext[BindingContext.TYPE, it] }
 
+private annotation class SuppressForbiddenApi
+
 /**
  * Workaround for
  * [exceptions from KtTypeReference.type](https://github.com/JetBrains/kotlin/blob/v2.1.10/analysis/analysis-api/src/org/jetbrains/kotlin/analysis/api/components/KaTypeProvider.kt#L81-L86)
  *
  * > org.jetbrains.kotlin.analysis.low.level.api.fir.api.InvalidFirElementTypeException: For TYPE_REFERENCE with text `Any`, the element of type interface org.jetbrains.kotlin.fir.FirElement expected, but no element found
  */
+@SuppressForbiddenApi
 fun KtTypeReference.getType(): KaType = withKaSession {
     try {
-        // TODO forbid calls of original method
         this@getType.type
     } catch (e: Exception) {
-        buildClassType(ClassId.fromString("Error"))
+        buildClassType(ClassId.fromString("<error>"))
     }
 }
 
