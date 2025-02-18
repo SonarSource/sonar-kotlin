@@ -38,6 +38,7 @@ import org.sonarsource.kotlin.api.checks.ANY_TYPE
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.EQUALS_METHOD_NAME
 import org.sonarsource.kotlin.api.checks.FunMatcher
+import org.sonarsource.kotlin.api.checks.getType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.withKaSession
 
@@ -109,7 +110,7 @@ class EqualsArgumentTypeCheck : AbstractCheck() {
         val parentNames = klass.superTypeListEntries.mapNotNull { it.typeReference!!.nameForReceiverLabel() }
         val klassSymbol: KaClassSymbol? = klass.classSymbol
         return klass.name == name || parentNames.contains(name) ||
-                klassSymbol != null && typeReference.type.isSubtypeOf(klassSymbol)
+                klassSymbol != null && typeReference.getType().isSubtypeOf(klassSymbol)
     }
 
     private fun isBinaryExpressionWithTypeCorrect(

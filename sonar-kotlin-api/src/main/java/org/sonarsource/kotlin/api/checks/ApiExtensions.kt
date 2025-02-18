@@ -52,6 +52,7 @@ import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
@@ -574,7 +575,7 @@ private fun KtProperty.determineType(bindingContext: BindingContext) =
         ?: bindingContext[BindingContext.EXPRESSION_TYPE_INFO, initializer]?.type)
 
 private fun KtProperty.determineType(): KaType? = withKaSession {
-    typeReference?.type ?: initializer?.expressionType
+    typeReference?.getType() ?: initializer?.expressionType
 }
 
 @Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineTypeAsString()"))
@@ -604,7 +605,7 @@ private fun KtParameter.determineType(bindingContext: BindingContext) =
     bindingContext[BindingContext.TYPE, typeReference]
 
 private fun KtParameter.determineType(): KaType? = withKaSession {
-    typeReference?.type
+    typeReference?.getType()
 }
 
 @Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineTypeAsString()"))
@@ -856,6 +857,21 @@ fun PsiElement?.getVariableType(bindingContext: BindingContext) =
 @Deprecated("use kotlin-analysis-api instead")
 fun KtTypeReference?.getType(bindingContext: BindingContext): KotlinType? =
     this?.let { bindingContext[BindingContext.TYPE, it] }
+
+/**
+ * Workaround for
+ * [exceptions from KtTypeReference.type](https://github.com/JetBrains/kotlin/blob/v2.1.10/analysis/analysis-api/src/org/jetbrains/kotlin/analysis/api/components/KaTypeProvider.kt#L81-L86)
+ *
+ * > org.jetbrains.kotlin.analysis.low.level.api.fir.api.InvalidFirElementTypeException: For TYPE_REFERENCE with text `Any`, the element of type interface org.jetbrains.kotlin.fir.FirElement expected, but no element found
+ */
+fun KtTypeReference.getType(): KaType = withKaSession {
+    try {
+        // TODO forbid calls of original method
+        this@getType.type
+    } catch (e: Exception) {
+        buildClassType(ClassId.fromString("Error"))
+    }
+}
 
 fun KtClassOrObject.hasExactlyOneFunctionAndNoProperties(): Boolean {
     var functionCount = 0

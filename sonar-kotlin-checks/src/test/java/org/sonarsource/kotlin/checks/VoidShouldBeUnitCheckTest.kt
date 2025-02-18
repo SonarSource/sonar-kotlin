@@ -18,6 +18,8 @@ package org.sonarsource.kotlin.checks
 
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.testapi.KotlinVerifier
+import java.io.File
+import java.nio.file.Paths
 
 internal class VoidShouldBeUnitCheckTest : CheckTestWithNoSemantics(VoidShouldBeUnitCheck(), shouldReport = true) {
 
@@ -26,6 +28,18 @@ internal class VoidShouldBeUnitCheckTest : CheckTestWithNoSemantics(VoidShouldBe
         KotlinVerifier(check) {
             this.fileName = sampleFileSemantics ?: "${checkName}SampleCustomVoid.kt"
         }.verify()
+    }
+
+    @Test
+    fun `wip`() {
+        KotlinVerifier(check) {
+            this.baseDir = Paths.get("../kotlin-checks-test-sources/src/main/files/non-compiling/checks")
+            this.fileName = "Wip.kt"
+//            this.classpath = System.getProperty("java.class.path").split(File.pathSeparatorChar)
+            this.classpath = emptyList()
+            this.deps = emptyList()
+            this.useK2 = true
+        }.verifyNoIssue()
     }
 
 }

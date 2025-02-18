@@ -31,6 +31,7 @@ import org.sonarsource.kotlin.api.checks.FUNS_ACCEPTING_DISPATCHERS
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
 import org.sonarsource.kotlin.api.checks.KOTLINX_COROUTINES_PACKAGE
+import org.sonarsource.kotlin.api.checks.getType
 import org.sonarsource.kotlin.api.checks.predictReceiverExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.withKaSession
@@ -78,7 +79,7 @@ private fun KtExpression.checkOptInDelicateApi(): Boolean {
 private fun MutableList<KtAnnotationEntry>?.isAnnotatedWithOptInDelicateApi() = withKaSession {
     this@isAnnotatedWithOptInDelicateApi?.let {
         it.any { annotation ->
-            val annotationType = annotation.typeReference?.type
+            val annotationType = annotation.typeReference?.getType()
             annotationType != null && (annotationType.isClassType(DELICATE_COROUTINES_API_CLASS_ID) ||
                 (annotationType.isClassType(OPTIN_CLASS_ID)
                     && annotation.valueArguments.any { valueArgument ->

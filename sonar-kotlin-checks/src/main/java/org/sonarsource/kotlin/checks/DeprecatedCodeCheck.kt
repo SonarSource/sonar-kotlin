@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.annotatedElement
+import org.sonarsource.kotlin.api.checks.getType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.withKaSession
 
@@ -33,7 +34,7 @@ import org.sonarsource.kotlin.api.visiting.withKaSession
 class DeprecatedCodeCheck : AbstractCheck() {
 
     override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry, context: KotlinFileContext) = withKaSession {
-        if (annotationEntry.typeReference?.type?.isClassType(StandardClassIds.Annotations.Deprecated) == true) {
+        if (annotationEntry.typeReference?.getType()?.isClassType(StandardClassIds.Annotations.Deprecated) == true) {
             context.reportIssue(annotationEntry.elementToReport(), "Do not forget to remove this deprecated code someday.")
         }
     }

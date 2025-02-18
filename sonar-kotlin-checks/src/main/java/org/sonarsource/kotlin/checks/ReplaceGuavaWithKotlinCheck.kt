@@ -35,6 +35,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
+import org.sonarsource.kotlin.api.checks.getType
 import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.withKaSession
@@ -138,7 +139,7 @@ class ReplaceGuavaWithKotlinCheck : CallAbstractCheck() {
     }
 
     private fun KtTypeReference.ifTypeReplacement(action: (String) -> Unit) = withKaSession {
-        this@ifTypeReplacement.type.symbol?.classId?.asFqNameString()
+        this@ifTypeReplacement.getType().symbol?.classId?.asFqNameString()
             ?.let { REPLACEMENT_TYPES[it]?.let(action) }
     }
 

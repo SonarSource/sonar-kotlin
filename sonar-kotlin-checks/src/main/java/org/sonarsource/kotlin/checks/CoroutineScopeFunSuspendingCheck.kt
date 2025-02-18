@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.checks.getType
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.checks.suspendModifier
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
@@ -36,8 +37,8 @@ class CoroutineScopeFunSuspendingCheck : AbstractCheck() {
         // Only applicable for suspending extension functions
         val suspendModifier = function.suspendModifier() ?: return
         val receiverType = function.receiverTypeReference ?: return
-        if (receiverType.type.isClassType(coroutineScopeClassId) ||
-            receiverType.type.allSupertypes.any { it.isClassType(coroutineScopeClassId) }
+        if (receiverType.getType().isClassType(coroutineScopeClassId) ||
+            receiverType.getType().allSupertypes.any { it.isClassType(coroutineScopeClassId) }
         ) {
             val secondaries = listOf(SecondaryLocation(kotlinFileContext.textRange(receiverType)))
             kotlinFileContext.reportIssue(suspendModifier, MESSAGE, secondaries)

@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
 import org.jetbrains.kotlin.util.isAnnotated
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.checks.getType
 import org.sonarsource.kotlin.api.checks.isAbstract
 import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
@@ -59,7 +60,7 @@ class PropertyGetterAndSetterUsageCheck : AbstractCheck() {
         prop: KtProperty, javaAccessors: Map<String, List<KtNamedFunction>>, ctx: KotlinFileContext
     ): Unit = withKaSession {
         prop.nameIdentifier?.let { propIdentifier ->
-            prop.typeReference?.type?.let {
+            prop.typeReference?.getType()?.let {
                 val propName = prop.name!!
                 val getterFunc = findJavaStyleGetterFunc(propName, it, javaAccessors)
                 val getterName = getterFunc?.nameIdentifier
@@ -97,7 +98,7 @@ private fun findJavaStyleGetterFunc(
 }
 
 private fun parameterMatchesType(parameter: KtParameter, kaType: KaType): Boolean = withKaSession {
-    return !parameter.isVarArg && parameter.typeReference?.type?.semanticallyEquals(kaType) ?: false
+    return !parameter.isVarArg && parameter.typeReference?.getType()?.semanticallyEquals(kaType) ?: false
 }
 
 private fun findJavaStyleSetterFunc(
