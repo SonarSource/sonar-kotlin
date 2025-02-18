@@ -31,7 +31,6 @@ import org.jetbrains.kotlin.types.StarProjectionImpl
 import org.jetbrains.kotlin.types.TypeProjection
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.checks.getType
 import org.sonarsource.kotlin.api.checks.isAbstract
 import org.sonarsource.kotlin.api.reporting.message
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
@@ -50,7 +49,7 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
     private val voidClassId = ClassId.fromString("java/lang/Void")
 
     override fun visitTypeReference(typeReference: KtTypeReference, kotlinFileContext: KotlinFileContext) = withKaSession {
-        if (typeReference.getType().isClassType(voidClassId) &&
+        if (typeReference.type.isClassType(voidClassId) &&
             !typeReference.isInheritedType() &&
             !isATypeArgumentOfAnInheritableClass(typeReference)
         ) {

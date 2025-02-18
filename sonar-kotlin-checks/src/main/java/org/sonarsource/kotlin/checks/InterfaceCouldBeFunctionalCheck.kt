@@ -22,7 +22,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.checks.getType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.withKaSession
 
@@ -48,7 +47,7 @@ class InterfaceCouldBeFunctionalCheck : AbstractCheck() {
 
     private fun checkFunctionalInterfaceAnnotation(klass: KtClass, context: KotlinFileContext) = withKaSession {
         klass.annotationEntries.forEach {
-            if (it.typeReference?.getType()?.isClassType(functionalInterClassId) == true) {
+            if (it.typeReference?.type?.isClassType(functionalInterClassId) == true) {
                 context.reportIssue(it, """"@FunctionalInterface" annotation has no effect in Kotlin""")
             }
         }

@@ -11,7 +11,6 @@ plugins {
     id("org.sonarqube") version "5.1.0.4882"
     id("org.jetbrains.kotlin.jvm") apply false
     id("com.diffplug.spotless") version "6.11.0"
-    id("de.thetaphi.forbiddenapis") version "3.8"
     `maven-publish`
     signing
 }
@@ -112,16 +111,6 @@ subprojects {
 
     tasks.withType<KotlinCompile>().all {
         compilerOptions.jvmTarget = JvmTarget.fromTarget(java.sourceCompatibility.toString())
-    }
-
-    apply(plugin = "de.thetaphi.forbiddenapis")
-    forbiddenApis {
-        ignoreSignaturesOfMissingClasses = true
-        suppressAnnotations = setOf("org.sonarsource.kotlin.api.checks.SuppressForbiddenApi")
-        signatures = listOf(
-            "org.jetbrains.kotlin.analysis.api.components.KaTypeProvider#getType(org.jetbrains.kotlin.psi.KtTypeReference)"
-                    + " @ throws exceptions, use org.sonarsource.kotlin.api.checks.ApiExtensions.getType instead",
-        )
     }
 
     jacoco {
