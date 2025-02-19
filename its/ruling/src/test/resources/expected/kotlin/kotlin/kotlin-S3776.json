@@ -391,6 +391,9 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/light-classes/src/org/jetbrains/kotlin/asJava/duplicateJvmSignatureUtil.kt": [
 36
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/light-classes/src/org/jetbrains/kotlin/asJava/elements/lightAnnotations.kt": [
+235
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/kdoc/parser/KDocLinkParser.kt": [
 49
 ],
@@ -1238,6 +1241,9 @@
 346,
 510,
 837
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/ui/KotlinChangeSignatureDialog.kt": [
+162
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/usages/KotlinCallableDefinitionUsage.kt": [
 165

@@ -492,6 +492,9 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-test-framework/test/org/jetbrains/kotlin/idea/test/TestFixtureExtension.kt": [
 34
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/ui/KotlinChangeSignatureDialog.kt": [
+268
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/findUsages/AbstractFindUsagesTest.kt": [
 192
 ],

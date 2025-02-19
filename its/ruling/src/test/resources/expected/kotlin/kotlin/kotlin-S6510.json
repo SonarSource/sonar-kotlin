@@ -400,5 +400,8 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-stdlib-js-merger/src/FileMerger.kt": [
 104
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/src/org/jetbrains/uast/kotlin/declarations/KotlinUVariable.kt": [
+196
 ]
 }

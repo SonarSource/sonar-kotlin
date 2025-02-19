@@ -255,5 +255,8 @@
 170,
 180,
 211
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/AbstractKotlinRenderLogTest.kt": [
+85
 ]
 }

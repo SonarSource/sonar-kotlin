@@ -1012,6 +1012,9 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/multiplatform/AbstractMultiPlatformIntegrationTest.kt": [
 39
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/scripts/ScriptTemplateTest.kt": [
+57
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/util/src/org/jetbrains/kotlin/config/LanguageVersionSettings.kt": [
 109
 ],
@@ -1887,6 +1890,9 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/quickfix/createFromUsage/createVariable/CreateParameterByRefActionFactory.kt": [
 78
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/quickfix/crossLanguage/KotlinElementActionsFactory.kt": [
+251
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/quickfix/replaceWith/DeprecatedSymbolUsageFixBase.kt": [
 55,

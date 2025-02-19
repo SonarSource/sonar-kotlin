@@ -124,6 +124,9 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/KotlinChangeInfo.kt": [
 349
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/ui/KotlinChangeSignatureDialog.kt": [
+162
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/usages/KotlinFunctionCallUsage.kt": [
 319
 ],

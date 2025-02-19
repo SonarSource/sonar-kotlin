@@ -91,6 +91,9 @@
 148,
 166
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/light-classes/src/org/jetbrains/kotlin/asJava/elements/lightAnnotations.kt": [
+336
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/components/CallableReferenceResolution.kt": [
 308
 ],
