@@ -1,0 +1,91 @@
+{
+"kotlin-corda-project:sources/kotlin/corda/client/rpc/src/integration-test/kotlin/net/corda/client/rpc/CordaRPCClientTest.kt": [
+54
+],
+"kotlin-corda-project:sources/kotlin/corda/client/rpc/src/integration-test/kotlin/net/corda/client/rpc/FlowsExecutionModeRpcTest.kt": [
+59
+],
+"kotlin-corda-project:sources/kotlin/corda/client/rpc/src/integration-test/kotlin/net/corda/client/rpc/RPCStabilityTests.kt": [
+157,
+187,
+603
+],
+"kotlin-corda-project:sources/kotlin/corda/client/rpc/src/test/kotlin/net/corda/client/rpc/AbstractRPCTest.kt": [
+60
+],
+"kotlin-corda-project:sources/kotlin/corda/client/rpc/src/test/kotlin/net/corda/client/rpc/RPCFailureTests.kt": [
+36
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/flows/FlowLogic.kt": [
+357,
+370,
+383,
+444
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/internal/concurrent/CordaFutureImpl.kt": [
+105,
+108
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/AuthDBTests.kt": [
+97
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/services/messaging/MQSecurityAsNodeTest.kt": [
+71,
+79
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/services/messaging/MQSecurityAsRPCTest.kt": [
+11
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/services/messaging/MQSecurityTest.kt": [
+114,
+116
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/NodeStartup.kt": [
+93
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/config/NodeConfiguration.kt": [
+248,
+249
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/events/PersistentScheduledFlowRepository.kt": [
+28,
+29
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/vault/HibernateQueryCriteriaParser.kt": [
+192,
+225,
+315
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/vault/NodeVaultService.kt": [
+464,
+464
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/HibernateConfigurationTest.kt": [
+916,
+916
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/statemachine/FlowFrameworkTests.kt": [
+849
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/vault/VaultWithCashTest.kt": [
+262,
+375
+],
+"kotlin-corda-project:sources/kotlin/corda/samples/simm-valuation-demo/src/main/kotlin/net/corda/vega/api/PortfolioApi.kt": [
+229,
+232,
+232,
+235,
+235
+],
+"kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/internal/FlowStackSnapshot.kt": [
+96,
+97
+],
+"kotlin-corda-project:sources/kotlin/corda/tools/demobench/src/main/kotlin/net/corda/demobench/views/NodeTabView.kt": [
+265
+],
+"kotlin-corda-project:sources/kotlin/corda/tools/shell/src/main/kotlin/net/corda/tools/shell/InteractiveShell.kt": [
+131
+]
+}

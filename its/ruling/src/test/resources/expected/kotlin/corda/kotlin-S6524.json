@@ -1,4 +1,9 @@
 {
+"kotlin-corda-project:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/contracts/AmountTests.kt": [
+136,
+145,
+158
+],
 "kotlin-corda-project:sources/kotlin/corda/experimental/behave/src/main/kotlin/net/corda/behave/file/LogSource.kt": [
 27
 ],

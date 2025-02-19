@@ -2,6 +2,15 @@
 "kotlin-corda-project:sources/kotlin/corda/client/jackson/src/main/kotlin/net/corda/client/jackson/StringToMethodCallParser.kt": [
 220
 ],
+"kotlin-corda-project:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/ConcatenatedList.kt": [
+71,
+88,
+97,
+106
+],
+"kotlin-corda-project:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/FlattenedList.kt": [
+42
+],
 "kotlin-corda-project:sources/kotlin/corda/client/mock/src/main/kotlin/net/corda/client/mock/EventGenerator.kt": [
 65,
 70,
