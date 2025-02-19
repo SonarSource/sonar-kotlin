@@ -180,7 +180,7 @@ public class SlangRulingTest {
     properties.put("sonar.kotlin.performance.measure", "true");
     properties.put("sonar.cpd.exclusions", "**/*");
     properties.put("sonar.scm.disabled", "true");
-    properties.put("sonar.internal.analysis.failFast", "false");
+    properties.put("sonar.internal.analysis.failFast", "true");
 
     Path rulingDirectory = rulingDirectory();
     Path performanceMeasuresDirectory = rulingDirectory.resolve(Path.of("build", "performance")).resolve(projectRelativePath(project));
