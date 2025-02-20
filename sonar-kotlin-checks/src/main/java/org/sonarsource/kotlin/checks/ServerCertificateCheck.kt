@@ -17,19 +17,28 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
+import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.KtVisitorVoid
+import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.withKaSession
 
-private val funMatchers = listOf(
+private val javaCryptographyExtensionFunMatchers = listOf(
     FunMatcher {
         definingSupertype = "javax.net.ssl.X509TrustManager"
         withNames("checkClientTrusted", "checkServerTrusted")
@@ -37,33 +46,37 @@ private val funMatchers = listOf(
     FunMatcher {
         definingSupertype = "javax.net.ssl.X509ExtendedTrustManager"
         withNames("checkClientTrusted", "checkServerTrusted")
-    })
+    },
+)
+
+private val androidWebViewFunMatchers = listOf(
+    FunMatcher {
+        definingSupertype = "android.webkit.WebViewClient"
+        withNames("onReceivedSslError")
+    },
+)
 
 @Rule(key = "S4830")
 class ServerCertificateCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        if (function.belongsToTrustManagerClass()
+        val javaCryptographyExtensionCandidate = javaCryptographyExtensionFunMatchers.any { it.matches(function) }
             && !function.callsCheckTrusted()
             && !function.throwsCertificateExceptionWithoutCatching()
-        ) {
+        val androidWebViewCandidate = androidWebViewFunMatchers.any { it.matches(function) }
+            && function.callsProceedUnconditionally()
+        if (javaCryptographyExtensionCandidate || androidWebViewCandidate) {
             kotlinFileContext.reportIssue(function.nameIdentifier ?: function,
                 "Enable server certificate validation on this SSL/TLS connection.")
         }
     }
 
-    private fun KtNamedFunction.belongsToTrustManagerClass(): Boolean =
-        funMatchers.any { it.matches(this) }
-
-    /*
-     * Returns true if a function contains a call to "checkClientTrusted" or "checkServerTrusted".
-     */
     private fun KtNamedFunction.callsCheckTrusted(): Boolean {
         val visitor = object : KtVisitorVoid() {
             private var foundCheckTrustedCall: Boolean = false
 
             override fun visitCallExpression(expression: KtCallExpression) {
-                foundCheckTrustedCall = foundCheckTrustedCall || funMatchers.any { it.matches(expression) }
+                foundCheckTrustedCall = foundCheckTrustedCall || javaCryptographyExtensionFunMatchers.any { it.matches(expression) }
             }
 
             fun callsCheckTrusted(): Boolean = foundCheckTrustedCall
@@ -72,13 +85,21 @@ class ServerCertificateCheck : AbstractCheck() {
         return visitor.callsCheckTrusted()
     }
 
-    /*
-     * Returns true only when the function throws a CertificateException without a catch against it.
-     */
     private fun KtNamedFunction.throwsCertificateExceptionWithoutCatching(): Boolean {
         val visitor = ThrowCatchVisitor()
         this.acceptRecursively(visitor)
         return visitor.throwsCertificateExceptionWithoutCatching()
+    }
+
+    /*
+     * The following heuristic is used to determine if the call to "proceed" is unconditional:
+     * proceed is called, cancel is never called, and there are no branching statements in the
+     * function (no matter if around the proceed or not).
+     */
+    private fun KtNamedFunction.callsProceedUnconditionally(): Boolean {
+        val visitor = AndroidWebViewCandidateVisitor()
+        this.acceptRecursively(visitor)
+        return visitor.foundProceedCall && !visitor.foundCancelCall && !visitor.potentialBranching
     }
 
     private class ThrowCatchVisitor : KtVisitorVoid() {
@@ -101,6 +122,43 @@ class ServerCertificateCheck : AbstractCheck() {
 
         fun throwsCertificateExceptionWithoutCatching(): Boolean {
             return throwFound && !catchFound
+        }
+    }
+
+    private class AndroidWebViewCandidateVisitor : KtVisitorVoid() {
+        private val androidSslErrorHandlerProceedFunMatcher = FunMatcher {
+            definingSupertype = "android.webkit.SslErrorHandler"
+            withNames("proceed")
+        }
+
+        private val androidSslErrorHandlerCancelFunMatcher = FunMatcher {
+            definingSupertype = "android.webkit.SslErrorHandler"
+            withNames("cancel")
+        }
+
+        var foundProceedCall: Boolean = false
+        var foundCancelCall: Boolean = false
+        var potentialBranching: Boolean = false
+
+        override fun visitCallExpression(expression: KtCallExpression) {
+            val isProceedCall = androidSslErrorHandlerProceedFunMatcher.matches(expression)
+            val isCancelCall = androidSslErrorHandlerCancelFunMatcher.matches(expression)
+            foundProceedCall = foundProceedCall || isProceedCall
+            foundCancelCall = foundCancelCall || isCancelCall
+        }
+
+        override fun visitExpression(expression: KtExpression) {
+            potentialBranching = potentialBranching ||
+                when (expression) {
+                    is KtIfExpression,
+                    is KtWhenExpression,
+                    is KtTryExpression,
+                    is KtLoopExpression,
+                    is KtLambdaExpression,
+                    is KtSafeQualifiedExpression -> true
+                    is KtBinaryExpression -> expression.operationToken == KtTokens.ELVIS
+                    else -> false
+                }
         }
     }
 
