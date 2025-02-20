@@ -53,10 +53,11 @@ annotation class K1only
 
 @OptIn(KaPlatformInterface::class, KaImplementationDetail::class)
 internal fun configureK1AnalysisApiServices(env: KotlinCoreEnvironment) {
-    // TODO KotlinCoreEnvironment.underApplicationLock
-    val application = env.projectEnvironment.environment.application
-    if (application.getServiceIfCreated(KtFe10ReferenceResolutionHelper::class.java) == null) {
-        AnalysisApiFe10ServiceRegistrar.registerApplicationServices(application)
+    KotlinCoreEnvironment.underApplicationLock {
+        val application = env.projectEnvironment.environment.application
+        if (application.getServiceIfCreated(KtFe10ReferenceResolutionHelper::class.java) == null) {
+            AnalysisApiFe10ServiceRegistrar.registerApplicationServices(application)
+        }
     }
 
     val project = env.projectEnvironment.project
