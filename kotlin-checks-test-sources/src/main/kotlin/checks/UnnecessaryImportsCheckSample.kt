@@ -27,7 +27,8 @@ import otherpackage.get
 // not used, defaults to String.plus
 import otherpackage.plus // Noncompliant {{Remove this unused import.}}
 import otherpackage.OtherClass.minus
-import otherpackage.OtherClass.plus // Non|compliant FN (it is used below in OtherClass + OtherClass but doesn't need to be imported)
+// TODO improved in K2
+//import otherpackage.OtherClass.plus // Non|compliant FN (it is used below in OtherClass + OtherClass but doesn't need to be imported)
 import otherpackage.OtherClass.get
 import otherpackage.OtherClass.set
 import java.io.File

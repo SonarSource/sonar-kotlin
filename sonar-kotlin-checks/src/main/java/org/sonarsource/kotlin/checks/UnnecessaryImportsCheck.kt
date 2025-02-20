@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.KaIdeApi
 import org.jetbrains.kotlin.descriptors.VariableAccessorDescriptor
 import org.jetbrains.kotlin.descriptors.VariableDescriptorWithAccessors
 import org.jetbrains.kotlin.descriptors.accessors
@@ -47,19 +48,42 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.isCompanionObject
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.frontend.K1internals
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val MESSAGE_UNUSED = "Remove this unused import."
 private const val MESSAGE_REDUNDANT = "Remove this redundant import."
 private val DELEGATES_IMPORTED_NAMES = setOf("getValue", "setValue", "provideDelegate")
 private val ARRAY_ACCESS_IMPORTED_NAMES = setOf("get", "set")
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S1128")
 class UnnecessaryImportsCheck : AbstractCheck() {
 
-    override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
+    @OptIn(KaIdeApi::class)
+    override fun visitKtFile(file: KtFile, context: KotlinFileContext) = withKaSession {
+        if (K1internals.isK1(this)) return k1(file, context)
 
+        val importOptimizer = analyzeImportsToOptimize(file)
+        file.importDirectives.asSequence().filter { importDirective ->
+            // 1. Filter out & report all imports that import from kotlin.* or the same package as our file
+            if (importDirective.isImportedImplicitlyAlready(file.packageDirective?.qualifiedName)) {
+                importDirective.importedReference?.let { context.reportIssue(it, MESSAGE_REDUNDANT) }
+                false
+            } else true
+        }.mapNotNull { importDirective: KtImportDirective ->
+            importDirective.importedFqName?.let { importDirective to it }
+        }.filter { (importDirective, fqName: FqName) ->
+            if (importDirective.isAllUnder) return@filter false
+            !importOptimizer.unresolvedNames.contains(fqName.shortName()) &&
+                    importOptimizer.usedDeclarations[fqName].isNullOrEmpty()
+        }.map { it.first }.forEach { importDirective ->
+            // We could not find any usages for anything remaining at this point. Hence, report!
+            importDirective.importedReference?.let { context.reportIssue(it, MESSAGE_UNUSED) }
+        }
+    }
+
+    private fun k1(file: KtFile, context: KotlinFileContext) {
         val (references, arrayAccesses, kDocLinks, delegateImports, calls) = collectReferences(file)
 
         val bindingContext = context.bindingContext
