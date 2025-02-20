@@ -99,7 +99,29 @@ tasks.shadowJar {
     exclude("org/jline/**")
     exclude("net/jpountz/**")
 
-    exclude("org/jetbrains/kotlin/backend/**")
+    exclude {
+        if (it.path.contains("/extensions/")) return@exclude false
+
+        if (it.path.contains("Extension")) return@exclude false
+        if (it.path.startsWith("org/jetbrains/kotlin/fir/backend/jvm/")) return@exclude false
+        if (it.path.startsWith("org/jetbrains/kotlin/fir/backend/")) return@exclude true
+
+        if (it.path.startsWith("org/jetbrains/kotlin/ir/")) return@exclude true
+
+        // seem to be small
+        if (it.path.startsWith("org/jetbrains/kotlin/psi2ir/")) return@exclude true
+        if (it.path.contains("/js/")) return@exclude true
+        if (it.path.contains("/wasm/")) return@exclude true
+
+        if (it.path.startsWith("org/jetbrains/kotlin/serialization/js/")) return@exclude true
+
+        if (it.path.startsWith("org/jetbrains/kotlin/backend/")) return@exclude true
+        if (it.path.startsWith("org/jetbrains/kotlin/js/")) return@exclude true
+        if (it.path.startsWith("org/jetbrains/kotlin/codegen/")) return@exclude true
+//        if (it.path.startsWith("org/jetbrains/kotlin/resolve/")) return@exclude true
+
+        return@exclude false
+    }
 
     dependencies {
         // K1 and K2 without minimize ~ 78M
