@@ -110,7 +110,7 @@ tasks.shadowJar {
 
         // seem to be small
         if (it.path.startsWith("org/jetbrains/kotlin/psi2ir/")) return@exclude true
-        if (it.path.contains("/js/")) return@exclude true
+        //if (it.path.contains("/js/")) return@exclude true
         if (it.path.contains("/wasm/")) return@exclude true
 
         if (it.path.startsWith("org/jetbrains/kotlin/serialization/js/")) return@exclude true

@@ -114,11 +114,11 @@ abstract class AbstractKotlinSensorExecuteContext(
             }.forEach { (ktFile, doc, inputFile) ->
                 if (sensorContext.isCancelled) return false
                 val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
-//                val tree = KotlinTree(ktFile, doc, bindingContext, getFileDiagnostics(ktFile), regexCache, doResolve)
+                val tree = KotlinTree(ktFile, doc, Any(), getFileDiagnostics(ktFile), regexCache, doResolve)
 
-//                measureDuration(inputFile.filename()) {
-//                    analyzeFile(inputFileContext, tree)
-//                }
+                measureDuration(inputFile.filename()) {
+                    analyzeFile(inputFileContext, tree)
+                }
                 progressReport.nextFile()
             }
             return true
