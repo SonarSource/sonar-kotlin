@@ -106,10 +106,12 @@ private object AnalysisApiFe10ServiceRegistrar : AnalysisApiSimpleServiceRegistr
             KtFe10ReferenceResolutionHelper::class.java,
             K1internals.dummyKtFe10ReferenceResolutionHelper(),
         )
-        application.registerService(
-            BuiltinsVirtualFileProvider::class.java,
-            BuiltinsVirtualFileProviderCliImpl::class.java,
-        )
+        if (application.getServiceIfCreated(BuiltinsVirtualFileProvider::class.java) == null) {
+            application.registerService(
+                BuiltinsVirtualFileProvider::class.java,
+                BuiltinsVirtualFileProviderCliImpl::class.java,
+            )
+        }
         application.registerService(
             KotlinAnalysisPermissionOptions::class.java,
             KotlinStandaloneAnalysisPermissionOptions::class.java,
