@@ -39,10 +39,10 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.allPaired
-import org.sonarsource.kotlin.api.checks.determineType
+//import org.sonarsource.kotlin.api.checks.determineType
 import org.sonarsource.kotlin.api.checks.determineTypeAsString
 import org.sonarsource.kotlin.api.checks.overrides
-import org.sonarsource.kotlin.api.checks.returnType
+//import org.sonarsource.kotlin.api.checks.returnType
 import org.sonarsource.kotlin.api.checks.returnTypeAsString
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
@@ -50,85 +50,85 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 @Rule(key = "S6514")
 class DelegationPatternCheck : AbstractCheck() {
 
-    override fun visitClassOrObject(classOrObject: KtClassOrObject, context: KotlinFileContext) {
-        val classType = classOrObject.determineType(context.bindingContext) ?: return
-        if (classType.isInterface()) return
-        val superInterfaces = getSuperInterfaces(classType).toSet()
-        if (superInterfaces.isEmpty()) return
-
-        classOrObject.declarations.forEach {
-            if (it is KtNamedFunction) {
-                checkNamedFunction(it, superInterfaces, context)
-            }
-        }
-    }
-
-    private fun checkNamedFunction(function: KtNamedFunction, superInterfaces: Set<KotlinType>, context: KotlinFileContext) {
-        if (!(function.isPublic && function.overrides())) return
-        val bindingContext = context.bindingContext
-        val delegeeType = getDelegeeOrNull(function, bindingContext)?.determineType(bindingContext) ?: return
-
-        if (getCommonSuperInterfaces(superInterfaces, delegeeType).any {
-            isFunctionInInterface(function, it, bindingContext)
-        }) {
-            context.reportIssue(function.nameIdentifier!!, """Replace with interface delegation using "by" in the class header.""")
-        }
-    }
-}
-
-private fun isFunctionInInterface(function: KtNamedFunction, superInterface: KotlinType, bindingContext: BindingContext): Boolean {
-    val classDescriptor = TypeUtils.getClassDescriptor(superInterface) as? ClassDescriptorWithResolutionScopes ?: return false
-    return classDescriptor.declaredCallableMembers.any {
-        isEqualFunctionSignature(function, it, bindingContext)
-    }
-}
-
-private fun isEqualFunctionSignature(
-    function: KtNamedFunction,
-    functionDescriptor: CallableMemberDescriptor,
-    bindingContext: BindingContext,
-) = function.name == functionDescriptor.name.identifier &&
-    function.returnTypeAsString(bindingContext) == functionDescriptor.returnType?.getKotlinTypeFqName(false) &&
-    function.valueParameters.allPaired(functionDescriptor.valueParameters) { parameter, paramerterDescriptor ->
-        parameter.typeReference?.determineTypeAsString(bindingContext) == paramerterDescriptor.type.getKotlinTypeFqName(false)
-    }
-
-fun getCommonSuperInterfaces(superInterfaces: Set<KotlinType>, otherType: KotlinType) =
-    getSuperInterfaces(otherType).intersect(superInterfaces)
-
-private fun getSuperInterfaces(kotlinType: KotlinType): List<KotlinType> =
-    kotlinType.supertypes().filter(KotlinType::isInterface).let {
-        if (kotlinType.isInterface()) it + kotlinType else it
-    }
-
-private fun getDelegeeOrNull(function: KtNamedFunction, bindingContext: BindingContext): KtNameReferenceExpression? {
-    val qualifiedCallExpression = getFunctionSingleBodyElementOrNull(function) as? KtDotQualifiedExpression ?: return null
-    val receiverExpression = qualifiedCallExpression.receiverExpression as? KtNameReferenceExpression ?: return null
-    val callExpression = qualifiedCallExpression.selectorExpression as? KtCallExpression ?: return null
-
-    return if (function.name!! == callExpression.getCallNameExpression()?.getReferencedName() &&
-        function.returnType(bindingContext) == callExpression.determineType(bindingContext) &&
-        function.valueParameters.allPaired(callExpression.valueArguments) { parameter, argument ->
-            isDelegatedParameter(parameter, argument, bindingContext)
-        }) receiverExpression else null
-}
-
-private fun isDelegatedParameter(parameter: KtParameter, arguments: KtValueArgument, bindingContext: BindingContext): Boolean {
-    val argumentExpression = arguments.getArgumentExpression() as? KtNameReferenceExpression ?: return false
-    return parameter.name == argumentExpression.getReferencedName() &&
-        parameter.determineType(bindingContext) == argumentExpression.determineType(bindingContext)
-}
-
-private fun getFunctionSingleBodyElementOrNull(function: KtNamedFunction): PsiElement? {
-    val bodyExpression = function.bodyExpression
-    if (bodyExpression !is KtBlockExpression) {
-        return bodyExpression
-    }
-
-    val singleBodyElement = bodyExpression.children.singleOrNull()
-    return if (singleBodyElement is KtReturnExpression) {
-        singleBodyElement.returnedExpression
-    } else {
-        singleBodyElement
-    }
+//    override fun visitClassOrObject(classOrObject: KtClassOrObject, context: KotlinFileContext) {
+//        val classType = classOrObject.determineType(context.bindingContext) ?: return
+//        if (classType.isInterface()) return
+//        val superInterfaces = getSuperInterfaces(classType).toSet()
+//        if (superInterfaces.isEmpty()) return
+//
+//        classOrObject.declarations.forEach {
+//            if (it is KtNamedFunction) {
+//                checkNamedFunction(it, superInterfaces, context)
+//            }
+//        }
+//    }
+//
+//    private fun checkNamedFunction(function: KtNamedFunction, superInterfaces: Set<KotlinType>, context: KotlinFileContext) {
+//        if (!(function.isPublic && function.overrides())) return
+//        val bindingContext = context.bindingContext
+//        val delegeeType = getDelegeeOrNull(function, bindingContext)?.determineType(bindingContext) ?: return
+//
+//        if (getCommonSuperInterfaces(superInterfaces, delegeeType).any {
+//            isFunctionInInterface(function, it, bindingContext)
+//        }) {
+//            context.reportIssue(function.nameIdentifier!!, """Replace with interface delegation using "by" in the class header.""")
+//        }
+//    }
+//}
+//
+//private fun isFunctionInInterface(function: KtNamedFunction, superInterface: KotlinType, bindingContext: BindingContext): Boolean {
+//    val classDescriptor = TypeUtils.getClassDescriptor(superInterface) as? ClassDescriptorWithResolutionScopes ?: return false
+//    return classDescriptor.declaredCallableMembers.any {
+//        isEqualFunctionSignature(function, it, bindingContext)
+//    }
+//}
+//
+//private fun isEqualFunctionSignature(
+//    function: KtNamedFunction,
+//    functionDescriptor: CallableMemberDescriptor,
+//    bindingContext: BindingContext,
+//) = function.name == functionDescriptor.name.identifier &&
+//    function.returnTypeAsString(bindingContext) == functionDescriptor.returnType?.getKotlinTypeFqName(false) &&
+//    function.valueParameters.allPaired(functionDescriptor.valueParameters) { parameter, paramerterDescriptor ->
+//        parameter.typeReference?.determineTypeAsString(bindingContext) == paramerterDescriptor.type.getKotlinTypeFqName(false)
+//    }
+//
+//fun getCommonSuperInterfaces(superInterfaces: Set<KotlinType>, otherType: KotlinType) =
+//    getSuperInterfaces(otherType).intersect(superInterfaces)
+//
+//private fun getSuperInterfaces(kotlinType: KotlinType): List<KotlinType> =
+//    kotlinType.supertypes().filter(KotlinType::isInterface).let {
+//        if (kotlinType.isInterface()) it + kotlinType else it
+//    }
+//
+//private fun getDelegeeOrNull(function: KtNamedFunction, bindingContext: BindingContext): KtNameReferenceExpression? {
+//    val qualifiedCallExpression = getFunctionSingleBodyElementOrNull(function) as? KtDotQualifiedExpression ?: return null
+//    val receiverExpression = qualifiedCallExpression.receiverExpression as? KtNameReferenceExpression ?: return null
+//    val callExpression = qualifiedCallExpression.selectorExpression as? KtCallExpression ?: return null
+//
+//    return if (function.name!! == callExpression.getCallNameExpression()?.getReferencedName() &&
+//        function.returnType(bindingContext) == callExpression.determineType(bindingContext) &&
+//        function.valueParameters.allPaired(callExpression.valueArguments) { parameter, argument ->
+//            isDelegatedParameter(parameter, argument, bindingContext)
+//        }) receiverExpression else null
+//}
+//
+//private fun isDelegatedParameter(parameter: KtParameter, arguments: KtValueArgument, bindingContext: BindingContext): Boolean {
+//    val argumentExpression = arguments.getArgumentExpression() as? KtNameReferenceExpression ?: return false
+//    return parameter.name == argumentExpression.getReferencedName() &&
+//        parameter.determineType(bindingContext) == argumentExpression.determineType(bindingContext)
+//}
+//
+//private fun getFunctionSingleBodyElementOrNull(function: KtNamedFunction): PsiElement? {
+//    val bodyExpression = function.bodyExpression
+//    if (bodyExpression !is KtBlockExpression) {
+//        return bodyExpression
+//    }
+//
+//    val singleBodyElement = bodyExpression.children.singleOrNull()
+//    return if (singleBodyElement is KtReturnExpression) {
+//        singleBodyElement.returnedExpression
+//    } else {
+//        singleBodyElement
+//    }
 }

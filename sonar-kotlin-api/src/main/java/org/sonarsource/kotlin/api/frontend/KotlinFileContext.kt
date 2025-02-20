@@ -33,7 +33,7 @@ data class KotlinFileContext(
      * @see [org.sonarsource.kotlin.api.visiting.withKaSession]
      */
     @Deprecated("use kotlin-analysis-api instead")
-    val bindingContext: BindingContext,
+    val bindingContext: Any,
     @Deprecated("use kotlin-analysis-api instead", ReplaceWith("kaDiagnostics"))
     val diagnostics: List<Diagnostic>,
     val regexCache: RegexCache,
@@ -43,8 +43,8 @@ data class KotlinFileContext(
 
     val kaDiagnostics: Sequence<KaDiagnosticWithPsi<*>> by lazy {
         withKaSession {
-            val k1 = diagnostics.asSequence().map { K1internals.kaFe10Diagnostic(it, token) }
-            return@lazy k1 + k2Diagnostics
+//            val k1 = diagnostics.asSequence().map { K1internals.kaFe10Diagnostic(it, token) }
+            return@lazy k2Diagnostics
         }
     }
 

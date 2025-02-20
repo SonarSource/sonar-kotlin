@@ -76,23 +76,23 @@ class FunMatcherImpl(
         if (definingSupertypes.isEmpty()) qualifiers else
             if (qualifiers.isEmpty()) definingSupertypes else qualifiers + definingSupertypes
 
-    @Deprecated("use kotlin-analysis-api instead", replaceWith = ReplaceWith("matches(node)"))
-    fun matches(node: KtCallExpression, bindingContext: BindingContext): Boolean {
-        val call = node.getCall(bindingContext)
-        return preCheckArgumentCount(call) &&
-            matches(bindingContext[RESOLVED_CALL, call]?.resultingDescriptor)
-    }
+//    @Deprecated("use kotlin-analysis-api instead", replaceWith = ReplaceWith("matches(node)"))
+//    fun matches(node: KtCallExpression, bindingContext: BindingContext): Boolean {
+//        val call = node.getCall(bindingContext)
+//        return preCheckArgumentCount(call) &&
+//            matches(bindingContext[RESOLVED_CALL, call]?.resultingDescriptor)
+//    }
 
     fun matches(node: KtCallExpression): Boolean = withKaSession {
         val call = node.resolveToCall()?.successfulFunctionCallOrNull()
         return call != null && matches(call)
     }
 
-    @Deprecated("use kotlin-analysis-api instead", replaceWith = ReplaceWith("matches(node)"))
-    fun matches(node: KtNamedFunction, bindingContext: BindingContext): Boolean {
-        val functionDescriptor = bindingContext[BindingContext.FUNCTION, node]
-        return matches(functionDescriptor)
-    }
+//    @Deprecated("use kotlin-analysis-api instead", replaceWith = ReplaceWith("matches(node)"))
+//    fun matches(node: KtNamedFunction, bindingContext: BindingContext): Boolean {
+//        val functionDescriptor = bindingContext[BindingContext.FUNCTION, node]
+//        return matches(functionDescriptor)
+//    }
 
     @OptIn(KaExperimentalApi::class)
     fun matches(node: KtNamedFunction): Boolean = withKaSession {
@@ -100,13 +100,13 @@ class FunMatcherImpl(
         return matches(null, symbol, symbol.asSignature())
     }
 
-    @Deprecated("use kotlin-analysis-api instead")
-    fun matches(call: Call, bindingContext: BindingContext) = preCheckArgumentCount(call) &&
-        matches(bindingContext[RESOLVED_CALL, call]?.resultingDescriptor)
+//    @Deprecated("use kotlin-analysis-api instead")
+//    fun matches(call: Call, bindingContext: BindingContext) = preCheckArgumentCount(call) &&
+//        matches(bindingContext[RESOLVED_CALL, call]?.resultingDescriptor)
 
-    @Deprecated("use kotlin-analysis-api instead")
-    fun matches(resolvedCall: ResolvedCall<*>?) = preCheckArgumentCount(resolvedCall?.call) &&
-        matches(resolvedCall?.resultingDescriptor)
+//    @Deprecated("use kotlin-analysis-api instead")
+//    fun matches(resolvedCall: ResolvedCall<*>?) = preCheckArgumentCount(resolvedCall?.call) &&
+//        matches(resolvedCall?.resultingDescriptor)
 
     @OptIn(KaExperimentalApi::class)
     fun matches(resolvedCall: KaCallableMemberCall<*, *>?): Boolean = withKaSession {
@@ -167,19 +167,19 @@ class FunMatcherImpl(
         }
     }
 
-    private fun preCheckArgumentCount(call: Call?) = call == null || call.valueArguments.size <= maxArgumentCount
+//    private fun preCheckArgumentCount(call: Call?) = call == null || call.valueArguments.size <= maxArgumentCount
 
-    @Deprecated("use kotlin-analysis-api instead")
-    fun matches(functionDescriptor: CallableDescriptor?) =
-        functionDescriptor != null &&
-            checkIsDynamic(functionDescriptor) &&
-            checkIsExtensionFunction(functionDescriptor) &&
-            checkIsSuspending(functionDescriptor) &&
-            checkIsOperator(functionDescriptor) &&
-            checkName(functionDescriptor) &&
-            checkTypeOrSupertype(functionDescriptor) &&
-            checkReturnType(functionDescriptor) &&
-            checkCallParameters(functionDescriptor)
+//    @Deprecated("use kotlin-analysis-api instead")
+//    fun matches(functionDescriptor: CallableDescriptor?) =
+//        functionDescriptor != null &&
+//            checkIsDynamic(functionDescriptor) &&
+//            checkIsExtensionFunction(functionDescriptor) &&
+//            checkIsSuspending(functionDescriptor) &&
+//            checkIsOperator(functionDescriptor) &&
+//            checkName(functionDescriptor) &&
+//            checkTypeOrSupertype(functionDescriptor) &&
+//            checkReturnType(functionDescriptor) &&
+//            checkCallParameters(functionDescriptor)
 
     private fun matches(
         dispatchReceiver: KaReceiverValue?,
@@ -197,10 +197,10 @@ class FunMatcherImpl(
             checkCallParameters(callableSignature)
     }
 
-    @Deprecated("use kotlin-analysis-api instead")
-    private fun checkTypeOrSupertype(functionDescriptor: CallableDescriptor) =
-        qualifiersOrDefiningSupertypes.isEmpty() || qualifiersOrDefiningSupertypes.contains(getActualQualifier(functionDescriptor)) ||
-            !definingSupertypes.isNullOrEmpty() && checkSubType(functionDescriptor)
+//    @Deprecated("use kotlin-analysis-api instead")
+//    private fun checkTypeOrSupertype(functionDescriptor: CallableDescriptor) =
+//        qualifiersOrDefiningSupertypes.isEmpty() || qualifiersOrDefiningSupertypes.contains(getActualQualifier(functionDescriptor)) ||
+//            !definingSupertypes.isNullOrEmpty() && checkSubType(functionDescriptor)
 
     private fun checkTypeOrSupertype(
         dispatchReceiver: KaReceiverValue?,
@@ -218,13 +218,13 @@ class FunMatcherImpl(
         return false
     }
 
-    @Deprecated("use kotlin-analysis-api instead")
-    private fun getActualQualifier(functionDescriptor: CallableDescriptor) =
-        if (functionDescriptor is ConstructorDescriptor) {
-            functionDescriptor.constructedClass.fqNameSafe.asString()
-        } else {
-            functionDescriptor.fqNameSafe.asString().substringBeforeLast(".")
-        }
+//    @Deprecated("use kotlin-analysis-api instead")
+//    private fun getActualQualifier(functionDescriptor: CallableDescriptor) =
+//        if (functionDescriptor is ConstructorDescriptor) {
+//            functionDescriptor.constructedClass.fqNameSafe.asString()
+//        } else {
+//            functionDescriptor.fqNameSafe.asString().substringBeforeLast(".")
+//        }
 
     // TODO when null?
     /** @return dot-separated package name for top-level functions, class name otherwise */
@@ -236,23 +236,23 @@ class FunMatcherImpl(
         }
     }
 
-    @Deprecated("use kotlin-analysis-api instead")
-    private fun checkSubType(functionDescriptor: CallableDescriptor): Boolean =
-        when (functionDescriptor) {
-            is ConstructorDescriptor -> false
-            else -> {
-                // Note: `overriddenTreeUniqueAsSequence()` will return a sequence of all overridden descriptors, even if thery are not
-                // explicitly declared in the super types. In other words, if you have a class hierarchy of 10 levels, with a declaration
-                // in the top-most class/interface and an overriding method in the bottom-most, it will return a sequence of 10 elements,
-                // even if there are no overriding methods in the classes in-between. This can be desired but in most cases is somewhat
-                // inefficient, as we mostly look for the top-most declaration here. The top-most declaration is the last element in the
-                // sequence, however, so we need to iterate the entire sequence to get there. There are optimization possibilities if this
-                // turns out to be a performance problem in the long run.
-                functionDescriptor.overriddenTreeUniqueAsSequence(true).any {
-                    definingSupertypes.contains(it.fqNameSafe.asString().substringBeforeLast("."))
-                }
-            }
-        }
+//    @Deprecated("use kotlin-analysis-api instead")
+//    private fun checkSubType(functionDescriptor: CallableDescriptor): Boolean =
+//        when (functionDescriptor) {
+//            is ConstructorDescriptor -> false
+//            else -> {
+//                // Note: `overriddenTreeUniqueAsSequence()` will return a sequence of all overridden descriptors, even if thery are not
+//                // explicitly declared in the super types. In other words, if you have a class hierarchy of 10 levels, with a declaration
+//                // in the top-most class/interface and an overriding method in the bottom-most, it will return a sequence of 10 elements,
+//                // even if there are no overriding methods in the classes in-between. This can be desired but in most cases is somewhat
+//                // inefficient, as we mostly look for the top-most declaration here. The top-most declaration is the last element in the
+//                // sequence, however, so we need to iterate the entire sequence to get there. There are optimization possibilities if this
+//                // turns out to be a performance problem in the long run.
+//                functionDescriptor.overriddenTreeUniqueAsSequence(true).any {
+//                    definingSupertypes.contains(it.fqNameSafe.asString().substringBeforeLast("."))
+//                }
+//            }
+//        }
 
     private fun checkSubType(symbol: KaCallableSymbol): Boolean = withKaSession {
         if (symbol is KaConstructorSymbol) return false
@@ -262,14 +262,14 @@ class FunMatcherImpl(
         }
     }
 
-    @Deprecated("use kotlin-analysis-api instead")
-    private fun checkName(functionDescriptor: CallableDescriptor): Boolean =
-        if (functionDescriptor is ConstructorDescriptor) {
-            matchConstructor
-        } else if (!matchConstructor) {
-            val name = functionDescriptor.name.asString()
-            (nameRegex == null && names.isEmpty()) || name in names || (nameRegex != null && nameRegex.matches(name))
-        } else false
+//    @Deprecated("use kotlin-analysis-api instead")
+//    private fun checkName(functionDescriptor: CallableDescriptor): Boolean =
+//        if (functionDescriptor is ConstructorDescriptor) {
+//            matchConstructor
+//        } else if (!matchConstructor) {
+//            val name = functionDescriptor.name.asString()
+//            (nameRegex == null && names.isEmpty()) || name in names || (nameRegex != null && nameRegex.matches(name))
+//        } else false
 
     private fun checkName(symbol: KaCallableSymbol): Boolean {
         if (matchConstructor) return symbol is KaConstructorSymbol
@@ -277,18 +277,18 @@ class FunMatcherImpl(
         return (nameRegex == null && names.isEmpty()) || name in names || (nameRegex != null && nameRegex.matches(name))
     }
 
-    @Deprecated("use kotlin-analysis-api instead")
-    private fun checkCallParameters(descriptor: CallableDescriptor): Boolean {
-        val valueParameters: List<ValueParameterDescriptor> =
-            descriptor.valueParameters
-
-        return arguments.isEmpty() || arguments.any {
-            (valueParameters.size == it.size) &&
-                it.foldRightIndexed(true) { i, argType, acc ->
-                    acc && argType.matches(valueParameters[i])
-                }
-        }
-    }
+//    @Deprecated("use kotlin-analysis-api instead")
+//    private fun checkCallParameters(descriptor: CallableDescriptor): Boolean {
+//        val valueParameters: List<ValueParameterDescriptor> =
+//            descriptor.valueParameters
+//
+//        return arguments.isEmpty() || arguments.any {
+//            (valueParameters.size == it.size) &&
+//                it.foldRightIndexed(true) { i, argType, acc ->
+//                    acc && argType.matches(valueParameters[i])
+//                }
+//        }
+//    }
 
     private fun checkCallParameters(callableSignature: KaCallableSignature<*>): Boolean {
         val symbol = callableSignature.symbol as? KaFunctionSymbol ?: return false
@@ -300,23 +300,23 @@ class FunMatcherImpl(
         }
     }
 
-    private fun checkIsDynamic(descriptor: CallableDescriptor): Boolean =
-        isDynamic?.let { it == descriptor.isDynamic() } ?: true
+//    private fun checkIsDynamic(descriptor: CallableDescriptor): Boolean =
+//        isDynamic?.let { it == descriptor.isDynamic() } ?: true
 
-    @Deprecated("use kotlin-analysis-api instead")
-    private fun checkIsExtensionFunction(descriptor: CallableDescriptor): Boolean =
-        isExtensionFunction?.let { it == descriptor.isExtension } ?: true
+//    @Deprecated("use kotlin-analysis-api instead")
+//    private fun checkIsExtensionFunction(descriptor: CallableDescriptor): Boolean =
+//        isExtensionFunction?.let { it == descriptor.isExtension } ?: true
 
     private fun checkIsExtensionFunction(callableSignature: KaCallableSignature<*>): Boolean =
         isExtensionFunction?.let { it == callableSignature.symbol.isExtension } ?: true
 
-    @Deprecated("use kotlin-analysis-api instead")
-    private fun checkReturnType(descriptor: CallableDescriptor) =
-        returnType?.let {
-            val kotlinType = descriptor.returnType
-            if (kotlinType?.constructor?.declarationDescriptor != null) it == kotlinType.getKotlinTypeFqName(false)
-            else null
-        } ?: true
+//    @Deprecated("use kotlin-analysis-api instead")
+//    private fun checkReturnType(descriptor: CallableDescriptor) =
+//        returnType?.let {
+//            val kotlinType = descriptor.returnType
+//            if (kotlinType?.constructor?.declarationDescriptor != null) it == kotlinType.getKotlinTypeFqName(false)
+//            else null
+//        } ?: true
 
     /**
      * Note that [KaCallableSignature] carries use-site type information,
@@ -328,16 +328,16 @@ class FunMatcherImpl(
            it == callableSignature.returnType.asFqNameString()
        } ?: true
 
-    @Deprecated("use kotlin-analysis-api instead")
-    private fun checkIsSuspending(descriptor: CallableDescriptor) =
-        isSuspending?.let { it == descriptor.isSuspend } ?: true
+//    @Deprecated("use kotlin-analysis-api instead")
+//    private fun checkIsSuspending(descriptor: CallableDescriptor) =
+//        isSuspending?.let { it == descriptor.isSuspend } ?: true
 
     private fun checkIsSuspending(callableSignature: KaCallableSignature<*>) =
         isSuspending?.let { it == (callableSignature.symbol as? KaNamedFunctionSymbol)?.isSuspend } ?: true
 
-    @Deprecated("use kotlin-analysis-api instead")
-    private fun checkIsOperator(descriptor: CallableDescriptor) =
-        isOperator?.let { it == ((descriptor as? FunctionDescriptor)?.isOperator ?: false) } ?: true
+//    @Deprecated("use kotlin-analysis-api instead")
+//    private fun checkIsOperator(descriptor: CallableDescriptor) =
+//        isOperator?.let { it == ((descriptor as? FunctionDescriptor)?.isOperator ?: false) } ?: true
 
     private fun checkIsOperator(callableSignature: KaCallableSignature<*>) =
         isOperator?.let { it == (callableSignature.symbol as? KaNamedFunctionSymbol)?.isOperator } ?: true
@@ -446,8 +446,8 @@ fun ConstructorMatcher(
     block: FunMatcherBuilderContext.() -> Unit = {}
 ) = FunMatcher(qualifier = typeName, matchConstructor = true, block = block)
 
-@Deprecated("use kotlin-analysis-api instead")
-infix fun ResolvedCall<*>?.matches(funMatcher: FunMatcherImpl): Boolean = funMatcher.matches(this)
+//@Deprecated("use kotlin-analysis-api instead")
+//infix fun ResolvedCall<*>?.matches(funMatcher: FunMatcherImpl): Boolean = funMatcher.matches(this)
 
 infix fun KaCallableMemberCall<*, *>?.matches(funMatcher: FunMatcherImpl): Boolean {
     if (this == null) return false

@@ -16,7 +16,6 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.sonar.check.Rule
@@ -31,22 +30,22 @@ class UselessAssignmentsCheck : AbstractCheck() {
             .mapNotNull { diagnostic ->
                 when (diagnostic.factoryName) {
                     /** TODO replace [Errors] by [org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors] during switch to K2 */
-                    "VARIABLE_INITIALIZER_IS_REDUNDANT",
-                    Errors.VARIABLE_WITH_REDUNDANT_INITIALIZER.name ->
+                    "VARIABLE_INITIALIZER_IS_REDUNDANT" ->
+//                    Errors.VARIABLE_WITH_REDUNDANT_INITIALIZER.name ->
                         diagnostic.psi to "Remove this useless initializer."
 
-                    "VARIABLE_NEVER_READ",
-                    Errors.ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE.name ->
+                    "VARIABLE_NEVER_READ" ->
+//                    Errors.ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE.name ->
                         (diagnostic.psi as KtNamedDeclaration).identifyingElement!! to
                         "Remove this variable, which is assigned but never accessed."
 
                     "ASSIGNED_VALUE_IS_NEVER_READ" ->
                         diagnostic.psi.parent to "The value assigned here is never used."
-                    Errors.UNUSED_VALUE.name ->
-                        diagnostic.psi to "The value assigned here is never used."
+//                    Errors.UNUSED_VALUE.name ->
+//                        diagnostic.psi to "The value assigned here is never used."
 
-                    Errors.UNUSED_CHANGED_VALUE.name ->
-                        diagnostic.psi to "The value changed here is never used."
+//                    Errors.UNUSED_CHANGED_VALUE.name ->
+//                        diagnostic.psi to "The value changed here is never used."
 
                     else -> null
                 }

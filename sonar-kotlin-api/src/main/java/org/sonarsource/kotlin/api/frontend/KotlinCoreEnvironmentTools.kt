@@ -65,7 +65,7 @@ class Environment(
 
     init {
         if (!useK2) {
-            configureK1AnalysisApiServices(env)
+//            configureK1AnalysisApiServices(env)
         }
     }
 }
@@ -89,42 +89,41 @@ fun kotlinCoreEnvironment(
     )
 }
 
-@Deprecated("use K2 instead")
-fun analyzeAndGetBindingContext(
-    env: KotlinCoreEnvironment,
-    ktFiles: List<KtFile>,
-): BindingContext {
-    val analyzer = AnalyzerWithCompilerReport(
-        MessageCollector.NONE,
-        env.configuration.languageVersionSettings,
-        false
-    )
-    analyzer.analyzeAndReport(ktFiles) {
-        TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
-            env.project,
-            ktFiles,
-            NoScopeRecordCliBindingTrace(env.project),
-            env.configuration,
-            env::createPackagePartProvider,
-            ::FileBasedDeclarationProviderFactory
-        )
-    }
-    return analyzer.analysisResult.bindingContext
-}
+//@Deprecated("use K2 instead")
+//fun analyzeAndGetBindingContext(
+//    env: KotlinCoreEnvironment,
+//    ktFiles: List<KtFile>,
+//): BindingContext {
+//    val analyzer = AnalyzerWithCompilerReport(
+//        MessageCollector.NONE,
+//        env.configuration.languageVersionSettings,
+//        false
+//    )
+//    analyzer.analyzeAndReport(ktFiles) {
+//        TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
+//            env.project,
+//            ktFiles,
+//            NoScopeRecordCliBindingTrace(env.project),
+//            env.configuration,
+//            env::createPackagePartProvider,
+//            ::FileBasedDeclarationProviderFactory
+//        )
+//    }
+//    return analyzer.analysisResult.bindingContext
 
-/**
- * Workaround to avoid performance-costly traversal of all diagnostics in
- * [org.jetbrains.kotlin.analysis.api.descriptors.components.KaFe10Resolver.handleResolveErrors]
- * ([see its source code](https://github.com/JetBrains/kotlin/blob/v2.0.21/analysis/analysis-api-fe10/src/org/jetbrains/kotlin/analysis/api/descriptors/components/KaFe10Resolver.kt#L604)).
- */
-fun transferDiagnostics(bindingContext: BindingContext): List<Diagnostic> {
-    val diagnostics = bindingContext.diagnostics
-    val diagnosticsList = diagnostics.noSuppression().toList()
-    if (diagnostics is MutableDiagnosticsWithSuppression) {
-        diagnostics.clear()
-    } else check(diagnostics === BindingContext.EMPTY.diagnostics)
-    return diagnosticsList
-}
+///**
+// * Workaround to avoid performance-costly traversal of all diagnostics in
+// * [org.jetbrains.kotlin.analysis.api.descriptors.components.KaFe10Resolver.handleResolveErrors]
+// * ([see its source code](https://github.com/JetBrains/kotlin/blob/v2.0.21/analysis/analysis-api-fe10/src/org/jetbrains/kotlin/analysis/api/descriptors/components/KaFe10Resolver.kt#L604)).
+// */
+//fun transferDiagnostics(bindingContext: BindingContext): List<Diagnostic> {
+//    val diagnostics = bindingContext.diagnostics
+//    val diagnosticsList = diagnostics.noSuppression().toList()
+//    if (diagnostics is MutableDiagnosticsWithSuppression) {
+//        diagnostics.clear()
+//    } else check(diagnostics === BindingContext.EMPTY.diagnostics)
+//    return diagnosticsList
+//}
 
 fun compilerConfiguration(
     classpath: List<String>,

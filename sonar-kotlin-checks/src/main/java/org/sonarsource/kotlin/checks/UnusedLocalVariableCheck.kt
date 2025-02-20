@@ -16,28 +16,29 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
 import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.checks.getVariableType
+//import org.sonarsource.kotlin.api.checks.getVariableType
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 @Rule(key = "S1481")
 class UnusedLocalVariableCheck : AbstractCheck() {
 
-    override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
-        context.kaDiagnostics
-            .filter {
-                it.factoryName == Errors.UNUSED_VARIABLE.name &&
-                    // TODO remove after switch to K2:
-                    (it.psi as KtNamedDeclaration).getVariableType(context.bindingContext)?.getKotlinTypeFqName(false) != "kotlin.Nothing"
-            }
-            .map { it.psi as KtNamedDeclaration }
-            .forEach {
-                context.reportIssue(it.nameIdentifier!!, """Remove this unused "${it.name}" local variable.""")
-            }
-    }
+//    override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
+//        context.kaDiagnostics
+//            .filter {
+////                it.factoryName == FirErrors.UNUSED_VARIABLE.name &&
+////                    // TODO remove after switch to K2:
+////                    (it.psi as KtNamedDeclaration).getVariableType(context.bindingContext)?.getKotlinTypeFqName(false) != "kotlin.Nothing"
+//                false
+//            }
+//            .map { it.psi as KtNamedDeclaration }
+//            .forEach {
+//                context.reportIssue(it.nameIdentifier!!, """Remove this unused "${it.name}" local variable.""")
+//            }
+//    }
 }

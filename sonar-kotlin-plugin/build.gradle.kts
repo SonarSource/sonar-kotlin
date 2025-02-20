@@ -98,17 +98,35 @@ tasks.shadowJar {
     exclude("META-INF/native/**/*jansi*")
     exclude("org/jline/**")
     exclude("net/jpountz/**")
+
+    exclude("org/jetbrains/kotlin/backend/**")
+
     dependencies {
         // K1 and K2 without minimize ~ 78M
 
         // K1 and K2 ~ 62M
 
 //        // K2 without K1 ~ 61M ??? I believe that should be less
-//        exclude(dependency("org.jetbrains.kotlin:analysis-api-fe10-for-ide"))
+        exclude(dependency("org.jetbrains.kotlin:analysis-api-fe10-for-ide"))
+//        exclude(project(":sonar-kotlin-api"))
+//        exclude(project(":sonar-kotlin-metrics"))
+//        exclude(project(":sonar-kotlin-external-linters"))
+//        exclude(project(":sonar-kotlin-gradle"))
+//        exclude(project(":sonar-kotlin-surefire"))
+//        exclude(project(":sonar-kotlin-checks"))
 
 //        // K1 without K2 (baseline) ~ 45M
 //        // include only K1, and exclude K2 for the time being
 //        exclude(dependency("org.jetbrains.kotlin:analysis-api-k2-for-ide"))
+//        exclude(dependency("org.jetbrains.kotlin:low-level-api-fir-for-ide"))
+//        exclude(dependency("org.jetbrains.kotlin:symbol-light-classes-for-ide"))
+
+//        exclude(dependency("org.jetbrains.kotlin:analysis-api-standalone-for-ide"))
+//        exclude(dependency("org.jetbrains.kotlin:analysis-api-platform-interface-for-ide"))
+//        exclude(dependency("org.jetbrains.kotlin:analysis-api-for-ide")) // old name "high-level-api-for-ide"
+//        exclude(dependency("org.jetbrains.kotlin:analysis-api-impl-base-for-ide")) // old name "high-level-api-impl-base"
+//        exclude(dependency("org.jetbrains.kotlin:analysis-api-fe10-for-ide")) // old name "high-level-api-fe10"
+//        exclude(dependency("org.jetbrains.kotlin:analysis-api-k2-for-ide")) // old name "high-level-api-k2"
 //        exclude(dependency("org.jetbrains.kotlin:low-level-api-fir-for-ide"))
 //        exclude(dependency("org.jetbrains.kotlin:symbol-light-classes-for-ide"))
     }

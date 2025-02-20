@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.analysis.api.types.KaErrorType
 import org.jetbrains.kotlin.analysis.api.types.KaTypeNullability
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
-import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -147,7 +146,8 @@ class UselessNullCheckCheck : AbstractCheck() {
             if (comparesToNull) "succeeds" else "fails"
         } else if (
         // We are not using the resolvedExpression on purpose here, as it can cause FPs. See SONARKT-373.
-            expression.isNotNullable(kfc.bindingContext)
+//            expression.isNotNullable(kfc.bindingContext)
+            false
         ) {
             if (comparesToNull) "fails" else "succeeds"
         } else {
@@ -169,7 +169,7 @@ class UselessNullCheckCheck : AbstractCheck() {
  * Since it is not always clear where this diagnostic might be raised, we over-approximate and ignore all files where such an error is
  * found.
  */
-private fun KotlinFileContext.mayBeAffectedByErrorInSemantics() = diagnostics.any { it.factory == Errors.MISSING_BUILT_IN_DECLARATION }
+private fun KotlinFileContext.mayBeAffectedByErrorInSemantics() = false //diagnostics.any { it.factory == FirErrors.MISSING_BUILT_IN_DECLARATION }
 
 private fun KtExpression.isNotNullable(bc: BindingContext): Boolean =
     when (this) {
@@ -181,7 +181,7 @@ private fun KtExpression.isNotNullable(bc: BindingContext): Boolean =
                 resolvedType !is KaErrorType &&
                         // TODO in K1 might be Unit when should be KaErrorType
                         // https://github.com/JetBrains/kotlin/blob/2.1.0/analysis/analysis-api-fe10/src/org/jetbrains/kotlin/analysis/api/descriptors/components/KaFe10ExpressionTypeProvider.kt#L68
-                        (!K1internals.isK1(this) || !resolvedType.isUnitType || bc.getType(this@isNotNullable) != null) &&
+//                        (!K1internals.isK1(this) || !resolvedType.isUnitType || bc.getType(this@isNotNullable) != null) &&
                         resolvedType !is KaTypeParameterType &&
                         resolvedType.nullability == KaTypeNullability.NON_NULLABLE
             }

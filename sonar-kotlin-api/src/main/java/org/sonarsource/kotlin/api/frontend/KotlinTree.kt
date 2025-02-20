@@ -31,7 +31,7 @@ import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textPointerAtOffset
 class KotlinTree(
     val psiFile: KtFile,
     val document: Document,
-    val bindingContext: BindingContext,
+    val bindingContext: Any,
     val diagnostics: List<Diagnostic>,
     val regexCache: RegexCache,
     val doResolve: Boolean,

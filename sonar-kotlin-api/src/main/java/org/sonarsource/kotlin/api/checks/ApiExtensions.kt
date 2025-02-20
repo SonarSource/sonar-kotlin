@@ -133,9 +133,9 @@ private val STRING_TO_BYTE_FUNS = listOf(
     FunMatcher(qualifier = "java.lang.String", name = "getBytes")
 )
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.predictRuntimeStringValue()"))
-fun KtExpression.predictRuntimeStringValue(bindingContext: BindingContext) =
-    predictRuntimeValueExpression(bindingContext).stringValue(bindingContext)
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.predictRuntimeStringValue()"))
+//fun KtExpression.predictRuntimeStringValue(bindingContext: BindingContext) =
+////    predictRuntimeValueExpression(bindingContext).stringValue(bindingContext)
 
 fun KtExpression.predictRuntimeStringValue() =
     predictRuntimeValueExpression().stringValue()
@@ -147,13 +147,13 @@ fun KtExpression.predictRuntimeStringValueWithSecondaries() = withKaSession {
     }
 }
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.predictRuntimeIntValue()"))
-fun KtExpression.predictRuntimeIntValue(bindingContext: BindingContext) =
-    predictRuntimeValueExpression(bindingContext).let { runtimeValueExpression ->
-        runtimeValueExpression.getType(bindingContext)?.let {
-            bindingContext[BindingContext.COMPILE_TIME_VALUE, runtimeValueExpression]?.getValue(it) as? Int
-        }
-    }
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.predictRuntimeIntValue()"))
+//fun KtExpression.predictRuntimeIntValue(bindingContext: BindingContext) = null
+//    predictRuntimeValueExpression(bindingContext).let { runtimeValueExpression ->
+//        runtimeValueExpression.getType(bindingContext)?.let {
+//            bindingContext[BindingContext.COMPILE_TIME_VALUE, runtimeValueExpression]?.getValue(it) as? Int
+//        }
+//    }
 
 fun KtExpression.predictRuntimeIntValue(): Int? = withKaSession {
     val valueExpression = predictRuntimeValueExpression()
@@ -162,13 +162,13 @@ fun KtExpression.predictRuntimeIntValue(): Int? = withKaSession {
     } else null
 }
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.predictRuntimeBooleanValue()"))
-fun KtExpression.predictRuntimeBooleanValue(bindingContext: BindingContext) =
-    predictRuntimeValueExpression(bindingContext).let { runtimeValueExpression ->
-        runtimeValueExpression.getType(bindingContext)?.let {
-            bindingContext[BindingContext.COMPILE_TIME_VALUE, runtimeValueExpression]?.getValue(it) as? Boolean
-        }
-    }
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.predictRuntimeBooleanValue()"))
+//fun KtExpression.predictRuntimeBooleanValue(bindingContext: BindingContext) = null
+//    predictRuntimeValueExpression(bindingContext).let { runtimeValueExpression ->
+//        runtimeValueExpression.getType(bindingContext)?.let {
+//            bindingContext[BindingContext.COMPILE_TIME_VALUE, runtimeValueExpression]?.getValue(it) as? Boolean
+//        }
+//    }
 
 fun KtExpression.predictRuntimeBooleanValue() = withKaSession {
     val valueExpression = predictRuntimeValueExpression()
@@ -184,27 +184,29 @@ fun KtExpression.predictRuntimeBooleanValue() = withKaSession {
  *
  * This function will try to resolve the current expression as far as it statically can, including deparenthesizing the expression.
  */
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.predictRuntimeValueExpression(declarations)"))
-fun KtExpression.predictRuntimeValueExpression(
-    bindingContext: BindingContext,
-    declarations: MutableList<PsiElement> = mutableListOf(),
-): KtExpression = this.deparenthesize().let { deparenthesized ->
-    when (deparenthesized) {
-        is KtReferenceExpression -> run {
-            val referenceTarget = deparenthesized.extractLetAlsoTargetExpression(bindingContext)
-                ?: deparenthesized.extractFromInitializer(bindingContext, declarations)
-
-            referenceTarget?.predictRuntimeValueExpression(bindingContext, declarations)
-        }
-
-        is KtParenthesizedExpression -> deparenthesized.expression?.predictRuntimeValueExpression(bindingContext, declarations)
-        is KtBinaryExpressionWithTypeRHS -> deparenthesized.left.predictRuntimeValueExpression(bindingContext, declarations)
-        is KtThisExpression -> bindingContext[BindingContext.REFERENCE_TARGET, deparenthesized.instanceReference]
-            ?.findFunctionLiteral(deparenthesized, bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
-
-        else -> deparenthesized.getCall(bindingContext)?.predictValueExpression(bindingContext)
-    } ?: deparenthesized as? KtExpression
-} ?: this
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.predictRuntimeValueExpression(declarations)"))
+//fun KtExpression.predictRuntimeValueExpression(
+//    bindingContext: BindingContext,
+//    declarations: MutableList<PsiElement> = mutableListOf(),
+//): KtExpression = this
+//this.deparenthesize()
+//    .let { deparenthesized ->
+//    when (deparenthesized) {
+//        is KtReferenceExpression -> run {
+//            val referenceTarget = deparenthesized.extractLetAlsoTargetExpression(bindingContext)
+//                ?: deparenthesized.extractFromInitializer(bindingContext, declarations)
+//
+//            referenceTarget?.predictRuntimeValueExpression(bindingContext, declarations)
+//        }
+//
+//        is KtParenthesizedExpression -> deparenthesized.expression?.predictRuntimeValueExpression(bindingContext, declarations)
+//        is KtBinaryExpressionWithTypeRHS -> deparenthesized.left.predictRuntimeValueExpression(bindingContext, declarations)
+//        is KtThisExpression -> bindingContext[BindingContext.REFERENCE_TARGET, deparenthesized.instanceReference]
+//            ?.findFunctionLiteral(deparenthesized, bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
+//
+//        else -> deparenthesized.getCall(bindingContext)?.predictValueExpression(bindingContext)
+//    } ?: deparenthesized as? KtExpression
+//} ?: this
 
 fun KtExpression.predictRuntimeValueExpression(
     declarations: MutableList<PsiElement> = mutableListOf(),
@@ -234,21 +236,22 @@ fun KtExpression.predictRuntimeValueExpression(
     } ?: deparenthesized as? KtExpression
 } ?: this
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.predictReceiverExpression()"))
-fun KtCallExpression.predictReceiverExpression(
-    bindingContext: BindingContext,
-    precomputedResolvedCall: ResolvedCall<*>? = null,
-): KtExpression? {
-    val resolvedCall = precomputedResolvedCall ?: getResolvedCall(bindingContext)
-
-    // For calls of the format `foo.bar()` (i.e. with explicit receiver)
-    resolvedCall?.getReceiverExpression()?.let { explicitReceiver ->
-        return explicitReceiver.predictRuntimeValueExpression(bindingContext)
-    }
-
-    // For calls of the format `foo()` (i.e. where `this` is the implicit receiver)
-    return resolvedCall?.getImplicitReceiverValue()?.extractWithRunApplyTargetExpression(this, bindingContext)
-}
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.predictReceiverExpression()"))
+//fun KtCallExpression.predictReceiverExpression(
+//    bindingContext: BindingContext,
+//    precomputedResolvedCall: ResolvedCall<*>? = null,
+//): KtExpression? = null
+//{
+//    val resolvedCall = precomputedResolvedCall ?: getResolvedCall(bindingContext)
+//
+//    // For calls of the format `foo.bar()` (i.e. with explicit receiver)
+//    resolvedCall?.getReceiverExpression()?.let { explicitReceiver ->
+//        return explicitReceiver.predictRuntimeValueExpression(bindingContext)
+//    }
+//
+//    // For calls of the format `foo()` (i.e. where `this` is the implicit receiver)
+//    return resolvedCall?.getImplicitReceiverValue()?.extractWithRunApplyTargetExpression(this, bindingContext)
+//}
 
 fun KtExpression.predictReceiverExpression(): KtExpression? = withKaSession {
     val resolvedCall = this@predictReceiverExpression.resolveToCall()?.successfulFunctionCallOrNull()
@@ -288,40 +291,40 @@ fun PsiComment.getContent() =
         else -> text
     }
 
-/**
- * @param declarations is used to collect all visited declaration for reporting secondary locations
- */
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.stringValue(declarations)"))
-private fun KtExpression.stringValue(
-    bindingContext: BindingContext,
-    declarations: MutableList<PsiElement> = mutableListOf(),
-): String? = when (this) {
-    is KtStringTemplateExpression -> {
-        val entries = entries.map {
-            if (it.expression != null) it.expression!!.stringValue(bindingContext, declarations) else it.text
-        }
-        if (entries.all { it != null }) entries.joinToString("") else null
-    }
-
-    is KtNameReferenceExpression -> {
-        val descriptor = bindingContext[BindingContext.REFERENCE_TARGET, this]
-        descriptor?.let {
-            val declaration = DescriptorToSourceUtils.descriptorToDeclaration(descriptor)
-            if (declaration is KtProperty && !declaration.isVar) {
-                declarations.add(declaration)
-                declaration.delegateExpressionOrInitializer?.stringValue(bindingContext, declarations)
-            } else null
-        }
-    }
-
-    is KtDotQualifiedExpression -> selectorExpression?.stringValue(bindingContext, declarations)
-    is KtBinaryExpression ->
-        if (operationToken == KtTokens.PLUS)
-            left?.stringValue(bindingContext, declarations)?.plus(right?.stringValue(bindingContext, declarations))
-        else null
-
-    else -> null
-}
+///**
+// * @param declarations is used to collect all visited declaration for reporting secondary locations
+// */
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.stringValue(declarations)"))
+//private fun KtExpression.stringValue(
+//    bindingContext: BindingContext,
+//    declarations: MutableList<PsiElement> = mutableListOf(),
+//): String? = when (this) {
+//    is KtStringTemplateExpression -> {
+//        val entries = entries.map {
+//            if (it.expression != null) it.expression!!.stringValue(bindingContext, declarations) else it.text
+//        }
+//        if (entries.all { it != null }) entries.joinToString("") else null
+//    }
+//
+//    is KtNameReferenceExpression -> {
+//        val descriptor = bindingContext[BindingContext.REFERENCE_TARGET, this]
+//        descriptor?.let {
+//            val declaration = DescriptorToSourceUtils.descriptorToDeclaration(descriptor)
+//            if (declaration is KtProperty && !declaration.isVar) {
+//                declarations.add(declaration)
+//                declaration.delegateExpressionOrInitializer?.stringValue(bindingContext, declarations)
+//            } else null
+//        }
+//    }
+//
+//    is KtDotQualifiedExpression -> selectorExpression?.stringValue(bindingContext, declarations)
+//    is KtBinaryExpression ->
+//        if (operationToken == KtTokens.PLUS)
+//            left?.stringValue(bindingContext, declarations)?.plus(right?.stringValue(bindingContext, declarations))
+//        else null
+//
+//    else -> null
+//}
 
 fun KtExpression.stringValue(
     declarations: MutableList<PsiElement> = mutableListOf(),
@@ -355,30 +358,30 @@ fun KtExpression.stringValue(
     }
 }
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.predictValueExpression()"))
-private fun Call.predictValueExpression(bindingContext: BindingContext) =
-    if (GET_PROP_WITH_DEFAULT_MATCHER.matches(this, bindingContext)) {
-        valueArguments[1].getArgumentExpression()
-    } else null
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.predictValueExpression()"))
+//private fun Call.predictValueExpression(bindingContext: BindingContext) =
+//    if (GET_PROP_WITH_DEFAULT_MATCHER.matches(this, bindingContext)) {
+//        valueArguments[1].getArgumentExpression()
+//    } else null
 
 private fun KaFunctionCall<*>.predictValueExpression(): KtExpression? =
     if (GET_PROP_WITH_DEFAULT_MATCHER.matches(this)) {
         argumentMapping.keys.elementAt(1)
     } else null
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.extractFromInitializer()"))
-private fun KtReferenceExpression.extractFromInitializer(
-    bindingContext: BindingContext,
-    declarations: MutableList<PsiElement> = mutableListOf(),
-) =
-    bindingContext[BindingContext.REFERENCE_TARGET, this]?.let {
-        DescriptorToSourceUtils.descriptorToDeclaration(it) as? KtProperty
-    }?.let { declaration ->
-        if (!declaration.isVar) {
-            declarations.add(declaration)
-            declaration.delegateExpressionOrInitializer?.predictRuntimeValueExpression(bindingContext)
-        } else null
-    }
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.extractFromInitializer()"))
+//private fun KtReferenceExpression.extractFromInitializer(
+//    bindingContext: BindingContext,
+//    declarations: MutableList<PsiElement> = mutableListOf(),
+//) =
+//    bindingContext[BindingContext.REFERENCE_TARGET, this]?.let {
+//        DescriptorToSourceUtils.descriptorToDeclaration(it) as? KtProperty
+//    }?.let { declaration ->
+//        if (!declaration.isVar) {
+//            declarations.add(declaration)
+//            declaration.delegateExpressionOrInitializer?.predictRuntimeValueExpression(bindingContext)
+//        } else null
+//    }
 
 
 private fun KtReferenceExpression.extractFromInitializer(
@@ -394,47 +397,47 @@ private fun KtReferenceExpression.extractFromInitializer(
         }
 }
 
-/**
- * Will try to resolve what `it` is an alias for inside of a `let` or `also` scope.
- */
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.extractLetAlsoTargetExpression()"))
-private fun KtReferenceExpression.extractLetAlsoTargetExpression(bindingContext: BindingContext) =
-    findReceiverScopeFunctionLiteral(bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
+///**
+// * Will try to resolve what `it` is an alias for inside of a `let` or `also` scope.
+// */
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.extractLetAlsoTargetExpression()"))
+//private fun KtReferenceExpression.extractLetAlsoTargetExpression(bindingContext: BindingContext) = null
+////    findReceiverScopeFunctionLiteral(bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
 
 private fun KtReferenceExpression.extractLetAlsoTargetExpression() =
     findReceiverScopeFunctionLiteral()?.findLetAlsoRunWithTargetExpression()
 
-/**
- * Will try to resolve what `this` is an alias for inside a `with`, `run` or `apply` scope.
- */
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.extractWithRunApplyTargetExpression()"))
-private fun ImplicitReceiver.extractWithRunApplyTargetExpression(
-    startNode: PsiElement,
-    bindingContext: BindingContext
-) =
-    findReceiverScopeFunctionLiteral(startNode, bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
+///**
+// * Will try to resolve what `this` is an alias for inside a `with`, `run` or `apply` scope.
+// */
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.extractWithRunApplyTargetExpression()"))
+//private fun ImplicitReceiver.extractWithRunApplyTargetExpression(
+//    startNode: PsiElement,
+//    bindingContext: BindingContext
+//) = null
+////    findReceiverScopeFunctionLiteral(startNode, bindingContext)?.findLetAlsoRunWithTargetExpression(bindingContext)
 
 private fun KaImplicitReceiverValue.extractWithRunApplyTargetExpression(
     startNode: PsiElement
 ) =
     findReceiverScopeFunctionLiteral(startNode)?.findLetAlsoRunWithTargetExpression()
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.findLetAlsoRunWithTargetExpression()"))
-private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(bindingContext: BindingContext): KtExpression? =
-    getParentCall(bindingContext)?.let { larwCallCandidate ->
-        when (larwCallCandidate.callElement.getCalleeExpressionIfAny()?.text) {
-            in KOTLIN_CHAIN_CALL_CONSTRUCTS -> {
-                (larwCallCandidate.explicitReceiver as? ExpressionReceiver)?.expression?.predictRuntimeValueExpression(bindingContext)
-            }
-
-            "with" -> {
-                larwCallCandidate.getResolvedCall(bindingContext)?.getFirstArgumentExpression()
-                    ?.predictRuntimeValueExpression(bindingContext)
-            }
-
-            else -> null
-        }
-    }
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.findLetAlsoRunWithTargetExpression()"))
+//private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(bindingContext: BindingContext): KtExpression? =
+//    getParentCall(bindingContext)?.let { larwCallCandidate ->
+//        when (larwCallCandidate.callElement.getCalleeExpressionIfAny()?.text) {
+//            in KOTLIN_CHAIN_CALL_CONSTRUCTS -> {
+//                (larwCallCandidate.explicitReceiver as? ExpressionReceiver)?.expression?.predictRuntimeValueExpression(bindingContext)
+//            }
+//
+//            "with" -> {
+//                larwCallCandidate.getResolvedCall(bindingContext)?.getFirstArgumentExpression()
+//                    ?.predictRuntimeValueExpression(bindingContext)
+//            }
+//
+//            else -> null
+//        }
+//    }
 
 private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(): KtExpression? = withKaSession {
     getParentCall()?.let { larwCallCandidate ->
@@ -473,10 +476,10 @@ fun KtElement.getParentCall(): KaFunctionCall<*>? {
 fun KaFunctionCall<*>.getFirstArgumentExpression() =
     argumentMapping.keys.elementAtOrNull(0)
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.findReceiverScopeFunctionLiteral()"))
-private fun KtReferenceExpression.findReceiverScopeFunctionLiteral(bindingContext: BindingContext): KtFunctionLiteral? =
-    (bindingContext[BindingContext.REFERENCE_TARGET, this] as? ValueParameterDescriptor)?.containingDeclaration
-        ?.findFunctionLiteral(this, bindingContext)
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.findReceiverScopeFunctionLiteral()"))
+//private fun KtReferenceExpression.findReceiverScopeFunctionLiteral(bindingContext: BindingContext): KtFunctionLiteral? =
+//    (bindingContext[BindingContext.REFERENCE_TARGET, this] as? ValueParameterDescriptor)?.containingDeclaration
+//        ?.findFunctionLiteral(this, bindingContext)
 
 private fun KtReferenceExpression.findReceiverScopeFunctionLiteral(): KtFunctionLiteral? = withKaSession {
     when (val resolvedSymbol = this@findReceiverScopeFunctionLiteral.mainReference.resolveToSymbol()) {
@@ -486,32 +489,32 @@ private fun KtReferenceExpression.findReceiverScopeFunctionLiteral(): KtFunction
     }
 }
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.findReceiverScopeFunctionLiteral(startNode)"))
-private fun ImplicitReceiver.findReceiverScopeFunctionLiteral(
-    startNode: PsiElement,
-    bindingContext: BindingContext
-): KtFunctionLiteral? =
-    declarationDescriptor.findFunctionLiteral(startNode, bindingContext)
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.findReceiverScopeFunctionLiteral(startNode)"))
+//private fun ImplicitReceiver.findReceiverScopeFunctionLiteral(
+//    startNode: PsiElement,
+//    bindingContext: BindingContext
+//): KtFunctionLiteral? =
+//    declarationDescriptor.findFunctionLiteral(startNode, bindingContext)
 
 private fun KaImplicitReceiverValue.findReceiverScopeFunctionLiteral(
     startNode: PsiElement,
 ): KtFunctionLiteral? =
     symbol.findFunctionLiteral(startNode)
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.findFunctionLiteral(startNode)"))
-private fun DeclarationDescriptor.findFunctionLiteral(
-    startNode: PsiElement,
-    bindingContext: BindingContext,
-): KtFunctionLiteral? {
-    var curNode: PsiElement? = startNode
-    for (i in 0 until MAX_AST_PARENT_TRAVERSALS) {
-        curNode = curNode?.parent ?: break
-        if (curNode is KtFunctionLiteral && bindingContext[BindingContext.FUNCTION, curNode] === this) {
-            return curNode
-        }
-    }
-    return null
-}
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.findFunctionLiteral(startNode)"))
+//private fun DeclarationDescriptor.findFunctionLiteral(
+//    startNode: PsiElement,
+//    bindingContext: BindingContext,
+//): KtFunctionLiteral? {
+//    var curNode: PsiElement? = startNode
+//    for (i in 0 until MAX_AST_PARENT_TRAVERSALS) {
+//        curNode = curNode?.parent ?: break
+//        if (curNode is KtFunctionLiteral && bindingContext[BindingContext.FUNCTION, curNode] === this) {
+//            return curNode
+//        }
+//    }
+//    return null
+//}
 
 private fun KaSymbol.findFunctionLiteral(
     startNode: PsiElement,
@@ -543,17 +546,17 @@ fun KtNamedFunction.isExpect(): Boolean {
 
 fun KtNamedFunction.suspendModifier() = modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD)
 
-fun KtQualifiedExpression.resolveReferenceTarget(bindingContext: BindingContext) =
-    this.selectorExpression?.referenceExpression()?.let { bindingContext[BindingContext.REFERENCE_TARGET, it] }
+//fun KtQualifiedExpression.resolveReferenceTarget(bindingContext: BindingContext) =
+//    this.selectorExpression?.referenceExpression()?.let { bindingContext[BindingContext.REFERENCE_TARGET, it] }
 
-fun DeclarationDescriptor.scope() = fqNameSafe.asString().substringBeforeLast(".")
+//fun DeclarationDescriptor.scope() = fqNameSafe.asString().substringBeforeLast(".")
 
-fun KtCallExpression.expressionTypeFqn(bindingContext: BindingContext): String? {
-    val type = bindingContext[BindingContext.EXPRESSION_TYPE_INFO, this]?.type
-    if (/* intersection type */ type?.constructor?.declarationDescriptor == null) return null
-    // Note that for intersection type next method throws IllegalArgumentException
-    return type.getKotlinTypeFqName(false)
-}
+//fun KtCallExpression.expressionTypeFqn(bindingContext: BindingContext): String? {
+//    val type = bindingContext[BindingContext.EXPRESSION_TYPE_INFO, this]?.type
+//    if (/* intersection type */ type?.constructor?.declarationDescriptor == null) return null
+//    // Note that for intersection type next method throws IllegalArgumentException
+//    return type.getKotlinTypeFqName(false)
+//}
 
 /**
  * See examples of [org.jetbrains.kotlin.analysis.api.types.KaFlexibleType]
@@ -568,18 +571,18 @@ fun KaType.asFqNameString(): String? = withKaSession {
     (lowerBoundIfFlexible() as? KaClassType)?.classId?.asFqNameString()
 }
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineType()"))
-private fun KtProperty.determineType(bindingContext: BindingContext) =
-    (typeReference?.let { bindingContext[BindingContext.TYPE, it] }
-        ?: bindingContext[BindingContext.EXPRESSION_TYPE_INFO, initializer]?.type)
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineType()"))
+//private fun KtProperty.determineType(bindingContext: BindingContext) =
+//    (typeReference?.let { bindingContext[BindingContext.TYPE, it] }
+//        ?: bindingContext[BindingContext.EXPRESSION_TYPE_INFO, initializer]?.type)
 
 private fun KtProperty.determineType(): KaType? = withKaSession {
     typeReference?.type ?: initializer?.expressionType
 }
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineTypeAsString()"))
-fun KtProperty.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineTypeAsString()"))
+//fun KtProperty.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
+//    determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
 /**
  * In the following example for the platform type `java.lang.String!`
@@ -593,41 +596,41 @@ fun KtProperty.determineTypeAsString(): String? = withKaSession {
     determineType()?.asFqNameString()
 }
 
-fun KtExpression.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    determineType(bindingContext)?.let {
-        if (it.constructor.declarationDescriptor != null) it.getKotlinTypeFqName(printTypeArguments)
-        else null
-    }
+//fun KtExpression.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
+//    determineType(bindingContext)?.let {
+//        if (it.constructor.declarationDescriptor != null) it.getKotlinTypeFqName(printTypeArguments)
+//        else null
+//    }
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineType()"))
-private fun KtParameter.determineType(bindingContext: BindingContext) =
-    bindingContext[BindingContext.TYPE, typeReference]
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineType()"))
+//private fun KtParameter.determineType(bindingContext: BindingContext) =
+//    bindingContext[BindingContext.TYPE, typeReference]
 
 private fun KtParameter.determineType(): KaType? = withKaSession {
     typeReference?.type
 }
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineTypeAsString()"))
-fun KtParameter.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.determineTypeAsString()"))
+//fun KtParameter.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
+//    determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
 fun KtParameter.determineTypeAsString(): String? = withKaSession {
     determineType()?.asFqNameString()
 }
 
-private fun KtTypeReference.determineType(bindingContext: BindingContext) =
-    bindingContext[BindingContext.TYPE, this]
+//private fun KtTypeReference.determineType(bindingContext: BindingContext) =
+//    bindingContext[BindingContext.TYPE, this]
 
-fun KtTypeReference.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
+//fun KtTypeReference.determineTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
+//    determineType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.returnTypeAsString()"))
-fun KtNamedFunction.returnTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
-    returnType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.returnTypeAsString()"))
+//fun KtNamedFunction.returnTypeAsString(bindingContext: BindingContext, printTypeArguments: Boolean = false) =
+//    returnType(bindingContext)?.getKotlinTypeFqName(printTypeArguments)
 
-@Deprecated("use kotlin-analysis-api", ReplaceWith("this.returnType"))
-fun KtNamedFunction.returnType(bindingContext: BindingContext) =
-    createTypeBindingForReturnType(bindingContext)?.type
+//@Deprecated("use kotlin-analysis-api", ReplaceWith("this.returnType"))
+//fun KtNamedFunction.returnType(bindingContext: BindingContext) =
+//    createTypeBindingForReturnType(bindingContext)?.type
 
 /**
  * In the following example for the platform type `java.lang.String!`
@@ -680,34 +683,34 @@ fun KtExpression.findCallInPrecedingCallChain(
     return receiver to receiverResolved
 }
 
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.isPredictedNull()"))
-fun ResolvedValueArgument.isNull(bindingContext: BindingContext) = (
-    (this as? ExpressionValueArgument)
-        ?.valueArgument
-        ?.getArgumentExpression()
-        ?.predictRuntimeValueExpression(bindingContext)
-    )?.isNull() ?: false
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.isPredictedNull()"))
+//fun ResolvedValueArgument.isNull(bindingContext: BindingContext) = (
+//    (this as? ExpressionValueArgument)
+//        ?.valueArgument
+//        ?.getArgumentExpression()
+//        ?.predictRuntimeValueExpression(bindingContext)
+//    )?.isNull() ?: false
 
 fun KtExpression.isPredictedNull() =
    predictRuntimeValueExpression().isNull()
 
-@Deprecated("use kotlin-analysis-api instead")
-fun KtExpression.getCalleeOrUnwrappedGetMethod(bindingContext: BindingContext) =
-    (this as? KtDotQualifiedExpression)?.let { dotQualifiedExpression ->
-        (dotQualifiedExpression.selectorExpression as? KtNameReferenceExpression)?.let { nameSelector ->
-            (bindingContext[BindingContext.REFERENCE_TARGET, nameSelector] as? PropertyDescriptor)?.unwrappedGetMethod
-        }
-    } ?: this.getResolvedCall(bindingContext)?.resultingDescriptor
+//@Deprecated("use kotlin-analysis-api instead")
+//fun KtExpression.getCalleeOrUnwrappedGetMethod(bindingContext: BindingContext) =
+//    (this as? KtDotQualifiedExpression)?.let { dotQualifiedExpression ->
+//        (dotQualifiedExpression.selectorExpression as? KtNameReferenceExpression)?.let { nameSelector ->
+//            (bindingContext[BindingContext.REFERENCE_TARGET, nameSelector] as? PropertyDescriptor)?.unwrappedGetMethod
+//        }
+//    } ?: this.getResolvedCall(bindingContext)?.resultingDescriptor
 
-/**
- * Checks whether the expression is a call, matches the FunMatchers in [STRING_TO_BYTE_FUNS] and is called on a constant string value.
- */
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.isBytesInitializedFromString()"))
-fun KtExpression.isBytesInitializedFromString(bindingContext: BindingContext) =
-    getCalleeOrUnwrappedGetMethod(bindingContext)?.let { callee ->
-        STRING_TO_BYTE_FUNS.any { it.matches(callee) } &&
-            (getCall(bindingContext)?.explicitReceiver as? ExpressionReceiver)?.expression?.predictRuntimeStringValue(bindingContext) != null
-    } ?: false
+///**
+// * Checks whether the expression is a call, matches the FunMatchers in [STRING_TO_BYTE_FUNS] and is called on a constant string value.
+// */
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.isBytesInitializedFromString()"))
+//fun KtExpression.isBytesInitializedFromString(bindingContext: BindingContext) = false
+////    getCalleeOrUnwrappedGetMethod(bindingContext)?.let { callee ->
+////        STRING_TO_BYTE_FUNS.any { it.matches(callee) } &&
+////            (getCall(bindingContext)?.explicitReceiver as? ExpressionReceiver)?.expression?.predictRuntimeStringValue(bindingContext) != null
+////    } ?: false
 
 fun KtExpression.isBytesInitializedFromString(): Boolean = withKaSession {
     val call = this@isBytesInitializedFromString.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
@@ -719,12 +722,12 @@ fun KtExpression.isBytesInitializedFromString(): Boolean = withKaSession {
                 ?.predictRuntimeStringValue() != null
 }
 
-@Deprecated("use kotlin-analysis-api instead")
-fun ResolvedCall<*>.simpleArgExpressionOrNull(index: Int) =
-    this.valueArgumentsByIndex
-        ?.getOrNull(index)
-        ?.arguments?.firstOrNull()
-        ?.getArgumentExpression()
+//@Deprecated("use kotlin-analysis-api instead")
+//fun ResolvedCall<*>.simpleArgExpressionOrNull(index: Int) =
+//    this.valueArgumentsByIndex
+//        ?.getOrNull(index)
+//        ?.arguments?.firstOrNull()
+//        ?.getArgumentExpression()
 
 /**
  * Will try to find any usages of this reference. You can provide a searchStartNode to define the scope of the search (will
@@ -751,8 +754,8 @@ fun KtNameReferenceExpression.findUsages(
             }
     }
 
-fun KtReferenceExpression.getContainingDeclaration(bindingContext: BindingContext) =
-    bindingContext[BindingContext.REFERENCE_TARGET, this]?.containingDeclaration
+//fun KtReferenceExpression.getContainingDeclaration(bindingContext: BindingContext) =
+//    bindingContext[BindingContext.REFERENCE_TARGET, this]?.containingDeclaration
 
 /**
  * Will try to find all the usages of this property. You can provide a searchStartNode to define the scope of the search (will
@@ -777,12 +780,12 @@ fun KtProperty.findUsages(
 /**
  * Checks whether the variable has been initialized with the help of a secure random function
  */
-@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.isInitializedPredictably(searchStartNode)"))
-fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression, bindingContext: BindingContext): Boolean {
-    return this !is KtNameReferenceExpression || this.findUsages(searchStartNode) {
-        it.getParentOfType<KtCallExpression>(false).getResolvedCall(bindingContext) matches SECURE_RANDOM_FUNS
-    }.isEmpty()
-}
+//@Deprecated("use kotlin-analysis-api instead", ReplaceWith("this.isInitializedPredictably(searchStartNode)"))
+//fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression, bindingContext: BindingContext): Boolean {
+//    return this !is KtNameReferenceExpression || this.findUsages(searchStartNode) {
+//        it.getParentOfType<KtCallExpression>(false).getResolvedCall(bindingContext) matches SECURE_RANDOM_FUNS
+//    }.isEmpty()
+//}
 
 fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression): Boolean {
     return this !is KtNameReferenceExpression || this.findUsages(searchStartNode) {
@@ -796,31 +799,31 @@ fun KtExpression.isInitializedPredictably(searchStartNode: KtExpression): Boolea
 /**
  * Checks if an expression is a function local variable
  */
-@Deprecated("use kotlin-analysis-api instead", replaceWith = ReplaceWith("isLocalVariable()"))
-fun KtExpression?.isLocalVariable(bindingContext: BindingContext) =
-    (this is KtNameReferenceExpression) && (bindingContext[BindingContext.REFERENCE_TARGET, this] is LocalVariableDescriptor)
+//@Deprecated("use kotlin-analysis-api instead", replaceWith = ReplaceWith("isLocalVariable()"))
+//fun KtExpression?.isLocalVariable(bindingContext: BindingContext) =
+//    (this is KtNameReferenceExpression) && (bindingContext[BindingContext.REFERENCE_TARGET, this] is LocalVariableDescriptor)
 
 fun KtExpression?.isLocalVariable(): Boolean = withKaSession {
     if (this@isLocalVariable !is KtNameReferenceExpression) return false
     return mainReference.resolveToSymbol() is KaLocalVariableSymbol
 }
 
-@Deprecated("use kotlin-analysis-api instead")
-fun KtExpression?.setterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
-    is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
-        (matcher.matches((bindingContext[BindingContext.REFERENCE_TARGET, this] as? PropertyDescriptor)?.unwrappedSetMethod))
-
-    is KtQualifiedExpression -> selectorExpression.setterMatches(bindingContext, propertyName, matcher)
-    else -> false
-}
-
-fun KtExpression?.getterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
-    is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
-        (matcher.matches((bindingContext[BindingContext.REFERENCE_TARGET, this] as? PropertyDescriptor)?.unwrappedGetMethod))
-
-    is KtQualifiedExpression -> selectorExpression.getterMatches(bindingContext, propertyName, matcher)
-    else -> false
-}
+//@Deprecated("use kotlin-analysis-api instead")
+//fun KtExpression?.setterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
+//    is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
+//        (matcher.matches((bindingContext[BindingContext.REFERENCE_TARGET, this] as? PropertyDescriptor)?.unwrappedSetMethod))
+//
+//    is KtQualifiedExpression -> selectorExpression.setterMatches(bindingContext, propertyName, matcher)
+//    else -> false
+//}
+//
+//fun KtExpression?.getterMatches(bindingContext: BindingContext, propertyName: String, matcher: FunMatcherImpl): Boolean = when (this) {
+//    is KtNameReferenceExpression -> (getReferencedName() == propertyName) &&
+//        (matcher.matches((bindingContext[BindingContext.REFERENCE_TARGET, this] as? PropertyDescriptor)?.unwrappedGetMethod))
+//
+//    is KtQualifiedExpression -> selectorExpression.getterMatches(bindingContext, propertyName, matcher)
+//    else -> false
+//}
 
 /**
  * Finds the closest ancestor of type T within the scope of a {@param stopCondition}.
@@ -849,13 +852,13 @@ fun PsiElement.findClosestAncestor(predicate: (PsiElement) -> Boolean): PsiEleme
 fun KtBinaryExpression.isPlus() =
     this.operationReference.operationSignTokenType?.let { OperatorConventions.BINARY_OPERATION_NAMES[it] }?.asString() == "plus"
 
-fun PsiElement?.getVariableType(bindingContext: BindingContext) =
-    this?.let { bindingContext[BindingContext.VARIABLE, it]?.type }
+//fun PsiElement?.getVariableType(bindingContext: BindingContext) =
+//    this?.let { bindingContext[BindingContext.VARIABLE, it]?.type }
 
-/** Use [org.jetbrains.kotlin.analysis.api.components.KaTypeProvider.type] instead. */
-@Deprecated("use kotlin-analysis-api instead")
-fun KtTypeReference?.getType(bindingContext: BindingContext): KotlinType? =
-    this?.let { bindingContext[BindingContext.TYPE, it] }
+///** Use [org.jetbrains.kotlin.analysis.api.components.KaTypeProvider.type] instead. */
+//@Deprecated("use kotlin-analysis-api instead")
+//fun KtTypeReference?.getType(bindingContext: BindingContext): KotlinType? =
+//    this?.let { bindingContext[BindingContext.TYPE, it] }
 
 fun KtClassOrObject.hasExactlyOneFunctionAndNoProperties(): Boolean {
     var functionCount = 0
@@ -867,8 +870,8 @@ fun KtClassOrObject.hasExactlyOneFunctionAndNoProperties(): Boolean {
 fun KotlinFileContext.merge(firstElement: PsiElement, lastElement: PsiElement) =
     merge(listOf(textRange(firstElement), textRange(lastElement)))
 
-@Deprecated("use kotlin-analysis-api instead")
-fun KotlinType.simpleName(): String = getKotlinTypeFqName(false).substringAfterLast(".")
+//@Deprecated("use kotlin-analysis-api instead")
+//fun KotlinType.simpleName(): String = getKotlinTypeFqName(false).substringAfterLast(".")
 
 /**
  * See examples of [org.jetbrains.kotlin.analysis.api.types.KaFlexibleType]
@@ -879,36 +882,36 @@ fun KaType.simpleName(): String? = withKaSession {
     return lowerBoundIfFlexible().symbol?.name?.asString()
 }
 
-fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
-    this?.let {
-        when (this) {
-            is KtCallExpression -> getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
-            is KtParameter -> determineType(bindingContext)
-            is KtTypeReference -> determineType(bindingContext)
-            is KtProperty -> determineType(bindingContext)
-            is KtDotQualifiedExpression -> getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
-            is KtReferenceExpression -> bindingContext[BindingContext.REFERENCE_TARGET, this].determineType()
-            is KtFunction -> bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this].determineType()
-            is KtClass -> bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this].determineType()
-            is KtExpression -> this.getKotlinTypeForComparison(bindingContext)
-            is KtValueArgument -> this.getArgumentExpression()?.determineType(bindingContext)
-            else -> null
-        }
+//fun PsiElement?.determineType(bindingContext: BindingContext): KotlinType? =
+//    this?.let {
+//        when (this) {
+//            is KtCallExpression -> getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
+//            is KtParameter -> determineType(bindingContext)
+//            is KtTypeReference -> determineType(bindingContext)
+//            is KtProperty -> determineType(bindingContext)
+//            is KtDotQualifiedExpression -> getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
+//            is KtReferenceExpression -> bindingContext[BindingContext.REFERENCE_TARGET, this].determineType()
+//            is KtFunction -> bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this].determineType()
+//            is KtClass -> bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this].determineType()
+//            is KtExpression -> this.getKotlinTypeForComparison(bindingContext)
+//            is KtValueArgument -> this.getArgumentExpression()?.determineType(bindingContext)
+//            else -> null
+//        }
+//
+//    }
 
-    }
+//fun KotlinType.isSupertypeOf(other: KotlinType): Boolean {
+//    return findCorrespondingSupertype(other, this).let { it != null && it != other }
+//}
 
-fun KotlinType.isSupertypeOf(other: KotlinType): Boolean {
-    return findCorrespondingSupertype(other, this).let { it != null && it != other }
-}
-
-fun DeclarationDescriptor?.determineType(): KotlinType? =
-    when (this) {
-        is FunctionDescriptor -> returnType
-        is ClassDescriptor -> defaultType
-        is PropertyDescriptor -> type
-        is ValueDescriptor -> type
-        else -> null
-    }
+//fun DeclarationDescriptor?.determineType(): KotlinType? =
+//    when (this) {
+//        is FunctionDescriptor -> returnType
+//        is ClassDescriptor -> defaultType
+//        is PropertyDescriptor -> type
+//        is ValueDescriptor -> type
+//        else -> null
+//    }
 
 fun KtQualifiedExpression?.determineSignature(): KaSymbol? = withKaSession {
     when (val selectorExpr = this@determineSignature?.selectorExpression) {
@@ -938,8 +941,8 @@ fun KtWhenExpression.isExhaustive(): Boolean = withKaSession {
     return entries.any { it.isElse } || computeMissingCases().isEmpty()
 }
 
-val PropertyDescriptor.unwrappedGetMethod: FunctionDescriptor?
-    get() = if (this is SyntheticPropertyDescriptor) this.getMethod else getter
+//val PropertyDescriptor.unwrappedGetMethod: FunctionDescriptor?
+//    get() = if (this is SyntheticPropertyDescriptor) this.getMethod else getter
 
-val PropertyDescriptor.unwrappedSetMethod: FunctionDescriptor?
-    get() = if (this is SyntheticPropertyDescriptor) this.setMethod else setter
+//val PropertyDescriptor.unwrappedSetMethod: FunctionDescriptor?
+//    get() = if (this is SyntheticPropertyDescriptor) this.setMethod else setter

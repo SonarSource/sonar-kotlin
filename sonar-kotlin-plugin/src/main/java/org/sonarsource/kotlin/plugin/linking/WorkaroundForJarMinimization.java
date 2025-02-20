@@ -24,16 +24,16 @@ public class WorkaroundForJarMinimization {
   /** Without this declaration JAR minimization can't detect that these classes should not be removed. */
   @SuppressWarnings("unused")
   static final List<Class<?>> CLASSES_TO_KEEP_WHEN_MINIMIZING_JAR = List.of(
-          /** META-INF/services/org.jetbrains.kotlin.builtins.BuiltInsLoader */
-          org.jetbrains.kotlin.serialization.deserialization.builtins.BuiltInsLoaderImpl.class,
-          /** META-INF/services/org.jetbrains.kotlin.util.ModuleVisibilityHelper */
-          org.jetbrains.kotlin.cli.common.ModuleVisibilityHelperImpl.class,
-          /** META-INF/services/org.jetbrains.kotlin.resolve.ExternalOverridabilityCondition */
-          org.jetbrains.kotlin.load.java.FieldOverridabilityCondition.class,
-          org.jetbrains.kotlin.load.java.ErasedOverridabilityCondition.class,
-          org.jetbrains.kotlin.load.java.JavaIncompatibilityRulesOverridabilityCondition.class,
-          /** META-INF/services/org.jetbrains.kotlin.resolve.jvm.jvmSignature.KotlinToJvmSignatureMapper */
-          org.jetbrains.kotlin.codegen.signature.KotlinToJvmSignatureMapperImpl.class,
+//          /** META-INF/services/org.jetbrains.kotlin.builtins.BuiltInsLoader */
+//          org.jetbrains.kotlin.serialization.deserialization.builtins.BuiltInsLoaderImpl.class,
+//          /** META-INF/services/org.jetbrains.kotlin.util.ModuleVisibilityHelper */
+//          org.jetbrains.kotlin.cli.common.ModuleVisibilityHelperImpl.class,
+//          /** META-INF/services/org.jetbrains.kotlin.resolve.ExternalOverridabilityCondition */
+//          org.jetbrains.kotlin.load.java.FieldOverridabilityCondition.class,
+//          org.jetbrains.kotlin.load.java.ErasedOverridabilityCondition.class,
+//          org.jetbrains.kotlin.load.java.JavaIncompatibilityRulesOverridabilityCondition.class,
+//          /** META-INF/services/org.jetbrains.kotlin.resolve.jvm.jvmSignature.KotlinToJvmSignatureMapper */
+//          org.jetbrains.kotlin.codegen.signature.KotlinToJvmSignatureMapperImpl.class,
 
           // META-INF/analysis-api/analysis-api-impl-base.xml
           org.jetbrains.kotlin.analysis.api.resolve.extensions.KaResolveExtensionProvider.class,
@@ -44,11 +44,11 @@ public class WorkaroundForJarMinimization {
           org.jetbrains.kotlin.analysis.api.platform.KotlinProjectMessageBusProvider.class,
           org.jetbrains.kotlin.analysis.api.impl.base.permissions.KaBaseAnalysisPermissionChecker.class,
           org.jetbrains.kotlin.analysis.api.impl.base.lifetime.KaBaseLifetimeTracker.class,
-          // META-INF/analysis-api/analysis-api-fe10.xml
-          org.jetbrains.kotlin.analysis.api.descriptors.KaFe10SessionProvider.class,
-          org.jetbrains.kotlin.analysis.api.descriptors.modification.KaFe10SourceModificationService.class,
-          org.jetbrains.kotlin.references.fe10.base.KtFe10KotlinReferenceProviderContributor.class,
-          org.jetbrains.kotlin.analysis.api.descriptors.references.ReadWriteAccessCheckerDescriptorsImpl.class,
+//          // META-INF/analysis-api/analysis-api-fe10.xml
+//          org.jetbrains.kotlin.analysis.api.descriptors.KaFe10SessionProvider.class,
+//          org.jetbrains.kotlin.analysis.api.descriptors.modification.KaFe10SourceModificationService.class,
+//          org.jetbrains.kotlin.references.fe10.base.KtFe10KotlinReferenceProviderContributor.class,
+//          org.jetbrains.kotlin.analysis.api.descriptors.references.ReadWriteAccessCheckerDescriptorsImpl.class,
           // META-INF/analysis-api/low-level-api-fir.xml
           org.jetbrains.kotlin.analysis.low.level.api.fir.services.LLRealFirElementByPsiElementChooser.class,
 

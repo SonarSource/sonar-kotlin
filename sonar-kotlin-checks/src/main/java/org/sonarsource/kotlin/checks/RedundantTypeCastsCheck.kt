@@ -17,6 +17,7 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
 import org.jetbrains.kotlin.psi.KtFile
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
@@ -30,9 +31,9 @@ class RedundantTypeCastsCheck : AbstractCheck() {
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
         context.diagnostics
             .mapNotNull { diagnostic ->
-                when (diagnostic.factory) {
-                    Errors.USELESS_CAST -> Message("Remove this useless cast.")
-                    Errors.USELESS_IS_CHECK -> message {
+                when (diagnostic.factory.name) {
+                    FirErrors.USELESS_CAST.name -> Message("Remove this useless cast.")
+                    FirErrors.USELESS_IS_CHECK.name -> message {
                         +"Remove this useless "
                         code("is")
                         +" check."

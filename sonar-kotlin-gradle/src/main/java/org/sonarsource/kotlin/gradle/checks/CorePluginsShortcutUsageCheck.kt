@@ -31,19 +31,19 @@ private const val PREFIX_LENGTH = "org.gradle.".length
 @Rule(key = "S6634")
 class CorePluginsShortcutUsageCheck : AbstractCheck() {
     override fun visitCallExpression(callExpr: KtCallExpression, kotlinFileContext: KotlinFileContext) {
-        val calleeExpr = callExpr.calleeExpression ?: return
-        val referencedName = (calleeExpr.referenceExpression() as? KtNameReferenceExpression)?.getReferencedName() ?: return
-        if (callExpr.valueArguments.size != 1 || referencedName != "id") return
-
-        val argAsString = callExpr.valueArguments.first().getArgumentExpression()
-            ?.predictRuntimeStringValue(kotlinFileContext.bindingContext) ?: return
-        if (argAsString.matches(corePluginMatcherRegex)) {
-            val canonicalName = argAsString.substring(PREFIX_LENGTH).let {
-                if (it.contains('-')) "`$it`"
-                else it
-            }
-            kotlinFileContext.reportIssue(callExpr, message(canonicalName))
-        }
+//        val calleeExpr = callExpr.calleeExpression ?: return
+//        val referencedName = (calleeExpr.referenceExpression() as? KtNameReferenceExpression)?.getReferencedName() ?: return
+//        if (callExpr.valueArguments.size != 1 || referencedName != "id") return
+//
+//        val argAsString = callExpr.valueArguments.first().getArgumentExpression()
+//            ?.predictRuntimeStringValue(kotlinFileContext.bindingContext) ?: return
+//        if (argAsString.matches(corePluginMatcherRegex)) {
+//            val canonicalName = argAsString.substring(PREFIX_LENGTH).let {
+//                if (it.contains('-')) "`$it`"
+//                else it
+//            }
+//            kotlinFileContext.reportIssue(callExpr, message(canonicalName))
+//        }
     }
 }
 

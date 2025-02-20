@@ -100,30 +100,30 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
 
     fun KotlinFileContext.isInAndroid() = inputFileContext.isAndroid
 
-    fun KtParameter.typeAsString(bindingContext: BindingContext) =
-        bindingContext[BindingContext.VALUE_PARAMETER, this]?.type.toString()
+//    fun KtParameter.typeAsString(bindingContext: BindingContext) =
+//        bindingContext[BindingContext.VALUE_PARAMETER, this]?.type.toString()
 
-    fun KtExpression.throwsException(bindingContext: BindingContext) =
-        when (this) {
-            is KtThrowExpression -> true
-            is KtDotQualifiedExpression ->
-                selectorExpression?.hasAnnotation(THROWS_FQN, bindingContext)
-            is KtCallExpression ->
-                hasAnnotation(THROWS_FQN, bindingContext)
-            else -> false
-        } ?: false
+//    fun KtExpression.throwsException(bindingContext: BindingContext) =
+//        when (this) {
+//            is KtThrowExpression -> true
+//            is KtDotQualifiedExpression ->
+//                selectorExpression?.hasAnnotation(THROWS_FQN, bindingContext)
+//            is KtCallExpression ->
+//                hasAnnotation(THROWS_FQN, bindingContext)
+//            else -> false
+//        } ?: false
 
-    fun KtExpression.hasAnnotation(annotation: String, bindingContext: BindingContext) =
-        getFunctionResolvedCallWithAssert(bindingContext).resultingDescriptor.annotations.hasAnnotation(FqName(annotation))
+//    fun KtExpression.hasAnnotation(annotation: String, bindingContext: BindingContext) =
+//        getFunctionResolvedCallWithAssert(bindingContext).resultingDescriptor.annotations.hasAnnotation(FqName(annotation))
 
     fun KtNamedFunction.listStatements(): List<KtExpression> =
         bodyBlockExpression?.statements ?: (bodyExpression?.let { listOf(it) } ?: emptyList())
 
-    private fun getAllSuperTypesInterfaces(classes: List<ClassDescriptor>): List<ClassDescriptor> =
-        classes + classes.flatMap { getAllSuperTypesInterfaces(it.getSuperInterfaces() + it.superClassAsList()) }
+//    private fun getAllSuperTypesInterfaces(classes: List<ClassDescriptor>): List<ClassDescriptor> =
+//        classes + classes.flatMap { getAllSuperTypesInterfaces(it.getSuperInterfaces() + it.superClassAsList()) }
 
-    private fun ClassDescriptor.superClassAsList(): List<ClassDescriptor> =
-        getSuperClassNotAny()?.let { listOf(it) } ?: emptyList()
+//    private fun ClassDescriptor.superClassAsList(): List<ClassDescriptor> =
+//        getSuperClassNotAny()?.let { listOf(it) } ?: emptyList()
 
     fun KtExpression.skipParentheses(): KtExpression {
         var expr = this

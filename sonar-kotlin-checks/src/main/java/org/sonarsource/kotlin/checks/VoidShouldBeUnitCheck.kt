@@ -72,17 +72,17 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
         val ktTypeReferences =
             flattenTypeRefs(typeAlias.getTypeReference().nonNullTypeArguments() ?: return)
 
-        kotlinFileContext.bindingContext[BindingContext.TYPE_ALIAS, typeAlias]
-            ?.underlyingType
-            ?.flattenTypeArguments()
-            ?.forEachIndexed { i, type ->
-                if (type.isJavaLangVoid()) {
-                    kotlinFileContext.reportIssue(
-                        ktTypeReferences[i],
-                        message
-                    )
-                }
-            }
+//        kotlinFileContext.bindingContext[BindingContext.TYPE_ALIAS, typeAlias]
+//            ?.underlyingType
+//            ?.flattenTypeArguments()
+//            ?.forEachIndexed { i, type ->
+//                if (type.isJavaLangVoid()) {
+//                    kotlinFileContext.reportIssue(
+//                        ktTypeReferences[i],
+//                        message
+//                    )
+//                }
+//            }
     }
 }
 

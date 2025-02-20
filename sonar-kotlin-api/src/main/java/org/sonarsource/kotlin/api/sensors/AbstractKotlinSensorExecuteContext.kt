@@ -45,7 +45,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinVirtualFile
 import org.sonarsource.kotlin.api.frontend.ParseException
 import org.sonarsource.kotlin.api.frontend.RegexCache
 import org.sonarsource.kotlin.api.frontend.createK2AnalysisSession
-import org.sonarsource.kotlin.api.frontend.transferDiagnostics
+//import org.sonarsource.kotlin.api.frontend.transferDiagnostics
 import org.sonarsource.kotlin.api.logging.debug
 import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
 import java.io.File
@@ -101,7 +101,7 @@ abstract class AbstractKotlinSensorExecuteContext(
         }
     }
 
-    abstract val bindingContext: BindingContext
+//    abstract val bindingContext: BindingContext
 
     abstract val doResolve: Boolean
 
@@ -114,11 +114,11 @@ abstract class AbstractKotlinSensorExecuteContext(
             }.forEach { (ktFile, doc, inputFile) ->
                 if (sensorContext.isCancelled) return false
                 val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
-                val tree = KotlinTree(ktFile, doc, bindingContext, getFileDiagnostics(ktFile), regexCache, doResolve)
+//                val tree = KotlinTree(ktFile, doc, bindingContext, getFileDiagnostics(ktFile), regexCache, doResolve)
 
-                measureDuration(inputFile.filename()) {
-                    analyzeFile(inputFileContext, tree)
-                }
+//                measureDuration(inputFile.filename()) {
+//                    analyzeFile(inputFileContext, tree)
+//                }
                 progressReport.nextFile()
             }
             return true
@@ -154,7 +154,8 @@ abstract class AbstractKotlinSensorExecuteContext(
 
     private val diagnostics: Map<PsiFile, List<Diagnostic>> by lazy {
         measureDuration("Diagnostics") {
-            transferDiagnostics(bindingContext).groupBy { it.psiFile }.toMap()
+            emptyMap()
+//            transferDiagnostics(bindingContext).groupBy { it.psiFile }.toMap()
         }
     }
 

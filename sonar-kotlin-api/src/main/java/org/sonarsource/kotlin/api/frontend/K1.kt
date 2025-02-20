@@ -47,79 +47,79 @@ import org.jetbrains.kotlin.resolve.extensions.AnalysisHandlerExtension
  */
 annotation class K1only
 
-@OptIn(KaPlatformInterface::class)
-internal fun configureK1AnalysisApiServices(env: KotlinCoreEnvironment) {
-    val application = env.projectEnvironment.environment.application
-    if (application.getServiceIfCreated(KtFe10ReferenceResolutionHelper::class.java) == null) {
-        AnalysisApiFe10ServiceRegistrar.registerApplicationServices(application)
-    }
-    val project = env.projectEnvironment.project
-    AnalysisApiFe10ServiceRegistrar.registerProjectServices(project)
-    AnalysisApiFe10ServiceRegistrar.registerProjectModelServices(
-        project,
-        env.projectEnvironment.parentDisposable
-    )
-
-    project.registerService(
-        KotlinModificationTrackerFactory::class.java,
-        KotlinStandaloneModificationTrackerFactory::class.java,
-    )
-    project.registerService(
-        KotlinGlobalModificationService::class.java,
-        KotlinStandaloneGlobalModificationService::class.java,
-    )
-    project.registerService(
-        KotlinLifetimeTokenFactory::class.java,
-        KotlinAlwaysAccessibleLifetimeTokenFactory::class.java,
-    )
-    project.registerService(
-        KotlinResolutionScopeProvider::class.java,
-        KotlinByModulesResolutionScopeProvider::class.java,
-    );
-    project.registerService(
-        KotlinProjectStructureProvider::class.java,
-        KtModuleProviderByCompilerConfiguration.build(
-            env.projectEnvironment,
-            env.configuration,
-            listOf()
-        )
-    )
-}
-
-@OptIn(KaImplementationDetail::class, KaPlatformInterface::class)
-private object AnalysisApiFe10ServiceRegistrar : AnalysisApiSimpleServiceRegistrar() {
-    private const val PLUGIN_RELATIVE_PATH = "/META-INF/analysis-api/analysis-api-fe10.xml"
-
-    override fun registerApplicationServices(application: MockApplication) {
-        PluginStructureProvider.registerApplicationServices(application, PLUGIN_RELATIVE_PATH)
-        application.registerService(
-            KtFe10ReferenceResolutionHelper::class.java,
-            K1internals.dummyKtFe10ReferenceResolutionHelper(),
-        )
-        val applicationArea = application.extensionArea
-        if (!applicationArea.hasExtensionPoint(ClassTypePointerFactory.EP_NAME)) {
-            CoreApplicationEnvironment.registerApplicationExtensionPoint(
-                ClassTypePointerFactory.EP_NAME,
-                ClassTypePointerFactory::class.java,
-            )
-            applicationArea
-                .getExtensionPoint(ClassTypePointerFactory.EP_NAME)
-                .registerExtension(PsiClassReferenceTypePointerFactory(), application)
-        }
-    }
-
-    override fun registerProjectExtensionPoints(project: MockProject) {
-        AnalysisHandlerExtension.registerExtensionPoint(project)
-        PluginStructureProvider.registerProjectExtensionPoints(project, PLUGIN_RELATIVE_PATH)
-    }
-
-    override fun registerProjectServices(project: MockProject) {
-        PluginStructureProvider.registerProjectServices(project, PLUGIN_RELATIVE_PATH)
-        PluginStructureProvider.registerProjectListeners(project, PLUGIN_RELATIVE_PATH)
-    }
-
-    override fun registerProjectModelServices(project: MockProject, disposable: Disposable) {
-        project.apply { registerService(Fe10AnalysisFacade::class.java, K1internals.createCliFe10AnalysisFacade()) }
-        AnalysisHandlerExtension.registerExtension(project, K1internals.createKaFe10AnalysisHandlerExtension())
-    }
-}
+//@OptIn(KaPlatformInterface::class)
+//internal fun configureK1AnalysisApiServices(env: KotlinCoreEnvironment) {
+//    val application = env.projectEnvironment.environment.application
+//    if (application.getServiceIfCreated(KtFe10ReferenceResolutionHelper::class.java) == null) {
+//        AnalysisApiFe10ServiceRegistrar.registerApplicationServices(application)
+//    }
+//    val project = env.projectEnvironment.project
+//    AnalysisApiFe10ServiceRegistrar.registerProjectServices(project)
+//    AnalysisApiFe10ServiceRegistrar.registerProjectModelServices(
+//        project,
+//        env.projectEnvironment.parentDisposable
+//    )
+//
+//    project.registerService(
+//        KotlinModificationTrackerFactory::class.java,
+//        KotlinStandaloneModificationTrackerFactory::class.java,
+//    )
+//    project.registerService(
+//        KotlinGlobalModificationService::class.java,
+//        KotlinStandaloneGlobalModificationService::class.java,
+//    )
+//    project.registerService(
+//        KotlinLifetimeTokenFactory::class.java,
+//        KotlinAlwaysAccessibleLifetimeTokenFactory::class.java,
+//    )
+//    project.registerService(
+//        KotlinResolutionScopeProvider::class.java,
+//        KotlinByModulesResolutionScopeProvider::class.java,
+//    );
+//    project.registerService(
+//        KotlinProjectStructureProvider::class.java,
+//        KtModuleProviderByCompilerConfiguration.build(
+//            env.projectEnvironment,
+//            env.configuration,
+//            listOf()
+//        )
+//    )
+//}
+//
+//@OptIn(KaImplementationDetail::class, KaPlatformInterface::class)
+//private object AnalysisApiFe10ServiceRegistrar : AnalysisApiSimpleServiceRegistrar() {
+//    private const val PLUGIN_RELATIVE_PATH = "/META-INF/analysis-api/analysis-api-fe10.xml"
+//
+//    override fun registerApplicationServices(application: MockApplication) {
+//        PluginStructureProvider.registerApplicationServices(application, PLUGIN_RELATIVE_PATH)
+//        application.registerService(
+//            KtFe10ReferenceResolutionHelper::class.java,
+//            K1internals.dummyKtFe10ReferenceResolutionHelper(),
+//        )
+//        val applicationArea = application.extensionArea
+//        if (!applicationArea.hasExtensionPoint(ClassTypePointerFactory.EP_NAME)) {
+//            CoreApplicationEnvironment.registerApplicationExtensionPoint(
+//                ClassTypePointerFactory.EP_NAME,
+//                ClassTypePointerFactory::class.java,
+//            )
+//            applicationArea
+//                .getExtensionPoint(ClassTypePointerFactory.EP_NAME)
+//                .registerExtension(PsiClassReferenceTypePointerFactory(), application)
+//        }
+//    }
+//
+//    override fun registerProjectExtensionPoints(project: MockProject) {
+//        AnalysisHandlerExtension.registerExtensionPoint(project)
+//        PluginStructureProvider.registerProjectExtensionPoints(project, PLUGIN_RELATIVE_PATH)
+//    }
+//
+//    override fun registerProjectServices(project: MockProject) {
+//        PluginStructureProvider.registerProjectServices(project, PLUGIN_RELATIVE_PATH)
+//        PluginStructureProvider.registerProjectListeners(project, PLUGIN_RELATIVE_PATH)
+//    }
+//
+//    override fun registerProjectModelServices(project: MockProject, disposable: Disposable) {
+//        project.apply { registerService(Fe10AnalysisFacade::class.java, K1internals.createCliFe10AnalysisFacade()) }
+//        AnalysisHandlerExtension.registerExtension(project, K1internals.createKaFe10AnalysisHandlerExtension())
+//    }
+//}

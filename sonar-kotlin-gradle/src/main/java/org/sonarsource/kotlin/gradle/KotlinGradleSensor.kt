@@ -58,7 +58,7 @@ class KotlinGradleSensor(
     ) = object : AbstractKotlinSensorExecuteContext(
         sensorContext, filesToAnalyze, progressReport, listOf(KtChecksVisitor(checks)), filenames, LOG
     ) {
-        override val bindingContext: BindingContext = BindingContext.EMPTY
+//        override val bindingContext: BindingContext = BindingContext.EMPTY
         // TODO due to use of predictRuntimeStringValue
         override val doResolve: Boolean = System.getProperty("sonar.kotlin.ktsSema") == "true"
     }

@@ -26,9 +26,9 @@ import org.sonarsource.kotlin.api.frontend.KotlinSyntaxStructure
 import org.sonarsource.kotlin.api.frontend.KotlinTree
 import org.sonarsource.kotlin.api.frontend.KotlinVirtualFile
 import org.sonarsource.kotlin.api.frontend.RegexCache
-import org.sonarsource.kotlin.api.frontend.analyzeAndGetBindingContext
+//import org.sonarsource.kotlin.api.frontend.analyzeAndGetBindingContext
 import org.sonarsource.kotlin.api.frontend.createK2AnalysisSession
-import org.sonarsource.kotlin.api.frontend.transferDiagnostics
+//import org.sonarsource.kotlin.api.frontend.transferDiagnostics
 import java.io.File
 
 fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile, doResolve: Boolean = true, providedDiagnostics: List<Diagnostic>? = null): KotlinTree {
@@ -47,9 +47,9 @@ fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile
 
     val (ktFile, document) = KotlinSyntaxStructure.of(content, environment, inputFile)
 
-    val bindingContext = if (!environment.useK2 && doResolve) analyzeAndGetBindingContext(
-        environment.env,
-        listOf(ktFile),
-    ) else BindingContext.EMPTY
-    return KotlinTree(ktFile, document, bindingContext, providedDiagnostics ?: transferDiagnostics(bindingContext), RegexCache(), doResolve)
+//    val bindingContext = if (!environment.useK2 && doResolve) analyzeAndGetBindingContext(
+//        environment.env,
+//        listOf(ktFile),
+//    ) else BindingContext.EMPTY
+    return KotlinTree(ktFile, document, Any(), listOf(), RegexCache(), doResolve)
 }
