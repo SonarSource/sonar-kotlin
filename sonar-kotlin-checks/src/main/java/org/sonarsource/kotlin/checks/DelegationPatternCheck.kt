@@ -17,9 +17,13 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
-import org.jetbrains.kotlin.descriptors.ClassDescriptorWithResolutionScopes
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.name
+import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -31,29 +35,20 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.TypeUtils
-import org.jetbrains.kotlin.types.typeUtil.isInterface
-import org.jetbrains.kotlin.types.typeUtil.supertypes
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.allPaired
-import org.sonarsource.kotlin.api.checks.determineType
-import org.sonarsource.kotlin.api.checks.determineTypeAsString
 import org.sonarsource.kotlin.api.checks.overrides
-import org.sonarsource.kotlin.api.checks.returnType
-import org.sonarsource.kotlin.api.checks.returnTypeAsString
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6514")
 class DelegationPatternCheck : AbstractCheck() {
 
-    override fun visitClassOrObject(classOrObject: KtClassOrObject, context: KotlinFileContext) {
-        val classType = classOrObject.determineType(context.bindingContext) ?: return
-        if (classType.isInterface()) return
-        val superInterfaces = getSuperInterfaces(classType).toSet()
+    override fun visitClassOrObject(classOrObject: KtClassOrObject, context: KotlinFileContext) = withKaSession {
+        val classSymbol = classOrObject.classSymbol ?: return
+        if (classSymbol.classKind == KaClassKind.INTERFACE) return
+        val superInterfaces: Set<KaClassSymbol> = classSymbol.getSuperInterfaces()
         if (superInterfaces.isEmpty()) return
 
         classOrObject.declarations.forEach {
@@ -63,60 +58,75 @@ class DelegationPatternCheck : AbstractCheck() {
         }
     }
 
-    private fun checkNamedFunction(function: KtNamedFunction, superInterfaces: Set<KotlinType>, context: KotlinFileContext) {
+    private fun checkNamedFunction(function: KtNamedFunction, superInterfaces: Set<KaClassSymbol>, context: KotlinFileContext) = withKaSession {
         if (!(function.isPublic && function.overrides())) return
-        val bindingContext = context.bindingContext
-        val delegeeType = getDelegeeOrNull(function, bindingContext)?.determineType(bindingContext) ?: return
+        val delegeeType = getDelegeeOrNull(function)?.expressionType ?: return
 
         if (getCommonSuperInterfaces(superInterfaces, delegeeType).any {
-            isFunctionInInterface(function, it, bindingContext)
+            isFunctionInInterface(function, it)
         }) {
             context.reportIssue(function.nameIdentifier!!, """Replace with interface delegation using "by" in the class header.""")
         }
     }
 }
 
-private fun isFunctionInInterface(function: KtNamedFunction, superInterface: KotlinType, bindingContext: BindingContext): Boolean {
-    val classDescriptor = TypeUtils.getClassDescriptor(superInterface) as? ClassDescriptorWithResolutionScopes ?: return false
-    return classDescriptor.declaredCallableMembers.any {
-        isEqualFunctionSignature(function, it, bindingContext)
+private fun isFunctionInInterface(function: KtNamedFunction, superInterface: KaClassSymbol): Boolean = withKaSession {
+    superInterface.declaredMemberScope.declarations.any {
+        it is KaFunctionSymbol && haveCompatibleFunctionSignature(it, function.symbol)
     }
 }
 
-private fun isEqualFunctionSignature(
-    function: KtNamedFunction,
-    functionDescriptor: CallableMemberDescriptor,
-    bindingContext: BindingContext,
-) = function.name == functionDescriptor.name.identifier &&
-    function.returnTypeAsString(bindingContext) == functionDescriptor.returnType?.getKotlinTypeFqName(false) &&
-    function.valueParameters.allPaired(functionDescriptor.valueParameters) { parameter, paramerterDescriptor ->
-        parameter.typeReference?.determineTypeAsString(bindingContext) == paramerterDescriptor.type.getKotlinTypeFqName(false)
-    }
+private fun haveCompatibleFunctionSignature(
+    function1: KaFunctionSymbol,
+    function2: KaFunctionSymbol,
+) = withKaSession {
+    function1.returnType.sameOrTypeParam(function2.returnType) &&
+            function1.name == function2.name &&
+            function1.valueParameters.allPaired(function2.valueParameters) { p1, p2 ->
+                p1.returnType.sameOrTypeParam(p2.returnType)
+            }
+}
 
-fun getCommonSuperInterfaces(superInterfaces: Set<KotlinType>, otherType: KotlinType) =
-    getSuperInterfaces(otherType).intersect(superInterfaces)
+fun KaType.sameOrTypeParam(other: KaType): Boolean = withKaSession {
+    if (this@sameOrTypeParam is KaTypeParameterType && other is KaTypeParameterType) return true
+    return symbol != null && other.symbol != null && symbol == other.symbol
+}
 
-private fun getSuperInterfaces(kotlinType: KotlinType): List<KotlinType> =
-    kotlinType.supertypes().filter(KotlinType::isInterface).let {
-        if (kotlinType.isInterface()) it + kotlinType else it
-    }
+fun getCommonSuperInterfaces(superInterfaces: Set<KaClassSymbol>, otherType: KaType) =
+    (otherType.symbol as? KaClassSymbol)?.let {
+        (it.getSuperInterfaces() + it).intersect(superInterfaces)
+    } ?: emptySet()
 
-private fun getDelegeeOrNull(function: KtNamedFunction, bindingContext: BindingContext): KtNameReferenceExpression? {
+fun KaType.getSuperInterfaces(): Set<KaClassSymbol> =
+    (symbol as? KaClassSymbol)?.getSuperInterfaces() ?: emptySet()
+
+fun KaClassSymbol.getSuperInterfaces(): Set<KaClassSymbol> = withKaSession {
+    val superTypes = this@getSuperInterfaces.superTypes.filter { !it.isAnyType }
+    val symbols: Collection<KaClassSymbol> = superTypes.mapNotNull { it.symbol as? KaClassSymbol }
+    val hierarchy: List<KaClassSymbol> = superTypes.flatMap { it.getSuperInterfaces() }
+    return (symbols + hierarchy)
+        .filter { it.classKind == KaClassKind.INTERFACE }
+        .toSet()
+}
+
+private fun getDelegeeOrNull(function: KtNamedFunction): KtNameReferenceExpression? = withKaSession {
     val qualifiedCallExpression = getFunctionSingleBodyElementOrNull(function) as? KtDotQualifiedExpression ?: return null
     val receiverExpression = qualifiedCallExpression.receiverExpression as? KtNameReferenceExpression ?: return null
     val callExpression = qualifiedCallExpression.selectorExpression as? KtCallExpression ?: return null
+    val callExpressionType = callExpression.expressionType ?: return null
 
     return if (function.name!! == callExpression.getCallNameExpression()?.getReferencedName() &&
-        function.returnType(bindingContext) == callExpression.determineType(bindingContext) &&
+        function.returnType.semanticallyEquals(callExpressionType) &&
         function.valueParameters.allPaired(callExpression.valueArguments) { parameter, argument ->
-            isDelegatedParameter(parameter, argument, bindingContext)
+            isDelegatedParameter(parameter, argument)
         }) receiverExpression else null
 }
 
-private fun isDelegatedParameter(parameter: KtParameter, arguments: KtValueArgument, bindingContext: BindingContext): Boolean {
+private fun isDelegatedParameter(parameter: KtParameter, arguments: KtValueArgument): Boolean = withKaSession {
     val argumentExpression = arguments.getArgumentExpression() as? KtNameReferenceExpression ?: return false
-    return parameter.name == argumentExpression.getReferencedName() &&
-        parameter.determineType(bindingContext) == argumentExpression.determineType(bindingContext)
+    if (parameter.name != argumentExpression.getReferencedName()) return false
+    val argumentType = argumentExpression.expressionType ?: return false
+    return parameter.symbol.returnType.semanticallyEquals(argumentType)
 }
 
 private fun getFunctionSingleBodyElementOrNull(function: KtNamedFunction): PsiElement? {

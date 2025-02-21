@@ -24,6 +24,11 @@
 "kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/InflaterSource.kt": [
 111
 ],
+"kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/Okio.kt": [
+78,
+80,
+113
+],
 "kotlin-okio-project:sources/kotlin/okio/okio/jvm/src/main/java/okio/RealBufferedSink.kt": [
 250
 ],
