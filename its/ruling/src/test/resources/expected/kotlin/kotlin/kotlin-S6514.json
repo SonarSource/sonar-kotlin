@@ -85,6 +85,9 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/caches/project/IdeaModuleInfos.kt": [
 443
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/scratch/output/InlayScratchOutputHandler.kt": [
+45
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/loopToCallChain/baseTransformations.kt": [
 140
 ],
