@@ -17,48 +17,56 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.analysis.api.symbols.*
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.analysis.api.types.symbol
-import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
 import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.*
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.checks.allPaired
+import org.sonarsource.kotlin.api.checks.determineType
+import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.withKaSession
 
 @Rule(key = "S6514")
 class DelegationPatternCheck : AbstractCheck() {
 
-    override fun visitClassOrObject(classOrObject: KtClassOrObject, context: KotlinFileContext) {
-        withKaSession {
-            val classSymbol = classOrObject.classSymbol ?: return
-            if (classSymbol.classKind == KaClassKind.INTERFACE) return
-            val superInterfaces: Set<KaClassSymbol> = classSymbol.getSuperInterfaces()
+    override fun visitClassOrObject(classOrObject: KtClassOrObject, context: KotlinFileContext) = withKaSession {
+        val classSymbol = classOrObject.classSymbol ?: return
+        if (classSymbol.classKind == KaClassKind.INTERFACE) return
+        val superInterfaces: Set<KaClassSymbol> = classSymbol.getSuperInterfaces()
+        if (superInterfaces.isEmpty()) return
 
-            classOrObject.declarations.forEach {
-                if (it is KtNamedFunction) {
-                    checkNamedFunction(it, context, superInterfaces)
-                }
+        classOrObject.declarations.forEach {
+            if (it is KtNamedFunction) {
+                checkNamedFunction(it, superInterfaces, context)
             }
         }
     }
 
-    private fun checkNamedFunction(
-        function: KtNamedFunction,
-        context: KotlinFileContext,
-        superInterfaces: Set<KaClassSymbol>
-    ) {
+    private fun checkNamedFunction(function: KtNamedFunction, superInterfaces: Set<KaClassSymbol>, context: KotlinFileContext) {
         if (!(function.isPublic && function.overrides())) return
-        val delegeeType1 = getDelegeeOrNull(function)?.determineType() ?: return
+        val delegeeType = getDelegeeOrNull(function)?.determineType() ?: return
 
-        val commonSuperInterfaces = getCommonSuperInterfaces(superInterfaces, delegeeType1)
-
-        if (commonSuperInterfaces.any {
-                isFunctionInInterface(function, it)
-            }) {
+        if (getCommonSuperInterfaces(superInterfaces, delegeeType).any {
+            isFunctionInInterface(function, it)
+        }) {
             context.reportIssue(function.nameIdentifier!!, """Replace with interface delegation using "by" in the class header.""")
         }
     }
