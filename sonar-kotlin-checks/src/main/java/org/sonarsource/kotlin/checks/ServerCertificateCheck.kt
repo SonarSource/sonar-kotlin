@@ -98,6 +98,9 @@ class ServerCertificateCheck : AbstractCheck() {
         return visitor.callsCheckTrusted()
     }
 
+    /*
+     * Returns true only when the function throws a CertificateException without a catch against it.
+     */
     private fun KtNamedFunction.throwsCertificateExceptionWithoutCatching(): Boolean {
         val visitor = ThrowCatchVisitor()
         visitor.visitElement(this)
