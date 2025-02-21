@@ -143,8 +143,10 @@ class ServerCertificateCheck : AbstractCheck() {
         var potentialBranching: Boolean = false
 
         override fun visitCallExpression(expression: KtCallExpression) {
-            proceedFound = proceedFound || androidSslErrorHandlerProceedFunMatcher.matches(expression)
-            cancelFound = cancelFound || androidSslErrorHandlerCancelFunMatcher.matches(expression)
+            when {
+                androidSslErrorHandlerProceedFunMatcher.matches(expression) -> proceedFound = true
+                androidSslErrorHandlerCancelFunMatcher.matches(expression) -> cancelFound = true
+            }
             super.visitCallExpression(expression)
         }
 
