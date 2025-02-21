@@ -16,7 +16,6 @@
  */
 package org.sonarsource.kotlin.checks
 
-import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -29,6 +28,7 @@ import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.KtVisitorVoid
 import org.jetbrains.kotlin.psi.KtWhenExpression
@@ -56,39 +56,52 @@ private val androidWebViewFunMatchers = listOf(
     },
 )
 
+private val androidSslErrorHandlerProceedFunMatcher = FunMatcher {
+    definingSupertype = "android.webkit.SslErrorHandler"
+    withNames("proceed")
+}
+
+private val androidSslErrorHandlerCancelFunMatcher = FunMatcher {
+    definingSupertype = "android.webkit.SslErrorHandler"
+    withNames("cancel")
+}
+
 @Rule(key = "S4830")
 class ServerCertificateCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
-        val javaCryptographyExtensionCandidate = javaCryptographyExtensionFunMatchers.any { it.matches(function) }
-            && !function.callsCheckTrusted()
-            && !function.throwsCertificateExceptionWithoutCatching()
-        val androidWebViewCandidate = androidWebViewFunMatchers.any { it.matches(function) }
-            && function.callsProceedUnconditionally()
-        if (javaCryptographyExtensionCandidate || androidWebViewCandidate) {
+        val match = when {
+            javaCryptographyExtensionFunMatchers.any { it.matches(function) } ->
+                !function.callsCheckTrusted() && !function.throwsCertificateExceptionWithoutCatching()
+            androidWebViewFunMatchers.any { it.matches(function) } ->
+                function.callsProceedUnconditionally()
+            else -> false
+        }
+        if (match) {
             kotlinFileContext.reportIssue(function.nameIdentifier ?: function,
                 "Enable server certificate validation on this SSL/TLS connection.")
         }
     }
 
     private fun KtNamedFunction.callsCheckTrusted(): Boolean {
-        val visitor = object : KtVisitorVoid() {
+        val visitor = object : KtTreeVisitorVoid() {
             private var foundCheckTrustedCall: Boolean = false
 
             override fun visitCallExpression(expression: KtCallExpression) {
                 foundCheckTrustedCall = foundCheckTrustedCall || javaCryptographyExtensionFunMatchers.any { it.matches(expression) }
+                super.visitCallExpression(expression)
             }
 
             fun callsCheckTrusted(): Boolean = foundCheckTrustedCall
         }
-        this.acceptRecursively(visitor)
+        visitor.visitElement(this)
         return visitor.callsCheckTrusted()
     }
 
     private fun KtNamedFunction.throwsCertificateExceptionWithoutCatching(): Boolean {
         val visitor = ThrowCatchVisitor()
-        this.acceptRecursively(visitor)
-        return visitor.throwsCertificateExceptionWithoutCatching()
+        visitor.visitElement(this)
+        return with(visitor) { throwFound && !catchFound }
     }
 
     /*
@@ -98,53 +111,38 @@ class ServerCertificateCheck : AbstractCheck() {
      */
     private fun KtNamedFunction.callsProceedUnconditionally(): Boolean {
         val visitor = AndroidWebViewCandidateVisitor()
-        this.acceptRecursively(visitor)
-        return visitor.foundProceedCall && !visitor.foundCancelCall && !visitor.potentialBranching
+        visitor.visitElement(this)
+        return with(visitor) { proceedFound && !cancelFound && !potentialBranching }
     }
 
-    private class ThrowCatchVisitor : KtVisitorVoid() {
+    private class ThrowCatchVisitor : KtTreeVisitorVoid() {
         private val certificateExceptionClassId = ClassId.fromString("java/security/cert/CertificateException")
 
-        private var throwFound: Boolean = false
-        private var catchFound: Boolean = false
+        var throwFound: Boolean = false
+        var catchFound: Boolean = false
 
         override fun visitThrowExpression(expression: KtThrowExpression) = withKaSession {
-            throwFound =
-                throwFound ||
-                        expression.thrownExpression?.expressionType?.isClassType(certificateExceptionClassId) == true
+            throwFound = throwFound ||
+                expression.thrownExpression?.expressionType?.isClassType(certificateExceptionClassId) == true
+            super.visitThrowExpression(expression)
         }
 
         override fun visitCatchSection(catchClause: KtCatchClause) = withKaSession {
-            catchFound =
-                catchFound ||
-                        catchClause.catchParameter?.symbol?.returnType?.isClassType(certificateExceptionClassId) == true
-        }
-
-        fun throwsCertificateExceptionWithoutCatching(): Boolean {
-            return throwFound && !catchFound
+            catchFound = catchFound ||
+                catchClause.catchParameter?.symbol?.returnType?.isClassType(certificateExceptionClassId) == true
+            super.visitCatchSection(catchClause)
         }
     }
 
-    private class AndroidWebViewCandidateVisitor : KtVisitorVoid() {
-        private val androidSslErrorHandlerProceedFunMatcher = FunMatcher {
-            definingSupertype = "android.webkit.SslErrorHandler"
-            withNames("proceed")
-        }
-
-        private val androidSslErrorHandlerCancelFunMatcher = FunMatcher {
-            definingSupertype = "android.webkit.SslErrorHandler"
-            withNames("cancel")
-        }
-
-        var foundProceedCall: Boolean = false
-        var foundCancelCall: Boolean = false
+    private class AndroidWebViewCandidateVisitor : KtTreeVisitorVoid() {
+        var proceedFound: Boolean = false
+        var cancelFound: Boolean = false
         var potentialBranching: Boolean = false
 
         override fun visitCallExpression(expression: KtCallExpression) {
-            val isProceedCall = androidSslErrorHandlerProceedFunMatcher.matches(expression)
-            val isCancelCall = androidSslErrorHandlerCancelFunMatcher.matches(expression)
-            foundProceedCall = foundProceedCall || isProceedCall
-            foundCancelCall = foundCancelCall || isCancelCall
+            proceedFound = proceedFound || androidSslErrorHandlerProceedFunMatcher.matches(expression)
+            cancelFound = cancelFound || androidSslErrorHandlerCancelFunMatcher.matches(expression)
+            super.visitCallExpression(expression)
         }
 
         override fun visitExpression(expression: KtExpression) {
@@ -159,13 +157,7 @@ class ServerCertificateCheck : AbstractCheck() {
                     is KtBinaryExpression -> expression.operationToken == KtTokens.ELVIS
                     else -> false
                 }
-        }
-    }
-
-    private fun PsiElement.acceptRecursively(visitor: KtVisitorVoid) {
-        this.accept(visitor)
-        for (child in this.children) {
-            child.acceptRecursively(visitor)
+            super.visitExpression(expression)
         }
     }
 }
