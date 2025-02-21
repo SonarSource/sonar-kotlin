@@ -103,7 +103,7 @@ tasks.shadowJar {
         exclude(dependency("org.jetbrains.kotlin:symbol-light-classes-for-ide"))
     }
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 45_800_000L, 46_200_000L)
+        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 42_400_000L, 42_800_000L)
     }
 }
 
