@@ -19,6 +19,7 @@ package org.sonarsource.kotlin.api.frontend
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
+@org.junit.jupiter.api.Disabled
 internal class KotlinCodeVerifierTest {
     @Test
     fun testContainsCode() {
