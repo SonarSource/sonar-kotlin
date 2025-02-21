@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.analysis.api.KaSession;
 import org.jetbrains.kotlin.analysis.api.diagnostics.KaDiagnosticWithPsi;
 import org.jetbrains.kotlin.analysis.api.lifetime.KaLifetimeToken;
 import org.jetbrains.kotlin.diagnostics.Diagnostic;
+import org.sonarsource.kotlin.api.visiting.OurKaSession;
 
 @SuppressWarnings("KotlinInternalInJava")
 public final class K1internals {
@@ -29,7 +30,7 @@ public final class K1internals {
   }
 
   public static boolean isK1(KaSession kaSession) {
-    return kaSession instanceof org.jetbrains.kotlin.analysis.api.descriptors.KaFe10Session;
+    return ((OurKaSession) kaSession).getOriginalKaSession() instanceof org.jetbrains.kotlin.analysis.api.descriptors.KaFe10Session;
   }
 
   static org.jetbrains.kotlin.analysis.api.descriptors.CliFe10AnalysisFacade createCliFe10AnalysisFacade() {

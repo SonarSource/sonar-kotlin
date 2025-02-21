@@ -17,6 +17,8 @@
 package org.sonarsource.kotlin.api.frontend
 
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.diagnostic.DefaultLogger
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileSystem
@@ -36,6 +38,13 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
+private class OurLogger(category: String) : DefaultLogger(category) {
+    override fun error(message: String?, t: Throwable?, vararg details: String?) {
+        System.err.println("ERROR: " + message + detailsToString(*details) + attachmentsToString(t))
+        t?.printStackTrace(System.err)
+    }
+}
+
 /**
  * @see [org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISessionBuilder.buildKtModuleProviderByCompilerConfiguration]
  */
@@ -44,6 +53,11 @@ fun createK2AnalysisSession(
     compilerConfiguration: CompilerConfiguration,
     virtualFiles: Collection<VirtualFile>,
 ): StandaloneAnalysisAPISession {
+
+    if (!Logger.isInitialized()) {
+        Logger.setFactory(::OurLogger)
+    }
+
     return buildStandaloneAnalysisAPISession(
         projectDisposable = parentDisposable,
     ) {
