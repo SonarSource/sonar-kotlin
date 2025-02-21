@@ -60,9 +60,9 @@ class DelegationPatternCheck : AbstractCheck() {
         }
     }
 
-    private fun checkNamedFunction(function: KtNamedFunction, superInterfaces: Set<KaClassSymbol>, context: KotlinFileContext) {
+    private fun checkNamedFunction(function: KtNamedFunction, superInterfaces: Set<KaClassSymbol>, context: KotlinFileContext) = withKaSession {
         if (!(function.isPublic && function.overrides())) return
-        val delegeeType = getDelegeeOrNull(function)?.determineType() ?: return
+        val delegeeType = getDelegeeOrNull(function)?.expressionType ?: return
 
         if (getCommonSuperInterfaces(superInterfaces, delegeeType).any {
             isFunctionInInterface(function, it)
@@ -72,13 +72,9 @@ class DelegationPatternCheck : AbstractCheck() {
     }
 }
 
-private fun isFunctionInInterface(
-    function: KtNamedFunction,
-    superInterface1: KaClassSymbol
-): Boolean = withKaSession {
-    val classDeclaration = superInterface1.psi as? KtClass ?: return false
-    return classDeclaration.declarations.any {
-        it is KtNamedFunction && haveCompatibleFunctionSignature(it.symbol, function.symbol)
+private fun isFunctionInInterface(function: KtNamedFunction, superInterface: KaClassSymbol): Boolean = withKaSession {
+    superInterface.declaredMemberScope.declarations.any {
+        it is KaFunctionSymbol && haveCompatibleFunctionSignature(it, function.symbol)
     }
 }
 
@@ -131,7 +127,7 @@ private fun getDelegeeOrNull(function: KtNamedFunction): KtNameReferenceExpressi
 private fun isDelegatedParameter(parameter: KtParameter, arguments: KtValueArgument): Boolean = withKaSession {
     val argumentExpression = arguments.getArgumentExpression() as? KtNameReferenceExpression ?: return false
     if (parameter.name != argumentExpression.getReferencedName()) return false
-    val argumentType = argumentExpression.determineType() ?: return false
+    val argumentType = argumentExpression.expressionType ?: return false
     return parameter.symbol.returnType.semanticallyEquals(argumentType)
 }
 
