@@ -1,0 +1,13 @@
+{
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/inspections/import/AutoImportFix.kt": [
+344
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/TypeInference.kt": [
+1382,
+1383,
+1514
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/RsTestBase.kt": [
+210
+]
+}

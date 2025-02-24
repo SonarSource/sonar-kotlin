@@ -1,123 +1,17 @@
 {
-"kotlin-corda-project:sources/kotlin/corda/client/jackson/src/main/kotlin/net/corda/client/jackson/StringToMethodCallParser.kt": [
-195
-],
-"kotlin-corda-project:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/AmountBindings.kt": [
-44
-],
-"kotlin-corda-project:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/AssociatedList.kt": [
-23
-],
-"kotlin-corda-project:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/ConcatenatedList.kt": [
-47,
-216
-],
-"kotlin-corda-project:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/FlattenedList.kt": [
-35,
-101
-],
-"kotlin-corda-project:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/LeftOuterJoinedMap.kt": [
-19
-],
-"kotlin-corda-project:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/ObservableFold.kt": [
-81
-],
-"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/contracts/ContractsDSL.kt": [
-82
-],
-"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/identity/CordaX500Name.kt": [
-104,
-105
-],
-"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/internal/AbstractAttachment.kt": [
-49
-],
-"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/LedgerTransaction.kt": [
-179
-],
-"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/ProgressTracker.kt": [
-166
-],
-"kotlin-corda-project:sources/kotlin/corda/docs/source/example-code/src/main/kotlin/net/corda/docs/tutorial/contract/TutorialContract.kt": [
-27
-],
 "kotlin-corda-project:sources/kotlin/corda/docs/source/example-code/src/main/kotlin/net/corda/docs/tutorial/tearoffs/TutorialTearOffs.kt": [
 34,
 35,
 36
 ],
-"kotlin-corda-project:sources/kotlin/corda/experimental/behave/src/main/kotlin/net/corda/behave/network/Network.kt": [
-76
-],
-"kotlin-corda-project:sources/kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/Util.kt": [
-118,
-118
-],
-"kotlin-corda-project:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/contracts/CommercialPaper.kt": [
-108
-],
-"kotlin-corda-project:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/contracts/asset/Obligation.kt": [
-733
-],
-"kotlin-corda-project:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/flows/CashExitFlow.kt": [
-55
-],
-"kotlin-corda-project:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/utils/PhysicalLocationStructures.kt": [
-62,
-62
-],
-"kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/RPCApi.kt": [
-224
-],
 "kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/CertificateRevocationListNodeTests.kt": [
 194
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/NodeStartup.kt": [
-54,
-108
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/serialization/kryo/SerializeAsTokenSerializer.kt": [
-24
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/messaging/ArtemisMessagingServer.kt": [
-140
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/FlowLogicRefFactoryImpl.kt": [
-84
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/transitions/StartedFlowTransition.kt": [
-77,
-113,
-114,
-163,
-164,
-265
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/internal/serialization/RoundTripObservableSerializerTests.kt": [
 98
 ],
-"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/events/NodeSchedulerServiceTest.kt": [
-177,
-335,
-360
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/registration/NetworkRegistrationHelperTest.kt": [
-212
-],
 "kotlin-corda-project:sources/kotlin/corda/samples/attachment-demo/src/main/kotlin/net/corda/attachmentdemo/AttachmentDemo.kt": [
 96
-],
-"kotlin-corda-project:sources/kotlin/corda/samples/irs-demo/cordapp/src/main/kotlin/net/corda/irs/api/NodeInterestRates.kt": [
-190
-],
-"kotlin-corda-project:sources/kotlin/corda/samples/network-visualiser/src/main/kotlin/net/corda/netmap/NetworkMapVisualiser.kt": [
-290
-],
-"kotlin-corda-project:sources/kotlin/corda/samples/trader-demo/src/main/kotlin/net/corda/traderdemo/flow/SellerFlow.kt": [
-42
-],
-"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/carpenter/ClassCarpenter.kt": [
-434
 ],
 "kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/ErrorMessagesTests.kt": [
 63,
@@ -133,30 +27,10 @@
 "kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationPropertyOrdering.kt": [
 38
 ],
-"kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/network/NetworkMapServer.kt": [
-147
-],
 "kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/core/Expect.kt": [
 178
 ],
-"kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/services/MockAttachmentStorage.kt": [
-71
-],
-"kotlin-corda-project:sources/kotlin/corda/tools/demobench/src/main/kotlin/net/corda/demobench/profile/ProfileController.kt": [
-44
-],
-"kotlin-corda-project:sources/kotlin/corda/tools/demobench/src/main/kotlin/net/corda/demobench/views/NodeTabView.kt": [
-148
-],
 "kotlin-corda-project:sources/kotlin/corda/tools/explorer/src/main/kotlin/net/corda/explorer/views/TransactionViewer.kt": [
 332
-],
-"kotlin-corda-project:sources/kotlin/corda/tools/loadtest/src/main/kotlin/net/corda/loadtest/tests/CrossCashTest.kt": [
-281,
-281
-],
-"kotlin-corda-project:sources/kotlin/corda/tools/shell/src/main/kotlin/net/corda/tools/shell/FlowWatchPrintingSubscriber.kt": [
-84,
-85
 ]
 }

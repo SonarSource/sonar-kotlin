@@ -83,29 +83,11 @@
 427,
 591
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.khronos.webgl.kt": [
-54,
-163,
-164,
-165,
-238,
-242
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.dom.events.kt": [
 131,
 210,
 268,
 382
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.dom.kt": [
-1579,
-1623,
-1686,
-1842,
-2061,
-2372,
-2394,
-2700
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.fetch.kt": [
 115
