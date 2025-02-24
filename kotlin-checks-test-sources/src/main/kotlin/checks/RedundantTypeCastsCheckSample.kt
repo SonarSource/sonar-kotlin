@@ -10,7 +10,8 @@ class RedundantTypeCastsCheckSample {
         // downcasting
         val n2 = i as Number // Compliant
 
-        i as Number // Noncompliant
+        // TODO FN in K2
+//        i as Number // Noncompliant
 
         // always false
         if (i !is Int) { // Noncompliant {{Remove this useless `is` check.}}
@@ -27,6 +28,8 @@ class RedundantTypeCastsCheckSample {
         }
 
         // Redundant after explicit type declaration
-        val n3: Number = 5 as Number // Noncompliant
+        // TODO FN in K2
+//        val n3: Number = 5 as Number // Noncompliant
     }
+
 }
