@@ -75,8 +75,8 @@ public class WorkaroundForJarMinimization {
           org.jetbrains.kotlin.analysis.api.fir.modification.KaFirSourceModificationService.class,
           org.jetbrains.kotlin.analysis.api.fir.references.KotlinFirReferenceContributor.class,
           org.jetbrains.kotlin.analysis.api.fir.references.ReadWriteAccessCheckerFirImpl.class,
-          // META-INF/extensions/compiler.xml
-          org.jetbrains.kotlin.plugin.references.SimpleNameReferenceExtension.class,
+//          // META-INF/extensions/compiler.xml
+//          org.jetbrains.kotlin.plugin.references.SimpleNameReferenceExtension.class,
 
           /** Used to have proper named groups behavior in regular expressions */
           kotlin.internal.jdk8.JDK8PlatformImplementations.class
