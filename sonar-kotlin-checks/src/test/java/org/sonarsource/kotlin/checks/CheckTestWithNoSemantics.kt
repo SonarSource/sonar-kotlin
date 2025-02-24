@@ -36,7 +36,7 @@ abstract class CheckTestWithNoSemantics(
     dependencies = dependencies
 ) {
     @Test
-    fun `with empty classpath`() {
+    open fun `with empty classpath`() {
         KotlinVerifier(check) {
             this.fileName = sampleFileNoSemantics ?: "$checkName$NO_SEMANTICS_TEST_FILE_POSTFIX"
             this.classpath = emptyList()

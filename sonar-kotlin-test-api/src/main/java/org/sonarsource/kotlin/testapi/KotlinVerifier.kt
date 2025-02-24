@@ -53,7 +53,6 @@ class KotlinVerifier(private val check: AbstractCheck) {
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
     var isAndroid = false
     var customDiagnostics: List<Diagnostic>? = null
-    var useK2 = false
 
     fun verify() {
         verifyFile {
@@ -71,7 +70,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
         val isScriptFile = filePath.extension == "kts"
 
         val disposable = Disposer.newDisposable()
-        val environment = Environment(disposable, classpath + deps, LanguageVersion.LATEST_STABLE, useK2 = useK2)
+        val environment = Environment(disposable, classpath + deps, LanguageVersion.LATEST_STABLE)
         val converter = { content: String ->
             val inputFile = TestInputFileBuilder("moduleKey", filePath.fileName.pathString)
                 .setCharset(StandardCharsets.UTF_8)
@@ -81,7 +80,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
             if (isScriptFile) {
                 // TODO: Add logic here to create a Binding with Kotlin Script / Gradle DSL semantics.
                 //       Currently, we are just providing an empty context (`doResolve = false`)
-                kotlinTreeOf(content, environment, inputFile, false, customDiagnostics) to inputFile
+                kotlinTreeOf(content, environment, inputFile, true, customDiagnostics) to inputFile
             } else {
                 kotlinTreeOf(content, environment, inputFile, true, customDiagnostics) to inputFile
             }

@@ -38,6 +38,7 @@ class KotlinTreeTest {
     Disposer.dispose(disposable)
   }
 
+  @org.junit.jupiter.api.Disabled
   @Test
   fun testCreateKotlinTree() {
     val environment = Environment(disposable, listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)

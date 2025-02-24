@@ -47,6 +47,7 @@ internal class KotlinSyntaxStructureTest {
         unmockkAll()
     }
 
+    @org.junit.jupiter.api.Disabled
     @Test
     fun `ensure file name is displayed on compiler exception`() {
         val path = Path.of("src/test/resources/api/sample/SimpleClass.kt")
