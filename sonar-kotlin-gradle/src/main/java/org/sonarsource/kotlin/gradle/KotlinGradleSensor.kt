@@ -16,7 +16,6 @@
  */
 package org.sonarsource.kotlin.gradle
 
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.slf4j.LoggerFactory
 import org.sonar.api.batch.fs.FileSystem
 import org.sonar.api.batch.fs.InputFile
@@ -27,7 +26,6 @@ import org.sonar.api.rule.RuleKey
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.common.KOTLIN_REPOSITORY_KEY
 import org.sonarsource.kotlin.api.common.KotlinLanguage
-import org.sonarsource.kotlin.api.frontend.K1internals
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensor
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
 import org.sonarsource.kotlin.api.visiting.KtChecksVisitor
@@ -60,8 +58,6 @@ class KotlinGradleSensor(
         sensorContext, filesToAnalyze, progressReport, listOf(KtChecksVisitor(checks)), filenames, LOG
     ) {
         override val classpath: List<String> = listOf()
-        override val bindingContext: BindingContext = BindingContext.EMPTY
-        override val doResolve: Boolean = environment.useK2
     }
 
     override fun getFilesToAnalyse(sensorContext: SensorContext): Iterable<InputFile> {

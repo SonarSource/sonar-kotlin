@@ -42,7 +42,6 @@ import org.sonarsource.kotlin.api.frontend.KotlinVirtualFile
 import org.sonarsource.kotlin.api.frontend.ParseException
 import org.sonarsource.kotlin.api.frontend.RegexCache
 import org.sonarsource.kotlin.api.frontend.createK2AnalysisSession
-import org.sonarsource.kotlin.api.frontend.transferDiagnostics
 import org.sonarsource.kotlin.api.logging.debug
 import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
 import java.io.File
@@ -69,9 +68,7 @@ abstract class AbstractKotlinSensorExecuteContext(
             Disposer.newDisposable(),
             classpath,
             determineKotlinLanguageVersion(sensorContext, logger),
-            useK2 = System.getProperty("sonar.kotlin.useK2") != "false"
         )
-        if (!env.useK2) return@lazy env
         val virtualFileSystem = KotlinFileSystem()
         env.k2session = createK2AnalysisSession(
             env.disposable,
@@ -86,6 +83,9 @@ abstract class AbstractKotlinSensorExecuteContext(
         )
         return@lazy env
     }
+
+    @Deprecated("scheduled for removal")
+    private val bindingContext: BindingContext = BindingContext.EMPTY
 
     val kotlinFiles: List<KotlinSyntaxStructure> by lazy {
         inputFiles.mapNotNull {
@@ -105,9 +105,8 @@ abstract class AbstractKotlinSensorExecuteContext(
         }
     }
 
-    abstract val bindingContext: BindingContext
-
-    abstract val doResolve: Boolean
+    @Deprecated("scheduled for removal")
+    private val doResolve: Boolean = true
 
     fun analyzeFiles(): Boolean {
         try {
@@ -154,11 +153,13 @@ abstract class AbstractKotlinSensorExecuteContext(
         }
     }
 
+    @Deprecated("scheduled for removal")
     private fun getFileDiagnostics(ktFile: KtFile): List<Diagnostic> = diagnostics[ktFile] ?: emptyList()
 
+    @Deprecated("scheduled for removal")
     private val diagnostics: Map<PsiFile, List<Diagnostic>> by lazy {
         measureDuration("Diagnostics") {
-            transferDiagnostics(bindingContext).groupBy { it.psiFile }.toMap()
+            emptyMap()
         }
     }
 

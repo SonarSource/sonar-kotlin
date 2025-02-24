@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.analysis.api.types.KaErrorType
 import org.jetbrains.kotlin.analysis.api.types.KaTypeNullability
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
-import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -33,13 +32,11 @@ import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.psi.psiUtil.isNull
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.checks.predictRuntimeValueExpression
-import org.sonarsource.kotlin.api.frontend.K1internals
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.Message
 import org.sonarsource.kotlin.api.visiting.withKaSession
@@ -139,15 +136,13 @@ class UselessNullCheckCheck : AbstractCheck() {
         comparesToNull: Boolean,
         nullCheckTypeForMessage: Message.() -> Unit
     ) {
-        if (kfc.mayBeAffectedByErrorInSemantics()) return
-
         val resolvedExpression = expression.predictRuntimeValueExpression()
 
         val result = if (resolvedExpression.isNull()) {
             if (comparesToNull) "succeeds" else "fails"
         } else if (
         // We are not using the resolvedExpression on purpose here, as it can cause FPs. See SONARKT-373.
-            expression.isNotNullable(kfc.bindingContext)
+            expression.isNotNullable()
         ) {
             if (comparesToNull) "fails" else "succeeds"
         } else {
@@ -162,16 +157,7 @@ class UselessNullCheckCheck : AbstractCheck() {
     }
 }
 
-/**
- * [WORKAROUND]
- * In some cases, semantics may be broken, e.g. in the Ktor IT. This may be due to multiplatform, although that is unconfirmed.
- * We seem to be able to identify such cases by looking for a MISSING_BUILT_IN_DECLARATION error somewhere close to the statement.
- * Since it is not always clear where this diagnostic might be raised, we over-approximate and ignore all files where such an error is
- * found.
- */
-private fun KotlinFileContext.mayBeAffectedByErrorInSemantics() = diagnostics.any { it.factory == Errors.MISSING_BUILT_IN_DECLARATION }
-
-private fun KtExpression.isNotNullable(bc: BindingContext): Boolean =
+private fun KtExpression.isNotNullable(): Boolean =
     when (this) {
         is KtConstantExpression -> !isNull()
         is KtStringTemplateExpression -> true
@@ -179,9 +165,6 @@ private fun KtExpression.isNotNullable(bc: BindingContext): Boolean =
         else -> withKaSession {
             this@isNotNullable.expressionType?.let { resolvedType ->
                 resolvedType !is KaErrorType &&
-                        // TODO in K1 might be Unit when should be KaErrorType
-                        // https://github.com/JetBrains/kotlin/blob/2.1.0/analysis/analysis-api-fe10/src/org/jetbrains/kotlin/analysis/api/descriptors/components/KaFe10ExpressionTypeProvider.kt#L68
-                        (!K1internals.isK1(this) || !resolvedType.isUnitType || bc.getType(this@isNotNullable) != null) &&
                         resolvedType !is KaTypeParameterType &&
                         resolvedType.nullability == KaTypeNullability.NON_NULLABLE
             }

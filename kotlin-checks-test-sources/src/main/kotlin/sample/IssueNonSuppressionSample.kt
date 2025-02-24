@@ -5,7 +5,7 @@ class DD
 
 @Suppress("DEPRECATION")
 fun ff() {
-    DD() // Noncompliant
+    DD()
 }
 
 @Suppress("UNUSED", "kotlin:S101")

@@ -33,22 +33,8 @@ abstract class CheckTest(
 ) {
     protected val checkName = check::class.java.simpleName
 
-    private fun k1only() = check::class.hasAnnotation<org.sonarsource.kotlin.api.frontend.K1only>()
-
     @Test
-    @DisabledIf("k1only")
-    fun `with k2 semantics`() {
-        KotlinVerifier(check) {
-            this.useK2 = true
-            this.fileName = sampleFileSemantics ?: "$checkName$TEST_FILE_POSTFIX"
-            this@CheckTest.classpath?.let { this.classpath = it }
-            this@CheckTest.dependencies?.let { this.deps = it }
-            this.isAndroid = this@CheckTest.isAndroid
-        }.verify()
-    }
-
-    @Test
-    fun `with k1 semantics`() {
+    fun `with semantics`() {
         KotlinVerifier(check) {
             this.fileName = sampleFileSemantics ?: "$checkName$TEST_FILE_POSTFIX"
             this@CheckTest.classpath?.let { this.classpath = it }

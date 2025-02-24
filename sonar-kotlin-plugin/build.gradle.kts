@@ -99,9 +99,10 @@ tasks.shadowJar {
     exclude("org/jline/**")
     exclude("net/jpountz/**")
     dependencies {
+//        exclude(dependency("org.jetbrains.kotlin:analysis-api-fe10-for-ide"))
     }
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 63_900_000L, 64_300_000L)
+        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 62_300_000L, 62_700_000L)
     }
 }
 

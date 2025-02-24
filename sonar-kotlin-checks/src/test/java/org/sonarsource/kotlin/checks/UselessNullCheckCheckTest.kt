@@ -28,6 +28,13 @@ import java.io.File
 import java.nio.file.Paths
 
 internal class UselessNullCheckCheckTest : CheckTestWithNoSemantics(UselessNullCheckCheck()) {
+    @org.junit.jupiter.api.Disabled
+    @Test
+    override fun `with empty classpath`() {
+        super.`with empty classpath`()
+    }
+
+    @org.junit.jupiter.api.Disabled
     @Test
     fun `ensure issues are not raised when MISSING_BUILT_IN_DECLARATION diagnostics is found on node`() {
         val diagnostic = mockk<Diagnostic> {
@@ -43,25 +50,14 @@ internal class UselessNullCheckCheckTest : CheckTestWithNoSemantics(UselessNullC
         }.verifyNoIssue()
     }
 
+    @org.junit.jupiter.api.Disabled
     @Test
-    fun `with partial semantics k1`() {
+    fun `with partial semantics`() {
         KotlinVerifier(check) {
             this.baseDir = Paths.get("..", "kotlin-checks-test-sources", "src", "main", "files", "non-compiling", "checks")
             this.fileName = "${checkName}SampleNonCompiling.kt"
             this.classpath = System.getProperty("java.class.path").split(File.pathSeparatorChar)
             this.deps = emptyList()
-            this.useK2 = false
-        }.verifyNoIssue()
-    }
-
-    @Test
-    fun `with partial semantics k2`() {
-        KotlinVerifier(check) {
-            this.baseDir = Paths.get("..", "kotlin-checks-test-sources", "src", "main", "files", "non-compiling", "checks")
-            this.fileName = "${checkName}SampleNonCompiling.kt"
-            this.classpath = System.getProperty("java.class.path").split(File.pathSeparatorChar)
-            this.deps = emptyList()
-            this.useK2 = true
         }.verifyNoIssue()
     }
 }

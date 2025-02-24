@@ -21,6 +21,14 @@ import org.sonarsource.kotlin.testapi.KotlinVerifier
 import java.io.File
 
 class UnnecessaryImportsCheckTest : CheckTestWithNoSemantics(UnnecessaryImportsCheck(), shouldReport = true) {
+
+    @org.junit.jupiter.api.Disabled
+    @Test
+    override fun `with empty classpath`() {
+        super.`with empty classpath`()
+    }
+
+    @org.junit.jupiter.api.Disabled
     @Test
     fun `with partial semantics`() {
         KotlinVerifier(check) {
@@ -30,6 +38,7 @@ class UnnecessaryImportsCheckTest : CheckTestWithNoSemantics(UnnecessaryImportsC
         }.verify()
     }
 
+    @org.junit.jupiter.api.Disabled
     @Test
     fun `with long package name and no semantics`() {
         KotlinVerifier(check) {

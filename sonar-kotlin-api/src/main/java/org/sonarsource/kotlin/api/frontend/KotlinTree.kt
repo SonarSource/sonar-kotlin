@@ -31,9 +31,12 @@ import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textPointerAtOffset
 class KotlinTree(
     val psiFile: KtFile,
     val document: Document,
+    @Deprecated("scheduled for removal")
     val bindingContext: BindingContext,
+    @Deprecated("scheduled for removal")
     val diagnostics: List<Diagnostic>,
     val regexCache: RegexCache,
+    @Deprecated("scheduled for removal")
     val doResolve: Boolean,
 )
 
@@ -42,6 +45,7 @@ data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val
         @JvmStatic
         fun of(content: String, environment: Environment, inputFile: InputFile): KotlinSyntaxStructure {
 
+            // FIXME k2session always non-null
             val psiFile: KtFile = if (environment.k2session != null) {
                 val inputFilePath = FileUtil.toSystemIndependentName(inputFile.file().path)
                 // TODO inefficient
