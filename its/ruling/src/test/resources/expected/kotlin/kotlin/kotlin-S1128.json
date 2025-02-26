@@ -64,9 +64,6 @@
 34,
 39
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/checkers/AbstractReflectionApiCallChecker.kt": [
-30
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/checkers/coroutineCallChecker.kt": [
 26
 ],
@@ -177,18 +174,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/resolve/constraintSystem/ConstraintSystemTestData.kt": [
 30
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors.jvm/src/org/jetbrains/kotlin/builtins/JvmBuiltInClassDescriptorFactory.kt": [
-26
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors.jvm/src/org/jetbrains/kotlin/load/java/lazy/descriptors/JvmPackageScope.kt": [
-31
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors.jvm/src/org/jetbrains/kotlin/load/java/lazy/descriptors/LazyJavaPackageFragment.kt": [
-33
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors.jvm/src/org/jetbrains/kotlin/load/kotlin/JvmBuiltInsSettings.kt": [
-48
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors/src/org/jetbrains/kotlin/builtins/UnsignedType.kt": [
 12
 ],
@@ -198,14 +183,8 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors/src/org/jetbrains/kotlin/renderer/DescriptorRendererOptionsImpl.kt": [
 21
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors/src/org/jetbrains/kotlin/resolve/scopes/StaticScopeForKotlinEnum.kt": [
-27
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors/src/org/jetbrains/kotlin/types/TypeWithEnhancement.kt": [
 22
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/core/deserialization/src/org/jetbrains/kotlin/serialization/deserialization/descriptors/DeserializedMemberScope.kt": [
-32
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/core/reflection.jvm/src/kotlin/reflect/jvm/internal/KCallableImpl.kt": [
 25
@@ -218,9 +197,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/ide-common/src/org/jetbrains/kotlin/idea/util/ShadowedDeclarationsFilter.kt": [
 20
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/caches/project/LibraryDependenciesCache.kt": [
-21
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/decompiler/navigation/KotlinDeclarationNavigationPolicyImpl.kt": [
 20
@@ -297,9 +273,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/quickfix/ImportFix.kt": [
 59
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/quickfix/MakeOverriddenMemberOpenFix.kt": [
-31
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/quickfix/createFromUsage/createCallable/CreateCallableMemberFromUsageFactory.kt": [
 25
 ],
@@ -363,9 +336,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.frontend/src/org/jetbrains/kotlin/js/resolve/diagnostics/JsCodePositioningStrategy.kt": [
 25
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.frontend/src/org/jetbrains/kotlin/js/resolve/diagnostics/JsReflectionAPICallChecker.kt": [
-30
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.inliner/src/org/jetbrains/kotlin/js/inline/FunctionReader.kt": [
 39

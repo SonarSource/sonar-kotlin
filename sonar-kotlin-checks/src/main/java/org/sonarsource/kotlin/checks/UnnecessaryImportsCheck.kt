@@ -45,6 +45,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
 import org.jetbrains.kotlin.resolve.descriptorUtil.isCompanionObject
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
@@ -73,10 +74,17 @@ class UnnecessaryImportsCheck : AbstractCheck() {
             } else true
         }.mapNotNull { importDirective: KtImportDirective ->
             importDirective.importedFqName?.let { importDirective to it }
-        }.filter { (importDirective, fqName: FqName) ->
+        }.filter { (importDirective, importedFqName: FqName) ->
             if (importDirective.isAllUnder) return@filter false
-            !importOptimizer.unresolvedNames.contains(fqName.shortName()) &&
-                    importOptimizer.usedDeclarations[fqName].isNullOrEmpty()
+            val importedName: Name =
+                if (importDirective.aliasName != null)
+                    Name.identifier(importDirective.aliasName!!)
+                else
+                    importedFqName.shortName()
+            !importOptimizer.unresolvedNames.contains(importedName) &&
+                    !OperatorConventions.isConventionName(importedName) &&
+                    importedName.asString() != "provideDelegate" &&
+                    importOptimizer.usedDeclarations[importedFqName].isNullOrEmpty()
         }.map { it.first }.forEach { importDirective ->
             // We could not find any usages for anything remaining at this point. Hence, report!
             importDirective.importedReference?.let { context.reportIssue(it, MESSAGE_UNUSED) }
@@ -120,6 +128,10 @@ class UnnecessaryImportsCheck : AbstractCheck() {
             imp.importedReference?.let { context.reportIssue(it, MESSAGE_REDUNDANT) }
             false
         } else true
+    }.filter {
+        val name = it.importedName ?: return@filter true
+        !OperatorConventions.isConventionName(name) &&
+                name.asString() != "provideDelegate"
     }.groupBy {
         it.importedName?.asString()
     }.filterKeys { simpleName ->
