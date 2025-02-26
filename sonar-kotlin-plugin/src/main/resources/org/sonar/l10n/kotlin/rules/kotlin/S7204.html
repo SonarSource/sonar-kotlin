@@ -1,0 +1,61 @@
+<p>Obfuscation makes reverse engineering significantly more difficult by making code harder to understand. This helps to deter malicious actors from
+easily discovering vulnerabilities or stealing proprietary algorithms in publicly deployed software. It is therefore recommended to enable obfuscation
+in release builds.</p>
+<h2>Why is this an issue?</h2>
+<p>When you build a release version of your application, you’re creating a distributable package of your code. Without obfuscation, the compiled code
+retains readable names and structures, making it much easier for someone to reverse-engineer your application. This means they can potentially
+understand your code’s logic, extract sensitive information like API keys, or even modify your application for malicious purposes. Obfuscation
+scrambles these names and structures, making it significantly harder to reverse-engineer and understand, thus protecting your intellectual property
+and sensitive data.</p>
+<p>Release builds are meant for distribution to end users and is therefore under constant scrutiny. Skipping obfuscation in these builds creates a
+serious vulnerability. While debugging builds often disable obfuscation for easier troubleshooting, failing to enable it for release builds exposes
+your application to unnecessary risks.</p>
+<h2>How to fix it in Android</h2>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<p>By default, obfuscation is not enabled for the release build type.</p>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+android {
+    buildTypes {
+        release {}
+    }
+}
+</pre>
+<h4>Compliant solution</h4>
+<p>Obfuscation can be enabled by setting <code>minifyEnabled</code> to <code>true</code>. The <code>proguardFiles</code> function then specifies the
+ProGuard configuration files that will be used.</p>
+<pre data-diff-id="1" data-diff-type="compliant">
+android {
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+}
+</pre>
+<h3>How does this work?</h3>
+<p>Setting <code>isMinifyEnabled</code> to <code>true</code> and providing <code>proguardFiles</code> in your Android Gradle configuration activates
+code shrinking and obfuscation. R8 (or ProGuard in older projects) then analyzes your code, removing unused parts and renaming classes and methods to
+obscure their purpose. This process makes it significantly harder for someone to reverse-engineer your application.</p>
+<p>The <code>proguardFiles</code> let you define exceptions for code that shouldn’t be altered, ensuring that essential parts of your application
+remain functional while still benefiting from the security enhancements of R8/ProGuard.</p>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<ul>
+  <li> Android Documentation - <a href="https://developer.android.com/build/shrink-code">Shrink, obfuscate, and optimize your app</a> </li>
+  <li> OWASP Mobile Application Security Testing Guide - <a
+  href="https://mas.owasp.org/MASTG/0x05j-Testing-Resiliency-Against-Reverse-Engineering/">Android Anti-Reversing Defenses</a> </li>
+</ul>
+<h3>Standards</h3>
+<ul>
+  <li> OWASP - <a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">Top 10 2021 Category A5 - Security Misconfiguration</a> </li>
+  <li> OWASP - <a href="https://owasp.org/www-project-mobile-top-10/2023-risks/m7-insufficient-binary-protection.html">Mobile Top 10 2024 Category M7
+  - Insufficient Input/Output Validation</a> </li>
+  <li> OWASP - <a href="https://owasp.org/www-project-mobile-top-10/2023-risks/m8-security-misconfiguration.html">Mobile Top 10 2024 Category M8 -
+  Security Misconfiguration</a> </li>
+</ul>
+
