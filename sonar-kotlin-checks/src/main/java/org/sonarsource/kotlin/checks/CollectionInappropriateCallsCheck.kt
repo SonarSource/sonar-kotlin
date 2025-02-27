@@ -84,14 +84,14 @@ class CollectionInappropriateCallsCheck : CallAbstractCheck() {
         val collectionType = callExpression.predictReceiverExpression()?.expressionType as? KaClassType ?: return
         val collectionArgumentIndex = funMatcherToArgumentIndexMap[matchedFun]!!
         val collectionArgumentType = collectionType.arrayElementType
-            ?: collectionType.typeArguments[collectionArgumentIndex].type
+            ?: collectionType.typeArguments.getOrNull(collectionArgumentIndex)?.type
             ?: return
 
         // for methods like removeAll, containsAll etc.. we pass a collection as argument,
         // and so we want to check the type of the collection<argument> instead
         if (matchedFun == COLLECTION_ARGUMENT_EXTENSIONS_MATCHER) {
             if (argType !is KaClassType) return
-            argType = argType.typeArguments.first().type ?: return
+            argType = argType.typeArguments.firstOrNull()?.type ?: return
         }
 
         // We avoid raising FPs for unresolved generic types.
