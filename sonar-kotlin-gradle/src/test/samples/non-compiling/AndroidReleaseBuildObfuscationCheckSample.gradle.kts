@@ -24,7 +24,7 @@ android({
         (
             buildTypes {
                 (
-                    release { // Noncompliant {{Enable offuscation by setting isMinifiedEnabled.}}
+                    release { // Noncompliant {{Enable obfuscation by setting isMinifiedEnabled.}}
 //                  ^^^^^^^
                     }
                 )
