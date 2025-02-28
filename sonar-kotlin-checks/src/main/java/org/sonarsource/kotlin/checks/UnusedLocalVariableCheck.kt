@@ -16,7 +16,7 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.sonar.check.Rule
@@ -29,7 +29,7 @@ class UnusedLocalVariableCheck : AbstractCheck() {
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
         context.kaDiagnostics
             .filter {
-                it.factoryName == Errors.UNUSED_VARIABLE.name
+                it.factoryName == FirErrors.UNUSED_VARIABLE.name
             }
             .map { it.psi as KtNamedDeclaration }
             .forEach {
