@@ -34,6 +34,7 @@ class KotlinTree(
 
 data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val inputFile: InputFile) {
     companion object {
+        // FIXME content unused
         @JvmStatic
         fun of(content: String, environment: Environment, inputFile: InputFile): KotlinSyntaxStructure {
 
