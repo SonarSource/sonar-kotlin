@@ -36,7 +36,7 @@ fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile
         val virtualFile = KotlinVirtualFile(
             KotlinFileSystem(),
             File(inputFile.uri().path),
-            content,
+            contentProvider = { content },
         )
         environment.k2session = createK2AnalysisSession(
             environment.disposable,

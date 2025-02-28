@@ -29,7 +29,7 @@ public final class K1internals {
   }
 
   public static boolean isK1(KaSession kaSession) {
-    return kaSession instanceof org.jetbrains.kotlin.analysis.api.descriptors.KaFe10Session;
+    return kaSession.getUseSiteSession() instanceof org.jetbrains.kotlin.analysis.api.descriptors.KaFe10Session;
   }
 
   static org.jetbrains.kotlin.analysis.api.descriptors.CliFe10AnalysisFacade createCliFe10AnalysisFacade() {

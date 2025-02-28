@@ -58,8 +58,9 @@ class KotlinGradleSensor(
     ) = object : AbstractKotlinSensorExecuteContext(
         sensorContext, filesToAnalyze, progressReport, listOf(KtChecksVisitor(checks)), filenames, LOG
     ) {
+        override val classpath: List<String> = listOf()
         override val bindingContext: BindingContext = BindingContext.EMPTY
-        override val doResolve: Boolean = false
+        override val doResolve: Boolean = environment.useK2
     }
 
     override fun getFilesToAnalyse(sensorContext: SensorContext): Iterable<InputFile> {

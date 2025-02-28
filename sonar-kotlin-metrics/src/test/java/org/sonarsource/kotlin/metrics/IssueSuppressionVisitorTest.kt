@@ -42,6 +42,7 @@ import java.io.File
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.name
 
 class IssueSuppressionVisitorTest {
     private val disposable = Disposer.newDisposable()
@@ -91,7 +92,8 @@ class IssueSuppressionVisitorTest {
         val env = Environment(disposable, System.getProperty("java.class.path").split(File.pathSeparatorChar) + DEFAULT_KOTLIN_CLASSPATH, LanguageVersion.LATEST_STABLE)
         val verifier = SingleFileVerifier.create(path, StandardCharsets.UTF_8)
         val testFileContent = String(Files.readAllBytes(path), StandardCharsets.UTF_8)
-        val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
+        val inputFile = TestInputFileBuilder("moduleKey", path.name)
+            .setModuleBaseDir(path.parent)
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(testFileContent)
             .build()

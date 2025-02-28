@@ -17,19 +17,12 @@
 package org.sonarsource.kotlin.api.frontend
 
 import com.intellij.openapi.util.Disposer
-import io.mockk.every
-import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.LanguageVersion
-import org.jetbrains.kotlin.resolve.BindingContextUtils
-import org.jetbrains.kotlin.utils.KotlinExceptionWithAttachments
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
-import org.sonarsource.kotlin.testapi.kotlinTreeOf
-import java.io.File
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import kotlin.io.path.readText
@@ -45,29 +38,6 @@ internal class KotlinSyntaxStructureTest {
     @AfterEach
     fun cleanup() {
         unmockkAll()
-    }
-
-    @Test
-    fun `ensure file name is displayed on compiler exception`() {
-        val path = Path.of("src/test/resources/api/sample/SimpleClass.kt")
-
-        val expectedException = object : Exception() {}
-
-        mockkStatic(BindingContextUtils::class)
-        every { BindingContextUtils.getRecordedTypeInfo(any(), any()) } throws expectedException
-
-        val content = path.readText()
-        val environment = Environment(disposable, System.getProperty("java.class.path").split(File.pathSeparatorChar), LanguageVersion.LATEST_STABLE)
-        val inputFile = TestInputFileBuilder("moduleKey", path.toString())
-            .setCharset(StandardCharsets.UTF_8)
-            .initMetadata(content).build()
-
-        assertThrows<KotlinExceptionWithAttachments> { kotlinTreeOf(content, environment, inputFile) }.apply {
-            assertThat(this)
-                .hasCause(expectedException)
-                .hasMessageStartingWith("Exception while analyzing expression in (4,17) in ")
-                .hasMessageContaining("/moduleKey/src/test/resources/api/sample/SimpleClass.kt")
-        }
     }
 
     @Test

@@ -76,6 +76,7 @@ class CopyPasteDetectorTest {
 
         val sensorContext: SensorContextTester = SensorContextTester.create(tmpFolder!!.root)
         val inputFile = TestInputFileBuilder("moduleKey", tmpFile.name)
+            .setModuleBaseDir(tmpFile.parent)
             .setContents(content)
             .build()
 
@@ -127,6 +128,7 @@ class CopyPasteDetectorTest {
 
         val sensorContext: SensorContextTester = SensorContextTester.create(tmpFolder!!.root)
         val inputFile = TestInputFileBuilder("moduleKey", tmpFile.name)
+            .setModuleBaseDir(tmpFile.parent)
             .setContents(content)
             .build()
 
@@ -159,6 +161,7 @@ class CopyPasteDetectorTest {
 
         val sensorContext: SensorContextTester = SensorContextTester.create(tmpFolder!!.root)
         val inputFile = TestInputFileBuilder("moduleKey", tmpFile.name)
+            .setModuleBaseDir(tmpFile.parent)
             .setContents(content)
             .build()
 
