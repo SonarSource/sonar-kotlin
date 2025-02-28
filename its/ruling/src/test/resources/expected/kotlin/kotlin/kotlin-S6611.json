@@ -1,15 +1,9 @@
 {
 "kotlin-kotlin-project:sources/kotlin/kotlin/build-common/src/org/jetbrains/kotlin/incremental/LookupStorage.kt": [
-80,
-188
+80
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/BoxedVsPrimitiveBranchedValues.kt": [
-40,
-163,
-218
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/BranchedValue.kt": [
-40
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/ArgumentGenerator.kt": [
+50
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/JvmStaticInCompanionObjectGenerator.kt": [
 99
@@ -20,11 +14,12 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/Parameters.kt": [
 57
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/src/org/jetbrains/kotlin/cli/jvm/javac/JavacWrapperKotlinResolverImpl.kt": [
-38
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/cfg/PseudocodeVariablesData.kt": [
 161
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/cfg/pseudocode/ControlFlowInstructionsGenerator.kt": [
+141,
+141
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/cfg/pseudocode/PseudocodeImpl.kt": [
 426,
@@ -48,15 +43,7 @@
 151
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.common/src/org/jetbrains/kotlin/backend/common/lower/VarargLowering.kt": [
-139,
 254
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.js/src/org/jetbrains/kotlin/ir/backend/js/lower/SecondaryCtorLowering.kt": [
-228,
-228
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/lower/ClassLowerWithContext.kt": [
-39
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/lower/EnumClassLowering.kt": [
 404,
@@ -65,6 +52,9 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.psi2ir/src/org/jetbrains/kotlin/psi2ir/PsiSourceManager.kt": [
 99
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.psi2ir/src/org/jetbrains/kotlin/psi2ir/generators/CallGenerator.kt": [
+234
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/contracts/model/MutableContextInfo.kt": [
 86,
@@ -76,15 +66,14 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/checkers/AbstractDiagnosticsTest.kt": [
 89,
 151,
+157,
+161,
 431,
 532,
 536
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/codegen/AbstractBytecodeTextTest.kt": [
 48
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/resolve/constraintSystem/AbstractConstraintSystemTest.kt": [
-146
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/jvm/compiler/MultiModuleJavaAnalysisCustomTest.kt": [
 113,
@@ -95,10 +84,14 @@
 156
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/ide-common/src/org/jetbrains/kotlin/idea/util/OptimizedImportsBuilder.kt": [
+146,
 239
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/decompiler/textBuilder/DecompiledText.kt": [
 36
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/overrideImplement/OverrideMembersHandler.kt": [
+58
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/quickfix/createFromUsage/callableBuilder/CallableBuilder.kt": [
 99,
@@ -121,18 +114,18 @@
 892,
 892
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/pullUp/KotlinPullUpHelper.kt": [
-606,
-630,
-631,
-641
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ClassBodyConverter.kt": [
 73,
 170
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ConstructorConverter.kt": [
+197
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/OverloadReducer.kt": [
 149
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/jps-tests/test/org/jetbrains/kotlin/jps/build/AbstractIncrementalJpsTest.kt": [
+405
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/jps-tests/test/org/jetbrains/kotlin/jps/build/AbstractLookupTrackerTest.kt": [
 209
@@ -146,29 +139,13 @@
 414,
 559
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.dce/src/org/jetbrains/kotlin/js/dce/Context.kt": [
-220,
-220
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.inliner/src/org/jetbrains/kotlin/js/inline/FunctionReader.kt": [
-114
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.inliner/src/org/jetbrains/kotlin/js/inline/clean/ReferenceTracker.kt": [
 33
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.inliner/src/org/jetbrains/kotlin/js/inline/util/rewriters/LabelNameRefreshingVisitor.kt": [
 53
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/BasicBoxTest.kt": [
-369
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.translator/src/org/jetbrains/kotlin/js/translate/reference/CallArgumentTranslator.kt": [
 311
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/android-extensions/android-extensions-compiler/src/org/jetbrains/kotlin/android/parcel/serializers/ParcelSerializers.kt": [
-652
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/android-extensions/android-extensions-compiler/src/org/jetbrains/kotlin/android/synthetic/res/AndroidLayoutXmlFileManager.kt": [
-117
 ]
 }

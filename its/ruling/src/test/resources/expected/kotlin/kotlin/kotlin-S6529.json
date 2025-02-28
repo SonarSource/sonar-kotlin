@@ -5,31 +5,20 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/DefaultCallArgs.kt": [
 45
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/MultifileClassCodegen.kt": [
-162
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/ScriptCodegen.kt": [
 151
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/AnonymousObjectTransformer.kt": [
-111,
 578
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/MethodInliner.kt": [
-442
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/SMAPParser.kt": [
-23,
-28
+208
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/TransformationInfo.kt": [
 98
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/cli-common/src/org/jetbrains/kotlin/cli/common/repl/KotlinJsr223JvmInvocableScriptEngine.kt": [
 98
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/container/src/org/jetbrains/kotlin/container/Registry.kt": [
-68
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInformationProvider.kt": [
 723,
@@ -45,6 +34,9 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/cfg/pseudocode/ControlFlowInstructionsGenerator.kt": [
 59
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/inference/constraintSystemUtils.kt": [
+48
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/lazy/FileScopeFactory.kt": [
 304
 ],
@@ -53,11 +45,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.common/src/org/jetbrains/kotlin/backend/common/Utils.kt": [
 30
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.common/src/org/jetbrains/kotlin/backend/common/lower/StringConcatenationLowering.kt": [
-67,
-71,
-94
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/codegen/ExpressionCodegen.kt": [
 560,
@@ -68,9 +55,7 @@
 156
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/KtCodeFragment.kt": [
-129,
-150,
-187
+150
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/KtPsiFactory.kt": [
 594,
@@ -79,9 +64,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/createByPattern.kt": [
 278
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/KotlinCallResolver.kt": [
-131
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/checkers/LazyOperationsLog.kt": [
 111,
@@ -95,9 +77,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/jvm/compiler/AbstractCompileKotlinAgainstJavaTest.kt": [
 92
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors.jvm/src/org/jetbrains/kotlin/load/java/lazy/descriptors/LazyJavaScope.kt": [
-201
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors.jvm/src/org/jetbrains/kotlin/load/kotlin/methodSignatureMapping.kt": [
 113
@@ -119,12 +98,6 @@
 45,
 47
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/core/metadata.jvm/src/org/jetbrains/kotlin/metadata/jvm/deserialization/utfEncoding.kt": [
-52
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/core/reflection.jvm/src/kotlin/reflect/jvm/internal/KPackageImpl.kt": [
-58
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/core/util.runtime/src/org/jetbrains/kotlin/utils/SmartSet.kt": [
 45,
 53,
@@ -132,6 +105,11 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/eval4j/src/org/jetbrains/eval4j/jdi/jdiEval.kt": [
 143
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/NodeIndentStrategy.kt": [
+108,
+123,
+134
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/ide-common/src/org/jetbrains/kotlin/resolve/lazy/PartialBodyResolveFilter.kt": [
 114,
@@ -141,11 +119,17 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/caches/resolve/IDELightClassGenerationSupport.kt": [
 58
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/codeInsight/shorten/delayedRequestsWaitingSet.kt": [
+130
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/highlighter/KotlinPsiChecker.kt": [
 125
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/search/declarationsSearch/declarationSearchUtil.kt": [
 81
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/LookupElementsCollector.kt": [
+60
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/smart/Utils.kt": [
 196
@@ -157,17 +141,14 @@
 88
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/DebuggerUtils.kt": [
-77
+77,
+210
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/KotlinPositionManager.kt": [
 329
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/evaluate/KotlinCodeFragmentFactory.kt": [
-192,
 390
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/stepping/KotlinSteppingCommandProvider.kt": [
-139
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/inspections/api/IncompatibleAPIKotlinVisitor.kt": [
 37
@@ -182,17 +163,11 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-test-framework/test/org/jetbrains/kotlin/idea/test/ConfigLibraryUtil.kt": [
 200
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/codeInsight/KotlinRefactoringHelperForDelayedRequests.kt": [
-29
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/codeInsight/postfix/KtPostfixTemplateProvider.kt": [
 200
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/highlighter/markers/OverridenFunctionMarker.kt": [
 62
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertToStringTemplateIntention.kt": [
-69
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/LambdaToAnonymousFunctionIntention.kt": [
 66
@@ -200,15 +175,15 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/CallableRefactoring.kt": [
 147
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/usages/KotlinEnumEntryWithoutSuperCallUsage.kt": [
-25
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/introduce/extractionEngine/ExtractableCodeDescriptor.kt": [
 283,
 454
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/pullUp/KotlinPullUpHelper.kt": [
-588
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/safeDelete/KotlinSafeDeleteProcessor.kt": [
+365
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/safeDelete/utils.kt": [
+96
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/findUsages/AbstractFindUsagesTest.kt": [
 227
@@ -216,14 +191,8 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/debugger/evaluate/AbstractKotlinEvaluateExpressionTest.kt": [
 396
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/decompiler/stubBuilder/AbstractClsStubBuilderTest.kt": [
-95
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ast/Expressions.kt": [
 242
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/src/org/jetbrains/kotlin/compilerRunner/CompilerRunnerUtil.kt": [
-37
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/src/org/jetbrains/kotlin/jps/platforms/KotlinJvmModuleBuildTarget.kt": [
 65
@@ -234,15 +203,12 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.frontend/src/org/jetbrains/kotlin/js/resolve/diagnostics/JsCallChecker.kt": [
 96
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.inliner/src/org/jetbrains/kotlin/js/inline/FunctionInlineMutator.kt": [
+201
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.translator/src/org/jetbrains/kotlin/js/translate/reference/CallArgumentTranslator.kt": [
 130,
 134
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/scripting/common/src/kotlin/script/experimental/host/scriptHostUtil.kt": [
-22
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/scripting/jvm/src/kotlin/script/experimental/jvm/jvmScriptEnvironment.kt": [
-56
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/common/src/generated/_Collections.kt": [
 597,
@@ -254,23 +220,8 @@
 24,
 110
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/common/src/generated/_Strings.kt": [
-860
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/dom/Classes.kt": [
-24
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/stringsCode.kt": [
-98
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/io/files/Utils.kt": [
 392
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/AbstractCollection.kt": [
-22
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/AbstractMap.kt": [
-72
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/Collections.kt": [
 169
@@ -278,15 +229,8 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/Maps.kt": [
 141
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/text/Strings.kt": [
-1168
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/js/MapJsTest.kt": [
-318
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-stdlib-gen/src/templates/dsl/MemberBuilder.kt": [
-354,
-381
+354
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/src/org/jetbrains/kotlin/kapt3/util/javacListUtils.kt": [
 42
