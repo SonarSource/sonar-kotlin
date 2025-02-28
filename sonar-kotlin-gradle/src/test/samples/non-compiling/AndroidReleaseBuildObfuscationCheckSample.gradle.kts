@@ -1,159 +1,330 @@
+// Glossary:
+// - App: Android application (identified by the presence of the applicationId property in the defaultConfig block)
+// - Library: Android library (identified by the absence of the applicationId property in the defaultConfig block)
+
 // region non-compliant scenarios
 
-// No release properties
+// App: no buildTypes
+    android { // Noncompliant {{Make sure that obfuscation is enabled in the release build configuration.}}
+//  ^^^^^^^
+        defaultConfig {
+            applicationId = "com.example" // Android app, not a library
+        }
+}
+
+// App: no buildTypes and different block and properties under android
+    android { // Noncompliant {{Make sure that obfuscation is enabled in the release build configuration.}}
+//  ^^^^^^^
+    namespace = "com.example"
+    compileSdk = 33
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
+}
+
+// App: no release properties
 android {
+    defaultConfig {
+        val SOME_CONSTANT = "com.example"
+        applicationId = SOME_CONSTANT // Android app, not a library
+    }
+
     buildTypes {
-        release { // Noncompliant {{Enable obfuscation by setting isMinifiedEnabled.}}
+        release { // Noncompliant {{Make sure that obfuscation is enabled in the release build configuration.}}
 //      ^^^^^^^
         }
     }
 }
 
-// Lambda in argument list within parentheses
+// App: lambda in argument list within parentheses
 android({
+    var someVariable = "com.example"
+    defaultConfig {
+        applicationId = someVariable // Android app, not a library
+    }
+
     buildTypes({
-        release({ // Noncompliant
+        release({ // Noncompliant {{Make sure that obfuscation is enabled in the release build configuration.}}
 //      ^^^^^^^
         })
     })
 })
 
-// Lambda within standalone parentheses (not parentheses of argument list)
+// App: lambda within standalone parentheses (not parentheses of argument list)
 (
     android {
         (
             buildTypes {
                 (
-                    release { // Noncompliant {{Enable obfuscation by setting isMinifiedEnabled.}}
+                    release { // Noncompliant {{Make sure that obfuscation is enabled in the release build configuration.}}
 //                  ^^^^^^^
                     }
                 )
             }
         )
+
+        defaultConfig {
+            applicationId = AndroidConfig.ID // Android app, not a library
+        }
     }
 )
 
-// Different release properties
+// App: different release properties than isDebuggable, isMinifyEnabled, and proguardFiles
 android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     buildTypes {
-        release { // Noncompliant
+        release { // Noncompliant {{Make sure that obfuscation is enabled in the release build configuration.}}
             namespace = "com.example"
         }
     }
 }
 
-// android under kotlin block
+// App: proguardFiles under release, but not isMinifyEnabled
+android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
+    buildTypes {
+        release { // Noncompliant {{Make sure that obfuscation is enabled in the release build configuration.}}
+            proguardFiles("proguard-rules.pro")
+        }
+    }
+}
+
+// App: isMinifyEnabled under release, but not proguardFiles
+android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
+    buildTypes {
+        release { // Noncompliant {{Make sure that obfuscation is enabled in the release build configuration.}}
+            isMinifyEnabled = true
+        }
+    }
+}
+
+// App: android under kotlin block - proguardFiles under release, but not isMinifyEnabled
 kotlin {
     android {
+        defaultConfig {
+            applicationId = "com.example" // Android app, not a library
+        }
         buildTypes {
             release { // Noncompliant
+                proguardFiles("proguard-rules.pro")
             }
         }
     }
 }
 
-// isMinifyEnabled read but not assigned
+// App: isMinifyEnabled read but not assigned - proguardFiles under release, but not isMinifyEnabled
 kotlin {
     android {
+        defaultConfig {
+            applicationId = "com.example" // Android app, not a library
+        }
         buildTypes {
             release { // Noncompliant
                 print(isMinifyEnabled)
+                proguardFiles("proguard-rules.pro")
             }
         }
     }
 }
 
-// isMinifyEnabled read in a binary operation which is not an assignnment
+// App: isMinifyEnabled read in a binary operation which is not an assignnment
 kotlin {
     android {
+        defaultConfig {
+            applicationId = "com.example" // Android app, not a library
+        }
         buildTypes {
             release { // Noncompliant
                 isMinifyEnabled && true
                 true && isMinifyEnabled
+
+                proguardFiles("proguard-rules.pro")
             }
         }
     }
 }
 
-// using setter
+// App: using setter
 android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     buildTypes {
         release { // Noncompliant
             setIsMinifiedEnable(false) // Not a valid setter
             setMinifiedEnable(false) // Not a valid setter
+
+            proguardFiles("proguard-rules.pro")
         }
     }
 }
 
-// using getByName and BuildType
+// App: using isDebuggable
 android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     buildTypes {
-        getByName(BuildType.RELEASE) { // FN
-            isMinifyEnabled = false
+        release { // Noncompliant {{Enabling debugging disables obfuscation for this release build. Make sure this is safe here.}}
+            isMinifyEnabled = true
+            isDebuggable = true
+//         <^^^^^^^^^^^^^^^^^^^
+            proguardFiles("proguard-rules.pro")
         }
     }
 }
 
-// using getByName and string
+// App: using getByName and BuildType
 android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     buildTypes {
-        getByName("release") { // FN
-            isMinifyEnabled = false
+        getByName(BuildType.RELEASE) {
+            isMinifyEnabled = false // Noncompliant
+//          ^^^^^^^^^^^^^^^^^^^^^^^
+            proguardFiles("proguard-rules.pro")
         }
     }
 }
 
-// using maybeCreate and apply
+// App: using getByName and string
 android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false // Noncompliant
+//          ^^^^^^^^^^^^^^^^^^^^^^^
+            proguardFiles("proguard-rules.pro")
+        }
+    }
+}
+
+// App: using getByName and triple-quote string
+android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
+    buildTypes {
+        getByName("""release""") {
+            isMinifyEnabled = false // Noncompliant
+//          ^^^^^^^^^^^^^^^^^^^^^^^
+            proguardFiles("proguard-rules.pro")
+        }
+    }
+}
+
+// App: using getByName and interpolated string
+android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
+    buildTypes {
+        getByName("${"release"}") { // FN
+            isMinifyEnabled = false
+            proguardFiles("proguard-rules.pro")
+        }
+    }
+}
+
+// App: using getByName and val
+android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
+    buildTypes {
+        val release = "release"
+        getByName(release) { // FN
+            isMinifyEnabled = false
+            proguardFiles("proguard-rules.pro")
+        }
+    }
+}
+
+// App: using maybeCreate and apply
+android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     buildTypes {
         maybeCreate(BuildTypes.RELEASE).apply { // FN
             isMinifyEnabled = false
+            proguardFiles("proguard-rules.pro")
         }
     }
 }
 
-// isMinifyEnabled assigned val
+// App: isMinifyEnabled assigned val
 android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     buildTypes {
         release { // FN
             val trueVal = false
             isMinifyEnabled = trueVal
+            proguardFiles("proguard-rules.pro")
         }
     }
 }
 
-// isMinifyEnabled assigned var
+// App: isMinifyEnabled assigned var
 android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     buildTypes {
         release { // FN
             var trueVal = false
             isMinifyEnabled = trueVal
+            proguardFiles("proguard-rules.pro")
         }
     }
 }
 
-// isMinifyEnabled assigned boolean expression
+// App: isMinifyEnabled assigned boolean expression
 android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     buildTypes {
         release { // FN
             isMinifyEnabled = false && true
+            proguardFiles("proguard-rules.pro")
         }
     }
 }
 
-// foreach of platforms
+// App: foreach of platforms
 listOf(android(), iosX64(), iosArm64()).forEach {
+    it.defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     it.buildTypes {
         release { // FN
+            proguardFiles("proguard-rules.pro")
         }
     }
 }
 
-// lambda argument not a function literal
+// App: lambda argument not a function literal
 fun lambdaArgument(configure: BaseAppModuleExtension) = with(configure) {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     buildTypes {
         release { // FN
             namespace = "com.example"
+            proguardFiles("proguard-rules.pro")
         }
     }
 }
@@ -184,17 +355,41 @@ android()
 // Empty non-android block with no lambda
 iosX64()
 
-// Different block and properties under android
+// Library: no buildTypes
+android {
+}
+
+// Library: no buildTypes and different block and properties under android
 android {
     namespace = "com.example"
     compileSdk = 33
-    defaultConfig {
-        applicationId = "com.example"
+}
+
+// Library: no release properties
+android {
+    buildTypes {
+        release {
+        }
     }
 }
 
-// Different block under buildTypes
+// Library: defaultConfig present, but applicationId not set
 android {
+    defaultConfig {
+        notApplicationId = "com.example"
+    }
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+        }
+    }
+}
+
+// App: different block (not release) under buildTypes
+android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     buildTypes {
         debug {
             isMinifyEnabled = true
@@ -202,38 +397,79 @@ android {
     }
 }
 
-// android under kotlin block
+// App: android with isMinifiedEnabled set and proguardFiles, under kotlin block
 kotlin {
     android {
+        defaultConfig {
+            applicationId = "com.example" // Android app, not a library
+        }
         buildTypes {
             release {
                 isMinifyEnabled = true
+                proguardFiles("proguard-rules.pro")
             }
         }
     }
 }
 
-// android under kotlin block
-kotlin {
-    android {
-        buildTypes {
-            release {
-                val trueVal = true
-                isMinifyEnabled = trueVal
+// App: isMinifiedEnabled set and empty proguardFiles
+android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles()
+        }
+    }
+}
+
+// App: isMinifiedEnabled set and proguardFiles called in nested block
+android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            someNestedBlock {
+                proguardFiles("proguard-rules.pro")
             }
         }
     }
 }
 
-// block with multiple or differently-typed arguments (not the overload from org.gradle.kotlin.dsl)
+// App: proguardFiles called with multiple parameters, variable and not
+android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            val aValParameter = "proguard-rules-1.pro"
+            var aVarParameter = "proguard-rules-2.pro"
+            proguardFiles(aValParameter, aVarParameter, "proguard-rules-3.pro")
+        }
+    }
+}
+
+// App: block with multiple or differently-typed arguments (not the overload from org.gradle.kotlin.dsl)
 android(42) {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     buildTypes {
         release("a string")
     }
 }
 
-// using getByName
+// App: using getByName
 android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     buildTypes {
         getByName(BuildType.DEBUG) {
             isMinifyEnabled = false
@@ -241,11 +477,15 @@ android {
         getByName("debug") {
             isMinifyEnabled = false
         }
+        getByName("release", 42)
     }
 }
 
-// using create
+// App: using create
 android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     buildTypes {
         create("beta") {
             isMinifyEnabled = false
@@ -253,11 +493,28 @@ android {
     }
 }
 
-// using maybeCreate and apply
+// App: using maybeCreate and apply
 android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
     buildTypes {
         maybeCreate(BuildTypes.DEBUG).apply {
             isMinifyEnabled = false
+        }
+    }
+}
+
+// App: using isDebuggable set to false (default)
+android {
+    defaultConfig {
+        applicationId = "com.example" // Android app, not a library
+    }
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isDebuggable = false
+            proguardFiles("proguard-rules.pro")
         }
     }
 }

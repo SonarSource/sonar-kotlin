@@ -27,35 +27,85 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtScriptInitializer
-import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.checks.predictRuntimeBooleanValue
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 
 private const val gradleExtension = ".gradle.kts"
-private const val message = "Enable obfuscation by setting isMinifiedEnabled."
+private const val mainMessage = "Make sure that obfuscation is enabled in the release build configuration."
+private const val debuggableSetToTrueMessage = "Enabling debugging disables obfuscation for this release build. Make sure this is safe here."
+
+private val releaseBuildTypeExpressions = listOf("\"release\"", "\"\"\"release\"\"\"", "BuildType.RELEASE")
 
 @Rule(key = "S7204")
 class AndroidReleaseBuildObfuscationCheck : AbstractCheck() {
 
     override fun visitScriptInitializer(initializer: KtScriptInitializer, data: KotlinFileContext) {
         data.ktFile.isGradleKts() || return
-        val (_, androidLambda) = initializer.getChildCallWithLambdaOrNull("android") ?: return
-        val (_, buildTypesLambda) = androidLambda.getChildCallWithLambdaOrNull("buildTypes") ?: return
-        val (releaseCallee, releaseLambda) = buildTypesLambda.getChildCallWithLambdaOrNull("release") ?: return
-        if (releaseLambda.getPropertyAssignmentToTrueOrNull("isMinifyEnabled", data.bindingContext) == null) {
-            data.reportIssue(releaseCallee, message)
+        val (androidCallee, androidLambda) = initializer.getChildCallWithLambdaOrNull("android") ?: return
+
+        // Ensure the project is an Android app, and not a library
+        val (_, defaultConfigLambda) = androidLambda.getChildCallWithLambdaOrNull("defaultConfig") ?: return
+        defaultConfigLambda.getPropertyAssignmentOrNull("applicationId") ?: return
+
+        val buildTypes = androidLambda.getChildCallWithLambdaOrNull("buildTypes")
+        if (buildTypes == null) {
+            data.reportIssue(androidCallee, mainMessage)
+            return
+        }
+
+        val (_, buildTypesLambda) = buildTypes
+        val (releaseCallee, releaseLambda) = buildTypesLambda.getChildCallWithLambdaOrNull("release")
+            ?: androidLambda.getGetByNameCallWithLambdaOrNull()
+            ?: return
+
+        // TODO: use predictRuntimeBooleanValue for "true" and "false" after migration to K2
+        val isDebuggableAssignment = releaseLambda.getPropertyAssignmentOrNull("isDebuggable")
+        val isDebuggableSetToTrue = isDebuggableAssignment?.right?.text == "true"
+        val isMinifiedEnabledAssignment = releaseLambda.getPropertyAssignmentOrNull("isMinifyEnabled")
+        val isMinifiedEnabledAssignmentNotSet = isMinifiedEnabledAssignment == null
+        val isMinifiedEnabledAssignmentSetToFalse = isMinifiedEnabledAssignment?.right?.text == "false"
+        val proguardFilesNotCalled = releaseLambda.getChildCallOrNull("proguardFiles") == null
+
+        when {
+            isDebuggableSetToTrue && !isMinifiedEnabledAssignmentNotSet && !isMinifiedEnabledAssignmentSetToFalse ->
+                data.reportIssue(
+                    releaseCallee,
+                    debuggableSetToTrueMessage,
+                    secondaryLocations = listOf(isDebuggableAssignment!!).map { SecondaryLocation(data.textRange(it), "") }
+                )
+            isMinifiedEnabledAssignmentNotSet -> data.reportIssue(releaseCallee, mainMessage)
+            isMinifiedEnabledAssignmentSetToFalse -> data.reportIssue(isMinifiedEnabledAssignment!!, mainMessage)
+            proguardFilesNotCalled -> data.reportIssue(releaseCallee, mainMessage)
         }
     }
 
     private fun KtFile.isGradleKts() = name.endsWith(gradleExtension)
 
+    private fun KtElement.getChildCallOrNull(childCallName: String): KtCallExpression? =
+        descendantsOfType<KtCallExpression>().firstOrNull { it.calleeExpression?.text == childCallName }
+
     private fun KtElement.getChildCallWithLambdaOrNull(childCallName: String): Pair<KtExpression, KtFunctionLiteral>? {
-        val callee = descendantsOfType<KtCallExpression>().firstOrNull { it.calleeExpression?.text == childCallName } ?: return null
+        val callee = getChildCallOrNull(childCallName) ?: return null
         val lambda = callee.functionLiteralArgumentOrNull() ?: return null
         return callee.calleeExpression!! to lambda
     }
+
+    private fun KtElement.getGetByNameCallWithLambdaOrNull(): Pair<KtExpression, KtFunctionLiteral>? {
+        val callee = descendantsOfType<KtCallExpression>().firstOrNull {
+            it.calleeExpression?.text == "getByName" &&
+                it.valueArguments.size == 2 &&
+                it.valueArguments[0].isReleaseBuildType()
+        } ?: return null
+        val lambda = callee.functionLiteralArgumentOrNull() ?: return null
+        return callee.calleeExpression!! to lambda
+    }
+
+    private fun KtValueArgument.isReleaseBuildType(): Boolean =
+        releaseBuildTypeExpressions.any(this::textMatches) // TODO: use predictRuntimeStringValue after migration to K2
 
     private fun KtCallExpression.functionLiteralArgumentOrNull(): KtFunctionLiteral? =
         valueArguments
@@ -63,9 +113,6 @@ class AndroidReleaseBuildObfuscationCheck : AbstractCheck() {
             .flatMap { it.childrenOfType<KtFunctionLiteral>() }
             .singleOrNull()
 
-    private fun KtElement.getPropertyAssignmentToTrueOrNull(propertyName: String, bindingContext: BindingContext): KtBinaryExpression? =
-        descendantsOfType<KtBinaryExpression>().firstOrNull {
-            it.operationToken == KtTokens.EQ &&
-                it.left?.text == propertyName &&
-                it.right?.predictRuntimeBooleanValue(bindingContext) ?: true }
+    private fun KtElement.getPropertyAssignmentOrNull(propertyName: String): KtBinaryExpression? =
+        descendantsOfType<KtBinaryExpression>().firstOrNull { it.operationToken == KtTokens.EQ && it.left?.text == propertyName }
 }
