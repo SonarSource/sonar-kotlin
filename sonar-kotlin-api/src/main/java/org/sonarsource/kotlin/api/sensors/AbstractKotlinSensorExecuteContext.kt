@@ -71,7 +71,10 @@ abstract class AbstractKotlinSensorExecuteContext(
             determineKotlinLanguageVersion(sensorContext, logger),
             useK2 = sensorContext.config().getBoolean("sonar.kotlin.useK2").orElse(true)
         )
-        if (!env.useK2) return@lazy env
+        if (!env.useK2) {
+            System.err.println(">>> USING K1 <<<")
+            return@lazy env
+        }
         val virtualFileSystem = KotlinFileSystem()
         env.k2session = createK2AnalysisSession(
             env.disposable,
