@@ -1,0 +1,48 @@
+{
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/androidTest/java/com/android/example/github/ui/repo/RepoFragmentTest.kt": [
+56
+],
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/androidTest/java/com/android/example/github/ui/search/SearchFragmentTest.kt": [
+59
+],
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/androidTest/java/com/android/example/github/ui/user/UserFragmentTest.kt": [
+54
+],
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/main/java/com/android/example/github/di/AppModule.kt": [
+26
+],
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/main/java/com/android/example/github/di/FragmentBuildersModule.kt": [
+23
+],
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/main/java/com/android/example/github/di/MainActivityModule.kt": [
+21
+],
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/main/java/com/android/example/github/di/ViewModelModule.kt": [
+28
+],
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/test/java/com/android/example/github/repository/FetchNextSearchPageTaskTest.kt": [
+38
+],
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/test/java/com/android/example/github/repository/RepoRepositoryTest.kt": [
+48
+],
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/test/java/com/android/example/github/repository/UserRepositoryTest.kt": [
+35
+],
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/test/java/com/android/example/github/ui/repo/RepoViewModelTest.kt": [
+33
+],
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/test/java/com/android/example/github/ui/search/SearchViewModelTest.kt": [
+35
+],
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/test/java/com/android/example/github/ui/user/UserViewModelTest.kt": [
+38
+],
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/NavigationBasicSample/app/src/main/java/com/example/android/navigationsample/Leaderboard.kt": [
+21,
+22
+],
+"kotlin-android-architecture-components-project:sources/kotlin/android-architecture-components/PagingSample/app/src/main/java/paging/android/example/com/pagingsample/MainActivity.kt": [
+26
+]
+}

@@ -108,7 +108,10 @@ public class SlangRulingTest {
       "sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/CompileServiceImpl.kt",
       "sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/psiUtil/ktPsiUtil.kt",
       "sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/psiUtil/psiUtils.kt",
-      "sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ast/Statements.kt");
+      "sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ast/Statements.kt",
+      "sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.dom.kt",
+      "sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.khronos.webgl.kt"
+    );
     executeSonarScannerAndAssertDifferences("kotlin/kotlin", Map.of(
       "sonar.inclusions", "sources/kotlin/kotlin/**/*.kt",
       "sonar.exclusions", String.join(",", exclusions)));
