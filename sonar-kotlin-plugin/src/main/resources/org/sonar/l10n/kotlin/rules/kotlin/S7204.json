@@ -1,0 +1,35 @@
+{
+  "title": "Obfuscation should be enabled for release builds",
+  "type": "VULNERABILITY",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "cwe"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-7204",
+  "sqKey": "S7204",
+  "scope": "All",
+  "securityStandards": {
+    "CWE": [
+      200
+    ],
+    "OWASP Mobile Top 10 2024": [
+      "M7",
+      "M8"
+    ],
+    "OWASP Top 10 2021": [
+      "A5"
+    ]
+  },
+  "quickfix": "unknown",
+  "code": {
+    "impacts": {
+      "SECURITY": "HIGH"
+    },
+    "attribute": "COMPLETE"
+  }
+}
