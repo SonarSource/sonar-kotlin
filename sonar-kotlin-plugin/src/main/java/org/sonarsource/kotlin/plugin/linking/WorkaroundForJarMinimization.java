@@ -45,12 +45,6 @@ public class WorkaroundForJarMinimization {
           org.jetbrains.kotlin.analysis.api.impl.base.permissions.KaBaseAnalysisPermissionChecker.class,
           org.jetbrains.kotlin.analysis.api.impl.base.lifetime.KaBaseLifetimeTracker.class,
           // all projectService.serviceImplementation from
-          // META-INF/analysis-api/analysis-api-fe10.xml
-          org.jetbrains.kotlin.analysis.api.descriptors.KaFe10SessionProvider.class,
-          org.jetbrains.kotlin.analysis.api.descriptors.modification.KaFe10SourceModificationService.class,
-          org.jetbrains.kotlin.references.fe10.base.KtFe10KotlinReferenceProviderContributor.class,
-          org.jetbrains.kotlin.analysis.api.descriptors.references.ReadWriteAccessCheckerDescriptorsImpl.class,
-          // all projectService.serviceImplementation from
           // META-INF/analysis-api/low-level-api-fir.xml
           org.jetbrains.kotlin.analysis.low.level.api.fir.services.LLRealFirElementByPsiElementChooser.class,
           org.jetbrains.kotlin.analysis.low.level.api.fir.projectStructure.LLFirBuiltinsSessionFactory.class,
@@ -75,6 +69,9 @@ public class WorkaroundForJarMinimization {
           org.jetbrains.kotlin.analysis.api.fir.modification.KaFirSourceModificationService.class,
           org.jetbrains.kotlin.analysis.api.fir.references.KotlinFirReferenceContributor.class,
           org.jetbrains.kotlin.analysis.api.fir.references.ReadWriteAccessCheckerFirImpl.class,
+          // FIXME add comment/explanation
+          // META-INF/extensions/compiler.xml
+          org.jetbrains.kotlin.plugin.references.SimpleNameReferenceExtension.class,
 
           /** Used to have proper named groups behavior in regular expressions */
           kotlin.internal.jdk8.JDK8PlatformImplementations.class

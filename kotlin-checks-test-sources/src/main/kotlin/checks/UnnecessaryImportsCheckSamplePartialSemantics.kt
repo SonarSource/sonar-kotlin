@@ -1,12 +1,12 @@
 package checks
 
-import checks.ClassInSameFileA
-import checks.DelicateCoroutinesApi
+import checks.ClassInSameFileA // Noncompliant
+import checks.DelicateCoroutinesApi // Noncompliant
 import com.google.common.collect.ImmutableList // Noncompliant
 import com.google.common.collect.ImmutableList.copyOf // Noncompliant
 import com.google.common.collect.ImmutableList.of
 import com.google.common.collect.ImmutableSet.of as immutable_set_of
-import com.google.common.io.Files
+import com.google.common.io.Files // Noncompliant
 import com.google.common.io.Files.isFile
 import imports.ClassWithCompanionObject
 import imports.ClassWithNamedCompanionObject
@@ -28,7 +28,7 @@ import java.util.BitSet // Compliant (KDoc usage)
 import java.util.Date // Noncompliant {{Remove this unused import.}}
 import java.util.Timer // Noncompliant {{Remove this unused import.}}
 import okhttp3.TlsVersion.TLS_1_1
-import okhttp3.TlsVersion.TLS_1_2
+import okhttp3.TlsVersion.TLS_1_2 // Noncompliant
 import otherpackage.OtherClass
 import otherpackage.OtherClass2.plus
 import otherpackage.OtherClass2.get
@@ -39,7 +39,7 @@ import otherpackage.stringExtFun2
 import java.io.InputStream
 import java.lang.reflect.Method
 import kotlin.reflect.jvm.kotlinFunction
-import okhttp3.TlsVersion.SSL_3_0 as TLS3
+import okhttp3.TlsVersion.SSL_3_0 as TLS3 // Noncompliant
 import okhttp3.TlsVersion.TLS_1_3 as TLS13
 import java.beans.*
 import kotlin.test.*

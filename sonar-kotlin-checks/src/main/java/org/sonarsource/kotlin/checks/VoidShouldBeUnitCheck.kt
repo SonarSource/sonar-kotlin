@@ -16,19 +16,13 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtTypeAlias
 import org.jetbrains.kotlin.psi.KtTypeArgumentList
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.StarProjectionImpl
-import org.jetbrains.kotlin.types.TypeProjection
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.isAbstract
@@ -59,58 +53,7 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
             )
         }
     }
-
-    // As type aliases are resolved lazily, we can't rely on 'determineType()' function.
-    // So we check argument types of a typealias separately
-    /**
-     * TODO remove after switch to K2 where this case is handled by [visitTypeReference],
-     * in K1 for some reason type of [KtTypeAlias.getTypeReference] is [org.jetbrains.kotlin.analysis.api.types.KaErrorType]
-     */
-    @Deprecated("use K2 instead")
-    override fun visitTypeAlias(typeAlias: KtTypeAlias, kotlinFileContext: KotlinFileContext) {
-
-        val ktTypeReferences =
-            flattenTypeRefs(typeAlias.getTypeReference().nonNullTypeArguments() ?: return)
-
-        kotlinFileContext.bindingContext[BindingContext.TYPE_ALIAS, typeAlias]
-            ?.underlyingType
-            ?.flattenTypeArguments()
-            ?.forEachIndexed { i, type ->
-                if (type.isJavaLangVoid()) {
-                    kotlinFileContext.reportIssue(
-                        ktTypeReferences[i],
-                        message
-                    )
-                }
-            }
-    }
 }
-
-private tailrec fun flattenTypeRefs(
-    typeRefs: List<KtTypeReference?>,
-    acc: MutableList<KtTypeReference> = mutableListOf()
-): List<KtTypeReference> =
-    if (typeRefs.isEmpty()) acc
-    else flattenTypeRefs(
-        typeRefs = typeRefs.flatMap { it.nonNullTypeArguments() ?: emptyList() },
-        acc = acc.apply { addAll(typeRefs.filterNotNull()) })
-
-private fun KtTypeReference?.nonNullTypeArguments() = this?.typeElement?.typeArgumentsAsTypes?.filterNotNull()
-
-private tailrec fun flattenTypeProjections(
-    typeProjections: List<TypeProjection>,
-    acc: MutableList<TypeProjection> = mutableListOf()
-): List<TypeProjection> =
-    if (typeProjections.isEmpty()) acc
-    else flattenTypeProjections(
-        typeProjections = typeProjections.flatMap { it.type.arguments.withoutStarProjection() },
-        acc = acc.apply { addAll(typeProjections.withoutStarProjection()) })
-
-private fun List<TypeProjection>.withoutStarProjection() = filter { projection -> projection !is StarProjectionImpl }
-
-private fun KotlinType.flattenTypeArguments(): List<KotlinType> = flattenTypeProjections(arguments).map { it.type }
-
-private fun KotlinType?.isJavaLangVoid() = this?.getKotlinTypeFqName(false) == "java.lang.Void"
 
 private fun isATypeArgumentOfAnInheritableClass(typeReference: KtTypeReference): Boolean {
     // The idea is to filter out classes or interfaces, parametrized with <Void>,

@@ -980,11 +980,6 @@
             <sha256 value="c5fd725bffab51846bf3c77db1383c60aaaebfe1b7fe2f00d23fe1b7df0a439d" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.jetbrains.kotlin" name="analysis-api-fe10-for-ide" version="2.1.10">
-         <artifact name="analysis-api-fe10-for-ide-2.1.10.jar">
-            <sha256 value="e9aea25f89d1da733b3f13b5bb8e621a0c037cf23c31810a455aec00b69e2230" origin="Verified"/>
-         </artifact>
-      </component>
       <component group="org.jetbrains.kotlin" name="analysis-api-for-ide" version="2.1.10">
          <artifact name="analysis-api-for-ide-2.1.10.jar">
             <sha256 value="d75ae2e742f4f30e3c9958ea48b2c118e9d77ffadc2c94ab0258555bc83444fa" origin="Verified"/>
