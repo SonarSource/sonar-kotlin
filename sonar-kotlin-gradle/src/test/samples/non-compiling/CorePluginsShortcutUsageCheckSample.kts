@@ -13,7 +13,7 @@ plugins {
     id("some.thing.else") // Compliant, not a core plugin
 
     val pluginId = "org.gradle.java"
-    id(pluginId) // Compliant FN - for now, we don't have semantics and hence don't support resultion of the value.
+    id(pluginId) // Noncompliant
 
     id("org.gradle.subpckg.foo") // Compliant, it is not in "org.gradle" but in a subpackage
     id()

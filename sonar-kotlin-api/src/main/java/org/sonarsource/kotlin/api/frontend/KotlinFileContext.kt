@@ -30,21 +30,12 @@ import org.sonarsource.kotlin.api.visiting.withKaSession
 data class KotlinFileContext(
     val inputFileContext: InputFileContext,
     val ktFile: KtFile,
-    /**
-     * @see [org.sonarsource.kotlin.api.visiting.withKaSession]
-     */
-    @Deprecated("use kotlin-analysis-api instead")
-    val bindingContext: BindingContext,
-    @Deprecated("use kotlin-analysis-api instead", ReplaceWith("kaDiagnostics"))
-    val diagnostics: List<Diagnostic>,
     val regexCache: RegexCache,
 ) {
 
     val kaDiagnostics: Sequence<KaDiagnosticWithPsi<*>> by lazy {
         withKaSession {
-            val k1 = diagnostics.asSequence().map { K1internals.kaFe10Diagnostic(it, token) }
-            val k2 = ktFile.collectDiagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS).asSequence()
-            return@lazy k1 + k2
+            return@lazy ktFile.collectDiagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS).asSequence()
         }
     }
 

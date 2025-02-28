@@ -36,7 +36,7 @@ class CorePluginsShortcutUsageCheck : AbstractCheck() {
         if (callExpr.valueArguments.size != 1 || referencedName != "id") return
 
         val argAsString = callExpr.valueArguments.first().getArgumentExpression()
-            ?.predictRuntimeStringValue(kotlinFileContext.bindingContext) ?: return
+            ?.predictRuntimeStringValue() ?: return
         if (argAsString.matches(corePluginMatcherRegex)) {
             val canonicalName = argAsString.substring(PREFIX_LENGTH).let {
                 if (it.contains('-')) "`$it`"

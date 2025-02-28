@@ -80,12 +80,8 @@ internal inline fun kaSession(ktFile: KtFile, action: () -> Unit) {
 abstract class KotlinFileVisitor {
     fun scan(fileContext: InputFileContext, root: KotlinTree) {
         val kotlinFileContext =
-            KotlinFileContext(fileContext, root.psiFile, root.bindingContext, root.diagnostics, root.regexCache)
-        if (root.doResolve) {
-            kaSession(root.psiFile) {
-                visit(kotlinFileContext)
-            }
-        } else {
+            KotlinFileContext(fileContext, root.psiFile, root.regexCache)
+        kaSession(root.psiFile) {
             visit(kotlinFileContext)
         }
     }

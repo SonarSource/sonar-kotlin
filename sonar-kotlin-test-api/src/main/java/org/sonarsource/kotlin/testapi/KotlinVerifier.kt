@@ -19,7 +19,6 @@ package org.sonarsource.kotlin.testapi
 import io.mockk.InternalPlatformDsl.toStr
 import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.LanguageVersion
-import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
@@ -52,8 +51,6 @@ class KotlinVerifier(private val check: AbstractCheck) {
     var classpath: List<String> = System.getProperty("java.class.path").split(File.pathSeparatorChar) + DEFAULT_KOTLIN_CLASSPATH
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
     var isAndroid = false
-    var customDiagnostics: List<Diagnostic>? = null
-    var useK2 = true
 
     fun verify() {
         verifyFile {
@@ -68,23 +65,16 @@ class KotlinVerifier(private val check: AbstractCheck) {
     }
     private fun verifyFile(verify: SingleFileVerifier.() -> Unit) {
         val filePath = baseDir.resolve(fileName)
-        val isScriptFile = filePath.extension == "kts"
 
         val disposable = Disposer.newDisposable()
-        val environment = Environment(disposable, classpath + deps, LanguageVersion.LATEST_STABLE, useK2 = useK2)
+        val environment = Environment(disposable, classpath + deps, LanguageVersion.LATEST_STABLE)
         val converter = { content: String ->
             val inputFile = TestInputFileBuilder("moduleKey", filePath.fileName.pathString)
                 .setCharset(StandardCharsets.UTF_8)
                 .setModuleBaseDir(baseDir)
                 .initMetadata(content).build()
 
-            if (isScriptFile) {
-                // TODO: Add logic here to create a Binding with Kotlin Script / Gradle DSL semantics.
-                //       Currently, we are just providing an empty context (`doResolve = false`)
-                kotlinTreeOf(content, environment, inputFile, false, customDiagnostics) to inputFile
-            } else {
-                kotlinTreeOf(content, environment, inputFile, true, customDiagnostics) to inputFile
-            }
+            kotlinTreeOf(content, environment, inputFile) to inputFile
         }
         try {
             createVerifier(converter, filePath).verify()

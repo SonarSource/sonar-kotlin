@@ -40,15 +40,4 @@ abstract class CheckTest(
             this.isAndroid = this@CheckTest.isAndroid
         }.verify()
     }
-
-    @Test
-    fun `with k1 semantics`() {
-        KotlinVerifier(check) {
-            this.useK2 = false
-            this.fileName = sampleFileSemantics ?: "$checkName$TEST_FILE_POSTFIX"
-            this@CheckTest.classpath?.let { this.classpath = it }
-            this@CheckTest.dependencies?.let { this.deps = it }
-            this.isAndroid = this@CheckTest.isAndroid
-        }.verify()
-    }
 }

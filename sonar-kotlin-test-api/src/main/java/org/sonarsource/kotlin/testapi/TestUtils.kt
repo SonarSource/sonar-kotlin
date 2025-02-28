@@ -16,8 +16,6 @@
  */
 package org.sonarsource.kotlin.testapi
 
-import org.jetbrains.kotlin.diagnostics.Diagnostic
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.api.batch.fs.InputFile
 // TODO: testapi should not depend on frontend module.
 import org.sonarsource.kotlin.api.frontend.Environment
@@ -26,30 +24,20 @@ import org.sonarsource.kotlin.api.frontend.KotlinSyntaxStructure
 import org.sonarsource.kotlin.api.frontend.KotlinTree
 import org.sonarsource.kotlin.api.frontend.KotlinVirtualFile
 import org.sonarsource.kotlin.api.frontend.RegexCache
-import org.sonarsource.kotlin.api.frontend.analyzeAndGetBindingContext
 import org.sonarsource.kotlin.api.frontend.createK2AnalysisSession
-import org.sonarsource.kotlin.api.frontend.transferDiagnostics
 import java.io.File
 
-fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile, doResolve: Boolean = true, providedDiagnostics: List<Diagnostic>? = null): KotlinTree {
-    if (environment.useK2) {
-        val virtualFile = KotlinVirtualFile(
-            KotlinFileSystem(),
-            File(inputFile.uri().path),
-            contentProvider = { content },
-        )
-        environment.k2session = createK2AnalysisSession(
-            environment.disposable,
-            environment.configuration,
-            listOf(virtualFile),
-        )
-    }
-
+fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile): KotlinTree {
+    val virtualFile = KotlinVirtualFile(
+        KotlinFileSystem(),
+        File(inputFile.uri().path),
+        contentProvider = { content },
+    )
+    environment.k2session = createK2AnalysisSession(
+        environment.disposable,
+        environment.configuration,
+        listOf(virtualFile),
+    )
     val (ktFile, document) = KotlinSyntaxStructure.of(content, environment, inputFile)
-
-    val bindingContext = if (!environment.useK2 && doResolve) analyzeAndGetBindingContext(
-        environment.env,
-        listOf(ktFile),
-    ) else BindingContext.EMPTY
-    return KotlinTree(ktFile, document, bindingContext, providedDiagnostics ?: transferDiagnostics(bindingContext), RegexCache(), doResolve)
+    return KotlinTree(ktFile, document, RegexCache())
 }

@@ -21,21 +21,15 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.PsiFile
-import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonar.api.batch.fs.InputFile
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textPointerAtOffset
 
 class KotlinTree(
     val psiFile: KtFile,
     val document: Document,
-    @Deprecated("use kotlin-analysis-api instead")
-    val bindingContext: BindingContext,
-    val diagnostics: List<Diagnostic>,
     val regexCache: RegexCache,
-    val doResolve: Boolean,
 )
 
 data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val inputFile: InputFile) {
@@ -43,17 +37,14 @@ data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val
         @JvmStatic
         fun of(content: String, environment: Environment, inputFile: InputFile): KotlinSyntaxStructure {
 
-            val psiFile: KtFile = if (environment.k2session != null) {
-                val inputFilePath = FileUtil.toSystemIndependentName(inputFile.file().path)
-                // TODO improve performance, see also
-                // https://github.com/Kotlin/analysis-api/commit/eea50c3d826584461e7bb0087deb9f0d9b55eb8c
-                // which requires Kotlin 2.1.20
-                // https://github.com/JetBrains/kotlin/commit/774d253de8263e284f045a452369a7308d495d03
-                environment.k2session!!.modulesWithFiles.values.first().find {
-                    it.virtualFile.path == inputFilePath
-                } as KtFile
-            } else
-                environment.ktPsiFactory.createFile(inputFile.uri().path, normalizeEol(content))
+            val inputFilePath = FileUtil.toSystemIndependentName(inputFile.file().path)
+            // TODO improve performance, see also
+            // https://github.com/Kotlin/analysis-api/commit/eea50c3d826584461e7bb0087deb9f0d9b55eb8c
+            // which requires Kotlin 2.1.20
+            // https://github.com/JetBrains/kotlin/commit/774d253de8263e284f045a452369a7308d495d03
+            val psiFile: KtFile = environment.k2session!!.modulesWithFiles.values.first().find {
+                it.virtualFile.path == inputFilePath
+            } as KtFile
 
             val document = try {
                 psiFile.viewProvider.document ?: throw ParseException("Cannot extract document")
