@@ -53,7 +53,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
     var isAndroid = false
     var customDiagnostics: List<Diagnostic>? = null
-    var useK2 = false
+    var useK2 = true
 
     fun verify() {
         verifyFile {

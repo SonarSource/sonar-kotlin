@@ -27,7 +27,7 @@ import org.sonarsource.kotlin.testapi.KotlinVerifier
 import java.io.File
 import java.nio.file.Paths
 
-internal class UselessNullCheckCheckTest : CheckTestWithNoSemantics(UselessNullCheckCheck()) {
+internal class UselessNullCheckCheckTest : CheckTestWithNoSemantics(UselessNullCheckCheck(), shouldReport = true) {
     @Test
     fun `ensure issues are not raised when MISSING_BUILT_IN_DECLARATION diagnostics is found on node`() {
         val diagnostic = mockk<Diagnostic> {

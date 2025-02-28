@@ -40,13 +40,6 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.references.fe10.base.KtFe10ReferenceResolutionHelper
 import org.jetbrains.kotlin.resolve.extensions.AnalysisHandlerExtension
 
-/**
- * Marker indicating that
- * annotated [org.sonarsource.kotlin.api.checks.KotlinCheck]
- * can be executed only in K1 mode.
- */
-annotation class K1only
-
 @OptIn(KaPlatformInterface::class)
 internal fun configureK1AnalysisApiServices(env: KotlinCoreEnvironment) {
     val application = env.projectEnvironment.environment.application
