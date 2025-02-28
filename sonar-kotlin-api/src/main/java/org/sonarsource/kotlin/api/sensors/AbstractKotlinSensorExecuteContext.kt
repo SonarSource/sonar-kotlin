@@ -16,7 +16,6 @@
  */
 package org.sonarsource.kotlin.api.sensors
 
-import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.Disposer
 import com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.config.LanguageVersion
@@ -34,17 +33,19 @@ import org.sonarsource.kotlin.api.common.FAIL_FAST_PROPERTY_NAME
 import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_VERSION
 import org.sonarsource.kotlin.api.common.KOTLIN_REPOSITORY_KEY
 import org.sonarsource.kotlin.api.common.SONAR_ANDROID_DETECTED
-import org.sonarsource.kotlin.api.common.SONAR_JAVA_BINARIES
-import org.sonarsource.kotlin.api.common.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.api.common.measureDuration
 import org.sonarsource.kotlin.api.frontend.Environment
+import org.sonarsource.kotlin.api.frontend.KotlinFileSystem
 import org.sonarsource.kotlin.api.frontend.KotlinSyntaxStructure
 import org.sonarsource.kotlin.api.frontend.KotlinTree
+import org.sonarsource.kotlin.api.frontend.KotlinVirtualFile
 import org.sonarsource.kotlin.api.frontend.ParseException
 import org.sonarsource.kotlin.api.frontend.RegexCache
+import org.sonarsource.kotlin.api.frontend.createK2AnalysisSession
 import org.sonarsource.kotlin.api.frontend.transferDiagnostics
 import org.sonarsource.kotlin.api.logging.debug
 import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
+import java.io.File
 
 private val EMPTY_FILE_CONTENT_PATTERN = Regex("""\s*+""")
 
@@ -60,9 +61,30 @@ abstract class AbstractKotlinSensorExecuteContext(
         sensorContext.config().getBoolean(SONAR_ANDROID_DETECTED).orElse(false)
     }
 
+    abstract val classpath: List<String>
+
     val environment: Environment by lazy {
         /** [analyzeFiles] */
-        environment(Disposer.newDisposable(), sensorContext, logger)
+        val env = Environment(
+            Disposer.newDisposable(),
+            classpath,
+            determineKotlinLanguageVersion(sensorContext, logger),
+            useK2 = sensorContext.config().getBoolean("sonar.kotlin.useK2").orElse(false)
+        )
+        if (!env.useK2) return@lazy env
+        val virtualFileSystem = KotlinFileSystem()
+        env.k2session = createK2AnalysisSession(
+            env.disposable,
+            env.configuration,
+            inputFiles.map {
+                KotlinVirtualFile(
+                    virtualFileSystem,
+                    File(it.uri().path),
+                    contentProvider = { it.contents() },
+                )
+            },
+        )
+        return@lazy env
     }
 
     val kotlinFiles: List<KotlinSyntaxStructure> by lazy {
@@ -151,14 +173,7 @@ abstract class AbstractKotlinSensorExecuteContext(
     }
 }
 
-fun environment(disposer: Disposable, sensorContext: SensorContext, logger: Logger) = Environment(
-    disposer,
-    sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
-        sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList(),
-    determineKotlinLanguageVersion(sensorContext, logger),
-)
-
-private fun determineKotlinLanguageVersion(sensorContext: SensorContext, logger: Logger) =
+internal fun determineKotlinLanguageVersion(sensorContext: SensorContext, logger: Logger) =
     (sensorContext.config()[KOTLIN_LANGUAGE_VERSION].map { versionString ->
         LanguageVersion.fromVersionString(versionString).also { langVersion ->
             if (langVersion == null && versionString.isNotBlank()) {

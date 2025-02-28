@@ -45,6 +45,10 @@ data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val
 
             val psiFile: KtFile = if (environment.k2session != null) {
                 val inputFilePath = FileUtil.toSystemIndependentName(inputFile.file().path)
+                // TODO improve performance, see also
+                // https://github.com/Kotlin/analysis-api/commit/eea50c3d826584461e7bb0087deb9f0d9b55eb8c
+                // which requires Kotlin 2.1.20
+                // https://github.com/JetBrains/kotlin/commit/774d253de8263e284f045a452369a7308d495d03
                 environment.k2session!!.modulesWithFiles.values.first().find {
                     it.virtualFile.path == inputFilePath
                 } as KtFile

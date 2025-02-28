@@ -54,7 +54,7 @@ class Environment(
     val classpath: List<String>,
     kotlinLanguageVersion: LanguageVersion,
     javaLanguageVersion: JvmTarget = JvmTarget.JVM_1_8,
-    val useK2: Boolean = false,
+    val useK2: Boolean = true,
 ) {
     val configuration = compilerConfiguration(classpath, kotlinLanguageVersion, javaLanguageVersion)
     // K1
@@ -89,6 +89,7 @@ fun kotlinCoreEnvironment(
     )
 }
 
+@Deprecated("use K2 instead")
 fun analyzeAndGetBindingContext(
     env: KotlinCoreEnvironment,
     ktFiles: List<KtFile>,
