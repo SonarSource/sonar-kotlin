@@ -34,7 +34,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 
-private const val gradleExtension = ".gradle.kts"
+private const val settingsGradleFileName = "settings.gradle.kts"
 private const val mainMessage = "Make sure that obfuscation is enabled in the release build configuration."
 private const val debuggableSetToTrueMessage = "Enabling debugging disables obfuscation for this release build. Make sure this is safe here."
 
@@ -44,12 +44,15 @@ private val releaseBuildTypeExpressions = listOf("\"release\"", "\"\"\"release\"
 class AndroidReleaseBuildObfuscationCheck : AbstractCheck() {
 
     override fun visitScriptInitializer(initializer: KtScriptInitializer, data: KotlinFileContext) {
-        data.ktFile.isGradleKts() || return
+        !data.ktFile.isSettingGradleKts() || return
         val (androidCallee, androidLambda) = initializer.getChildCallWithLambdaOrNull("android") ?: return
 
         // Ensure the project is an Android app, and not a library
-        val (_, defaultConfigLambda) = androidLambda.getChildCallWithLambdaOrNull("defaultConfig") ?: return
-        defaultConfigLambda.getPropertyAssignmentOrNull("applicationId") ?: return
+        androidLambda
+            .getChildCallWithLambdaOrNull("defaultConfig")
+            ?.lambda
+            ?.getPropertyAssignmentOrNull("applicationId")
+            ?: return
 
         val buildTypes = androidLambda.getChildCallWithLambdaOrNull("buildTypes")
         if (buildTypes == null) {
@@ -57,51 +60,49 @@ class AndroidReleaseBuildObfuscationCheck : AbstractCheck() {
             return
         }
 
-        val (_, buildTypesLambda) = buildTypes
-        val (releaseCallee, releaseLambda) = buildTypesLambda.getChildCallWithLambdaOrNull("release")
+        val (releaseCallee, releaseLambda) = buildTypes.lambda.getChildCallWithLambdaOrNull("release")
             ?: androidLambda.getGetByNameCallWithLambdaOrNull()
             ?: return
 
-        // TODO: use predictRuntimeBooleanValue for "true" and "false" after migration to K2
         val isDebuggableAssignment = releaseLambda.getPropertyAssignmentOrNull("isDebuggable")
-        val isDebuggableSetToTrue = isDebuggableAssignment?.right?.text == "true"
         val isMinifiedEnabledAssignment = releaseLambda.getPropertyAssignmentOrNull("isMinifyEnabled")
-        val isMinifiedEnabledAssignmentNotSet = isMinifiedEnabledAssignment == null
-        val isMinifiedEnabledAssignmentSetToFalse = isMinifiedEnabledAssignment?.right?.text == "false"
-        val proguardFilesNotCalled = releaseLambda.getChildCallOrNull("proguardFiles") == null
 
+        // TODO: use predictRuntimeBooleanValue for "true" and "false" after migration to K2
         when {
-            isDebuggableSetToTrue && !isMinifiedEnabledAssignmentNotSet && !isMinifiedEnabledAssignmentSetToFalse ->
+            isMinifiedEnabledAssignment == null ->
+                data.reportIssue(releaseCallee, mainMessage)
+            isMinifiedEnabledAssignment.right?.text == "false" ->
+                data.reportIssue(isMinifiedEnabledAssignment, mainMessage)
+            isDebuggableAssignment?.right?.text == "true" ->
                 data.reportIssue(
                     releaseCallee,
                     debuggableSetToTrueMessage,
-                    secondaryLocations = listOf(isDebuggableAssignment!!).map { SecondaryLocation(data.textRange(it), "") }
+                    secondaryLocations = listOf(isDebuggableAssignment).map { SecondaryLocation(data.textRange(it), "") }
                 )
-            isMinifiedEnabledAssignmentNotSet -> data.reportIssue(releaseCallee, mainMessage)
-            isMinifiedEnabledAssignmentSetToFalse -> data.reportIssue(isMinifiedEnabledAssignment!!, mainMessage)
-            proguardFilesNotCalled -> data.reportIssue(releaseCallee, mainMessage)
+            releaseLambda.getChildCallOrNull("proguardFiles") == null ->
+                data.reportIssue(releaseCallee, mainMessage)
         }
     }
 
-    private fun KtFile.isGradleKts() = name.endsWith(gradleExtension)
+    private fun KtFile.isSettingGradleKts() = name.endsWith(settingsGradleFileName, ignoreCase = true)
 
     private fun KtElement.getChildCallOrNull(childCallName: String): KtCallExpression? =
         descendantsOfType<KtCallExpression>().firstOrNull { it.calleeExpression?.text == childCallName }
 
-    private fun KtElement.getChildCallWithLambdaOrNull(childCallName: String): Pair<KtExpression, KtFunctionLiteral>? {
+    private fun KtElement.getChildCallWithLambdaOrNull(childCallName: String): CalleeAndLambda? {
         val callee = getChildCallOrNull(childCallName) ?: return null
         val lambda = callee.functionLiteralArgumentOrNull() ?: return null
-        return callee.calleeExpression!! to lambda
+        return CalleeAndLambda(callee.calleeExpression!!, lambda)
     }
 
-    private fun KtElement.getGetByNameCallWithLambdaOrNull(): Pair<KtExpression, KtFunctionLiteral>? {
+    private fun KtElement.getGetByNameCallWithLambdaOrNull(): CalleeAndLambda? {
         val callee = descendantsOfType<KtCallExpression>().firstOrNull {
             it.calleeExpression?.text == "getByName" &&
                 it.valueArguments.size == 2 &&
                 it.valueArguments[0].isReleaseBuildType()
         } ?: return null
         val lambda = callee.functionLiteralArgumentOrNull() ?: return null
-        return callee.calleeExpression!! to lambda
+        return CalleeAndLambda(callee.calleeExpression!!, lambda)
     }
 
     private fun KtValueArgument.isReleaseBuildType(): Boolean =
@@ -115,4 +116,6 @@ class AndroidReleaseBuildObfuscationCheck : AbstractCheck() {
 
     private fun KtElement.getPropertyAssignmentOrNull(propertyName: String): KtBinaryExpression? =
         descendantsOfType<KtBinaryExpression>().firstOrNull { it.operationToken == KtTokens.EQ && it.left?.text == propertyName }
+
+    private data class CalleeAndLambda(val callee: KtExpression, val lambda: KtFunctionLiteral)
 }

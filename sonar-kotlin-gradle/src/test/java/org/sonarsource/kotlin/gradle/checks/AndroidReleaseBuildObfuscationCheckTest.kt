@@ -18,6 +18,7 @@ package org.sonarsource.kotlin.gradle.checks
 
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.testapi.KotlinVerifier
+import java.nio.file.Path
 
 internal class AndroidReleaseBuildObfuscationCheckTest {
     private val check = AndroidReleaseBuildObfuscationCheck()
@@ -26,15 +27,15 @@ internal class AndroidReleaseBuildObfuscationCheckTest {
     @Test
     fun `on gradle file`() {
         KotlinVerifier(check) {
-            this.fileName = "$fileNamePrefix.gradle.kts"
+            this.fileName = Path.of(fileNamePrefix, "build.gradle.kts").toFile().path
             this.baseDir = SAMPLES_BASE_DIR
         }.verify()
     }
 
     @Test
-    fun `on nongradle file`() {
+    fun `on settings gradle file`() {
         KotlinVerifier(check) {
-            this.fileName = "$fileNamePrefix.nongradle.kts"
+            this.fileName = Path.of(fileNamePrefix, "settings.gradle.kts").toFile().path
             this.baseDir = SAMPLES_BASE_DIR
         }.verifyNoIssue()
     }
