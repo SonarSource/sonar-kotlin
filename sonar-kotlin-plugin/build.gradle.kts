@@ -101,7 +101,7 @@ tasks.shadowJar {
     dependencies {
     }
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 63_900_000L, 64_300_000L)
+        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 62_200_000L, 62_600_000L)
     }
 }
 

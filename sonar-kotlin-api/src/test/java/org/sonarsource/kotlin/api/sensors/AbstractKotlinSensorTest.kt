@@ -22,7 +22,6 @@ import io.mockk.mockk
 import org.assertj.core.api.Assertions.*
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
@@ -194,8 +193,6 @@ class DummyKotlinSensor(checkFactory: CheckFactory, language: KotlinLanguage, ch
         sensorContext, filesToAnalyze, progressReport, listOf(KtChecksVisitor(checks)), filenames, LOG
     ) {
         override val classpath: List<String> = listOf()
-        override val bindingContext: BindingContext = BindingContext.EMPTY
-        override val doResolve: Boolean = false
     }
 
     override fun getFilesToAnalyse(sensorContext: SensorContext): Iterable<InputFile> =

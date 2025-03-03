@@ -16,7 +16,7 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
 import org.jetbrains.kotlin.psi.KtFile
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
@@ -28,8 +28,8 @@ class ReasonableTypeCastsCheck : AbstractCheck() {
         context.kaDiagnostics
             .mapNotNull { diagnostic ->
                 when (diagnostic.factoryName) {
-                    Errors.UNCHECKED_CAST.name -> "Remove this unchecked cast."
-                    Errors.CAST_NEVER_SUCCEEDS.name -> "Remove this cast that can never succeed."
+                    FirErrors.UNCHECKED_CAST.name -> "Remove this unchecked cast."
+                    FirErrors.CAST_NEVER_SUCCEEDS.name -> "Remove this cast that can never succeed."
                     else -> null
                 }?.let { diagnostic to it }
             }.forEach { (diagnostic, msg) ->

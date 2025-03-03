@@ -58,10 +58,9 @@ class UselessNullCheckCheckSample {
         var b: String? = null
         b!! // Compliant FN. We don't currently resolve the value of vars.
 
-        // TODO improved in K2
-//        var c: String? = null
-//        c = "foo"
-//        c!! // Compliant FN. We don't currently resolve the value of vars.
+        var c: String? = null
+        c = "foo"
+        c!! // Noncompliant
 
         var d: String = ""
         d!! // Noncompliant

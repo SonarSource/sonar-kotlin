@@ -25,7 +25,6 @@ import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.api.visiting.kaSession
@@ -41,17 +40,6 @@ class KotlinCoreEnvironmentToolsTest {
     Disposer.dispose(disposable)
   }
 
-  @Test
-  fun testNonEmptyBindingContext() {
-    val kotlinCoreEnvironment = kotlinCoreEnvironment(
-      compilerConfiguration(emptyList(), LanguageVersion.KOTLIN_1_4, JvmTarget.JVM_1_8),
-      disposable
-    )
-
-    assertThat(analyzeAndGetBindingContext(kotlinCoreEnvironment, emptyList()))
-      .isNotEqualTo(BindingContext.EMPTY)
-  }
-
   // https://kotlinlang.org/docs/whatsnew20.html#smart-cast-improvements
   private val content = """
     fun example(any: Any) {
@@ -62,33 +50,6 @@ class KotlinCoreEnvironmentToolsTest {
     }
     """.trimIndent()
 
-  /**
-   * @see k2
-   */
-  @Test
-  fun k1() {
-    val environment = Environment(
-      disposable,
-      listOf(),
-      LanguageVersion.LATEST_STABLE,
-      JvmTarget.JVM_1_8,
-      useK2 = false,
-    )
-    val ktFile = environment.ktPsiFactory.createFile("/fake.kt", content)
-    analyzeAndGetBindingContext(environment.env, listOf(ktFile))
-    kaSession(ktFile) {
-      withKaSession {
-        assertThat(ktFile.findDescendantOfType<KtIsExpression>()!!.expressionType.toString())
-          .isEqualTo("kotlin/Boolean")
-        assertThat(ktFile.findDescendantOfType<KtDotQualifiedExpression>()!!.expressionType.toString())
-          .isEqualTo("kotlin/Unit")
-      }
-    }
-  }
-
-  /**
-   * @see k1
-   */
   @Test
   fun k2() {
     val analysisSession = createK2AnalysisSession(
