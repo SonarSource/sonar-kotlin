@@ -19,21 +19,11 @@ package org.sonarsource.kotlin.api.checks
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.withKaSession
 
 abstract class CallAbstractCheck : AbstractCheck() {
     abstract val functionsToVisit: Iterable<FunMatcherImpl>
-
-    @Deprecated("use kotlin-analysis-api")
-    open fun visitFunctionCall(
-        callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
-        matchedFun: FunMatcherImpl,
-        kotlinFileContext: KotlinFileContext
-    ) = visitFunctionCall(callExpression, resolvedCall, kotlinFileContext)
 
     open fun visitFunctionCall(
         callExpression: KtCallExpression,
@@ -41,9 +31,6 @@ abstract class CallAbstractCheck : AbstractCheck() {
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext
     ) = visitFunctionCall(callExpression, resolvedCall, kotlinFileContext)
-
-    @Deprecated("use kotlin-analysis-api")
-    open fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) = Unit
 
     open fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) = Unit
 
@@ -57,9 +44,5 @@ abstract class CallAbstractCheck : AbstractCheck() {
             functionsToVisit.firstOrNull { it.matches(resolvedCall) }
                 ?.let { visitFunctionCall(callExpression, resolvedCall, it, kotlinFileContext) }
         }
-
-        val resolvedCall = callExpression.getResolvedCall(kotlinFileContext.bindingContext) ?: return
-        functionsToVisit.firstOrNull { resolvedCall matches it }
-            ?.let { visitFunctionCall(callExpression, resolvedCall, it, kotlinFileContext) }
     }
 }

@@ -48,7 +48,6 @@ import org.sonarsource.kotlin.api.common.FAIL_FAST_PROPERTY_NAME
 import org.sonarsource.kotlin.api.common.SONAR_ANDROID_DETECTED
 import org.sonarsource.kotlin.api.common.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.frontend.analyzeAndGetBindingContext
 import org.sonarsource.kotlin.plugin.caching.contentHashKey
 import org.sonarsource.kotlin.plugin.cpd.computeCPDTokensCacheKey
 import org.sonarsource.kotlin.testapi.AbstractSensorTest
@@ -211,65 +210,6 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         sensor(checkFactory).execute(context)
         val issues = context.allIssues()
         assertThat(issues).hasSize(2)
-    }
-
-    /**
-     * ```
-     * java.lang.IllegalStateException: Resolution is not performed
-     *     at org.jetbrains.kotlin.analysis.api.descriptors.CliFe10AnalysisFacade.orThrowResolutionNotPerformedError(CliFe10AnalysisFacade.kt:78)
-     *     at org.jetbrains.kotlin.analysis.api.descriptors.CliFe10AnalysisFacade.getAnalysisContext(CliFe10AnalysisFacade.kt:52)
-     *     at org.jetbrains.kotlin.analysis.api.descriptors.CliFe10AnalysisFacade.getAnalysisContext(CliFe10AnalysisFacade.kt:41)
-     *     at org.jetbrains.kotlin.analysis.api.descriptors.KaFe10SessionProvider.getAnalysisSession(KaFe10SessionProvider.kt:24)
-     *     at org.sonarsource.kotlin.api.visiting.KotlinFileVisitor.scan(KotlinFileVisitor.kt:48)
-     * ```
-     * thrown by [org.jetbrains.kotlin.analysis.api.analyze]
-     */
-    @Test
-    fun `Ensure compiler crashes during BindingContext generation don't crash engine`() {
-        context.setCanSkipUnchangedFiles(false)
-        executeAnalysisWithInvalidBindingContext()
-        assertThat(logTester.logs(Level.ERROR)).containsExactly(
-            "Could not generate binding context. Proceeding without semantics.",
-            "Cannot analyse 'file1.kt' with 'IssueSuppressionVisitor': Resolution is not performed",
-            "Cannot analyse 'file1.kt' with 'MetricVisitor': Resolution is not performed",
-            "Cannot analyse 'file1.kt' with 'KtChecksVisitor': Resolution is not performed",
-            "Cannot analyse 'file1.kt' with 'CopyPasteDetector': Resolution is not performed",
-            "Cannot analyse 'file1.kt' with 'SyntaxHighlighter': Resolution is not performed",
-        )
-    }
-
-    @Test
-    fun `BindingContext generation does not crash when there are no files to analyze`() {
-        context.setCanSkipUnchangedFiles(true)
-        executeAnalysisWithInvalidBindingContext()
-        assertThat(logTester.logs(Level.ERROR)).isEmpty()
-    }
-
-    private fun executeAnalysisWithInvalidBindingContext() {
-        val inputFile = createInputFile(
-            "file1.kt", """
-        abstract class MyClass {
-            abstract fun <P1> foo(): (P1) -> Unknown<String>
-        
-            private fun callTryConvertConstant() {
-                println(foo<String>())
-            }
-        }
-        """.trimIndent(),
-            InputFile.Status.SAME
-        )
-        val settings = MapSettings()
-        settings.setProperty("sonar.kotlin.useK2", false)
-        context.setSettings(settings)
-        context.fileSystem().add(inputFile)
-        populateCacheWithExpectedEntries(listOf(inputFile), context)
-        mockkStatic("org.sonarsource.kotlin.api.frontend.KotlinCoreEnvironmentToolsKt")
-        every { analyzeAndGetBindingContext(any(), any()) } throws IOException("Boom!")
-
-        val checkFactory = checkFactory("S1764")
-        assertDoesNotThrow { sensor(checkFactory).execute(context) }
-
-        unmockkAll()
     }
 
     @Test

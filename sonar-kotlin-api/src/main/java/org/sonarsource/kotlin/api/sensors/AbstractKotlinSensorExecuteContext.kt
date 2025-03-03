@@ -17,11 +17,7 @@
 package org.sonarsource.kotlin.api.sensors
 
 import com.intellij.openapi.util.Disposer
-import com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.config.LanguageVersion
-import org.jetbrains.kotlin.diagnostics.Diagnostic
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.slf4j.Logger
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.SensorContext
@@ -42,7 +38,6 @@ import org.sonarsource.kotlin.api.frontend.KotlinVirtualFile
 import org.sonarsource.kotlin.api.frontend.ParseException
 import org.sonarsource.kotlin.api.frontend.RegexCache
 import org.sonarsource.kotlin.api.frontend.createK2AnalysisSession
-import org.sonarsource.kotlin.api.frontend.transferDiagnostics
 import org.sonarsource.kotlin.api.logging.debug
 import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
 import java.io.File
@@ -69,9 +64,7 @@ abstract class AbstractKotlinSensorExecuteContext(
             Disposer.newDisposable(),
             classpath,
             determineKotlinLanguageVersion(sensorContext, logger),
-            useK2 = sensorContext.config().getBoolean("sonar.kotlin.useK2").orElse(true)
         )
-        if (!env.useK2) return@lazy env
         val virtualFileSystem = KotlinFileSystem()
         env.k2session = createK2AnalysisSession(
             env.disposable,
@@ -105,10 +98,6 @@ abstract class AbstractKotlinSensorExecuteContext(
         }
     }
 
-    abstract val bindingContext: BindingContext
-
-    abstract val doResolve: Boolean
-
     fun analyzeFiles(): Boolean {
         try {
             val regexCache = RegexCache()
@@ -118,7 +107,7 @@ abstract class AbstractKotlinSensorExecuteContext(
             }.forEach { (ktFile, doc, inputFile) ->
                 if (sensorContext.isCancelled) return false
                 val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
-                val tree = KotlinTree(ktFile, doc, bindingContext, getFileDiagnostics(ktFile), regexCache, doResolve)
+                val tree = KotlinTree(ktFile, doc, regexCache)
 
                 measureDuration(inputFile.filename()) {
                     analyzeFile(inputFileContext, tree)
@@ -151,14 +140,6 @@ abstract class AbstractKotlinSensorExecuteContext(
                     )
                 }
             }
-        }
-    }
-
-    private fun getFileDiagnostics(ktFile: KtFile): List<Diagnostic> = diagnostics[ktFile] ?: emptyList()
-
-    private val diagnostics: Map<PsiFile, List<Diagnostic>> by lazy {
-        measureDuration("Diagnostics") {
-            transferDiagnostics(bindingContext).groupBy { it.psiFile }.toMap()
         }
     }
 

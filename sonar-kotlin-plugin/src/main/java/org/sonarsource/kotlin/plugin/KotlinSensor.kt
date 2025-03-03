@@ -16,7 +16,6 @@
  */
 package org.sonarsource.kotlin.plugin
 
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.slf4j.LoggerFactory
 import org.sonar.api.SonarProduct
 import org.sonar.api.batch.fs.FileSystem
@@ -29,10 +28,8 @@ import org.sonar.api.measures.FileLinesContextFactory
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.checks.hasCacheEnabled
 import org.sonarsource.kotlin.api.common.KotlinLanguage
-import org.sonarsource.kotlin.api.common.measureDuration
 import org.sonarsource.kotlin.api.common.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.api.common.SONAR_JAVA_LIBRARIES
-import org.sonarsource.kotlin.api.frontend.analyzeAndGetBindingContext
 import org.sonarsource.kotlin.api.logging.trace
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensor
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
@@ -89,25 +86,6 @@ class KotlinSensor(
         override val classpath: List<String> =
             sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
                     sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList()
-
-        override val bindingContext: BindingContext by lazy {
-            if (environment.useK2) {
-                return@lazy BindingContext.EMPTY
-            }
-            runCatching {
-                measureDuration("BindingContext") {
-                    analyzeAndGetBindingContext(
-                        environment.env,
-                        kotlinFiles.map { it.ktFile }.filter { !it.isScript() },
-                    )
-                }
-            }.getOrElse { e ->
-                LOG.error("Could not generate binding context. Proceeding without semantics.", e)
-                BindingContext.EMPTY
-            }
-        }
-
-        override val doResolve: Boolean = true
     }
 
     private fun visitors(sensorContext: SensorContext): List<KotlinFileVisitor> =
