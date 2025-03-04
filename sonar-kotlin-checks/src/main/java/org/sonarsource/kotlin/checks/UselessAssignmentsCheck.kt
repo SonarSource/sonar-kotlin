@@ -19,6 +19,7 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
+import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
@@ -37,8 +38,10 @@ class UselessAssignmentsCheck : AbstractCheck() {
                         (diagnostic.psi as KtNamedDeclaration).identifyingElement!! to
                         "Remove this variable, which is assigned but never accessed."
 
-                    FirErrors.ASSIGNED_VALUE_IS_NEVER_READ.name ->
+                    FirErrors.ASSIGNED_VALUE_IS_NEVER_READ.name -> {
+                        if (diagnostic.psi.parent is KtPrefixExpression) return@mapNotNull null
                         diagnostic.psi.parent to "The value assigned here is never used."
+                    }
 
                     else -> null
                 }
