@@ -20,5 +20,11 @@ class UselessAssignmentsCheckSample {
         k = 1 // Noncompliant
 
         println(j)
+
+        // Prefix assignment shouldn't be reported (regression from K2)
+
+        var d = 0
+
+        println(++d)
     }
 }
