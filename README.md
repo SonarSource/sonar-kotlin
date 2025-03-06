@@ -25,7 +25,7 @@ Useful links
 
 Build and run Unit Tests:
 
-    ./gradlew build
+    ./gradlew build dist
 
 ## Integration Tests
 
