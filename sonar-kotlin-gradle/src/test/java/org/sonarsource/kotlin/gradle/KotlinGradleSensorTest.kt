@@ -30,6 +30,7 @@ import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.gradle.checks.MissingSettingsCheck
+import org.sonarsource.kotlin.gradle.checks.MissingVerificationMetadataCheck
 import org.sonarsource.kotlin.testapi.AbstractSensorTest
 import kotlin.io.path.createFile
 
@@ -80,7 +81,7 @@ internal class KotlinGraldeSensorTest : AbstractSensorTest() {
 
         addBuildFile()
 
-        val checkFactory = checkFactory("S6631")
+        val checkFactory = checkFactory(MISSING_SETTINGS_RULE_KEY)
         sensor(checkFactory).execute(context)
         val issues = context.allIssues()
 
@@ -103,7 +104,7 @@ internal class KotlinGraldeSensorTest : AbstractSensorTest() {
         addSettingsFile()
         addBuildFile()
 
-        val checkFactory = checkFactory("S6631")
+        val checkFactory = checkFactory(MISSING_SETTINGS_RULE_KEY)
         sensor(checkFactory).execute(context)
         val issues = context.allIssues()
 
@@ -122,7 +123,7 @@ internal class KotlinGraldeSensorTest : AbstractSensorTest() {
         addSettingsKtsFile()
         addBuildFile()
 
-        val checkFactory = checkFactory("S6631")
+        val checkFactory = checkFactory(MISSING_SETTINGS_RULE_KEY)
         sensor(checkFactory).execute(context)
         val issues = context.allIssues()
 
@@ -145,6 +146,108 @@ internal class KotlinGraldeSensorTest : AbstractSensorTest() {
         val issues = context.allIssues()
 
         assertThat(issues).isEmpty()
+    }
+
+    @Test
+    fun test_missing_verification_metadata_rule_is_trigger_when_Kotlin_settings_is_used_without_verification_metadata() {
+        mockkStatic("org.sonarsource.kotlin.gradle.KotlinGradleCheckListKt")
+        every { KOTLIN_GRADLE_CHECKS } returns listOf(MissingVerificationMetadataCheck::class.java)
+
+        val settings = MapSettings()
+        settings.setProperty(GRADLE_PROJECT_ROOT_PROPERTY, baseDir.toRealPath().toString())
+        context.setSettings(settings)
+
+        addSettingsKtsFile()
+
+        val checkFactory = checkFactory(MISSING_VERIFICATION_METADATA_RULE_KEY)
+        sensor(checkFactory).execute(context)
+        val issues = context.allIssues()
+
+        assertThat(issues).hasSize(1)
+        val issue = issues.iterator().next()
+        assertThat(issue.primaryLocation().inputComponent().key()).isEqualTo("projectKey")
+        val expectedMessage = """Create a "verification-metadata.xml" file to verify these dependencies against a known checksum or signature."""
+        assertThat(issue.primaryLocation().message()).isEqualTo(expectedMessage)
+    }
+
+    @Test
+    fun test_missing_verification_metadata_rule_is_triggered_when_settings_is_absent() {
+        mockkStatic("org.sonarsource.kotlin.gradle.KotlinGradleCheckListKt")
+        every { KOTLIN_GRADLE_CHECKS } returns listOf(MissingVerificationMetadataCheck::class.java)
+
+        val settings = MapSettings()
+        settings.setProperty(GRADLE_PROJECT_ROOT_PROPERTY, baseDir.toRealPath().toString())
+        context.setSettings(settings)
+
+        // No settings.gradle.kts file
+        addBuildFile()
+
+        val checkFactory = checkFactory(MISSING_VERIFICATION_METADATA_RULE_KEY)
+        sensor(checkFactory).execute(context)
+
+        val issues = context.allIssues()
+        assertThat(issues).hasSize(1)
+
+        val issue = issues.iterator().next()
+        assertThat(issue.primaryLocation().inputComponent().key()).isEqualTo("projectKey")
+    }
+
+    @Test
+    fun test_missing_verification_metadata_rule_is_triggered_when_Grovy_settings_is_used() {
+        mockkStatic("org.sonarsource.kotlin.gradle.KotlinGradleCheckListKt")
+        every { KOTLIN_GRADLE_CHECKS } returns listOf(MissingVerificationMetadataCheck::class.java)
+
+        val settings = MapSettings()
+        settings.setProperty(GRADLE_PROJECT_ROOT_PROPERTY, baseDir.toRealPath().toString())
+        context.setSettings(settings)
+
+        addSettingsFile() // Groovy
+        addBuildFile()
+
+        val checkFactory = checkFactory(MISSING_VERIFICATION_METADATA_RULE_KEY)
+        sensor(checkFactory).execute(context)
+
+        val issues = context.allIssues()
+        assertThat(issues).hasSize(1)
+
+        val issue = issues.iterator().next()
+        assertThat(issue.primaryLocation().inputComponent().key()).isEqualTo("projectKey")
+    }
+
+    @Test
+    fun test_missing_verification_metadata_rule_is_not_triggered_when_Kotlin_settings_is_used_with_verification_metadata() {
+        mockkStatic("org.sonarsource.kotlin.gradle.KotlinGradleCheckListKt")
+        every { KOTLIN_GRADLE_CHECKS } returns listOf(MissingVerificationMetadataCheck::class.java)
+
+        val settings = MapSettings()
+        settings.setProperty(GRADLE_PROJECT_ROOT_PROPERTY, baseDir.toRealPath().toString())
+        context.setSettings(settings)
+
+        addSettingsKtsFile()
+        addVerificationMetadataFile()
+
+        val checkFactory = checkFactory(MISSING_VERIFICATION_METADATA_RULE_KEY)
+        sensor(checkFactory).execute(context)
+
+        assertThat(context.allIssues()).isEmpty()
+    }
+
+    @Test
+    fun test_missing_verification_metadata_rule_is_not_triggered_when_rule_is_not_active() {
+        mockkStatic("org.sonarsource.kotlin.gradle.KotlinGradleCheckListKt")
+        every { KOTLIN_GRADLE_CHECKS } returns listOf(MissingVerificationMetadataCheck::class.java)
+
+        val settings = MapSettings()
+        settings.setProperty(GRADLE_PROJECT_ROOT_PROPERTY, baseDir.toRealPath().toString())
+        context.setSettings(settings)
+
+        addSettingsKtsFile()
+        addBuildFile()
+
+        val checkFactory = checkFactory() // No rule key
+        sensor(checkFactory).execute(context)
+
+        assertThat(context.allIssues()).isEmpty()
     }
 
     private fun addBuildFile() {
@@ -193,6 +296,29 @@ internal class KotlinGraldeSensorTest : AbstractSensorTest() {
         )
         baseDir.resolve("settings.gradle.kts").createFile()
         context.fileSystem().add(settingsFile)
+    }
+
+    private fun addVerificationMetadataFile() {
+        val verificationMetadataFile = createInputFile(
+            "verification-metadata.xml", """
+                <?xml version="1.0" encoding="UTF-8"?>
+                <verification-metadata xmlns="https://schema.gradle.org/dependency-verification" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://schema.gradle.org/dependency-verification https://schema.gradle.org/dependency-verification/dependency-verification-1.3.xsd">
+                   <configuration>
+                      <verify-metadata>false</verify-metadata>
+                      <verify-signatures>false</verify-signatures>
+                   </configuration>
+                   <components>
+                      <component group="ch.qos.logback" name="logback-classic" version="1.2.9">
+                         <artifact name="logback-classic-1.2.9.jar">
+                            <sha256 value="ad745cc243805800d1ebbf5b7deba03b37c95885e6bce71335a73f7d6d0f14ee" origin="Verified"/>
+                         </artifact>
+                      </component>
+                   </components>
+                </verification-metadata>
+                """.trimIndent())
+        baseDir.resolve("gradle").toFile().mkdir()
+        baseDir.resolve("gradle/verification-metadata.xml").createFile()
+        context.fileSystem().add(verificationMetadataFile)
     }
 
     private fun sensor(checkFactory: CheckFactory): KotlinGradleSensor {

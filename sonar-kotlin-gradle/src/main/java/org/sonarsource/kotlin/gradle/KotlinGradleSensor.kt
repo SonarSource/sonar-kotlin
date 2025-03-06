@@ -33,6 +33,7 @@ import java.io.File
 
 const val GRADLE_PROJECT_ROOT_PROPERTY = "sonar.kotlin.gradleProjectRoot"
 const val MISSING_SETTINGS_RULE_KEY = "S6631"
+const val MISSING_VERIFICATION_METADATA_RULE_KEY = "S6474"
 
 private val LOG = LoggerFactory.getLogger(KotlinGradleSensor::class.java)
 
@@ -72,6 +73,7 @@ class KotlinGradleSensor(
 
         sensorContext.config()[GRADLE_PROJECT_ROOT_PROPERTY].ifPresent {
             checkForMissingGradleSettings(File(it), sensorContext)
+            checkForMissingVerificationMetadata(File(it), sensorContext)
         }
 
         return fileSystem.inputFiles(mainFilePredicate)
@@ -92,6 +94,27 @@ class KotlinGradleSensor(
                             .newLocation()
                             .on(project)
                             .message("""Add a missing "settings.gradle" or "settings.gradle.kts" file.""")
+                    )
+                    .save()
+            }
+        }
+    }
+
+    private fun checkForMissingVerificationMetadata(rootDirFile: File, sensorContext: SensorContext) {
+        val missingSettingsRuleKey = RuleKey.of(KOTLIN_REPOSITORY_KEY, MISSING_VERIFICATION_METADATA_RULE_KEY)
+        if (sensorContext.activeRules().find(missingSettingsRuleKey) == null) return
+
+        if (!rootDirFile.resolve("gradle/verification-metadata.xml").exists()) {
+            val project = sensorContext.project()
+
+            with(sensorContext) {
+                newIssue()
+                    .forRule(missingSettingsRuleKey)
+                    .at(
+                        newIssue()
+                            .newLocation()
+                            .on(project)
+                            .message("""Create a "verification-metadata.xml" file to verify these dependencies against a known checksum or signature.""")
                     )
                     .save()
             }
