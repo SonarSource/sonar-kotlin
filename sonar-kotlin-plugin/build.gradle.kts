@@ -9,6 +9,12 @@ plugins {
     id("jacoco-report-aggregation")
 }
 
+buildscript {
+    dependencies {
+        classpath("com.guardsquare:proguard-gradle:7.6.1")
+    }
+}
+
 dependencies {
     compileOnly(libs.sonar.plugin.api)
     compileOnly(libs.slf4j.api)
@@ -87,32 +93,31 @@ tasks.jar {
     }
 }
 
-val shadowJar = tasks.shadowJar
 val sourcesJar = tasks.sourcesJar
 val javadocJar = tasks.javadocJar
 
-tasks.shadowJar {
-    minimize {
-        exclude(dependency("com.github.ben-manes.caffeine:caffeine"))
-    }
-    exclude("META-INF/native/**/*jansi*")
-    exclude("org/jline/**")
-    exclude("net/jpountz/**")
-    dependencies {
-    }
+// Note that this task is time-consuming
+// and needed only for integration tests and publishing,
+// so it is not part of `gradle build`.
+task<proguard.gradle.ProGuardTask>("dist") {
+    group = "build"
+    description = "Assembles sonar-kotlin-plugin.jar for integration tests and publishing"
+    libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
+    injars(
+        mapOf("filter" to "!META-INF/native/**/*jansi*,!org/jline/**,!net/jpountz/**"),
+        tasks.shadowJar.get().archiveFile
+    )
+    outjars("build/libs/sonar-kotlin-plugin.jar")
+    configuration("proguard.txt")
     doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 62_200_000L, 62_600_000L)
+        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 63_100_000L, 63_500_000L)
     }
-}
-
-artifacts {
-    archives(shadowJar)
 }
 
 tasks.artifactoryPublish { skip = false }
 publishing {
     publications.withType<MavenPublication> {
-        artifact(shadowJar) {
+        artifact(tasks.named("dist")) {
             classifier = null
         }
         artifact(sourcesJar)
@@ -126,6 +131,8 @@ fun enforceJarSizeAndCheckContent(file: File, minSize: Long, maxSize: Long) {
         throw GradleException("${file.path} size ($size) too small. Min is $minSize")
     } else if (size > maxSize) {
         throw GradleException("${file.path} size ($size) too large. Max is $maxSize")
+    } else {
+        logger.lifecycle("${file.path} size $size")
     }
     checkJarEntriesPathUniqueness(file)
 }
