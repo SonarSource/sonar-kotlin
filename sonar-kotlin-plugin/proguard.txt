@@ -1,0 +1,64 @@
+-dontobfuscate
+-dontoptimize
+-dontnote
+-dontwarn
+
+-keep class
+# META-INF/extensions/compiler.xml
+org.jetbrains.kotlin.plugin.references.SimpleNameReferenceExtension,
+# all projectService.serviceImplementation from
+# META-INF/analysis-api/analysis-api-impl-base.xml
+org.jetbrains.kotlin.resolve.jvm.KotlinJavaPsiFacade,
+org.jetbrains.kotlin.analysis.api.impl.base.java.source.JavaElementSourceWithSmartPointerFactory,
+org.jetbrains.kotlin.analysis.api.impl.base.references.HLApiReferenceProviderService,
+org.jetbrains.kotlin.analysis.api.impl.base.projectStructure.KaBaseModuleProvider,
+org.jetbrains.kotlin.analysis.api.platform.KotlinProjectMessageBusProvider,
+org.jetbrains.kotlin.analysis.api.impl.base.permissions.KaBaseAnalysisPermissionChecker,
+org.jetbrains.kotlin.analysis.api.impl.base.lifetime.KaBaseLifetimeTracker,
+# all projectService.serviceImplementation from
+# META-INF/analysis-api/low-level-api-fir.xml
+org.jetbrains.kotlin.analysis.low.level.api.fir.services.LLRealFirElementByPsiElementChooser,
+org.jetbrains.kotlin.analysis.low.level.api.fir.projectStructure.LLFirBuiltinsSessionFactory,
+org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.LLFirSessionCache,
+org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.LLFirSessionInvalidationService,
+org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.LLFirSessionInvalidationEventPublisher,
+org.jetbrains.kotlin.analysis.low.level.api.fir.LLFirGlobalResolveComponents,
+org.jetbrains.kotlin.analysis.low.level.api.fir.LLFirResolveSessionService,
+org.jetbrains.kotlin.analysis.low.level.api.fir.file.structure.LLFirDeclarationModificationService,
+org.jetbrains.kotlin.analysis.low.level.api.fir.file.structure.LLFirInBlockModificationTracker,
+# all projectService.serviceImplementation from
+# META-INF/analysis-api/symbol-light-classes.xml
+org.jetbrains.kotlin.light.classes.symbol.SymbolKotlinAsJavaSupport,
+# all projectService.serviceImplementation and applicationService.serviceImplementation from
+# META-INF/analysis-api/analysis-api-fir-standalone-base.xml
+org.jetbrains.kotlin.analysis.api.standalone.base.declarations.KotlinStandaloneFirDirectInheritorsProvider,
+org.jetbrains.kotlin.analysis.api.platform.projectStructure.KotlinSimpleGlobalSearchScopeMerger,
+org.jetbrains.kotlin.analysis.decompiler.psi.BuiltinsVirtualFileProviderCliImpl,
+# all projectService.serviceImplementation from
+# META-INF/analysis-api/analysis-api-fir.xml
+org.jetbrains.kotlin.analysis.api.fir.KaFirSessionProvider,
+org.jetbrains.kotlin.analysis.api.fir.modification.KaFirSourceModificationService,
+org.jetbrains.kotlin.analysis.api.fir.references.KotlinFirReferenceContributor,
+org.jetbrains.kotlin.analysis.api.fir.references.ReadWriteAccessCheckerFirImpl,
+
+# Used to have proper named groups behavior in regular expressions
+kotlin.internal.jdk8.JDK8PlatformImplementations,
+
+com.github.benmanes.caffeine.**,
+
+org.sonarsource.kotlin.plugin.**
+
+-keepclassmembers class * { *; }
+
+-keep class kotlin.Metadata
+
+-verbose
+
+# Can be used for debugging to create list of removed classes and removed members of non-removed classes:
+#-printusage build/libs/removed.txt
+
+# Can be used for debugging to create list of classes and their members explicitly marked to be kept:
+#-printseeds build/libs/seeds.txt
+
+# Can be used for debugging, but seems that its output is misleading most of the time:
+#-whyareyoukeeping class org.jetbrains.kotlin.codegen.**
