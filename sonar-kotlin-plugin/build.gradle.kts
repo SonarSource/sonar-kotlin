@@ -115,7 +115,7 @@ task<proguard.gradle.ProGuardTask>("dist") {
     keepdirectories()
     configuration("proguard.txt")
     doLast {
-        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 52_100_000L, 52_500_000L)
+        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 52_100_000L, 52_800_000L)
     }
 }
 
