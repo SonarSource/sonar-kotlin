@@ -59,7 +59,7 @@ public class TestsHelper {
       String plugin = "sonar-" + language +"-plugin";
       if (slangVersion == null || slangVersion.isEmpty()) {
         // use the plugin that was built on local machine
-        pluginLocation = FileLocation.byWildcardMavenFilename(new File("../../" + plugin + "/build/libs"), plugin + "-*-all.jar");
+        pluginLocation = FileLocation.byWildcardMavenFilename(new File("../../" + plugin + "/build/libs"), plugin + ".jar");
       } else {
         // QA environment downloads the plugin built by the CI job
         pluginLocation = MavenLocation.of("org.sonarsource.kotlin", plugin, slangVersion);
