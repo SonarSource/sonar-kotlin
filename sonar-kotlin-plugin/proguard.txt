@@ -50,7 +50,17 @@ org.sonarsource.kotlin.plugin.**
 
 -keep @interface *
 
--keepclassmembers class * { *; }
+-keepclassmembers class
+!org.jetbrains.kotlin.codegen.**,
+!org.jetbrains.kotlin.backend.**,
+!org.jetbrains.kotlin.**.backend.**,
+!org.jetbrains.kotlin.ir.**,
+!org.jetbrains.kotlin.analysis.api.components.KaCompilerFacility,
+!org.jetbrains.kotlin.analysis.api.KaSession,
+!org.jetbrains.kotlin.analysis.api.impl.base.KaBaseSession,
+!org.jetbrains.kotlin.analysis.api.fir.components.KaFirCompilerFacility**,
+!org.jetbrains.kotlin.analysis.api.fir.KaFirSession
+{ *; }
 
 -verbose
 

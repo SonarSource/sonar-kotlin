@@ -111,10 +111,11 @@ task<proguard.gradle.ProGuardTask>("dist") {
         tasks.shadowJar.get().archiveFile
     )
     outjars("build/libs/sonar-kotlin-plugin.jar")
+    // TODO do not keep empty directories
     keepdirectories()
     configuration("proguard.txt")
     doLast {
-        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 62_200_000L, 62_600_000L)
+        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 52_100_000L, 52_500_000L)
     }
 }
 
