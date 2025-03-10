@@ -110,7 +110,7 @@ task<proguard.gradle.ProGuardTask>("dist") {
     outjars("build/libs/sonar-kotlin-plugin.jar")
     configuration("proguard.txt")
     doLast {
-        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 63_100_000L, 63_500_000L)
+        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 49_400_000L, 49_800_000L)
     }
 }
 
