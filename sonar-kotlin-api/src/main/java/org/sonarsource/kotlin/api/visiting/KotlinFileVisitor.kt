@@ -16,9 +16,14 @@
  */
 package org.sonarsource.kotlin.api.visiting
 
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.KaCompilationResult
+import org.jetbrains.kotlin.analysis.api.components.KaCompilerTarget
+import org.jetbrains.kotlin.analysis.api.diagnostics.KaDiagnostic
 import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTypeReference
@@ -60,6 +65,18 @@ internal class SonarKaSession(
                 buildClassType(ClassId.fromString("<error>"))
             }
         }
+
+    /**
+     * Always throws [UnsupportedOperationException] to get rid of dependency on codegen.
+     */
+    @OptIn(KaExperimentalApi::class)
+    override fun compile(
+        file: KtFile,
+        configuration: CompilerConfiguration,
+        target: KaCompilerTarget,
+        allowedErrorFilter: (KaDiagnostic) -> Boolean,
+    ): KaCompilationResult =
+        throw UnsupportedOperationException()
 }
 
 /**
