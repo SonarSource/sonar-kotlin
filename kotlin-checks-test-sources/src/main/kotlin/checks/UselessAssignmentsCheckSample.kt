@@ -21,4 +21,19 @@ class UselessAssignmentsCheckSample {
 
         println(j)
     }
+
+    private fun prefix_operator() {
+        var a = 0
+        ++a // Noncompliant
+
+        var b = 0
+        ++b
+        println(b)
+
+        var c = 0
+        println(++c)
+
+        var d = 0
+        println(if (true) ++d else ++d)
+    }
 }
