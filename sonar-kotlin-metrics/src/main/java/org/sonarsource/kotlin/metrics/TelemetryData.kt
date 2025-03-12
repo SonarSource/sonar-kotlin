@@ -16,22 +16,6 @@
  */
 package org.sonarsource.kotlin.metrics
 
-import org.sonar.api.batch.sensor.SensorContext
-import org.sonar.api.utils.Version
-
-private val MIN_SQS_SUPPORTED: Version = Version.create(10, 9)
-
 class TelemetryData {
     var hasAndroidImports = false
-    var hasAndroidImportsReportedAsTrue = false
-
-    fun report(sensorContext: SensorContext) {
-        if (hasAndroidImportsReportedAsTrue || !sensorContext.isTelemetrySupported()) return
-        sensorContext.addTelemetryProperty("kotlin.android", if (hasAndroidImports) "1" else "0")
-        hasAndroidImportsReportedAsTrue = hasAndroidImports
-    }
 }
-
-private fun SensorContext.isTelemetrySupported() =
-    this.runtime().apiVersion.isGreaterThanOrEqual(MIN_SQS_SUPPORTED)
-

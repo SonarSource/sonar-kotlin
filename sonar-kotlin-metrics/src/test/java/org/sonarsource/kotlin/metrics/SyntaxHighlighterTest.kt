@@ -29,6 +29,7 @@ import org.sonar.api.batch.sensor.highlighting.TypeOfText.STRING
 import org.sonar.api.batch.sensor.highlighting.TypeOfText.STRUCTURED_COMMENT
 import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
+import org.sonarsource.kotlin.plugin.KotlinProjectSensor
 // TODO: refactor later; metrics should not depend on plugin!
 import org.sonarsource.kotlin.plugin.KotlinSensor
 import org.sonarsource.kotlin.testapi.AbstractSensorTest
@@ -46,7 +47,7 @@ class SyntaxHighlighterTest : AbstractSensorTest() {
         val inputFile: InputFile = createInputFile("file1.kt", fileToTest.readText())
 
         context.fileSystem().add(inputFile)
-        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language()).execute(context)
+        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), KotlinProjectSensor()).execute(context)
 
         assertThat(context, inputFile)
             .isHighlighted(1, 1, KEYWORD)

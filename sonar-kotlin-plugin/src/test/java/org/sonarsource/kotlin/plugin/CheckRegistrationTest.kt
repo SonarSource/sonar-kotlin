@@ -45,7 +45,7 @@ class CheckRegistrationTest : AbstractSensorTest() {
              """.trimIndent())
         context.fileSystem().add(inputFile)
         val dummyCheck = spyk(DummyCheck())
-        KotlinSensor(checkFactory("S99999"), fileLinesContextFactory, DefaultNoSonarFilter(), language()).also { sensor ->
+        KotlinSensor(checkFactory("S99999"), fileLinesContextFactory, DefaultNoSonarFilter(), language(), KotlinProjectSensor()).also { sensor ->
             sensor.checks.addAnnotatedChecks(dummyCheck)
             sensor.execute(context)
         }
