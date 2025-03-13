@@ -1,0 +1,41 @@
+{
+  "title": "Android production release targets should not be debuggable",
+  "type": "VULNERABILITY",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [],
+  "defaultSeverity": "Minor",
+  "ruleSpecification": "RSPEC-7416",
+  "sqKey": "S7416",
+  "scope": "All",
+  "securityStandards": {
+    "CWE": [
+      489,
+      215
+    ],
+    "OWASP Mobile": [
+      "M9",
+      "M10"
+    ],
+    "OWASP Mobile Top 10 2024": [
+      "M7",
+      "M8"
+    ],
+    "OWASP": [
+      "A3"
+    ],
+    "OWASP Top 10 2021": [
+      "A5"
+    ]
+  },
+  "quickfix": "unknown",
+  "code": {
+    "impacts": {
+      "SECURITY": "LOW"
+    },
+    "attribute": "CONVENTIONAL"
+  }
+}

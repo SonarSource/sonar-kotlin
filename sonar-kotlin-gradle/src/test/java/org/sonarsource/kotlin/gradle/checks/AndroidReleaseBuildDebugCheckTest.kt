@@ -20,9 +20,9 @@ import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.testapi.KotlinVerifier
 import java.nio.file.Path
 
-internal class AndroidReleaseBuildObfuscationCheckTest {
-    private val check = AndroidReleaseBuildObfuscationCheck()
-    private val fileNamePrefix = "AndroidReleaseBuildObfuscationCheckSample"
+internal class AndroidReleaseBuildDebugCheckTest {
+    private val check = AndroidReleaseBuildDebugCheck()
+    private val fileNamePrefix = "AndroidReleaseBuildDebugCheckSample"
 
     @Test
     fun `on build gradle file`() {
