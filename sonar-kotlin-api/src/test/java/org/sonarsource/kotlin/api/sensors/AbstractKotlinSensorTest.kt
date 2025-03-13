@@ -21,9 +21,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.*
 import org.jetbrains.kotlin.config.LanguageVersion
-import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
@@ -105,11 +103,11 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             every { config() } returns ConfigurationBridge(MapSettings())
         }
 
-        val environment = environment(disposable, sensorContext, LOG)
+        val actual = determineKotlinLanguageVersion(sensorContext, LOG)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
-        assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
+        assertThat(actual).isSameAs(expectedKotlinVersion)
         assertThat(logTester.logs(Level.WARN)).isEmpty()
         assertThat(logTester.logs(Level.DEBUG))
             .contains("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
@@ -125,11 +123,11 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(disposable, sensorContext, LOG)
+        val actual = determineKotlinLanguageVersion(sensorContext, LOG)
 
         val expectedKotlinVersion = LanguageVersion.KOTLIN_1_3
 
-        assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
+        assertThat(actual).isSameAs(expectedKotlinVersion)
         assertThat(logTester.logs(Level.WARN)).isEmpty()
         assertThat(logTester.logs(Level.DEBUG))
             .contains("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
@@ -145,11 +143,11 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(disposable, sensorContext, LOG)
+        val actual = determineKotlinLanguageVersion(sensorContext, LOG)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
-        assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
+        assertThat(actual).isSameAs(expectedKotlinVersion)
         assertThat(logTester.logs(Level.WARN))
             .containsExactly("Failed to find Kotlin version 'foo'. Defaulting to ${expectedKotlinVersion.versionString}")
         assertThat(logTester.logs(Level.DEBUG))
@@ -166,11 +164,11 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
             })
         }
 
-        val environment = environment(disposable, sensorContext, LOG)
+        val actual = determineKotlinLanguageVersion(sensorContext, LOG)
 
         val expectedKotlinVersion = LanguageVersion.LATEST_STABLE
 
-        assertThat(environment.configuration.languageVersionSettings.languageVersion).isSameAs(expectedKotlinVersion)
+        assertThat(actual).isSameAs(expectedKotlinVersion)
         assertThat(logTester.logs(Level.WARN)).isEmpty()
         assertThat(logTester.logs(Level.DEBUG))
             .contains("Using Kotlin ${expectedKotlinVersion.versionString} to parse source code")
@@ -183,6 +181,7 @@ private val LOG = LoggerFactory.getLogger(DummyKotlinSensor::class.java)
 class DummyKotlinSensor(checkFactory: CheckFactory, language: KotlinLanguage, checks: List<Class<out KotlinCheck>>) :
     AbstractKotlinSensor(
         checkFactory,
+        emptyList(),
         language,
         checks,
     ) {
@@ -194,8 +193,7 @@ class DummyKotlinSensor(checkFactory: CheckFactory, language: KotlinLanguage, ch
     ): AbstractKotlinSensorExecuteContext = object : AbstractKotlinSensorExecuteContext(
         sensorContext, filesToAnalyze, progressReport, listOf(KtChecksVisitor(checks)), filenames, LOG
     ) {
-        override val bindingContext: BindingContext = BindingContext.EMPTY
-        override val doResolve: Boolean = false
+        override val classpath: List<String> = listOf()
     }
 
     override fun getFilesToAnalyse(sensorContext: SensorContext): Iterable<InputFile> =

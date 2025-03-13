@@ -16,7 +16,6 @@
  */
 package org.sonarsource.kotlin.plugin
 
-import org.assertj.core.api.Assert
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.sonar.api.SonarEdition
@@ -73,9 +72,34 @@ internal class KotlinRulesDefinitionTest {
 
     private fun repositoryForVersion(version: Version): RulesDefinition.Repository? {
         val rulesDefinition: RulesDefinition = KotlinRulesDefinition(
-            SonarRuntimeImpl.forSonarQube(version, SonarQubeSide.SCANNER, SonarEdition.COMMUNITY))
+            SonarRuntimeImpl.forSonarQube(version, SonarQubeSide.SCANNER, SonarEdition.COMMUNITY),
+            emptyArray(),
+        )
         val context = RulesDefinition.Context()
         rulesDefinition.define(context)
         return context.repository("kotlin")
     }
+
+    @Test
+    fun extensions() {
+        val rulesDefinition = KotlinRulesDefinition(
+            SonarRuntimeImpl.forSonarQube(Version.create(9, 9), SonarQubeSide.SCANNER, SonarEdition.COMMUNITY),
+            arrayOf(DummyKotlinPluginExtensionsProvider()),
+        )
+        val context = RulesDefinition.Context()
+        rulesDefinition.define(context)
+
+        val repository = context.repository(DummyKotlinPluginExtensionsProvider.DUMMY_REPOSITORY_KEY)!!
+        Assertions.assertThat(repository.language()).isEqualTo("kotlin")
+        Assertions.assertThat(repository.name()).isEqualTo("Dummy Repository")
+        val rule = repository.rule("DummyRule")!!
+        Assertions.assertThat(rule.name()).isEqualTo("Dummy Rule")
+        Assertions.assertThat(rule.htmlDescription()).isEqualTo("Dummy Description")
+
+        Assertions.assertThat(
+            context.repository(DummyKotlinPluginExtensionsProvider.DUMMY_NON_SONAR_WAY_REPOSITORY_KEY)!!
+                .rule("DummyRule")
+        ).isNotNull
+    }
+
 }

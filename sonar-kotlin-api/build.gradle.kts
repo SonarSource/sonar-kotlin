@@ -12,7 +12,6 @@ dependencies {
         "org.jetbrains.kotlin:analysis-api-platform-interface-for-ide",
         "org.jetbrains.kotlin:analysis-api-for-ide", // old name "high-level-api-for-ide"
         "org.jetbrains.kotlin:analysis-api-impl-base-for-ide", // old name "high-level-api-impl-base"
-        "org.jetbrains.kotlin:analysis-api-fe10-for-ide", // old name "high-level-api-fe10"
         "org.jetbrains.kotlin:analysis-api-k2-for-ide", // old name "high-level-api-k2"
         "org.jetbrains.kotlin:low-level-api-fir-for-ide",
         "org.jetbrains.kotlin:symbol-light-classes-for-ide"
@@ -23,6 +22,7 @@ dependencies {
             isTransitive = false
         }
     }
+    implementation("com.github.ben-manes.caffeine:caffeine:2.9.3")
 
     compileOnly(libs.sonar.plugin.api)
     compileOnly(libs.slf4j.api)

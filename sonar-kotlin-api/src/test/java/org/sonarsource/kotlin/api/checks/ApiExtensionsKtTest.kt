@@ -20,15 +20,8 @@ import com.intellij.openapi.util.Disposer
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.ObjectAssert
 import com.intellij.psi.PsiElement
-import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
-import io.mockk.impl.platform.Disposable
 import org.jetbrains.kotlin.config.LanguageVersion
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.js.descriptorUtils.getKotlinTypeFqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
-import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -37,18 +30,11 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtParameter
-import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
-import org.jetbrains.kotlin.psi.KtTypeReference
-import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -59,6 +45,7 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
 import org.sonarsource.kotlin.api.frontend.Environment
+import org.sonarsource.kotlin.api.visiting.kaSession
 import org.sonarsource.kotlin.testapi.kotlinTreeOf
 import java.io.File
 import java.nio.charset.StandardCharsets
@@ -105,68 +92,17 @@ private class ApiExtensionsKtTest : AbstractApiExtensionsKtTest() {
                 referencesMap[it.getReferencedName()] = it
             }
         }
-        val ctx = tree.bindingContext
-        assertThat((null as KtExpression?).isLocalVariable(ctx)).isFalse
 
         assertThat(referencesMap.keys).containsExactlyInAnyOrder(
             "Any", "Int", "List",
             "a", "b", "c", "d", "e", "f", "g", "h", "i", "it", "j", "k", "l", "listOf", "m", "n", "o"
         )
-        assertThat(referencesMap.filter { it.value.isLocalVariable(ctx) }.map { it.key })
-            .containsExactlyInAnyOrder("h", "i", "j", "k", "m", "n", "o")
-    }
-
-    @Test
-    fun `test getterMatches and setterMatches`() {
-        val tree = parse(
-            """
-        fun foo(thread: Thread): Int {
-          thread.name = "1"
-          thread.isDaemon = false
-          var x = 0
-          x = 1
-          return thread.priority
+        kaSession(tree.psiFile) {
+            assertThat((null as KtExpression?).isLocalVariable()).isFalse
+            assertThat(referencesMap.filter { it.value.isLocalVariable() }.map { it.key })
+                .containsExactlyInAnyOrder("h", "i", "j", "k", "m", "n", "o")
         }
-        """.trimIndent()
-        )
-
-        val referencesMap: MutableMap<String, KtReferenceExpression> = TreeMap()
-        walker(tree.psiFile) {
-            if (it is KtNameReferenceExpression) {
-                referencesMap[it.getReferencedName()] = it
-            }
-        }
-
-        val getNameMatcher = FunMatcher(qualifier = "java.lang.Thread", name = "getName")
-        val setNameMatcher = FunMatcher(qualifier = "java.lang.Thread", name = "setName") { withArguments("kotlin.String") }
-        val isDaemonMatcher = FunMatcher(qualifier = "java.lang.Thread", name = "isDaemon")
-        val setDaemonMatcher = FunMatcher(qualifier = "java.lang.Thread", name = "setDaemon") { withArguments("kotlin.Boolean") }
-
-        val ctx = tree.bindingContext
-        assertThat((null as KtExpression?).getterMatches(ctx, "name", getNameMatcher)).isFalse
-        assertThat((null as KtExpression?).setterMatches(ctx, "name", setNameMatcher)).isFalse
-
-        assertThat(referencesMap.keys).containsExactlyInAnyOrder("Int", "Thread", "isDaemon", "name", "priority", "thread", "x")
-        assertThat(referencesMap.filter { it.value.getterMatches(ctx, "name", getNameMatcher) }.map { it.key })
-            .containsExactlyInAnyOrder("name")
-        assertThat(referencesMap.filter { it.value.setterMatches(ctx, "name", setNameMatcher) }.map { it.key })
-            .containsExactlyInAnyOrder("name")
-        assertThat(referencesMap.filter { it.value.getterMatches(ctx, "isDaemon", isDaemonMatcher) }.map { it.key })
-            .containsExactlyInAnyOrder("isDaemon")
-        assertThat(referencesMap.filter { it.value.setterMatches(ctx, "isDaemon", setDaemonMatcher) }.map { it.key })
-            .containsExactlyInAnyOrder("isDaemon")
-
-        // should not match
-        assertThat(referencesMap.filter { it.value.getterMatches(ctx, "priority", getNameMatcher) }.map { it.key })
-            .isEmpty()
-        assertThat(referencesMap.filter { it.value.setterMatches(ctx, "priority", setNameMatcher) }.map { it.key })
-            .isEmpty()
-        assertThat(referencesMap.filter { it.value.getterMatches(ctx, "x", getNameMatcher) }.map { it.key })
-            .isEmpty()
-        assertThat(referencesMap.filter { it.value.setterMatches(ctx, "x", setNameMatcher) }.map { it.key })
-            .isEmpty()
     }
-
 
     @Test
     fun `test KtExpression findClosestAncestorOfType`() {
@@ -237,12 +173,6 @@ private class ApiExtensionsKtTest : AbstractApiExtensionsKtTest() {
     }
 
     @Test
-    fun `PsiElement getVariableType()`() {
-        assertThat((null as PsiElement?).getVariableType(BindingContext.EMPTY)).isNull()
-        assertThat(PsiWhiteSpaceImpl(" ").getVariableType(BindingContext.EMPTY)).isNull()
-    }
-
-    @Test
     fun `test Functions modifiers`(){
         val tree = parse(
             """
@@ -275,240 +205,9 @@ private class ApiExtensionsKtTest : AbstractApiExtensionsKtTest() {
         assertThat(textToExpression["defaultFun"]!!.isExpect()).isFalse()
     }
 
-    @Test
-    fun `test KtTypeReference getType with null`() {
-        assertThat((null as KtTypeReference?).getType(BindingContext.EMPTY)).isNull()
-    }
-
     private fun walker(node: PsiElement, action: (PsiElement) -> Unit) {
         action(node)
         node.allChildren.forEach { walker(it, action) }
-    }
-}
-
-private class ApiExtensionsKtDetermineTypeTest : AbstractApiExtensionsKtTest() {
-    private val bindingContext: BindingContext
-    private val ktFile: KtFile
-
-    init {
-        val kotlinTree = parse(
-            """
-        package bar
-        import java.nio.charset.StandardCharsets
-        import whatever.Random
-        
-        class Foo {
-        
-            companion object {
-                const val feww = "test"    
-            }
-        
-            val prop: Int = 0
-            val arr = arrayOf("a", "b")
-            val numb: Number = 2
-            val any: Any = 3
-            val str = "string"
-            val lz by lazy { "str" }
-            
-            fun aFun(param: Float): Long {
-                stringReturning()
-                this.prop
-                println(Foo.feww)
-                println(lz)
-                StandardCharsets.US_ASCII
-                val localVal: Double
-            }
-            fun stringReturning(): String {}
-            
-            fun anotherFun(obj: Foo): Long {
-                obj.prop
-            }
-            
-            fun testKtArgument(){
-                aFun( 1.2f )
-            }
-            
-            fun lambda() { 1 }
-            
-            fun nonResolving(){
-                println(Random.method())
-            }
-            
-        }
-        
-        class FooSon : Foo {
-            
-        }
-        
-        """.trimIndent()
-        )
-        bindingContext = kotlinTree.bindingContext
-        ktFile = kotlinTree.psiFile
-    }
-
-    @Test
-    fun `determineType of KtCallExpression`() {
-        val expr1 = ktFile.findDescendantOfType<KtCallExpression> { it.text == "stringReturning()" }!!
-        val expr2 = ktFile.findDescendantOfType<KtCallExpression> { it.text == "arrayOf(\"a\", \"b\")" }!!
-
-        assertThat(expr1.determineType(bindingContext)!!.getKotlinTypeFqName(false))
-            .isEqualTo("kotlin.String")
-        val expr2Type = expr2.determineType(bindingContext)!!
-        assertThat(expr2Type.getKotlinTypeFqName(false))
-            .isEqualTo("kotlin.Array")
-        assertThat(expr2Type.arguments[0].type.getKotlinTypeFqName(false))
-            .isEqualTo("kotlin.String")
-    }
-
-    @Test
-    fun `determineType of KtParameter`() {
-        val expr = ktFile.findDescendantOfType<KtParameter> { it.text == "param: Float" }!!
-
-        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
-            .isEqualTo("kotlin.Float")
-    }
-
-    @Test
-    fun `determineType of KtValueArgument`() {
-        val expr = ktFile.findDescendantOfType<KtValueArgument> { it.text == "1.2f" }!!
-        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
-            .isEqualTo("kotlin.Float")
-
-        val exprLazy = ktFile.findDescendantOfType<KtValueArgument> { it.text == "lz" }!!
-        assertThat(exprLazy.determineType(bindingContext)!!.getKotlinTypeFqName(false))
-            .isEqualTo("kotlin.String")
-
-    }
-
-    @Test
-    fun `determineType of KtValueArgument with parsing error`() {
-        val kotlinTree = """
-            package test
-            
-            class Test{
-                fun method(any: Any){
-                    method(,)
-                }
-            }
-        """.trimIndent()
-        val bindingContext = BindingContext.EMPTY
-        val ktFile = parseWithoutParsingExceptions(kotlinTree)
-        val expr = ktFile.findDescendantOfType<KtValueArgument>()
-        assertThat(expr.determineType(bindingContext)).isNull()
-    }
-
-    @Test
-    fun `determineType of KtTypeReference`() {
-        val expr = ktFile.findDescendantOfType<KtTypeReference> { it.text == "Int" }!!
-
-        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
-            .isEqualTo("kotlin.Int")
-    }
-
-    @Test
-    fun `determineType of KtProperty`() {
-        val expr = ktFile.findDescendantOfType<KtProperty> { it.text == "val prop: Int = 0" }!!
-
-        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
-            .isEqualTo("kotlin.Int")
-    }
-
-    @Test
-    fun `determineType of KtDotQualifiedExpression`() {
-        val expr = ktFile.findDescendantOfType<KtDotQualifiedExpression> { it.text == "this.prop" }!!
-        val expr2 = ktFile.findDescendantOfType<KtDotQualifiedExpression> { it.text == "StandardCharsets.US_ASCII" }!!
-        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
-            .isEqualTo("kotlin.Int")
-        assertThat(expr2.determineType(bindingContext)!!.getKotlinTypeFqName(false))
-            .isEqualTo("java.nio.charset.Charset")
-
-    }
-
-    @Test
-    fun `determineType of non resolving KtDotQualifiedExpression`() {
-        val expr = ktFile.findDescendantOfType<KtDotQualifiedExpression> { it.text == "Random.method()" }!!
-        assertThat(expr.determineType(bindingContext)).isNull()
-    }
-
-    @Test
-    fun `determineType of KtReferenceExpression`() {
-        val expr = ktFile.findDescendantOfType<KtReferenceExpression> { it.text == "Int" }!!
-
-        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
-            .isEqualTo("kotlin.Int")
-    }
-
-    @Test
-    fun `determineType of KtFunction`() {
-        val expr = ktFile.findDescendantOfType<KtFunction> { it.name == "stringReturning" }!!
-
-        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
-            .isEqualTo("kotlin.String")
-    }
-
-    @Test
-    fun `determineType of KtClass`() {
-        val expr = ktFile.findDescendantOfType<KtClass> { it.name == "Foo" }!!
-
-        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
-            .isEqualTo("bar.Foo")
-    }
-
-    @Test
-    fun `determineType of KtExpression`() {
-        val expr = ktFile.findDescendantOfType<KtBlockExpression> { it.text == "{ 1 }" }!!
-        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
-            .isEqualTo("kotlin.Int")
-        assertThat(expr.determineTypeAsString(bindingContext))
-            .isEqualTo("kotlin.Int")
-        val missingContext = BindingContext.EMPTY
-        assertThat(expr.determineTypeAsString(missingContext)).isNull()
-    }
-
-    @Test
-    fun `determineType else`() {
-        val directive = ktFile.findDescendantOfType<KtPackageDirective>()!!
-        assertThat(directive.determineType(bindingContext))
-            .isNull()
-    }
-
-    @Test
-    fun `determineType of declaration not supported`() {
-        assertThat((null as FunctionDescriptor?).determineType())
-            .isNull()
-    }
-
-    @Test
-    fun `determineType of ValueDescriptor`() {
-        val expr = ktFile.findDescendantOfType<KtReferenceExpression> { it.text == "obj" }!!
-
-        assertThat(expr.determineType(bindingContext)!!.getKotlinTypeFqName(false))
-            .isEqualTo("bar.Foo")
-    }
-
-    @Test
-    fun `isSuperType of standard kotlin types`() {
-        val intType = ktFile.findDescendantOfType<KtProperty> { it.text == "val prop: Int = 0" }.determineType(bindingContext)!!
-        val numType = ktFile.findDescendantOfType<KtProperty> { it.text == "val numb: Number = 2" }.determineType(bindingContext)!!
-        val anyType = ktFile.findDescendantOfType<KtProperty> { it.text == "val any: Any = 3" }.determineType(bindingContext)!!
-        val strType = ktFile.findDescendantOfType<KtProperty> { it.text == "val str = \"string\"" }.determineType(bindingContext)!!
-        assertThat(numType.isSupertypeOf(intType)).isTrue
-        assertThat(!intType.isSupertypeOf(numType)).isTrue
-        assertThat(anyType.isSupertypeOf(strType) && anyType.isSupertypeOf(numType) && anyType.isSupertypeOf(intType)).isTrue
-        assertThat(!intType.isSupertypeOf(anyType) && !strType.isSupertypeOf(anyType) && !numType.isSupertypeOf(anyType)).isTrue
-        assertThat(!strType.isSupertypeOf(intType) && !intType.isSupertypeOf(strType)).isTrue
-        assertThat(numType.isSupertypeOf(numType)).isFalse
-    }
-
-    @Test
-    fun `isSuperType of custom classes`() {
-        val anyType = ktFile.findDescendantOfType<KtProperty> { it.text == "val any: Any = 3" }.determineType(bindingContext)!!
-        val fooType = ktFile.findDescendantOfType<KtClass> { it.name == "Foo" }.determineType(bindingContext)!!
-        val fooSonType = ktFile.findDescendantOfType<KtClass> { it.name == "FooSon" }.determineType(bindingContext)!!
-        assertThat(fooType.isSupertypeOf(fooSonType) && !fooSonType.isSupertypeOf(fooType)).isTrue
-        assertThat(anyType.isSupertypeOf(fooType) && !fooType.isSupertypeOf(anyType)).isTrue
-        assertThat(anyType.isSupertypeOf(fooSonType)).isTrue
-        assertThat(anyType.isSupertypeOf(anyType)).isFalse
     }
 }
 
@@ -523,11 +222,11 @@ private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKt
                     $funContent
                 }
             }
-        """.let { parse(it) }.let { it.psiFile to it.bindingContext }
+        """.let { parse(it) }.psiFile
 
     @Test
     fun `resolve this as arg in with`() {
-        val (tree, bindingContext) = generateAst(
+        val tree = generateAst(
             """
                 with(prop) {
                     println(this)
@@ -535,13 +234,15 @@ private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKt
             """.trimIndent()
         )
 
-        assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
-            .isConstantExpr(42)
+        kaSession(tree) {
+            assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression())
+                .isConstantExpr(42)
+        }
     }
 
     @Test
     fun `resolve this as explicit target in with`() {
-        val (tree, bindingContext) = generateAst(
+        val tree = generateAst(
             """
                 with(prop) {
                     this.toString()
@@ -549,13 +250,15 @@ private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKt
             """.trimIndent()
         )
 
-        assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
-            .isConstantExpr(42)
+        kaSession(tree) {
+            assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression())
+                .isConstantExpr(42)
+        }
     }
 
     @Test
     fun `resolve this as arg in apply`() {
-        val (tree, bindingContext) = generateAst(
+        val tree = generateAst(
             """
                 prop.apply {
                     println(this)
@@ -563,13 +266,15 @@ private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKt
             """.trimIndent()
         )
 
-        assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
-            .isConstantExpr(42)
+        kaSession(tree) {
+            assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression())
+                .isConstantExpr(42)
+        }
     }
 
     @Test
     fun `resolve this as explicit target in apply`() {
-        val (tree, bindingContext) = generateAst(
+        val tree = generateAst(
             """
                 prop.apply {
                     this.toString()
@@ -577,13 +282,15 @@ private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKt
             """.trimIndent()
         )
 
-        assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
-            .isConstantExpr(42)
+        kaSession(tree) {
+            assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression())
+                .isConstantExpr(42)
+        }
     }
 
     @Test
     fun `resolve this as arg in run`() {
-        val (tree, bindingContext) = generateAst(
+        val tree = generateAst(
             """
                 prop.run {
                     println(this)
@@ -591,13 +298,15 @@ private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKt
             """.trimIndent()
         )
 
-        assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
-            .isConstantExpr(42)
+        kaSession(tree) {
+            assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression())
+                .isConstantExpr(42)
+        }
     }
 
     @Test
     fun `resolve this as explicit target in run`() {
-        val (tree, bindingContext) = generateAst(
+        val tree = generateAst(
             """
                 prop.run {
                     this.toString()
@@ -605,13 +314,15 @@ private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKt
             """.trimIndent()
         )
 
-        assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
-            .isConstantExpr(42)
+        kaSession(tree) {
+            assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression())
+                .isConstantExpr(42)
+        }
     }
 
     @Test
     fun `resolve this to current object`() {
-        val (tree, bindingContext) = generateAst(
+        val tree = generateAst(
             """
                 prop.let {
                     println(this)
@@ -619,8 +330,10 @@ private class ApiExtensionsScopeFunctionResolutionTest : AbstractApiExtensionsKt
             """.trimIndent()
         )
 
-        assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression(bindingContext))
-            .isInstanceOf(KtThisExpression::class.java)
+        kaSession(tree) {
+            assertThatExpr(tree.findDescendantOfType<KtThisExpression>()!!.predictRuntimeValueExpression())
+                .isInstanceOf(KtThisExpression::class.java)
+        }
     }
 
     @JvmField
@@ -680,6 +393,7 @@ private abstract class AbstractApiExtensionsKtTest {
             LanguageVersion.LATEST_STABLE
         ),
         TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
+            .setModuleBaseDir(Path.of("."))
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(code)
             .build()
@@ -692,6 +406,7 @@ private abstract class AbstractApiExtensionsKtTest {
             LanguageVersion.LATEST_STABLE
         )
         val inputFile = TestInputFileBuilder("moduleKey", "src/org/foo/kotlin.kt")
+            .setModuleBaseDir(Path.of("."))
             .setCharset(StandardCharsets.UTF_8)
             .initMetadata(code)
             .build()

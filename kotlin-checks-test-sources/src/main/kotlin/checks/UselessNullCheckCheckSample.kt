@@ -60,7 +60,7 @@ class UselessNullCheckCheckSample {
 
         var c: String? = null
         c = "foo"
-        c!! // Compliant FN. We don't currently resolve the value of vars.
+        c!! // Noncompliant
 
         var d: String = ""
         d!! // Noncompliant
@@ -133,4 +133,8 @@ private class FooBar(
     private val someString: String? = something as? String
     val isString: Boolean
         get() = someString != null // Compliant
+}
+
+private fun <T> testParametrised(list: List<T>): Int? {
+    return list.first()?.hashCode()
 }

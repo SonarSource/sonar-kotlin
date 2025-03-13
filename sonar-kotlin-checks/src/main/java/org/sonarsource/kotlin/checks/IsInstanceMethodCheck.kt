@@ -17,7 +17,9 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -26,16 +28,14 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil.deparenthesize
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val JAVA_CLASS_KEYWORDS = listOf("java", "javaClass")
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6202")
 class IsInstanceMethodCheck : CallAbstractCheck() {
 
@@ -44,7 +44,7 @@ class IsInstanceMethodCheck : CallAbstractCheck() {
         FunMatcher(qualifier = "java.lang.Class", name = "isInstance") { withArguments("kotlin.Any") },
     )
 
-    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: ResolvedCall<*>, kotlinFileContext: KotlinFileContext) {
+    override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) {
         callExpression.getQualifiedExpressionForSelector()?.receiverExpression
             .qualifiedName(kotlinFileContext, true)?.let { className ->
                 kotlinFileContext.reportIssue(callExpression.calleeExpression!!, "Replace this usage of \"isInstance\" with \"is $className\".")
@@ -54,7 +54,7 @@ class IsInstanceMethodCheck : CallAbstractCheck() {
     private fun PsiElement?.qualifiedName(ctx: KotlinFileContext, onlyClass: Boolean): String? {
         return when (val expr = deparenthesize(this as? KtExpression)) {
             is KtClassLiteralExpression -> if (onlyClass) expr.lhs.qualifiedName(ctx, true) else null
-            is KtNameReferenceExpression -> if (!onlyClass || expr.isClass(ctx)) expr.getReferencedName() else null
+            is KtNameReferenceExpression -> if (!onlyClass || expr.isClass()) expr.getReferencedName() else null
             is KtDotQualifiedExpression -> {
                 val right = expr.selectorExpression.qualifiedName(ctx, onlyClass)
                 if (right != null) {
@@ -73,7 +73,8 @@ class IsInstanceMethodCheck : CallAbstractCheck() {
     private fun isJavaClassKeyword(expr: KtExpression?): Boolean =
         (expr is KtNameReferenceExpression) && (expr.getReferencedName() in JAVA_CLASS_KEYWORDS)
 
-    private fun KtReferenceExpression.isClass(ctx: KotlinFileContext) =
-        ctx.bindingContext[BindingContext.REFERENCE_TARGET, this] is ClassDescriptor
+    private fun KtReferenceExpression.isClass(): Boolean = withKaSession {
+        return this@isClass.mainReference.resolveToSymbol() is KaClassSymbol
+    }
 
 }

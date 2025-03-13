@@ -25,7 +25,7 @@ import okhttp3.TlsVersion
 import org.apache.commons.lang.StringUtils
 import otherpackage.get
 // not used, defaults to String.plus
-import otherpackage.plus // Noncompliant {{Remove this unused import.}}
+import otherpackage.plus // FN
 import otherpackage.OtherClass.minus
 import otherpackage.OtherClass.plus // Non|compliant FN (it is used below in OtherClass + OtherClass but doesn't need to be imported)
 import otherpackage.OtherClass.get
@@ -49,8 +49,8 @@ import okhttp3.TlsVersion.TLS_1_1
 import okhttp3.TlsVersion.TLS_1_2 // Noncompliant {{Remove this unused import.}}
 import otherpackage.OtherClass
 import otherpackage.OtherClass2.plus
-import otherpackage.OtherClass2.get // Noncompliant {{Remove this unused import.}}
-import otherpackage.OtherClass2.set // Noncompliant {{Remove this unused import.}}
+import otherpackage.OtherClass2.get // FN
+import otherpackage.OtherClass2.set // FN
 import otherpackage.someInfixFun
 import otherpackage.stringExtFun1
 import otherpackage.stringExtFun2
@@ -66,7 +66,7 @@ import kotlin.* // Noncompliant {{Remove this redundant import.}}
 
 // Operators
 import operators.getValue // Compliant is a delegation operator
-import operators.setValue // Noncompliant
+import operators.setValue // FN
 import operators.contains
 import operators.dec
 import operators.div
@@ -82,11 +82,11 @@ import operators.unaryPlus
 import operators.get
 import operators.invoke
 import operators.set
-import operators.plusAssign // Noncompliant
-import operators.minusAssign // Noncompliant
-import operators.timesAssign // Noncompliant
-import operators.divAssign // Noncompliant
-import operators.remAssign // Noncompliant
+import operators.plusAssign // FN
+import operators.minusAssign // FN
+import operators.timesAssign // FN
+import operators.divAssign // FN
+import operators.remAssign // FN
 
 
 import operators.ResourceLoader

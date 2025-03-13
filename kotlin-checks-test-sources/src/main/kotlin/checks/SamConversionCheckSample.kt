@@ -73,6 +73,12 @@ class SamConversionCheckSample {
             // ...
         }
     }
+
+    val functionN = object : (Int) -> Unit { // Noncompliant
+        override fun invoke(p: Int) {
+            // ...
+        }
+    }
 }
 
 fun interface ProgressCallback {

@@ -18,13 +18,13 @@ package org.sonarsource.kotlin.api.frontend
 
 import org.assertj.core.api.Assertions.assertThat
 import com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.analysis.api.types.KaErrorType
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.api.visiting.kaSession
@@ -40,17 +40,6 @@ class KotlinCoreEnvironmentToolsTest {
     Disposer.dispose(disposable)
   }
 
-  @Test
-  fun testNonEmptyBindingContext() {
-    val kotlinCoreEnvironment = kotlinCoreEnvironment(
-      compilerConfiguration(emptyList(), LanguageVersion.KOTLIN_1_4, JvmTarget.JVM_1_8),
-      disposable
-    )
-
-    assertThat(analyzeAndGetBindingContext(kotlinCoreEnvironment, emptyList()))
-      .isNotEqualTo(BindingContext.EMPTY)
-  }
-
   // https://kotlinlang.org/docs/whatsnew20.html#smart-cast-improvements
   private val content = """
     fun example(any: Any) {
@@ -61,33 +50,6 @@ class KotlinCoreEnvironmentToolsTest {
     }
     """.trimIndent()
 
-  /**
-   * @see k2
-   */
-  @Test
-  fun k1() {
-    val environment = Environment(
-      disposable,
-      listOf(),
-      LanguageVersion.LATEST_STABLE,
-      JvmTarget.JVM_1_8,
-      useK2 = false,
-    )
-    val ktFile = environment.ktPsiFactory.createFile("/fake.kt", content)
-    analyzeAndGetBindingContext(environment.env, listOf(ktFile))
-    kaSession(ktFile) {
-      withKaSession {
-        assertThat(ktFile.findDescendantOfType<KtIsExpression>()!!.expressionType.toString())
-          .isEqualTo("kotlin/Boolean")
-        assertThat(ktFile.findDescendantOfType<KtDotQualifiedExpression>()!!.expressionType.toString())
-          .isEqualTo("kotlin/Unit")
-      }
-    }
-  }
-
-  /**
-   * @see k1
-   */
   @Test
   fun k2() {
     val analysisSession = createK2AnalysisSession(
@@ -97,7 +59,7 @@ class KotlinCoreEnvironmentToolsTest {
         LanguageVersion.LATEST_STABLE,
         JvmTarget.JVM_1_8,
       ),
-      listOf(KotlinVirtualFile(KotlinFileSystem(), File("/fake.kt"), content)),
+      listOf(KotlinVirtualFile(KotlinFileSystem(), File("/fake.kt"), contentProvider = { content })),
     )
     val ktFile: KtFile = analysisSession.modulesWithFiles.entries.first().value[0] as KtFile
     kaSession(ktFile) {
@@ -106,6 +68,28 @@ class KotlinCoreEnvironmentToolsTest {
           .isEqualTo("kotlin/Boolean")
         assertThat(ktFile.findDescendantOfType<KtDotQualifiedExpression>()!!.expressionType.toString())
           .isEqualTo("kotlin/Int")
+      }
+    }
+  }
+
+  @Test
+  fun k2_language_version_1_9() {
+    val analysisSession = createK2AnalysisSession(
+      disposable,
+      compilerConfiguration(
+        listOf(),
+        LanguageVersion.KOTLIN_1_9,
+        JvmTarget.JVM_1_8,
+      ),
+      listOf(KotlinVirtualFile(KotlinFileSystem(), File("/fake.kt"), contentProvider = { content })),
+    )
+    val ktFile: KtFile = analysisSession.modulesWithFiles.entries.first().value[0] as KtFile
+    kaSession(ktFile) {
+      withKaSession {
+        assertThat(ktFile.findDescendantOfType<KtIsExpression>()!!.expressionType.toString())
+          .isEqualTo("kotlin/Boolean")
+        assertThat(ktFile.findDescendantOfType<KtDotQualifiedExpression>()!!.expressionType is KaErrorType)
+          .isTrue()
       }
     }
   }

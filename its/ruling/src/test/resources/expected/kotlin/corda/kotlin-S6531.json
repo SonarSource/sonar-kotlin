@@ -1,73 +1,15 @@
 {
 "kotlin-corda-project:sources/kotlin/corda/client/jfx/src/integration-test/kotlin/net/corda/client/jfx/NodeMonitorModelTest.kt": [
+165,
 175
 ],
-"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/flows/CollectSignaturesFlow.kt": [
-232
-],
-"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/ContractUpgradeTransactions.kt": [
-243
-],
-"kotlin-corda-project:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/flows/ReceiveAllFlowTests.kt": [
-40
-],
-"kotlin-corda-project:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/contracts/asset/cash/selection/CashSelectionH2Impl.kt": [
-60,
-62
-],
-"kotlin-corda-project:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/flows/CashConfigDataFlow.kt": [
-37
-],
-"kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/config/ConfigUtilities.kt": [
-210,
-210,
-210,
-213,
-213,
-213,
-213,
-213,
-213,
-216,
-219,
-222
-],
-"kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/persistence/CordaPersistence.kt": [
-42
-],
-"kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/protonwrapper/netty/AMQPChannelHandler.kt": [
-48
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/services/distributed/DistributedServiceTests.kt": [
-108,
-148
+"kotlin-corda-project:sources/kotlin/corda/docs/source/example-code/src/main/kotlin/net/corda/docs/FxTransactionBuildTutorial.kt": [
+136
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/CordaRPCOpsImpl.kt": [
 293,
 295,
 299
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/security/RPCSecurityManagerImpl.kt": [
-238,
-241
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/serialization/kryo/Kryo.kt": [
-320,
-454
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/messaging/RPCServer.kt": [
-274
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/FlowSessionImpl.kt": [
-31
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/FlowStateMachineImpl.kt": [
-48
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SingleThreadedStateMachineManager.kt": [
-556,
-750,
-751
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/vault/HibernateQueryCriteriaParser.kt": [
 217,
@@ -79,19 +21,7 @@
 391,
 398
 ],
-"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/modes/draining/ScheduledFlowsDrainingModeTest.kt": [
-80
-],
-"kotlin-corda-project:sources/kotlin/corda/samples/network-visualiser/src/main/kotlin/net/corda/netmap/simulation/Simulation.kt": [
-87
-],
-"kotlin-corda-project:sources/kotlin/corda/samples/trader-demo/src/integration-test/kotlin/net/corda/traderdemo/TraderDemoTest.kt": [
-40
-],
-"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/TransformTypes.kt": [
-127
-],
-"kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/carpenter/ClassCarpenterTest.kt": [
-88
+"kotlin-corda-project:sources/kotlin/corda/tools/shell/src/main/kotlin/net/corda/tools/shell/InteractiveShell.kt": [
+295
 ]
 }

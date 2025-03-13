@@ -13,14 +13,14 @@ class UselessNullCheckCheckSampleNoSemantics {
     fun foo() {
         val s: String = ""
 
-        if (s == null) {} // Compliant FN (missing semantics)
+        if (s == null) {} // Noncompliant
 
 
-        if (s != null) {} // Compliant FN (missing semantics)
-        s?.doSomething() // Compliant FN (missing semantics)
+        if (s != null) {} // Noncompliant
+        s?.doSomething() // Noncompliant
 
         fun foo(s: Any): String {
-            s ?: return "" // Compliant FN (missing semantics)
+            s ?: return "" // Noncompliant
 
             return s.toString()
         }
@@ -28,14 +28,14 @@ class UselessNullCheckCheckSampleNoSemantics {
 
 
         checkNotNull(s) // Compliant FN (missing semantics)
-        s!!.doSomething() // Compliant FN (missing semantics)
+        s!!.doSomething() // Noncompliant
 
-        null!! // FN
-        null?.doSomething() // FN
-        null ?: doSomething() // FN
-        null != "" // FN
-        0 != null // FN
-        doSomething() ?: null // Compliant FN (missing semantics)
+        null!! // Noncompliant
+        null?.doSomething() // Noncompliant
+        null ?: doSomething() // Noncompliant
+        null != "" // Noncompliant
+        0 != null // Noncompliant
+        doSomething() ?: null // Noncompliant
     }
 
     val aField: String? = null
@@ -50,25 +50,25 @@ class UselessNullCheckCheckSampleNoSemantics {
 
     fun bar() {
         val a: String? = null
-        a!! // Compliant FN (missing semantics)
+        a!! // Noncompliant
 
         var b: String? = null
         b!! // Compliant FN. We don't currently resolve the value of vars.
 
         var c: String? = null
         c = "foo"
-        c!! // Compliant FN. We don't currently resolve the value of vars.
+        c!! // Noncompliant
 
         var d: String = ""
-        d!! // Compliant FN (missing semantics)
+        d!! // Noncompliant
 
         var e = getSomething()
-        e!! // Compliant FN (missing semantics)
+        e!! // Noncompliant
 
         val f = getSomethingNullable()
         f!! // Compliant
 
-        aField!! // Compliant FN (missing semantics)
+        aField!! // Noncompliant
 
         // The following is a compliant FN. bField is declared as:
         // val bField:String? = ""
@@ -76,12 +76,12 @@ class UselessNullCheckCheckSampleNoSemantics {
         // However, this causes FPs in some situations, see SONARKT-373.
         bField!! // Compliant FN
 
-        cField!! // Compliant FN (missing semantics)
+        cField!! // Noncompliant
         dField!!
-        eField!! // Compliant FN (missing semantics)
+        eField!! // Noncompliant
         fField!!
         gField!!
-        hField!! // Compliant FN (missing semantics)
+        hField!! // Noncompliant
     }
 
     fun `ensure we don't trigger on some unexpected code`(foo: Any) {

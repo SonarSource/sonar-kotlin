@@ -16,25 +16,24 @@
  */
 package org.sonarsource.kotlin.checks
 
-import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
 import org.jetbrains.kotlin.psi.KtFile
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S6530")
 class ReasonableTypeCastsCheck : AbstractCheck() {
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
-        context.diagnostics
+        context.kaDiagnostics
             .mapNotNull { diagnostic ->
-                when (diagnostic.factory) {
-                    Errors.UNCHECKED_CAST -> "Remove this unchecked cast."
-                    Errors.CAST_NEVER_SUCCEEDS -> "Remove this cast that can never succeed."
+                when (diagnostic.factoryName) {
+                    FirErrors.UNCHECKED_CAST.name -> "Remove this unchecked cast."
+                    FirErrors.CAST_NEVER_SUCCEEDS.name -> "Remove this cast that can never succeed."
                     else -> null
                 }?.let { diagnostic to it }
             }.forEach { (diagnostic, msg) ->
-                context.reportIssue(diagnostic.psiElement, msg)
+                context.reportIssue(diagnostic.psi, msg)
             }
     }
 }

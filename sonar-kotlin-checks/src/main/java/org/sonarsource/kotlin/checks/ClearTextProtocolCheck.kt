@@ -16,27 +16,28 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.KaIdeApi
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil.deparenthesize
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.BindingContext.REFERENCE_TARGET
-import org.jetbrains.kotlin.resolve.calls.util.getFirstArgumentExpression
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.ConstructorMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcherImpl
+import org.sonarsource.kotlin.api.checks.getFirstArgumentExpression
 import org.sonarsource.kotlin.api.checks.predictRuntimeIntValue
-import org.sonarsource.kotlin.api.checks.setterMatches
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.KtTreeVisitor
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val CLEARTEXT_FQN = "okhttp3.ConnectionSpec.Companion.CLEARTEXT"
 
@@ -60,7 +61,6 @@ private val ANDROID_SET_MIXED_CONTENT_MODE = FunMatcher(definingSupertype = "and
 
 private fun msg(insecure: String, replaceWith: String) = "Using $insecure is insecure. Use $replaceWith instead."
 
-@org.sonarsource.kotlin.api.frontend.K1only
 @Rule(key = "S5332")
 class ClearTextProtocolCheck : CallAbstractCheck() {
 
@@ -68,10 +68,10 @@ class ClearTextProtocolCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
-        resolvedCall: ResolvedCall<*>,
+        resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext,
-    ) {
+    ) = withKaSession {
         UNSAFE_CALLS_GENERAL[matchedFun]?.let { msg ->
             kotlinFileContext.reportIssue(callExpression, msg)
             return
@@ -81,36 +81,37 @@ class ClearTextProtocolCheck : CallAbstractCheck() {
             analyzeOkHttpCall(kotlinFileContext, callExpression)
         } else if (matchedFun == ANDROID_SET_MIXED_CONTENT_MODE) {
             checkAndroidMixedContentArgument(kotlinFileContext,
-                deparenthesize(callExpression.getResolvedCall(kotlinFileContext.bindingContext)?.getFirstArgumentExpression()))
+                deparenthesize(callExpression.resolveToCall()?.successfulFunctionCallOrNull()
+                    ?.getFirstArgumentExpression())
+            )
         }
     }
 
-    override fun visitBinaryExpression(expression: KtBinaryExpression, ctx: KotlinFileContext) {
-        val left = deparenthesize(expression.left) ?: return
+    override fun visitBinaryExpression(expression: KtBinaryExpression, ctx: KotlinFileContext) = withKaSession {
         if (expression.operationToken == KtTokens.EQ &&
-            left.setterMatches(ctx.bindingContext, "mixedContentMode", ANDROID_SET_MIXED_CONTENT_MODE)
+            ANDROID_SET_MIXED_CONTENT_MODE.matches(expression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>())
         ) {
             checkAndroidMixedContentArgument(ctx, deparenthesize(expression.right))
         }
     }
 
     private fun checkAndroidMixedContentArgument(ctx: KotlinFileContext, argument: KtExpression?) {
-        if (argument != null && argument.predictRuntimeIntValue(ctx.bindingContext) == MIXED_CONTENT_ALWAYS_ALLOW) {
+        if (argument != null && argument.predictRuntimeIntValue() == MIXED_CONTENT_ALWAYS_ALLOW) {
             ctx.reportIssue(argument, MESSAGE_ANDROID_MIXED_CONTENT)
         }
     }
 
     private fun analyzeOkHttpCall(kotlinFileContext: KotlinFileContext, callExpr: KtCallExpression) =
-        OkHttpArgumentFinder(kotlinFileContext.bindingContext) { arg ->
+        OkHttpArgumentFinder { arg ->
             kotlinFileContext.reportIssue(arg, msg("HTTP", "HTTPS"))
         }.visitTree(callExpr)
 }
 
 private class OkHttpArgumentFinder(
-    private val bindingContext: BindingContext,
     private val issueReporter: (KtSimpleNameExpression) -> Unit,
 ) : KtTreeVisitor() {
-    override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
-        if (bindingContext[REFERENCE_TARGET, expression]?.fqNameOrNull()?.asString() == CLEARTEXT_FQN) issueReporter(expression)
+    @OptIn(KaIdeApi::class)
+    override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) = withKaSession {
+        if (expression.mainReference.resolveToSymbol()?.importableFqName?.asString() == CLEARTEXT_FQN) issueReporter(expression)
     }
 }
