@@ -46,6 +46,7 @@ kotlin.internal.jdk8.JDK8PlatformImplementations,
 
 com.github.benmanes.caffeine.**,
 
+org.sonarsource.analyzer.commons.RuleMetadataLoader,
 org.sonarsource.kotlin.plugin.**
 
 -keepclassmembers class

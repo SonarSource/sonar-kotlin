@@ -698,7 +698,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
 
     private fun sensor(checkFactory: CheckFactory): KotlinSensor {
-        return KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), KotlinProjectSensor())
+        return KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), KotlinProjectSensor(), emptyArray())
     }
 }
 

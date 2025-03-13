@@ -16,26 +16,14 @@
  */
 package org.sonarsource.kotlin.plugin
 
-import io.mockk.spyk
-import io.mockk.verify
-import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
-import org.sonar.check.Rule
-import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.testapi.AbstractSensorTest
-import kotlin.time.ExperimentalTime
 
 class CheckRegistrationTest : AbstractSensorTest() {
 
-    @Rule(key = "S99999")
-    class DummyCheck : AbstractCheck() {
-        override fun visitNamedFunction(function: KtNamedFunction, data: KotlinFileContext?) {
-        }
-    }
-
-    @ExperimentalTime
     @Test
     fun ensure_check_registration_works() {
         val inputFile = createInputFile("file1.kt", """
@@ -44,12 +32,15 @@ class CheckRegistrationTest : AbstractSensorTest() {
             }
              """.trimIndent())
         context.fileSystem().add(inputFile)
-        val dummyCheck = spyk(DummyCheck())
-        KotlinSensor(checkFactory("S99999"), fileLinesContextFactory, DefaultNoSonarFilter(), language(), KotlinProjectSensor()).also { sensor ->
-            sensor.checks.addAnnotatedChecks(dummyCheck)
-            sensor.execute(context)
-        }
+        KotlinSensor(
+            checkFactory(listOf(RuleKey.of("dummy", "DummyRule"))),
+            fileLinesContextFactory,
+            DefaultNoSonarFilter(),
+            language(),
+            KotlinProjectSensor(),
+            arrayOf(DummyKotlinPluginExtensionsProvider()),
+        ).execute(context)
 
-        verify(exactly = 1) { dummyCheck.visitNamedFunction(any(), any()) }
+        assertEquals(1, context.allIssues().size)
     }
 }

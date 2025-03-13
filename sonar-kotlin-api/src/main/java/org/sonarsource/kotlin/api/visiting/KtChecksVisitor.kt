@@ -18,16 +18,15 @@ package org.sonarsource.kotlin.api.visiting
 
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtElement
-import org.sonar.api.batch.rule.Checks
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.common.measureDuration
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
-class KtChecksVisitor(val checks: Checks<out AbstractCheck>) : KotlinFileVisitor() {
+class KtChecksVisitor(val checks: Collection<AbstractCheck>) : KotlinFileVisitor() {
 
     override fun visit(kotlinFileContext: KotlinFileContext) {
         flattenNodes(listOf(kotlinFileContext.ktFile)).let { flatNodes ->
-            checks.all().forEach { check ->
+            checks.forEach { check ->
                 measureDuration(check.javaClass.simpleName) {
                     flatNodes.forEach { node ->
                         // Note: we only visit KtElements. If we need to visit PsiElement, add a

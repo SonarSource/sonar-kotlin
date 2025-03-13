@@ -17,11 +17,10 @@
 package org.sonarsource.kotlin.api.frontend
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
 import org.jetbrains.kotlin.analysis.api.diagnostics.KaDiagnosticWithPsi
-import org.jetbrains.kotlin.diagnostics.Diagnostic
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
@@ -30,6 +29,7 @@ import org.sonarsource.kotlin.api.visiting.withKaSession
 data class KotlinFileContext(
     val inputFileContext: InputFileContext,
     val ktFile: KtFile,
+    val kaSession: KaSession,
     val regexCache: RegexCache,
 ) {
 

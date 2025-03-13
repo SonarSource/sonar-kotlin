@@ -18,7 +18,6 @@ package org.sonarsource.kotlin.api.sensors
 
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.CheckFactory
-import org.sonar.api.batch.rule.Checks
 import org.sonar.api.batch.sensor.Sensor
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonarsource.analyzer.commons.ProgressReport
@@ -34,14 +33,15 @@ private const val PERFORMANCE_MEASURE_ACTIVATION_PROPERTY = "sonar.kotlin.perfor
 private const val PERFORMANCE_MEASURE_DESTINATION_FILE = "sonar.kotlin.performance.measure.json"
 abstract class AbstractKotlinSensor(
     checkFactory: CheckFactory,
+    externalChecks: Collection<AbstractCheck>,
     val language: KotlinLanguage,
     checks: List<Class<out KotlinCheck>>
 ) : Sensor {
 
-    val checks: Checks<AbstractCheck> = checkFactory.create<AbstractCheck>(KOTLIN_REPOSITORY_KEY).apply {
+    val checks: Collection<AbstractCheck> = checkFactory.create<AbstractCheck>(KOTLIN_REPOSITORY_KEY).apply {
         addAnnotatedChecks(checks)
         all().forEach { it.initialize(ruleKey(it)!!) }
-    }
+    }.all() + externalChecks
 
     abstract fun getExecuteContext(
         sensorContext: SensorContext,

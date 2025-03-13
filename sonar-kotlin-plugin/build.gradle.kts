@@ -116,6 +116,7 @@ task<proguard.gradle.ProGuardTask>("dist") {
 
 tasks.artifactoryPublish { skip = false }
 publishing {
+    // gradle :sonar-kotlin-plugin:publishToMavenLocal
     publications.withType<MavenPublication> {
         artifact(tasks.named("dist")) {
             classifier = null

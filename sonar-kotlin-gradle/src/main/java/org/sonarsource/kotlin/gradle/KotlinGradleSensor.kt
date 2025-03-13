@@ -40,7 +40,7 @@ class KotlinGradleSensor(
     checkFactory: CheckFactory,
     language: KotlinLanguage,
 ) : AbstractKotlinSensor(
-    checkFactory, language, KOTLIN_GRADLE_CHECKS
+    checkFactory, emptyList(), language, KOTLIN_GRADLE_CHECKS
 ) {
 
     override fun describe(descriptor: SensorDescriptor) {
