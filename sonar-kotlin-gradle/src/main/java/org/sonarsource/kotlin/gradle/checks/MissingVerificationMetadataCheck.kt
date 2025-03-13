@@ -22,7 +22,7 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private const val disableVerificationMetadata = "disableDependencyVerification"
-private const val message = """Remove this call to "disableDependencyVerification()" so that dependencies are verified."""
+private const val message = """This call disables dependencies verification. Make sure it is safe here."""
 
 // The part of the rule looking for missing verification-metadata.xml is implemented in the KotlinGradleSensor
 @Rule(key = "S6474")

@@ -100,7 +100,7 @@ class KotlinGradleSensor(
             raiseProjectLevelIssue(
                 sensorContext,
                 missingVerificationMetadataRuleKey,
-                """Create a "verification-metadata.xml" file to verify these dependencies against a known checksum or signature.""",
+                """Dependencies are not verified because the "verification-metadata.xml" file is missing. Make sure it is safe here.""",
             )
         }
     }
