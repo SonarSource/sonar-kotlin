@@ -222,7 +222,7 @@ class CopyPasteDetectorTest {
     ).map { (title, input, expected) ->
         DynamicTest.dynamicTest("with $title") {
             val sensorContext: SensorContextTester = SensorContextTester.create(tmpFolder!!.root)
-            val inputFile = TestInputFileBuilder("moduleKey", "test.kt").setContents(input).build()
+            val inputFile = TestInputFileBuilder("moduleKey", "test.kt").setModuleBaseDir(Path.of(".")).setContents(input).build()
             val root = kotlinTreeOf(input, Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE), inputFile)
             val ctx = InputFileContextImpl(sensorContext, inputFile, false)
             CopyPasteDetector().scan(ctx, root)
