@@ -21,7 +21,9 @@ import org.assertj.core.api.Assertions
 import org.assertj.core.api.ObjectAssert
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.api.io.TempDir
 import org.slf4j.event.Level
@@ -101,24 +103,23 @@ class CopyPasteDetectorTest {
             .hasEndUnit(8)
 
         assertThat(cpdTokenLines[2])
-            .hasValue("""println("LITERAL")""")
+            .hasValue("""println(LITERAL)""")
             .hasStartLine(10)
             .hasStartUnit(9)
-            .hasEndUnit(14)
+            .hasEndUnit(12)
 
         assertThat(cpdTokenLines[3])
             .hasValue("}")
             .hasStartLine(11)
-            .hasStartUnit(15)
-            .hasEndUnit(15)
+            .hasStartUnit(13)
+            .hasEndUnit(13)
 
         assertThat(cpdTokenLines[4])
             .hasValue("}")
             .hasStartLine(12)
-            .hasStartUnit(16)
-            .hasEndUnit(16)
+            .hasStartUnit(14)
+            .hasEndUnit(14)
     }
-
 
     @Test
     fun `cpd tokens are saved for the next analysis when the cache is enabled`() {
@@ -150,7 +151,7 @@ class CopyPasteDetectorTest {
 
         Assertions.assertThat(logs)
             .hasSize(1)
-            .containsExactly("Caching 16 CPD tokens for next analysis of input file moduleKey:dummy.kt.")
+            .containsExactly("Caching 14 CPD tokens for next analysis of input file moduleKey:dummy.kt.")
     }
 
     @Test
@@ -183,6 +184,53 @@ class CopyPasteDetectorTest {
         Assertions.assertThat(logs)
             .hasSize(1)
             .containsExactly("No CPD tokens cached for next analysis of input file moduleKey:dummy.kt.")
+    }
+
+    private val d = "$"
+    private val tq = "\"\"\""
+
+    @TestFactory
+    fun `cpd tokens`() = listOf(
+        Triple("int literal", """ val x = 42 """, "valx=42"),
+        Triple("long literal", """ val x = 42L """, "valx=42L"),
+        Triple("float literal", """ val x = 42.0f """, "valx=42.0f"),
+        Triple("double literal", """ val x = 42.0 """, "valx=42.0"),
+        Triple("char literal", """ val x = 'a' """, "valx='a'"),
+        Triple("null literal", """ val x = null """, "valx=null"),
+        Triple("double-quote string literal", """ val x = "a" """, "valx=LITERAL"),
+        Triple("double-quote string literal concatenation", """ val x = "a" + "b" """, "valx=LITERAL+LITERAL"),
+        Triple("double-quote string template", """ val x = "a $d{1}" """, "valx=LITERAL"),
+        Triple("triple-quote string literal", """ val x = ${tq}a${tq} """, "valx=LITERAL"),
+        Triple("triple-quote string literal concatenation", """ val x = ${tq}a${tq} + ${tq}b${tq} """, "valx=LITERAL+LITERAL"),
+        Triple("triple-quote string template", """ val x = ${tq}a $d{1}${tq} """, "valx=LITERAL"),
+        Triple("mixed-quote string literal concatenation", """ val x = "a" + ${tq}b${tq} """, "valx=LITERAL+LITERAL"),
+        Triple(
+            "triple-quote string template with interpolated vars",
+            """
+            val noInterpolations = "a literal"
+            val doubleQuoteTwoInterpolations = "$d{x} $d{x}"
+            val tripleQuoteTwoInterpolations = $tq$d{noInterpolations} $d{doubleQuoteTwoInterpolations}${tq}
+            var nestedInterpolations = $tq$d{ "$d{1 + 1}" }${tq}
+            """.trimIndent(),
+            """
+            valnoInterpolations=LITERAL
+            valdoubleQuoteTwoInterpolations=LITERAL
+            valtripleQuoteTwoInterpolations=LITERAL
+            varnestedInterpolations=LITERAL
+            """.trimIndent()
+            )
+    ).map { (title, input, expected) ->
+        DynamicTest.dynamicTest("with $title") {
+            val sensorContext: SensorContextTester = SensorContextTester.create(tmpFolder!!.root)
+            val inputFile = TestInputFileBuilder("moduleKey", "test.kt").setModuleBaseDir(Path.of(".")).setContents(input).build()
+            val root = kotlinTreeOf(input, Environment(disposable, emptyList(), LanguageVersion.LATEST_STABLE), inputFile)
+            val ctx = InputFileContextImpl(sensorContext, inputFile, false)
+            CopyPasteDetector().scan(ctx, root)
+
+            val cpdTokenLines = sensorContext.cpdTokens(inputFile.key())!!
+            val tokensStringified = cpdTokenLines.joinToString(separator = "\n", transform = { it.value })
+            Assertions.assertThat(tokensStringified).isEqualTo(expected)
+        }
     }
 }
 
