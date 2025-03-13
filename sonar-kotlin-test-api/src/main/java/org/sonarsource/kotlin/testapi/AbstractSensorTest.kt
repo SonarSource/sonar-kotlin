@@ -68,11 +68,15 @@ abstract class AbstractSensorTest {
     }
 
     protected fun checkFactory(vararg ruleKeys: String): CheckFactory {
+        return checkFactory(ruleKeys.map { RuleKey.of(KOTLIN_REPOSITORY_KEY, it) })
+    }
+
+    protected fun checkFactory(ruleKeys: List<RuleKey>): CheckFactory {
         val builder = ActiveRulesBuilder()
         for (ruleKey in ruleKeys) {
             val newRule = NewActiveRule.Builder()
-                .setRuleKey(RuleKey.of(KOTLIN_REPOSITORY_KEY, ruleKey))
-                .setName(ruleKey)
+                .setRuleKey(ruleKey)
+                .setName(ruleKey.rule())
                 .build()
             builder.addRule(newRule)
         }

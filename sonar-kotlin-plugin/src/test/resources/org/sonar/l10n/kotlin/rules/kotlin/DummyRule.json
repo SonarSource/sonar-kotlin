@@ -1,0 +1,7 @@
+{
+  "title": "Dummy Rule",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "defaultSeverity": "Minor",
+  "sqKey": "S0",
+}

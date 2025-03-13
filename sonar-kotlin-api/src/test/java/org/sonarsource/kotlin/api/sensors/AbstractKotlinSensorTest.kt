@@ -181,6 +181,7 @@ private val LOG = LoggerFactory.getLogger(DummyKotlinSensor::class.java)
 class DummyKotlinSensor(checkFactory: CheckFactory, language: KotlinLanguage, checks: List<Class<out KotlinCheck>>) :
     AbstractKotlinSensor(
         checkFactory,
+        emptyList(),
         language,
         checks,
     ) {

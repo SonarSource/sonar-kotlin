@@ -21,11 +21,14 @@ import org.sonar.api.SonarProduct
 import org.sonar.api.batch.fs.FileSystem
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.CheckFactory
+import org.sonar.api.batch.rule.Checks
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContextFactory
+import com.sonarsource.plugins.kotlin.api.KotlinPluginExtensionsProvider
 import org.sonarsource.analyzer.commons.ProgressReport
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.hasCacheEnabled
 import org.sonarsource.kotlin.api.common.KotlinLanguage
 import org.sonarsource.kotlin.api.common.SONAR_JAVA_BINARIES
@@ -55,9 +58,11 @@ class KotlinSensor(
     private val noSonarFilter: NoSonarFilter,
     language: KotlinLanguage,
     private val kotlinProjectSensor: KotlinProjectSensor,
+    extensionsProviders: Array<KotlinPluginExtensionsProvider>,
 ): AbstractKotlinSensor(
-    checkFactory, language, KOTLIN_CHECKS
+    checkFactory, instantiateRules(checkFactory, extensionsProviders), language, KOTLIN_CHECKS
 ) {
+
     override fun describe(descriptor: SensorDescriptor) {
         descriptor
             .onlyOnLanguage(language.key)
@@ -153,4 +158,18 @@ class KotlinSensor(
     private fun fileHasChanged(inputFile: InputFile, contentHashCache: ContentHashCache?): Boolean {
         return contentHashCache?.hasDifferentContentCached(inputFile) ?: (inputFile.status() != InputFile.Status.SAME)
     }
+}
+
+private fun instantiateRules(
+    checkFactory: CheckFactory,
+    extensionsProviders: Array<KotlinPluginExtensionsProvider>,
+): List<AbstractCheck> {
+    val extensions = KotlinPluginExtensions(extensionsProviders)
+    val map = mutableMapOf<String, Checks<AbstractCheck>>()
+    extensions.repositories().forEach{ (repositoryKey, _) -> map[repositoryKey] = checkFactory.create(repositoryKey) }
+    extensions.rulesByRepositoryKey().forEach { (repositoryKey, rules) -> map[repositoryKey]?.addAnnotatedChecks(rules) }
+    map.values.forEach { checks ->
+        checks.all().forEach { instance -> instance.initialize(checks.ruleKey(instance)!!) }
+    }
+    return map.values.flatMap { it.all() }
 }
