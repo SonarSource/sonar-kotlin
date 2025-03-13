@@ -34,12 +34,12 @@ import java.util.Optional
 internal class KotlinPluginTest {
     @Test
     fun testSonarQube() {
-        testSonarQube(18)
+        testSonarQube(19)
     }
 
     @Test
     fun testSonarLint() {
-        testSonarLint(5)
+        testSonarLint(6)
     }
 
 

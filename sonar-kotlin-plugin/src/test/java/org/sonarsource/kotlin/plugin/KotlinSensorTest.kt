@@ -562,18 +562,6 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertAnalysisIsNotIncremental(files)
     }
 
-    @Test
-    fun `execute reports telemetry`() {
-        val sensor = sensor(checkFactory())
-        var telemetrySet = false
-        val context = spyk(context) {
-            every { addTelemetryProperty(any(), any()) } answers { telemetrySet = true }
-        }
-        assertThat(telemetrySet).isFalse()
-        sensor.execute(context)
-        assertThat(telemetrySet).isTrue()
-    }
-
     private fun assertAnalysisIsIncremental(files: Map<InputFile.Status, InputFile>) {
         val addedFile = files[InputFile.Status.ADDED]
         val changedFile = files[InputFile.Status.CHANGED]
@@ -710,7 +698,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
 
     private fun sensor(checkFactory: CheckFactory): KotlinSensor {
-        return KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language())
+        return KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), KotlinProjectSensor())
     }
 }
 

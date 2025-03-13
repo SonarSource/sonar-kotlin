@@ -53,6 +53,7 @@ class KotlinPlugin : Plugin {
 
         context.addExtensions(
             KotlinLanguage::class.java,
+            KotlinProjectSensor::class.java,
             KotlinSensor::class.java,
             KotlinRulesDefinition::class.java,
             KotlinProfileDefinition::class.java,
