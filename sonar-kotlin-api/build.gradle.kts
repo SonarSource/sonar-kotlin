@@ -55,3 +55,9 @@ task<JavaExec>("printAst") {
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("org.sonarsource.kotlin.ast.AstPrinterKt")
 }
+
+task<JavaExec>("patchKotlinCompiler") {
+    outputs.dir(layout.buildDirectory.dir("patch"))
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("org.sonarsource.kotlin.tools.PatchKotlinCompilerKt")
+}
