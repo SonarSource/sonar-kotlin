@@ -4,7 +4,7 @@ plugins {
 
 configurations {
     named("jetbrainsRuntimeLocalInstance") {
-        resolutionStrategy.disableDependencyVerification() // Noncompliant {{Remove this call to "disableDependencyVerification()" so that dependencies are verified.}}
+        resolutionStrategy.disableDependencyVerification() // Noncompliant {{This call disables dependencies verification. Make sure it is safe here.}}
         //                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     named("jetbrainsRuntimeDependency") {

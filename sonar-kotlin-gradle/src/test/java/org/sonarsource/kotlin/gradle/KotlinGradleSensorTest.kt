@@ -164,7 +164,7 @@ internal class KotlinGraldeSensorTest : AbstractSensorTest() {
         assertThat(issues).hasSize(1)
         val issue = issues.iterator().next()
         assertThat(issue.primaryLocation().inputComponent().key()).isEqualTo("projectKey")
-        val expectedMessage = """Create a "verification-metadata.xml" file to verify these dependencies against a known checksum or signature."""
+        val expectedMessage = """Dependencies are not verified because the "verification-metadata.xml" file is missing. Make sure it is safe here."""
         assertThat(issue.primaryLocation().message()).isEqualTo(expectedMessage)
     }
 
