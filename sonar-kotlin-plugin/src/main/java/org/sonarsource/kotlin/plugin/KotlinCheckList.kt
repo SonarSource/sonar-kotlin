@@ -20,6 +20,7 @@ import org.sonarsource.kotlin.checks.AbstractClassShouldBeInterfaceCheck
 import org.sonarsource.kotlin.checks.AllBranchesIdenticalCheck
 import org.sonarsource.kotlin.checks.AnchorPrecedenceCheck
 import org.sonarsource.kotlin.checks.AndroidBroadcastingCheck
+import org.sonarsource.kotlin.checks.AndroidWebViewJavascriptInterfaceCheck
 import org.sonarsource.kotlin.checks.ArrayHashCodeAndToStringCheck
 import org.sonarsource.kotlin.checks.AuthorisingNonAuthenticatedUsersCheck
 import org.sonarsource.kotlin.checks.BadClassNameCheck
@@ -154,6 +155,7 @@ val KOTLIN_CHECKS = listOf(
     AllBranchesIdenticalCheck::class.java,
     AnchorPrecedenceCheck::class.java,
     AndroidBroadcastingCheck::class.java,
+    AndroidWebViewJavascriptInterfaceCheck::class.java,
     ArrayHashCodeAndToStringCheck::class.java,
     AuthorisingNonAuthenticatedUsersCheck::class.java,
     BadClassNameCheck::class.java,
