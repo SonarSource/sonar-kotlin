@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import com.sonarsource.plugins.kotlin.api.KotlinPluginExtensionsProvider
 import org.sonar.api.Plugin
 import org.sonar.api.SonarProduct
 import org.sonar.api.config.PropertyDefinition
@@ -33,7 +34,7 @@ import org.sonarsource.kotlin.surefire.KotlinResourcesLocator
 import org.sonarsource.kotlin.surefire.KotlinSurefireParser
 import org.sonarsource.kotlin.surefire.KotlinSurefireSensor
 
-class KotlinPlugin : Plugin {
+class KotlinPlugin : Plugin, KotlinPluginExtensionsProvider {
 
     companion object {
         // Subcategories
@@ -107,5 +108,9 @@ class KotlinPlugin : Plugin {
                     .build()
             )
         }
+    }
+
+    override fun registerKotlinPluginExtensions(extensions: KotlinPluginExtensionsProvider.Extensions) {
+        // nothing to do
     }
 }
