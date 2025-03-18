@@ -1,0 +1,72 @@
+<p>Software projects often rely on external code libraries, known as dependencies. Package managers, such as Gradle, allow developers to reference
+dependencies for their projects. These dependencies simplify development, but also introduce risk as they download and include external code based on
+a project’s configuration. Integrity checking is the step of verifying that the downloaded or included dependency code is exactly what the developer
+expects. Without this verification, the application cannot guarantee that the dependency is legitimate.</p>
+<p>Failing to verify the integrity of dependencies before using them is a significant security problem. It exposes your application, and potentially
+your users, to several risks. The core issue is that you are running code from an untrusted source without checking it, effectively giving an attacker
+a direct pathway into your application.</p>
+<p>This is often a key component of what is called a "supply chain attack." The attacker isn’t directly attacking your application. Instead, they are
+attacking a component you use. This is an important consideration because the attack’s source is less obvious. You might diligently secure your own
+code, but overlook the risk introduced by external dependencies.</p>
+<h2>Ask Yourself Whether</h2>
+<ul>
+  <li> Your team or company has the security policy to enforce dependency verification. </li>
+</ul>
+<p>There is a risk if you answer yes to any of these questions.</p>
+<h2>Recommended Secure Coding Practices</h2>
+<p>Create a <code>verification-metadata.xml</code> in the <code>gradle</code> directory of your project. Use <code>./gradlew
+--write-verification-metadata pgp,sha256 --export-keys</code> to bootstrap the file content with PGP key ids and SH256 checksums. The
+<code>--export-keys</code> option creates a keyring file containing the identities of all the dependencies publishers trust.</p>
+<p>Verify the identity of all publisher keys exported in the local keyring. If you cannot verify publisher identities, fallback on checksum-based
+integrity verification.</p>
+<p>Enabling dependency verification in Gradle will add extra friction to your development workflow. Make sure your team is aware about this change and
+has a process to maintain the <code>verification-metadata.xml</code> as well as the trusted identities.</p>
+<h2>Sensitive Code Example</h2>
+<pre>
+dependencies {
+    implementation("com.example:a-dependency:1.0")
+}
+
+configurations {
+    all {
+        resolutionStrategy {
+            disableDependencyVerification() // Sensitive: dependency verification is disabled
+        }
+    }
+}
+</pre>
+<p>Absence of a <code>verification-metadata.xml</code> file in the <code>gradle</code> directory of your project will also result in the Gradle build
+not verifying the integrity of the dependencies.</p>
+<h2>Compliant Solution</h2>
+<pre>
+dependencies {
+    implementation("com.example:adependency:1.0")
+}
+</pre>
+<pre>
+&lt;verification-metadata
+    xmlns="https://schema.gradle.org/dependency-verification"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://schema.gradle.org/dependency-verification https://schema.gradle.org/dependency-verification/dependency-verification-1.3.xsd"&gt;
+   &lt;configuration&gt;
+      &lt;verify-metadata&gt;true&lt;/verify-metadata&gt;
+      &lt;verify-signatures&gt;true&lt;/verify-signatures&gt;
+      &lt;keyring-format&gt;armored&lt;/keyring-format&gt;
+      &lt;trusted-keys&gt;
+         &lt;trusted-key id="FD8190C7D72E7DCD42582B1042677B9FC1DC2161" group="com.example" name="adependency"/&gt;
+      &lt;/trusted-keys&gt;
+   &lt;/configuration&gt;
+&lt;/verification-metadata&gt;
+</pre>
+<h2>See</h2>
+<ul>
+  <li> OWASP - <a href="https://owasp.org/Top10/A08_2021-Software_and_Data_Integrity_Failures/">Top 10 2021 Category A8 - Software and Data Integrity
+  Failures</a> </li>
+  <li> OWASP - <a href="https://owasp.org/www-project-mobile-top-10/2023-risks/m2-inadequate-supply-chain-security">Mobile Top 10 2024 Category M2 -
+  Inadequate Supply Chain Security</a> </li>
+  <li> CWE - <a href="https://cwe.mitre.org/data/definitions/494">CWE-494 - Download of Code Without Integrity Check</a> </li>
+  <li> STIG Viewer - <a href="https://stigviewer.com/stig/application_security_and_development/2023-06-08/finding/V-222618">Application Security and
+  Development: V-222618</a> - Unsigned Category 1A mobile code must not be used in the application in accordance with DoD policy. </li>
+  <li> Gradle - <a href="https://docs.gradle.org/current/userguide/dependency_verification.html">Verifying dependencies</a> </li>
+</ul>
+
