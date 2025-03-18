@@ -103,9 +103,17 @@ class CollectionInappropriateCallsCheckSample {
         myMap.contains(element)
     }
 
-    fun noCrashWithoutTypeArguments() {
+    abstract class IntIterable : Iterable<Int>
+
+    fun noCrashWithoutTypeArguments(
+        intCollection: MutableCollection<Int>,
+        intIterable: IntIterable,
+    ) {
         val intArray = IntArray(4)
         intArray.lastIndexOf(10)
+
+        intCollection.removeAll(intIterable)
+        intIterable.contains(1)
     }
 
 }

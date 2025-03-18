@@ -16,21 +16,23 @@
  */
 package org.sonarsource.kotlin.plugin
 
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.slf4j.LoggerFactory
 import org.sonar.api.SonarProduct
 import org.sonar.api.batch.fs.FileSystem
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.CheckFactory
+import org.sonar.api.batch.rule.Checks
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContextFactory
+import com.sonarsource.plugins.kotlin.api.KotlinPluginExtensionsProvider
 import org.sonarsource.analyzer.commons.ProgressReport
+import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.hasCacheEnabled
 import org.sonarsource.kotlin.api.common.KotlinLanguage
-import org.sonarsource.kotlin.api.common.measureDuration
-import org.sonarsource.kotlin.api.frontend.analyzeAndGetBindingContext
+import org.sonarsource.kotlin.api.common.SONAR_JAVA_BINARIES
+import org.sonarsource.kotlin.api.common.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.api.logging.trace
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensor
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
@@ -43,7 +45,6 @@ import org.sonarsource.kotlin.metrics.IssueSuppressionVisitor
 import org.sonarsource.kotlin.metrics.MetricVisitor
 import org.sonarsource.kotlin.metrics.SyntaxHighlighter
 import org.sonarsource.kotlin.api.visiting.KtChecksVisitor
-import org.sonarsource.kotlin.metrics.TelemetryData
 
 import kotlin.jvm.optionals.getOrElse
 
@@ -55,25 +56,17 @@ class KotlinSensor(
     checkFactory: CheckFactory,
     private val fileLinesContextFactory: FileLinesContextFactory,
     private val noSonarFilter: NoSonarFilter,
-    language: KotlinLanguage
+    language: KotlinLanguage,
+    private val kotlinProjectSensor: KotlinProjectSensor,
+    extensionsProviders: Array<KotlinPluginExtensionsProvider>,
 ): AbstractKotlinSensor(
-    checkFactory, language, KOTLIN_CHECKS
+    checkFactory, instantiateRules(checkFactory, extensionsProviders), language, KOTLIN_CHECKS
 ) {
-    private val telemetryData = TelemetryData()
 
     override fun describe(descriptor: SensorDescriptor) {
         descriptor
             .onlyOnLanguage(language.key)
             .name(language.name + " Sensor")
-    }
-
-    override fun execute(sensorContext: SensorContext) {
-        super.execute(sensorContext)
-        // The MetricsVisitor instantiated by the visitors method keeps a shared reference
-        // to the TelemetryData of this sensor, and updates it accordingly. The report method
-        // of TelemetryData takes care of not sending metrics more than once, when execute is
-        // run multiple times.
-        telemetryData.report(sensorContext)
     }
 
     override fun getExecuteContext(
@@ -84,34 +77,22 @@ class KotlinSensor(
     ) = object : AbstractKotlinSensorExecuteContext(
         sensorContext, filesToAnalyze, progressReport, visitors(sensorContext), filenames, LOG
     ) {
-        override val bindingContext: BindingContext by lazy {
-            runCatching {
-                measureDuration("BindingContext") {
-                    analyzeAndGetBindingContext(
-                        environment.env,
-                        kotlinFiles.map { it.ktFile }.filter { !it.isScript() },
-                    )
-                }
-            }.getOrElse { e ->
-                LOG.error("Could not generate binding context. Proceeding without semantics.", e)
-                BindingContext.EMPTY
-            }
-        }
-
-        override val doResolve: Boolean = true
+        override val classpath: List<String> =
+            sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
+                    sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList()
     }
 
     private fun visitors(sensorContext: SensorContext): List<KotlinFileVisitor> =
         if (sensorContext.runtime().product == SonarProduct.SONARLINT) {
             listOf(
                 IssueSuppressionVisitor(),
-                MetricVisitor(fileLinesContextFactory, noSonarFilter, telemetryData),
+                MetricVisitor(fileLinesContextFactory, noSonarFilter, kotlinProjectSensor.telemetryData),
                 KtChecksVisitor(checks),
             )
         } else {
             listOf(
                 IssueSuppressionVisitor(),
-                MetricVisitor(fileLinesContextFactory, noSonarFilter, telemetryData),
+                MetricVisitor(fileLinesContextFactory, noSonarFilter, kotlinProjectSensor.telemetryData),
                 KtChecksVisitor(checks),
                 CopyPasteDetector(),
                 SyntaxHighlighter(),
@@ -177,4 +158,18 @@ class KotlinSensor(
     private fun fileHasChanged(inputFile: InputFile, contentHashCache: ContentHashCache?): Boolean {
         return contentHashCache?.hasDifferentContentCached(inputFile) ?: (inputFile.status() != InputFile.Status.SAME)
     }
+}
+
+private fun instantiateRules(
+    checkFactory: CheckFactory,
+    extensionsProviders: Array<KotlinPluginExtensionsProvider>,
+): List<AbstractCheck> {
+    val extensions = KotlinPluginExtensions(extensionsProviders)
+    val map = mutableMapOf<String, Checks<AbstractCheck>>()
+    extensions.repositories().forEach{ (repositoryKey, _) -> map[repositoryKey] = checkFactory.create(repositoryKey) }
+    extensions.rulesByRepositoryKey().forEach { (repositoryKey, rules) -> map[repositoryKey]?.addAnnotatedChecks(rules) }
+    map.values.forEach { checks ->
+        checks.all().forEach { instance -> instance.initialize(checks.ruleKey(instance)!!) }
+    }
+    return map.values.flatMap { it.all() }
 }

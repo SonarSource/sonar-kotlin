@@ -9,6 +9,12 @@ plugins {
     id("jacoco-report-aggregation")
 }
 
+buildscript {
+    dependencies {
+        classpath("com.guardsquare:proguard-gradle:7.6.1")
+    }
+}
+
 dependencies {
     compileOnly(libs.sonar.plugin.api)
     compileOnly(libs.slf4j.api)
@@ -87,34 +93,46 @@ tasks.jar {
     }
 }
 
-val shadowJar = tasks.shadowJar
 val sourcesJar = tasks.sourcesJar
 val javadocJar = tasks.javadocJar
 
-tasks.shadowJar {
-    minimize {}
-    exclude("META-INF/native/**/*jansi*")
-    exclude("org/jline/**")
-    exclude("net/jpountz/**")
-    dependencies {
-        // include only K1, and exclude K2 for the time being
-        exclude(dependency("org.jetbrains.kotlin:analysis-api-k2-for-ide"))
-        exclude(dependency("org.jetbrains.kotlin:low-level-api-fir-for-ide"))
-        exclude(dependency("org.jetbrains.kotlin:symbol-light-classes-for-ide"))
-    }
-    doLast {
-        enforceJarSizeAndCheckContent(shadowJar.get().archiveFile.get().asFile, 45_800_000L, 46_200_000L)
-    }
+val patchTask = project(":sonar-kotlin-api").tasks.named("patchKotlinCompiler")
+
+sourceSets.main {
+    resources.srcDir(patchTask)
 }
 
-artifacts {
-    archives(shadowJar)
+// Note that this task is time-consuming
+// and needed only for integration tests and publishing,
+// so it is not part of `gradle build`.
+task<proguard.gradle.ProGuardTask>("dist") {
+    group = "build"
+    description = "Assembles sonar-kotlin-plugin.jar for integration tests and publishing"
+    libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
+    injars(
+        mapOf(
+            "filter" to listOf(
+                "!com/intellij/util/concurrency/AppScheduledExecutorService\$MyThreadFactory.class", // patched version is included below
+                "!META-INF/native/**/*jansi*",
+                "!org/jline/**",
+                "!net/jpountz/**"
+            ).joinToString(",")
+        ),
+        tasks.shadowJar.get().archiveFile
+    )
+    injars(patchTask)
+    outjars("build/libs/sonar-kotlin-plugin.jar")
+    configuration("proguard.txt")
+    doLast {
+        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 49_400_000L, 49_800_000L)
+    }
 }
 
 tasks.artifactoryPublish { skip = false }
 publishing {
+    // gradle :sonar-kotlin-plugin:publishToMavenLocal
     publications.withType<MavenPublication> {
-        artifact(shadowJar) {
+        artifact(tasks.named("dist")) {
             classifier = null
         }
         artifact(sourcesJar)
@@ -128,6 +146,8 @@ fun enforceJarSizeAndCheckContent(file: File, minSize: Long, maxSize: Long) {
         throw GradleException("${file.path} size ($size) too small. Min is $minSize")
     } else if (size > maxSize) {
         throw GradleException("${file.path} size ($size) too large. Max is $maxSize")
+    } else {
+        logger.lifecycle("${file.path} size $size")
     }
     checkJarEntriesPathUniqueness(file)
 }

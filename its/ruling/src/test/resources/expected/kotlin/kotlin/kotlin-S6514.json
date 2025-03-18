@@ -16,9 +16,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/src/org/jetbrains/kotlin/cli/jvm/repl/GenericReplCompiler.kt": [
 57
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend.script/src/org/jetbrains/kotlin/script/AsyncDependencyResolverWrapper.kt": [
-36
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowBuilderAdapter.kt": [
 48,
 79,
@@ -90,31 +87,5 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/loopToCallChain/baseTransformations.kt": [
 140
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/collections/HashMap.kt": [
-30
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/collections/LinkedHashMap.kt": [
-202
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/Iterators.kt": [
-39
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/MapWithDefault.kt": [
-72,
-73,
-74,
-75,
-88,
-89,
-90,
-91,
-96,
-97,
-98,
-99
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/collections/ReversedViews.kt": [
-22
 ]
 }

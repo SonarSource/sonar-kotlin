@@ -14,5 +14,6 @@
  * You should have received a copy of the Sonar Source-Available License
  * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
-@javax.annotation.ParametersAreNonnullByDefault
-package org.sonarsource.kotlin.plugin.linking;
+package org.sonarsource.kotlin.gradle.checks
+
+internal class MissingVerificationMetadataCheckTest : CheckTest(MissingVerificationMetadataCheck())

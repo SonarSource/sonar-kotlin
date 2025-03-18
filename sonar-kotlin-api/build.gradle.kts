@@ -12,7 +12,6 @@ dependencies {
         "org.jetbrains.kotlin:analysis-api-platform-interface-for-ide",
         "org.jetbrains.kotlin:analysis-api-for-ide", // old name "high-level-api-for-ide"
         "org.jetbrains.kotlin:analysis-api-impl-base-for-ide", // old name "high-level-api-impl-base"
-        "org.jetbrains.kotlin:analysis-api-fe10-for-ide", // old name "high-level-api-fe10"
         "org.jetbrains.kotlin:analysis-api-k2-for-ide", // old name "high-level-api-k2"
         "org.jetbrains.kotlin:low-level-api-fir-for-ide",
         "org.jetbrains.kotlin:symbol-light-classes-for-ide"
@@ -55,4 +54,10 @@ task<JavaExec>("printAst") {
     group = "Application"
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("org.sonarsource.kotlin.ast.AstPrinterKt")
+}
+
+task<JavaExec>("patchKotlinCompiler") {
+    outputs.dir(layout.buildDirectory.dir("patch"))
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("org.sonarsource.kotlin.tools.PatchKotlinCompilerKt")
 }

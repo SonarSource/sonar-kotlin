@@ -17,7 +17,7 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtEnumEntrySuperclassReferenceExpression
 import org.jetbrains.kotlin.psi.KtFile
@@ -33,7 +33,7 @@ class DeprecatedCodeUsedCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) = withKaSession {
         context.kaDiagnostics
-            .filter { it.factoryName == Errors.DEPRECATION.name }
+            .filter { it.factoryName == FirErrors.DEPRECATION.name }
             .forEach { context.reportIssue(it.psi.elementToReport(), "Deprecated code should not be used.") }
     }
 

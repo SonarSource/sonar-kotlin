@@ -14,14 +14,24 @@
  * You should have received a copy of the Sonar Source-Available License
  * along with this program; if not, see https://sonarsource.com/license/ssal/
  */
-package org.sonarsource.kotlin.plugin.linking
+package com.sonarsource.plugins.kotlin.api;
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import org.sonar.api.server.ServerSide;
+import org.sonarsource.api.sonarlint.SonarLintSide;
 
-internal class WorkaroundForJarMinimizationTest {
-    @Test
-    fun minimizing_class_count() {
-        assertThat(WorkaroundForJarMinimization.CLASSES_TO_KEEP_WHEN_MINIMIZING_JAR).hasSize(17)
-    }
+/**
+ * Note that this is EXPERIMENTAL API with NO COMPATIBILITY guarantees.
+ * Classes implementing this interface must be public and have public no-arg constructor.
+ */
+@SonarLintSide
+@ServerSide
+public interface KotlinPluginExtensionsProvider {
+
+  void registerKotlinPluginExtensions(Extensions extensions);
+
+  interface Extensions {
+    void registerRepository(String repositoryKey, String name);
+    void registerRule(String repositoryKey, Class<?> ruleClass, boolean enabledInSonarWay);
+  }
+
 }

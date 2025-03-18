@@ -20,6 +20,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.sonar.api.rule.RuleKey
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
 
 private const val MIN_RULE_COUNT = 80
@@ -38,11 +39,25 @@ internal class KotlinProfileDefinitionTest {
     @Test
     fun profile() {
         val context = BuiltInQualityProfilesDefinition.Context()
-        KotlinProfileDefinition().define(context)
+        KotlinProfileDefinition(emptyArray()).define(context)
         val profile = context.profile("kotlin", "Sonar way")
         assertThat(profile.rules().size).isGreaterThan(MIN_RULE_COUNT)
         assertThat(profile.rules())
             .extracting<String> { obj: BuiltInQualityProfilesDefinition.BuiltInActiveRule -> obj.ruleKey() }
             .contains("S1764")
+    }
+
+    @Test
+    fun extensions() {
+        val context = BuiltInQualityProfilesDefinition.Context()
+        KotlinProfileDefinition(arrayOf(DummyKotlinPluginExtensionsProvider())).define(context)
+        val profile = context.profile("kotlin", "Sonar way")
+
+        assertThat(profile.rule(RuleKey.of(
+            DummyKotlinPluginExtensionsProvider.DUMMY_REPOSITORY_KEY, "DummyRule"
+        ))).isNotNull()
+        assertThat(profile.rule(RuleKey.of(
+            DummyKotlinPluginExtensionsProvider.DUMMY_NON_SONAR_WAY_REPOSITORY_KEY, "DummyRule"
+        ))).isNull()
     }
 }

@@ -45,7 +45,7 @@ class DummyInputFile(val path: Path? = null) : InputFile {
 
     override fun file() = path().toFile()
 
-    override fun path() = path ?: Path.of("./dummyFile.kt")
+    override fun path() = path ?: Path.of("./dummyFile.kt").toAbsolutePath()
 
     override fun uri() = path().toUri()
 

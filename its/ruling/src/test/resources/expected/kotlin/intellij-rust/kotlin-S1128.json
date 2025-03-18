@@ -1,31 +1,147 @@
 {
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/debugger/src/main/kotlin/org/rust/debugger/lang/RsDebuggerTypesHelper.kt": [
+16
+],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/workspace/StandardLibrary.kt": [
+8,
+9,
+10,
+11,
 14,
 17
 ],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/toolchain/Cargo.kt": [
 23
 ],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/util/RustCrateUtil.kt": [
+8
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/annotator/RsCargoCheckAnnotator.kt": [
+19
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/annotator/RsSyntaxErrorsAnnotator.kt": [
+10
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/folding/RsFoldingBuilder.kt": [
+21
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/idea/CargoConfigurationWizardStep.kt": [
+12
+],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/intentions/UnwrapToTryIntention.kt": [
 15
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/lineMarkers/CargoExecutableRunLineMarkerContributor.kt": [
+12
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/lineMarkers/CargoTestRunLineMarkerContributor.kt": [
+12
 ],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/lineMarkers/RsImplsLineMarkerProvider.kt": [
 20
 ],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/newProject/RsDirectoryProjectGenerator.kt": [
+10
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/template/postfix/utils.kt": [
+12
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/RsPsiPattern.kt": [
+10
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/RsDeriveCompletionProvider.kt": [
+14,
+21
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/RsKeywordCompletionContributor.kt": [
+13,
+15
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/RsMacroDefinitionCompletionProvider.kt": [
+13,
+23
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/RsPlatformPatterns.kt": [
+9
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/psi/ext/RsEnumItem.kt": [
+9
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/psi/ext/RsForeignModItem.kt": [
+10
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/ref/RsAssocTypeBindingReferenceImpl.kt": [
+10,
+11
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/RsImportOptimizer.kt": [
+12
+],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/implementMembers/ImplementMembersFix.kt": [
 13
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/implementMembers/impl.kt": [
+14,
+15
 ],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/implementMembers/ui.kt": [
 20,
 21
 ],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/openapiext/utils.kt": [
+12
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/toml/CargoCrateDocLineMarkerProvider.kt": [
+14
+],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/toml/RsTomlCompletionProvider.kt": [
 23
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/runconfig/producers/RunConfigurationProducerTest.kt": [
+27,
+29
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/docs/RsResolveLinkTest.kt": [
+11
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/docs/RsStdlibResolveLinkTest.kt": [
+11
 ],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsFormatterTest.kt": [
 9
 ],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/lineMarkers/RsTraitItemImplLineMarkerProviderTest.kt": [
 8
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/miscExtensions/RsBreadcrumbsInfoProviderTest.kt": [
+11
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/RsTestBase.kt": [
+10
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsLookupElementTest.kt": [
+11
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsMultiResolveTest.kt": [
+9
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsPackageLibraryResolveTest.kt": [
+8
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsResolveTestBase.kt": [
+14
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsTypeAwareResolveTest.kt": [
+8
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/stubs/RsStubAccessTest.kt": [
+20,
+22
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsTypificationTestBase.kt": [
+13
+],
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/RsHighlightingPerformanceTest.kt": [
+15
 ]
 }

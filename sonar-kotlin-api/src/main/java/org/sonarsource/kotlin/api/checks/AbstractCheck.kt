@@ -20,22 +20,12 @@ import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.LeafPsiElement
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
-import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
-import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtVisitor
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getFunctionResolvedCallWithAssert
-import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperClassNotAny
-import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperInterfaces
 import org.sonar.api.batch.fs.TextRange
 import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.api.reporting.Message
@@ -100,30 +90,8 @@ abstract class AbstractCheck : KotlinCheck, KtVisitor<Unit, KotlinFileContext>()
 
     fun KotlinFileContext.isInAndroid() = inputFileContext.isAndroid
 
-    fun KtParameter.typeAsString(bindingContext: BindingContext) =
-        bindingContext[BindingContext.VALUE_PARAMETER, this]?.type.toString()
-
-    fun KtExpression.throwsException(bindingContext: BindingContext) =
-        when (this) {
-            is KtThrowExpression -> true
-            is KtDotQualifiedExpression ->
-                selectorExpression?.hasAnnotation(THROWS_FQN, bindingContext)
-            is KtCallExpression ->
-                hasAnnotation(THROWS_FQN, bindingContext)
-            else -> false
-        } ?: false
-
-    fun KtExpression.hasAnnotation(annotation: String, bindingContext: BindingContext) =
-        getFunctionResolvedCallWithAssert(bindingContext).resultingDescriptor.annotations.hasAnnotation(FqName(annotation))
-
     fun KtNamedFunction.listStatements(): List<KtExpression> =
         bodyBlockExpression?.statements ?: (bodyExpression?.let { listOf(it) } ?: emptyList())
-
-    private fun getAllSuperTypesInterfaces(classes: List<ClassDescriptor>): List<ClassDescriptor> =
-        classes + classes.flatMap { getAllSuperTypesInterfaces(it.getSuperInterfaces() + it.superClassAsList()) }
-
-    private fun ClassDescriptor.superClassAsList(): List<ClassDescriptor> =
-        getSuperClassNotAny()?.let { listOf(it) } ?: emptyList()
 
     fun KtExpression.skipParentheses(): KtExpression {
         var expr = this

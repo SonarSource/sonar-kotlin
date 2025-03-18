@@ -3,7 +3,7 @@ package sample
 @Deprecated("")
 class DD
 
-@Suppress("DEPRECATION")
+@Suppress("kotlin:S1874")
 fun ff() {
     DD() // Noncompliant
 }

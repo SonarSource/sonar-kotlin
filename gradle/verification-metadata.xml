@@ -170,6 +170,11 @@
             <sha256 value="4548b74a815ed44f5480ca4f06204a8b00809dc7e5f6a825a9edf18f40377b65" origin="Verified"/>
          </artifact>
       </component>
+      <component group="com.github.zafarkhaja" name="java-semver" version="0.10.2">
+         <artifact name="java-semver-0.10.2.jar">
+            <sha256 value="a8e32e17575d0188c1f3e2e57bb95db09793883c8853fde828b63ecb1f99a63a" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="com.google.code.findbugs" name="jsr305" version="3.0.2">
          <artifact name="jsr305-3.0.2.jar">
             <sha256 value="766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7" origin="Verified"/>
@@ -273,6 +278,21 @@
       <component group="com.gradleup.shadow" name="shadow-gradle-plugin" version="8.3.1">
          <artifact name="shadow-gradle-plugin-8.3.1.jar">
             <sha256 value="49d0b14065a344fe8c694a1186c8d706d98e2853c76a5b53ea4a93ad1bb01b3d" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="com.guardsquare" name="proguard-base" version="7.6.1">
+         <artifact name="proguard-base-7.6.1.jar">
+            <sha256 value="c2650e666c3443781dc5e9eaee5de8721593f00be44e9d87cec761406357c770" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="com.guardsquare" name="proguard-core" version="9.1.7">
+         <artifact name="proguard-core-9.1.7.jar">
+            <sha256 value="db06fa9f6b43bb7d386420f854f41aa55a11023de36bad68e043c3ac3f33b8d5" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="com.guardsquare" name="proguard-gradle" version="7.6.1">
+         <artifact name="proguard-gradle-7.6.1.jar">
+            <sha256 value="49c8e84067d1569215f162b9f4412254422f5f80397aed380bccb2059787ef19" origin="Verified"/>
          </artifact>
       </component>
       <component group="com.h2database" name="h2" version="2.2.222">
@@ -825,6 +845,16 @@
             <sha256 value="98428d545ea63cd9a0aaf255caf42cb8cb64fe430dbb5e709aed536d4daeed04" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.apache.logging.log4j" name="log4j-api" version="2.24.2">
+         <artifact name="log4j-api-2.24.2.jar">
+            <sha256 value="0ca3ecbd4c315bdd5f2ef6af127712df718c78334cce5bf6fb7b4aa17fdab126" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.apache.logging.log4j" name="log4j-core" version="2.24.2">
+         <artifact name="log4j-core-2.24.2.jar">
+            <sha256 value="7a7b90db866c86a1093b3fde758ca28398ebb2a533da0d79a30cc0a78506b9df" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.apiguardian" name="apiguardian-api" version="1.1.0">
          <artifact name="apiguardian-api-1.1.0.jar">
             <sha256 value="a9aae9ff8ae3e17a2a18f79175e82b16267c246fbbd3ca9dfbbb290b08dcfdd4" origin="Verified"/>
@@ -978,11 +1008,6 @@
       <component group="org.jetbrains.intellij.deps" name="trove4j" version="1.0.20200330">
          <artifact name="trove4j-1.0.20200330.jar">
             <sha256 value="c5fd725bffab51846bf3c77db1383c60aaaebfe1b7fe2f00d23fe1b7df0a439d" origin="Verified"/>
-         </artifact>
-      </component>
-      <component group="org.jetbrains.kotlin" name="analysis-api-fe10-for-ide" version="2.1.10">
-         <artifact name="analysis-api-fe10-for-ide-2.1.10.jar">
-            <sha256 value="e9aea25f89d1da733b3f13b5bb8e621a0c037cf23c31810a455aec00b69e2230" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="analysis-api-for-ide" version="2.1.10">
@@ -1299,6 +1324,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-klib-commonizer-embeddable" version="2.1.10">
          <artifact name="kotlin-klib-commonizer-embeddable-2.1.10.jar">
             <sha256 value="d3327a42701984d992fbf25abd728d944dcb2e3f132f5c32539f9c71a6cf90db" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-metadata-jvm" version="2.0.0">
+         <artifact name="kotlin-metadata-jvm-2.0.0.jar">
+            <sha256 value="ad8f1c7dbc5ac46f5cbd2d2e5de39c56c9db65dd7de716a84e01ce208758aee6" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-native-utils" version="1.9.23">
@@ -1773,6 +1803,11 @@
       <component group="org.jfrog.filespecs" name="file-specs-java" version="1.1.2">
          <artifact name="file-specs-java-1.1.2.jar">
             <sha256 value="bb0dbc2c2b9fc993cfa86711398f4caf1480a9271c6d07a3a97c11b1a8e6141e" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.json" name="json" version="20231013">
+         <artifact name="json-20231013.jar">
+            <sha256 value="0f18192df289114e17aa1a0d0a7f8372cc9f5c7e4f7e39adcf8906fe714fa7d3" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.junit.jupiter" name="junit-jupiter" version="5.10.1">

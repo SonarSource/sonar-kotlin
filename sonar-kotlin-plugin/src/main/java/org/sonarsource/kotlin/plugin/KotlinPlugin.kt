@@ -16,10 +16,10 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import com.sonarsource.plugins.kotlin.api.KotlinPluginExtensionsProvider
 import org.sonar.api.Plugin
 import org.sonar.api.SonarProduct
 import org.sonar.api.config.PropertyDefinition
-import org.sonar.api.resources.Qualifiers
 import org.sonarsource.kotlin.api.common.KOTLIN_FILE_SUFFIXES_DEFAULT_VALUE
 import org.sonarsource.kotlin.api.common.KOTLIN_FILE_SUFFIXES_KEY
 import org.sonarsource.kotlin.api.common.KotlinLanguage
@@ -34,7 +34,7 @@ import org.sonarsource.kotlin.surefire.KotlinResourcesLocator
 import org.sonarsource.kotlin.surefire.KotlinSurefireParser
 import org.sonarsource.kotlin.surefire.KotlinSurefireSensor
 
-class KotlinPlugin : Plugin {
+class KotlinPlugin : Plugin, KotlinPluginExtensionsProvider {
 
     companion object {
         // Subcategories
@@ -54,6 +54,7 @@ class KotlinPlugin : Plugin {
 
         context.addExtensions(
             KotlinLanguage::class.java,
+            KotlinProjectSensor::class.java,
             KotlinSensor::class.java,
             KotlinRulesDefinition::class.java,
             KotlinProfileDefinition::class.java,
@@ -79,14 +80,14 @@ class KotlinPlugin : Plugin {
                     .subCategory(GENERAL)
                     .category(KOTLIN_CATEGORY)
                     .multiValues(true)
-                    .onQualifiers(Qualifiers.PROJECT)
+                    .onConfigScopes(setOf(PropertyDefinition.ConfigScope.PROJECT))
                     .build(),
                 PropertyDefinition.builder(DetektSensor.REPORT_PROPERTY_KEY)
                     .name("Detekt Report Files")
                     .description("Paths (absolute or relative) to checkstyle xml files with Detekt issues.")
                     .category(EXTERNAL_ANALYZERS_CATEGORY)
                     .subCategory(KOTLIN_SUBCATEGORY)
-                    .onQualifiers(Qualifiers.PROJECT)
+                    .onConfigScopes(setOf(PropertyDefinition.ConfigScope.PROJECT))
                     .multiValues(true)
                     .build(),
                 PropertyDefinition.builder(AndroidLintSensor.REPORT_PROPERTY_KEY)
@@ -94,7 +95,7 @@ class KotlinPlugin : Plugin {
                     .description("Paths (absolute or relative) to xml files with Android Lint issues.")
                     .category(EXTERNAL_ANALYZERS_CATEGORY)
                     .subCategory(ANDROID_SUBCATEGORY)
-                    .onQualifiers(Qualifiers.PROJECT)
+                    .onConfigScopes(setOf(PropertyDefinition.ConfigScope.PROJECT))
                     .multiValues(true)
                     .build(),
                 PropertyDefinition.builder(KtlintSensor.REPORT_PROPERTY_KEY)
@@ -102,10 +103,14 @@ class KotlinPlugin : Plugin {
                     .description("Paths (absolute or relative) to checkstyle xml or json files with Ktlint issues.")
                     .category(EXTERNAL_ANALYZERS_CATEGORY)
                     .subCategory(KOTLIN_SUBCATEGORY)
-                    .onQualifiers(Qualifiers.PROJECT)
+                    .onConfigScopes(setOf(PropertyDefinition.ConfigScope.PROJECT))
                     .multiValues(true)
                     .build()
             )
         }
+    }
+
+    override fun registerKotlinPluginExtensions(extensions: KotlinPluginExtensionsProvider.Extensions) {
+        // nothing to do
     }
 }

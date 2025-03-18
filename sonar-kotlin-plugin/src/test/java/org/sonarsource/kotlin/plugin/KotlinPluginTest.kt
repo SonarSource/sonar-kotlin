@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import com.sonarsource.plugins.kotlin.api.KotlinPluginExtensionsProvider
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.sonar.api.Plugin
@@ -27,19 +28,26 @@ import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
 import kotlin.time.ExperimentalTime
 import org.sonar.api.config.Configuration
-import org.sonarsource.kotlin.gradle.GRADLE_PROJECT_ROOT_PROPERTY
 import java.util.Optional
 
 @ExperimentalTime
 internal class KotlinPluginTest {
+
+    @Test
+    fun `should implement KotlinPluginExtensionsProvider`() {
+        Assertions.assertThat(KotlinPlugin::class.java.interfaces)
+            .describedAs("To please dependency injection framework of SonarQube Cloud")
+            .contains(KotlinPluginExtensionsProvider::class.java)
+    }
+
     @Test
     fun testSonarQube() {
-        testSonarQube(18)
+        testSonarQube(19)
     }
 
     @Test
     fun testSonarLint() {
-        testSonarLint(5)
+        testSonarLint(6)
     }
 
 

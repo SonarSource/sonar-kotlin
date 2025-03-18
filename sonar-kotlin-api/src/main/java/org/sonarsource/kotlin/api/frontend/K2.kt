@@ -17,6 +17,8 @@
 package org.sonarsource.kotlin.api.frontend
 
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.diagnostic.DefaultLogger
+import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileSystem
@@ -30,6 +32,7 @@ import org.jetbrains.kotlin.cli.common.CliModuleVisibilityManagerImpl
 import org.jetbrains.kotlin.cli.jvm.config.jvmClasspathRoots
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.load.kotlin.ModuleVisibilityManager
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import java.io.File
@@ -44,19 +47,24 @@ fun createK2AnalysisSession(
     compilerConfiguration: CompilerConfiguration,
     virtualFiles: Collection<VirtualFile>,
 ): StandaloneAnalysisAPISession {
+
+    if (!Logger.isInitialized()) {
+        Logger.setFactory(::SonarLogger)
+    }
+
     return buildStandaloneAnalysisAPISession(
         projectDisposable = parentDisposable,
     ) {
         // https://github.com/JetBrains/kotlin/blob/a9ff22693479cabd201909a06e6764c00eddbf7b/analysis/analysis-api-fe10/tests/org/jetbrains/kotlin/analysis/api/fe10/test/configurator/AnalysisApiFe10TestServiceRegistrar.kt#L49
         registerProjectService(ModuleVisibilityManager::class.java, CliModuleVisibilityManagerImpl(enabled = true))
 
-        // TODO language version, jvm target, etc
         val platform = JvmPlatforms.defaultJvmPlatform
         buildKtModuleProvider {
             this.platform = platform
             addModule(buildKtSourceModule {
                 this.platform = platform
                 moduleName = "module"
+                languageVersionSettings = compilerConfiguration.languageVersionSettings
                 addSourceVirtualFiles(virtualFiles)
                 addRegularDependency(buildKtLibraryModule {
                     this.platform = platform
@@ -75,6 +83,16 @@ fun createK2AnalysisSession(
     }
 }
 
+private class SonarLogger(category: String) : DefaultLogger(category) {
+    /**
+     * Unlike overridden does not throw [AssertionError].
+     */
+    override fun error(message: String?, t: Throwable?, vararg details: String?) {
+        System.err.println("ERROR: " + message + detailsToString(*details) + attachmentsToString(t))
+        t?.printStackTrace(System.err)
+    }
+}
+
 class KotlinFileSystem : CoreLocalFileSystem() {
     /**
      * TODO return null if file does not exist - see [CoreLocalFileSystem.findFileByNioFile]
@@ -86,7 +104,7 @@ class KotlinFileSystem : CoreLocalFileSystem() {
 class KotlinVirtualFile(
     private val fileSystem: KotlinFileSystem,
     private val file: File,
-    private val content: String? = null,
+    private val contentProvider: (() -> String)? = null,
 ) : VirtualFile() {
 
     override fun getName(): String = file.name
@@ -115,7 +133,7 @@ class KotlinVirtualFile(
         throw UnsupportedOperationException()
 
     override fun contentsToByteArray(): ByteArray {
-        if (content != null) return content.toByteArray()
+        if (contentProvider != null) return contentProvider.invoke().toByteArray()
         return FileUtil.loadFileBytes(file)
     }
 
