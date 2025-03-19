@@ -16,27 +16,14 @@
  */
 package org.sonarsource.kotlin.gradle.checks
 
-import com.intellij.psi.util.childrenOfType
-import com.intellij.psi.util.descendantsOfType
-import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.KtBinaryExpression
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtFunctionLiteral
-import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtScriptInitializer
-import org.jetbrains.kotlin.psi.KtValueArgument
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.predictRuntimeBooleanValue
-import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 
-private const val settingsGradleFileName = "settings.gradle.kts"
 private const val mainMessage = "Make sure that obfuscation is enabled in the release build configuration."
 private const val debuggableSetToTrueMessage = "Enabling debugging disables obfuscation for this release build. Make sure this is safe here."
 
@@ -48,11 +35,7 @@ class AndroidReleaseBuildObfuscationCheck : AbstractCheck() {
         val (androidCallee, androidLambda) = initializer.getChildCallWithLambdaOrNull("android") ?: return
 
         // Ensure the project is an Android app, and not a library
-        androidLambda
-            .getChildCallWithLambdaOrNull("defaultConfig")
-            ?.lambda
-            ?.getPropertyAssignmentOrNull("applicationId")
-            ?: return
+        androidLambda.getApplicationId() ?: return
 
         val buildTypes = androidLambda.getChildCallWithLambdaOrNull("buildTypes")
         if (buildTypes == null) {
@@ -82,40 +65,4 @@ class AndroidReleaseBuildObfuscationCheck : AbstractCheck() {
                 data.reportIssue(releaseCallee, mainMessage)
         }
     }
-
-    private fun KtFile.isSettingGradleKts() = name.endsWith(settingsGradleFileName, ignoreCase = true)
-
-    private fun KtElement.getChildCallOrNull(childCallName: String): KtCallExpression? =
-        descendantsOfType<KtCallExpression>().firstOrNull { it.calleeExpression?.text == childCallName }
-
-    private fun KtElement.getChildCallWithLambdaOrNull(childCallName: String): CalleeAndLambda? {
-        val callee = getChildCallOrNull(childCallName) ?: return null
-        val lambda = callee.functionLiteralArgumentOrNull() ?: return null
-        return CalleeAndLambda(callee.calleeExpression!!, lambda)
-    }
-
-    private fun KtElement.getGetByNameCallWithLambdaOrNull(): CalleeAndLambda? {
-        val callee = descendantsOfType<KtCallExpression>().firstOrNull {
-            it.calleeExpression?.text == "getByName" &&
-                it.valueArguments.size == 2 &&
-                it.valueArguments[0].isReleaseBuildType()
-        } ?: return null
-        val lambda = callee.functionLiteralArgumentOrNull() ?: return null
-        return CalleeAndLambda(callee.calleeExpression!!, lambda)
-    }
-
-    private fun KtValueArgument.isReleaseBuildType(): Boolean =
-        textMatches("BuildType.RELEASE") ||
-        getArgumentExpression()?.predictRuntimeStringValue() == "release"
-
-    private fun KtCallExpression.functionLiteralArgumentOrNull(): KtFunctionLiteral? =
-        valueArguments
-            .flatMap { it.childrenOfType<KtLambdaExpression>() }
-            .flatMap { it.childrenOfType<KtFunctionLiteral>() }
-            .singleOrNull()
-
-    private fun KtElement.getPropertyAssignmentOrNull(propertyName: String): KtBinaryExpression? =
-        descendantsOfType<KtBinaryExpression>().firstOrNull { it.operationToken == KtTokens.EQ && it.left?.text == propertyName }
-
-    private data class CalleeAndLambda(val callee: KtExpression, val lambda: KtFunctionLiteral)
 }

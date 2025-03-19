@@ -270,8 +270,8 @@ android {
     }
     buildTypes {
         release {
-            val trueVal = false
-            isMinifyEnabled = trueVal // Noncompliant
+            val falseVal = false
+            isMinifyEnabled = falseVal // Noncompliant
             proguardFiles("proguard-rules.pro")
         }
     }
@@ -284,8 +284,8 @@ android {
     }
     buildTypes {
         release { // FN
-            var trueVal = false
-            isMinifyEnabled = trueVal
+            var falseVal = true
+            isMinifyEnabled = falseVal
             proguardFiles("proguard-rules.pro")
         }
     }
