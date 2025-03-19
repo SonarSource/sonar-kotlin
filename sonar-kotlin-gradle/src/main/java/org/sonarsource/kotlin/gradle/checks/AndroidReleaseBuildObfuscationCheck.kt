@@ -30,6 +30,8 @@ import org.jetbrains.kotlin.psi.KtScriptInitializer
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.checks.predictRuntimeBooleanValue
+import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
@@ -37,8 +39,6 @@ import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 private const val settingsGradleFileName = "settings.gradle.kts"
 private const val mainMessage = "Make sure that obfuscation is enabled in the release build configuration."
 private const val debuggableSetToTrueMessage = "Enabling debugging disables obfuscation for this release build. Make sure this is safe here."
-
-private val releaseBuildTypeExpressions = listOf("\"release\"", "\"\"\"release\"\"\"", "BuildType.RELEASE")
 
 @Rule(key = "S7204")
 class AndroidReleaseBuildObfuscationCheck : AbstractCheck() {
@@ -67,13 +67,12 @@ class AndroidReleaseBuildObfuscationCheck : AbstractCheck() {
         val isDebuggableAssignment = releaseLambda.getPropertyAssignmentOrNull("isDebuggable")
         val isMinifiedEnabledAssignment = releaseLambda.getPropertyAssignmentOrNull("isMinifyEnabled")
 
-        // TODO: use predictRuntimeBooleanValue for "true" and "false" after migration to K2
         when {
             isMinifiedEnabledAssignment == null ->
                 data.reportIssue(releaseCallee, mainMessage)
-            isMinifiedEnabledAssignment.right?.text == "false" ->
+            isMinifiedEnabledAssignment.right?.predictRuntimeBooleanValue() == false ->
                 data.reportIssue(isMinifiedEnabledAssignment, mainMessage)
-            isDebuggableAssignment?.right?.text == "true" ->
+            isDebuggableAssignment?.right?.predictRuntimeBooleanValue() == true ->
                 data.reportIssue(
                     releaseCallee,
                     debuggableSetToTrueMessage,
@@ -106,7 +105,8 @@ class AndroidReleaseBuildObfuscationCheck : AbstractCheck() {
     }
 
     private fun KtValueArgument.isReleaseBuildType(): Boolean =
-        releaseBuildTypeExpressions.any(this::textMatches) // TODO: use predictRuntimeStringValue after migration to K2
+        textMatches("BuildType.RELEASE") ||
+        getArgumentExpression()?.predictRuntimeStringValue() == "release"
 
     private fun KtCallExpression.functionLiteralArgumentOrNull(): KtFunctionLiteral? =
         valueArguments

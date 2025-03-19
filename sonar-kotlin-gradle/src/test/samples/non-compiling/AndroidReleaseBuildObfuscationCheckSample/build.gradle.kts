@@ -229,8 +229,8 @@ android {
         applicationId = "com.example" // Android app, not a library
     }
     buildTypes {
-        getByName("${"release"}") { // FN
-            isMinifyEnabled = false
+        getByName("${"release"}") {
+            isMinifyEnabled = false // Noncompliant
             proguardFiles("proguard-rules.pro")
         }
     }
@@ -243,8 +243,8 @@ android {
     }
     buildTypes {
         val release = "release"
-        getByName(release) { // FN
-            isMinifyEnabled = false
+        getByName(release) {
+            isMinifyEnabled = false // Noncompliant
             proguardFiles("proguard-rules.pro")
         }
     }
@@ -269,9 +269,9 @@ android {
         applicationId = "com.example" // Android app, not a library
     }
     buildTypes {
-        release { // FN
+        release {
             val trueVal = false
-            isMinifyEnabled = trueVal
+            isMinifyEnabled = trueVal // Noncompliant
             proguardFiles("proguard-rules.pro")
         }
     }
