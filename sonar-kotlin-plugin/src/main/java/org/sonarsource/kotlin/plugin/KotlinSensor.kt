@@ -27,6 +27,7 @@ import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContextFactory
 import com.sonarsource.plugins.kotlin.api.KotlinPluginExtensionsProvider
+import org.sonar.api.batch.sensor.Sensor
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.hasCacheEnabled
@@ -59,7 +60,7 @@ class KotlinSensor(
     language: KotlinLanguage,
     private val kotlinProjectSensor: KotlinProjectSensor,
     extensionsProviders: Array<KotlinPluginExtensionsProvider>,
-): AbstractKotlinSensor(
+) : Sensor, AbstractKotlinSensor(
     checkFactory, instantiateRules(checkFactory, extensionsProviders), language, KOTLIN_CHECKS
 ) {
 

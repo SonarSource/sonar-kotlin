@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.CheckFactory
+import org.sonar.api.batch.sensor.Sensor
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.config.internal.ConfigurationBridge
@@ -178,8 +179,11 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
 }
 
 private val LOG = LoggerFactory.getLogger(DummyKotlinSensor::class.java)
-class DummyKotlinSensor(checkFactory: CheckFactory, language: KotlinLanguage, checks: List<Class<out KotlinCheck>>) :
-    AbstractKotlinSensor(
+class DummyKotlinSensor(
+    checkFactory: CheckFactory,
+    language: KotlinLanguage,
+    checks: List<Class<out KotlinCheck>>,
+    ) : Sensor, AbstractKotlinSensor(
         checkFactory,
         emptyList(),
         language,

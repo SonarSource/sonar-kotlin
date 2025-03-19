@@ -23,6 +23,7 @@ import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.batch.rule.CheckFactory
 import org.sonar.api.rule.RuleKey
+import org.sonar.api.scanner.sensor.ProjectSensor
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.common.KOTLIN_REPOSITORY_KEY
 import org.sonarsource.kotlin.api.common.KotlinLanguage
@@ -37,10 +38,17 @@ const val MISSING_VERIFICATION_METADATA_RULE_KEY = "S6474"
 
 private val LOG = LoggerFactory.getLogger(KotlinGradleSensor::class.java)
 
+/**
+ * The sensor used to analyze Gradle Kotlin files.
+ * This is a project sensor, i.e. it is executed once for the entire project, and not for each module.
+ * There is no guaranteed order of execution between KotlinGradleSensor and KotlinProjectSensor, so
+ * telemetry data should not be not sent from this sensor, unless the order is made deterministic and
+ * guaranteed.
+ */
 class KotlinGradleSensor(
     checkFactory: CheckFactory,
     language: KotlinLanguage,
-) : AbstractKotlinSensor(
+) : ProjectSensor, AbstractKotlinSensor(
     checkFactory, emptyList(), language, KOTLIN_GRADLE_CHECKS
 ) {
 

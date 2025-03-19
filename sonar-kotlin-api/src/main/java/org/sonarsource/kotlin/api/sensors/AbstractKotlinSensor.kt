@@ -35,8 +35,8 @@ abstract class AbstractKotlinSensor(
     checkFactory: CheckFactory,
     externalChecks: Collection<AbstractCheck>,
     val language: KotlinLanguage,
-    checks: List<Class<out KotlinCheck>>
-) : Sensor {
+    checks: List<Class<out KotlinCheck>>,
+) {
 
     val checks: Collection<AbstractCheck> = checkFactory.create<AbstractCheck>(KOTLIN_REPOSITORY_KEY).apply {
         addAnnotatedChecks(checks)
@@ -52,7 +52,7 @@ abstract class AbstractKotlinSensor(
 
     abstract fun getFilesToAnalyse(sensorContext: SensorContext): Iterable<InputFile>
 
-    override fun execute(sensorContext: SensorContext) {
+    fun execute(sensorContext: SensorContext) {
         val sensorDuration = createPerformanceMeasureReport(sensorContext)
         val filesToAnalyze = getFilesToAnalyse(sensorContext)
 
