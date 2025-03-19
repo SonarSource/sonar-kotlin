@@ -17,17 +17,19 @@
 package org.sonarsource.kotlin.gradle
 
 import org.sonarsource.kotlin.api.checks.KotlinCheck
+import org.sonarsource.kotlin.gradle.checks.AndroidReleaseBuildObfuscationCheck
 import org.sonarsource.kotlin.gradle.checks.CorePluginsShortcutUsageCheck
-import org.sonarsource.kotlin.gradle.checks.RootProjectNamePresentCheck
 import org.sonarsource.kotlin.gradle.checks.DependencyGroupedCheck
 import org.sonarsource.kotlin.gradle.checks.DependencyVersionHardcodedCheck
 import org.sonarsource.kotlin.gradle.checks.MissingSettingsCheck
 import org.sonarsource.kotlin.gradle.checks.MissingVerificationMetadataCheck
+import org.sonarsource.kotlin.gradle.checks.RootProjectNamePresentCheck
 import org.sonarsource.kotlin.gradle.checks.TaskDefinitionsCheck
 import org.sonarsource.kotlin.gradle.checks.TaskRegisterVsCreateCheck
 
 
 val KOTLIN_GRADLE_CHECKS: List<Class<out KotlinCheck>> = listOf(
+    AndroidReleaseBuildObfuscationCheck::class.java,
     CorePluginsShortcutUsageCheck::class.java,
     RootProjectNamePresentCheck::class.java,
     DependencyGroupedCheck::class.java,
@@ -37,3 +39,4 @@ val KOTLIN_GRADLE_CHECKS: List<Class<out KotlinCheck>> = listOf(
     TaskDefinitionsCheck::class.java,
     TaskRegisterVsCreateCheck::class.java,
 )
+
