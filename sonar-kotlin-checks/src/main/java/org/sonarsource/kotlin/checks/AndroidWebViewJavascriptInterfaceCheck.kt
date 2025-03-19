@@ -26,7 +26,7 @@ import org.sonarsource.kotlin.api.checks.STRING_TYPE
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.withKaSession
 
-private const val message = "Exposing a Javascript interface can expose sensitive information to attackers. Make sure it is safe here."
+private const val MESSAGE = "Exposing a Javascript interface can expose sensitive information to attackers. Make sure it is safe here."
 
 @Rule(key = "S7409")
 class AndroidWebViewJavascriptInterfaceCheck : CallAbstractCheck() {
@@ -44,6 +44,6 @@ class AndroidWebViewJavascriptInterfaceCheck : CallAbstractCheck() {
         resolvedCall: KaFunctionCall<*>,
         kotlinFileContext: KotlinFileContext
     ) = withKaSession {
-        kotlinFileContext.reportIssue(callExpression, message)
+        kotlinFileContext.reportIssue(callExpression, MESSAGE)
     }
 }
