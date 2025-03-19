@@ -16,4 +16,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-class WebViewsFileAccessCheckTest : CheckTest(WebViewsFileAccessCheck())
+class WebViewsFileAccessCheckTest : CheckTestWithNoSemantics(WebViewsFileAccessCheck())
