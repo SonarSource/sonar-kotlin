@@ -29,7 +29,7 @@ class AndroidReleaseBuildDebugCheck : AbstractCheck() {
 
     override fun visitScriptInitializer(initializer: KtScriptInitializer, data: KotlinFileContext) {
         !data.ktFile.isSettingGradleKts() || return
-        val (_, androidLambda) = initializer.getChildCallWithLambdaOrNull("android") ?: return
+        val androidLambda = initializer.getChildCallWithLambdaOrNull("android")?.lambda ?: return
 
         // Ensure the project is an Android app, and not a library
         androidLambda.getApplicationId() ?: return
