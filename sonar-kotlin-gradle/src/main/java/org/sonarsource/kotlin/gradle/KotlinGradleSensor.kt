@@ -30,6 +30,7 @@ import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensor
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
 import org.sonarsource.kotlin.api.visiting.KtChecksVisitor
 import java.io.File
+import java.nio.file.Files
 
 const val GRADLE_PROJECT_ROOT_PROPERTY = "sonar.kotlin.gradleProjectRoot"
 const val MISSING_SETTINGS_RULE_KEY = "S6631"
@@ -71,10 +72,14 @@ class KotlinGradleSensor(
             )
         )
 
-        sensorContext.config()[GRADLE_PROJECT_ROOT_PROPERTY].ifPresent {
-            checkForMissingGradleSettings(File(it), sensorContext)
-            checkForMissingVerificationMetadata(File(it), sensorContext)
-        }
+        sensorContext.config()[GRADLE_PROJECT_ROOT_PROPERTY]
+            .map { File(it) }
+            // Only run checks on the root module, where Gradle project root == baseDir
+            .filter { Files.isSameFile(it.toPath(), sensorContext.fileSystem().baseDir().toPath()) }
+            .ifPresent {
+                checkForMissingGradleSettings(it, sensorContext)
+                checkForMissingVerificationMetadata(it, sensorContext)
+            }
 
         return fileSystem.inputFiles(mainFilePredicate)
     }
