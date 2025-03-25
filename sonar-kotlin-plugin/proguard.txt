@@ -56,6 +56,10 @@ com.github.benmanes.caffeine.**,
 org.sonarsource.analyzer.commons.RuleMetadataLoader,
 org.sonarsource.kotlin.plugin.**
 
+-keepclassmembers enum * {
+  *;
+}
+
 -keepclassmembers class
 !org.jetbrains.kotlin.analysis.api.components.KaCompilerFacility**,
 !org.jetbrains.kotlin.analysis.api.KaSession,
