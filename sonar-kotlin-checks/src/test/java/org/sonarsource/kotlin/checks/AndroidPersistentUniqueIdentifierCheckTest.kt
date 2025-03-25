@@ -16,4 +16,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-class AndroidPersistentUniqueIdentifierCheckTest : CheckTest(AndroidPersistentUniqueIdentifierCheck())
+class AndroidPersistentUniqueIdentifierCheckTest : CheckTestWithNoSemantics(AndroidPersistentUniqueIdentifierCheck())
