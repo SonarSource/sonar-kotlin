@@ -33,6 +33,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSyntheticJavaPropertySymbol
 import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.sonarsource.kotlin.api.visiting.withKaSession
@@ -167,7 +168,9 @@ class FunMatcherImpl(
     /** @return dot-separated package name for top-level functions, class name otherwise */
     private fun getActualQualifier(symbol: KaCallableSymbol): String? {
         return if (symbol is KaConstructorSymbol) {
-            symbol.containingClassId?.asFqNameString()
+            // TODO investigate
+            symbol.returnType.symbol?.classId?.asFqNameString()
+//            symbol.containingClassId?.asFqNameString()
         } else {
             symbol.callableId?.asSingleFqName()?.parent()?.asString()
         }
