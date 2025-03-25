@@ -91,6 +91,7 @@ import org.sonarsource.kotlin.checks.MobileDatabaseEncryptionKeysCheck
 import org.sonarsource.kotlin.checks.NestedMatchCheck
 import org.sonarsource.kotlin.checks.OneStatementPerLineCheck
 import org.sonarsource.kotlin.checks.ParsingErrorCheck
+import org.sonarsource.kotlin.checks.PasswordPlaintextFastHashingCheck
 import org.sonarsource.kotlin.checks.PreparedStatementAndResultSetCheck
 import org.sonarsource.kotlin.checks.PropertyGetterAndSetterUsageCheck
 import org.sonarsource.kotlin.checks.PseudoRandomCheck
@@ -228,6 +229,7 @@ val KOTLIN_CHECKS = listOf(
     NestedMatchCheck::class.java,
     OneStatementPerLineCheck::class.java,
     ParsingErrorCheck::class.java,
+    PasswordPlaintextFastHashingCheck::class.java,
     PreparedStatementAndResultSetCheck::class.java,
     PropertyGetterAndSetterUsageCheck::class.java,
     PseudoRandomCheck::class.java,
