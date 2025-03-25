@@ -21,6 +21,7 @@ import org.sonarsource.kotlin.checks.AllBranchesIdenticalCheck
 import org.sonarsource.kotlin.checks.AnchorPrecedenceCheck
 import org.sonarsource.kotlin.checks.AndroidBroadcastingCheck
 import org.sonarsource.kotlin.checks.AndroidKeyboardCacheOnPasswordInputCheck
+import org.sonarsource.kotlin.checks.AndroidPersistentUniqueIdentifierCheck
 import org.sonarsource.kotlin.checks.AndroidWebViewJavascriptInterfaceCheck
 import org.sonarsource.kotlin.checks.ArrayHashCodeAndToStringCheck
 import org.sonarsource.kotlin.checks.AuthorisingNonAuthenticatedUsersCheck
@@ -157,6 +158,7 @@ val KOTLIN_CHECKS = listOf(
     AnchorPrecedenceCheck::class.java,
     AndroidBroadcastingCheck::class.java,
     AndroidKeyboardCacheOnPasswordInputCheck::class.java,
+    AndroidPersistentUniqueIdentifierCheck::class.java,
     AndroidWebViewJavascriptInterfaceCheck::class.java,
     ArrayHashCodeAndToStringCheck::class.java,
     AuthorisingNonAuthenticatedUsersCheck::class.java,
