@@ -1,0 +1,32 @@
+{
+  "title": "Keyboard cache should be disabled for password inputs",
+  "type": "VULNERABILITY",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "android"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "RSPEC-7410",
+  "sqKey": "S7410",
+  "scope": "All",
+  "securityStandards": {
+    "OWASP Mobile Top 10 2024": [
+      "M8",
+      "M9"
+    ],
+    "CWE": [
+      524
+    ]
+  },
+  "quickfix": "unknown",
+  "code": {
+    "impacts": {
+      "SECURITY": "MEDIUM"
+    },
+    "attribute": "CONVENTIONAL"
+  }
+}

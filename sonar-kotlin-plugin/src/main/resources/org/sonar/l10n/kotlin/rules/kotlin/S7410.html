@@ -1,0 +1,40 @@
+<p>Mobile OSes use software keyboards that provide text predictions and suggestions. These keyboards cache text inputs in a local file in order to
+speed up typing and to recall frequent phrases. When users type sensitive data into a text field where keyboard cache is enabled, the data will be
+stored in clear-text in a local file. It will keep appearing in the keyboard suggestion list until the cache is cleared.</p>
+<h2>Why is this an issue?</h2>
+<p>Keyboard caches are not designed to store sensitive information. Data they contain is not encrypted and can be exposed. In case a backup is
+performed, the cache file can be included in the backup, which will lead to the password being leakage. When device is shared, other user will see the
+password in the suggestion list.</p>
+<h2>How to fix it in Jetpack Compose</h2>
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+TextField(
+    value = text,
+    onValueChange = { text = it },
+    label = { Text("Password") },
+    visualTransformation = PasswordVisualTransformation(),
+    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text) // Noncompliant: keyboard cache is enabled
+)
+</pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+TextField(
+    value = text,
+    onValueChange = { text = it },
+    label = { Text("Password") },
+    visualTransformation = PasswordVisualTransformation(),
+    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+)
+</pre>
+<h2>Resources</h2>
+<h3>Documentation</h3>
+<h3>Standards</h3>
+<ul>
+  <li> OWASP - <a href="https://owasp.org/www-project-mobile-top-10/2023-risks/m8-security-misconfiguration">Mobile Top 10 2024 Category M8 - Security
+  Misconfiguration</a> </li>
+  <li> OWASP - <a href="https://owasp.org/www-project-mobile-top-10/2023-risks/m9-insecure-data-storage">Mobile Top 10 2024 Category M9 - Insecure
+  Data Storage</a> </li>
+  <li> CWE - <a href="https://cwe.mitre.org/data/definitions/524">CWE-524 - Use of Cache Containing Sensitive Information</a> </li>
+</ul>
+
