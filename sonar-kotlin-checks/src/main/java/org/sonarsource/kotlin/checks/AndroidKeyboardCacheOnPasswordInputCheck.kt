@@ -141,8 +141,7 @@ class AndroidKeyboardCacheOnPasswordInputCheck : CallAbstractCheck() {
     private fun isKeyboardOptionsWithCacheEnabledCallExpression(expression: KtCallExpression) : Boolean = withKaSession {
         // e.g. KeyboardOptions(keyboardType = KeyboardType.Ascii)
         // no keyboardType argument means KeyboardType.Unspecified, that is cache enabled
-        return@withKaSession keyboardOptionsConstructorFunMatcher.matches(expression) &&
-            (isCacheEnabledKeyboardTypeOrNull(expression) ?: true)
+        keyboardOptionsConstructorFunMatcher.matches(expression) && (isCacheEnabledKeyboardTypeOrNull(expression) ?: true)
     }
 
     private fun isKeyboardOptionsWithCacheEnabledReferenceExpression(expression: KtReferenceExpression): Boolean = withKaSession {
@@ -151,18 +150,21 @@ class AndroidKeyboardCacheOnPasswordInputCheck : CallAbstractCheck() {
         val value = (symbol.psi as? KtProperty)?.takeIf { !it.isVar }?.initializer
             ?: (symbol.psi as? KtParameter)?.defaultValue
             ?: return@withKaSession false
-        return@withKaSession isKeyboardOptionsWithCacheEnabled(value)
+        isKeyboardOptionsWithCacheEnabled(value)
     }
 
     private fun isCacheEnabledKeyboardTypeOrNull(expression: KtCallExpression) : Boolean? = withKaSession {
-        val resolvedCall = expression.resolveToCall()?.successfulFunctionCallOrNull() // Can be constructor or normal function call
-        return@withKaSession resolvedCall?.argumentMapping?.entries?.singleOrNull {
-            it.value.symbol.name == keyboardTypeParamName
-        }?.key?.let(::isCacheEnabledKeyboardType)
+        expression.resolveToCall()
+            ?.successfulFunctionCallOrNull() // Can be constructor or normal function call
+            ?.argumentMapping
+            ?.entries
+            ?.singleOrNull { it.value.symbol.name == keyboardTypeParamName }
+            ?.key
+            ?.let(::isCacheEnabledKeyboardType)
     }
 
     private fun isCacheEnabledKeyboardType(expression: KtExpression): Boolean = withKaSession {
-        return@withKaSession expression is KtDotQualifiedExpression &&
+        expression is KtDotQualifiedExpression &&
             expression.receiverExpression.expressionType?.isClassType(keyboardTypeCompanionClassId) == true &&
             cacheEnabledKeyboardTypes.contains(expression.selectorExpression?.text)
     }
