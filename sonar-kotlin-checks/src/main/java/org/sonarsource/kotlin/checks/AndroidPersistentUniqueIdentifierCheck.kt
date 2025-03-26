@@ -17,8 +17,8 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
-import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
@@ -86,9 +86,9 @@ class AndroidPersistentUniqueIdentifierCheck : CallAbstractCheck() {
 
     override fun visitReferenceExpression(expression: KtReferenceExpression, data: KotlinFileContext) = withKaSession {
         val resolvedCall = expression.resolveToCall()
-        val call = resolvedCall?.singleCallOrNull<KaCallableMemberCall<*, *>>() ?: return@withKaSession
+        val call = resolvedCall?.successfulCallOrNull<KaCallableMemberCall<*, *>>() ?: return@withKaSession
         if (staticSettingsSecureGetStringFunMatcher.matches(call)) {
-            val nameValueArgument = resolvedCall.singleFunctionCallOrNull()?.argumentMapping?.keys?.toList()?.getOrNull(1)
+            val nameValueArgument = resolvedCall.successfulFunctionCallOrNull()?.argumentMapping?.keys?.toList()?.getOrNull(1)
                 ?: return@withKaSession
             if (isSettingsSecureAndroidId(nameValueArgument) || nameValueArgument.predictRuntimeStringValue() == "android_id") {
                 data.reportIssue(expression, NON_RESETTABLE_PERSISTENT_ID_MESSAGE)
