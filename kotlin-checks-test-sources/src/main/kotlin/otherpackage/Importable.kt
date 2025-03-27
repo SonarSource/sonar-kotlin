@@ -18,6 +18,12 @@ object OtherClass2 {
     operator fun InputStream.set(value1: Int, value2: Int) {}
 }
 
+class ClassUsedViaConstructorReference1
+class ClassUsedViaConstructorReference2
+class ClassUsedViaConstructorReference3
+
+fun functionTakingAny(value: Any) {}
+
 fun String.stringExtFun1() {}
 fun String.stringExtFun2() {}
 infix fun String.someInfixFun(foo: String) = this

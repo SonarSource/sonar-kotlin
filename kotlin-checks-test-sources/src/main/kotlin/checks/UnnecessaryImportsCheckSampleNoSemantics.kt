@@ -82,6 +82,11 @@ import operators.divAssign // FN
 import operators.remAssign // FN
 import operators.provideDelegate // FN due to missing binding context
 
+import otherpackage.ClassUsedViaConstructorReference1
+import otherpackage.ClassUsedViaConstructorReference2
+import otherpackage.ClassUsedViaConstructorReference3
+import otherpackage.functionTakingAny
+
 class SomeClassWithDelegateNoSemantics(var delegate: OperatorsContainer) {
     val someProperty: String by delegate
 
@@ -154,8 +159,15 @@ class UnnecessaryImportsCheckSampleNoSemantics {
     fun bar() {
 
     }
+
+    class ConstructorReference(val value: Any = ::ClassUsedViaConstructorReference1) {
+        fun constructorReference(value: Any = ::ClassUsedViaConstructorReference2) {
+            functionTakingAny(value = ::ClassUsedViaConstructorReference3)
+        }
+    }
 }
 
 class ChildClass1B: java.util.Date()
 class ChildClass2B: Timer()
 class ClassInSameFileB
+
