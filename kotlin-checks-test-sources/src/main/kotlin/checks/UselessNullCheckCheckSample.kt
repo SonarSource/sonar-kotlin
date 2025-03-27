@@ -1,13 +1,10 @@
 package checks
 
-import kotlinx.coroutines.CoroutineScope
-import java.io.IOException
-import java.net.HttpURLConnection
 import java.util.Arrays
 import java.util.WeakHashMap
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
-import kotlin.coroutines.CoroutineContext
+import kotlin.test.asserter
 
 class UselessNullCheckCheckSample {
 
@@ -137,4 +134,16 @@ private class FooBar(
 
 private fun <T> testParametrised(list: List<T>): Int? {
     return list.first()?.hashCode()
+}
+
+class NullableGeneric {
+    fun <T : Any> assertNotNull(actual: T?, message: String? = null): T {
+        contract { returns() implies (actual != null) } // Compliant: actual is nullable
+        asserter.assertNotNull(message, actual)
+        return actual!!
+    }
+
+    fun returns(): NullableGeneric { throw NotImplementedError() }
+    infix fun contract(block: () -> Unit) { }
+    infix fun <T> T.implies(value: Boolean) { }
 }
