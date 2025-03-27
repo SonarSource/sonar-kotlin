@@ -168,9 +168,7 @@ class FunMatcherImpl(
     /** @return dot-separated package name for top-level functions, class name otherwise */
     private fun getActualQualifier(symbol: KaCallableSymbol): String? {
         return if (symbol is KaConstructorSymbol) {
-            // TODO investigate
-            symbol.returnType.symbol?.classId?.asFqNameString()
-//            symbol.containingClassId?.asFqNameString()
+            symbol.returnType.asFqNameString() // callableId is null for ctors, containingClassId would return type aliases
         } else {
             symbol.callableId?.asSingleFqName()?.parent()?.asString()
         }
