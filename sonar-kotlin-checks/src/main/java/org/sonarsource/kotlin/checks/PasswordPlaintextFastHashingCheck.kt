@@ -81,7 +81,6 @@ class PasswordPlaintextFastHashingCheck : CallAbstractCheck() {
         resolvedCall: KaFunctionCall<*>,
         kotlinFileContext: KotlinFileContext,
     ) = withKaSession {
-        generateSecretFunMatcher.matches(resolvedCall) || return@withKaSession
         val secretKeyFactoryCall = callExpression.predictReceiverExpression()
             ?.resolveToCall()
             ?.successfulFunctionCallOrNull()
