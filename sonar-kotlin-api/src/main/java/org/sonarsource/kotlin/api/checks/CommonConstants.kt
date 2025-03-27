@@ -19,6 +19,8 @@ package org.sonarsource.kotlin.api.checks
 const val INT_TYPE = "kotlin.Int"
 const val STRING_TYPE = "kotlin.String"
 const val BOOLEAN_TYPE = "kotlin.Boolean"
+const val CHAR_ARRAY_TYPE = "kotlin.CharArray"
+const val BYTE_ARRAY_TYPE = "kotlin.ByteArray"
 const val ANY_TYPE = "kotlin.Any"
 const val GET_INSTANCE = "getInstance"
 const val WITH_CONTEXT = "withContext"
@@ -35,8 +37,8 @@ const val JAVA_UTIL_PATTERN = "java.util.regex.Pattern"
 const val HASHCODE_METHOD_NAME = "hashCode"
 const val EQUALS_METHOD_NAME = "equals"
 
-val BYTE_ARRAY_CONSTRUCTOR = ConstructorMatcher("kotlin.ByteArray")
-val BYTE_ARRAY_CONSTRUCTOR_SIZE_ARG_ONLY = ConstructorMatcher("kotlin.ByteArray") { withArguments("kotlin.Int") }
+val BYTE_ARRAY_CONSTRUCTOR = ConstructorMatcher(BYTE_ARRAY_TYPE)
+val BYTE_ARRAY_CONSTRUCTOR_SIZE_ARG_ONLY = ConstructorMatcher(BYTE_ARRAY_TYPE) { withArguments(INT_TYPE) }
 
 val SECURE_RANDOM_FUNS = FunMatcher(qualifier = "java.security.SecureRandom")
 
