@@ -22,3 +22,17 @@ class MySampleClass : MyInterface {
 interface MyInterface {
     fun sayHello(name: String)
 }
+
+typealias JavaLangIllegalStateExceptionAlias  = java.lang.IllegalStateException
+typealias KotlinIllegalStateExceptionAlias = kotlin.IllegalStateException
+typealias KotlinIllegalStateExceptionAliasOfAlias = KotlinIllegalStateExceptionAlias
+
+fun `Match aliased and non-aliased constructor`() {
+    IllegalStateException("kotlin Alias implicit import")
+    java.lang.IllegalStateException("java.lang FQN")
+    JavaLangIllegalStateExceptionAlias("java.lang Alias")
+    kotlin.IllegalStateException("kotlin FQN")
+    KotlinIllegalStateExceptionAlias("kotlin Alias")
+    KotlinIllegalStateExceptionAliasOfAlias("kotlin Alias of Alias")
+    throw IllegalStateException("with throw")
+}

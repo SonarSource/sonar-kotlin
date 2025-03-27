@@ -22,12 +22,15 @@ import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.api.frontend.Environment
 import org.sonarsource.kotlin.api.visiting.kaSession
+import org.sonarsource.kotlin.testapi.DEFAULT_KOTLIN_CLASSPATH
 import org.sonarsource.kotlin.testapi.kotlinTreeOf
+import java.io.File
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -41,7 +44,8 @@ class FunMatcherTest {
         Disposer.dispose(disposable)
     }
 
-    val environment = Environment(disposable, listOf("../kotlin-checks-test-sources/build/classes/kotlin/main"), LanguageVersion.LATEST_STABLE)
+    val classpath = System.getProperty("java.class.path").split(File.pathSeparatorChar) + DEFAULT_KOTLIN_CLASSPATH
+    val environment = Environment(disposable, classpath, LanguageVersion.LATEST_STABLE)
     val path = Paths.get("../kotlin-checks-test-sources/src/main/kotlin/sample/functions.kt")
     val content = String(Files.readAllBytes(path))
     val inputFile = TestInputFileBuilder("moduleKey",  path.name)
@@ -428,6 +432,26 @@ class FunMatcherTest {
     @Test
     fun `Match only methods returning Unit`() {
         check(FunMatcher(returnType = "kotlin.Unit"), true, true, false, false, true, true, false)
+    }
+
+    @Test
+    fun `Match aliased and non-aliased constructor`() = kaSession(tree.psiFile) {
+        val constructorExpressions = tree.psiFile
+            .findDescendantOfType<KtNamedFunction> { it.name == "Match aliased and non-aliased constructor" }!!
+            .collectDescendantsOfType<KtCallExpression> {
+                it.calleeExpression?.text?.contains("IllegalStateException") ?: false
+            }
+        val assert = { typeName: String, expected: Boolean ->
+            val matcher = ConstructorMatcher(typeName = typeName)
+            constructorExpressions.forEach { assertThat(matcher.matches(it)).withFailMessage(it.text).isEqualTo(expected) }
+        }
+
+        assert("java.lang.IllegalStateException", true)
+        assert("kotlin.IllegalStateException", false)
+        assert("JavaLangIllegalStateExceptionAlias", false)
+        assert("KotlinIllegalStateExceptionAlias", false)
+        assert("KotlinIllegalStateExceptionAliasOfAlias", false)
+        assert("IllegalStateException", false)
     }
 
     private fun check(funMatcher: FunMatcherImpl, vararg expected: Boolean?) = kaSession(tree.psiFile) {

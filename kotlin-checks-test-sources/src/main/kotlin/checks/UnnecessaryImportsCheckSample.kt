@@ -92,6 +92,11 @@ import operators.remAssign // FN
 import operators.ResourceLoader
 import operators.provideDelegate // Compliant
 
+import otherpackage.ClassUsedViaConstructorReference1
+import otherpackage.ClassUsedViaConstructorReference2
+import otherpackage.ClassUsedViaConstructorReference3
+import otherpackage.functionTakingAny
+
 
 class MyUI {
     fun <T> bindResource(id: ResourceID<T>): ResourceLoader<T> {
@@ -183,6 +188,12 @@ class UnnecessaryImportsCheckSample {
     fun bar() {
 
     }
+
+    class ConstructorReference(val value: Any = ::ClassUsedViaConstructorReference1) {
+        fun constructorReference(value: Any = ::ClassUsedViaConstructorReference2) {
+            functionTakingAny(value = ::ClassUsedViaConstructorReference3)
+        }
+    }
 }
 
 class ChildClass1A: java.util.Date()
@@ -200,3 +211,4 @@ inline fun <T> remember(calculation: () -> T): T = TODO()
 private fun state() = object : State<String> {
     override val value = "XY"
 }
+
