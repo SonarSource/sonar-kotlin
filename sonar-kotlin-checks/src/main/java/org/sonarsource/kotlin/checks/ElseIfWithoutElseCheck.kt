@@ -64,7 +64,7 @@ class ElseIfWithoutElseCheck : AbstractCheck() {
     }
 
     private fun KtIfExpression.terminates(): Boolean =
-        when (then!!.lastBlockStatementOrThis()) {
+        when (then?.lastBlockStatementOrThis()) {
             is KtReturnExpression, is KtThrowExpression, is KtBreakExpression, is KtContinueExpression -> true
             else -> false
         }
