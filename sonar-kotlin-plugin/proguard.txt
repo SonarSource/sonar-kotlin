@@ -6,16 +6,19 @@
 -keep class
 # META-INF/extensions/compiler.xml
 org.jetbrains.kotlin.plugin.references.SimpleNameReferenceExtension,
-# all projectService.serviceImplementation from
+# all projectService.serviceImplementation and applicationService.serviceImplementation from
 # META-INF/analysis-api/analysis-api-impl-base.xml
 org.jetbrains.kotlin.resolve.jvm.KotlinJavaPsiFacade,
 org.jetbrains.kotlin.analysis.api.impl.base.java.source.JavaElementSourceWithSmartPointerFactory,
 org.jetbrains.kotlin.analysis.api.impl.base.references.HLApiReferenceProviderService,
 org.jetbrains.kotlin.analysis.api.impl.base.projectStructure.KaBaseModuleProvider,
 org.jetbrains.kotlin.analysis.api.platform.KotlinProjectMessageBusProvider,
+org.jetbrains.kotlin.analysis.api.impl.base.permissions.KaBaseAnalysisPermissionRegistry,
 org.jetbrains.kotlin.analysis.api.impl.base.permissions.KaBaseAnalysisPermissionChecker,
 org.jetbrains.kotlin.analysis.api.impl.base.lifetime.KaBaseLifetimeTracker,
-# all projectService.serviceImplementation from
+org.jetbrains.kotlin.analysis.decompiled.light.classes.origin.KotlinDeclarationInCompiledFileSearcher,
+org.jetbrains.kotlin.analysis.api.impl.base.symbols.pointers.KaBasePsiSymbolPointerCreator,
+# all projectService.serviceImplementation and applicationService.serviceImplementation from
 # META-INF/analysis-api/low-level-api-fir.xml
 org.jetbrains.kotlin.analysis.low.level.api.fir.services.LLRealFirElementByPsiElementChooser,
 org.jetbrains.kotlin.analysis.low.level.api.fir.projectStructure.LLFirBuiltinsSessionFactory,
@@ -26,6 +29,8 @@ org.jetbrains.kotlin.analysis.low.level.api.fir.LLFirGlobalResolveComponents,
 org.jetbrains.kotlin.analysis.low.level.api.fir.LLFirResolveSessionService,
 org.jetbrains.kotlin.analysis.low.level.api.fir.file.structure.LLFirDeclarationModificationService,
 org.jetbrains.kotlin.analysis.low.level.api.fir.file.structure.LLFirInBlockModificationTracker,
+org.jetbrains.kotlin.analysis.low.level.api.fir.statistics.LLStatisticsService,
+org.jetbrains.kotlin.analysis.low.level.api.fir.lazy.resolve.LLFirResolutionActivityTracker,
 # all projectService.serviceImplementation from
 # META-INF/analysis-api/symbol-light-classes.xml
 org.jetbrains.kotlin.light.classes.symbol.SymbolKotlinAsJavaSupport,
@@ -40,6 +45,8 @@ org.jetbrains.kotlin.analysis.api.fir.KaFirSessionProvider,
 org.jetbrains.kotlin.analysis.api.fir.modification.KaFirSourceModificationService,
 org.jetbrains.kotlin.analysis.api.fir.references.KotlinFirReferenceContributor,
 org.jetbrains.kotlin.analysis.api.fir.references.ReadWriteAccessCheckerFirImpl,
+org.jetbrains.kotlin.analysis.api.fir.KaFirDefaultImportsProvider,
+org.jetbrains.kotlin.analysis.api.fir.statistics.KaFirStatisticsService,
 
 # Used to have proper named groups behavior in regular expressions
 kotlin.internal.jdk8.JDK8PlatformImplementations,
@@ -49,8 +56,10 @@ com.github.benmanes.caffeine.**,
 org.sonarsource.analyzer.commons.RuleMetadataLoader,
 org.sonarsource.kotlin.plugin.**
 
+-keepclassmembers enum * { *; }
+
 -keepclassmembers class
-!org.jetbrains.kotlin.analysis.api.components.KaCompilerFacility,
+!org.jetbrains.kotlin.analysis.api.components.KaCompilerFacility**,
 !org.jetbrains.kotlin.analysis.api.KaSession,
 !org.jetbrains.kotlin.analysis.api.impl.base.KaBaseSession,
 !org.jetbrains.kotlin.analysis.api.fir.components.KaFirCompilerFacility**,
@@ -61,6 +70,7 @@ org.sonarsource.kotlin.plugin.**
 !org.jetbrains.kotlin.ir.**,
 !org.jetbrains.kotlin.js.**,
 !org.jetbrains.kotlin.**.js.**,
+!org.jetbrains.kotlin.cli.**,
 **
 { *; }
 

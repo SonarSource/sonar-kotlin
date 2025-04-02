@@ -20,9 +20,6 @@
 "kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/internal/InternalUtils.kt": [
 335
 ],
-"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/messaging/CordaRPCOps.kt": [
-48
-],
 "kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/ProgressTracker.kt": [
 52
 ],

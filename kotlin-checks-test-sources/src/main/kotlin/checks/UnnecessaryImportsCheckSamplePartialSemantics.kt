@@ -45,6 +45,11 @@ import java.beans.*
 import kotlin.test.*
 import kotlin.* // Noncompliant {{Remove this redundant import.}}
 
+import otherpackage.ClassUsedViaConstructorReference1
+import otherpackage.ClassUsedViaConstructorReference2
+import otherpackage.ClassUsedViaConstructorReference3
+import otherpackage.functionTakingAny
+
 class UnnecessaryImportsCheckSamplePartialSemantics {
     fun foo() {
         StringBuilder()
@@ -92,5 +97,11 @@ class UnnecessaryImportsCheckSamplePartialSemantics {
     @DelicateCoroutinesApi
     fun bar() {
 
+    }
+
+    class ConstructorReference(val value: Any = ::ClassUsedViaConstructorReference1) {
+        fun constructorReference(value: Any = ::ClassUsedViaConstructorReference2) {
+            functionTakingAny(value = ::ClassUsedViaConstructorReference3)
+        }
     }
 }
