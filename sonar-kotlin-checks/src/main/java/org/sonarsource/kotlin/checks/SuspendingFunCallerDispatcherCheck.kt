@@ -43,6 +43,7 @@ class SuspendingFunCallerDispatcherCheck : CallAbstractCheck() {
             && callExpressions.all {
                 (it.resolveToCall()?.singleFunctionCallOrNull()?.partiallyAppliedSymbol?.signature?.symbol as? KaNamedFunctionSymbol)?.isSuspend == true
             }
+            && arguments.size == 2
         ) {
             val argExpr = arguments.elementAt(0)
             kotlinFileContext.reportIssue(argExpr, "Remove this dispatcher. It is pointless when used with only suspending functions.")

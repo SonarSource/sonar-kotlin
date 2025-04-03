@@ -41,6 +41,10 @@ class SuspendingFunCallerDispatcherCheckSample(val injectable: CoroutineDispatch
             launch(Dispatchers.IO) { // Compliant
                 Thread.sleep(500L)
             }
+
+            async { // Compliant, no Dispatcher is used explicitly
+                complex()
+            }
         }
     }
 
