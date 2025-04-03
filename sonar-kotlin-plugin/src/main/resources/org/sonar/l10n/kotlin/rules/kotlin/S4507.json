@@ -16,7 +16,6 @@
     "cwe",
     "error-handling",
     "debug",
-    "android",
     "user-experience"
   ],
   "defaultSeverity": "Minor",
@@ -27,17 +26,6 @@
     "CWE": [
       489,
       215
-    ],
-    "OWASP Mobile": [
-      "M9",
-      "M10"
-    ],
-    "OWASP Mobile Top 10 2024": [
-      "M7",
-      "M8"
-    ],
-    "MASVS": [
-      "MSTG-CODE-2"
     ],
     "OWASP": [
       "A3"

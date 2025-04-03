@@ -1,5 +1,5 @@
 {
-  "title": "Exposing Java interfaces in WebViews is security-sensitive",
+  "title": "Exposing Java objects through JavaScript interfaces is security-sensitive",
   "type": "SECURITY_HOTSPOT",
   "status": "ready",
   "remediation": {
@@ -29,7 +29,7 @@
       79
     ]
   },
-  "quickfix": "unknown",
+  "quickfix": "partial",
   "code": {
     "impacts": {
       "SECURITY": "MEDIUM"

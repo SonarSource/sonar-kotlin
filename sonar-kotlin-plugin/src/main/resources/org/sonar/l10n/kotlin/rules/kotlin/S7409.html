@@ -1,19 +1,20 @@
-<p>Using Javascript interfaces in WebViews is unsafe as it allows JavaScript to invoke Java methods, potentially giving attackers access to data or
-sensitive app functionality. WebViews might include untrusted sources such as third-party iframes, making this functionality particularly risky. As
-Javascript interfaces are passed to every frame in the WebView, those iframes are also able to access the exposed Java methods.</p>
+<p>Using JavaScript interfaces in WebViews to expose Java objects is unsafe. Doing so allows JavaScript to invoke Java methods, potentially giving
+attackers access to data or sensitive app functionality. WebViews might include untrusted sources such as third-party iframes, making this
+functionality particularly risky. As JavaScript interfaces are passed to every frame in the WebView, those iframes are also able to access the exposed
+Java object.</p>
 <h2>Ask Yourself Whether</h2>
 <ul>
   <li> The content in the WebView is fully trusted and secure. </li>
   <li> Potentially untrusted iframes could be loaded in the WebView. </li>
-  <li> The Javascript interface has to be exposed for the entire lifecycle of the WebView. </li>
-  <li> The exposed Java methods will accept input from potentially untrusted sources. </li>
+  <li> The JavaScript interface has to be exposed for the entire lifecycle of the WebView. </li>
+  <li> The exposed Java object might be called by untrusted sources. </li>
 </ul>
 <p>There is a risk if you answered yes to any of these questions.</p>
 <h2>Recommended Secure Coding Practices</h2>
 <h3>Disable JavaScript</h3>
-<p>If it is possible to disable JavaScript in the WebView, this is the most secure option. By default, JavaScript is disabled in a WebView, so you do
-not need to explicitly call <code>webSettings.setJavaScriptEnabled(true)</code> in your <code>WebSettings</code> configuration. Of course, sometimes
-it is necessary to enable JavaScript, in which case the following recommendations should be considered.</p>
+<p>If it is possible to disable JavaScript in the WebView, this is the most secure option. By default, JavaScript is disabled in a WebView, so
+<code>webSettings.javaScriptEnabled = false</code> does not need to be explicitly called. Of course, sometimes it is necessary to enable JavaScript,
+in which case the following recommendations should be considered.</p>
 <h3>Remove JavaScript interface when loading untrusted content</h3>
 <p>JavaScript interfaces can be removed at a later point. It is recommended to remove the JavaScript interface when it is no longer needed. If it is
 needed for a longer time, consider removing it before loading untrusted content. This can be done by calling
@@ -45,7 +46,8 @@ class ExampleActivity : AppCompatActivity() {
 }
 </pre>
 <h2>Compliant Solution</h2>
-<p>The most secure option is to disable JavaScript entirely.</p>
+<p>The most secure option is to disable JavaScript entirely. {rule:kotlin:S6362} further explains why it should not be enabled unless absolutely
+necessary.</p>
 <pre>
 class ExampleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +87,9 @@ class ExampleActivity : AppCompatActivity() {
         webView.settings.javaScriptEnabled = true
 
         WebViewCompat.addWebMessageListener(
-            webView, "androidBridge", ALLOWED_ORIGINS,  // Only allow messages from these origins
+            webView,
+            "androidBridge",
+            ALLOWED_ORIGINS,  // Only allow messages from these origins
             object : WebViewCompat.WebMessageListener {
                 override fun onPostMessage(
                     view: WebView,
@@ -112,5 +116,9 @@ class ExampleActivity : AppCompatActivity() {
   <li> OWASP - <a href="https://owasp.org/www-project-mobile-top-10/2023-risks/m8-security-misconfiguration.html">Mobile Top 10 2024 Category M8 -
   Security Misconfiguration</a> </li>
   <li> CWE - <a href="https://cwe.mitre.org/data/definitions/79">CWE-79 - Improper Neutralization of Input During Web Page Generation</a> </li>
+</ul>
+<h3>Related rules</h3>
+<ul>
+  <li> {rule:kotlin:S6362} - Enabling JavaScript support for WebViews is security-sensitive </li>
 </ul>
 
