@@ -1,10 +1,13 @@
-#!/bin/bash
+#!/bin/bash -x
 set -euo pipefail
 
 cd "$ORCHESTRATOR_HOME" || exit 1
 
+/usr/bin/sort --version
+/usr/bin/find . -name 'sonar-application-*'
+
 # Find all sonar-application-* JAR files, sort them by version, and list them
-files=$(/usr/bin/find . -name 'sonar-application-*' | sort --version-sort --field-separator=- --key=3 --reverse)
+files=$(/usr/bin/find . -name 'sonar-application-*' | /usr/bin/sort --field-separator=- --key=3V --reverse)
 
 echo "File that will not be deleted:"
 echo "$files" | head -n 1
