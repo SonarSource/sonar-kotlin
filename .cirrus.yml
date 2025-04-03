@@ -63,6 +63,30 @@ windows_16_cpu_32G_template: &WINDOWS_16_CPU_32G
     preemptible: false
     use_ssd: true
 
+orchestrator_cache_definition: &ORCHESTRATOR_CACHE_DEFINITION
+  set_orchestrator_home_script: |
+    # Check if SQ_VERSION exists and create an intermediary variable
+    if [ -n "$SQ_VERSION" ]; then
+        FOLDER="${SQ_VERSION}"
+    else
+        FOLDER="DEFAULT"
+    fi
+
+    CURRENT_MONTH=$(date +"%B")
+    echo "CURRENT_MONTH=${CURRENT_MONTH}" >> $CIRRUS_ENV
+    echo "ORCHESTRATOR_HOME=${CIRRUS_WORKING_DIR}/orchestrator/${FOLDER}/${CURRENT_MONTH}" >> $CIRRUS_ENV
+    echo "FOLDER=${FOLDER}" >> $CIRRUS_ENV
+  mkdir_orchestrator_home_script: |
+    echo "Create dir ${ORCHESTRATOR_HOME} if needed"
+    mkdir -p ${ORCHESTRATOR_HOME}
+  orchestrator_cache:
+    folder: ${ORCHESTRATOR_HOME}
+    fingerprint_script: echo ${FOLDER}-${CURRENT_MONTH}
+    reupload_on_changes: "true"
+
+cleanup_orchestrator_cache_script_template: &CLEANUP_ORCHESTRATOR_CACHE_SCRIPT
+  cleanup_orchestrator_cache_script: .cirrus/clean-orchestrator-cache.sh
+
 setup_gradle_cache_template: &SETUP_GRADLE_CACHE
   gradle_cache:
      folder: .gradle/caches
@@ -78,6 +102,7 @@ cleanup_gradle_cache_script_template: &CLEANUP_GRADLE_CACHE_SCRIPT
 
 gradle_its_template: &GRADLE_ITS_TEMPLATE
   <<: *SETUP_GRADLE_CACHE
+  <<: *ORCHESTRATOR_CACHE_DEFINITION
   run_its_script:
     - |
       if [ -n "${GIT_SUB_MODULE}" ]; then
@@ -89,6 +114,7 @@ gradle_its_template: &GRADLE_ITS_TEMPLATE
       "-DbuildNumber=$BUILD_NUMBER"
       --info --console plain --no-daemon --build-cache
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+  <<: *CLEANUP_ORCHESTRATOR_CACHE_SCRIPT
 
 only_if_sonarsource_qa_template: &ONLY_IF_SONARSOURCE_QA
   only_if: $CIRRUS_USER_COLLABORATOR == 'true' && $CIRRUS_TAG == "" && ($CIRRUS_PR != "" || $CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "dogfood-on-.*")
@@ -198,6 +224,7 @@ qa_ruling_kotlin_compiler_task:
     GIT_SUB_MODULE: "its/sources"
   <<: *LINUX_6_CPU_12G_JAVA_17
   <<: *SETUP_GRADLE_CACHE
+  <<: *ORCHESTRATOR_CACHE_DEFINITION
   run_its_script:
     - |
       if [ -n "${GIT_SUB_MODULE}" ]; then
@@ -209,6 +236,7 @@ qa_ruling_kotlin_compiler_task:
       "-DbuildNumber=$BUILD_NUMBER"
       --info --console plain --no-daemon --build-cache
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
+  <<: *CLEANUP_ORCHESTRATOR_CACHE_SCRIPT
 
 build_win_task:
   <<: *QA_TASK_FILTER
