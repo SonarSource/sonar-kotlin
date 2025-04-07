@@ -39,5 +39,5 @@ fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile
         listOf(virtualFile),
     )
     val (ktFile, document) = KotlinSyntaxStructure.of(content, environment, inputFile)
-    return KotlinTree(ktFile, document, RegexCache())
+    return KotlinTree(ktFile, document)
 }

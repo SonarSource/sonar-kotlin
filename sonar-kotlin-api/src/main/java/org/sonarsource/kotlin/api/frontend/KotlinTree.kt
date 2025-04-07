@@ -29,8 +29,9 @@ import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textPointerAtOffset
 class KotlinTree(
     val psiFile: KtFile,
     val document: Document,
-    val regexCache: RegexCache,
-)
+) {
+    val regexCache = RegexCache()
+}
 
 data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val inputFile: InputFile) {
     companion object {
