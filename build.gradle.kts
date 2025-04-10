@@ -152,12 +152,8 @@ subprojects {
 
         systemProperties = System.getProperties().filterKeys {
             it is String &&
-                (it.startsWith("orchestrator") || it.startsWith("sonar") || it == "buildNumber" || it == "slangVersion")
+                (it.startsWith("orchestrator") || it.startsWith("sonar") || it == "buildNumber")
         }.mapKeys { it.key as String }
-
-        if (systemProperties.containsKey("buildNumber") && !systemProperties.containsKey("slangVersion")) {
-            systemProperties["slangVersion"] = version
-        }
     }
 
     val sourcesJar by tasks.creating(Jar::class) {

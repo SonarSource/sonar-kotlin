@@ -16,7 +16,6 @@
  */
 package org.sonarsource.slang;
 
-import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.build.Build;
 import com.sonar.orchestrator.build.GradleBuild;
 import com.sonar.orchestrator.build.SonarScanner;
@@ -24,7 +23,6 @@ import com.sonar.orchestrator.build.SonarScanner;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
-import com.sonar.orchestrator.locator.Location;
 import com.sonar.orchestrator.locator.MavenLocation;
 import java.io.File;
 import java.io.IOException;
@@ -66,9 +64,8 @@ public class SlangRulingTest {
       .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion(System.getProperty(SQ_VERSION_PROPERTY, DEFAULT_SQ_VERSION))
       .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin", "sonar-lits-plugin", "0.11.0.2659"))
+      .addPlugin(FileLocation.of("../../sonar-kotlin-plugin/build/libs/sonar-kotlin-plugin.jar"))
       .setServerProperty("sonar.telemetry.enable", "false");
-
-    addLanguagePlugins(builder);
 
     orchestrator = builder.build();
     orchestrator.start();
@@ -80,24 +77,6 @@ public class SlangRulingTest {
     File kotlinProfile = ProfileGenerator.generateProfile(SlangRulingTest.orchestrator.getServer().getUrl(), "kotlin", "kotlin", kotlinRulesConfiguration, Collections.emptySet());
 
     orchestrator.getServer().restoreProfile(FileLocation.of(kotlinProfile));
-  }
-
-  private static void addLanguagePlugins(OrchestratorBuilder builder) {
-    String slangVersion = System.getProperty("slangVersion");
-
-    LANGUAGES.forEach(language -> {
-      Location pluginLocation;
-      String plugin = "sonar-" + language +"-plugin";
-      if (slangVersion == null || slangVersion.isEmpty()) {
-        // use the plugin that was built on local machine
-        pluginLocation = FileLocation.byWildcardMavenFilename(new File("../../" + plugin + "/build/libs"), plugin + ".jar");
-      } else {
-        // QA environment downloads the plugin built by the CI job
-        pluginLocation = MavenLocation.of("org.sonarsource.kotlin", plugin, slangVersion);
-      }
-
-      builder.addPlugin(pluginLocation);
-    });
   }
 
   @Test
