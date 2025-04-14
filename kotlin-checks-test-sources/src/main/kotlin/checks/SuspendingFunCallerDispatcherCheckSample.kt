@@ -1,6 +1,7 @@
 package checks
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -52,6 +53,17 @@ class SuspendingFunCallerDispatcherCheckSample(val injectable: CoroutineDispatch
         val dispatcher = Dispatchers.IO
         coroutineScope {
             launch(dispatcher) { // Noncompliant
+                delay(100L)
+                complex()
+                delay(500L)
+            }
+        }
+    }
+
+    suspend fun notDispatcher() {
+        coroutineScope {
+            val context = CoroutineExceptionHandler { _, throwable -> }
+            launch(context) { // Compliant, not a dispatcher
                 delay(100L)
                 complex()
                 delay(500L)
