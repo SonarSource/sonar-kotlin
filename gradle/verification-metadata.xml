@@ -2038,24 +2038,14 @@
             <sha256 value="c9ddc63c3b0ca3b551662dd0eede1f0b4df6581c81faba7741a64fefa2000a96" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.orchestrator" name="sonar-orchestrator" version="5.0.0.2065">
-         <artifact name="sonar-orchestrator-5.0.0.2065.jar">
-            <sha256 value="be389d90b4de348c0099989268bfc392071de3eb589788d9e4b650c9713779ff" origin="Verified"/>
+      <component group="org.sonarsource.orchestrator" name="sonar-orchestrator" version="5.5.0.2535">
+         <artifact name="sonar-orchestrator-5.5.0.2535.jar">
+            <sha256 value="4224a66f2a78db5037d73a4a8c4733eca9636d55647bd193e169a3a84c81c686" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.orchestrator" name="sonar-orchestrator" version="5.1.0.2254">
-         <artifact name="sonar-orchestrator-5.1.0.2254.jar">
-            <sha256 value="a517b078c8ec9111bc150f3059b977241f4526f919bb2aaf7df7f9dc570c5b1a" origin="Verified"/>
-         </artifact>
-      </component>
-      <component group="org.sonarsource.orchestrator" name="sonar-orchestrator-junit5" version="5.0.0.2065">
-         <artifact name="sonar-orchestrator-junit5-5.0.0.2065.jar">
-            <sha256 value="76579f8f55085b4ca675914feb437f116f361a9e32126dc6d34fc412e4e8b471" origin="Verified"/>
-         </artifact>
-      </component>
-      <component group="org.sonarsource.orchestrator" name="sonar-orchestrator-junit5" version="5.1.0.2254">
-         <artifact name="sonar-orchestrator-junit5-5.1.0.2254.jar">
-            <sha256 value="57f7c1614da32b1377330985a4e430de02e96cad7d15b936509b0412bb28dd16" origin="Verified"/>
+      <component group="org.sonarsource.orchestrator" name="sonar-orchestrator-junit5" version="5.5.0.2535">
+         <artifact name="sonar-orchestrator-junit5-5.5.0.2535.jar">
+            <sha256 value="6913aeef244978cc50f7614db1cabd60fe47cdfb46af217b214a3f6d02e5ebc2" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.sonarsource.scanner.api" name="sonar-scanner-api" version="2.16.2.588">
