@@ -17,7 +17,7 @@ dependencies {
     implementation("org.springframework.security:spring-security-core:4.2.17.RELEASE")
     implementation("commons-codec:commons-codec:1.13")
     implementation("com.google.guava:guava:30.1.1-jre")
-    implementation("org.apache.commons:commons-lang3:3.9")
+    implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("commons-lang:commons-lang:2.6")
 }
 

@@ -33,6 +33,7 @@ private val MATH_RANDOM_MATCHER = FunMatcher(qualifier = "java.lang.Math", name 
 
 private val KOTLIN_RANDOM_MATCHER = FunMatcher (qualifier = "kotlin.random", name = "Random")
 
+private val LANG3_RANDOM_STRING_UTILS = "org.apache.commons.lang3.RandomStringUtils"
 private val RANDOM_TYPES_MATCHER = FunMatcher {
    qualifiers = setOf(
        "java.util.concurrent.ThreadLocalRandom",
@@ -41,6 +42,11 @@ private val RANDOM_TYPES_MATCHER = FunMatcher {
        "org.apache.commons.lang.RandomStringUtils",
        "org.apache.commons.lang3.RandomStringUtils",
    )
+}
+
+private val RANDOM_STRING_UTILS_SECURE_INSTANCES = FunMatcher {
+    definingSupertypes = setOf(LANG3_RANDOM_STRING_UTILS)
+    names = setOf("secure", "secureStrong")
 }
 
 private val RANDOM_CONSTRUCTORS_MATCHER = FunMatcher(matchConstructor = true) {
@@ -66,7 +72,9 @@ class PseudoRandomCheck : CallAbstractCheck() {
         kotlinFileContext: KotlinFileContext,
     ) {
         val calleeExpression = callExpression.calleeExpression ?: return
-        if (matchedFun != RANDOM_TYPES_MATCHER || !callExpression.isChainedMethodInvocation()) {
+        if ((matchedFun != RANDOM_TYPES_MATCHER || !callExpression.isChainedMethodInvocation())
+            && !RANDOM_STRING_UTILS_SECURE_INSTANCES.matches(callExpression)
+        ) {
             kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
         }
     }
