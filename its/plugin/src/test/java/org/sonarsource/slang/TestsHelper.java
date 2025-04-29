@@ -43,6 +43,7 @@ public class TestsHelper {
     OrchestratorExtensionBuilder orchestratorBuilder = OrchestratorExtension.builderEnv();
     addLanguagePlugins(orchestratorBuilder);
     ORCHESTRATOR = orchestratorBuilder
+            .setEdition(com.sonar.orchestrator.container.Edition.ENTERPRISE_LW)
             .useDefaultAdminCredentialsForBuilds(true)
             .setSonarVersion(System.getProperty(SQ_VERSION_PROPERTY, DEFAULT_SQ_VERSION))
             .restoreProfileAtStartup(FileLocation.of("src/test/resources/suppress-warnings-kotlin.xml"))

@@ -86,6 +86,16 @@ allprojects {
     }
 
     repositories {
+        maven(url = "https://repox.jfrog.io/repox/sonarsource-qa") {
+            // TODO https://github.com/SonarSource/orchestrator/pull/242
+            credentials {
+                username = System.getenv("ARTIFACTORY_PRIVATE_USERNAME")
+                password = System.getenv("ARTIFACTORY_PRIVATE_PASSWORD")
+            }
+            content {
+                includeGroup("org.sonarsource.orchestrator")
+            }
+        }
         mavenCentral()
         maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies") {
             content {
