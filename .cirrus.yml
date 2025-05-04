@@ -103,6 +103,9 @@ cleanup_gradle_cache_script_template: &CLEANUP_GRADLE_CACHE_SCRIPT
 gradle_its_template: &GRADLE_ITS_TEMPLATE
   <<: *SETUP_GRADLE_CACHE
   <<: *ORCHESTRATOR_CACHE_DEFINITION
+  download_build_artifact_script:
+    - mkdir -p sonar-kotlin-plugin/build/libs
+    - curl --fail -X GET -o sonar-kotlin-plugin/build/libs/sonar-kotlin-plugin.jar http://${CIRRUS_HTTP_CACHE_HOST}/build/${CIRRUS_BUILD_ID}/sonar-kotlin-plugin.jar
   run_its_script:
     - |
       if [ -n "${GIT_SUB_MODULE}" ]; then
@@ -136,6 +139,8 @@ build_task:
   build_script:
     - source cirrus-env BUILD-PRIVATE
     - regular_gradle_build_deploy_analyze -x test -x sonar
+  upload_build_artifact_script:
+    - curl -X POST --data-binary @sonar-kotlin-plugin/build/libs/sonar-kotlin-plugin.jar http://${CIRRUS_HTTP_CACHE_HOST}/build/${CIRRUS_BUILD_ID}/sonar-kotlin-plugin.jar
   on_failure:
     error_log_artifacts:
       path: "hs_err_pid*.log"
@@ -225,6 +230,9 @@ qa_ruling_kotlin_compiler_task:
   <<: *LINUX_6_CPU_12G_JAVA_17
   <<: *SETUP_GRADLE_CACHE
   <<: *ORCHESTRATOR_CACHE_DEFINITION
+  download_build_artifact_script:
+    - mkdir -p sonar-kotlin-plugin/build/libs
+    - curl --fail -X GET -o sonar-kotlin-plugin/build/libs/sonar-kotlin-plugin.jar http://${CIRRUS_HTTP_CACHE_HOST}/build/${CIRRUS_BUILD_ID}/sonar-kotlin-plugin.jar
   run_its_script:
     - |
       if [ -n "${GIT_SUB_MODULE}" ]; then
