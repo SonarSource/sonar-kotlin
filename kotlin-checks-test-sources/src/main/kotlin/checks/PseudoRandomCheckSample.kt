@@ -86,6 +86,9 @@ class PseudoRandomCheckSample {
         val rand10 = RandomStringUtils.random(1) // Noncompliant
 
         val rand11 = org.apache.commons.lang3.RandomStringUtils.random(1) // Noncompliant
+
+        val rand12 = org.apache.commons.lang3.RandomStringUtils.secure().next(1) // Compliant
+        val rand13 = org.apache.commons.lang3.RandomStringUtils.secureStrong().next(1) // Compliant
     }
 
     fun nextInt(): Int {
