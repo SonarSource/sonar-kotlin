@@ -56,11 +56,13 @@ class InterfaceCouldBeFunctionalCheck : AbstractCheck() {
 
 private fun hasExactlyOneFunctionAndNoProperties(klass: KtClass): Boolean {
     if (klass.superTypeListEntries.isNotEmpty()) return false
-
-    // Note: other possible declarations are KtClass (classes, interfaces) and
-    //       KtObjectDeclaration (companion objects), but they are allowed inside function interfaces
     var functionCount = 0
-    return klass.declarations.all {
-        it !is KtProperty && (it !is KtNamedFunction || functionCount++ == 0)
-    } && functionCount > 0
+    for (declaration in klass.declarations) {
+        if (declaration is KtProperty) return false
+        if (declaration is KtNamedFunction) {
+            if (functionCount > 0 || declaration.hasTypeParameterListBeforeFunctionName()) return false
+            functionCount++
+        }
+    }
+    return functionCount > 0
 }
