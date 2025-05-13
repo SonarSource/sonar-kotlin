@@ -88,9 +88,6 @@
 "kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/DriverDSLImpl.kt": [
 112
 ],
-"kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/dsl/LedgerDSLInterpreter.kt": [
-19
-],
 "kotlin-corda-project:sources/kotlin/corda/tools/explorer/src/main/kotlin/net/corda/explorer/formatters/Formatter.kt": [
 3
 ]

@@ -140,3 +140,15 @@ class InterfaceCouldBeFunctionalCheckSample {
     }
 
 }
+
+// We shouldn't suggest the fun interface in the case of a single generic function
+
+interface DistributedLock { // Compliant
+    fun <R> transaction(body: () -> R): R
+}
+
+class RedisDistributedLock : DistributedLock {
+    override fun <R> transaction(body: () -> R): R {
+        return null as R
+    }
+}

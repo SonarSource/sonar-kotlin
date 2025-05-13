@@ -26,8 +26,7 @@
 81,
 116,
 164,
-173,
-205
+173
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/cli-runner/src/org/jetbrains/kotlin/runner/Runner.kt": [
 21
@@ -40,9 +39,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/src/org/jetbrains/kotlin/cli/jvm/repl/ReplExceptionReporter.kt": [
 23
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/src/org/jetbrains/kotlin/cli/jvm/repl/configuration/SnippetExecutionInterceptor.kt": [
-19
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/container/src/org/jetbrains/kotlin/container/Container.kt": [
 27
@@ -209,14 +205,8 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/KtFileClassProvider.kt": [
 21
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/contracts/description/ContractDescription.kt": [
-35
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/contracts/interpretation/EffectDeclarationInterpreter.kt": [
 28
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/contracts/model/ESExpressions.kt": [
-21
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/contracts/model/Functor.kt": [
 27
@@ -315,9 +305,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/caches/project/LibraryDependenciesCache.kt": [
 29
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/compiler/configuration/BaseKotlinCompilerSettings.kt": [
-95
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/configuration/BuildSystemType.kt": [
 16
