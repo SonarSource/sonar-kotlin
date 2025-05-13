@@ -59,6 +59,7 @@ public abstract class TestBase {
       .setProjectName(projectKey)
       .setProjectVersion("1")
       .setProperty("sonar.internal.analysis.failFast", "true")
+      .setProperty("sonar.scanner.skipJreProvisioning", "true")
       .setSourceDirs(".");
   }
 
