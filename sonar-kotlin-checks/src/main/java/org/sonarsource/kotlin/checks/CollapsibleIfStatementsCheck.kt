@@ -28,6 +28,7 @@ class CollapsibleIfStatementsCheck : AbstractCheck() {
 
     override fun visitIfExpression(expression: KtIfExpression, kotlinFileContext: KotlinFileContext) {
         if (expression.elseKeyword != null) return
+        // It is safe to use ".then!!" here as we filtered out the cases with "else"
         val collapsibleIfStatement = getCollapsibleIfStatement(expression.then!!)
         if (collapsibleIfStatement != null) {
             kotlinFileContext.reportIssue(

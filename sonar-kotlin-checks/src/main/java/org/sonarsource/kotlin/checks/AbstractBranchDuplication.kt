@@ -43,7 +43,7 @@ abstract class AbstractBranchDuplication : AbstractCheck() {
     }
 
     private fun checkConditionalStructure(ctx: KotlinFileContext, tree: KtElement, conditional: ConditionalStructure) {
-        if (conditional.allBranchesArePresent && conditional.allBranchesAreIdentical()) {
+        if (conditional.allBranchesArePresent && !conditional.hasEmptyThen && conditional.allBranchesAreIdentical()) {
             onAllIdenticalBranches(ctx, tree)
         } else {
             checkDuplicatedBranches(ctx, tree, conditional.branches)
@@ -53,15 +53,24 @@ abstract class AbstractBranchDuplication : AbstractCheck() {
 
 private class ConditionalStructure {
     var allBranchesArePresent = false
+    var hasEmptyThen = false
     val branches: MutableList<KtElement> = mutableListOf()
 
     constructor(ifTree: KtIfExpression) {
-        ifTree.then!!.let { branches.add(it) }
+        if (ifTree.then != null) {
+            branches.add(ifTree.then!!)
+        } else {
+            hasEmptyThen = true
+        }
         var elseBranch = ifTree.`else`
         while (elseBranch != null) {
             if (elseBranch is KtIfExpression) {
                 val elseIf = elseBranch
-                elseIf.then!!.let { branches.add(it) }
+                if (elseIf.then != null) {
+                    branches.add(elseIf.then!!)
+                } else {
+                    hasEmptyThen = true
+                }
                 elseBranch = elseIf.`else`
             } else {
                 branches.add(elseBranch)

@@ -59,6 +59,12 @@ class AllBranchesIdenticalCheckSample {
             else -> any.foo()
         }
 
+        if (true)
+            else false
+
+        if (true)
+            else if (false)
+                else false
     }
 
     private fun String.foo() = Unit

@@ -3,6 +3,9 @@ package checks
 class ElseIfWithoutElseCheckSample {
 
     fun test(c: Boolean) {
+        if(c)
+            else ""
+
         if (c)
             if (c)
                 return

@@ -31,8 +31,7 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 class LiftReturnStatementCheck : AbstractCheck() {
 
     override fun visitIfExpression(expression: KtIfExpression, context: KotlinFileContext) {
-        // `then` branch of an `if` statement can never be null
-        val thenBranch = expression.then!!
+        val thenBranch = expression.then ?: return
         val elseBranch = expression.`else`?: return
 
         if (isReturnOrReturnBlock(thenBranch) && isReturnOrReturnBlock(elseBranch)) {
