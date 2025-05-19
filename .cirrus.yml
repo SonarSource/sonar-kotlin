@@ -191,6 +191,7 @@ qa_plug_pub_lin_task:
   env:
     ITS_PROJECT: "plugin"
     GRADLE_TASK: ":its:plugin:test"
+    GITHUB_TOKEN: VAULT[development/github/token/licenses-ro token]
     matrix:
       - SQ_VERSION: "DEV"
       - SQ_VERSION: "LATEST_RELEASE"
