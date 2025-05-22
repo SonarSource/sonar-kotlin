@@ -60,7 +60,12 @@ private fun hasExactlyOneFunctionAndNoProperties(klass: KtClass): Boolean {
     for (declaration in klass.declarations) {
         if (declaration is KtProperty) return false
         if (declaration is KtNamedFunction) {
-            if (functionCount > 0 || declaration.hasTypeParameterListBeforeFunctionName()) return false
+            if (
+                functionCount > 0 ||
+                declaration.hasTypeParameterListBeforeFunctionName() ||
+                declaration.valueParameters.any { it.hasDefaultValue() }
+            )
+                return false
             functionCount++
         }
     }
