@@ -34,12 +34,6 @@ which are used as input:
 
     git submodule update --init its/sources
 
-Then you need to build the Ktor project:
-
-    cd its/sources/kotlin/ktor
-
-Follow the instructions to [build the project](https://github.com/ktorio/ktor/blob/main/CONTRIBUTING.md#building-the-project) and go back to the project root directory.
-
 Then build and run the Integration Tests using the `its` property:
 
     ./gradlew build -Pits --info --console=plain --no-daemon
