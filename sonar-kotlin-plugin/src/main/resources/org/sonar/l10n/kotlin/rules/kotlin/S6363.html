@@ -65,8 +65,8 @@ AndroidView(
 )
 </pre>
 <p>The compliant solution uses <code>WebViewAssetLoader</code> to load local files instead of directly accessing them via <code>file://</code> URLs.
-This approach serves assets over a secure <code><a href="https://appassets.androidplatform.net">https://appassets.androidplatform.net</a></code> URL,
-effectively isolating the WebView from the local file system.</p>
+This approach serves assets over a secure <code>https://appassets.androidplatform.net</code> URL, effectively isolating the WebView from the local
+file system.</p>
 <p>The file access settings are disabled by default in modern Android versions. To prevent possible security issues in
 <code>Build.VERSION_CODES.Q</code> and earlier, it is still recommended to explicitly set those values to false.</p>
 <h2>See</h2>
