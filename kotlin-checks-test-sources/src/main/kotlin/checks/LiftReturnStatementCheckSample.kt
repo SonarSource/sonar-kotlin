@@ -220,4 +220,9 @@ class LiftReturnStatementCheckSample {
             }
         }
     }
+
+    fun ifWithElseAndNoIf() {
+        if (true)
+            else false
+    }
 }

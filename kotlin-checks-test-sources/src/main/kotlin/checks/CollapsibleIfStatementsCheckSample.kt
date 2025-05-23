@@ -26,5 +26,12 @@ class CollapsibleIfStatementsCheck {
                 println()
             else
                 println()
+
+        if (true)
+        else false
+
+        if (true)
+        else if (false)
+        else false
     }
 }
