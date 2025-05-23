@@ -19,8 +19,10 @@ package org.sonarsource.kotlin.checks
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FUNS_ACCEPTING_DISPATCHERS
@@ -41,12 +43,18 @@ class SuspendingFunCallerDispatcherCheck : CallAbstractCheck() {
         val callExpressions = callExpression.collectDescendantsOfType<KtCallExpression>().dropLast(1)
         if (callExpressions.isNotEmpty()
             && callExpressions.all {
-                (it.resolveToCall()?.singleFunctionCallOrNull()?.partiallyAppliedSymbol?.signature?.symbol as? KaNamedFunctionSymbol)?.isSuspend == true
+                (it.resolveToCall()
+                    ?.singleFunctionCallOrNull()?.partiallyAppliedSymbol?.signature?.symbol as? KaNamedFunctionSymbol)?.isSuspend == true
             }
             && arguments.size == 2
         ) {
             val argExpr = arguments.elementAt(0)
-            kotlinFileContext.reportIssue(argExpr, "Remove this dispatcher. It is pointless when used with only suspending functions.")
+            argExpr.expressionType?.isSubtypeOf(ClassId.fromString("kotlinx/coroutines/CoroutineDispatcher"))?.ifTrue {
+                kotlinFileContext.reportIssue(
+                    argExpr,
+                    "Remove this dispatcher. It is pointless when used with only suspending functions."
+                )
+            }
         }
     }
 }
