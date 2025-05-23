@@ -21,12 +21,8 @@
 26
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/cli-common/src/org/jetbrains/kotlin/cli/common/repl/ReplApi.kt": [
-50,
 56,
-81,
-116,
-164,
-173
+81
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/cli-runner/src/org/jetbrains/kotlin/runner/Runner.kt": [
 21
@@ -406,9 +402,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/kotlin.test/common/src/main/kotlin/kotlin/test/Assertions.kt": [
 219
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/scripting/common/src/kotlin/script/experimental/api/scriptCompilation.kt": [
-8
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/scripting/common/src/kotlin/script/experimental/api/scriptEvaluation.kt": [
 28
