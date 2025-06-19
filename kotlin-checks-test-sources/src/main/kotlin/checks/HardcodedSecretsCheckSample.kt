@@ -5,9 +5,6 @@ package checks
  * - 1. String literal
  * - 2. Variable declaration
  * - 3. Assignment
- * - 4. Method invocations
- * - 4.1 Equals
- * - 4.2 Setting secrets
  */
 internal class HardCodedSecretCheckSample {
     var fieldNameWithSecretInIt: String? = retrieveSecret()
@@ -100,6 +97,7 @@ internal class HardCodedSecretCheckSample {
 
         // Secret containing words and random characters should be filtered
         val secret001 = "sk_live_xf2fh0Hu3LqXlqqUg2DEWhEz" // Noncompliant
+        val secret777 = "sk_live_aaaaaaaaaaaaaaaaaaaaaaaa" // Compliant, not enough entropy
         val secret003 = "examples/commit/8e1d746900f5411e9700fea0" // Noncompliant
         val secret004 = "examples/commit/revision/469001e9700fea0"
         val secret006 = "abcdefghijklmnop" // Compliant

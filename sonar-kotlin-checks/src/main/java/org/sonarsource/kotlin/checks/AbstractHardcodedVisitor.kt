@@ -50,7 +50,7 @@ abstract class AbstractHardcodedVisitor : AbstractCheck() {
     }
 
     override fun visitBinaryExpression(expression: KtBinaryExpression, context: KotlinFileContext) {
-        if (expression.operationToken == KtTokens.EQ || expression.operationToken == KtTokens.PLUSEQ || expression.operationToken == KtTokens.EQEQ) {
+        if (expression.operationToken == KtTokens.EQ || expression.operationToken == KtTokens.PLUSEQ) {
             val left = expression.left
             left?.identifier()?.let { checkVariable(context, left, it, expression.right!!) }
         }
@@ -119,9 +119,9 @@ abstract class AbstractHardcodedVisitor : AbstractCheck() {
         }
     }
 
-    private fun variablePatterns() = variablePatterns ?: toPatterns("")
+    private fun variablePatterns() = variablePatterns ?: toPatterns("").also { variablePatterns = it }
 
-    private fun literalPatterns() = literalPatterns ?: toPatterns("""=([^\s&]+)""")
+    private fun literalPatterns() = literalPatterns ?: toPatterns("""=([^\s&]+)""").also { literalPatterns = it }
 
     private fun toPatterns(suffix: String): Sequence<Regex> {
         return sensitiveWords.split(",").toTypedArray()
