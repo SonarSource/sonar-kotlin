@@ -71,6 +71,7 @@ import org.sonarsource.kotlin.checks.FunctionCognitiveComplexityCheck
 import org.sonarsource.kotlin.checks.GraphemeClustersInClassesCheck
 import org.sonarsource.kotlin.checks.HardcodedCredentialsCheck
 import org.sonarsource.kotlin.checks.HardcodedIpCheck
+import org.sonarsource.kotlin.checks.HardcodedSecretsCheck
 import org.sonarsource.kotlin.checks.IdenticalBinaryOperandCheck
 import org.sonarsource.kotlin.checks.IdenticalConditionsCheck
 import org.sonarsource.kotlin.checks.IfConditionalAlwaysTrueOrFalseCheck
@@ -209,6 +210,7 @@ val KOTLIN_CHECKS = listOf(
     GraphemeClustersInClassesCheck::class.java,
     HardcodedCredentialsCheck::class.java,
     HardcodedIpCheck::class.java,
+    HardcodedSecretsCheck::class.java,
     IdenticalBinaryOperandCheck::class.java,
     IdenticalConditionsCheck::class.java,
     IfConditionalAlwaysTrueOrFalseCheck::class.java,
