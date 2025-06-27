@@ -380,9 +380,9 @@
             <sha256 value="5b27372ca0bde6e9e7cbfe00b3276e86d70f1dddd9a1364b27cdc7c8168113b1" origin="Verified"/>
          </artifact>
       </component>
-      <component group="com.sonarsource.rule-api" name="rule-api" version="2.7.0.2612">
-         <artifact name="rule-api-2.7.0.2612.jar">
-            <sha256 value="f9d9652dcdb9a3ed66357846168f825dda97f42374a2b9393b0f930dd5fb7584" origin="Verified"/>
+      <component group="com.sonarsource.rule-api" name="rule-api" version="2.12.0.4409">
+         <artifact name="rule-api-2.12.0.4409.jar">
+            <sha256 value="2848b1136c465031f5cc9cf27280581bb7196637923ed7b5eb172783d6ebe1a7" origin="Verified"/>
          </artifact>
       </component>
       <component group="com.squareup.okhttp3" name="logging-interceptor" version="4.12.0">
