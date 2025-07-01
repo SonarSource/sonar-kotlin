@@ -112,6 +112,7 @@ task<proguard.gradle.ProGuardTask>("dist") {
     injars(
         mapOf(
             "filter" to listOf(
+                "!META-INF/*.kotlin_module",
                 "!com/intellij/util/concurrency/AppScheduledExecutorService\$MyThreadFactory.class", // patched version is included below
                 "!META-INF/native/**/*jansi*",
                 "!org/jline/**",
@@ -124,7 +125,7 @@ task<proguard.gradle.ProGuardTask>("dist") {
     outjars("build/libs/sonar-kotlin-plugin.jar")
     configuration("proguard.txt")
     doLast {
-        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 49_100_000L, 49_500_000L)
+        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 49_300_000L, 49_700_000L)
     }
 }
 

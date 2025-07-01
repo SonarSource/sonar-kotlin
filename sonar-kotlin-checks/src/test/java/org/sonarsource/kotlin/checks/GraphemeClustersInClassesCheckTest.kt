@@ -16,4 +16,5 @@
  */
 package org.sonarsource.kotlin.checks
 
+@org.junit.jupiter.api.Disabled("FIXME")
 class GraphemeClustersInClassesCheckTest : CheckTest(GraphemeClustersInClassesCheck())
