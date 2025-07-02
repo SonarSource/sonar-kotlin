@@ -16,5 +16,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-@org.junit.jupiter.api.Disabled("FIXME")
 class DuplicatesInCharacterClassCheckTest : CheckTest(DuplicatesInCharacterClassCheck())
