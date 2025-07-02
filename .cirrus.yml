@@ -191,6 +191,7 @@ qa_plug_pub_lin_task:
   env:
     ITS_PROJECT: "plugin"
     GRADLE_TASK: ":its:plugin:test"
+    GITHUB_TOKEN: VAULT[development/github/token/licenses-ro token]
     matrix:
       - SQ_VERSION: "DEV"
       - SQ_VERSION: "LATEST_RELEASE"
@@ -203,6 +204,7 @@ qa_plug_pub_win_task:
     SQ_VERSION: LATEST_RELEASE
     GRADLE_TASK: ":its:plugin:test"
     ITS_PROJECT: "plugin"
+    GITHUB_TOKEN: VAULT[development/github/token/licenses-ro token]
   <<: *WINDOWS_16_CPU_32G
   <<: *GRADLE_ITS_TEMPLATE
 
@@ -213,6 +215,7 @@ qa_ruling_kotlin_task:
     GRADLE_TASK: ":its:ruling:test"
     ITS_PROJECT: "ruling"
     GIT_SUB_MODULE: "its/sources"
+    GITHUB_TOKEN: VAULT[development/github/token/licenses-ro token]
   <<: *LINUX_6_CPU_12G_JAVA_17
   <<: *GRADLE_ITS_TEMPLATE
 
@@ -222,6 +225,7 @@ qa_ruling_kotlin_compiler_task:
     KOTLIN_COMPILER_IT_ENABLED: "true"
     SQ_VERSION: "LATEST_RELEASE"
     GIT_SUB_MODULE: "its/sources"
+    GITHUB_TOKEN: VAULT[development/github/token/licenses-ro token]
   <<: *LINUX_6_CPU_12G_JAVA_17
   <<: *SETUP_GRADLE_CACHE
   <<: *ORCHESTRATOR_CACHE_DEFINITION
