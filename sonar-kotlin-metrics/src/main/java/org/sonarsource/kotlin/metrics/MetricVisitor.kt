@@ -22,6 +22,7 @@ import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -151,6 +152,11 @@ private class KtMetricVisitor : KtTreeVisitorVoid() {
 
     override fun visitComment(comment: PsiComment) {
         addCommentMetrics(comment, commentLines, nosonarLines)
+    }
+
+    // Default implementation tries to flatten String concatenation, which is causing loosing of comments in the middle
+    override fun visitBinaryExpression(expression: KtBinaryExpression) {
+        visitExpression(expression)
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
