@@ -87,7 +87,7 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies") {
+        maven(url = "https://packages.jetbrains.team/maven/p/ij/intellij-dependencies") {
             content {
                 includeGroup("org.jetbrains.kotlin")
             }

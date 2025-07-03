@@ -1,4 +1,8 @@
 {
+"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/formatter/impl/utils.kt": [
+95,
+103
+],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/inspections/import/AutoImportFix.kt": [
 344
 ],

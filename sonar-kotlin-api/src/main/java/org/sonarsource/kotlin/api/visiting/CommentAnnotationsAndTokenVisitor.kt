@@ -24,6 +24,7 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.lexer.KtKeywordToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
@@ -76,6 +77,11 @@ class CommentAnnotationsAndTokenVisitor(
             }
         }
         super.visitElement(element)
+    }
+
+    // Default implementation doesn't preserve all tokens, for instance Comments are missing
+    override fun visitBinaryExpression(expression: KtBinaryExpression) {
+            visitExpression(expression)
     }
 
     private fun createComment(element: PsiComment): Comment {
