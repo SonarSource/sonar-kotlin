@@ -152,3 +152,8 @@ class RedisDistributedLock : DistributedLock {
         return null as R
     }
 }
+
+// We shouldn't suggest the fun interface in the case of a single function containing default parameters
+interface Foo {
+    fun bar(baz: Int = 0)
+}
