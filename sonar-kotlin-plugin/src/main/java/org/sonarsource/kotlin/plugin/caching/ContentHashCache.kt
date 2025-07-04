@@ -22,7 +22,7 @@ import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.cache.ReadCache
 import org.sonar.api.batch.sensor.cache.WriteCache
 import org.sonarsource.kotlin.api.checks.hasCacheEnabled
-import org.sonarsource.kotlin.api.logging.trace
+import org.sonarsource.kotlin.api.logging.debug
 import java.security.MessageDigest
 
 private val LOG = LoggerFactory.getLogger(ContentHashCache::class.java)
@@ -58,7 +58,7 @@ class ContentHashCache private constructor(private val readCache: ReadCache, pri
             if (cacheContentIsEqual) {
                 try {
                     writeCache.copyFromPrevious(key)
-                    LOG.trace { "Cache contained same hash for file ${inputFile.filename()}" }
+                    LOG.debug { "Cache contained same hash for file ${inputFile.filename()}" }
                 } catch (_: IllegalArgumentException) {
                     LOG.warn("Cannot copy key $key from cache as it has already been written")
                 }
@@ -66,7 +66,7 @@ class ContentHashCache private constructor(private val readCache: ReadCache, pri
             }
         }
         write(key, getHash(inputFile))
-        LOG.trace { "Cache contained a different hash for file ${inputFile.filename()}" }
+        LOG.debug { "Cache contained a different hash for file ${inputFile.filename()}" }
         return true
     }
 
