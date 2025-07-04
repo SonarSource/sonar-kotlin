@@ -273,6 +273,7 @@ public class SlangRulingTest {
   }
 
   private void executeBuildAndAssertDifferences(String project, Build<?> build) throws IOException {
+    build.setProperty("sonar.scanner.skipJreProvisioning", "true");
     String projectKey = projectKey(project);
     orchestrator.getServer().provisionProject(projectKey, projectKey);
     LANGUAGES.forEach(lang -> orchestrator.getServer().associateProjectToQualityProfile(projectKey, lang, "rules"));
