@@ -265,7 +265,7 @@ public class SlangRulingTest {
 
     String debugPort = System.getProperty("sonar.rulingDebugPort");
     if (debugPort != null) {
-      build.setEnvironmentVariable("SONAR_SCANNER_DEBUG_OPTS",
+      build.setEnvironmentVariable("SONAR_SCANNER_JAVA_OPTS",
         "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=" + debugPort);
     }
 
