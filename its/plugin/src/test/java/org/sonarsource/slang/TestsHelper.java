@@ -17,7 +17,7 @@
 package org.sonarsource.slang;
 
 import com.sonar.orchestrator.OrchestratorBuilder;
-
+import com.sonar.orchestrator.container.Edition;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
@@ -43,6 +43,8 @@ public class TestsHelper {
     OrchestratorExtensionBuilder orchestratorBuilder = OrchestratorExtension.builderEnv();
     addLanguagePlugins(orchestratorBuilder);
     ORCHESTRATOR = orchestratorBuilder
+            .setEdition(Edition.ENTERPRISE_LW)
+            .activateLicense()
             .useDefaultAdminCredentialsForBuilds(true)
             .setSonarVersion(System.getProperty(SQ_VERSION_PROPERTY, DEFAULT_SQ_VERSION))
             .restoreProfileAtStartup(FileLocation.of("src/test/resources/suppress-warnings-kotlin.xml"))

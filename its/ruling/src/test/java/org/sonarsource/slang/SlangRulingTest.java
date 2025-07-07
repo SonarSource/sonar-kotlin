@@ -20,7 +20,7 @@ import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.build.Build;
 import com.sonar.orchestrator.build.GradleBuild;
 import com.sonar.orchestrator.build.SonarScanner;
-
+import com.sonar.orchestrator.container.Edition;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
@@ -63,6 +63,8 @@ public class SlangRulingTest {
   @BeforeAll
   public static void setUp() {
     OrchestratorExtensionBuilder builder = OrchestratorExtension.builderEnv()
+      .setEdition(Edition.ENTERPRISE_LW)
+      .activateLicense()
       .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion(System.getProperty(SQ_VERSION_PROPERTY, DEFAULT_SQ_VERSION))
       .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin", "sonar-lits-plugin", "0.11.0.2659"))
