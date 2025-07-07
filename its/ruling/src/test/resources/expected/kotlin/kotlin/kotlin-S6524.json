@@ -14,11 +14,23 @@
 105,
 114
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/eval4j/src/org/jetbrains/eval4j/jdi/jdiEval.kt": [
+56
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/eval4j/test/org/jetbrains/eval4j/jdi/test/jdiTest.kt": [
+40
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/codeInsight/shorten/delayedRequestsWaitingSet.kt": [
 129
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/framework/JsLibraryStdDetectionUtil.kt": [
 41
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/KotlinSourcePositionProvider.kt": [
+126
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/debuggerUtil.kt": [
+111
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertSecondaryConstructorToPrimaryIntention.kt": [
 119

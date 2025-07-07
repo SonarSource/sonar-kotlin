@@ -36,6 +36,9 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/intrinsics/Concat.kt": [
 60
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/javac-wrapper/src/org/jetbrains/kotlin/javac/JavacWrapper.kt": [
+170
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/light-classes/src/org/jetbrains/kotlin/asJava/classes/KtLightClassForFacade.kt": [
 259
 ],
@@ -63,6 +66,9 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/KotlinIndicesHelper.kt": [
 296
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/KotlinSourcePositionProvider.kt": [
+128
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/stepping/KotlinStepActionFactory.kt": [
 89

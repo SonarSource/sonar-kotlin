@@ -104,6 +104,7 @@
 82
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/eval4j/src/org/jetbrains/eval4j/jdi/jdiEval.kt": [
+57,
 143
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/NodeIndentStrategy.kt": [
@@ -145,7 +146,11 @@
 210
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/KotlinPositionManager.kt": [
-329
+329,
+337
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/KotlinSourcePositionProvider.kt": [
+127
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/evaluate/KotlinCodeFragmentFactory.kt": [
 390
@@ -231,6 +236,9 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-stdlib-gen/src/templates/dsl/MemberBuilder.kt": [
 354
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/src/org/jetbrains/kotlin/kapt3/stubs/ClassFileToSourceStubConverter.kt": [
+176
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/src/org/jetbrains/kotlin/kapt3/util/javacListUtils.kt": [
 42
