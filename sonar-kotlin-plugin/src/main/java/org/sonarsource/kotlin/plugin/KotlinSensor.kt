@@ -33,7 +33,7 @@ import org.sonarsource.kotlin.api.checks.hasCacheEnabled
 import org.sonarsource.kotlin.api.common.KotlinLanguage
 import org.sonarsource.kotlin.api.common.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.api.common.SONAR_JAVA_LIBRARIES
-import org.sonarsource.kotlin.api.logging.trace
+import org.sonarsource.kotlin.api.logging.debug
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensor
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
 import org.sonarsource.kotlin.plugin.caching.ContentHashCache
@@ -139,7 +139,7 @@ class KotlinSensor(
             try {
                 nextCache.copyCPDTokensFromPrevious(inputFile)
             } catch (_: IllegalArgumentException) {
-                LOG.trace { "Unable to save the CPD tokens of file $inputFile for the next analysis." }
+                LOG.debug { "Unable to save the CPD tokens of file $inputFile for the next analysis." }
             }
             true
         } ?: false
