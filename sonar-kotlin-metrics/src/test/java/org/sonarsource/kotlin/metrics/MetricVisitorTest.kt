@@ -105,6 +105,18 @@ internal class MetricVisitorTest {
     }
 
     @Test
+    fun commentInStringConcatenation() {
+        scan(
+            """
+    val x = "1" + // comment1
+            "2" + // comment2
+            "3" // comment3
+    """.trimIndent()
+        )
+        assertThat(visitor.commentLines()).containsExactly(1, 2, 3)
+    }
+
+    @Test
     fun multiLineComment() {
         scan(
             """

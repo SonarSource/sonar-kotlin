@@ -21,12 +21,51 @@ import org.jetbrains.org.objectweb.asm.ClassVisitor
 import org.jetbrains.org.objectweb.asm.ClassWriter
 import org.jetbrains.org.objectweb.asm.MethodVisitor
 import org.jetbrains.org.objectweb.asm.Opcodes
+import org.jetbrains.org.objectweb.asm.tree.ClassNode
 import java.io.File
+
+fun main() {
+    patchAppScheduledExecutorService()
+    patchKtVisitor()
+}
+
+/**
+ * Patches [org.jetbrains.kotlin.psi.KtVisitor]
+ * to get rid of folded string literals - see https://youtrack.jetbrains.com/issue/KT-78843
+ */
+private fun patchKtVisitor() {
+    val cls = "org/jetbrains/kotlin/psi/KtVisitor.class"
+    val bytes = object {}.javaClass
+        .getResourceAsStream("/$cls")!!
+        .use { it.readAllBytes() }
+    val classWriter = ClassWriter(0)
+
+    val classNode = ClassNode()
+    ClassReader(bytes).accept(classNode, 0)
+    val methodNode = classNode.methods.find { it.name == "visitBinaryExpression" }!!
+    methodNode.instructions.clear()
+    methodNode.visitVarInsn(Opcodes.ALOAD, 0)
+    methodNode.visitVarInsn(Opcodes.ALOAD, 1)
+    methodNode.visitVarInsn(Opcodes.ALOAD, 2)
+    methodNode.visitMethodInsn(
+        Opcodes.INVOKEVIRTUAL,
+        "org/jetbrains/kotlin/psi/KtVisitor",
+        "visitExpression",
+        "(Lorg/jetbrains/kotlin/psi/KtExpression;Ljava/lang/Object;)Ljava/lang/Object;",
+        false
+    )
+    methodNode.visitInsn(Opcodes.ARETURN)
+    classNode.accept(classWriter)
+
+    val output = File("build/patch").resolve(cls)
+    output.parentFile.mkdirs()
+    output.writeBytes(classWriter.toByteArray())
+}
 
 /**
  * Patches [com.intellij.util.concurrency.AppScheduledExecutorService.MyThreadFactory].
  */
-fun main() {
+private fun patchAppScheduledExecutorService() {
 
     var patched = false
 
@@ -71,6 +110,5 @@ fun main() {
 
     val output = File("build/patch").resolve(cls)
     output.parentFile.mkdirs()
-    File("build/patch/test.txt").writeText("test")
     output.writeBytes(classWriter.toByteArray())
 }

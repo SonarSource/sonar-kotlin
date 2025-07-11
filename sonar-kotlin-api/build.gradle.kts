@@ -22,6 +22,7 @@ dependencies {
             isTransitive = false
         }
     }
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.9.0")
     implementation("com.github.ben-manes.caffeine:caffeine:2.9.3")
 
     compileOnly(libs.sonar.plugin.api)
@@ -56,8 +57,12 @@ task<JavaExec>("printAst") {
     mainClass.set("org.sonarsource.kotlin.ast.AstPrinterKt")
 }
 
-task<JavaExec>("patchKotlinCompiler") {
+val patchTask = task<JavaExec>("patchKotlinCompiler") {
     outputs.dir(layout.buildDirectory.dir("patch"))
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("org.sonarsource.kotlin.tools.PatchKotlinCompilerKt")
+}
+
+tasks.jar {
+    from(patchTask)
 }
