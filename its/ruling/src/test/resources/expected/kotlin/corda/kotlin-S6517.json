@@ -12,9 +12,6 @@
 "kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/internal/FlowAsyncOperation.kt": [
 13
 ],
-"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/internal/notary/UniquenessProvider.kt": [
-15
-],
 "kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/TransactionVerifierService.kt": [
 12
 ],
