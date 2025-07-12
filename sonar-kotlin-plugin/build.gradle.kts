@@ -98,10 +98,6 @@ val javadocJar = tasks.javadocJar
 
 val patchTask = project(":sonar-kotlin-api").tasks.named("patchKotlinCompiler")
 
-sourceSets.main {
-    resources.srcDir(patchTask)
-}
-
 // Note that this task is time-consuming
 // and needed only for integration tests and publishing,
 // so it is not part of `gradle build`.
@@ -112,6 +108,8 @@ task<proguard.gradle.ProGuardTask>("dist") {
     injars(
         mapOf(
             "filter" to listOf(
+                "!META-INF/*.kotlin_module",
+                "!org/jetbrains/kotlin/psi/KtVisitor.class", // patched version is included below
                 "!com/intellij/util/concurrency/AppScheduledExecutorService\$MyThreadFactory.class", // patched version is included below
                 "!META-INF/native/**/*jansi*",
                 "!org/jline/**",
@@ -124,7 +122,7 @@ task<proguard.gradle.ProGuardTask>("dist") {
     outjars("build/libs/sonar-kotlin-plugin.jar")
     configuration("proguard.txt")
     doLast {
-        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 49_100_000L, 49_500_000L)
+        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 49_600_000L, 50_000_000L)
     }
 }
 

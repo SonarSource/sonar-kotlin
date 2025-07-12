@@ -119,6 +119,10 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/eval4j/src/org/jetbrains/eval4j/interpreterLoop.kt": [
 97
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/KotlinCommonBlock.kt": [
+609,
+625
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/SyntheticKotlinBlock.kt": [
 63
 ],
@@ -151,6 +155,8 @@
 82
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/BasicCompletionSession.kt": [
+157,
+160,
 245,
 268,
 356,
@@ -226,6 +232,9 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/inspections/ExplicitThisInspection.kt": [
 57
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertBinaryExpressionWithDemorgansLawIntention.kt": [
+61
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertReferenceToLambdaIntention.kt": [
 74,

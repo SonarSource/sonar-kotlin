@@ -8,16 +8,19 @@
 org.jetbrains.kotlin.plugin.references.SimpleNameReferenceExtension,
 # all projectService.serviceImplementation and applicationService.serviceImplementation from
 # META-INF/analysis-api/analysis-api-impl-base.xml
-org.jetbrains.kotlin.resolve.jvm.KotlinJavaPsiFacade,
+org.jetbrains.kotlin.analysis.api.impl.base.java.KaBaseKotlinJavaPsiFacade,
+org.jetbrains.kotlin.analysis.api.impl.base.java.KaBaseJavaModuleResolver,
 org.jetbrains.kotlin.analysis.api.impl.base.java.source.JavaElementSourceWithSmartPointerFactory,
 org.jetbrains.kotlin.analysis.api.impl.base.references.HLApiReferenceProviderService,
 org.jetbrains.kotlin.analysis.api.impl.base.projectStructure.KaBaseModuleProvider,
 org.jetbrains.kotlin.analysis.api.platform.KotlinProjectMessageBusProvider,
 org.jetbrains.kotlin.analysis.api.impl.base.permissions.KaBaseAnalysisPermissionRegistry,
 org.jetbrains.kotlin.analysis.api.impl.base.permissions.KaBaseAnalysisPermissionChecker,
+org.jetbrains.kotlin.analysis.api.impl.base.projectStructure.KaBaseResolutionScopeProvider,
 org.jetbrains.kotlin.analysis.api.impl.base.lifetime.KaBaseLifetimeTracker,
+org.jetbrains.kotlin.analysis.api.impl.base.projectStructure.KaBaseContentScopeProvider,
+org.jetbrains.kotlin.analysis.api.impl.base.projectStructure.KotlinOptimizingGlobalSearchScopeMerger,
 org.jetbrains.kotlin.analysis.decompiled.light.classes.origin.KotlinDeclarationInCompiledFileSearcher,
-org.jetbrains.kotlin.analysis.api.impl.base.symbols.pointers.KaBasePsiSymbolPointerCreator,
 # all projectService.serviceImplementation and applicationService.serviceImplementation from
 # META-INF/analysis-api/low-level-api-fir.xml
 org.jetbrains.kotlin.analysis.low.level.api.fir.services.LLRealFirElementByPsiElementChooser,
@@ -37,7 +40,6 @@ org.jetbrains.kotlin.light.classes.symbol.SymbolKotlinAsJavaSupport,
 # all projectService.serviceImplementation and applicationService.serviceImplementation from
 # META-INF/analysis-api/analysis-api-fir-standalone-base.xml
 org.jetbrains.kotlin.analysis.api.standalone.base.declarations.KotlinStandaloneFirDirectInheritorsProvider,
-org.jetbrains.kotlin.analysis.api.platform.projectStructure.KotlinSimpleGlobalSearchScopeMerger,
 org.jetbrains.kotlin.analysis.decompiler.psi.BuiltinsVirtualFileProviderCliImpl,
 # all projectService.serviceImplementation from
 # META-INF/analysis-api/analysis-api-fir.xml
@@ -52,6 +54,10 @@ org.jetbrains.kotlin.analysis.api.fir.statistics.KaFirStatisticsService,
 kotlin.internal.jdk8.JDK8PlatformImplementations,
 
 com.github.benmanes.caffeine.**,
+
+!org.jetbrains.kotlin.analysis.api.impl.**,
+!org.jetbrains.kotlin.analysis.api.fir.**,
+org.jetbrains.kotlin.analysis.api.**,
 
 org.sonarsource.analyzer.commons.RuleMetadataLoader,
 org.sonarsource.kotlin.plugin.**
