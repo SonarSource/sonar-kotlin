@@ -25,7 +25,3 @@ fun Logger.info(provider: () -> String) {
 fun Logger.debug(provider: () -> String) {
     if (this.isDebugEnabled) this.debug(provider.invoke())
 }
-
-fun Logger.trace(provider: () -> String) {
-    if (this.isTraceEnabled) this.trace(provider.invoke())
-}

@@ -447,7 +447,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         assertAnalysisIsIncremental(files)
         // Check that the exception has been logged
-        assertThat(logTester.logs(Level.TRACE)).contains("Unable to save the CPD tokens of file unchanged.kt for the next analysis.")
+        assertThat(logTester.logs(Level.DEBUG)).contains("Unable to save the CPD tokens of file unchanged.kt for the next analysis.")
     }
 
     @Test
