@@ -144,7 +144,7 @@ build_task:
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
 build_test_analyze_task:
-  <<: *LINUX_3_5_CPU_7G
+  <<: *LINUX_6_CPU_12G_JAVA_17
   <<: *SETUP_GRADLE_CACHE
   env:
     # analysis on next
