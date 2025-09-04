@@ -29,6 +29,7 @@ jobs:
           run-shadow-scans: true
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
+          gradle-args: -Dsonar.organization=sonarsource
       - name: Run IRIS Analysis
         uses: SonarSource/unified-dogfooding-actions/run-iris@v1
         with:
