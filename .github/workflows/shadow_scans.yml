@@ -2,7 +2,7 @@ name: Shadow scans
 on:
   schedule:
     # Run the workflow every day at 04:00 UTC
-    - cron: '0 1 * * *'
+    - cron: "0 1 * * *"
   workflow_dispatch:
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
           run-shadow-scans: true
           artifactory-reader-role: private-reader
           artifactory-deployer-role: qa-deployer
-          gradle-args: -Dsonar.organization=sonarsource
+          gradle-args: -Dsonar.organization=sonarsource -Dsonar.exclusions="**/build/**/*,**/its/**,**/kotlin-checks-test-sources/**"
       - name: Run IRIS Analysis
         uses: SonarSource/unified-dogfooding-actions/run-iris@v1
         with:
