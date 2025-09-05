@@ -19,17 +19,23 @@ jobs:
         with:
           secrets: |
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/kv/data/sonarcloud token | SQC_EU_TOKEN;
       - uses: actions/checkout@v4
       - uses: jdx/mise-action@v2
-      - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+      - name: manual gradle sonarcloud scan
         env:
-          ARTIFACTORY_PRIVATE_USERNAME: vault-{REPO_OWNER_NAME_DASH}-private-reader
-          ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
-        with:
-          run-shadow-scans: true
-          artifactory-reader-role: private-reader
-          artifactory-deployer-role: qa-deployer
-          gradle-args: -Dsonar.organization=sonarsource -Dsonar.exclusions="**/build/**/*,**/its/**,**/kotlin-checks-test-sources/**"
+          SQC_EU_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).SQC_EU_TOKEN }}
+        shell: bash
+        run: ./gradlew --no-daemon --info --stacktrace --console plain build sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${SQC_EU_TOKEN} -Dsonar.analysis.buildNumber=9 -Dsonar.analysis.pipeline=17489363443 -Dsonar.analysis.repository=SonarSource/sonar-kotlin -Dsonar.projectVersion=3.4.0-SNAPSHOT -Dsonar.scm.revision=c647209fa1075fcb0a627d88970c1d076a1b3f17 -DbuildNumber=9 -Dsonar.organization=sonarsource -Dsonar.projectKey=SonarSource_sonar-kotlin
+#      - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+#        env:
+#          ARTIFACTORY_PRIVATE_USERNAME: vault-{REPO_OWNER_NAME_DASH}-private-reader
+#          ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+#        with:
+#          run-shadow-scans: true
+#          artifactory-reader-role: private-reader
+#          artifactory-deployer-role: qa-deployer
+#          gradle-args: -Dsonar.organization=sonarsource -Dsonar.exclusions="**/build/**/*,**/its/**,**/kotlin-checks-test-sources/**"
       - name: Run IRIS Analysis
         uses: SonarSource/unified-dogfooding-actions/run-iris@v1
         with:
