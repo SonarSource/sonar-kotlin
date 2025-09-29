@@ -162,27 +162,6 @@ build_test_analyze_task:
       path: "*.hprof"
   <<: *CLEANUP_GRADLE_CACHE_SCRIPT
 
-ws_scan_task:
-  <<: *LINUX_6_CPU_12G_JAVA_17
-  <<: *SETUP_GRADLE_CACHE
-  depends_on:
-    - build
-  # run only on master, long-term branches and mend-related branches
-  only_if: $CIRRUS_USER_COLLABORATOR == 'true' && ($CIRRUS_BRANCH == "master" || $CIRRUS_BRANCH =~ "branch-.*" || $CIRRUS_BRANCH =~ "mend-.*")
-  env:
-    WS_APIKEY: VAULT[development/kv/data/mend data.apikey]
-  maven_cache:
-    folder: ${CIRRUS_WORKING_DIR}/.m2/repository
-  whitesource_script:
-    - source cirrus-env QA
-    - ./gradlew clean assemble
-    - source ./export_ws_variables.sh
-    - source ws_scan.sh
-  allow_failures: "true"
-  always:
-    ws_artifacts:
-      path: "whitesource/**/*"
-
 # --- WARNING --- WARNING --- WARNING --- WARNING --- WARNING --- WARNING ---
 # The following task names should all be included in promote_task/depends_on
 # ---------------------------------------------------------------------------
@@ -264,7 +243,6 @@ promote_task:
     - qa_ruling_kotlin
     - qa_ruling_kotlin_compiler
     - build_win
-    - ws_scan
   <<: *ONLY_IF_SONARSOURCE_QA
   <<: *LINUX_3_5_CPU_7G
   env:
