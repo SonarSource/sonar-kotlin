@@ -16,7 +16,7 @@ env:
 
   ORG_GRADLE_PROJECT_signingKey: VAULT[development/kv/data/sign data.key]
   ORG_GRADLE_PROJECT_signingPassword: VAULT[development/kv/data/sign data.passphrase]
-  ORG_GRADLE_PROJECT_signingKeyId: 0x7DCD4258
+  ORG_GRADLE_PROJECT_signingKeyId: VAULT[development/kv/data/sign data.key_id]
 
   DEVELOCITY_TOKEN: VAULT[development/kv/data/develocity data.token]
   DEVELOCITY_ACCESS_KEY: develocity.sonar.build=${DEVELOCITY_TOKEN}
