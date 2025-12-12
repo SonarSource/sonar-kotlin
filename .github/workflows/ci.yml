@@ -1,0 +1,134 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+      - branch-*
+  pull_request:
+  schedule:
+    - cron: "0 2 * * *" # at 02:00 UTC every day
+
+permissions:
+  id-token: write  # Required for Vault OIDC authentication
+  contents: read
+
+jobs:
+  build:
+    runs-on: github-ubuntu-latest-s
+    steps:
+      - &configure_GITHUB_JOB_ID_environment_variable
+        # https://github.com/actions/runner/issues/324#issuecomment-3324382354
+        # for Develocity
+        run: echo "GITHUB_JOB_ID=${{ job.check_run_id }}" >> $GITHUB_ENV
+        shell: bash
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        with:
+          distribution: temurin
+          java-version: 17
+      - id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/kv/data/develocity token | DEVELOCITY_TOKEN;
+            development/kv/data/next token | SONAR_TOKEN;
+            development/kv/data/sign key | SIGN_KEY;
+            development/kv/data/sign passphrase | SIGN_PASSPHRASE;
+            development/kv/data/sign key_id | SIGN_KEY_ID;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer username | ARTIFACTORY_DEPLOY_USERNAME;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer access_token | ARTIFACTORY_DEPLOY_PASSWORD;
+      - id: build-number
+        uses: SonarSource/ci-github-actions/get-build-number@v1
+      - run: |
+          ./gradlew \
+              build \
+              sonar -Dsonar.host.url=https://next.sonarqube.com/sonarqube \
+              ${{ github.event_name != 'pull_request' && 'artifactoryPublish' || '' }} \
+              -DbuildNumber=${{ steps.build-number.outputs.BUILD_NUMBER }}
+        env:
+          DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
+          SONAR_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).SONAR_TOKEN }}
+          ORG_GRADLE_PROJECT_signingKey: ${{ fromJSON(steps.secrets.outputs.vault).SIGN_KEY }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ fromJSON(steps.secrets.outputs.vault).SIGN_PASSPHRASE }}
+          ORG_GRADLE_PROJECT_signingKeyId: ${{ fromJSON(steps.secrets.outputs.vault).SIGN_KEY_ID }}
+          ARTIFACTORY_URL: https://repox.jfrog.io/artifactory
+          ARTIFACTORY_DEPLOY_REPO: sonarsource-public-qa
+          ARTIFACTORY_DEPLOY_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_USERNAME }}
+          ARTIFACTORY_DEPLOY_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_PASSWORD }}
+  qa_plugin:
+    runs-on: github-ubuntu-latest-s
+    steps:
+      - *configure_GITHUB_JOB_ID_environment_variable
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        with:
+          distribution: temurin
+          java-version: 17
+      - id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/kv/data/develocity token | DEVELOCITY_TOKEN;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/github/token/licenses-ro token | GITHUB_TOKEN;
+      - run: |
+          ./gradlew \
+              --no-scan \
+              dist
+      - uses: ./.github/actions/cache-orchestrator
+      - run: |
+          ./gradlew \
+              --no-scan \
+              :its:plugin:test -Pplugin -Dsonar.runtimeVersion=DEV
+        env:
+          DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
+          ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
+          ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+  qa_ruling:
+    runs-on: github-ubuntu-latest-m
+    steps:
+      - *configure_GITHUB_JOB_ID_environment_variable
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          submodules: true
+      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        with:
+          distribution: temurin
+          java-version: 17
+      - id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/kv/data/develocity token | DEVELOCITY_TOKEN;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/github/token/licenses-ro token | GITHUB_TOKEN;
+      - run: |
+          ./gradlew \
+              --no-scan \
+              dist
+      - run: |
+          ./gradlew \
+              --no-scan \
+              :its:ruling:test -Pruling -Dsonar.runtimeVersion=LATEST_RELEASE
+        env:
+          KOTLIN_COMPILER_IT_ENABLED: true
+          DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
+          ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
+          ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+  promote:
+    needs:
+      - build
+      - qa_plugin
+      - qa_ruling
+    runs-on: github-ubuntu-latest-s
+    permissions:
+      id-token: write  # Required for Vault OIDC authentication
+      contents: write
+    steps:
+      - uses: SonarSource/ci-github-actions/promote@v1

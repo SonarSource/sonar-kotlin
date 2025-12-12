@@ -101,17 +101,17 @@ plugins {
 val isCI: Boolean = System.getenv("CI") != null
 
 develocity {
-    server = "https://develocity.sonar.build"
+    server = "https://develocity-public.sonar.build"
     buildScan {
         if (isCI) {
             uploadInBackground.set(false)
             tag("CI")
             for (key in listOf(
-                "CIRRUS_BUILD_ID",
-                "CIRRUS_TASK_ID",
-                "CIRRUS_TASK_NAME",
-                "CIRRUS_BRANCH",
-                "CIRRUS_CHANGE_IN_REPO"
+                "GITHUB_RUN_ID",
+                "GITHUB_JOB_ID", // configured in .github/workflows/ci.yml - see https://github.com/actions/runner/issues/324#issuecomment-3324382354
+                "GITHUB_JOB",
+                "GITHUB_REF_NAME",
+                "GITHUB_SHA",
             )) {
                 value(key, System.getenv(key))
             }

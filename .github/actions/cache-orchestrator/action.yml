@@ -1,0 +1,15 @@
+runs:
+  using: "composite"
+  steps:
+    - id: setup
+      shell: bash
+      run: |
+        export TODAY=$(date '+%Y-%m-%d')
+        echo "TODAY=${TODAY}" >> $GITHUB_OUTPUT
+        echo "ORCHESTRATOR_HOME=${GITHUB_WORKSPACE}/orchestrator/${TODAY}" >> $GITHUB_ENV
+        mkdir -p "${GITHUB_WORKSPACE}/orchestrator/${TODAY}"
+    - uses: SonarSource/ci-github-actions/cache@v1
+      with:
+        path: ${{ env.ORCHESTRATOR_HOME }}
+        key: orchestrator-${{ steps.setup.outputs.TODAY }}
+        enableCrossOsArchive: true
