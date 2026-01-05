@@ -1,6 +1,6 @@
 /*
  * SonarSource Kotlin
- * Copyright (C) 2018-2025 SonarSource SA
+ * Copyright (C) 2018-2026 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -42,7 +42,7 @@ public class SurefireTest extends TestBase {
   public void tests_without_main_code() {
     MavenBuild build = MavenBuild.create()
       .setPom(new File(BASE_DIRECTORY.toFile(), "tests-without-main-code/pom.xml"))
-      .setGoals("clean test-compile surefire:test", "sonar:sonar");
+      .setGoals("clean test-compile surefire:test", "org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.scanner.skipJreProvisioning=true");
     ORCHESTRATOR.executeBuild(build);
 
     Map<String, Measures.Measure> measures = getMeasures("org.sonarsource.it.projects:tests-without-main-code",
@@ -61,7 +61,8 @@ public class SurefireTest extends TestBase {
   public void tests_with_report_name_suffix() {
     MavenBuild build = MavenBuild.create()
       .setPom(new File(BASE_DIRECTORY.toFile(), "tests-surefire-suffix/pom.xml"))
-      .setGoals("clean test-compile surefire:test -Dsurefire.reportNameSuffix=Run1", "test-compile surefire:test -Dsurefire.reportNameSuffix=Run2", "sonar:sonar");
+      .setGoals("clean test-compile surefire:test -Dsurefire.reportNameSuffix=Run1", "test-compile surefire:test -Dsurefire.reportNameSuffix=Run2",
+        "org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.scanner.skipJreProvisioning=true");
     ORCHESTRATOR.executeBuild(build);
 
     Map<String, Measures.Measure> measures = getMeasures("org.sonarsource.it.projects:tests-surefire-suffix",
@@ -79,7 +80,8 @@ public class SurefireTest extends TestBase {
   public void tests_with_submodule() {
     MavenBuild build = MavenBuild.create()
       .setPom(new File(BASE_DIRECTORY.toFile(), "tests-with-submodule/pom.xml"))
-      .setGoals("clean test-compile surefire:test -Dsurefire.reportNameSuffix=Run1", "test-compile surefire:test -Dsurefire.reportNameSuffix=Run2", "sonar:sonar");
+      .setGoals("clean test-compile surefire:test -Dsurefire.reportNameSuffix=Run1", "test-compile surefire:test -Dsurefire.reportNameSuffix=Run2",
+        "org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.scanner.skipJreProvisioning=true");
     String buildLog = ORCHESTRATOR.executeBuild(build).getLogs();
 
     Map<String, Measures.Measure> measures = getMeasures("org.sonarsource.it.projects:tests-with-submodule",
