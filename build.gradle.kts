@@ -111,6 +111,7 @@ subprojects {
 
     tasks.withType<KotlinCompile>().all {
         compilerOptions.jvmTarget = JvmTarget.fromTarget(java.sourceCompatibility.toString())
+        compilerOptions.freeCompilerArgs.add("-Xjdk-release=" + java.sourceCompatibility.toString())
     }
 
     jacoco {
