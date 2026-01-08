@@ -108,16 +108,22 @@ class KotlinSensor(
         )
 
         return fileSystem.inputFiles(mainFilePredicate).let { mainFiles ->
-            if (canSkipUnchangedFiles(sensorContext) && sensorContext.runtime().product != SonarProduct.SONARLINT) {
-                val contentHashCache = ContentHashCache.of(sensorContext)
+            if (sensorContext.runtime().product == SonarProduct.SONARLINT) {
+                return@let mainFiles
+            }
+            val canSkipUnchangedFiles = canSkipUnchangedFiles(sensorContext)
+            val contentHashCache = ContentHashCache.of(sensorContext)
+            var totalFiles = 0
+            val changedFiles = mainFiles.filter {
+                totalFiles++
+                // compares and saves hash
+                fileHasChanged(it, contentHashCache)
+                        || (canSkipUnchangedFiles && !reuseCPDTokens(it, sensorContext))
+            }
+            if (canSkipUnchangedFiles) {
                 LOG.debug("The Kotlin analyzer is running in a context where it can skip unchanged files.")
-                var totalFiles = 0
-                mainFiles.filter {
-                    totalFiles++
-                    fileHasChanged(it, contentHashCache) || !reuseCPDTokens(it, sensorContext)
-                }.also {
-                    LOG.info("Only analyzing ${it.size} changed Kotlin files out of ${totalFiles}.")
-                }
+                LOG.info("Only analyzing ${changedFiles.size} changed Kotlin files out of ${totalFiles}.")
+                changedFiles
             } else {
                 LOG.debug("The Kotlin analyzer is running in a context where unchanged files cannot be skipped.")
                 mainFiles
@@ -148,6 +154,7 @@ class KotlinSensor(
     private fun canSkipUnchangedFiles(sensorContext: SensorContext): Boolean {
         return sensorContext.config().getBoolean(KotlinPlugin.SKIP_UNCHANGED_FILES_OVERRIDE).getOrElse {
             try {
+                // true when analysing PR, false otherwise
                 sensorContext.canSkipUnchangedFiles()
             } catch (_: IncompatibleClassChangeError) {
                 false
