@@ -210,19 +210,14 @@ subprojects {
         val signingKey: String? by project
         val signingPassword: String? by project
         useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-        setRequired {
-            val branch = System.getenv()["CIRRUS_BRANCH"] ?: ""
-            (branch == "master" || branch.matches("branch-[\\d.]+".toRegex())) &&
-                gradle.taskGraph.hasTask(":artifactoryPublish")
-        }
         sign(publishing.publications)
+        setRequired { gradle.taskGraph.hasTask(":artifactoryPublish") }
     }
 
     tasks.withType<Sign> {
         onlyIf {
-            val branch = System.getenv()["CIRRUS_BRANCH"] ?: ""
             val artifactorySkip: Boolean = tasks.artifactoryPublish.get().skip
-            !artifactorySkip && (branch == "master" || branch.matches("branch-[\\d.]+".toRegex())) &&
+            !artifactorySkip &&
                 gradle.taskGraph.hasTask(":artifactoryPublish")
         }
     }
