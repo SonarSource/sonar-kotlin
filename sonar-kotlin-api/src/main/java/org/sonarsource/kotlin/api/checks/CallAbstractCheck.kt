@@ -17,7 +17,7 @@
 package org.sonarsource.kotlin.api.checks
 
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.withKaSession
@@ -37,10 +37,10 @@ abstract class CallAbstractCheck : AbstractCheck() {
     final override fun visitCallExpression(callExpression: KtCallExpression, kotlinFileContext: KotlinFileContext) {
         withKaSession {
             val resolvedCall = callExpression.resolveToCall()
-                // TODO
-                //   seems that `singleFunctionCallOrNull` better matches behavior prior to use of Kotlin Analysis API,
-                //   however consider using `successfulFunctionCallOrNull` instead to avoid potential FPs
-                ?.singleFunctionCallOrNull() ?: return
+                // Using successfulFunctionCallOrNull instead of singleFunctionCallOrNull to avoid incorrect resolution
+                // of functions when semantics are missing. E.g. extension methods may not be found without semantics,
+                // leading to a function definition to be selected that has the same name but different signature.
+                ?.successfulFunctionCallOrNull() ?: return
             functionsToVisit.firstOrNull { it.matches(resolvedCall) }
                 ?.let { visitFunctionCall(callExpression, resolvedCall, it, kotlinFileContext) }
         }
