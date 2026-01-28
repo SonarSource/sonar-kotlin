@@ -70,7 +70,7 @@ dependencyResolutionManagement {
 
         create("testLibs") {
             val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
-            val assertj = version("assertj", "3.24.2")
+            val assertj = version("assertj", "3.27.7")
             val junit = version("junit", "5.10.1")
             val mockito = version("mockito", "5.7.0")
             val mockk = version("mockk", "1.13.3")
