@@ -765,14 +765,9 @@
             <sha256 value="8e495b634469d64fb8acfa3495a065cbacc8a0fff55ce1e31007be4c16dc57d3" origin="Verified"/>
          </artifact>
       </component>
-      <component group="net.bytebuddy" name="byte-buddy" version="1.12.21">
-         <artifact name="byte-buddy-1.12.21.jar">
-            <sha256 value="f6f45c2237a7f132c16745ad2a52c4cdde58028b11ee80b09f0d422f4930d685" origin="Verified"/>
-         </artifact>
-      </component>
-      <component group="net.bytebuddy" name="byte-buddy" version="1.14.9">
-         <artifact name="byte-buddy-1.14.9.jar">
-            <sha256 value="377352e253282bf86f731ac90ed88348e8f40a63ce033c00a85982de7e790e6f" origin="Verified"/>
+      <component group="net.bytebuddy" name="byte-buddy" version="1.18.3">
+         <artifact name="byte-buddy-1.18.3.jar">
+            <sha256 value="d78396e3c5bce3f2865c9186647481e5589d34cacc632484715b686108d17c66" origin="Verified"/>
          </artifact>
       </component>
       <component group="net.bytebuddy" name="byte-buddy-agent" version="1.14.9">
@@ -895,9 +890,9 @@
             <sha256 value="b509448ac506d607319f182537f0b35d71007582ec741832a1f111e5b5b70b38" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.assertj" name="assertj-core" version="3.24.2">
-         <artifact name="assertj-core-3.24.2.jar">
-            <sha256 value="df3d0b348f1fe806bdddcb10fa4ae63c6679e9888d4bc7055f09848517976aa3" origin="Verified"/>
+      <component group="org.assertj" name="assertj-core" version="3.27.7">
+         <artifact name="assertj-core-3.27.7.jar">
+            <sha256 value="c4a445426c3c2861666863b842cc4ec7bbb1c4226fefd370b6d2fe83d6c4ff0f" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.bouncycastle" name="bcpg-jdk18on" version="1.80">
