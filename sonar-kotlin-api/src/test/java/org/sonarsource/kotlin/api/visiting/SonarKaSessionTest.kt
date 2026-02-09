@@ -76,10 +76,9 @@ fun <K> example(list: ObservableList<K>) {
             assertTrue(type is KaErrorType)
         }
 
-        assertThrows<Exception> {
-            analyze(ktFile) {
-                action()
-            }
+        analyze(ktFile) {
+            val type = action()
+            assertTrue(type is KaErrorType)
         }
     }
 

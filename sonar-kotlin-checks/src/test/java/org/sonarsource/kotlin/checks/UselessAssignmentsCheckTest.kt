@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonarsource.kotlin.api.frontend.Environment
@@ -60,7 +60,7 @@ internal class UselessAssignmentsCheckTest : CheckTest(UselessAssignmentsCheck()
         analyze(ktFile) {
             // Failure of the following assertion during Kotlin compiler version upgrade will indicate fix of
             // https://youtrack.jetbrains.com/issue/KT-75695/Bogus-Assigned-value-is-never-read-warning-for-prefix-operator
-            assertTrue(
+            assertFalse(
                 ktFile.collectDiagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS)
                     .any { it.factoryName == FirErrors.ASSIGNED_VALUE_IS_NEVER_READ.name }
             )

@@ -105,7 +105,7 @@ class WebViewsFileAccessCheckSample {
     }
 
     fun assigningConstantBooleanExpression(settings: WebSettings) {
-        settings.allowFileAccess = true || false // FN, requires resolving complex constant expressions
+        settings.allowFileAccess = true || false // Noncompliant
     }
 
     // endregion

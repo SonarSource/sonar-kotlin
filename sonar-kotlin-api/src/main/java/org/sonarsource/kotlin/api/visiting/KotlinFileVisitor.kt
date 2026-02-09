@@ -17,6 +17,7 @@
 package org.sonarsource.kotlin.api.visiting
 
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaCompilationResult
@@ -40,32 +41,10 @@ inline fun <R> withKaSession(action: KaSession.() -> R): R = action(kaSession!!)
 @PublishedApi
 internal var kaSession: KaSession? = null
 
+@OptIn(KaImplementationDetail::class)
 internal class SonarKaSession(
     private val originalKaSession: KaSession
 ) : KaSession by originalKaSession {
-    /**
-     * Unlike original
-     * [org.jetbrains.kotlin.analysis.api.components.KaTypeProvider.type]
-     * instead of
-     * [raising exception](https://github.com/JetBrains/kotlin/blob/v2.1.10/analysis/analysis-api/src/org/jetbrains/kotlin/analysis/api/components/KaTypeProvider.kt#L81-L86)
-     * such as
-     *
-     * > org.jetbrains.kotlin.analysis.low.level.api.fir.api.InvalidFirElementTypeException: For TYPE_REFERENCE with text `Any`, the element of type interface org.jetbrains.kotlin.fir.FirElement expected, but no element found
-     *
-     * returns [org.jetbrains.kotlin.analysis.api.types.KaErrorType] in case of absence of some types.
-     */
-    override val KtTypeReference.type: KaType
-        get() {
-            return try {
-                with(originalKaSession) {
-                    this@type.type
-                }
-            } catch (e: Exception) {
-                // TODO log?
-                buildClassType(ClassId.fromString("<error>"))
-            }
-        }
-
     /**
      * Always throws [UnsupportedOperationException] to get rid of dependency on codegen.
      */
