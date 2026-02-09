@@ -410,6 +410,11 @@
             <sha256 value="dbc2bb04ecb002b9f4046263ccad996f4a3d3c59a0cc98837e300a6700571f7c" origin="Verified"/>
          </artifact>
       </component>
+      <component group="com.squareup.okhttp3" name="okhttp-urlconnection" version="4.12.0">
+         <artifact name="okhttp-urlconnection-4.12.0.jar">
+            <sha256 value="74c0e3f8c3df0b1d32ab9d839448c914586d3e8479611e4386fecfa6b3f0a26b" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="com.squareup.okio" name="okio" version="2.5.0">
          <artifact name="okio-jvm-2.5.0.jar">
             <sha256 value="7c9df002992c5fb020d0f037673041a7c5bdb9418f91a9ef34721e5ccfd6ff92" origin="Verified"/>
@@ -528,6 +533,11 @@
       <component group="io.github.hakky54" name="sslcontext-kickstart" version="8.3.4">
          <artifact name="sslcontext-kickstart-8.3.4.jar">
             <sha256 value="cddce99227969bf2d3326ef5089e54d4730ca8311889392c9228111e0b40d967" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="io.github.hakky54" name="sslcontext-kickstart" version="8.3.6">
+         <artifact name="sslcontext-kickstart-8.3.6.jar">
+            <sha256 value="e5fa688a7026676f970933838f603523347d84047d21e7b7bfecf422b32f27f0" origin="Verified"/>
          </artifact>
       </component>
       <component group="io.github.java-diff-utils" name="java-diff-utils" version="4.12">
@@ -765,9 +775,9 @@
             <sha256 value="27bb5d40f37c3bb7205b4a0540247df057715e9f6cbbd97d626ab8b50318bb04" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.apache.commons" name="commons-compress" version="1.26.2">
-         <artifact name="commons-compress-1.26.2.jar">
-            <sha256 value="9168a03141d8fc7eda21a2360d83cc0412bcbb1d6204d992bd48c2573cb3c6b8" origin="Verified"/>
+      <component group="org.apache.commons" name="commons-compress" version="1.27.1">
+         <artifact name="commons-compress-1.27.1.jar">
+            <sha256 value="293d80f54b536b74095dcd7ea3cf0a29bbfc3402519281332495f4420d370d16" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.apache.commons" name="commons-csv" version="1.10.0">
@@ -873,6 +883,11 @@
       <component group="org.assertj" name="assertj-core" version="3.24.2">
          <artifact name="assertj-core-3.24.2.jar">
             <sha256 value="df3d0b348f1fe806bdddcb10fa4ae63c6679e9888d4bc7055f09848517976aa3" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.bouncycastle" name="bcprov-jdk18on" version="1.78.1">
+         <artifact name="bcprov-jdk18on-1.78.1.jar">
+            <sha256 value="add5915e6acfc6ab5836e1fd8a5e21c6488536a8c1f21f386eeb3bf280b702d7" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.checkerframework" name="checker-qual" version="3.19.0">
@@ -1998,9 +2013,9 @@
             <sha256 value="ce0e71d673acb9036bb55d0244b261cf033f8e4c1245f14f931dfb1937dd4c95" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.slf4j" name="slf4j-api" version="2.0.7">
-         <artifact name="slf4j-api-2.0.7.jar">
-            <sha256 value="5d6298b93a1905c32cda6478808ac14c2d4a47e91535e53c41f7feeb85d946f4" origin="Verified"/>
+      <component group="org.slf4j" name="slf4j-api" version="2.0.13">
+         <artifact name="slf4j-api-2.0.13.jar">
+            <sha256 value="e7c2a48e8515ba1f49fa637d57b4e2f590b3f5bd97407ac699c3aa5efb1204a9" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.snakeyaml" name="snakeyaml-engine" version="2.6">
@@ -2083,9 +2098,19 @@
             <sha256 value="4df4526499760242c2d5d76ee8bc38326b4549c344e034e12bc392d2b8a618ac" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.scanner.gradle" name="sonarqube-gradle-plugin" version="5.1.0.4882">
-         <artifact name="sonarqube-gradle-plugin-5.1.0.4882.jar">
-            <sha256 value="0a0a1aa505a1b05c94768bd248a51e1bc61af251ec9819f352b41c2afd8cbcfa" origin="Verified"/>
+      <component group="org.sonarsource.scanner.gradle" name="sonarqube-gradle-plugin" version="7.1.0.6387">
+         <artifact name="sonarqube-gradle-plugin-7.1.0.6387.jar">
+            <sha256 value="9ab0856087dbb95c5226e1ff7825ed7cce217c9aba88517333e16161438a7226" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.sonarsource.scanner.lib" name="sonar-scanner-java-library" version="3.3.1.450">
+         <artifact name="sonar-scanner-java-library-3.3.1.450.jar">
+            <sha256 value="cd2941a71a705a96c181e10903f2e4f787087eb7e49d99b6dada408dc5dd9176" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.sonarsource.scanner.lib" name="sonar-scanner-java-library-batch-interface" version="3.3.1.450">
+         <artifact name="sonar-scanner-java-library-batch-interface-3.3.1.450.jar">
+            <sha256 value="adbfef2053957a4e9639db69730ba83a090a5f8fa1cc3424a122c2c6663297d9" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.sonarsource.sonarlint.core" name="sonarlint-analysis-engine" version="10.13.0.79996">
