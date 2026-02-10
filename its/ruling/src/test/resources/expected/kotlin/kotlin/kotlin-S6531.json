@@ -96,6 +96,9 @@
 155,
 157
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/compiler/configuration/BaseKotlinCompilerSettings.kt": [
+71
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/project/ResolveElementCache.kt": [
 328,
 335,
@@ -162,6 +165,12 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/rename/RenameKotlinFunctionProcessor.kt": [
 134
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ast/Util.kt": [
+36
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/src/org/jetbrains/kotlin/jps/model/Serializer.kt": [
+65
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/pluginsDsl/allopenPluginsDsl/src/test/kotlin/HelloTest.kt": [
 12

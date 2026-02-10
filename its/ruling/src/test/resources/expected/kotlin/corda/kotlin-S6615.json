@@ -1,4 +1,40 @@
 {
+"kotlin-corda-project:sources/kotlin/corda/client/rpc/src/integration-test/kotlin/net/corda/client/rpc/CordaRPCClientTest.kt": [
+102
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/MerkleTransaction.kt": [
+164
+],
+"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/WireTransaction.kt": [
+140
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/TransactionCallbackTest.kt": [
+39,
+40
+],
+"kotlin-corda-project:sources/kotlin/corda/samples/network-visualiser/src/main/kotlin/net/corda/netmap/VisualiserView.kt": [
+161
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/EvolutionSerializer.kt": [
+89
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/SerializationHelper.kt": [
+325
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/carpenter/ClassCarpenter.kt": [
+306,
+370,
+382
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/DeserializeNeedingCarpentryTests.kt": [
+233
+],
+"kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/carpenter/EnumClassTests.kt": [
+63
+],
+"kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/core/Expect.kt": [
+172
+],
 "kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/internal/FlowStackSnapshot.kt": [
 37
 ]
