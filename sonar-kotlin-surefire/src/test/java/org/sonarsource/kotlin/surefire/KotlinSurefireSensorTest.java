@@ -31,6 +31,7 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.scan.filesystem.PathResolver;
+import org.sonarsource.kotlin.metrics.TelemetryData;
 import org.sonarsource.kotlin.surefire.api.SurefireUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,6 +46,7 @@ class KotlinSurefireSensorTest {
   private KotlinSurefireSensor surefireSensor;
   private SensorContextTester context;
   private final PathResolver pathResolver = new PathResolver();
+  private TelemetryData telemetryData;
 
   @BeforeEach
   void before() {
@@ -57,7 +59,8 @@ class KotlinSurefireSensorTest {
     kotlinResourcesLocator = mock(KotlinResourcesLocator.class);
     when(kotlinResourcesLocator.findResourceByClassName(anyString())).thenAnswer(invocation -> Optional.of(resource((String) invocation.getArguments()[0])));
 
-    surefireSensor = new KotlinSurefireSensor(new KotlinSurefireParser(kotlinResourcesLocator), new MapSettings().asConfig(), pathResolver);
+    telemetryData = new TelemetryData();
+    surefireSensor = new KotlinSurefireSensor(new KotlinSurefireParser(kotlinResourcesLocator), new MapSettings().asConfig(), pathResolver, telemetryData);
   }
 
   private DefaultInputFile resource(String key) {
@@ -66,7 +69,7 @@ class KotlinSurefireSensorTest {
 
   @Test
   void should_execute_if_filesystem_contains_kotlin_files() {
-    surefireSensor = new KotlinSurefireSensor(new KotlinSurefireParser(kotlinResourcesLocator), new MapSettings().asConfig(), pathResolver);
+    surefireSensor = new KotlinSurefireSensor(new KotlinSurefireParser(kotlinResourcesLocator), new MapSettings().asConfig(), pathResolver, telemetryData);
     DefaultSensorDescriptor defaultSensorDescriptor = new DefaultSensorDescriptor();
     surefireSensor.describe(defaultSensorDescriptor);
     assertThat(defaultSensorDescriptor.languages()).containsOnly("kotlin");
@@ -77,9 +80,9 @@ class KotlinSurefireSensorTest {
     MapSettings settings = new MapSettings();
     settings.setProperty(SurefireUtils.SUREFIRE_REPORT_PATHS_PROPERTY, "unknown");
 
-    KotlinSurefireSensor surefireSensor = new KotlinSurefireSensor(mock(KotlinSurefireParser.class), settings.asConfig(), pathResolver);
+    var surefireSensorWithUnresolvablePath = new KotlinSurefireSensor(mock(KotlinSurefireParser.class), settings.asConfig(), pathResolver, telemetryData);
     try {
-      surefireSensor.execute(context);
+      surefireSensorWithUnresolvablePath.execute(context);
     } catch (Throwable t) {
       fail("Failed when no reports found!");
     }
@@ -212,6 +215,16 @@ class KotlinSurefireSensorTest {
   @Test
   void testToStringMethod() {
     assertThat(surefireSensor).hasToString("KotlinSurefireSensor");
+  }
+
+  @Test
+  void shouldTrackTelemetryForNotFoundResources() throws URISyntaxException {
+    when(kotlinResourcesLocator.findResourceByClassName(anyString())).thenReturn(Optional.empty());
+
+    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldHandleTestSuiteDetails/");
+
+    assertThat(telemetryData.getSurefireReportsImported()).hasValue(0);
+    assertThat(telemetryData.getSurefireReportsFailed()).hasValue(3);
   }
 
   private void collect(SensorContextTester context, String path) throws URISyntaxException {

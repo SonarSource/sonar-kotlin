@@ -47,7 +47,7 @@ class SyntaxHighlighterTest : AbstractSensorTest() {
         val inputFile: InputFile = createInputFile("file1.kt", fileToTest.readText())
 
         context.fileSystem().add(inputFile)
-        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), KotlinProjectSensor(), emptyArray()).execute(context)
+        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), TelemetryData(), emptyArray()).execute(context)
 
         assertThat(context, inputFile)
             .isHighlighted(1, 1, KEYWORD)

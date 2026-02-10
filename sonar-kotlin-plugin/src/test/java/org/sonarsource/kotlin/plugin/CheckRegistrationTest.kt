@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
 import org.sonar.api.rule.RuleKey
+import org.sonarsource.kotlin.metrics.TelemetryData
 import org.sonarsource.kotlin.testapi.AbstractSensorTest
 
 class CheckRegistrationTest : AbstractSensorTest() {
@@ -37,7 +38,7 @@ class CheckRegistrationTest : AbstractSensorTest() {
             fileLinesContextFactory,
             DefaultNoSonarFilter(),
             language(),
-            KotlinProjectSensor(),
+            TelemetryData(),
             arrayOf(DummyKotlinPluginExtensionsProvider()),
         ).execute(context)
 

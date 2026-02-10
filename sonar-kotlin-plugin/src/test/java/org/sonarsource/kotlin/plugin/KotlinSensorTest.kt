@@ -56,6 +56,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.security.MessageDigest
 import kotlin.time.ExperimentalTime
+import org.sonarsource.kotlin.metrics.TelemetryData
 
 private val LOG = LoggerFactory.getLogger(KotlinSensor::class.java)
 
@@ -698,7 +699,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
 
     private fun sensor(checkFactory: CheckFactory): KotlinSensor {
-        return KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), KotlinProjectSensor(), emptyArray())
+        return KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), TelemetryData(), emptyArray())
     }
 }
 
