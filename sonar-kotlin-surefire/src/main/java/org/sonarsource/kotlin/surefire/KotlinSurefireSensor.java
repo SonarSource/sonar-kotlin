@@ -23,6 +23,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.scan.filesystem.PathResolver;
+import org.sonarsource.kotlin.metrics.TelemetryData;
 import org.sonarsource.kotlin.surefire.api.SurefireUtils;
 
 import java.io.File;
@@ -34,11 +35,17 @@ public class KotlinSurefireSensor implements Sensor {
   private final KotlinSurefireParser kotlinSurefireParser;
   private final Configuration settings;
   private final PathResolver pathResolver;
+  private final TelemetryData telemetryData;
 
-  public KotlinSurefireSensor(KotlinSurefireParser kotlinSurefireParser, Configuration settings, PathResolver pathResolver) {
+  public KotlinSurefireSensor(
+    KotlinSurefireParser kotlinSurefireParser,
+    Configuration settings,
+    PathResolver pathResolver,
+    TelemetryData telemetryData) {
     this.kotlinSurefireParser = kotlinSurefireParser;
     this.settings = settings;
     this.pathResolver = pathResolver;
+    this.telemetryData = telemetryData;
   }
 
   @Override
@@ -54,7 +61,7 @@ public class KotlinSurefireSensor implements Sensor {
 
   protected void collect(SensorContext context, List<File> reportsDirs) {
     LOGGER.info("parsing {}", reportsDirs);
-    kotlinSurefireParser.collect(context, reportsDirs, settings.hasKey(SurefireUtils.SUREFIRE_REPORT_PATHS_PROPERTY));
+    kotlinSurefireParser.collect(context, reportsDirs, settings.hasKey(SurefireUtils.SUREFIRE_REPORT_PATHS_PROPERTY), telemetryData);
   }
 
   @Override

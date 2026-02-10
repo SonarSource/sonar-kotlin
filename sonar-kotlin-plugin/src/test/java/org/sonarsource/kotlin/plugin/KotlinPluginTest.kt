@@ -42,12 +42,12 @@ internal class KotlinPluginTest {
 
     @Test
     fun testSonarQube() {
-        testSonarQube(19)
+        testSonarQube(20)
     }
 
     @Test
     fun testSonarLint() {
-        testSonarLint(6)
+        testSonarLint(7)
     }
 
 

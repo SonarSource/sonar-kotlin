@@ -23,12 +23,13 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.sensor.internal.SensorContextTester
 import java.nio.file.Path
+import org.sonarsource.kotlin.metrics.TelemetryData
 
 class KotlinProjectSensorTest {
 
     @Test
     fun `execute reports telemetry`() {
-        val sensor = KotlinProjectSensor()
+        val sensor = KotlinProjectSensor(TelemetryData())
         val telemetry = mutableMapOf<String, String>()
         val context = spyk(SensorContextTester.create(Path.of("."))) {
             val key = slot<String>()
@@ -37,11 +38,22 @@ class KotlinProjectSensorTest {
         }
 
         sensor.execute(context)
-        assertThat(telemetry).isEqualTo(mapOf("kotlin.android" to "0"))
+        assertThat(telemetry)
+            .containsExactlyInAnyOrderEntriesOf(
+                mapOf(
+                    "kotlin.android" to "0",
+                    "kotlin.reports.surefire.failed" to "0",
+                    "kotlin.reports.surefire.imported" to "0",
+                )
+            )
 
         sensor.telemetryData.hasAndroidImports = true
         sensor.execute(context)
-        assertThat(telemetry).isEqualTo(mapOf("kotlin.android" to "1"))
+        assertThat(telemetry).containsExactlyInAnyOrderEntriesOf(mapOf(
+            "kotlin.android" to "1",
+            "kotlin.reports.surefire.failed" to "0",
+            "kotlin.reports.surefire.imported" to "0",
+        ))
     }
 
 }
