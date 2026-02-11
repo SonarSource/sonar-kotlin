@@ -377,6 +377,9 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/PluginsDslIT.kt": [
 101
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/tasks/Tasks.kt": [
+98
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-script-util/src/main/kotlin/org/jetbrains/kotlin/script/util/context.kt": [
 135,
 138,

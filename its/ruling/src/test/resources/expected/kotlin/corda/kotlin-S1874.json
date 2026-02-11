@@ -148,7 +148,6 @@
 64
 ],
 "kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/PropertySerializer.kt": [
-133,
 140
 ],
 "kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/AttachmentsClassLoaderTests.kt": [
