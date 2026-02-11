@@ -1,11 +1,4 @@
 {
-"kotlin-kotlin-project:sources/kotlin/kotlin/build-common/src/org/jetbrains/kotlin/incremental/fileUtils.kt": [
-26,
-27
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/buildSrc/src/main/kotlin/plugins/PublishedKotlinModule.kt": [
-25
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/constants/evaluate/ConstantExpressionEvaluator.kt": [
 1024,
 1026
@@ -21,37 +14,14 @@
 356,
 388
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jps-common/src/org/jetbrains/kotlin/config/KotlinFacetSettings.kt": [
-63
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ast/Class.kt": [
 62
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/jps-plugin/src/org/jetbrains/kotlin/jps/build/KotlinBuilder.kt": [
-617
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/text/StringsJVM.kt": [
 51
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/src/kotlin/text/Strings.kt": [
-696,
-706,
-712,
-758,
-780
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/ranges/CoercionTest.kt": [
 84,
 85
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/text/StringTest.kt": [
-750,
-751,
-752,
-753
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/incremental/fileUtils.kt": [
-30,
-31
 ]
 }
