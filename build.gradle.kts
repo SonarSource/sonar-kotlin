@@ -10,7 +10,7 @@ plugins {
     id("com.jfrog.artifactory") version "5.2.5"
     id("org.sonarqube") version "7.1.0.6387"
     id("org.jetbrains.kotlin.jvm") apply false
-    id("com.diffplug.spotless") version "6.11.0"
+    id("com.diffplug.spotless") version "6.25.0"
     `maven-publish`
     signing
 }
@@ -40,7 +40,7 @@ configure(subprojects.filter { it.name != "kotlin-checks-test-sources" }) {
         }
         kotlinGradle {
             target("*.gradle.kts")
-            ktlint()
+            ktlint("0.50.0")
         }
 
         format("misc") {
