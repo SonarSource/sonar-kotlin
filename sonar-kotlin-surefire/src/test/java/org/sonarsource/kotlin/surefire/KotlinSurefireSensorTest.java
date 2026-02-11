@@ -223,8 +223,8 @@ class KotlinSurefireSensorTest {
 
     collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldHandleTestSuiteDetails/");
 
-    assertThat(telemetryData.getSurefireReportsImported()).hasValue(0);
-    assertThat(telemetryData.getSurefireReportsFailed()).hasValue(3);
+    assertThat(telemetryData.getSurefireClassesImported()).isZero();
+    assertThat(telemetryData.getSurefireClassesFailed()).isEqualTo(3);
   }
 
   private void collect(SensorContextTester context, String path) throws URISyntaxException {

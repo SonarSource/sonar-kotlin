@@ -235,7 +235,7 @@ class KotlinSurefireParserTest {
   }
 
   private void verifyTelemetry(int expectedImported, int expectedFailed) {
-    assertThat(telemetryData.getSurefireReportsImported()).hasValue(expectedImported);
-    assertThat(telemetryData.getSurefireReportsFailed()).hasValue(expectedFailed);
+    assertThat(telemetryData.getSurefireClassesImported()).isEqualTo(expectedImported);
+    assertThat(telemetryData.getSurefireClassesFailed()).isEqualTo(expectedFailed);
   }
 }

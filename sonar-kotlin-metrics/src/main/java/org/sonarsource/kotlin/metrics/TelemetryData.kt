@@ -16,7 +16,6 @@
  */
 package org.sonarsource.kotlin.metrics
 
-import java.util.concurrent.atomic.AtomicInteger
 import org.sonar.api.scanner.ScannerSide
 import org.sonarsource.api.sonarlint.SonarLintSide
 
@@ -24,6 +23,6 @@ import org.sonarsource.api.sonarlint.SonarLintSide
 @SonarLintSide
 class TelemetryData {
     var hasAndroidImports = false
-    val surefireReportsImported = AtomicInteger(0)
-    val surefireReportsFailed = AtomicInteger(0)
+    var surefireClassesImported = 0
+    var surefireClassesFailed = 0
 }

@@ -119,9 +119,9 @@ public class KotlinSurefireParser {
         Optional<InputFile> inputFile = kotlinResourcesLocator.findResourceByClassName(entry.getKey());
         if (inputFile.isPresent()) {
           save(report, inputFile.get(), context);
-          telemetryData.getSurefireReportsImported().incrementAndGet();
+          telemetryData.setSurefireClassesImported(telemetryData.getSurefireClassesImported() + 1);
         } else {
-          telemetryData.getSurefireReportsFailed().incrementAndGet();
+          telemetryData.setSurefireClassesFailed(telemetryData.getSurefireClassesFailed() + 1);
         }
       }
     }
