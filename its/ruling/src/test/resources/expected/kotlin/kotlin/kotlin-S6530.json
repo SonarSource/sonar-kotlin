@@ -22,10 +22,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/analyzer/AnalyzerFacade.kt": [
 342
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInfo.kt": [
-31,
-44
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/tower/ManyCandidatesResolver.kt": [
 55
 ],

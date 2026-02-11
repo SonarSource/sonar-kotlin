@@ -49,6 +49,9 @@ org.jetbrains.kotlin.analysis.api.fir.references.KotlinFirReferenceContributor,
 org.jetbrains.kotlin.analysis.api.fir.references.ReadWriteAccessCheckerFirImpl,
 org.jetbrains.kotlin.analysis.api.fir.KaFirDefaultImportsProvider,
 org.jetbrains.kotlin.analysis.api.fir.statistics.KaFirStatisticsService,
+org.jetbrains.kotlin.analysis.api.fir.utils.KaFirStopWorldCacheCleaner,
+org.jetbrains.kotlin.analysis.decompiler.psi.K2KotlinBuiltInDecompilationInterceptor,
+org.jetbrains.kotlin.analysis.decompiler.psi.K2KotlinBuiltInStubVersionOffsetProvider,
 
 # Used to have proper named groups behavior in regular expressions
 kotlin.internal.jdk8.JDK8PlatformImplementations,
