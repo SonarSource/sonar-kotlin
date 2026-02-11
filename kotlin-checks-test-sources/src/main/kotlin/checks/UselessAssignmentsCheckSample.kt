@@ -24,7 +24,7 @@ class UselessAssignmentsCheckSample {
 
     private fun prefix_operator() {
         var a = 0
-        ++a // Noncompliant
+        ++a // FN https://youtrack.jetbrains.com/issue/KT-59831 ?
 
         var b = 0
         ++b

@@ -297,8 +297,8 @@ android {
         applicationId = "com.example" // Android app, not a library
     }
     buildTypes {
-        release { // FN
-            isMinifyEnabled = false && true
+        release {
+            isMinifyEnabled = false && true // Noncompliant
             proguardFiles("proguard-rules.pro")
         }
     }

@@ -40,10 +40,6 @@ class UselessAssignmentsCheck : AbstractCheck() {
                         "Remove this variable, which is assigned but never accessed."
 
                     FirErrors.ASSIGNED_VALUE_IS_NEVER_READ.name -> withKaSession {
-                        if ((diagnostic.psi.parent as? KtPrefixExpression)?.isUsedAsExpression == true) {
-                            // https://youtrack.jetbrains.com/issue/KT-75695/Bogus-Assigned-value-is-never-read-warning-for-prefix-operator
-                            return@mapNotNull null
-                        }
                         diagnostic.psi.parent to "The value assigned here is never used."
                     }
 
