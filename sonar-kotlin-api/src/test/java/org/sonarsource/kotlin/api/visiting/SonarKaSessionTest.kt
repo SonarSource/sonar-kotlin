@@ -17,17 +17,14 @@
 package org.sonarsource.kotlin.api.visiting
 
 import com.intellij.openapi.util.Disposer
-import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.types.KaErrorType
-import org.jetbrains.kotlin.analysis.api.types.KaType
+import io.mockk.mockkClass
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.components.KaCompilerTarget
+import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtTypeReference
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.sonarsource.kotlin.api.frontend.KotlinFileSystem
@@ -45,40 +42,18 @@ private class SonarKaSessionTest {
         Disposer.dispose(disposable)
     }
 
+    @OptIn(KaExperimentalApi::class)
     @Test
-    fun `should return KaErrorType instead of raising exception when obtaining type for KtTypeReference`() {
-        val ktFile = ktFile(
-            """
-//class ObservableList<K> {
-//    fun addListener(listener: Listener<K>) {
-//    }
-//
-//    fun interface Listener<K> {
-//        fun callback(change: Change<out K>)
-//
-//        interface Change<K>
-//    }
-//}
-
-fun <K> example(list: ObservableList<K>) {
-    list.addListener { _: ObservableList.Listener.Change<out K> ->
-    }
-}
-        """.trimIndent()
-        )
-
-        val action: KaSession.() -> KaType = {
-            ktFile.collectDescendantsOfType<KtTypeReference>()[2].type
-        }
-
+    fun `compile should always throw UnsupportedOperationException`() {
+        val ktFile = ktFile("")
         kaSession(ktFile) {
-            val type = withKaSession(action)
-            assertTrue(type is KaErrorType)
-        }
-
-        analyze(ktFile) {
-            val type = action()
-            assertTrue(type is KaErrorType)
+            withKaSession {
+                val c = mockkClass(CompilerConfiguration::class)
+                val t = mockkClass(KaCompilerTarget::class)
+                assertThrows<UnsupportedOperationException> {
+                    this.compile(ktFile, c, t) { _ -> false }
+                }
+            }
         }
     }
 

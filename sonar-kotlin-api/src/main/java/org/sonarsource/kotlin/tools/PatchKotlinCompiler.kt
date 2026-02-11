@@ -32,6 +32,9 @@ fun main() {
 /**
  * Patches [org.jetbrains.kotlin.psi.KtVisitor]
  * to get rid of folded string literals - see https://youtrack.jetbrains.com/issue/KT-78843
+ *
+ * TODO check whether the [fix](https://github.com/JetBrains/kotlin/commit/1118af763f6e6405c9f0668582d7dee153a72e8)
+ * for the above issue is appropriate for us and sonar-security and can supersede this patch
  */
 private fun patchKtVisitor() {
     val cls = "org/jetbrains/kotlin/psi/KtVisitor.class"
