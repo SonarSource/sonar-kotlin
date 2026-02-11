@@ -34,8 +34,8 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
     override fun execute(context: SensorContext) {
         if (context.runtime().apiVersion.isGreaterThanOrEqual(Version.create(10, 9))) {
             context.addTelemetryProperty("kotlin.android", if (telemetryData.hasAndroidImports) "1" else "0")
-            context.addTelemetryProperty("kotlin.reports.surefire.imported", telemetryData.surefireReportsImported.get().toString())
-            context.addTelemetryProperty("kotlin.reports.surefire.failed", telemetryData.surefireReportsFailed.get().toString())
+            context.addTelemetryProperty("kotlin.reports.surefire.classes.imported", telemetryData.surefireClassesImported.toString())
+            context.addTelemetryProperty("kotlin.reports.surefire.classes.failed", telemetryData.surefireClassesFailed.toString())
         }
     }
 }

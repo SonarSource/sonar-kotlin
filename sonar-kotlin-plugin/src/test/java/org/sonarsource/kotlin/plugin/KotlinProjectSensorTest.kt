@@ -42,8 +42,8 @@ class KotlinProjectSensorTest {
             .containsExactlyInAnyOrderEntriesOf(
                 mapOf(
                     "kotlin.android" to "0",
-                    "kotlin.reports.surefire.failed" to "0",
-                    "kotlin.reports.surefire.imported" to "0",
+                    "kotlin.reports.surefire.classes.failed" to "0",
+                    "kotlin.reports.surefire.classes.imported" to "0",
                 )
             )
 
@@ -51,8 +51,8 @@ class KotlinProjectSensorTest {
         sensor.execute(context)
         assertThat(telemetry).containsExactlyInAnyOrderEntriesOf(mapOf(
             "kotlin.android" to "1",
-            "kotlin.reports.surefire.failed" to "0",
-            "kotlin.reports.surefire.imported" to "0",
+            "kotlin.reports.surefire.classes.failed" to "0",
+            "kotlin.reports.surefire.classes.imported" to "0",
         ))
     }
 
