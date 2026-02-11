@@ -23,9 +23,7 @@ import org.sonar.api.utils.Version
 import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_KEY
 import org.sonarsource.kotlin.metrics.TelemetryData
 
-class KotlinProjectSensor : ProjectSensor {
-    val telemetryData: TelemetryData = TelemetryData()
-
+class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSensor {
     override fun describe(descriptor: SensorDescriptor) {
         descriptor.onlyOnLanguage(KOTLIN_LANGUAGE_KEY).name("KotlinProjectSensor")
     }
@@ -36,6 +34,8 @@ class KotlinProjectSensor : ProjectSensor {
     override fun execute(context: SensorContext) {
         if (context.runtime().apiVersion.isGreaterThanOrEqual(Version.create(10, 9))) {
             context.addTelemetryProperty("kotlin.android", if (telemetryData.hasAndroidImports) "1" else "0")
+            context.addTelemetryProperty("kotlin.reports.surefire.classes.imported", telemetryData.surefireClassesImported.toString())
+            context.addTelemetryProperty("kotlin.reports.surefire.classes.failed", telemetryData.surefireClassesFailed.toString())
         }
     }
 }

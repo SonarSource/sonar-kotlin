@@ -47,6 +47,7 @@ import org.sonarsource.kotlin.metrics.SyntaxHighlighter
 import org.sonarsource.kotlin.api.visiting.KtChecksVisitor
 
 import kotlin.jvm.optionals.getOrElse
+import org.sonarsource.kotlin.metrics.TelemetryData
 
 private val LOG = LoggerFactory.getLogger(KotlinSensor::class.java)
 
@@ -57,7 +58,7 @@ class KotlinSensor(
     private val fileLinesContextFactory: FileLinesContextFactory,
     private val noSonarFilter: NoSonarFilter,
     language: KotlinLanguage,
-    private val kotlinProjectSensor: KotlinProjectSensor,
+    private val telemetryData: TelemetryData,
     extensionsProviders: Array<KotlinPluginExtensionsProvider>,
 ): AbstractKotlinSensor(
     checkFactory, instantiateRules(checkFactory, extensionsProviders), language, KOTLIN_CHECKS
@@ -86,13 +87,13 @@ class KotlinSensor(
         if (sensorContext.runtime().product == SonarProduct.SONARLINT) {
             listOf(
                 IssueSuppressionVisitor(),
-                MetricVisitor(fileLinesContextFactory, noSonarFilter, kotlinProjectSensor.telemetryData),
+                MetricVisitor(fileLinesContextFactory, noSonarFilter, telemetryData),
                 KtChecksVisitor(checks),
             )
         } else {
             listOf(
                 IssueSuppressionVisitor(),
-                MetricVisitor(fileLinesContextFactory, noSonarFilter, kotlinProjectSensor.telemetryData),
+                MetricVisitor(fileLinesContextFactory, noSonarFilter, telemetryData),
                 KtChecksVisitor(checks),
                 CopyPasteDetector(),
                 SyntaxHighlighter(),

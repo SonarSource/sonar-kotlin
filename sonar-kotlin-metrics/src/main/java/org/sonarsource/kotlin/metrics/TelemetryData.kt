@@ -16,6 +16,13 @@
  */
 package org.sonarsource.kotlin.metrics
 
+import org.sonar.api.scanner.ScannerSide
+import org.sonarsource.api.sonarlint.SonarLintSide
+
+@ScannerSide
+@SonarLintSide
 class TelemetryData {
     var hasAndroidImports = false
+    var surefireClassesImported = 0
+    var surefireClassesFailed = 0
 }
