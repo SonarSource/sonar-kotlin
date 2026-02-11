@@ -39,12 +39,12 @@ abstract class FetchRuleMetadata : DefaultTask() {
 
     internal fun executeRuleApi(arguments: List<String>): ExecResult {
         val ruleApi = addRuleApiToProjectConfig()
-        return project.javaexec {
+        return project.providers.javaexec {
             classpath = project.files(ruleApi.resolve())
             args = arguments
             mainClass.set("com.sonarsource.ruleapi.Main")
             workingDir = project.project(":sonar-kotlin-plugin").projectDir
-        }
+        }.result.get()
     }
 
     abstract class FetchSpecificRulesMetadata : FetchRuleMetadata() {

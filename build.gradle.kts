@@ -161,13 +161,13 @@ subprojects {
         }
     }
 
-    val sourcesJar by tasks.creating(Jar::class) {
+    val sourcesJar by tasks.registering(Jar::class) {
         dependsOn(JavaPlugin.CLASSES_TASK_NAME)
         archiveClassifier.set("sources")
         from(sourceSets.main.get().allSource)
     }
 
-    val javadocJar by tasks.creating(Jar::class) {
+    val javadocJar by tasks.registering(Jar::class) {
         dependsOn(javadoc)
         archiveClassifier.set("javadoc")
         from(tasks["javadoc"])
@@ -225,6 +225,8 @@ subprojects {
 
 sonarqube {
     properties {
+        property("sonar.projectName", "SonarKotlin")
+        property("sonar.projectKey", "SonarSource_sonar-kotlin")
         property("sonar.links.ci", "https://cirrus-ci.com/github/SonarSource/sonar-kotlin")
         property("sonar.projectName", projectTitle)
         property("sonar.links.scm", "https://github.com/SonarSource/sonar-kotlin")
@@ -289,13 +291,13 @@ artifactory {
 tasks.register<CreateKotlinRuleStubsTask>("setupRuleStubs") {
     group = "Rules"
     description = "Generate required stubs for a new Kotlin rule"
-    finalizedBy(tasks.findByPath(":generateRuleMetadata"))
+    finalizedBy(tasks.getByPath(":generateRuleMetadata"))
 }
 
 tasks.register<CreateKotlinGradleRuleStubsTask>("setupGradleRuleStubs") {
     group = "Rules"
     description = "Generate required stubs for a new Kotlin Gradle DSL rule"
-    finalizedBy(tasks.findByPath(":generateRuleMetadata"))
+    finalizedBy(tasks.getByPath(":generateRuleMetadata"))
 }
 
 tasks.register<FetchRuleMetadata.FetchSpecificRulesMetadata>("generateRuleMetadata")
