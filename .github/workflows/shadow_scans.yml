@@ -1,0 +1,42 @@
+name: Shadow scans
+on:
+  schedule:
+    # Run the workflow every day at 04:00 UTC
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: github-ubuntu-latest-s
+    name: Scan on shadow platforms
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - name: Vault
+        id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/kv/data/sonarcloud token | SQC_EU_TOKEN;
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v2
+      - uses: SonarSource/ci-github-actions/build-gradle@master # dogfood
+        env:
+          ARTIFACTORY_PRIVATE_USERNAME: vault-{REPO_OWNER_NAME_DASH}-private-reader
+          ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+        with:
+          run-shadow-scans: true
+          artifactory-reader-role: private-reader
+          artifactory-deployer-role: qa-deployer
+          gradle-args: -Dsonar.organization=sonarsource -Dsonar.exclusions="**/build/**/*,**/its/**,**/kotlin-checks-test-sources/**"
+      - name: Run IRIS Analysis
+        uses: SonarSource/unified-dogfooding-actions/run-iris@v1
+        with:
+          primary_project_key: "org.sonarsource.kotlin:kotlin"
+          primary_platform: "Next"
+          shadow1_project_key: "org.sonarsource.kotlin:kotlin"
+          shadow1_platform: "SQC-EU"
+          shadow2_project_key: "org.sonarsource.kotlin:kotlin"
+          shadow2_platform: "SQC-US"
