@@ -37,30 +37,8 @@ class UnnecessaryImportsCheck : AbstractCheck() {
 
     @OptIn(KaIdeApi::class)
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) = withKaSession {
-        val importOptimizer = analyzeImportsToOptimize(file)
-        file.importDirectives.asSequence().filter { importDirective ->
-            // 1. Filter out & report all imports that import from kotlin.* or the same package as our file
-            if (importDirective.isImportedImplicitlyAlready(file.packageDirective?.qualifiedName)) {
-                importDirective.importedReference?.let { context.reportIssue(it, MESSAGE_REDUNDANT) }
-                false
-            } else true
-        }.mapNotNull { importDirective: KtImportDirective ->
-            importDirective.importedFqName?.let { importDirective to it }
-        }.filter { (importDirective, importedFqName: FqName) ->
-            if (importDirective.isAllUnder) return@filter false
-            val importedName: Name =
-                if (importDirective.aliasName != null)
-                    Name.identifier(importDirective.aliasName!!)
-                else
-                    importedFqName.shortName()
-            !importOptimizer.unresolvedNames.contains(importedName) &&
-                    !OperatorConventions.isConventionName(importedName) &&
-                    importedName.asString() != "provideDelegate" &&
-                    importOptimizer.usedDeclarations[importedFqName].isNullOrEmpty()
-        }.map { it.first }.forEach { importDirective ->
-            // We could not find any usages for anything remaining at this point. Hence, report!
-            importDirective.importedReference?.let { context.reportIssue(it, MESSAGE_UNUSED) }
-        }
+        // TODO https://youtrack.jetbrains.com/projects/KT/issues/KT-81122/Drop-KaImportOptimizer
+        // https://github.com/JetBrains/intellij-community/tree/master/plugins/kotlin/code-insight/kotlin.code-insight.k2/src/org/jetbrains/kotlin/idea/k2/codeinsight/imports
     }
 
 }
