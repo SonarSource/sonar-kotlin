@@ -4,6 +4,8 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.jar.JarInputStream
 import org.sonarsource.cloudnative.gradle.licenseTitleToResourceFile
+import org.sonarsource.kotlin.buildsrc.utils.packagesToDependencies
+import org.sonarsource.kotlin.buildsrc.utils.kotlinCompilerDependencies
 import proguard.gradle.ProGuardTask
 
 plugins {
@@ -143,13 +145,12 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
     into(layout.buildDirectory.dir("preprocessed/kotlin-compiler"))
 
     eachFile {
-        val isKnownPackage = packagesToDependencies.keys.any { prefix ->
+        val isKnownPackage = packagesToDependencies.any { (prefix, _) ->
             path.startsWith(prefix)
         }
 
         if (!isKnownPackage) {
-            throw GradleException("Unexpected package inside kotlin-compiler: $path. Please update the exclude list in preprocessKotlinCompiler task " +
-                "or add a license for this dependency in packagesToDependencies map")
+            throw GradleException("Unexpected package inside kotlin-compiler: $path. Please update the mapping to include a license for this dependency")
         }
     }
 }
@@ -188,7 +189,7 @@ tasks.register<ProGuardTask>("dist") {
     outjars("build/libs/sonar-kotlin-plugin.jar")
     configuration("proguard.txt")
     doLast {
-        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 50_400_000L, 50_800_000L)
+        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 50_800_000L, 51_300_000L)
     }
 }
 
@@ -242,6 +243,7 @@ tasks.check {
 val renderKotlinCompilerThirdPartyLicenses = tasks.register<DefaultTask>("renderKotlinCompilerThirdPartyLicenses") {
     group = "build"
     description = "Generates license files for the third-party dependencies of the Kotlin compiler that are not already included in the resources"
+    dependsOn(preprocessKotlinCompiler)
 
     val generatedLicenseResourcesDirectory = layout.projectDirectory.dir("src/main/resources/licenses/THIRD_PARTY_LICENSES").asFile
     outputs.dir(generatedLicenseResourcesDirectory)
@@ -249,9 +251,11 @@ val renderKotlinCompilerThirdPartyLicenses = tasks.register<DefaultTask>("render
     doLast {
         generatedLicenseResourcesDirectory.mkdirs()
 
-        dependencies
-            .forEach { (fqName, info) ->
+        kotlinCompilerDependencies
+            .filter { it.licenseName != "N/A" }
+            .forEach { info ->
                 val licenseName = info.licenseName
+                val fqName = info.fqName
                 val licenseResourceFileName = licenseTitleToResourceFile[licenseName]
                     ?: throw GradleException("License '$licenseName' not found in licenseTitleToResourceFile map for dependency $fqName")
 
@@ -283,105 +287,4 @@ val renderKotlinCompilerThirdPartyLicenses = tasks.register<DefaultTask>("render
 
 tasks.named("generateLicenseResources") {
     finalizedBy(renderKotlinCompilerThirdPartyLicenses)
-}
-
-private data class DependencyInfo(
-    val packages: List<String> = emptyList(),
-    val licenseName: String
-)
-
-// mapping of all dependencies embedded in kotlin-compiler.jar
-private val dependencies = mapOf(
-    "com.fasterxml:aalto-xml" to DependencyInfo(
-        packages = listOf("com/fasterxml/aalto"),
-        licenseName = "Apache 2.0"
-    ),
-    "com.fasterxml.woodstox:woodstox-core" to DependencyInfo(
-        packages = listOf("com/ctc"),
-        licenseName = "Apache 2.0"
-    ),
-    "org.codehaus.woodstox:stax2-api" to DependencyInfo(
-        packages = listOf("org/codehaus/stax2"),
-        licenseName = "BSD"
-        // Excluded - we include full version ourselves
-    ),
-    "com.github.ben-manes.caffeine:caffeine" to DependencyInfo(
-        packages = listOf("com/github/benmanes/caffeine"),
-        licenseName = "Apache 2.0"
-    ),
-    "com.google.guava:guava" to DependencyInfo(
-        packages = listOf("com/google/common"),
-        licenseName = "Apache 2.0"
-    ),
-    "com.google.gwt:gwt-user" to DependencyInfo(
-        packages = listOf("com/google/gwt"),
-        licenseName = "Apache 2.0"
-    ),
-    "com.sun.jna:jna" to DependencyInfo(
-        packages = listOf("com/sun/jna"),
-        licenseName = "Apache 2.0"
-    ),
-    "io.opentelemetry:opentelemetry-api" to DependencyInfo(
-        packages = listOf("io/opentelemetry"),
-        licenseName = "Apache 2.0"
-    ),
-
-    "io.vavr:vavr" to DependencyInfo(
-        packages = listOf("io/vavr"),
-        licenseName = "Apache 2.0"
-    ),
-    "it.unimi.dsi:fastutil" to DependencyInfo(
-        packages = listOf("it/unimi/dsi"),
-        licenseName = "Apache 2.0"
-    ),
-    "one.util.streamex:streamex" to DependencyInfo(
-        packages = listOf("one/util/streamex"),
-        licenseName = "Apache 2.0"
-    ),
-    "org.apache.logging.log4j:log4j-api" to DependencyInfo(
-        packages = listOf("org/apache/log4j"),
-        licenseName = "Apache 2.0"
-    ),
-    "org.jdom:jdom2" to DependencyInfo(
-        packages = listOf("org/jdom"),
-        licenseName = "BSD"
-    ),
-    "org.picocontainer:picocontainer" to DependencyInfo(
-        packages = listOf("org/picocontainer"),
-        licenseName = "BSD"
-    ),
-
-    // Standard Java APIs
-    "javax.inject:javax.inject" to DependencyInfo(
-        packages = listOf("javax/inject"),
-        licenseName = "Apache 2.0"
-    ),
-
-    // Kotlin compiler and IntelliJ platform (Apache 2.0 license, bundled with kotlin-compiler)
-    "org.jetbrains.kotlin:kotlin-compiler" to DependencyInfo(
-        packages = listOf("com/intellij", "org/jetbrains"),
-        licenseName = "Apache 2.0"
-    ),
-    "org.jetbrains.kotlin:kotlin-stdlib" to DependencyInfo(
-        packages = listOf("kotlin/"),
-        licenseName = "Apache 2.0"
-    ),
-    "org.jetbrains.kotlinx:kotlinx-coroutines-core" to DependencyInfo(
-        packages = listOf("kotlinx/"),
-        licenseName = "Apache 2.0"
-    ),
-
-    // Resources and metadata (not code dependencies)
-    "resources" to DependencyInfo(
-        packages = listOf("META-INF/", "messages/", "misc/", "custom-formatters.js", "kotlinManifest.properties"),
-        licenseName = "N/A" // N/A for resources
-    ),
-)
-
-private val packagesToDependencies: Map<String, String> by lazy {
-    dependencies
-        .flatMap { (fqName, info) ->
-            info.packages.map { pkg -> pkg to fqName }
-        }
-        .toMap()
 }
