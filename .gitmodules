@@ -1,3 +1,7 @@
 [submodule "its/sources"]
 	path = its/sources
 	url = https://github.com/SonarSource/slang-test-sources
+[submodule "build-logic/common"]
+	path = build-logic/common
+	url = https://github.com/SonarSource/cloud-native-gradle-modules
+	branch = petertrr-patch-1
