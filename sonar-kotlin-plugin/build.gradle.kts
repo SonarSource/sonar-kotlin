@@ -1,11 +1,9 @@
-import java.io.IOException
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.jar.JarInputStream
-import org.sonarsource.cloudnative.gradle.licenseTitleToResourceFile
-import org.sonarsource.kotlin.buildsrc.utils.packagesToDependencies
 import org.sonarsource.kotlin.buildsrc.utils.kotlinCompilerDependencies
+import org.sonarsource.kotlin.buildsrc.utils.packagesToDependencies
 import proguard.gradle.ProGuardTask
 
 plugins {
@@ -19,6 +17,10 @@ buildscript {
     dependencies {
         classpath("com.guardsquare:proguard-gradle:7.6.1")
     }
+}
+
+val kotlinCompilerEmbedded: Configuration by configurations.creating {
+    isTransitive = false
 }
 
 dependencies {
@@ -40,8 +42,8 @@ dependencies {
     implementation(project(":sonar-kotlin-surefire"))
     implementation(project(":sonar-kotlin-checks"))
 
-    testImplementation(testLibs.junit.jupiter)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation(testLibs.junit.jupiter)
     testImplementation(libs.slf4j.api)
     testImplementation(testLibs.assertj.core)
     testImplementation(testLibs.mockito.core)
@@ -52,6 +54,11 @@ dependencies {
 
     testImplementation(project(":sonar-kotlin-test-api"))
     jacocoAggregation(project(":sonar-kotlin-test-api"))
+
+    // replicate dependencies embedded into kotlin-compiler for easier license management
+    kotlinCompilerDependencies.forEach {
+        kotlinCompilerEmbedded("${it.fqName}:${it.version}")
+    }
 }
 
 val test: Test by tasks
@@ -144,13 +151,23 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
 
     into(layout.buildDirectory.dir("preprocessed/kotlin-compiler"))
 
+    val isPackageVisited = kotlinCompilerDependencies.associate { it.fqName to false }.toMutableMap()
     eachFile {
-        val isKnownPackage = packagesToDependencies.any { (prefix, _) ->
+        val knownPackage = packagesToDependencies.filter { (prefix, _) ->
             path.startsWith(prefix)
-        }
+        }.keys.firstOrNull()
 
-        if (!isKnownPackage) {
+        if (knownPackage == null) {
             throw GradleException("Unexpected package inside kotlin-compiler: $path. Please update the mapping to include a license for this dependency")
+        } else {
+            isPackageVisited[knownPackage] = true
+        }
+    }
+
+    doLast {
+        isPackageVisited.filterValues { !it }.keys.joinToString(", ").takeIf { it.isNotEmpty() }?.let {
+            throw GradleException("Some expected packages were not found in kotlin-compiler: $it. " +
+                "Please check if the kotlin-compiler dependency has changed and exclude any old dependencies that are no longer present")
         }
     }
 }
@@ -240,51 +257,9 @@ tasks.check {
     dependsOn(tasks.named<JacocoReport>("testCodeCoverageReport"))
 }
 
-val renderKotlinCompilerThirdPartyLicenses = tasks.register<DefaultTask>("renderKotlinCompilerThirdPartyLicenses") {
-    group = "build"
-    description = "Generates license files for the third-party dependencies of the Kotlin compiler that are not already included in the resources"
-    dependsOn(preprocessKotlinCompiler)
-
-    val generatedLicenseResourcesDirectory = layout.projectDirectory.dir("src/main/resources/licenses/THIRD_PARTY_LICENSES").asFile
-    outputs.dir(generatedLicenseResourcesDirectory)
-
-    doLast {
-        generatedLicenseResourcesDirectory.mkdirs()
-
-        kotlinCompilerDependencies
-            .filter { it.licenseName != "N/A" }
-            .forEach { info ->
-                val licenseName = info.licenseName
-                val fqName = info.fqName
-                val licenseResourceFileName = licenseTitleToResourceFile[licenseName]
-                    ?: throw GradleException("License '$licenseName' not found in licenseTitleToResourceFile map for dependency $fqName")
-
-                // Parse Maven coordinates: "group:artifact"
-                val parts = fqName.split(":")
-                if (parts.size != 2) {
-                    logger.warn("Skipping $fqName - not a valid Maven coordinate")
-                    return@forEach
-                }
-                val (group, artifact) = parts
-
-                val targetFile = File(generatedLicenseResourcesDirectory, "$group.$artifact-LICENSE.txt")
-
-                if (targetFile.exists()) {
-                    logger.info("License file already exists for $fqName at ${targetFile.path}, skipping generation")
-                    return@forEach
-                }
-
-                val resourceStream = rootDir.resolve("build-logic/common/gradle-modules/src/main/resources/licenses/$licenseResourceFileName")
-                    .takeIf { it.exists() }
-                    ?: throw IOException("Resource not found: license file not found for $fqName with license '$licenseName' (expected resource file: $licenseResourceFileName)")
-
-                resourceStream.copyTo(targetFile)
-
-                logger.info("Generated license file: ${targetFile.name} for $fqName (license: $licenseName)")
-            }
-    }
-}
-
-tasks.named("generateLicenseResources") {
-    finalizedBy(renderKotlinCompilerThirdPartyLicenses)
+licenseReport {
+    configurations = arrayOf(
+        kotlinCompilerEmbedded.name,
+        "runtimeClasspath",
+    )
 }
