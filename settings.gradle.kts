@@ -108,7 +108,7 @@ develocity {
             tag("CI")
             for (key in listOf(
                 "GITHUB_RUN_ID",
-                "GITHUB_JOB_ID", // configured in .github/workflows/ci.yml - see https://github.com/actions/runner/issues/324#issuecomment-3324382354
+                "GITHUB_JOB_ID", // configured in .github/workflows/build.yml - see https://github.com/actions/runner/issues/324#issuecomment-3324382354
                 "GITHUB_JOB",
                 "GITHUB_REF_NAME",
                 "GITHUB_SHA",
