@@ -63,11 +63,6 @@ jobs:
           ARTIFACTORY_DEPLOY_REPO: sonarsource-public-qa
           ARTIFACTORY_DEPLOY_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_USERNAME }}
           ARTIFACTORY_DEPLOY_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_PASSWORD }}
-      - uses: actions/upload-artifact@v6.0.0
-        if: always()
-        with:
-          name: dependency-verification-report
-          path: build/reports/dependency-verification/*
   qa_plugin:
     runs-on: github-ubuntu-latest-s
     steps:

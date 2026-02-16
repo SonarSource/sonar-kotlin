@@ -20,24 +20,6 @@ val kotlinCompilerDependencies = setOf(
         licenseName = "Apache 2.0"
     ),
     DependencyInfo(
-        fqName = "com.fasterxml.woodstox:woodstox-core",
-        version = "7.1.0",
-        packages = listOf("com/ctc"),
-        licenseName = "Apache 2.0"
-    ),
-    DependencyInfo(
-        fqName = "org.codehaus.woodstox:stax2-api",
-        version = "4.2.1",
-        packages = listOf("org/codehaus/stax2"),
-        licenseName = "BSD" // Note: in AnalyzerLicensingPackagingRenderer.kt, we map "BSD" as BSD 2-clause
-    ),
-    DependencyInfo(
-        fqName = "com.github.ben-manes.caffeine:caffeine",
-        version = "2.9.3",
-        packages = listOf("com/github/benmanes/caffeine"),
-        licenseName = "Apache 2.0"
-    ),
-    DependencyInfo(
         fqName = "com.google.guava:guava",
         version = "33.3.1-jre",
         packages = listOf("com/google/common"),

@@ -155,7 +155,7 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
     eachFile {
         val knownPackage = packagesToDependencies.filter { (prefix, _) ->
             path.startsWith(prefix)
-        }.keys.firstOrNull()
+        }.values.firstOrNull()
 
         if (knownPackage == null) {
             throw GradleException("Unexpected package inside kotlin-compiler: $path. Please update the mapping to include a license for this dependency")
