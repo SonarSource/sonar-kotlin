@@ -1,10 +1,10 @@
+import org.sonarsource.kotlin.buildsrc.utils.kotlinCompilerDependencies
+import org.sonarsource.kotlin.buildsrc.utils.packagesToDependencies
+import proguard.gradle.ProGuardTask
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.jar.JarInputStream
-import org.sonarsource.kotlin.buildsrc.utils.kotlinCompilerDependencies
-import org.sonarsource.kotlin.buildsrc.utils.packagesToDependencies
-import proguard.gradle.ProGuardTask
 
 plugins {
     id("com.gradleup.shadow") version "8.3.1"
@@ -125,14 +125,16 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
     group = "build"
     description = "Before including kotlin-compiler into the shadow jar, filter out some files and verify that all licenses are accounted for"
 
-    from(provider {
-        val compilerJar = kotlinCompilerJar.resolvedConfiguration.resolvedArtifacts
-            .find { it.moduleVersion.id.module.name == "kotlin-compiler" }
-            ?.file
-            ?: throw GradleException("kotlin-compiler dependency not found")
+    from(
+        provider {
+            val compilerJar = kotlinCompilerJar.resolvedConfiguration.resolvedArtifacts
+                .find { it.moduleVersion.id.module.name == "kotlin-compiler" }
+                ?.file
+                ?: throw GradleException("kotlin-compiler dependency not found")
 
-        zipTree(compilerJar)
-    }) {
+            zipTree(compilerJar)
+        }
+    ) {
         exclude(
             // Files also excluded by ProGuard (see dist task)
             "META-INF/*.kotlin_module",
@@ -145,7 +147,7 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
             // Additional exclusions
             "org/codehaus/stax2/**", // a stripped down version of the class breaks our usage, we include the full version ourselves
             "org/fusesource/jansi/**", // jansi dependency not used
-            "META-INF/services/org/jline/**", // service provider files for jline
+            "META-INF/services/org/jline/**" // service provider files for jline
         )
     }
 
@@ -166,8 +168,10 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
 
     doLast {
         isPackageVisited.filterValues { !it }.keys.joinToString(", ").takeIf { it.isNotEmpty() }?.let {
-            throw GradleException("Some expected packages were not found in kotlin-compiler: $it. " +
-                "Please check if the kotlin-compiler dependency has changed and exclude any old dependencies that are no longer present")
+            throw GradleException(
+                "Some expected packages were not found in kotlin-compiler: $it. " +
+                    "Please check if the kotlin-compiler dependency has changed and exclude any old dependencies that are no longer present"
+            )
         }
     }
 }
@@ -260,6 +264,6 @@ tasks.check {
 licenseReport {
     configurations = arrayOf(
         kotlinCompilerEmbedded.name,
-        "runtimeClasspath",
+        "runtimeClasspath"
     )
 }
