@@ -153,7 +153,7 @@ jobs:
     steps:
       - uses: SonarSource/release-github-actions/notify-slack@v1
         with:
-          project-name: "SonarText Enterprise"
+          project-name: "SonarKotlin"
           slack-channel: "squad-security-cloud-notifs"
           icon: ':kotlin:'
           jobs: ${{ toJSON(needs) }}
