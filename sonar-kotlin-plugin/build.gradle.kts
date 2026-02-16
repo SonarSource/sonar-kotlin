@@ -125,6 +125,17 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
     group = "build"
     description = "Before including kotlin-compiler into the shadow jar, filter out some files and verify that all licenses are accounted for"
 
+    val excludedPackages = setOf(
+        // Packages also excluded by ProGuard (see dist task)
+        "org/jline",
+        "net/jpountz",
+
+        "org/codehaus/stax2", // a stripped down version of the class breaks our usage, we include the full version ourselves
+        "org/fusesource/jansi", // jansi dependency not used
+        "org/apache/log4j", // everything should be using slf4j, we don't need to bundle a logging implementation
+        "javax/inject" // a compile-time dependency
+    )
+
     from(
         provider {
             val compilerJar = kotlinCompilerJar.resolvedConfiguration.resolvedArtifacts
@@ -141,19 +152,15 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
             "org/jetbrains/kotlin/psi/KtVisitor.class", // patched version is included separately
             "com/intellij/util/concurrency/AppScheduledExecutorService\$MyThreadFactory.class", // patched version is included separately
             "META-INF/native/**/*jansi*",
-            "org/jline/**",
-            "net/jpountz/**",
-
-            // Additional exclusions
-            "org/codehaus/stax2/**", // a stripped down version of the class breaks our usage, we include the full version ourselves
-            "org/fusesource/jansi/**", // jansi dependency not used
-            "META-INF/services/org/jline/**" // service provider files for jline
+            "META-INF/services/org/jline", // service provider files for jline
+            *excludedPackages.map { "$it/**" }.toTypedArray()
         )
     }
 
     into(layout.buildDirectory.dir("preprocessed/kotlin-compiler"))
 
-    val isPackageVisited = kotlinCompilerDependencies.associate { it.fqName to false }.toMutableMap()
+    val isPackageVisited = kotlinCompilerDependencies.associate { it.fqName to false }
+        .toMutableMap()
     eachFile {
         val knownPackage = packagesToDependencies.filter { (prefix, _) ->
             path.startsWith(prefix)
@@ -167,9 +174,15 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
     }
 
     doLast {
-        isPackageVisited.filterValues { !it }.keys.joinToString(", ").takeIf { it.isNotEmpty() }?.let {
+        val packagesNotVisited = isPackageVisited
+            .filterNot { (packageName, _) -> excludedPackages.any { path -> packageName.startsWith(path) } }
+            .filterValues { !it }
+            .keys
+            .joinToString(", ")
+
+        if (packagesNotVisited.isNotEmpty()) {
             throw GradleException(
-                "Some expected packages were not found in kotlin-compiler: $it. " +
+                "Some expected packages were not found in kotlin-compiler: $packagesNotVisited. " +
                     "Please check if the kotlin-compiler dependency has changed and exclude any old dependencies that are no longer present"
             )
         }

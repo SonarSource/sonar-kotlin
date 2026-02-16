@@ -65,12 +65,6 @@ val kotlinCompilerDependencies = setOf(
         licenseName = "Apache 2.0"
     ),
     DependencyInfo(
-        fqName = "log4j:log4j",
-        version = "1.2.17",
-        packages = listOf("org/apache/log4j"),
-        licenseName = "Apache 2.0"
-    ),
-    DependencyInfo(
         fqName = "org.jdom:jdom2",
         version = "2.0.6.1",
         packages = listOf("org/jdom"),
@@ -81,13 +75,6 @@ val kotlinCompilerDependencies = setOf(
         version = "2.15",
         packages = listOf("org/picocontainer"),
         licenseName = "BSD"
-    ),
-
-    DependencyInfo(
-        fqName = "javax.inject:javax.inject",
-        version = "1",
-        packages = listOf("javax/inject"),
-        licenseName = "Apache 2.0"
     ),
 
     DependencyInfo(
