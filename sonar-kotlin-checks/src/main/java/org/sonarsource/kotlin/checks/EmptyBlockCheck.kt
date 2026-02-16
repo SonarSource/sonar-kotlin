@@ -18,6 +18,7 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtFunction
+import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.KtWhileExpression
 import org.sonar.check.Rule
@@ -41,9 +42,16 @@ class EmptyBlockCheck : AbstractCheck() {
             && expression.parent !is KtFunction
             /** Between [KtWhileExpression] and [KtBlockExpression] there is [org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody] */
             && expression.parent.parent !is KtWhileExpression
+            /** Empty else block in when expression is intentional */
+            && !isWhenElseBranch(expression)
         ) {
             kotlinFileContext.reportIssue(expression, message)
         }
+    }
+
+    private fun isWhenElseBranch(expression: KtBlockExpression): Boolean {
+        val parent = expression.parent
+        return parent is KtWhenEntry && parent.isElse
     }
 
 }
