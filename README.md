@@ -23,7 +23,23 @@ Useful links
 
 ### Build
 
-Build and run Unit Tests:
+#### Setup
+
+To configure build dependencies, run the following command:
+
+```shell
+git submodule update --init -- build-logic/common
+```
+
+To always get the latest version of the build logic during git operations, set the following configuration:
+
+```shell
+git config submodule.recurse true
+```
+
+For more information see [README.md](https://github.com/SonarSource/cloud-native-gradle-modules/blob/master/README.md) of cloud-native-gradle-modules.
+
+#### Build and run Unit Tests:
 
     ./gradlew build dist
 
