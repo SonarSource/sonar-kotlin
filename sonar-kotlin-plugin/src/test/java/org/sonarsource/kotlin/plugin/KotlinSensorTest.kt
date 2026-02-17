@@ -233,22 +233,29 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun test_fail_reading() {
-        val inputFile = spyk(createInputFile("file1.kt", "class A { fun f() = TODO() }"))
-        context.fileSystem().add(inputFile)
-        every { inputFile.contents() } throws IOException("Can't read")
-        every { inputFile.toString() } returns "file1.kt"
+        logTester.setLevel(Level.DEBUG)
 
-        val checkFactory = checkFactory("S1764")
-        sensor(checkFactory).execute(context)
-        val analysisErrors = context.allAnalysisErrors()
-        assertThat(analysisErrors).hasSize(1)
-        val analysisError = analysisErrors.iterator().next()
-        assertThat(analysisError.inputFile()).isEqualTo(inputFile)
-        assertThat(analysisError.message()).isEqualTo("Unable to parse file: file1.kt")
-        val textPointer = analysisError.location()
-        assertThat(textPointer).isNull()
+        try {
+            val inputFile = spyk(createInputFile("file1.kt", "class A { fun f() = TODO() }"))
+            context.fileSystem().add(inputFile)
+            every { inputFile.contents() } throws IOException("Can't read")
+            every { inputFile.toString() } returns "file1.kt"
 
-        assertThat(logTester.logs(Level.ERROR)).contains("Cannot read 'file1.kt': Can't read")
+            val checkFactory = checkFactory("S1764")
+            sensor(checkFactory).execute(context)
+            val analysisErrors = context.allAnalysisErrors()
+            assertThat(analysisErrors).hasSize(1)
+            val analysisError = analysisErrors.iterator().next()
+            assertThat(analysisError.inputFile()).isEqualTo(inputFile)
+            assertThat(analysisError.message()).isEqualTo("Unable to parse file: file1.kt")
+            val textPointer = analysisError.location()
+            assertThat(textPointer).isNull()
+
+            assertThat(logTester.logs(Level.ERROR)).contains("Cannot read 'file1.kt': Can't read")
+            assertThat(logTester.logs(Level.DEBUG)).contains("Detailed information: ")
+        } finally {
+            logTester.setLevel(Level.INFO)
+        }
     }
 
     @Test

@@ -17,6 +17,8 @@
 package org.sonarsource.kotlin.api.sensors
 
 import com.intellij.openapi.util.Disposer
+import java.io.File
+import java.io.IOException
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.slf4j.Logger
 import org.sonar.api.batch.fs.InputFile
@@ -36,12 +38,9 @@ import org.sonarsource.kotlin.api.frontend.KotlinSyntaxStructure
 import org.sonarsource.kotlin.api.frontend.KotlinTree
 import org.sonarsource.kotlin.api.frontend.KotlinVirtualFile
 import org.sonarsource.kotlin.api.frontend.ParseException
-import org.sonarsource.kotlin.api.frontend.RegexCache
 import org.sonarsource.kotlin.api.frontend.createK2AnalysisSession
 import org.sonarsource.kotlin.api.logging.debug
 import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
-import java.io.File
-import java.io.IOException
 
 private val EMPTY_FILE_CONTENT_PATTERN = Regex("""\s*+""")
 
@@ -57,6 +56,24 @@ abstract class AbstractKotlinSensorExecuteContext(
         sensorContext.config().getBoolean(SONAR_ANDROID_DETECTED).orElse(false)
     }
 
+    private val inputFileToVirtualFile: Map<InputFile, KotlinVirtualFile> by lazy {
+        val virtualFileSystem = KotlinFileSystem()
+
+        inputFiles.associateWith {
+            KotlinVirtualFile(
+                virtualFileSystem,
+                File(it.uri().rawPath),
+                contentProvider = {
+                    try {
+                        it.contents()
+                    } catch (_: IOException) {
+                        ""
+                    }
+                },
+            )
+        }
+    }
+
     abstract val classpath: List<String>
 
     val environment: Environment by lazy {
@@ -66,23 +83,11 @@ abstract class AbstractKotlinSensorExecuteContext(
             classpath,
             determineKotlinLanguageVersion(sensorContext, logger),
         )
-        val virtualFileSystem = KotlinFileSystem()
+
         env.k2session = createK2AnalysisSession(
             env.disposable,
             env.configuration,
-            inputFiles.map {
-                KotlinVirtualFile(
-                    virtualFileSystem,
-                    File(it.uri().path),
-                    contentProvider = {
-                        try {
-                            it.contents()
-                        } catch (_: IOException) {
-                            ""
-                        }
-                    },
-                )
-            },
+            inputFileToVirtualFile.values,
         )
         return@lazy env
     }
@@ -91,7 +96,11 @@ abstract class AbstractKotlinSensorExecuteContext(
         inputFiles.mapNotNull {
             val inputFileContext = InputFileContextImpl(sensorContext, it, isInAndroidContext)
             try {
-                KotlinSyntaxStructure.of(it.contents(), environment, it)
+                // The current logic relies on eager loading of all files before the analysis starts.
+                // To trigger potential IO exceptions and report them, we need to do this call.
+                // TODO SONARKT-711
+                it.contents()
+                KotlinSyntaxStructure.of(environment, it, inputFileToVirtualFile.getValue(it))
             } catch (e: ParseException) {
                 logParsingError(it, toParseException("parse", it, e))
                 inputFileContext.reportAnalysisParseError(KOTLIN_REPOSITORY_KEY, it, e.position)
@@ -157,6 +166,7 @@ abstract class AbstractKotlinSensorExecuteContext(
         }
         logger.error("Unable to parse file: ${inputFile.uri()}. $positionMessage")
         e.message?.let { logger.error(it) }
+        logger.debug("Detailed information: ", e)
     }
 }
 

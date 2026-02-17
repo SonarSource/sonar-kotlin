@@ -24,6 +24,8 @@ import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
 import org.sonar.api.batch.fs.InputFile
@@ -73,7 +75,7 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
         sensor().execute(context)
 
         val issues = context.allIssues()
-        assertThat(issues)
+        assertThat(issues).isEmpty()
     }
 
     @Test
@@ -92,7 +94,33 @@ class AbstractKotlinSensorTest : AbstractSensorTest() {
         assertThat(textPointer!!.line()).isEqualTo(1)
         assertThat(textPointer.lineOffset()).isEqualTo(14)
         assertThat(logTester.logs())
-            .contains(String.format("Unable to parse file: %s. Parse error at position 1:14", inputFile.uri()))
+            .contains("Unable to parse file: ${inputFile.uri()}. Parse error at position 1:14")
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = [
+        "directory with spaces/file.kt",
+        "test[brackets]/file(parens).kt",
+        "test%test/file.kt",
+    ])
+    fun `test file with spaces in path`(path: String) {
+        val inputFile = createInputFile(
+            path, """
+     fun main() {
+       print (1 == 1)
+     }
+     """.trimIndent()
+        )
+        context.fileSystem().add(inputFile)
+
+        sensor().execute(context)
+
+        val issues = context.allIssues()
+        assertThat(issues)
+            .hasSize(1)
+            .element(0)
+            .extracting { it.primaryLocation().inputComponent() }
+            .isEqualTo(inputFile)
     }
 
     @Test
