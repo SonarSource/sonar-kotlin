@@ -34,6 +34,12 @@ on:
         description: |
           Specify the version for the next release (e.g., 4.2.0).
           If left blank, the last version number will be automatically incremented (e.g., 1.51 -> 1.52, 1.51.1 -> 1.51.2).
+      require-rule-metadata-update:
+        type: boolean
+        description: |
+          Toggle whether the pre release checks should include a rule metadata update.
+          It is false for now as the action is broken, because of RSPEC repo went private, see GHA-184 for more details.
+        default: false
 
 jobs:
   lock-branch:
@@ -72,6 +78,7 @@ jobs:
       new-version: ${{ inputs.new-version }}
       create-slvs-ticket: false
       create-sle-ticket: false
+      require-rule-metadata-update: ${{ inputs.require-rule-metadata-update }}
 
   unlock-branch:
     name: Unlock ${{ inputs.branch }} branch
