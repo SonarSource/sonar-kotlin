@@ -109,8 +109,6 @@ tasks.jar {
 val sourcesJar = tasks.sourcesJar
 val javadocJar = tasks.javadocJar
 
-val patchTask = project(":sonar-kotlin-api").tasks.named("patchKotlinCompiler")
-
 // Configuration to resolve kotlin-compiler dependency
 val kotlinCompilerJar: Configuration = configurations.create("kotlinCompilerJar") {
     isCanBeConsumed = false
@@ -198,7 +196,7 @@ tasks.shadowJar {
     dependsOn(preprocessKotlinCompiler)
 
     dependencies {
-        exclude(dependency("org.jetbrains.kotlin:kotlin-compiler:.*"))
+        exclude(dependency(libs.kotlin.compiler))
     }
 
     from(preprocessKotlinCompiler.map { it.outputs.files })
@@ -212,7 +210,6 @@ tasks.register<ProGuardTask>("dist") {
     description = "Assembles sonar-kotlin-plugin.jar for integration tests and publishing"
     libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
     injars(tasks.shadowJar.get().archiveFile)
-    injars(patchTask)
     outjars("build/libs/sonar-kotlin-plugin.jar")
     configuration("proguard.txt")
     doLast {
