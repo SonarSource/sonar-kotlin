@@ -22,9 +22,6 @@ on:
         default: false
         required: false
 
-env:
-  PYTHONUNBUFFERED: 1
-
 jobs:
   release:
     permissions:
