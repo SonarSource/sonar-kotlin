@@ -121,6 +121,11 @@ val kotlinCompilerJar: Configuration = configurations.create("kotlinCompilerJar"
     }
 }
 
+/**
+ * A task to unpack kotlin-compiler.jar, process it, and feed into the shadowJar task instead of the normal jar.
+ * Processing involves analyzing embedded dependencies and validating that we include all the licenses,
+ * as well as excluding some files that we don't need and that cause issues if included.
+ */
 val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") {
     group = "build"
     description = "Before including kotlin-compiler into the shadow jar, filter out some files and verify that all licenses are accounted for"
@@ -147,11 +152,11 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
         }
     ) {
         exclude(
-            // Files also excluded by ProGuard (see dist task)
             "META-INF/*.kotlin_module",
             "org/jetbrains/kotlin/psi/KtVisitor.class", // patched version is included separately
             "com/intellij/util/concurrency/AppScheduledExecutorService\$MyThreadFactory.class", // patched version is included separately
             "META-INF/native/**/*jansi*",
+
             "META-INF/services/org/jline", // service provider files for jline
             *excludedPackages.map { "$it/**" }.toTypedArray()
         )
@@ -206,19 +211,7 @@ tasks.register<ProGuardTask>("dist") {
     group = "build"
     description = "Assembles sonar-kotlin-plugin.jar for integration tests and publishing"
     libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
-    injars(
-        mapOf(
-            "filter" to listOf(
-                "!META-INF/*.kotlin_module",
-                "!org/jetbrains/kotlin/psi/KtVisitor.class", // patched version is included below
-                "!com/intellij/util/concurrency/AppScheduledExecutorService\$MyThreadFactory.class", // patched version is included below
-                "!META-INF/native/**/*jansi*",
-                "!org/jline/**",
-                "!net/jpountz/**"
-            ).joinToString(",")
-        ),
-        tasks.shadowJar.get().archiveFile
-    )
+    injars(tasks.shadowJar.get().archiveFile)
     injars(patchTask)
     outjars("build/libs/sonar-kotlin-plugin.jar")
     configuration("proguard.txt")
