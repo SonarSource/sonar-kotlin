@@ -1,3 +1,6 @@
+import org.sonarsource.kotlin.buildsrc.utils.kotlinCompilerDependencies
+import org.sonarsource.kotlin.buildsrc.utils.packagesToDependencies
+import proguard.gradle.ProGuardTask
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
@@ -7,12 +10,17 @@ plugins {
     id("com.gradleup.shadow") version "8.3.1"
     kotlin("jvm")
     id("jacoco-report-aggregation")
+    id("org.sonarsource.cloud-native.license-file-generator")
 }
 
 buildscript {
     dependencies {
         classpath("com.guardsquare:proguard-gradle:7.6.1")
     }
+}
+
+val kotlinCompilerEmbedded: Configuration by configurations.creating {
+    isTransitive = false
 }
 
 dependencies {
@@ -34,8 +42,8 @@ dependencies {
     implementation(project(":sonar-kotlin-surefire"))
     implementation(project(":sonar-kotlin-checks"))
 
-    testImplementation(testLibs.junit.jupiter)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation(testLibs.junit.jupiter)
     testImplementation(libs.slf4j.api)
     testImplementation(testLibs.assertj.core)
     testImplementation(testLibs.mockito.core)
@@ -46,6 +54,11 @@ dependencies {
 
     testImplementation(project(":sonar-kotlin-test-api"))
     jacocoAggregation(project(":sonar-kotlin-test-api"))
+
+    // replicate dependencies embedded into kotlin-compiler for easier license management
+    kotlinCompilerDependencies.forEach {
+        kotlinCompilerEmbedded("${it.fqName}:${it.version}")
+    }
 }
 
 val test: Test by tasks
@@ -96,33 +109,111 @@ tasks.jar {
 val sourcesJar = tasks.sourcesJar
 val javadocJar = tasks.javadocJar
 
-val patchTask = project(":sonar-kotlin-api").tasks.named("patchKotlinCompiler")
+// Configuration to resolve kotlin-compiler dependency
+val kotlinCompilerJar: Configuration = configurations.create("kotlinCompilerJar") {
+    isCanBeConsumed = false
+    isCanBeResolved = true
+    extendsFrom(configurations.implementation.get())
+    attributes {
+        attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage.JAVA_RUNTIME))
+    }
+}
+
+/**
+ * A task to unpack kotlin-compiler.jar, process it, and feed into the shadowJar task instead of the normal jar.
+ * Processing involves analyzing embedded dependencies and validating that we include all the licenses,
+ * as well as excluding some files that we don't need and that cause issues if included.
+ */
+val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") {
+    group = "build"
+    description = "Before including kotlin-compiler into the shadow jar, filter out some files and verify that all licenses are accounted for"
+
+    val excludedPackages = setOf(
+        // Packages also excluded by ProGuard (see dist task)
+        "org/jline",
+        "net/jpountz",
+
+        "org/codehaus/stax2", // a stripped down version of the class breaks our usage, we include the full version ourselves
+        "org/fusesource/jansi", // jansi dependency not used
+        "org/apache/log4j", // everything should be using slf4j, we don't need to bundle a logging implementation
+        "javax/inject" // a compile-time dependency
+    )
+
+    from(
+        provider {
+            val compilerJar = kotlinCompilerJar.resolvedConfiguration.resolvedArtifacts
+                .find { it.moduleVersion.id.module.name == "kotlin-compiler" }
+                ?.file
+                ?: throw GradleException("kotlin-compiler dependency not found")
+
+            zipTree(compilerJar)
+        }
+    ) {
+        exclude(
+            "META-INF/*.kotlin_module",
+            "org/jetbrains/kotlin/psi/KtVisitor.class", // patched version is included separately
+            "com/intellij/util/concurrency/AppScheduledExecutorService\$MyThreadFactory.class", // patched version is included separately
+            "META-INF/native/**/*jansi*",
+
+            "META-INF/services/org/jline", // service provider files for jline
+            *excludedPackages.map { "$it/**" }.toTypedArray()
+        )
+    }
+
+    into(layout.buildDirectory.dir("preprocessed/kotlin-compiler"))
+
+    val isPackageVisited = kotlinCompilerDependencies.associate { it.fqName to false }
+        .toMutableMap()
+    eachFile {
+        val knownPackage = packagesToDependencies.filter { (prefix, _) ->
+            path.startsWith(prefix)
+        }.values.firstOrNull()
+
+        if (knownPackage == null) {
+            throw GradleException("Unexpected package inside kotlin-compiler: $path. Please update the mapping to include a license for this dependency")
+        } else {
+            isPackageVisited[knownPackage] = true
+        }
+    }
+
+    doLast {
+        val packagesNotVisited = isPackageVisited
+            .filterNot { (packageName, _) -> excludedPackages.any { path -> packageName.startsWith(path) } }
+            .filterValues { !it }
+            .keys
+            .joinToString(", ")
+
+        if (packagesNotVisited.isNotEmpty()) {
+            throw GradleException(
+                "Some expected packages were not found in kotlin-compiler: $packagesNotVisited. " +
+                    "Please check if the kotlin-compiler dependency has changed and exclude any old dependencies that are no longer present"
+            )
+        }
+    }
+}
+
+tasks.shadowJar {
+    dependsOn(preprocessKotlinCompiler)
+
+    dependencies {
+        exclude(dependency(libs.kotlin.compiler))
+    }
+
+    from(preprocessKotlinCompiler.map { it.outputs.files })
+}
 
 // Note that this task is time-consuming
 // and needed only for integration tests and publishing,
 // so it is not part of `gradle build`.
-task<proguard.gradle.ProGuardTask>("dist") {
+tasks.register<ProGuardTask>("dist") {
     group = "build"
     description = "Assembles sonar-kotlin-plugin.jar for integration tests and publishing"
     libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
-    injars(
-        mapOf(
-            "filter" to listOf(
-                "!META-INF/*.kotlin_module",
-                "!org/jetbrains/kotlin/psi/KtVisitor.class", // patched version is included below
-                "!com/intellij/util/concurrency/AppScheduledExecutorService\$MyThreadFactory.class", // patched version is included below
-                "!META-INF/native/**/*jansi*",
-                "!org/jline/**",
-                "!net/jpountz/**"
-            ).joinToString(",")
-        ),
-        tasks.shadowJar.get().archiveFile
-    )
-    injars(patchTask)
+    injars(tasks.shadowJar.get().archiveFile)
     outjars("build/libs/sonar-kotlin-plugin.jar")
     configuration("proguard.txt")
     doLast {
-        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 50_400_000L, 50_800_000L)
+        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 50_800_000L, 51_300_000L)
     }
 }
 
@@ -171,4 +262,11 @@ fun checkJarEntriesPathUniqueness(file: File) {
 tasks.check {
     // Generate aggregate coverage report
     dependsOn(tasks.named<JacocoReport>("testCodeCoverageReport"))
+}
+
+licenseReport {
+    configurations = arrayOf(
+        kotlinCompilerEmbedded.name,
+        "runtimeClasspath"
+    )
 }

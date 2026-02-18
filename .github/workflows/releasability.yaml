@@ -2,6 +2,13 @@ name: Releasability status
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: [ Build ]  # Name must match the build workflow
+    types:
+      - completed
+    branches:
+      - master
+      - branch-*
 
 jobs:
   update_releasability_status:
@@ -12,6 +19,8 @@ jobs:
       statuses: write
       contents: read
     steps:
-      - uses: SonarSource/gh-action_releasability/releasability-status@23c9ad31b2d613bade88da898dfdca0b5c65ac69 # v1.2.1
+      - uses: SonarSource/gh-action_releasability/releasability-status@v3
+        with:
+          optional_checks: "Jira"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'

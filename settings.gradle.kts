@@ -1,4 +1,6 @@
 pluginManagement {
+    includeBuild("build-logic/common")
+
     repositories {
         gradlePluginPortal()
     }
@@ -70,7 +72,7 @@ dependencyResolutionManagement {
 
         create("testLibs") {
             val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
-            val assertj = version("assertj", "3.24.2")
+            val assertj = version("assertj", "3.27.7")
             val junit = version("junit", "5.10.1")
             val mockito = version("mockito", "5.7.0")
             val mockk = version("mockk", "1.13.3")
@@ -108,7 +110,7 @@ develocity {
             tag("CI")
             for (key in listOf(
                 "GITHUB_RUN_ID",
-                "GITHUB_JOB_ID", // configured in .github/workflows/ci.yml - see https://github.com/actions/runner/issues/324#issuecomment-3324382354
+                "GITHUB_JOB_ID", // configured in .github/workflows/build.yml - see https://github.com/actions/runner/issues/324#issuecomment-3324382354
                 "GITHUB_JOB",
                 "GITHUB_REF_NAME",
                 "GITHUB_SHA",

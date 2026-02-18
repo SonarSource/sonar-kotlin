@@ -1,4 +1,4 @@
-name: CI
+name: Build
 on:
   push:
     branches:
@@ -8,6 +8,10 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 2 * * *" # at 02:00 UTC every day
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   id-token: write  # Required for Vault OIDC authentication
@@ -23,6 +27,9 @@ jobs:
         run: echo "GITHUB_JOB_ID=${{ job.check_run_id }}" >> $GITHUB_ENV
         shell: bash
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - &checkout-build-logic
+        id: checkout-build-logic
+        run: git submodule update --init -- build-logic/common
       - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           distribution: temurin
@@ -61,6 +68,7 @@ jobs:
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - *checkout-build-logic
       - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
         with:
           distribution: temurin
@@ -133,3 +141,23 @@ jobs:
       contents: write
     steps:
       - uses: SonarSource/ci-github-actions/promote@v1
+
+  notify_slack:
+    name: Notify Slack on Failure
+    needs: [ build, qa_plugin, qa_ruling, promote ]
+    if: >-
+      failure() && ! cancelled() &&
+      (github.ref_name == github.event.repository.default_branch ||
+      startsWith(github.ref_name, 'branch-') ||
+      startsWith(github.ref_name, 'feature/'))
+    permissions:
+      id-token: write
+      statuses: read
+    runs-on: github-ubuntu-latest-s
+    steps:
+      - uses: SonarSource/release-github-actions/notify-slack@v1
+        with:
+          project-name: "SonarKotlin"
+          slack-channel: "squad-security-cloud-notifs"
+          icon: ':kotlin:'
+          jobs: ${{ toJSON(needs) }}
