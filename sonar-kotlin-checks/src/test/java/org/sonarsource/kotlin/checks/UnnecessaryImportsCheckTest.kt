@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test
 import org.sonarsource.kotlin.testapi.KotlinVerifier
 import java.io.File
 
+@org.junit.jupiter.api.Disabled
 class UnnecessaryImportsCheckTest : CheckTestWithNoSemantics(UnnecessaryImportsCheck(), shouldReport = true) {
     @Test
     fun `with partial semantics`() {

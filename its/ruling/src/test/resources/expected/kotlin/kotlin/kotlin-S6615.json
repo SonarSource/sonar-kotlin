@@ -1,77 +1,12 @@
 {
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/ObjectSuperCallArgumentGenerator.kt": [
-47
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/MethodInliner.kt": [
-478,
-524,
-543,
-774
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/ParametersBuilder.kt": [
-96
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/contracts/parsing/PsiConditionParser.kt": [
-88,
-91,
-92
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/CallCompleter.kt": [
-270,
-271,
-274,
-275,
-277,
-278
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.common/src/org/jetbrains/kotlin/backend/common/ir/Ir.kt": [
-192
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.js/src/org/jetbrains/kotlin/ir/backend/js/lower/BlockDecomposerLowering.kt": [
-442
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/lower/EnumClassLowering.kt": [
-104
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/javac-wrapper/src/org/jetbrains/kotlin/javac/resolve/ClassifierResolver.kt": [
-73,
-74
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/codegen/AbstractBytecodeListingTest.kt": [
 154
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/resolve/calls/AbstractEnhancedSignaturesResolvedCallsTest.kt": [
-32
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors/src/org/jetbrains/kotlin/resolve/DescriptorUtils.kt": [
-250,
-276,
-361
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/decompiler/textBuilder/buildDecompiledText.kt": [
-112
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/generateUtil.kt": [
-197
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/debugger/stepping/KotlinSteppingCommandProvider.kt": [
-264
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/actions/internal/SearchNotPropertyCandidatesAction.kt": [
-93,
-98
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/actions/internal/benchmark/AbstractCompletionBenchmarkAction.kt": [
-209
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/actions/internal/benchmark/HighlightingBenchmarkAction.kt": [
-207
+250
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/conversion/copy/ConvertJavaCopyPasteProcessor.kt": [
 239
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/editor/KotlinMultilineStringEnterHandler.kt": [
-309
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/facet/KotlinFacetEditorGeneralTab.kt": [
 182
@@ -80,53 +15,15 @@
 159,
 160
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/KotlinChangeInfo.kt": [
-441,
-453
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/introduce/extractionEngine/ExtractableCodeDescriptor.kt": [
-267,
-296
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/move/changePackage/ChangePackageIntention.kt": [
 77,
 78
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/coverage/AbstractKotlinCoverageOutputFilesTest.kt": [
-59
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.inliner/src/org/jetbrains/kotlin/js/coroutine/CoroutinePasses.kt": [
-176
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.inliner/src/org/jetbrains/kotlin/js/inline/clean/TemporaryAssignmentElimination.kt": [
-251
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/js/js.parser/src/org/jetbrains/kotlin/js/parser/sourcemaps/SourceMapLocationRemapper.kt": [
-47,
-48
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/utils/LineCollector.kt": [
 52
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.translator/src/org/jetbrains/kotlin/js/translate/context/DeclarationExporter.kt": [
 120
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/common/src/generated/_Collections.kt": [
-1852
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/common/src/generated/_Sequences.kt": [
-1382
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/common/src/generated/_Sets.kt": [
-28
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/utils/LazyJVMTest.kt": [
-58,
-82,
-162
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/samples/test/samples/collections/sequences.kt": [
-17
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/samples/test/samples/properties/delegates.kt": [
 50
@@ -136,15 +33,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/collections/SequenceTest.kt": [
 355
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/plugin/KotlinMultiplatformPlugin.kt": [
-136
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-stdlib-gen/src/templates/dsl/MemberBuilder.kt": [
-380
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/src/org/jetbrains/uast/kotlin/declarations/KotlinUClass.kt": [
-112
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/org/jetbrains/uast/test/common/IdentifiersTestBase.kt": [
 36

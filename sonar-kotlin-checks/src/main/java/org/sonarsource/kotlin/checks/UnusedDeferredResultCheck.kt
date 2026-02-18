@@ -30,7 +30,8 @@ class UnusedDeferredResultCheck : AbstractCheck() {
     private val deferredFqn = ClassId.fromString(DEFERRED_FQN.replace('.', '/'))
 
     override fun visitCallExpression(expression: KtCallExpression, context: KotlinFileContext) = withKaSession {
-        if (expression.expressionType!!.isClassType(deferredFqn)
+        // TODO expressionType not supposed to be null in this case according to documentation, however was encountered in ruling test
+        if (expression.expressionType?.isClassType(deferredFqn) == true
             && !expression.isUsedAsExpression) {
             context.reportIssue(expression.calleeExpression!!, """This function returns "Deferred", but its result is never used.""")
         }

@@ -41,6 +41,7 @@ import org.sonarsource.kotlin.api.frontend.createK2AnalysisSession
 import org.sonarsource.kotlin.api.logging.debug
 import org.sonarsource.kotlin.api.visiting.KotlinFileVisitor
 import java.io.File
+import java.io.IOException
 
 private val EMPTY_FILE_CONTENT_PATTERN = Regex("""\s*+""")
 
@@ -73,7 +74,13 @@ abstract class AbstractKotlinSensorExecuteContext(
                 KotlinVirtualFile(
                     virtualFileSystem,
                     File(it.uri().path),
-                    contentProvider = { it.contents() },
+                    contentProvider = {
+                        try {
+                            it.contents()
+                        } catch (_: IOException) {
+                            ""
+                        }
+                    },
                 )
             },
         )

@@ -37,10 +37,10 @@ class UnusedFunctionParameterCheck : AbstractCheck() {
         if (!shouldBeChecked(function)) return
         val unusedParameters = function.getUnusedParameters()
         val singleMessage =
-            if (function.isAnonymous()) """Use "_" instead of this unused function parameter"""
+            if (function.isAnonymous) """Use "_" instead of this unused function parameter"""
             else "Remove this unused function parameter"
         val pluralMessage =
-            if (function.isAnonymous()) """Use "_" instead of these unused function parameters."""
+            if (function.isAnonymous) """Use "_" instead of these unused function parameters."""
             else "Remove these unused function parameters."
         if (unusedParameters.isNotEmpty()) reportUnusedParameters(context, unusedParameters, singleMessage, pluralMessage)
     }
@@ -72,7 +72,7 @@ class UnusedFunctionParameterCheck : AbstractCheck() {
 
 private fun shouldBeChecked(function: KtNamedFunction) =
     function.hasBody()
-        && (function.isTopLevel || function.isPrivate() || function.isAnonymous())
+        && (function.isTopLevel || function.isPrivate() || function.isAnonymous)
 
 private fun KtNamedFunction.getUnusedParameters(): List<KtParameter> =
     valueParameters.asSequence()

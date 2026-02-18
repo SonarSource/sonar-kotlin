@@ -27,17 +27,17 @@ class KotlinLanguageVersionTest {
 
     @Test
     fun first_supported() {
-        assertThat(LanguageVersion.FIRST_SUPPORTED).isEqualTo(LanguageVersion.KOTLIN_1_8)
+        assertThat(LanguageVersion.FIRST_SUPPORTED).isEqualTo(LanguageVersion.KOTLIN_2_0)
     }
 
     @Test
     fun first_non_deprecated() {
-        assertThat(LanguageVersion.FIRST_NON_DEPRECATED).isEqualTo(LanguageVersion.KOTLIN_2_0)
+        assertThat(LanguageVersion.FIRST_NON_DEPRECATED).isEqualTo(LanguageVersion.KOTLIN_2_1)
     }
 
     @Test
     fun latest_stable() {
-        assertThat(LanguageVersion.LATEST_STABLE).isEqualTo(LanguageVersion.KOTLIN_2_2)
+        assertThat(LanguageVersion.LATEST_STABLE).isEqualTo(LanguageVersion.KOTLIN_2_3)
     }
 
 }

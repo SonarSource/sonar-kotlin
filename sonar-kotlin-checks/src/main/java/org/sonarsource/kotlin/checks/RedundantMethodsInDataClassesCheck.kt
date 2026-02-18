@@ -125,7 +125,7 @@ private fun checkHashExpression(
 
 private fun KtNamedFunction.equalsHasDefaultImpl(
     klassParameters: List<KtParameter>,
-    methodParameters: MutableList<KtParameter>,
+    methodParameters: List<KtParameter>,
     className: String?
 ): Boolean {
     return if (hasBlockBody()) {
@@ -140,7 +140,7 @@ private fun KtNamedFunction.equalsHasDefaultImpl(
 private fun checkEqualsExpression(
     expression: KtExpression?,
     klassParameters: List<KtParameter>,
-    methodParameters: MutableList<KtParameter>,
+    methodParameters: List<KtParameter>,
     className: String?
 ): Boolean {
     val map = mutableMapOf<KtParameter, Boolean>()
@@ -153,7 +153,7 @@ private fun checkEqualsExpression(
 private fun visitExpression(
     expression: KtExpression?,
     klassParameters: List<KtParameter>,
-    methodParameters: MutableList<KtParameter>,
+    methodParameters: List<KtParameter>,
     map: MutableMap<KtParameter, Boolean>,
     className: String?
 ): Boolean {

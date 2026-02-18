@@ -139,7 +139,7 @@ class RedundantMethodsInDataClassesCheckSample {
             return other is Person1 && other.name == name && other.age == age
         }
 
-        override fun hashCode() = Arrays.hashCode(arrayOf(name, age)) // Noncompliant
+        override fun hashCode() = Arrays.hashCode(arrayOf<Comparable<*>>(name, age)) // Noncompliant
     }
 
     data class Person16(val name: String, val age: Int) {
@@ -189,7 +189,7 @@ class RedundantMethodsInDataClassesCheckSample {
     }
 
     data class Person22(val name: String, val age: Int) {
-        val a = arrayOf(name, age)
+        val a = arrayOf<Comparable<*>>(name, age)
 
         override fun hashCode() = Arrays.hashCode(a) // FN
     }
