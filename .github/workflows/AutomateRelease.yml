@@ -40,6 +40,10 @@ on:
           Toggle whether the pre release checks should include a rule metadata update.
           It is false for now as the action is broken, because of RSPEC repo went private, see GHA-184 for more details.
         default: false
+      dry-run:
+        description: "Test mode: uses Jira sandbox and creates draft GitHub release"
+        type: boolean
+        default: false
 
 jobs:
   lock-branch:
@@ -66,8 +70,8 @@ jobs:
       plugin-name: "kotlin"
       plugin-artifacts-sqs: "kotlin"
       plugin-artifacts-sqc: "kotlin"
-      use-jira-sandbox: false
-      is-draft-release: false
+      use-jira-sandbox: ${{ github.event.inputs.dry-run == 'true' }}
+      is-draft-release: ${{ github.event.inputs.dry-run == 'true' }}
       pm-email: "alexandre.gigleux@sonarsource.com"
       release-automation-secret-name: "sonar-kotlin-release-automation"
       short-description: ${{ inputs.short-description }}
