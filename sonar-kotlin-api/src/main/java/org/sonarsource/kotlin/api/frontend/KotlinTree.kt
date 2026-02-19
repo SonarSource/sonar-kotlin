@@ -17,12 +17,12 @@
 package org.sonarsource.kotlin.api.frontend
 
 import com.intellij.openapi.editor.Document
-import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
 import org.sonar.api.batch.fs.InputFile
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textPointerAtOffset
 
@@ -36,20 +36,28 @@ class KotlinTree(
 data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val inputFile: InputFile) {
     companion object {
         @JvmStatic
-        fun of(content: String, environment: Environment, inputFile: InputFile): KotlinSyntaxStructure {
+        fun of(environment: Environment, inputFile: InputFile, virtualFile: KotlinVirtualFile): KotlinSyntaxStructure {
 
-            val inputFilePath = FileUtil.toSystemIndependentName(inputFile.file().path)
-            // TODO improve performance, see also
+            // TODO SONARKT-711 improve performance, see also
             // https://github.com/Kotlin/analysis-api/commit/eea50c3d826584461e7bb0087deb9f0d9b55eb8c
             // which requires Kotlin 2.1.20
             // https://github.com/JetBrains/kotlin/commit/774d253de8263e284f045a452369a7308d495d03
-            val psiFile: KtFile = environment.k2session!!.modulesWithFiles.values.first().find {
-                it.virtualFile.path == inputFilePath
-            } as KtFile
+            // At the beginning of Analysis API, the only way to retrieve KtFile from k2session was to use modulesWithFiles.
+            // Currently, the API already allows analysis of String (i.e. in-memory file) and not KtFile.
+            // Maybe, we can avoid creation of Kotlin VirtualFiles completely, but this needs to be investigated.
+            val psiFile = environment.k2session!!.modulesWithFiles.values.first().find {
+                it.virtualFile == virtualFile
+            }
+
+            if (psiFile == null) {
+                throw ParseException("Cannot find KtFile for virtual file ${virtualFile.path}")
+            } else if (psiFile !is KtFile) {
+                throw ParseException("Cannot find KtFile for virtual file ${virtualFile.path}, found a file of type ${psiFile::class.java}: $psiFile")
+            }
 
             val document = try {
                 psiFile.viewProvider.document ?: throw ParseException("Cannot extract document")
-            } catch (e: AssertionError) {
+            } catch (_: AssertionError) {
                 // A KotlinLexerException may occur when attempting to read invalid files
                 throw ParseException("Cannot correctly map AST with a null Document object")
             }
@@ -61,19 +69,14 @@ data class KotlinSyntaxStructure(val ktFile: KtFile, val document: Document, val
     }
 }
 
-fun checkParsingErrors(psiFile: PsiFile, document: Document, inputFile: InputFile) {
-    descendants(psiFile)
-        .firstOrNull { it is PsiErrorElement }
-        ?.let { element: PsiElement ->
-            throw ParseException(
-                "Cannot convert file due to syntactic errors",
-                inputFile.textPointerAtOffset(document, element.startOffset)
-            )
-        }
-}
+fun checkParsingErrors(psiFile: PsiFile, document: Document, inputFile: InputFile) = descendants(psiFile)
+    .firstIsInstanceOrNull<PsiErrorElement>()
+    ?.let { element ->
+        throw ParseException(
+            "Cannot convert file due to syntactic errors",
+            inputFile.textPointerAtOffset(document, element.startOffset)
+        )
+    }
 
-private fun descendants(element: PsiElement): Sequence<PsiElement> {
-    return element.children.asSequence().flatMap { tree: PsiElement -> sequenceOf(tree) + descendants(tree) }
-}
-
-private fun normalizeEol(content: String) = content.replace("""\r\n?""".toRegex(), "\n")
+private fun descendants(element: PsiElement): Sequence<PsiElement> =
+    element.children.asSequence().flatMap { tree -> sequenceOf(tree) + descendants(tree) }

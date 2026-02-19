@@ -23,14 +23,13 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileSystem
 import org.sonarsource.kotlin.api.frontend.KotlinSyntaxStructure
 import org.sonarsource.kotlin.api.frontend.KotlinTree
 import org.sonarsource.kotlin.api.frontend.KotlinVirtualFile
-import org.sonarsource.kotlin.api.frontend.RegexCache
 import org.sonarsource.kotlin.api.frontend.createK2AnalysisSession
 import java.io.File
 
 fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile): KotlinTree {
     val virtualFile = KotlinVirtualFile(
         KotlinFileSystem(),
-        File(inputFile.uri().path),
+        File(inputFile.uri().rawPath),
         contentProvider = { content },
     )
     environment.k2session = createK2AnalysisSession(
@@ -38,6 +37,6 @@ fun kotlinTreeOf(content: String, environment: Environment, inputFile: InputFile
         environment.configuration,
         listOf(virtualFile),
     )
-    val (ktFile, document) = KotlinSyntaxStructure.of(content, environment, inputFile)
+    val (ktFile, document) = KotlinSyntaxStructure.of(environment, inputFile, virtualFile)
     return KotlinTree(ktFile, document)
 }

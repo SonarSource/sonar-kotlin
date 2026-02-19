@@ -38,6 +38,7 @@ import org.sonarsource.kotlin.api.common.KotlinLanguage
 import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 import kotlin.io.path.createTempDirectory
+import org.intellij.lang.annotations.Language
 
 abstract class AbstractSensorTest {
 
@@ -84,7 +85,7 @@ abstract class AbstractSensorTest {
         return CheckFactory(context.activeRules())
     }
 
-    protected fun createInputFile(relativePath: String, content: String, status: InputFile.Status=InputFile.Status.SAME): InputFile {
+    protected fun createInputFile(relativePath: String, @Language("kotlin") content: String, status: InputFile.Status=InputFile.Status.SAME): InputFile {
         return TestInputFileBuilder("moduleKey", relativePath)
             .setModuleBaseDir(baseDir)
             .setType(InputFile.Type.MAIN)
