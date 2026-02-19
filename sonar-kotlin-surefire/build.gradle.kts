@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    id("filtered-kotlin-compiler")
 }
 
 dependencies {
@@ -12,6 +13,7 @@ dependencies {
     implementation(libs.staxmate)
     implementation(libs.gson)
     implementation(libs.sonar.analyzer.commons.recognizers)
+    implementation(project(":sonar-kotlin-metrics"))
 
     testImplementation(testLibs.junit.jupiter)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
