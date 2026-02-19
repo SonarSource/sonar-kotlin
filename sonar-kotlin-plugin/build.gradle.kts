@@ -5,12 +5,14 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.jar.JarInputStream
+import org.sonarsource.kotlin.buildsrc.packageExclusions
 
 plugins {
     id("com.gradleup.shadow") version "8.3.1"
     kotlin("jvm")
     id("jacoco-report-aggregation")
     id("org.sonarsource.cloud-native.license-file-generator")
+    id("filtered-kotlin-compiler")
 }
 
 buildscript {
@@ -128,17 +130,6 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
     group = "build"
     description = "Before including kotlin-compiler into the shadow jar, filter out some files and verify that all licenses are accounted for"
 
-    val excludedPackages = setOf(
-        // Packages also excluded by ProGuard (see dist task)
-        "org/jline",
-        "net/jpountz",
-
-        "org/codehaus/stax2", // a stripped down version of the class breaks our usage, we include the full version ourselves
-        "org/fusesource/jansi", // jansi dependency not used
-        "org/apache/log4j", // everything should be using slf4j, we don't need to bundle a logging implementation
-        "javax/inject" // a compile-time dependency
-    )
-
     from(
         provider {
             val compilerJar = kotlinCompilerJar.resolvedConfiguration.resolvedArtifacts
@@ -156,7 +147,6 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
             "META-INF/native/**/*jansi*",
 
             "META-INF/services/org/jline", // service provider files for jline
-            *excludedPackages.map { "$it/**" }.toTypedArray()
         )
     }
 
@@ -165,6 +155,11 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
     val isPackageVisited = kotlinCompilerDependencies.associate { it.fqName to false }
         .toMutableMap()
     eachFile {
+        if (packageExclusions.any { path.startsWith(it) }) {
+            exclude()
+            return@eachFile
+        }
+
         val knownPackage = packagesToDependencies.filter { (prefix, _) ->
             path.startsWith(prefix)
         }.values.firstOrNull()
@@ -178,7 +173,7 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
 
     doLast {
         val packagesNotVisited = isPackageVisited
-            .filterNot { (packageName, _) -> excludedPackages.any { path -> packageName.startsWith(path) } }
+            .filterNot { (packageName, _) -> packageExclusions.any { path -> packageName.startsWith(path) } }
             .filterValues { !it }
             .keys
             .joinToString(", ")

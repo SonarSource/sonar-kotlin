@@ -1,12 +1,11 @@
 plugins {
     kotlin("jvm")
+    id("filtered-kotlin-compiler")
 }
 
 dependencies {
     compileOnly(libs.sonar.plugin.api)
     compileOnly(libs.slf4j.api)
-    // force the usage of stax2-api, which otherwise gets substituted by a stripped down version embedded into kotlin-compiler
-    api(libs.stax2.api)
     implementation(project(":sonar-kotlin-metrics"))
     implementation(libs.sonar.analyzer.commons)
     implementation(libs.sonar.xml.parsing)
