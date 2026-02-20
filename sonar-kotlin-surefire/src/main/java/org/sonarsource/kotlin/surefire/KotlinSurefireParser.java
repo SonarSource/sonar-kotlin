@@ -31,6 +31,7 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
+import org.sonarsource.kotlin.metrics.TelemetryData;
 import org.sonarsource.kotlin.surefire.data.UnitTestClassReport;
 import org.sonarsource.kotlin.surefire.data.UnitTestIndex;
 
@@ -38,14 +39,16 @@ import org.sonarsource.kotlin.surefire.data.UnitTestIndex;
 public class KotlinSurefireParser {
   private static final Logger LOGGER = LoggerFactory.getLogger(KotlinSurefireParser.class);
   private final KotlinResourcesLocator kotlinResourcesLocator;
+  private TelemetryData telemetryData;
 
   public KotlinSurefireParser(KotlinResourcesLocator kotlinResourcesLocator) {
     this.kotlinResourcesLocator = kotlinResourcesLocator;
   }
 
-  public void collect(SensorContext context, List<File> reportsDirs, boolean reportDirSetByUser) {
+  public void collect(SensorContext context, List<File> reportsDirs, boolean reportDirSetByUser, TelemetryData telemetryData) {
     List<File> xmlFiles = getReports(reportsDirs, reportDirSetByUser);
     if (!xmlFiles.isEmpty()) {
+      this.telemetryData = telemetryData;
       parseFiles(context, xmlFiles);
     }
   }
@@ -116,9 +119,9 @@ public class KotlinSurefireParser {
         Optional<InputFile> inputFile = kotlinResourcesLocator.findResourceByClassName(entry.getKey());
         if (inputFile.isPresent()) {
           save(report, inputFile.get(), context);
+          telemetryData.setSurefireClassesImported(telemetryData.getSurefireClassesImported() + 1);
         } else {
-          LOGGER.warn("Resource not found: {} under the directory {} while reading test reports. Please, make sure your \"sonar.junit.reportPaths\" property is configured properly",
-            entry.getKey(), context.fileSystem().baseDir().getPath());
+          telemetryData.setSurefireClassesFailed(telemetryData.getSurefireClassesFailed() + 1);
         }
       }
     }

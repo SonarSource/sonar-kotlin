@@ -23,11 +23,7 @@ import java.util.Set;
 
 public class UnitTestIndex {
 
-  private Map<String, UnitTestClassReport> indexByClassname;
-
-  public UnitTestIndex() {
-    this.indexByClassname = new HashMap<>();
-  }
+  private final Map<String, UnitTestClassReport> indexByClassname = new HashMap<>();
 
   public UnitTestClassReport index(String classname) {
     return indexByClassname.computeIfAbsent(classname, name -> new UnitTestClassReport());

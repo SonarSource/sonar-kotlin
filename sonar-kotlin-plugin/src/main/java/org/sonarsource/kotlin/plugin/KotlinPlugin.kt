@@ -30,6 +30,7 @@ import org.sonarsource.kotlin.externalreport.detekt.DetektSensor
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintRulesDefinition
 import org.sonarsource.kotlin.externalreport.ktlint.KtlintSensor
 import org.sonarsource.kotlin.gradle.KotlinGradleSensor
+import org.sonarsource.kotlin.metrics.TelemetryData
 import org.sonarsource.kotlin.surefire.KotlinResourcesLocator
 import org.sonarsource.kotlin.surefire.KotlinSurefireParser
 import org.sonarsource.kotlin.surefire.KotlinSurefireSensor
@@ -54,6 +55,7 @@ class KotlinPlugin : Plugin, KotlinPluginExtensionsProvider {
 
         context.addExtensions(
             KotlinLanguage::class.java,
+            TelemetryData::class.java,
             KotlinProjectSensor::class.java,
             KotlinSensor::class.java,
             KotlinRulesDefinition::class.java,
