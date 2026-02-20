@@ -1,10 +1,6 @@
 name: Automate release
 
 on:
-  # to be able to run workflow, remove before merge
-  pull_request:
-    branches:
-      - master
   workflow_dispatch:
     inputs:
       short-description:
