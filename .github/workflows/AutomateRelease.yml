@@ -1,0 +1,104 @@
+name: Automate release
+
+on:
+  workflow_dispatch:
+    inputs:
+      short-description:
+        description: |
+          A brief summary of what the release contains.
+          This will be added directly to the release ticket.
+        required: true
+      rule-props-changed:
+        type: choice
+        description: |
+          Did any rule properties change in this release?
+        required: true
+        default: "No"
+        options:
+          - "Yes"
+          - "No"
+      branch:
+        description: |
+          Branch from which to do the release.
+        required: true
+        default: "master"
+      release-notes:
+        description: |
+          Release notes.
+          If blank, release notes will be generated from the Jira Release.
+      sq-ide-short-description:
+        description: |
+          A brief summary of SQ IDE related changes.
+          If blank, the generic brief summary defined above will be used.
+      new-version:
+        description: |
+          Specify the version for the next release (e.g., 4.2.0).
+          If left blank, the last version number will be automatically incremented (e.g., 1.51 -> 1.52, 1.51.1 -> 1.51.2).
+      require-rule-metadata-update:
+        type: boolean
+        description: |
+          Toggle whether the pre release checks should include a rule metadata update.
+          It is false for now as the action is broken, because of RSPEC repo went private, see GHA-184 for more details.
+        default: false
+      dry-run:
+        description: "Test mode: uses Jira sandbox and creates draft GitHub release"
+        type: boolean
+        default: false
+
+jobs:
+  lock-branch:
+    name: Lock ${{ inputs.branch }} branch
+    uses: ./.github/workflows/ToggleLockBranch.yml
+    permissions:
+      id-token: write
+    with:
+      branch: ${{ inputs.branch }}
+
+  release:
+    name: Release
+    uses: SonarSource/release-github-actions/.github/workflows/cloud-security-automated-release.yml@v1
+    needs: lock-branch
+    permissions:
+      statuses: read
+      id-token: write
+      contents: write
+      actions: write
+      pull-requests: write
+    with:
+      jira-project-key: "SONARKT"
+      project-name: "SonarKotlin"
+      plugin-name: "kotlin"
+      plugin-artifacts-sqs: "kotlin"
+      plugin-artifacts-sqc: "kotlin"
+      use-jira-sandbox: ${{ github.event.inputs.dry-run == 'true' }}
+      is-draft-release: ${{ github.event.inputs.dry-run == 'true' }}
+      pm-email: "alexandre.gigleux@sonarsource.com"
+      release-automation-secret-name: "sonar-kotlin-release-automation"
+      short-description: ${{ inputs.short-description }}
+      rule-props-changed: ${{ inputs.rule-props-changed }}
+      branch: ${{ inputs.branch }}
+      release-notes: ${{ inputs.release-notes }}
+      sq-ide-short-description: ${{ inputs.sq-ide-short-description }}
+      new-version: ${{ inputs.new-version }}
+      create-slvs-ticket: false
+      create-sle-ticket: false
+      require-rule-metadata-update: ${{ inputs.require-rule-metadata-update }}
+
+  unlock-branch:
+    name: Unlock ${{ inputs.branch }} branch
+    uses: ./.github/workflows/ToggleLockBranch.yml
+    needs: release
+    permissions:
+      id-token: write
+    with:
+      branch: ${{ inputs.branch }}
+
+  bump_versions:
+    name: Bump versions
+    needs: [release, unlock-branch]
+    uses: ./.github/workflows/bump-versions.yaml
+    permissions:
+      contents: write
+      pull-requests: write
+    with:
+      version: ${{ needs.release.outputs.new-version }}-SNAPSHOT
