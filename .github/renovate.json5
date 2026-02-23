@@ -1,0 +1,85 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>SonarSource/renovate-config:languages-team",
+    ":semanticCommitsDisabled"
+  ],
+  "schedule": [
+    "before 4am on Monday"
+  ],
+  "enabledManagers": [
+    "gradle",
+    "gradle-wrapper",
+    "github-actions",
+    "git-submodules"
+  ],
+  "gradle": {
+    "enabled": true
+  },
+  "git-submodules": {
+    "enabled": true
+  },
+  "ignorePaths": [
+    "its/**",
+    "**/test/**"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "SonarSource/*"
+      ],
+      "pinDigests": false,
+      "groupName": "all Sonar GitHub Actions",
+      "groupSlug": "all-sonar-github-actions"
+    },
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "!SonarSource/*"
+      ],
+      "pinDigests": true,
+      "groupName": "all third-party GitHub Actions",
+      "groupSlug": "all-3rd-party-github-actions"
+    },
+    {
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "!org.sonarsource.api.plugin:sonar-plugin-api*"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
+    },
+    {
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "org.sonarsource.api.plugin:sonar-plugin-api*"
+      ],
+      "groupName": "sonar-plugin-api",
+      "groupSlug": "sonar-plugin-api",
+      "prHeader": "**Before updating the plugin-api version, make sure to check the [compatibility matrix](https://github.com/SonarSource/sonar-plugin-api?tab=readme-ov-file#compatibility) and stick to the lowest denominator.**"
+    },
+    {
+      "matchManagers": [
+        "git-submodules"
+      ],
+      "matchDepNames": [
+        "its/sources/**"
+      ],
+      "enabled": false
+    }
+  ],
+  "reviewers": ["team:security-cloud-squad"]
+}
