@@ -34,6 +34,11 @@ class EmptyBlockCheckSample {
             }
         }
 
+        when (c) {
+            true -> println("true")
+            else -> {} // Compliant - empty else block in when is intentional
+        }
+
         while (c) {} // Compliant - exception to the rule
     }
 
