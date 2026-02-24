@@ -232,7 +232,7 @@ sonarqube {
         property("sonar.links.scm", "https://github.com/SonarSource/sonar-kotlin")
         property("sonar.links.issue", "https://jira.sonarsource.com/browse/SONARKT")
         property("sonar.exclusions", "**/build/**/*")
-        property("sonar.sca.exclusions", "**/its/**,**/kotlin-checks-test-sources/**")
+        property("sonar.sca.exclusions", "**/its/**,**/kotlin-checks-test-sources/**,**/samples/**")
     }
 }
 
