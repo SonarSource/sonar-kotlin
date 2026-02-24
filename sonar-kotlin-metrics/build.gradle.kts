@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    id("filtered-kotlin-compiler")
 }
 
 dependencies {
