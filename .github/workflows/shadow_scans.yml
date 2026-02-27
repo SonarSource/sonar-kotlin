@@ -47,12 +47,12 @@ jobs:
 #        uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c # v1.7.1
 #        with:
 #          sdk: ${{ env.DART_VERSION }}
-      - name: Run Shadow Scan
+      - name: Run Shadow Scans
         uses: SonarSource/ci-github-actions/build-gradle@v1
         with:
           deploy-pull-request: false
           run-shadow-scans: true
-          use-develocity: false
+          use-develocity: true
           gradle-args: -x test --info -Dorg.gradle.jvmargs=-Xmx1g # for sonar task
 
   iris_sync:
