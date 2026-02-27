@@ -1,0 +1,87 @@
+name: Shadow Scans
+
+on:
+  push:
+    branches:
+      - mg/shadow-scan
+  schedule:
+    # Run nightly at 17:00 AM UTC on master branch
+    - cron: '0 17 * * *'
+  pull_request:
+
+permissions:
+  id-token: write
+  contents: write
+
+env:
+  SONAR_PROJECT_KEY: "SonarSource_sonar-kotlin"
+#  DART_VERSION: "3.11.0"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ============================================================================
+  # SHADOW SCAN JOBS - SonarQube analysis on all SonarCloud instances
+  # ============================================================================
+  shadow_scan_sqc:
+    runs-on: sonar-s
+    name: Build and Shadow Scan
+    if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'shadow_scan')
+    steps:
+      # https://github.com/actions/runner/issues/324#issuecomment-3324382354
+      # for Develocity
+      - run: echo "GITHUB_JOB_ID=${{ job.check_run_id }}" >> $GITHUB_ENV
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+      - name: Checkout build logic
+        run: git submodule update --init --depth 1 -- build-logic/common
+      - name: Install Java
+        uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
+        with:
+          distribution: temurin
+          java-version: 21
+#      - name: Install Dart
+#        uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c # v1.7.1
+#        with:
+#          sdk: ${{ env.DART_VERSION }}
+      - name: Run Shadow Scan
+        uses: SonarSource/ci-github-actions/build-gradle@v1
+        with:
+          deploy-pull-request: false
+          run-shadow-scans: true
+          use-develocity: false
+          gradle-args: -x test --info -Dorg.gradle.jvmargs=-Xmx1g # for sonar task
+
+  iris_sync:
+    name: IRIS Sync
+    runs-on: sonar-xs
+    needs: [shadow_scan_sqc]
+    steps:
+      - uses: SonarSource/unified-dogfooding-actions/run-iris@v1
+        with:
+          primary_project_key: ${{ env.SONAR_PROJECT_KEY }}
+          primary_platform: Next
+          shadow1_project_key: ${{ env.SONAR_PROJECT_KEY }}
+          shadow1_platform: SQC-EU
+          shadow2_project_key: ${{ env.SONAR_PROJECT_KEY }}
+          shadow2_platform: SQC-US
+
+  notify_slack:
+    name: Notify Slack on Failure
+    needs: [ shadow_scan_sqc, iris_sync]
+    if: >-
+      failure() && ! cancelled() && github.event_name != 'pull_request'
+    permissions:
+      id-token: write
+      statuses: read
+    runs-on: github-ubuntu-latest-s
+    steps:
+      - uses: SonarSource/release-github-actions/notify-slack@v1
+        with:
+          project-name: "SonarKotlin"
+          slack-channel: "squad-security-cloud-notifs"
+          icon: ':kotlin:'
+          jobs: ${{ toJSON(needs) }}
