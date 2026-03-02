@@ -28,7 +28,7 @@ jobs:
   shadow_scan_sqc:
     runs-on: sonar-s
     name: Build and Shadow Scan
-    if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'shadow_scan')
+#    if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'shadow_scan')
     steps:
       # https://github.com/actions/runner/issues/324#issuecomment-3324382354
       # for Develocity
