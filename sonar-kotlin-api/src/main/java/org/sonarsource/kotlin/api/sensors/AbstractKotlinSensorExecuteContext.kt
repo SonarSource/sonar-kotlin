@@ -17,6 +17,7 @@
 package org.sonarsource.kotlin.api.sensors
 
 import com.intellij.openapi.util.Disposer
+import com.intellij.openapi.vfs.impl.ZipHandler
 import java.io.File
 import java.io.IOException
 import org.jetbrains.kotlin.config.LanguageVersion
@@ -132,6 +133,18 @@ abstract class AbstractKotlinSensorExecuteContext(
             return true
         } finally {
             Disposer.dispose(environment.disposable)
+            // When FastJarFileSystem is unavailable (e.g. when sun.misc.Unsafe is inaccessible due to
+            // missing --add-opens flags, a security manager, or the JDK variant in use), the Kotlin
+            // compiler falls back to ZipHandler (ZipFile-based). ZipHandler holds static ZipFile handles
+            // in a static cache that are never released by the disposal chain, causing file locks on
+            // Windows that prevent Maven from overwriting dependencies. Explicitly clear the cache here.
+            // Note: clearFileAccessorCache() clears the global static cache (shared across all analyses),
+            // but this is safe because analyses run serially (SonarQube sensor framework and SonarLint's
+            // AnalysisScheduler both serialize analysis execution). Clearing is also safe when
+            // FastJarFileSystem IS available, as it uses a separate cache unaffected by this call.
+            // If concurrent analysis were ever introduced, this call would need to be revisited
+            // as it clears handles that may still be in use by a parallel analysis.
+            ZipHandler.clearFileAccessorCache()
         }
     }
 
