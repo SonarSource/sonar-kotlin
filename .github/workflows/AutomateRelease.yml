@@ -80,8 +80,10 @@ jobs:
       release-notes: ${{ inputs.release-notes }}
       sq-ide-short-description: ${{ inputs.sq-ide-short-description }}
       new-version: ${{ inputs.new-version }}
+      create-sli-ticket: true
       create-slvs-ticket: false
       create-sle-ticket: false
+      create-slvscode-ticket: false
       require-rule-metadata-update: ${{ inputs.require-rule-metadata-update }}
 
   unlock-branch:
