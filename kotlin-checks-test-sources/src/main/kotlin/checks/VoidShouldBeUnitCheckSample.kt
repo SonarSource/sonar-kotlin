@@ -87,3 +87,49 @@ interface WithVoidFunctions {
     fun voidFunction1(): Void // Noncompliant
     fun voidFunction2(): Void // Noncompliant
 }
+
+
+interface Mono<T>
+
+interface WebFilter {
+    fun filter(): Mono<Void>
+}
+
+class MyFilter : WebFilter {
+    override fun filter(): Mono<Void> { TODO() } // Compliant, overriding function with Void as type argument
+}
+
+class MyFilterWithLocalVar : WebFilter {
+    override fun filter(): Mono<Void> { // Compliant, overriding function with Void as type argument
+        val local: Function<Void> = TODO() // Noncompliant
+        return TODO()
+    }
+}
+
+interface GenericProcessor<T> {
+    fun process(): Map<String, T>
+}
+
+class VoidProcessor : GenericProcessor<Void> { // Noncompliant
+    override fun process(): Map<String, Void> { TODO() } // Compliant, overriding function with Void as type argument
+}
+
+interface MultiGenericService<T> {
+    fun execute(): Map<String, List<T>>
+}
+
+class MyService : MultiGenericService<Void> { // Noncompliant
+    override fun execute(): Map<String, List<Void>> { TODO() } // Compliant, overriding function with Void in nested type argument
+}
+
+interface ParamOverrideService {
+    fun process(callback: Function<Void>)
+}
+
+class ParamOverrideImpl : ParamOverrideService {
+    override fun process(callback: Function<Void>) {} // Compliant, overriding function with Void in parameter type argument
+}
+
+fun nonOverrideFunWithVoidTypeArg(): List<Void> { TODO() } // Noncompliant
+
+fun nonOverrideFunWithVoidParam(x: Function<Void>) {} // Noncompliant

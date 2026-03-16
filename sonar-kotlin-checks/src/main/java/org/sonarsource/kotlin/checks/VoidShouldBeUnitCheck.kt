@@ -18,6 +18,7 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTypeArgumentList
@@ -26,8 +27,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.isAbstract
-import org.sonarsource.kotlin.api.reporting.message
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.reporting.message
 import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val message = message {
@@ -45,7 +46,8 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
     override fun visitTypeReference(typeReference: KtTypeReference, kotlinFileContext: KotlinFileContext) = withKaSession {
         if (typeReference.type.isClassType(voidClassId) &&
             !typeReference.isInheritedType() &&
-            !isATypeArgumentOfAnInheritableClass(typeReference)
+            !isATypeArgumentOfAnInheritableClass(typeReference) &&
+            !isInOverrideFunction(typeReference)
         ) {
             kotlinFileContext.reportIssue(
                 typeReference,
@@ -59,11 +61,22 @@ private fun isATypeArgumentOfAnInheritableClass(typeReference: KtTypeReference):
     // The idea is to filter out classes or interfaces, parametrized with <Void>,
     // that could be extended from Java. As usage of Void is justified due to this issue:
     // https://youtrack.jetbrains.com/issue/KT-15964
-    return typeReference.getParentOfType<KtTypeArgumentList>(true)?.let { _ ->
-        typeReference.getParentOfType<KtClass>(true)?.run {
-            isInterface() || hasModifier(KtTokens.OPEN_KEYWORD) || hasModifier(KtTokens.ABSTRACT_KEYWORD)
-        }
-    } ?: false
+    return typeReference.getParentOfType<KtTypeArgumentList>(true)
+        ?.let { _ -> typeReference.getParentOfType<KtClass>(true) }
+        ?.run { isInterface() || hasModifier(KtTokens.OPEN_KEYWORD) || hasModifier(KtTokens.ABSTRACT_KEYWORD) }
+        ?: false
+}
+
+private fun isInOverrideFunction(typeReference: KtTypeReference): Boolean {
+    // Check if the Void type reference is nested inside a type argument (e.g., Mono<Void>)
+    // within the signature of an override function.
+    // This is needed because overriding functions must match the parent's signature,
+    // which may require Void as a type argument.
+    return typeReference.getParentOfType<KtTypeArgumentList>(true)
+        // Check if the type argument is part of function's signature or a local declaration inside a block expression
+        ?.getParentOfType<KtNamedFunction>(strict = true, KtBlockExpression::class.java)
+        ?.hasModifier(KtTokens.OVERRIDE_KEYWORD)
+        ?: false
 }
 
 private fun KtTypeReference.isInheritedType(): Boolean =
