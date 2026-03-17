@@ -18,9 +18,9 @@ jobs:
               -H "Accept: application/vnd.github+json" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
               /repos/SonarSource/sonar-kotlin/pulls \
-              -f 'title=godin/gha-cache-orchestrator' \
+              -f 'title=SONARKT-722' \
               -f 'body=' \
-              -f 'head=godin/gha-cache-orchestrator' \
+              -f 'head=godin/gha_needs' \
               -f 'base=master'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
