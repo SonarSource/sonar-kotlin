@@ -45,9 +45,8 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
 
     override fun visitTypeReference(typeReference: KtTypeReference, kotlinFileContext: KotlinFileContext) = withKaSession {
         if (typeReference.type.isClassType(voidClassId) &&
-            !typeReference.isInheritedType() &&
             !isATypeArgumentOfAnInheritableClass(typeReference) &&
-            !isInOverrideFunction(typeReference)
+            !isInOverrideOrAbstractFunction(typeReference)
         ) {
             kotlinFileContext.reportIssue(
                 typeReference,
@@ -67,19 +66,13 @@ private fun isATypeArgumentOfAnInheritableClass(typeReference: KtTypeReference):
         ?: false
 }
 
-private fun isInOverrideFunction(typeReference: KtTypeReference): Boolean {
-    // Check if the Void type reference is nested inside a type argument (e.g., Mono<Void>)
-    // within the signature of an override function.
-    // This is needed because overriding functions must match the parent's signature,
-    // which may require Void as a type argument.
-    return typeReference.getParentOfType<KtTypeArgumentList>(true)
-        // Check if the type argument is part of function's signature or a local declaration inside a block expression
-        ?.getParentOfType<KtNamedFunction>(strict = true, KtBlockExpression::class.java)
-        ?.hasModifier(KtTokens.OVERRIDE_KEYWORD)
-        ?: false
-}
-
-private fun KtTypeReference.isInheritedType(): Boolean =
-    with(parent) {
-        this is KtNamedFunction && (hasModifier(KtTokens.OVERRIDE_KEYWORD) || isAbstract())
-    }
+/**
+ * Check if the Void type reference is inside a signature of an override or abstract function.
+ * This accounts for cases when interop with Java is needed and functions must match the parent's signature,
+ * e.g. functions returning `Mono<Void>`.
+ */
+private fun isInOverrideOrAbstractFunction(typeReference: KtTypeReference) = typeReference
+    // Get function declaration, stopping at block expressions to filter out function-local declarations with Void type
+    .getParentOfType<KtNamedFunction>(strict = true, KtBlockExpression::class.java)
+    ?.run { hasModifier(KtTokens.OVERRIDE_KEYWORD) || isAbstract() }
+    ?: false
