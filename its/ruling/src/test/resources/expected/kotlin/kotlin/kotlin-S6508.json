@@ -2,9 +2,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/CompilerCallbackServicesFacade.kt": [
 84
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/asJava/AbstractCompilerLightClassTest.kt": [
-52
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors/src/org/jetbrains/kotlin/resolve/constants/constantValues.kt": [
 172
 ],
