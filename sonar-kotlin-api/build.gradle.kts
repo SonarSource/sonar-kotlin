@@ -2,6 +2,18 @@ plugins {
     kotlin("jvm")
 }
 
+repositories {
+    maven(url = "https://www.jetbrains.com/intellij-repository/releases/") {
+        content {
+            includeGroup("com.jetbrains.intellij.platform")
+        }
+    }
+}
+
+val intellijUtilOld: Configuration by configurations.creating {
+    isTransitive = false
+}
+
 dependencies {
     listOf(
         // Source of these artifacts is
@@ -24,6 +36,9 @@ dependencies {
     }
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.9.0")
     implementation("com.github.ben-manes.caffeine:caffeine:2.9.3")
+
+    // See PatchKotlinCompiler.kt for explanation why this is needed
+    intellijUtilOld("com.jetbrains.intellij.platform:util:241.19416.19")
 
     compileOnly(libs.sonar.plugin.api)
     compileOnly(libs.slf4j.api)
@@ -51,16 +66,27 @@ dependencies {
 val test: Test by tasks
 test.dependsOn(project(":kotlin-checks-test-sources").tasks.named("build"))
 
-task<JavaExec>("printAst") {
+tasks.register<JavaExec>("printAst") {
+    group = "help"
+    description = "Print the AST of a file for debugging purposes"
+
     group = "Application"
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("org.sonarsource.kotlin.ast.AstPrinterKt")
 }
 
-val patchTask = task<JavaExec>("patchKotlinCompiler") {
+val patchTask = tasks.register<JavaExec>("patchKotlinCompiler") {
+    group = "build"
+    description = "Patch Kotlin compiler to enable usage in the plugin"
+
+    inputs.files(intellijUtilOld)
     outputs.dir(layout.buildDirectory.dir("patch"))
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("org.sonarsource.kotlin.tools.PatchKotlinCompilerKt")
+
+    doFirst {
+        args(intellijUtilOld.resolvedConfiguration.resolvedArtifacts.single().file.absolutePath)
+    }
 }
 
 tasks.jar {

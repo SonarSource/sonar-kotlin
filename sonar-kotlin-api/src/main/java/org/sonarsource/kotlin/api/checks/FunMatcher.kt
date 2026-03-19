@@ -20,8 +20,7 @@ import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaReceiverValue
-import org.jetbrains.kotlin.analysis.api.resolution.KaSimpleVariableAccess
-import org.jetbrains.kotlin.analysis.api.resolution.KaSimpleVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.signatures.KaCallableSignature
@@ -80,10 +79,10 @@ class FunMatcherImpl(
                 val symbol = resolvedCall.partiallyAppliedSymbol
                 matches(symbol.dispatchReceiver, symbol.signature.symbol, symbol.signature)
             }
-            is KaSimpleVariableAccessCall -> {
+            is KaVariableAccessCall -> {
                 val propertySymbol = (resolvedCall.symbol as? KaPropertySymbol) ?: return false
-                when (resolvedCall.simpleAccess) {
-                    is KaSimpleVariableAccess.Read -> {
+                when (resolvedCall.kind) {
+                    is KaVariableAccessCall.Kind.Read -> {
                         val symbolForNameCheck =
                             /**
                              * Note that this allows to use matcher with name `"getExample"`
@@ -106,7 +105,7 @@ class FunMatcherImpl(
                                         // TODO propertySymbol works only in K2 (see ExternalAndroidStorageAccessCheck):
                                         checkTypeOrSupertype(null, symbolForNameCheck))
                     }
-                    is KaSimpleVariableAccess.Write -> {
+                    is KaVariableAccessCall.Kind.Write -> {
                         val symbolForNameCheck =
                             /**
                              * Note that this allows to use matcher with name `"setExample"`

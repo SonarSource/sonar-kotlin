@@ -16,14 +16,15 @@
  */
 package org.sonarsource.kotlin.api.frontend
 
-import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
+import com.intellij.openapi.Disposable
+import java.io.File
+import org.jetbrains.kotlin.K1Deprecation
+import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISession
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
-import com.intellij.openapi.Disposable
-import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISession
 import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -32,7 +33,6 @@ import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.jetbrains.kotlin.psi.KtPsiFactory
-import java.io.File
 
 /**
  * @param disposable
@@ -53,13 +53,19 @@ class Environment(
     var k2session: StandaloneAnalysisAPISession? = null
 }
 
+/**
+ * See https://youtrack.jetbrains.com/issue/KT-76504/Find-and-deprecate-actively-used-parts-of-K1-API for some context about deprecation.
+ *
+ * Until the Kotlin compiler itself moves to the new API, the deprecated API should be stable enough, as it's extensively used there.
+ */
+@OptIn(K1Deprecation::class)
 fun kotlinCoreEnvironment(
     configuration: CompilerConfiguration,
     disposable: Disposable,
 ): KotlinCoreEnvironment {
     setIdeaIoUseFallback()
     configuration.put(
-        CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
+        CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY,
         MessageCollector.NONE
     )
     configuration.put(CommonConfigurationKeys.MODULE_NAME, "sonar-kotlin-ng")

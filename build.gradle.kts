@@ -151,13 +151,15 @@ subprojects {
             events("skipped", "failed") // verbose log for failed and skipped tests (by default the name of the tests are not logged)
         }
 
-        systemProperties = System.getProperties().filterKeys {
-            it is String &&
-                (it.startsWith("orchestrator") || it.startsWith("sonar") || it == "buildNumber" || it == "slangVersion")
-        }.mapKeys { it.key as String }
+        systemProperties = buildMap {
+            System.getProperties().filterKeys {
+                it is String &&
+                    (it.startsWith("orchestrator") || it.startsWith("sonar") || it == "buildNumber" || it == "slangVersion")
+            }.forEach { (k, v) -> put(k as String, v) }
 
-        if (systemProperties.containsKey("buildNumber") && !systemProperties.containsKey("slangVersion")) {
-            systemProperties["slangVersion"] = version
+            if (systemProperties.containsKey("buildNumber") && !systemProperties.containsKey("slangVersion")) {
+                put("slangVersion", version)
+            }
         }
     }
 

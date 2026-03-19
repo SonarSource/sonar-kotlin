@@ -16,17 +16,49 @@
  */
 package org.sonarsource.kotlin.tools
 
+import java.io.File
+import java.util.zip.ZipFile
 import org.jetbrains.org.objectweb.asm.ClassReader
 import org.jetbrains.org.objectweb.asm.ClassVisitor
 import org.jetbrains.org.objectweb.asm.ClassWriter
 import org.jetbrains.org.objectweb.asm.MethodVisitor
 import org.jetbrains.org.objectweb.asm.Opcodes
 import org.jetbrains.org.objectweb.asm.tree.ClassNode
-import java.io.File
 
-fun main() {
+private const val OUTPUT_DIR = "build/patch"
+
+fun main(args: Array<String>) {
+    require(args.size == 1) { "Expected one argument: path to com.jetbrains.intellij.platform:util jar" }
+    injectThreadContextFromOldJar(args[0])
     patchAppScheduledExecutorService()
     patchKtVisitor()
+}
+
+/**
+ * Injects [com.intellij.util.concurrency.ThreadContext] and its inner classes from an older version
+ * of the IntelliJ Platform util artifact to avoid [AppScheduledExecutorServiceTest] hanging indefinitely.
+ *
+ * Kotlin 2.3.20 is using IJ SDK 251.x; previously it was 241.x.
+ * With the version from IJ SDK 251.x, a lot of tests are crashing with `kotlinx.coroutines.internal.intellij.IntellijCoroutines` being not found.
+ * See https://github.com/JetBrains/kotlin/commit/e56ff6f0118370781b67ec749f6f717d4c982a0c for a similar problem.
+ * Setting the property "ide.enable.implicit.blocking.context" fixes most of the tests, but not AppScheduledExecutorServiceTest.
+ *
+ * Once Kotlin updates to IJ-platform 253+, another property can be used, itroduced in:
+ * https://github.com/JetBrains/intellij-community/commit/44959e7295d26d22713d7bf3fda855807261a346.
+ * After that, this workaround can probably be removed.
+ */
+private fun injectThreadContextFromOldJar(oldUtilJarPath: String) {
+    val classPrefix = "com/intellij/concurrency/ThreadContext"
+    ZipFile(oldUtilJarPath).use { zip ->
+        zip.entries().asSequence()
+            .filter { entry -> entry.name.startsWith(classPrefix) && entry.name.endsWith(".class") }
+            .forEach { entry ->
+                val bytes = zip.getInputStream(entry).use { it.readAllBytes() }
+                val output = File(OUTPUT_DIR).resolve(entry.name)
+                output.parentFile.mkdirs()
+                output.writeBytes(bytes)
+            }
+    }
 }
 
 /**
@@ -60,7 +92,7 @@ private fun patchKtVisitor() {
     methodNode.visitInsn(Opcodes.ARETURN)
     classNode.accept(classWriter)
 
-    val output = File("build/patch").resolve(cls)
+    val output = File(OUTPUT_DIR).resolve(cls)
     output.parentFile.mkdirs()
     output.writeBytes(classWriter.toByteArray())
 }
@@ -111,7 +143,7 @@ private fun patchAppScheduledExecutorService() {
 
     if (!patched) throw AssertionError()
 
-    val output = File("build/patch").resolve(cls)
+    val output = File(OUTPUT_DIR).resolve(cls)
     output.parentFile.mkdirs()
     output.writeBytes(classWriter.toByteArray())
 }

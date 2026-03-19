@@ -26,12 +26,6 @@ val kotlinCompilerDependencies = setOf(
         licenseName = "Apache 2.0"
     ),
     DependencyInfo(
-        fqName = "org.gwtproject:gwt-user",
-        version = "2.11.0",
-        packages = listOf("com/google/gwt"),
-        licenseName = "Apache 2.0" // See https://www.gwtproject.org/terms.html
-    ),
-    DependencyInfo(
         fqName = "net.java.dev.jna:jna",
         version = "5.9.0.26",
         packages = listOf("com/sun/jna"),
@@ -75,6 +69,12 @@ val kotlinCompilerDependencies = setOf(
         version = "2.15",
         packages = listOf("org/picocontainer"),
         licenseName = "BSD"
+    ),
+    DependencyInfo(
+        fqName = "org.antlr:antlr4",
+        version = "4.3.12",
+        packages = listOf("org/antlr/v4"),
+        licenseName = "BSD-3-Clause"
     ),
 
     DependencyInfo(
