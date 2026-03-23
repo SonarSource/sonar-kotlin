@@ -242,7 +242,7 @@ private fun KtReferenceExpression.extractFromInitializer(
             if (it.isVal) {
                 (it.psi as? KtProperty)
                     ?.apply { declarations.add(this) }
-                    ?.delegateExpressionOrInitializer?.predictRuntimeValueExpression(declarations)
+                    ?.initializer?.predictRuntimeValueExpression(declarations)
             } else null
         }
 }

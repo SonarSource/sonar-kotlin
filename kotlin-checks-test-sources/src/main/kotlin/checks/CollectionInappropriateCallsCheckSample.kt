@@ -20,9 +20,31 @@ class CollectionInappropriateCallsCheckSample {
         "asd"
     }
 
+    val lazyIntList by lazy {
+        listOf(1, 2, 3)
+    }
+
+    val lazyIntMap by lazy {
+        mapOf(1 to "one", 2 to "two")
+    }
+
+    val lazyMutableCollection by lazy {
+        mutableListOf(1, 2, 3)
+    }
+
     fun testBy(){
         strList.indexOf<Any>(lazy) // Compliant
         strList.indexOf<Any>(actualLazy) // Noncompliant
+    }
+
+    fun testLazyCollectionAsReceiver(i: Int?, str: String) {
+        lazyIntList.indexOf(i) // Compliant: lazy list of Int, indexOf with Int?
+        lazyIntList.contains(i) // Compliant: lazy list of Int, contains with Int?
+        lazyIntMap.containsKey(i) // Compliant: lazy map with Int key, containsKey with Int?
+        lazyIntMap.containsValue<Int, Any>(str) // Compliant: lazy map with String value, containsValue with String
+        lazyMutableCollection.remove(i) // Compliant: lazy mutable list of Int, remove with Int?
+        lazyIntList.indexOf<Any>(str) // Noncompliant
+        lazyIntMap.containsKey<Any>(str) // Noncompliant
     }
 
     class StringListProvider {
