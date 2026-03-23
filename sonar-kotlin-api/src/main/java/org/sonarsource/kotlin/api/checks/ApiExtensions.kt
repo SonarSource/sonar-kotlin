@@ -214,7 +214,7 @@ fun KtExpression.stringValue(
                     if (it.isVal) {
                         (it.psi as? KtProperty)
                             ?.apply { declarations.add(this) }
-                            ?.delegateExpressionOrInitializer?.stringValue(declarations)
+                            ?.initializer?.stringValue(declarations)
                     } else null
                 }
         }
