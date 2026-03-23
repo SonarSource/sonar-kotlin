@@ -67,10 +67,9 @@ val test: Test by tasks
 test.dependsOn(project(":kotlin-checks-test-sources").tasks.named("build"))
 
 tasks.register<JavaExec>("printAst") {
-    group = "help"
+    group = "application"
     description = "Print the AST of a file for debugging purposes"
 
-    group = "Application"
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("org.sonarsource.kotlin.ast.AstPrinterKt")
 }

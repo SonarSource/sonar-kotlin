@@ -157,7 +157,7 @@ subprojects {
                     (it.startsWith("orchestrator") || it.startsWith("sonar") || it == "buildNumber" || it == "slangVersion")
             }.forEach { (k, v) -> put(k as String, v) }
 
-            if (systemProperties.containsKey("buildNumber") && !systemProperties.containsKey("slangVersion")) {
+            if (containsKey("buildNumber") && !containsKey("slangVersion")) {
                 put("slangVersion", version)
             }
         }
