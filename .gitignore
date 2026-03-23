@@ -23,6 +23,7 @@ out/
 bin/
 
 # ---- Eclipse
+bin/
 .classpath
 .project
 .settings
