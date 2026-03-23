@@ -1,0 +1,34 @@
+{
+"corda-project:sources-kotlin/corda/client/rpc/src/integration-test/kotlin/net/corda/client/rpc/RPCStabilityTests.kt": [
+240
+],
+"corda-project:sources-kotlin/corda/experimental/blobwriter/src/main/kotlin/net/corda/blobwriter/BlobWriter.kt": [
+88
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/crypto/ContentSignerBuilder.kt": [
+58
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/DeserializeSimpleTypesTests.kt": [
+118,
+156,
+171,
+206,
+244,
+289,
+326,
+363,
+400,
+439,
+440,
+513,
+516
+],
+"corda-project:sources-kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/internal/InternalTestUtils.kt": [
+231,
+243,
+246
+],
+"corda-project:sources-kotlin/corda/tools/demobench/src/main/kotlin/net/corda/demobench/views/NodeTabView.kt": [
+304
+]
+}

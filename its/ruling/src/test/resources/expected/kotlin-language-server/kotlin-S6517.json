@@ -1,0 +1,20 @@
+{
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/QuickFix.kt": [
+14
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/externalsources/SourceArchiveProvider.kt": [
+5
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/formatting/Formatter.kt": [
+5
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/progress/Progress.kt": [
+20
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/kotlinCompilerPerformance/BigFile.kt": [
+514
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/quickfixes/SomeInterface.kt": [
+3
+]
+}

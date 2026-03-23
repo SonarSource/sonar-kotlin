@@ -1,0 +1,11 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/mir/MirBuildTest.kt": [
+177
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustPerformanceTests/RustCompilerErrorComparisonTest.kt": [
+156
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/RsCompilerSourcesPerfTest.kt": [
+100
+]
+}

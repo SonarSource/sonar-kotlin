@@ -1,0 +1,42 @@
+{
+"corda-project:sources-kotlin/corda/client/jackson/src/main/kotlin/net/corda/client/jackson/JacksonSupport.kt": [
+523,
+537
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/flows/RecoveryTypes.kt": [
+63
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/vault/QueryCriteriaUtils.kt": [
+157
+],
+"corda-project:sources-kotlin/corda/core/src/test/kotlin/net/corda/core/internal/ClassLoadingUtilsTest.kt": [
+64
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/AMQPBridgeTest.kt": [
+50
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/CertificateRevocationListNodeTests.kt": [
+72
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test/kotlin/net/corda/node/services/messaging/ArtemisMessagingTest.kt": [
+74
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test2/kotlin/net/corda/node/amqp/ProtonWrapperTests.kt": [
+76
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/registration/NetworkRegistrationHelperTest.kt": [
+75
+],
+"corda-project:sources-kotlin/corda/serialization-tests/src/test/kotlin/net/corda/serialization/internal/CordaClassResolverTests.kt": [
+78
+],
+"corda-project:sources-kotlin/corda/serialization-tests/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationOutputTests.kt": [
+222
+],
+"corda-project:sources-kotlin/corda/testing/core-test-utils/src/test/kotlin/net/corda/coretesting/internal/RigorousMockTest.kt": [
+18
+],
+"corda-project:sources-kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/InternalMockNetwork.kt": [
+650
+]
+}

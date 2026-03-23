@@ -23,6 +23,9 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileSystem
 import com.intellij.openapi.vfs.local.CoreLocalFileSystem
+import java.io.File
+import java.io.InputStream
+import java.io.OutputStream
 import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISession
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtLibraryModule
@@ -35,9 +38,6 @@ import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.load.kotlin.ModuleVisibilityManager
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
-import java.io.File
-import java.io.InputStream
-import java.io.OutputStream
 
 /**
  * @see [org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISessionBuilder.buildKtModuleProviderByCompilerConfiguration]

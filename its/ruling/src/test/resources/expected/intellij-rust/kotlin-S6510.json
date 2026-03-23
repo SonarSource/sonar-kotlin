@@ -1,0 +1,30 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/debugger/src/main/kotlin/org/rust/debugger/RsDefaultDebuggerDriverConfigurationProvider.kt": [
+30
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/refactoring/RsImportOptimizer.kt": [
+88
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/refactoring/suggested/RsSuggestedRefactoringStateChanges.kt": [
+40
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/lexer/RsEscapesLexer.kt": [
+63
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/MirBuilder.kt": [
+1007
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/building/PlaceBuilder.kt": [
+25
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/NameResolution.kt": [
+1555
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve2/DefCollector.kt": [
+182,
+359
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/Fulfillment.kt": [
+204
+]
+}

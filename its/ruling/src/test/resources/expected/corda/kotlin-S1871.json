@@ -1,0 +1,19 @@
+{
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/ThreadDumpUtils.kt": [
+59
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/transitions/StartedFlowTransition.kt": [
+458,
+467
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/model/CarpentryDependencyGraph.kt": [
+78
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/model/RemoteTypeInformation.kt": [
+156
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/carpenter/ClassCarpenterTestUtils.kt": [
+77,
+83
+]
+}

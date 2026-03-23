@@ -1,0 +1,14 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/injected/RsRegExpInjector.kt": [
+38
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/ssr/RsStructuralSearchProfile.kt": [
+82
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/template/RsContextType.kt": [
+71
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/MirBuilder.kt": [
+451
+]
+}

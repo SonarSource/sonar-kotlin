@@ -1,0 +1,12 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/stubs/RsStubAccessTest.kt": [
+88
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustPerformanceTests/RsParsingPerfTest.kt": [
+81
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/RsCompilerSourcesPerfTest.kt": [
+56,
+101
+]
+}

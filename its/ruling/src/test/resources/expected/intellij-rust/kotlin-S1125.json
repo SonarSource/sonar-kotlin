@@ -1,0 +1,59 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/debugger/src/main/kotlin/org/rust/debugger/runconfig/RsDebugRunnerUtils.kt": [
+51
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/runconfig/RsCommandConfiguration.kt": [
+24
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/toolchain/tools/Cargo.kt": [
+558
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/inspections/RsThreadRngGenInspection.kt": [
+37
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/lineMarkers/RsMethodLineSeparatorProvider.kt": [
+36
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/typing/RsQuoteHandler.kt": [
+46
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/utils/ExtractUtils.kt": [
+259
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/utils/import/ImportCandidatesCollector.kt": [
+465
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/sort/RsCompletionWeighers.kt": [
+115
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/dfa/borrowck/MoveData.kt": [
+279
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/lexer/RsEscapesLexer.kt": [
+116
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/macros/MacroExpansionFileSystem.kt": [
+596
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/macros/proc/ProcMacroExpander.kt": [
+41
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/MirBuilder.kt": [
+2041
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/schemas/MirBorrowKind.kt": [
+11
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/psi/RsPsiManager.kt": [
+96
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/psi/ext/RsAbstractable.kt": [
+109
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/NameResolution.kt": [
+1129
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/Fold.kt": [
+192
+]
+}

@@ -1,0 +1,12 @@
+{
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/config/ConfigUtilities.kt": [
+61
+],
+"corda-project:sources-kotlin/corda/samples/irs-demo/cordapp/workflows-irs/src/test/kotlin/net/corda/irs/Main.kt": [
+14
+],
+"corda-project:sources-kotlin/corda/tools/explorer/src/main/kotlin/net/corda/explorer/model/SettingsModel.kt": [
+58,
+69
+]
+}

@@ -1,0 +1,36 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/highlight/RsHighlightExitPointsHandlerFactory.kt": [
+79
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/refactoring/RsRenameProcessor.kt": [
+159
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/macros/RsMacroDataWithHash.kt": [
+64
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/MirBuilder.kt": [
+1440
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/borrowck/MirBorrowCheckVisitor.kt": [
+139
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/dataflow/framework/Direction.kt": [
+54
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/dataflow/move/MovePaths.kt": [
+331
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/schemas/MirVisitor.kt": [
+195,
+228
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/NameResolution.kt": [
+1667
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/TypeInference.kt": [
+1297
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/regions/Scope.kt": [
+834
+]
+}

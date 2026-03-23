@@ -1,0 +1,12 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/util/IndexKeyMap.kt": [
+33
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/ref/RsResolveCache.kt": [
+252,
+285
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/TypeInference.kt": [
+865
+]
+}

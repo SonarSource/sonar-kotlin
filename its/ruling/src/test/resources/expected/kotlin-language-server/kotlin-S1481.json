@@ -1,0 +1,20 @@
+{
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/SimpleScriptTest.kt": [
+45
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/FunctionScope.kt": [
+3
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/inlayhints/Declarations.kt": [
+18,
+18
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceComponents.kt": [
+7,
+7,
+8
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/symbols/OtherFileSymbols.kt": [
+5
+]
+}

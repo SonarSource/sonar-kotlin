@@ -1,0 +1,415 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/coverage/src/main/kotlin/org/rust/coverage/LcovCoverageReport.kt": [
+56,
+111
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/coverage/src/test/kotlin/org/rust/coverage/RsCoverageTest.kt": [
+69,
+140,
+171
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/configurable/CargoConfigurable.kt": [
+32
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/configurable/RsExternalLinterConfigurable.kt": [
+38
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/configurable/RsProjectConfigurable.kt": [
+30
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/configurable/RustfmtConfigurable.kt": [
+35
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/model/impl/CargoProjectImpl.kt": [
+89,
+134,
+277,
+650
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/model/impl/CargoSyncTask.kt": [
+115,
+166,
+341,
+417
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/settings/ui/RustProjectSettingsPanel.kt": [
+96
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/workspace/CargoWorkspace.kt": [
+269,
+278,
+471
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/runconfig/CargoTestRunState.kt": [
+41
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/runconfig/legacy/RsAsyncRunner.kt": [
+150,
+158
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/runconfig/target/RsCommandLineSetup.kt": [
+53
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/runconfig/target/RsLanguageRuntimeConfigurable.kt": [
+22
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/runconfig/ui/CargoCommandConfigurationEditor.kt": [
+170
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/toolchain/tools/Cargo.kt": [
+531
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/toolchain/wsl/RsWslToolchainFlavor.kt": [
+46
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/annotator/format/impl.kt": [
+259
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/docs/RsDocumentationProvider.kt": [
+119
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/fixes/ChangeFunctionSignatureFix.kt": [
+42
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/formatter/impl/spacing.kt": [
+157
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/injected/RsDoctestLanguageInjector.kt": [
+324,
+325
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/intentions/DestructureIntention.kt": [
+202
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/intentions/MatchToIfLetIntention.kt": [
+64
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/newProject/ui/RsNewProjectPanel.kt": [
+117
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/presentation/RsPsiRenderer.kt": [
+190
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/presentation/Utils.kt": [
+28
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/refactoring/extractFunction/RsExtractFunctionConfig.kt": [
+248
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/refactoring/introduceVariable/impl.kt": [
+67
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/settings/RsAutoImportOptions.kt": [
+25
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/typing/paste/RsConvertJsonToStructCopyPasteProcessor.kt": [
+367,
+372
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/RsCommonCompletionProvider.kt": [
+84,
+640
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/macros/MacroExpansionTask.kt": [
+187,
+201
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/macros/decl/DeclMacroExpander.kt": [
+237,
+277
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/MirBuilder.kt": [
+197,
+1165,
+1223
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/parser/RustParserUtil.kt": [
+841
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/psi/ProcMacroAttribute.kt": [
+143
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/psi/ext/RsItemsOwner.kt": [
+62
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/NameResolution.kt": [
+1238,
+1719
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/indexes/RsMacroIndex.kt": [
+51
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/ref/RsPathReferenceImpl.kt": [
+576
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve2/DefCollector.kt": [
+100
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/thir/Mirror.kt": [
+501
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/thir/Thir.kt": [
+34
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/TypeInference.kt": [
+1433
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/utils/RsDemangler.kt": [
+33
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/utils/RsDiagnostic.kt": [
+97,
+129
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/toml/crates/local/CratesLocalIndexServiceImpl.kt": [
+128
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/toml/resolve/CargoTomlNameResolution.kt": [
+26
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/RsTestBase.kt": [
+214
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/commands/RustfmtTest.kt": [
+381,
+415,
+449,
+487
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/model/CargoPackagesTest.kt": [
+19,
+54,
+95,
+141
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/model/CargoStdlibPackagesTest.kt": [
+47
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/model/impl/CargoExternalSystemProjectAwareTest.kt": [
+44,
+147,
+248,
+337
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/model/impl/CargoProjectDeduplicationTest.kt": [
+16,
+56,
+57,
+100,
+101,
+157
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/model/impl/CargoTomlWatcherIntegrationTest.kt": [
+23
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/model/impl/SyncToolWindowTest.kt": [
+77,
+127,
+346,
+372,
+447
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/toolchain/CargoConfigTest.kt": [
+65,
+101
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/util/CargoCommandCompletionProviderTest.kt": [
+143
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsErrorAnnotatorWithToolchainOverrideTest.kt": [
+10
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsFormatMacroAnnotatorToolchainTest.kt": [
+20,
+53
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/console/RsConsoleFoldingTestBase.kt": [
+76
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/refactoring/RsInlineTypeAliasTest.kt": [
+221
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/refactoring/suggested/RsChangeSignatureSuggestedRefactoringTest.kt": [
+585,
+627
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsDoctestInjectionCompletionTest.kt": [
+28
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/mir/MirPrettyPrinter.kt": [
+262,
+337,
+396
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsOperatorsResolve.kt": [
+12
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsUseResolveTest.kt": [
+744
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsAdjustmentTest.kt": [
+846
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsArithmeticOpsTest.kt": [
+58,
+82,
+112,
+142
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/stdext/AsyncValueTest.kt": [
+16
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/toml/inspections/MissingFeaturesInspectionTest.kt": [
+26,
+69,
+98
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/toml/resolve/CargoTomlDependencyFeaturesReferenceProviderTest.kt": [
+14,
+39
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/toml/resolve/CargoTomlFeatureDependencyReferenceProviderTest.kt": [
+78,
+106,
+134,
+163
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/toml/search/CargoTomlFindUsagesTest.kt": [
+24
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustPerformanceTests/RsParsingPerfTest.kt": [
+40
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustPerformanceTests/RustCompilerErrorComparisonTest.kt": [
+92
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/CargoProjectServiceTest.kt": [
+16
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/CargoProjectsTreeTest.kt": [
+41,
+81,
+111
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/RsContentRootsTest.kt": [
+21,
+97,
+156,
+268
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/RsUnusedImportWithToolchainInspectionTest.kt": [
+24,
+55,
+56
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/cargo/runconfig/RunConfigurationTest.kt": [
+68,
+104,
+142,
+150,
+185,
+222,
+230,
+264,
+306
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/cargo/runconfig/buildtool/CargoBuildManagerTest.kt": [
+215,
+320,
+526,
+579,
+616,
+669,
+708
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/cargo/runconfig/test/CargoTestRunnerTest.kt": [
+20,
+58,
+130,
+137,
+214,
+254,
+298,
+372,
+510,
+519,
+549,
+599,
+608,
+668,
+707
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/ide/actions/RsBuildActionTest.kt": [
+29,
+102,
+175,
+230
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/lang/resolve/CargoGeneratedItemsResolveTest.kt": [
+57,
+97,
+105,
+142,
+217,
+224,
+284,
+291,
+351,
+358,
+418,
+425,
+485,
+492,
+551,
+586,
+634,
+682,
+745,
+809,
+840,
+895,
+933,
+978
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/lang/resolve/CargoProjectResolveTest.kt": [
+60,
+98,
+147,
+226,
+263,
+266,
+396,
+479,
+514,
+580,
+607,
+646,
+685,
+748,
+766,
+813,
+876,
+951,
+1021,
+1022,
+1074,
+1115,
+1202,
+1244,
+1288
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/lang/resolve/CustomTargetCfgResolveTest.kt": [
+16,
+29,
+58,
+88
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/lang/resolve/RsProcMacroExpansionResolveIntegrationTest.kt": [
+24,
+26,
+66,
+98,
+134,
+182
+]
+}

@@ -1,0 +1,9 @@
+{
+"corda-project:sources-kotlin/corda/experimental/blobwriter/src/main/kotlin/net/corda/blobwriter/BlobWriter.kt": [
+52,
+75
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/DeserializeNeedingCarpentryTests.kt": [
+145
+]
+}

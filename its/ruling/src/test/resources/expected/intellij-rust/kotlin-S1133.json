@@ -1,0 +1,18 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/fixes/RsQuickFixBase.kt": [
+113,
+116
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/psi/ext/RsLetExpr.kt": [
+13
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/psi/ext/RsMatchArm.kt": [
+13
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/ty/TyTypeParameter.kt": [
+33
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/completion/RsCompletionTestBase.kt": [
+35
+]
+}

@@ -1,0 +1,18 @@
+{
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/OneFilePerformance.kt": [
+34,
+40,
+43
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/j2k/JavaJSONConverter.kt": [
+13,
+14
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceOperatorUsingName.kt": [
+9
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/Logger.kt": [
+147,
+179
+]
+}

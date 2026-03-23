@@ -1,0 +1,11 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/RsPsiPattern.kt": [
+89
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/RsKeywordCompletionContributor.kt": [
+362
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/TyLowering.kt": [
+142
+]
+}

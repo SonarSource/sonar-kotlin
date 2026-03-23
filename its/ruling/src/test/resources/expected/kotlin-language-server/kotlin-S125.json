@@ -1,0 +1,8 @@
+{
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/CompiledFile.kt": [
+102
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/kotlinCompilerPerformance/BigFile.kt": [
+129
+]
+}

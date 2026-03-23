@@ -1,0 +1,34 @@
+{
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/internal/verification/NodeVerificationSupport.kt": [
+236
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/internal/verification/Verifier.kt": [
+419
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/serialization/internal/AttachmentsClassLoader.kt": [
+272
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/TransactionBuilder.kt": [
+572
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/persistence/CordaPersistence.kt": [
+371
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/protonwrapper/engine/ConnectionStateMachine.kt": [
+166,
+345
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/config/NodeConfigurationImpl.kt": [
+236
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/FlowLogicRefFactoryImpl.kt": [
+138
+],
+"corda-project:sources-kotlin/corda/samples/trader-demo/workflows-trader/src/main/kotlin/net/corda/traderdemo/flow/TransactionGraphSearch.kt": [
+44
+],
+"corda-project:sources-kotlin/corda/tools/checkpoint-agent/src/main/kotlin/net/corda/tools/CheckpointAgent.kt": [
+146,
+158
+]
+}

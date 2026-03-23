@@ -1,0 +1,13 @@
+{
+"corda-project:sources-kotlin/corda/client/rpc/src/main/kotlin/net/corda/client/rpc/internal/RPCUtils.kt": [
+8,
+9,
+10
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/crypto/Crypto.kt": [
+922
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/crypto/internal/Secp256k1SupportProvider.kt": [
+173
+]
+}

@@ -1,0 +1,35 @@
+{
+"corda-project:sources-kotlin/corda/core-tests/src/test/kotlin/net/corda/coretests/indentity/PartyAndCertificateTest.kt": [
+60
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/attachments/AttachmentTrustCalculatorTest.kt": [
+236,
+404,
+436,
+461,
+527,
+580
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/config/NodeConfigurationImplTest.kt": [
+382,
+383
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/NodeAttachmentServiceTest.kt": [
+844,
+918,
+996,
+1030
+],
+"corda-project:sources-kotlin/corda/samples/bank-of-corda-demo/src/main/kotlin/net/corda/bank/api/BankOfCordaClientApi.kt": [
+20
+],
+"corda-project:sources-kotlin/corda/samples/irs-demo/web/src/test/kotlin/net/corda/irs/web/IrsDemoWebApplicationTests.kt": [
+11
+],
+"corda-project:sources-kotlin/corda/testing/core-test-utils/src/main/kotlin/net/corda/testing/core/internal/ContractJarTestUtils.kt": [
+47
+],
+"corda-project:sources-kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/TestCordappSigner.kt": [
+38
+]
+}

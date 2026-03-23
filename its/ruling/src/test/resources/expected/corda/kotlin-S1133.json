@@ -1,0 +1,239 @@
+{
+"corda-project:sources-kotlin/corda/client/jackson/src/main/kotlin/net/corda/client/jackson/JacksonSupport.kt": [
+94,
+107,
+119,
+130,
+337,
+344,
+351,
+363,
+404,
+415,
+424,
+435,
+442,
+453,
+467,
+480,
+487,
+494,
+501,
+508,
+515,
+523,
+537
+],
+"corda-project:sources-kotlin/corda/client/rpc/src/main/kotlin/net/corda/client/rpc/CordaRPCClient.kt": [
+149,
+338
+],
+"corda-project:sources-kotlin/corda/confidential-identities/src/main/kotlin/net/corda/confidential/SwapIdentitiesFlow.kt": [
+46,
+50
+],
+"corda-project:sources-kotlin/corda/core-tests/src/test/kotlin/net/corda/coretests/internal/DetermineLanguageVersionTest.kt": [
+66
+],
+"corda-project:sources-kotlin/corda/core-tests/src/test/kotlin/net/corda/coretests/transactions/AttachmentsClassLoaderTests.kt": [
+483,
+494,
+503
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/ClientRelevantError.kt": [
+10
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/contracts/Attachment.kt": [
+60
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/contracts/AttachmentConstraint.kt": [
+92
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/contracts/Structures.kt": [
+226
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/contracts/TransactionVerificationException.kt": [
+273,
+278,
+282,
+286
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/cordapp/CordappContext.kt": [
+34
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/crypto/CompositeSignature.kt": [
+38,
+58
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/crypto/CryptoUtils.kt": [
+263,
+268,
+276,
+287
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/crypto/internal/Secp256k1SupportProvider.kt": [
+108,
+115
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/flows/FinalityFlow.kt": [
+73,
+77,
+79,
+81,
+135
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/flows/FlowLogic.kt": [
+209,
+225,
+242,
+254,
+267,
+280
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/flows/NotaryError.kt": [
+48,
+59
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/flows/SendTransactionFlow.kt": [
+142
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/identity/CordaX500Name.kt": [
+74
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/internal/FlowAsyncOperation.kt": [
+32
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/internal/LegalNameValidator.kt": [
+14,
+66
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/internal/messaging/FlowManagerRPCOps.kt": [
+12
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/messaging/CordaRPCOps.kt": [
+48,
+194,
+203,
+212,
+515
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/AttachmentStorage.kt": [
+40,
+57
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/TimeWindowChecker.kt": [
+10
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/VaultService.kt": [
+311,
+313
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/vault/QueryCriteriaUtils.kt": [
+84,
+250,
+257,
+264,
+292,
+301,
+309,
+315,
+321,
+327,
+333,
+340,
+349,
+392,
+404,
+413,
+420,
+431,
+440,
+450,
+463,
+476
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/serialization/SerializationAPI.kt": [
+224
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/ContractUpgradeTransactions.kt": [
+404,
+417
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/LedgerTransaction.kt": [
+750,
+779,
+809,
+841
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/NotaryChangeTransactions.kt": [
+136,
+250,
+259
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/SignedTransaction.kt": [
+328,
+332
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/WireTransaction.kt": [
+105,
+172
+],
+"corda-project:sources-kotlin/corda/core/src/test/kotlin/net/corda/core/contracts/StructuresTests.kt": [
+87
+],
+"corda-project:sources-kotlin/corda/finance/contracts/src/main/kotlin/net/corda/finance/contracts/asset/OnLedgerAsset.kt": [
+231,
+323
+],
+"corda-project:sources-kotlin/corda/finance/workflows/src/main/kotlin/net/corda/finance/workflows/asset/CashUtils.kt": [
+41,
+107
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/exceptions/RpcExceptions.kt": [
+49
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/protonwrapper/netty/AMQPChannelHandler.kt": [
+189
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test2/kotlin/net/corda/node/services/statemachine/OldFinalityFlow.kt": [
+65,
+69,
+71,
+73,
+127
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/CordaClock.kt": [
+24
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/config/NodeConfiguration.kt": [
+40,
+157,
+279
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/config/NodeConfigurationImpl.kt": [
+38,
+57
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/utilities/registration/NetworkRegistrationHelper.kt": [
+431
+],
+"corda-project:sources-kotlin/corda/testing/core-test-utils/src/main/kotlin/net/corda/testing/core/TestUtils.kt": [
+83,
+93,
+103
+],
+"corda-project:sources-kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/driver/Driver.kt": [
+113,
+136,
+140,
+143,
+160,
+166,
+273,
+510
+],
+"corda-project:sources-kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/MockNetwork.kt": [
+288,
+299
+]
+}

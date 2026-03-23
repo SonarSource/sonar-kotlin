@@ -1,0 +1,51 @@
+{
+"corda-project:sources-kotlin/corda/core-tests/src/test/kotlin/net/corda/coretests/flows/AttachmentTests.kt": [
+119
+],
+"corda-project:sources-kotlin/corda/core-tests/src/test/kotlin/net/corda/coretests/internal/ResolveTransactionsFlowTest.kt": [
+425
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/flows/ContractUpgradeFlow.kt": [
+34,
+53
+],
+"corda-project:sources-kotlin/corda/core/src/test/kotlin/net/corda/core/internal/concurrent/CordaFutureImplTest.kt": [
+81,
+88
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/RPCApi.kt": [
+223
+],
+"corda-project:sources-kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/serialization/kryo/KryoTests.kt": [
+366
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/internal/CordaRPCOpsImpl.kt": [
+304
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/notary/experimental/bftsmart/BFTSmartNotaryService.kt": [
+106,
+108
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/CordaRPCOpsImplTest.kt": [
+436
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/TimedFlowTests.kt": [
+342
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/network/NetworkMapUpdaterTest.kt": [
+93
+],
+"corda-project:sources-kotlin/corda/samples/notary-demo/workflows/src/main/kotlin/net/corda/notarydemo/MyCustomNotaryService.kt": [
+35
+],
+"corda-project:sources-kotlin/corda/samples/simm-valuation-demo/contracts-states/src/main/kotlin/net/corda/vega/contracts/PortfolioSwap.kt": [
+11
+],
+"corda-project:sources-kotlin/corda/testing/core-test-utils/src/main/kotlin/net/corda/testing/core/SerializationEnvironmentExtension.kt": [
+59
+],
+"corda-project:sources-kotlin/corda/testing/node-driver/src/test/kotlin/net/corda/testing/node/CustomNotaryTest.kt": [
+67,
+68
+]
+}

@@ -1,0 +1,15 @@
+{
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/utilities/PersistentMap.kt": [
+219
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/internal/telemetry/TelemetryTests.kt": [
+275
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/HibernateConfigurationTest.kt": [
+777
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/PersistentMapTests.kt": [
+101,
+145
+]
+}

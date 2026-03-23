@@ -1,0 +1,13 @@
+{
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/j2k/JavaJSONConverter.kt": [
+17
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/Logger.kt": [
+150,
+151
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/Utils.kt": [
+38,
+38
+]
+}

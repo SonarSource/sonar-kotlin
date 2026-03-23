@@ -1,0 +1,71 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/formatter/impl/spacing.kt": [
+43
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/formatter/settings/RsLanguageCodeStyleSettingsProvider.kt": [
+132
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/injected/RsStringLiteralManipulator.kt": [
+18
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/refactoring/introduceVariable/impl.kt": [
+104
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/typing/RsQuoteHandler.kt": [
+28,
+40
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/utils/SearchByOffset.kt": [
+58,
+59
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/RsPsiPattern.kt": [
+76
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/lexer/RsEscapesLexer.kt": [
+105
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/psi/ext/RsPat.kt": [
+40
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/NameResolution.kt": [
+876
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/TypeInference.kt": [
+788
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/utils/evaluation/ConstExprEvaluator.kt": [
+195,
+196,
+197,
+202
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/toml/completion/LocalCargoTomlDependencyCompletionProviders.kt": [
+111
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/RustProjectDescriptors.kt": [
+52
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsAutoIndentTest.kt": [
+224
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/formatter/RsFormatterTest.kt": [
+368
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/typecheck/RsTypeCheckInspectionTest.kt": [
+536
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/surroundWith/statement/RsWithBlockSurrounderTest.kt": [
+120
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/typing/RsEnterInStringLiteralHandlerTest.kt": [
+213
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsProcMacroResolveTest.kt": [
+14,
+27
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsAdjustmentTest.kt": [
+861
+]
+}

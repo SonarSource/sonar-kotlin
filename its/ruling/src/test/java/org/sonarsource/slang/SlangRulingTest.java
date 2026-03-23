@@ -44,6 +44,14 @@ import org.sonarsource.analyzer.commons.ProfileGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Ruling tests for the `sonar-kotlin` plugin.
+ *<br/>
+ * Most of these tests are using sonar-scanner-cli, despite it giving incomplete type information for the plugin.
+ * The reason is that otherwise the ruling tests would become to slow, heavyweight and difficult to setup.
+ * <br/>
+ * See <a href="https://sonarsource.atlassian.net/browse/SONARKT-25">SONARKT-25</a> for more context.
+ */
 class SlangRulingTest {
 
   private static final Logger LOG = LoggerFactory.getLogger(SlangRulingTest.class);
@@ -111,27 +119,34 @@ class SlangRulingTest {
     ));
   }
 
+  /*
+   * This project was archived, and kotlin 1.6.21 is the latest version it was using
+   */
   @Test
   void test_kotlin_android() throws IOException {
-    executeSonarScannerAndAssertDifferences("kotlin/android-architecture-components", Map.of(
-      "sonar.inclusions", "sources/kotlin/android-architecture-components/**/*.kt",
-      "sonar.exclusions", "**/testData/**/*"
+    executeSonarScannerAndAssertDifferences("android-architecture-components", Map.of(
+      "sonar.inclusions", "sources-kotlin/android-architecture-components/**/*.kt",
+      "sonar.exclusions", "**/testData/**/*",
+      "sonar.kotlin.source.version", "1.6.21"
     ));
   }
 
   @Test
   void test_kotlin_corda() throws IOException {
-    executeSonarScannerAndAssertDifferences("kotlin/corda", Map.of(
-      "sonar.inclusions", "sources/kotlin/corda/**/*.kt",
-      "sonar.exclusions", "**/testData/**/*"
+    executeSonarScannerAndAssertDifferences("corda", Map.of(
+      "sonar.inclusions", "sources-kotlin/corda/**/*.kt",
+      "sonar.exclusions", "**/testData/**/*",
+      // see https://github.com/corda/corda/blob/release/os/4.14/gradle.properties
+      "sonar.kotlin.source.version", "1.9.20"
     ));
   }
 
   @Test
   void test_kotlin_intellij_rust() throws IOException {
-    executeSonarScannerAndAssertDifferences("kotlin/intellij-rust", Map.of(
-      "sonar.inclusions", "sources/kotlin/intellij-rust/**/*.kt",
-      "sonar.exclusions", "**/testData/**/*"
+    executeSonarScannerAndAssertDifferences("intellij-rust", Map.of(
+      "sonar.inclusions", "sources-kotlin/intellij-rust/**/*.kt",
+      "sonar.exclusions", "**/testData/**/*",
+      "sonar.kotlin.source.version", "1.8.22"
     ));
   }
 
@@ -144,15 +159,10 @@ class SlangRulingTest {
 
   @Test
   void test_kotlin_language_server() throws IOException {
-    executeGradleBuildAndAssertDifferences("kotlin/kotlin-language-server", Map.of());
-  }
-
-  private static String getFileLocationAbsolutePath(FileLocation location) {
-    try {
-      return location.getFile().getCanonicalFile().getAbsolutePath();
-    } catch (IOException e) {
-      return "";
-    }
+    executeSonarScannerAndAssertDifferences("kotlin-language-server", Map.of(
+      "sonar.inclusions", "sources-kotlin/kotlin-language-server/**/*.kt",
+      "sonar.kotlin.source.version", "2.1.0"
+    ));
   }
 
   private static Map<String, String> prepareAnalysisConfiguration(String project, Map<String, String> additionalProperties) throws IOException {
@@ -198,11 +208,14 @@ class SlangRulingTest {
   }
 
   private static Path projectDirectory(String project) throws IOException {
-    Path directory = Path.of("..", "sources").resolve(projectRelativePath(project));
-    if (!Files.exists(directory)) {
-      throw new IOException("Project directory not found: " + directory);
+    Path relativePath = projectRelativePath(project);
+    for (Path base : List.of(Path.of("..", "sources-kotlin"), Path.of("..", "sources"))) {
+      Path directory = base.resolve(relativePath);
+      if (Files.exists(directory)) {
+        return directory.toRealPath();
+      }
     }
-    return directory.toRealPath();
+    throw new IOException("Project directory not found in sources-kotlin or sources/kotlin: " + project);
   }
 
   private static Path rulingDirectory() throws IOException {
@@ -238,7 +251,12 @@ class SlangRulingTest {
       properties.put("org.gradle.debug.port", debugPort);
     }
     executeBuildAndAssertDifferences(project, gradleBuild(project, properties)
-      .setTasks("build").addArguments("sonar", "-x", "test"));
+      // don't run tests of the analyzed projects, only assemble artifacts to have all dependencies
+      .setTasks("build")
+      .addArguments(
+        "--init-script", rulingDirectory().resolve("apply-sonarqube-plugin.gradle.kts").toString(),
+        "sonar",
+        "-x", "test"));
   }
 
   private void executeSonarScannerAndAssertDifferences(String project, Map<String, String> additionalProperties) throws IOException {
@@ -269,7 +287,7 @@ class SlangRulingTest {
   }
 
   @AfterAll
-  public static void after() {
+  static void after() {
     if (keepSonarqubeRunning) {
       try {
         LOG.info("::: Intentionally keep SonarQube running at {} use CTRL+C to stop it :::",

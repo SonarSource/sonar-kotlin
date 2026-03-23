@@ -1,0 +1,24 @@
+{
+"corda-project:sources-kotlin/corda/node-api-tests/src/test/kotlin/net/corda/nodeapitests/internal/crypto/X509UtilitiesTest.kt": [
+301
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/protonwrapper/netty/SSLHelper.kt": [
+258
+],
+"corda-project:sources-kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/crypto/TlsDiffAlgorithmsTest.kt": [
+164
+],
+"corda-project:sources-kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/crypto/TlsDiffProtocolsTest.kt": [
+211
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test/kotlin/net/corda/services/messaging/SimpleAMQPClient.kt": [
+64
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test2/kotlin/net/corda/node/amqp/ProtonWrapperTests.kt": [
+159,
+238
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/TLSAuthenticationTests.kt": [
+373
+]
+}

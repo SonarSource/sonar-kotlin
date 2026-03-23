@@ -1,0 +1,178 @@
+{
+"corda-project:sources-kotlin/corda/client/jackson/src/main/kotlin/net/corda/client/jackson/internal/CordaModule.kt": [
+616,
+624
+],
+"corda-project:sources-kotlin/corda/common/configuration-parsing/src/main/kotlin/net/corda/common/configuration/parsing/internal/Specification.kt": [
+9
+],
+"corda-project:sources-kotlin/corda/common/logging/src/main/kotlin/net/corda/common/logging/errorReporting/ErrorContextProvider.kt": [
+8
+],
+"corda-project:sources-kotlin/corda/common/logging/src/main/kotlin/net/corda/common/logging/errorReporting/ErrorReporter.kt": [
+8
+],
+"corda-project:sources-kotlin/corda/common/validation/src/main/kotlin/net/corda/common/validation/internal/Validator.kt": [
+6
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/contracts/AttachmentConstraint.kt": [
+34
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/contracts/Structures.kt": [
+241
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/flows/FlowExternalOperations.kt": [
+27,
+58
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/flows/scheduler/mapper/FlowSchedulerMapper.kt": [
+11
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/internal/FlowAsyncOperation.kt": [
+15
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/internal/telemetry/TelemetryServiceImpl.kt": [
+86
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/internal/utilities/Internable.kt": [
+11
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/internal/verification/Verifier.kt": [
+54
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/ServiceLifecycleObserver.kt": [
+9,
+10
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/diagnostics/DiagnosticsService.kt": [
+9
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/vault/QueryCriteria.kt": [
+21
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/serialization/SerializationAPI.kt": [
+357,
+362
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/serialization/SerializationToken.kt": [
+22,
+29
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/KotlinUtils.kt": [
+93
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/ProgressTracker.kt": [
+40
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/UntrustworthyData.kt": [
+23
+],
+"corda-project:sources-kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/Literal.kt": [
+126
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/PublicKeyToOwningIdentityCache.kt": [
+9
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/ShutdownHook.kt": [
+3
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/config/ConfigUtilities.kt": [
+52
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/persistence/LiquibaseDatabaseFactory.kt": [
+6
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/protonwrapper/netty/CrlSource.kt": [
+6,
+7
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/internal/NodeStartup.kt": [
+70
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/internal/artemis/CertificateChainCheckPolicy.kt": [
+14,
+15
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/internal/cordapp/CordappConfigProvider.kt": [
+5
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/api/AuditService.kt": [
+126
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/messaging/MessagingExecutor.kt": [
+16
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/network/NetworkParameterUpdateListener.kt": [
+9
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/network/NotaryUpdateListener.kt": [
+9
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/persistence/DBCheckpointPerformanceRecorder.kt": [
+15
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/ActionExecutor.kt": [
+9
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/StaffedFlowHospital.kt": [
+417
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/TransitionExecutor.kt": [
+11
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/notary/experimental/bftsmart/BFTSmart.kt": [
+78
+],
+"corda-project:sources-kotlin/corda/samples/irs-demo/cordapp/workflows-irs/src/main/kotlin/net/corda/irs/math/Interpolators.kt": [
+5,
+9
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/AMQPSerializationScheme.kt": [
+36
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/ComposableTypePropertySerializer.kt": [
+15
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/RemoteSerializerFactory.kt": [
+13
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/carpenter/ClassCarpenter.kt": [
+24
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/model/LocalTypeModel.kt": [
+42
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/model/RemoteTypeCarpenter.kt": [
+11
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/model/TypeLoader.kt": [
+11
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/model/TypeModellingFingerPrinter.kt": [
+14
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/AMQPExceptionsTests.kt": [
+11
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/CorDappSerializerTests.kt": [
+195
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/DeserializeNeedingCarpentryTests.kt": [
+17
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/carpenter/CarpenterExceptionTests.kt": [
+28
+],
+"corda-project:sources-kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/InMemoryMessagingNetwork.kt": [
+141
+],
+"corda-project:sources-kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/DriverDSLImpl.kt": [
+180
+],
+"corda-project:sources-kotlin/corda/tools/explorer/src/main/kotlin/net/corda/explorer/formatters/Formatter.kt": [
+3
+],
+"corda-project:sources-kotlin/corda/tools/network-builder/src/main/kotlin/net/corda/networkbuilder/containers/push/ContainerPusher.kt": [
+5
+]
+}

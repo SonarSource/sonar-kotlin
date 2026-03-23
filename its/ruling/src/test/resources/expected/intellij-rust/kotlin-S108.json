@@ -1,0 +1,46 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/debugger/src/main/kotlin/org/rust/debugger/runconfig/RsDebugProcessConfigurationHelper.kt": [
+142
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/runconfig/buildtool/CargoBuildTaskRunner.kt": [
+297
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/util/RsCommandLineEditor.kt": [
+85
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/annotator/RsErrorAnnotator.kt": [
+1624
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/inspections/checkMatch/RsUnreachablePatternsInspection.kt": [
+37,
+38
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/intentions/MatchToIfLetIntention.kt": [
+73
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/utils/checkMatch/CheckMatchUtils.kt": [
+29,
+30
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/macros/MacroExpansionManager.kt": [
+406
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/macros/MacroExpansionTask.kt": [
+236
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/borrowck/MirBorrowCheckVisitor.kt": [
+286
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/schemas/MirVisitor.kt": [
+121,
+220,
+263
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/stdext/path.kt": [
+26,
+36
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/refactoring/suggested/RsSuggestedRefactoringTest.kt": [
+155
+]
+}

@@ -1,0 +1,22 @@
+{
+"corda-project:sources-kotlin/corda/core-tests/src/test/kotlin/net/corda/coretests/contracts/AmountTests.kt": [
+140,
+149,
+162
+],
+"corda-project:sources-kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/persistence/RestrictedConnectionTest.kt": [
+121,
+224,
+327
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/PersistentMapTests.kt": [
+171
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/registration/HTTPNetworkRegistrationServiceTest.kt": [
+29,
+44
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/EnumEvolvabilityTests.kt": [
+183
+]
+}

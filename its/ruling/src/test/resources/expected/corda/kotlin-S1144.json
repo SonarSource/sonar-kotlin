@@ -1,0 +1,11 @@
+{
+"corda-project:sources-kotlin/corda/client/rpc/src/smoke-test/kotlin/net/corda/kotlin/rpc/StandaloneCordaRPClientTest.kt": [
+291
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/bridging/LoopbackBridgeManager.kt": [
+95
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/model/LocalTypeModelTests.kt": [
+239
+]
+}

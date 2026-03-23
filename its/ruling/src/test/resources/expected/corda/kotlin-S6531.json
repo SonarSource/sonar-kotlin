@@ -1,0 +1,23 @@
+{
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/internal/CordaRPCOpsImpl.kt": [
+469,
+471,
+475
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/persistence/DBTransactionStorageLedgerRecovery.kt": [
+179
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/rpc/CheckpointDumperImpl.kt": [
+501
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/vault/HibernateQueryCriteriaParser.kt": [
+226,
+242,
+330,
+488,
+506,
+519,
+559,
+572
+]
+}

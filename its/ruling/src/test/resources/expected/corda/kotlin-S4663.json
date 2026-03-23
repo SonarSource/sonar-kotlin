@@ -1,0 +1,8 @@
+{
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/LedgerTransaction.kt": [
+357
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/migration/IdentityServiceToStringShortMigrationTest.kt": [
+30
+]
+}

@@ -1,0 +1,15 @@
+{
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt": [
+165
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/definition/GoToDefinition.kt": [
+76
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/overridemembers/OverrideMembers.kt": [
+186
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/StringUtils.kt": [
+35,
+46
+]
+}

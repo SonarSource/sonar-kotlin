@@ -1,0 +1,15 @@
+{
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/completion/Completions.kt": [
+109
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/semantictokens/SemanticTokens.kt": [
+129,
+132,
+138,
+156,
+185
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/StringUtils.kt": [
+47
+]
+}

@@ -1,0 +1,8 @@
+{
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/messaging/TwoPartyTradeFlowTests.kt": [
+312
+],
+"corda-project:sources-kotlin/corda/testing/core-test-utils/src/main/kotlin/net/corda/coretesting/internal/RigorousMock.kt": [
+70
+]
+}

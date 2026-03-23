@@ -1,0 +1,103 @@
+{
+"corda-project:sources-kotlin/corda/core-tests/src/test/kotlin/net/corda/coretests/transactions/CompatibleTransactionTests.kt": [
+487
+],
+"corda-project:sources-kotlin/corda/core-tests/src/test/kotlin/net/corda/coretests/transactions/TransactionBuilderTest.kt": [
+179
+],
+"corda-project:sources-kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/Perceivable.kt": [
+51
+],
+"corda-project:sources-kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/Util.kt": [
+84
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/protonwrapper/netty/AMQPChannelHandler.kt": [
+301
+],
+"corda-project:sources-kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/crypto/TlsDiffAlgorithmsTest.kt": [
+61,
+72
+],
+"corda-project:sources-kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/crypto/TlsDiffProtocolsTest.kt": [
+89,
+100
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/AMQPClientSslErrorsTest.kt": [
+127,
+151
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/NotarisationPayloadSerializationTests.kt": [
+53,
+79,
+110
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/NotaryChangeTests.kt": [
+271,
+295
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/TLSAuthenticationTests.kt": [
+256,
+283,
+288
+],
+"corda-project:sources-kotlin/corda/samples/irs-demo/cordapp/contracts-irs/src/main/kotlin/net/corda/irs/contract/IRSUtils.kt": [
+91
+],
+"corda-project:sources-kotlin/corda/samples/simm-valuation-demo/flows/src/main/kotlin/net/corda/vega/analytics/example/OGSwapPricingCcpExample.kt": [
+124
+],
+"corda-project:sources-kotlin/corda/samples/simm-valuation-demo/flows/src/main/kotlin/net/corda/vega/analytics/example/OGSwapPricingExample.kt": [
+95
+],
+"corda-project:sources-kotlin/corda/samples/simm-valuation-demo/src/test/kotlin/net/corda/vega/SwapExample.kt": [
+82
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/carpenter/ClassCarpenter.kt": [
+248
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/EnumEvolvabilityTests.kt": [
+417
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/EnumEvolveTests.kt": [
+44,
+72,
+112,
+446
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/EvolutionObjectBuilderRenamedPropertyTests.kt": [
+33,
+42,
+68,
+80
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/EvolutionSerializerFactoryTests.kt": [
+42
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/EvolvabilityTests.kt": [
+317,
+763,
+790,
+936
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/GenericsTests.kt": [
+271,
+390,
+413,
+437,
+505
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/ThrowableEvolutionTests.kt": [
+20,
+26,
+32,
+38,
+53,
+67
+],
+"corda-project:sources-kotlin/corda/testing/core-test-utils/src/main/kotlin/net/corda/coretesting/internal/NettyTestClient.kt": [
+66
+],
+"corda-project:sources-kotlin/corda/testing/core-test-utils/src/main/kotlin/net/corda/coretesting/internal/NettyTestServer.kt": [
+64
+]
+}

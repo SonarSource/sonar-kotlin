@@ -1,0 +1,9 @@
+{
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceOperator.kt": [
+2,
+12
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceOperatorUsingName.kt": [
+2
+]
+}

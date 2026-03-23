@@ -1,0 +1,11 @@
+{
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/CompilerClassPath.kt": [
+173
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/CompiledFileTest.kt": [
+25
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/CompilerTest.kt": [
+44
+]
+}

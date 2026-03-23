@@ -1,0 +1,238 @@
+{
+"corda-project:sources-kotlin/corda/client/rpc/src/integration-test/kotlin/net/corda/client/rpc/RpcCustomSerializersTest.kt": [
+139
+],
+"corda-project:sources-kotlin/corda/client/rpc/src/test/kotlin/net/corda/client/rpc/ClientRPCInfrastructureTests.kt": [
+64
+],
+"corda-project:sources-kotlin/corda/core-tests/src/test/kotlin/net/corda/coretests/flows/ContractUpgradeFlowTest.kt": [
+195
+],
+"corda-project:sources-kotlin/corda/core-tests/src/test/kotlin/net/corda/coretests/node/VaultUpdateTests.kt": [
+23
+],
+"corda-project:sources-kotlin/corda/core-tests/src/test/kotlin/net/corda/coretests/serialization/TransactionSerializationTests.kt": [
+51
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/Utils.kt": [
+40
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/crypto/internal/Instances.kt": [
+57
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/crypto/internal/PlatformSecureRandom.kt": [
+67
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/transactions/LedgerTransaction.kt": [
+954
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/persistence/AttachmentVersionNumberMigration.kt": [
+83,
+86
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/persistence/CordaPersistence.kt": [
+381,
+382,
+383
+],
+"corda-project:sources-kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/serialization/testutils/TestObservableContext.kt": [
+17
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test/kotlin/net/corda/node/NodePerformanceTests.kt": [
+40
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test/kotlin/net/corda/node/flows/FlowEntityManagerTest.kt": [
+745
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test/kotlin/net/corda/services/messaging/SimpleAMQPClient.kt": [
+123,
+126
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test1/kotlin/net/corda/flows/incompatible/version1/AttachmentFlow.kt": [
+72
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test2/kotlin/net/corda/node/services/statemachine/FlowHospitalTest.kt": [
+517,
+568,
+629
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/internal/AbstractNode.kt": [
+1343,
+1345
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/migration/CordaMigration.kt": [
+75,
+78
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/migration/PersistentIdentityMigration.kt": [
+29,
+32
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/migration/PersistentIdentityMigrationNewTable.kt": [
+79,
+82
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/api/IdentityServiceInternal.kt": [
+17,
+19
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/persistence/DBTransactionStorage.kt": [
+224
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/utilities/registration/NetworkRegistrationHelper.kt": [
+360
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/notary/experimental/bftsmart/BFTSmartNotaryService.kt": [
+206
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/notary/jpa/JPANotaryService.kt": [
+48
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/internal/telemetry/TelemetryTests.kt": [
+286,
+290
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/TimedFlowTests.kt": [
+343,
+344
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/network/NetworkParametersHotloaderTest.kt": [
+78,
+83,
+98,
+103
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/DBCheckpointStorageTests.kt": [
+863
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/HibernateInteractionTests.kt": [
+166
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/ObserverNodeTransactionTests.kt": [
+294
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/rpc/CheckpointDumperImplTest.kt": [
+193
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/statemachine/FlowMetadataRecordingTest.kt": [
+597
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/vault/VaultQueryJoinTest.kt": [
+171
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/vault/VaultQueryTests.kt": [
+386
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/vault/VaultSoftLockManagerTest.kt": [
+142
+],
+"corda-project:sources-kotlin/corda/samples/irs-demo/cordapp/workflows-irs/src/main/kotlin/net.corda.irs/flows/RatesFixFlow.kt": [
+74
+],
+"corda-project:sources-kotlin/corda/samples/irs-demo/web/src/test/kotlin/net/corda/irs/web/IrsDemoWebApplicationTests.kt": [
+17
+],
+"corda-project:sources-kotlin/corda/samples/network-verifier/contracts/src/main/kotlin/net/corda/verification/contracts/CommsContracts.kt": [
+22
+],
+"corda-project:sources-kotlin/corda/samples/network-verifier/contracts/src/main/kotlin/net/corda/verification/contracts/NotaryTestContracts.kt": [
+20
+],
+"corda-project:sources-kotlin/corda/samples/notary-demo/contracts/src/main/kotlin/net/corda/notarydemo/contracts/DummyStates.kt": [
+13
+],
+"corda-project:sources-kotlin/corda/samples/notary-demo/workflows/src/main/kotlin/net/corda/notarydemo/MyCustomNotaryService.kt": [
+37,
+38
+],
+"corda-project:sources-kotlin/corda/serialization-tests/src/test/kotlin/net/corda/serialization/internal/CordaClassResolverTests.kt": [
+97,
+100,
+109
+],
+"corda-project:sources-kotlin/corda/serialization-tests/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationOutputTests.kt": [
+726,
+739
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/AMQPPrimitiveSerializer.kt": [
+19
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/ComposableTypePropertySerializer.kt": [
+239,
+263
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/CorDappCustomSerializer.kt": [
+71
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/CustomSerializer.kt": [
+119
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/ObjectBuilder.kt": [
+216
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/Schema.kt": [
+125
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/EvolutionObjectBuilderRenamedPropertyTests.kt": [
+25
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/model/LocalTypeModelTests.kt": [
+22,
+23
+],
+"corda-project:sources-kotlin/corda/testing/cordapps/dummystateworkflows/src/main/kotlin/net/corda/testing/dummystatecreator/IssueDummyStateMultiparty.kt": [
+77
+],
+"corda-project:sources-kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/MockTransactionStorage.kt": [
+68
+],
+"corda-project:sources-kotlin/corda/testing/node-driver/src/test/kotlin/net/corda/testing/node/CustomNotaryTest.kt": [
+74,
+75
+],
+"corda-project:sources-kotlin/corda/testing/test-db/src/main/kotlin/net/corda/testing/internal/db/NoOpTestDatabaseContext.kt": [
+8,
+10,
+12,
+14,
+16,
+18
+],
+"corda-project:sources-kotlin/corda/testing/test-db/src/test/kotlin/net/corda/testing/internal/db/GroupAMoreTests.kt": [
+17
+],
+"corda-project:sources-kotlin/corda/testing/test-db/src/test/kotlin/net/corda/testing/internal/db/GroupATests.kt": [
+16,
+21
+],
+"corda-project:sources-kotlin/corda/testing/test-db/src/test/kotlin/net/corda/testing/internal/db/GroupBTests.kt": [
+15,
+20
+],
+"corda-project:sources-kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/dsl/TestDSL.kt": [
+145,
+147,
+149,
+151,
+155
+],
+"corda-project:sources-kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/internal/vault/DummyDealContract.kt": [
+17
+],
+"corda-project:sources-kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/internal/vault/UniqueDummyFungibleContract.kt": [
+18
+],
+"corda-project:sources-kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/internal/vault/UniqueDummyLinearContract.kt": [
+18
+],
+"corda-project:sources-kotlin/corda/testing/testserver/src/main/kotlin/net/corda/webserver/services/WebServerPluginRegistry.kt": [
+29
+],
+"corda-project:sources-kotlin/corda/tools/loadtest/src/main/kotlin/net/corda/loadtest/ConnectionManager.kt": [
+42
+],
+"corda-project:sources-kotlin/corda/tools/network-builder/src/main/kotlin/net/corda/networkbuilder/containers/push/azure/AzureContainerPusher.kt": [
+37,
+40
+]
+}

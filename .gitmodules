@@ -4,3 +4,15 @@
 [submodule "build-logic/common"]
 	path = build-logic/common
 	url = https://github.com/SonarSource/cloud-native-gradle-modules
+[submodule "its/sources-kotlin/intellij-rust"]
+	path = its/sources-kotlin/intellij-rust
+	url = https://github.com/intellij-rust/intellij-rust.git
+[submodule "its/sources-kotlin/corda"]
+	path = its/sources-kotlin/corda
+	url = https://github.com/corda/corda.git
+[submodule "its/sources-kotlin/android-architecture-samples"]
+	path = its/sources-kotlin/android-architecture-samples
+	url = https://github.com/android/architecture-components-samples
+[submodule "its/sources-kotlin/kotlin-language-server"]
+	path = its/sources-kotlin/kotlin-language-server
+	url = https://github.com/fwcd/kotlin-language-server

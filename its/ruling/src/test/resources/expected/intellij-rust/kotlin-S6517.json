@@ -1,0 +1,51 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/debugger/src/main/kotlin/org/rust/debugger/RsDebuggerDriverConfigurationProvider.kt": [
+12
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/toolchain/RsToolchainProvider.kt": [
+11
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/actions/ui/CargoNewCrateDialog.kt": [
+25
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/inspections/import/ui.kt": [
+57
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/refactoring/extractFunction/ui.kt": [
+49
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/refactoring/extractStructFields/ui.kt": [
+41
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/refactoring/generate/ui.kt": [
+59
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/refactoring/introduceConstant/ui.kt": [
+93
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/macros/MacroExpansionSharedCache.kt": [
+109
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/macros/MacroExpansionTaskListener.kt": [
+10
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/psi/RsPsiManager.kt": [
+101,
+105
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/ImplLookup.kt": [
+160
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve2/FileModificationTracker.kt": [
+29
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/utils/snapshot/Snapshot.kt": [
+15
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/stdext/Cache.kt": [
+11
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/util/RsBackgroundTaskQueue.kt": [
+97
+]
+}

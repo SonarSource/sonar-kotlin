@@ -1,0 +1,8 @@
+{
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/cryptoservice/DefaultCryptoService.kt": [
+183
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/persistence/AesDbEncryptionService.kt": [
+49
+]
+}

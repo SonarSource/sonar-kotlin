@@ -1,0 +1,161 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/debugger/src/test/kotlin/org/rust/debugger/lang/RsTypeNameParserTest.kt": [
+36,
+102,
+128,
+134
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/model/impl/CargoSyncTask.kt": [
+123
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/toolwindow/CargoToolWindow.kt": [
+127
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/runconfig/CargoTestRunState.kt": [
+105,
+126
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/runconfig/Utils.kt": [
+149
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/util/CargoOptions.kt": [
+476
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/console/RsConsoleActions.kt": [
+27,
+105
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/hints/type/RsExpressionTypeProvider.kt": [
+47
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/notifications/RsExternalLinterSlowRunNotifier.kt": [
+39
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/template/postfix/editable/RsPostfixTemplateEditor.kt": [
+50
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/ide/utils/checkMatch/Usefulness.kt": [
+82
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/utils/RsDiagnostic.kt": [
+646,
+671
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsErrorAnnotatorTest.kt": [
+1772,
+1773,
+1774,
+1775,
+1780,
+1781,
+1782,
+1783,
+1986,
+2635,
+2637,
+2898,
+2901,
+2999,
+3022,
+3413,
+3418,
+3513,
+3755,
+3842,
+4023,
+4040,
+4057,
+4066,
+4122,
+4353,
+4354,
+4355,
+4362,
+4363,
+4364,
+4544
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsFormatMacroAnnotatorTest.kt": [
+24,
+25,
+92,
+95,
+252,
+253,
+254,
+280,
+367,
+376,
+410
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsHighlightingAnnotatorTest.kt": [
+119
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsLiteralAnnotatorTest.kt": [
+25
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/RsSyntaxErrorsAnnotatorTest.kt": [
+171,
+491,
+492
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/RemoveMetaItemFixTest.kt": [
+27,
+36
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/annotator/fixes/ReplaceWithStdMemDropFixTest.kt": [
+115
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/docs/RsCodeHighlightingInQuickDocumentationTest.kt": [
+35,
+90
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/docs/RsQuickDocumentationTest.kt": [
+186,
+199,
+247,
+454,
+498,
+680,
+1016,
+1037,
+1093,
+1389
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/docs/RsQuickNavigationInfoTest.kt": [
+99,
+153,
+182,
+224,
+435,
+479
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/docs/RsRenderedDocumentationTest.kt": [
+94
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsWrongGenericArgumentsNumberInspectionTest.kt": [
+48,
+69,
+94,
+117,
+138,
+163
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/ide/inspections/RsWrongGenericParametersNumberInspectionTest.kt": [
+42,
+43
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsMacroExpansionResolveTest.kt": [
+1060
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/utils/RsDemanglerTest.kt": [
+144
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/toml/completion/LocalCargoTomlDependencyVersionCompletionTest.kt": [
+33,
+34
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/toml/inspections/TomlInvalidKeywordSegmentInspectionTest.kt": [
+17
+]
+}

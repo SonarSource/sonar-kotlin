@@ -1,0 +1,71 @@
+{
+"corda-project:sources-kotlin/corda/client/rpc/src/main/kotlin/net/corda/client/rpc/internal/RPCClientProxyHandler.kt": [
+439
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/flows/SendTransactionFlow.kt": [
+174
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/internal/verification/VerificationResult.kt": [
+48,
+55
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/Try.kt": [
+65
+],
+"corda-project:sources-kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/PrettyPrint.kt": [
+86,
+100,
+105,
+111,
+136
+],
+"corda-project:sources-kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/UniversalContract.kt": [
+56,
+79,
+198,
+225,
+263
+],
+"corda-project:sources-kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/Util.kt": [
+103
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/config/ConfigUtilities.kt": [
+189
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/internal/security/RPCPermissionResolver.kt": [
+62
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/messaging/NodeNettyAcceptorFactory.kt": [
+177
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/rpc/CheckpointDumperImpl.kt": [
+500
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/rpc/RPCServer.kt": [
+441
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SingleThreadedStateMachineManager.kt": [
+1157
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/vault/HibernateQueryCriteriaParser.kt": [
+381,
+403,
+435
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/statemachine/FlowFrameworkTests.kt": [
+1052
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/transactions/UniquenessProviderTests.kt": [
+663
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/model/TypeIdentifier.kt": [
+239,
+243
+],
+"corda-project:sources-kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/services/MockAttachmentStorage.kt": [
+58
+],
+"corda-project:sources-kotlin/corda/tools/explorer/src/main/kotlin/net/corda/explorer/views/cordapps/cash/NewTransaction.kt": [
+154
+]
+}

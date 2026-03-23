@@ -1,0 +1,29 @@
+{
+"corda-project:sources-kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/AbstractAggregatedList.kt": [
+132
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/contracts/RotatedKeys.kt": [
+110
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/flows/FinalityFlow.kt": [
+223
+],
+"corda-project:sources-kotlin/corda/experimental/netparams/src/main/kotlin/net/corda/netparams/NetParams.kt": [
+112
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/persistence/AttachmentVersionNumberMigration.kt": [
+38
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/serialization/kryo/DefaultKryoCustomizer.kt": [
+230
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/internal/security/RPCPermissionResolver.kt": [
+58
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/network/NetworkParametersHotloader.kt": [
+47
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/TransitionExecutorImpl.kt": [
+47
+]
+}

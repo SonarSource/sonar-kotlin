@@ -1,0 +1,74 @@
+{
+"corda-project:sources-kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/AssociatedList.kt": [
+33
+],
+"corda-project:sources-kotlin/corda/client/rpc/src/main/kotlin/net/corda/client/rpc/internal/RPCClientProxyHandler.kt": [
+448
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/flows/SendTransactionFlow.kt": [
+242
+],
+"corda-project:sources-kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/PrettyPrint.kt": [
+99
+],
+"corda-project:sources-kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/UniversalContract.kt": [
+196,
+261
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/bridging/BridgeControlListener.kt": [
+204
+],
+"corda-project:sources-kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/crypto/TlsDiffAlgorithmsTest.kt": [
+127
+],
+"corda-project:sources-kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/crypto/TlsDiffProtocolsTest.kt": [
+174
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/internal/subcommands/GenerateRpcSslCertsCli.kt": [
+47
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/config/ConfigUtilities.kt": [
+198
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/rpc/CheckpointDumperImpl.kt": [
+180
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/rpc/RPCServer.kt": [
+396
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SingleThreadedStateMachineManager.kt": [
+1256
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/transitions/DeliverSessionMessageTransition.kt": [
+85
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/transitions/TopLevelTransition.kt": [
+238
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/vault/HibernateQueryCriteriaParser.kt": [
+399
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/statemachine/FlowFrameworkTests.kt": [
+1048
+],
+"corda-project:sources-kotlin/corda/samples/irs-demo/cordapp/contracts-irs/src/test/kotlin/net/corda/irs/contract/IRSTests.kt": [
+48,
+134
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/model/LocalTypeInformationBuilder.kt": [
+127
+],
+"corda-project:sources-kotlin/corda/tools/checkpoint-agent/src/main/kotlin/net/corda/tools/CheckpointAgent.kt": [
+359
+],
+"corda-project:sources-kotlin/corda/tools/explorer/src/main/kotlin/net/corda/explorer/views/LoginView.kt": [
+44
+],
+"corda-project:sources-kotlin/corda/tools/explorer/src/main/kotlin/net/corda/explorer/views/TransactionViewer.kt": [
+292
+],
+"corda-project:sources-kotlin/corda/tools/loadtest/src/main/kotlin/net/corda/loadtest/tests/CrossCashTest.kt": [
+162,
+189
+]
+}

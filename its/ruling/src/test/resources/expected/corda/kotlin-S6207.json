@@ -1,0 +1,9 @@
+{
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/model/LocalTypeInformation.kt": [
+142,
+147
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/model/RemoteTypeInformation.kt": [
+91
+]
+}

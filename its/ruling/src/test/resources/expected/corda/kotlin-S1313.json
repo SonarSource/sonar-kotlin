@@ -1,0 +1,23 @@
+{
+"corda-project:sources-kotlin/corda/core/src/test/kotlin/net/corda/core/utilities/NetworkHostAndPortTest.kt": [
+35,
+35,
+46,
+46
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/internal/NodeTest.kt": [
+169
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/AddressUtilsTests.kt": [
+15,
+16,
+17,
+18,
+19,
+20,
+22,
+23,
+24,
+26
+]
+}

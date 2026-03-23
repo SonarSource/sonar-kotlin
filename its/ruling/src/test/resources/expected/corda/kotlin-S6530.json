@@ -1,0 +1,11 @@
+{
+"corda-project:sources-kotlin/corda/node/src/integration-test/kotlin/net/corda/node/multiRpc/MultiRpcClientTest.kt": [
+239
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationPropertyOrdering.kt": [
+45
+],
+"corda-project:sources-kotlin/corda/testing/node-driver/src/integration-test/kotlin/net/corda/testing/driver/DriverTests.kt": [
+45
+]
+}

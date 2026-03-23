@@ -1,0 +1,8 @@
+{
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/ImplementAbstractMembersQuickFix.kt": [
+105
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/overridemembers/OverrideMembers.kt": [
+114
+]
+}

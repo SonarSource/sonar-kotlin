@@ -186,7 +186,7 @@ abstract class AbstractKotlinSensorExecuteContext(
 
 internal fun determineKotlinLanguageVersion(sensorContext: SensorContext, logger: Logger) =
     (sensorContext.config()[KOTLIN_LANGUAGE_VERSION].map { versionString ->
-        LanguageVersion.fromVersionString(versionString).also { langVersion ->
+        LanguageVersion.fromFullVersionString(versionString).also { langVersion ->
             if (langVersion == null && versionString.isNotBlank()) {
                 logger.warn("Failed to find Kotlin version '$versionString'. Defaulting to ${DEFAULT_KOTLIN_LANGUAGE_VERSION.versionString}")
             }

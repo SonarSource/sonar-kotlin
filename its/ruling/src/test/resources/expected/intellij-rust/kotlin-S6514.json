@@ -1,0 +1,14 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/ty/TyClosure.kt": [
+22
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/ty/TyFunctionDef.kt": [
+22
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/ty/TyFunctionPointer.kt": [
+20
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/stdext/Collections.kt": [
+182
+]
+}

@@ -1,0 +1,34 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/copyright/src/test/kotlin/org/rust/copyright/RsCopyrightTest.kt": [
+49
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/model/impl/TestCargoProjectsServiceImpl.kt": [
+141,
+146,
+152
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/runconfig/buildtool/CargoBuildTaskRunner.kt": [
+295
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/MirBuilder.kt": [
+777,
+1062,
+1177,
+1187
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/building/MirTest.kt": [
+101
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/dataflow/impls/MaybeUninitializedPlaces.kt": [
+25
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/mir/dataflow/impls/BorrowsTest.kt": [
+42
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/mir/dataflow/impls/MaybeUninitializedPlacesTest.kt": [
+34
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/test/kotlin/org/rust/stdext/AsyncValueTest.kt": [
+38
+]
+}

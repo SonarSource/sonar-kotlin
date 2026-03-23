@@ -1,0 +1,17 @@
+{
+"corda-project:sources-kotlin/corda/experimental/nodeinfo/src/main/kotlin/net.corda.nodeinfo/NodeInfo.kt": [
+150
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/utilities/AppendOnlyPersistentMap.kt": [
+284
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/statemachine/FlowAsyncOperationTests.kt": [
+139
+],
+"corda-project:sources-kotlin/corda/samples/irs-demo/cordapp/contracts-irs/src/main/kotlin/net/corda/irs/contract/IRS.kt": [
+519
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/AMQPRemoteTypeModel.kt": [
+161
+]
+}

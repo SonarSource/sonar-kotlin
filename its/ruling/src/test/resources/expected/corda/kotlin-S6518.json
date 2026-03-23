@@ -1,0 +1,88 @@
+{
+"corda-project:sources-kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/AssociatedList.kt": [
+44,
+55,
+55
+],
+"corda-project:sources-kotlin/corda/client/rpc/src/integration-test/kotlin/net/corda/client/rpc/CordaRPCClientTest.kt": [
+151
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/internal/StatePointerSearch.kt": [
+78
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/ThreadDumpUtils.kt": [
+46
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/persistence/CordaPersistence.kt": [
+313,
+317,
+321
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/serialization/kryo/CustomIteratorSerializers.kt": [
+32,
+33,
+125
+],
+"corda-project:sources-kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/protonwrapper/engine/EventProcessorTest.kt": [
+44,
+60
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test/kotlin/net/corda/node/customcheckpointserializer/CustomCheckpointSerializerTest.kt": [
+93
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test/kotlin/net/corda/services/messaging/SimpleAMQPClient.kt": [
+52
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test2/kotlin/net/corda/node/amqp/ProtonWrapperTests.kt": [
+472,
+490
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/internal/cordapp/JarScanningCordappLoader.kt": [
+473
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/FiberUtils.kt": [
+10
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/utilities/ObjectDiffer.kt": [
+86,
+86
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/TimedFlowTests.kt": [
+218,
+224,
+251,
+256
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/AppendOnlyPersistentMapTest.kt": [
+221,
+230,
+260
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/DBTransactionStorageTests.kt": [
+438
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/DbMapDeadlockTest.kt": [
+121,
+122,
+123,
+164,
+166,
+169,
+189,
+191,
+193,
+209
+],
+"corda-project:sources-kotlin/corda/serialization-tests/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationOutputTests.kt": [
+1370
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/ByteBufferStreams.kt": [
+40
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/ComposableTypePropertySerializer.kt": [
+174
+],
+"corda-project:sources-kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/DriverDSLImpl.kt": [
+741
+]
+}

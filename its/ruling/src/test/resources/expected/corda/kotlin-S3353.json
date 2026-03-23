@@ -1,0 +1,67 @@
+{
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/crypto/internal/PlatformSecureRandom.kt": [
+65
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/flows/FlowException.kt": [
+33,
+50
+],
+"corda-project:sources-kotlin/corda/experimental/netparams/src/main/kotlin/net/corda/netparams/NetParams.kt": [
+82,
+85,
+88,
+91,
+94,
+97,
+103
+],
+"corda-project:sources-kotlin/corda/experimental/nodeinfo/src/main/kotlin/net.corda.nodeinfo/NodeInfo.kt": [
+66,
+69,
+72,
+75,
+78,
+81,
+87
+],
+"corda-project:sources-kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/Literal.kt": [
+18
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/bridging/AMQPBridgeManager.kt": [
+154
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/config/shell/ShellSafetyConfig.kt": [
+18
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/identity/PersistentIdentityService.kt": [
+355
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/internal/NodeStartupCliTest.kt": [
+26
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/registration/HTTPNetworkRegistrationServiceTest.kt": [
+29,
+44
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/model/TypeModellingFingerPrinter.kt": [
+103
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/DeserializeSimpleTypesTests.kt": [
+488
+],
+"corda-project:sources-kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/InMemoryMessagingNetwork.kt": [
+147
+],
+"corda-project:sources-kotlin/corda/testing/testserver/src/main/kotlin/net/corda/webserver/internal/NodeWebServer.kt": [
+42
+],
+"corda-project:sources-kotlin/corda/tools/blobinspector/src/main/kotlin/net/corda/blobinspector/BlobInspector.kt": [
+42,
+45,
+49,
+52
+],
+"corda-project:sources-kotlin/corda/tools/network-builder/src/main/kotlin/net/corda/networkbuilder/NetworkBuilder.kt": [
+57
+]
+}

@@ -1,0 +1,16 @@
+{
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/internal/FlowIORequest.kt": [
+90
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/NonEmptySet.kt": [
+61
+],
+"corda-project:sources-kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/ProgressTracker.kt": [
+95,
+99,
+103
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/LocalSerializerFactory.kt": [
+307
+]
+}

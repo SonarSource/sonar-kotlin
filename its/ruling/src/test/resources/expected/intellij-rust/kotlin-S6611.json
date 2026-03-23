@@ -1,0 +1,13 @@
+{
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/mir/dataflow/move/MovePaths.kt": [
+190,
+198,
+221,
+307,
+366,
+376
+],
+"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/stdext/Profiling.kt": [
+49
+]
+}

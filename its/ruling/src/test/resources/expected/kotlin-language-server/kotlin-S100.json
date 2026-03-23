@@ -1,0 +1,211 @@
+{
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/AdditionalWorkspaceTest.kt": [
+26,
+35
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/ClassPathTest.kt": [
+18,
+31,
+44
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/CompiledFileTest.kt": [
+45
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/CompletionsTest.kt": [
+8,
+23,
+30,
+44,
+51,
+59,
+68,
+76,
+85,
+92,
+100,
+110,
+120,
+141,
+153,
+165,
+174,
+183,
+192,
+199,
+206,
+213,
+222,
+233,
+240,
+247,
+256,
+266,
+275,
+282,
+291,
+301,
+310,
+319,
+327,
+337,
+344,
+353
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/DefinitionTest.kt": [
+15,
+24,
+37,
+45,
+53,
+61
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/DiagnosticTest.kt": [
+13,
+21,
+33,
+43,
+58
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/DocumentHighlightTest.kt": [
+15,
+31,
+51,
+71,
+87,
+103
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/DocumentSymbolsTest.kt": [
+16,
+20
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/FormatTest.kt": [
+11,
+32
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/GradleDSLScriptTest.kt": [
+11,
+18
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/HoverTest.kt": [
+9,
+18,
+27,
+34,
+41,
+48,
+58,
+67,
+78
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/ImportsTest.kt": [
+12,
+22,
+32,
+42,
+52
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/InlayHintTest.kt": [
+34,
+46,
+57,
+65,
+77,
+92,
+104,
+112,
+124,
+139,
+152
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/JavaToKotlinTest.kt": [
+12
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/OverrideMemberTest.kt": [
+19,
+45,
+68,
+75,
+98
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/QuickFixesTest.kt": [
+13,
+45,
+69,
+95,
+105,
+128,
+154,
+176,
+198,
+224,
+246,
+278,
+300,
+322
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/ReferencesTest.kt": [
+8,
+19,
+30,
+41,
+51,
+64,
+72,
+82,
+92,
+104,
+114,
+126,
+138,
+146,
+154,
+162,
+170,
+178,
+186,
+194,
+204,
+212,
+220
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/RenameTest.kt": [
+13,
+30,
+49,
+70
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/ResolveMainTest.kt": [
+13,
+29,
+47,
+64
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/ScriptTest.kt": [
+10,
+18
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/SemanticTokensTest.kt": [
+12
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/SignatureHelpTest.kt": [
+9,
+21,
+33,
+39,
+45,
+51
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/WorkspaceSymbolsTest.kt": [
+11
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/BackquotedFunction.kt": [
+5
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/test/kotlin/org/javacs/kt/MavenArtifactParsingTest.kt": [
+12,
+55
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/test/kotlin/org/javacs/kt/URIsTest.kt": [
+10
+]
+}

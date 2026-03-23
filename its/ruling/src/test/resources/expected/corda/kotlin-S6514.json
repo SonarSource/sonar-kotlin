@@ -1,0 +1,26 @@
+{
+"corda-project:sources-kotlin/corda/client/rpc/src/main/kotlin/net/corda/client/rpc/CordaRPCClient.kt": [
+81
+],
+"corda-project:sources-kotlin/corda/common/configuration-parsing/src/main/kotlin/net/corda/common/configuration/parsing/internal/Configuration.kt": [
+378
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test/kotlin/net/corda/node/AuthDBTests.kt": [
+427
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/internal/cordapp/JarScanningCordappLoader.kt": [
+125
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/CustomSerializer.kt": [
+105
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/ObjectBuilder.kt": [
+280,
+298
+],
+"corda-project:sources-kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/MockServices.kt": [
+586,
+588,
+590
+]
+}

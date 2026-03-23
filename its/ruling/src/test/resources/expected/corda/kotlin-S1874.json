@@ -1,0 +1,32 @@
+{
+"corda-project:sources-kotlin/corda/client/rpc/src/test/kotlin/net/corda/client/rpc/RPCConcurrencyTests.kt": [
+65,
+67,
+74
+],
+"corda-project:sources-kotlin/corda/core-1.2/src/main/kotlin/kotlin/CharCode1.2.kt": [
+5
+],
+"corda-project:sources-kotlin/corda/core-tests/src/test/kotlin/net/corda/coretests/utilities/ProgressTrackerTest.kt": [
+108
+],
+"corda-project:sources-kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/serialization/RoundTripObservableSerializerTests.kt": [
+87
+],
+"corda-project:sources-kotlin/corda/node/src/integration-test-slow/kotlin/net/corda/node/services/distributed/DistributedServiceTests.kt": [
+78,
+80
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/statemachine/FlowClientIdTests.kt": [
+567,
+579,
+904
+],
+"corda-project:sources-kotlin/corda/serialization-tests/src/test/kotlin/net/corda/serialization/internal/ListsSerializationTest.kt": [
+129
+],
+"corda-project:sources-kotlin/corda/tools/demobench/src/test/kotlin/net/corda/demobench/pty/ZeroFilterTest.kt": [
+30,
+53
+]
+}

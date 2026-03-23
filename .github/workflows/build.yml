@@ -113,6 +113,7 @@ jobs:
       - run: |
           ./gradlew \
               :its:ruling:test -Pruling -Dsonar.runtimeVersion=LATEST_RELEASE[2025.5]
+        timeout-minutes: 60
         env:
           KOTLIN_COMPILER_IT_ENABLED: true
           DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}

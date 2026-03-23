@@ -1,0 +1,22 @@
+{
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/persistence/Slf4jLiquibaseLogger.kt": [
+21
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/messaging/InterceptingActiveMQJAASSecurityManager.kt": [
+31,
+41
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/FlowLogicRefFactoryImpl.kt": [
+241
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/AppendOnlyPersistentMapTest.kt": [
+219
+],
+"corda-project:sources-kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/ByteBufferStreams.kt": [
+32
+],
+"corda-project:sources-kotlin/corda/tools/checkpoint-agent/src/main/kotlin/net/corda/tools/CheckpointAgent.kt": [
+225,
+366
+]
+}

@@ -1,0 +1,33 @@
+{
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/KotlinTextDocumentService.kt": [
+124
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt": [
+495
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/HoverTest.kt": [
+31
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/OverrideMemberTest.kt": [
+28,
+29,
+30,
+31
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/QuickFixesTest.kt": [
+114
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/ReferencesTest.kt": [
+26,
+63
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/RenameTest.kt": [
+18,
+19,
+46,
+50
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/classpath/BackupClassPathResolver.kt": [
+20
+]
+}

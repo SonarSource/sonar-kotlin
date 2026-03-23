@@ -1,0 +1,542 @@
+{
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/images/Example.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/CompiledFile.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/CompilerClassPath.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/Configuration.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/KotlinLanguageServer.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/KotlinProtocolExtensionService.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/KotlinProtocolExtensions.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/KotlinTextDocumentService.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/KotlinWorkspaceService.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/Main.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/SourceFiles.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/SourcePath.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/URIContentProvider.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/codeaction/CodeAction.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/AddMissingImportsQuickFix.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/ImplementAbstractMembersQuickFix.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/QuickFix.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/command/Commands.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/completion/Completions.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/completion/RenderCompletionItem.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/definition/GoToDefinition.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/diagnostic/ConvertDiagnostic.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/docs/FindDoc.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/externalsources/ClassContentProvider.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/externalsources/ClassPathSourceArchiveProvider.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/externalsources/Decompiler.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/externalsources/FernFlowerDecompiler.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/externalsources/JdkSourceArchiveProvider.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/externalsources/KlsURI.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/externalsources/SourceArchiveProvider.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/formatting/Formatter.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/formatting/FormattingService.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/formatting/KtfmtFormatter.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/formatting/NopFormatter.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/highlight/DocumentHighlight.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/hover/Hovers.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/imports/Imports.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/index/ExtractSymbolExtensionReceiverType.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/index/ExtractSymbolKind.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/index/ExtractSymbolVisibility.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/index/Symbol.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/index/SymbolIndex.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/inlayhints/InlayHint.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/j2k/JavaElementConverter.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/j2k/JavaToKotlinConverter.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/j2k/JavaTypeConverter.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/j2k/PlatformTypeConverter.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/overridemembers/OverrideMembers.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/position/Position.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/progress/LanguageClientProgress.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/progress/Progress.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/references/FindReferences.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/rename/Rename.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/resolve/ResolveMain.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/semantictokens/SemanticTokens.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/signaturehelp/SignatureHelp.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/symbols/Symbols.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/util/LoggingMessageCollector.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/util/PsiUtils.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/util/RangeUtils.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/util/TcpSockets.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/AdditionalWorkspaceTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/ClassPathTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/CompiledFileTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/CompilerFixtures.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/CompilerTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/CompletionsTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/DebouncerTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/DefinitionTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/DiagnosticTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/DocumentHighlightTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/DocumentSymbolsTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/FormatTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/GradleDSLScriptTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/HoverTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/ImportsTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/InlayHintTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/JavaToKotlinTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/LanguageServerTestFixture.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/OneFilePerformance.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/OverrideMemberTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/QuickFixesTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/ReferencesTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/RenameTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/ResolveMainTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/ScriptTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/SemanticTokensTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/SignatureHelpTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/SimpleScriptTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/WorkspaceSymbolsTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/compiledFile/CompiledFileExample.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/compiler/FileToEdit.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/BackquotedFunction.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/Constructor.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/EditCall.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/FillEmptyBody.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/FunctionScope.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/InstanceMember.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/InstanceMembersJava.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/JavaGetterSetterConversion.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/MiddleOfFunction.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/OuterDotInner.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/Statics.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/TrailingLambda.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/Types.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/Visibility.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/definition/GoFrom.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/definition/GoTo.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/definition/GoToProperties.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/diagnostic/Diagnostics.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/formatting/NonFormatted.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/formatting/Spaces.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/highlight/DocumentHighlight.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/hover/FunctionReference.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/hover/Literals.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/hover/ObjectReference.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/hover/Recover.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/hover/ResolveFromFile.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/hover/ResolveToFile.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/imports/Simple.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/inlayhints/ChainedMethods.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/inlayhints/Declarations.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/inlayhints/Parameters.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/j2k/JavaJSONConverter.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/kotlinCompilerPerformance/BigFile.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/kotlinCompilerPerformance/ReferencesBigFile.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/mainWorkspace/MainWorkspaceFile.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/overridemember/OverrideMembers.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/quickfixes/SomeInterface.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/quickfixes/SomeSubclass.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/quickfixes/SomeSuperClass.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/quickfixes/standardlib.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceCollectionish.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceComponents.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceConstructor.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceFrom.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceGetSetValue.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceGetterSetter.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceInvoke.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceOperator.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceOperatorUsingName.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceTo.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/rename/DeclSite.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/rename/SomeClass.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/rename/SomeOtherClass.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/rename/UsageSite.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/resolvemain/CompanionObject.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/resolvemain/NoMain.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/resolvemain/Simple.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/semantictokens/SemanticTokens.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/signatureHelp/SignatureHelp.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/symbols/DocumentSymbols.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/symbols/OtherFileSymbols.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/Logger.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/ScriptsConfiguration.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/SourceExclusions.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/classpath/BackupClassPathResolver.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/classpath/CachedClassPathResolver.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/classpath/ClassPathEntry.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/classpath/ClassPathResolver.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/classpath/DefaultClassPathResolver.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/classpath/GradleClassPathResolver.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/classpath/Home.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/classpath/MavenClassPathResolver.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/classpath/ShellClassPathResolver.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/classpath/WithStdlibResolver.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/database/DatabaseService.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/AsyncExecutor.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/Debouncer.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/DelegatePrintStream.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/ExitingInputStream.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/KotlinLSException.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/ShellPathUtils.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/StringUtils.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/TemporaryDirectory.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/URIs.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/Utils.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/test/kotlin/org/javacs/kt/MavenArtifactParsingTest.kt": [
+0
+],
+"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/test/kotlin/org/javacs/kt/URIsTest.kt": [
+0
+]
+}

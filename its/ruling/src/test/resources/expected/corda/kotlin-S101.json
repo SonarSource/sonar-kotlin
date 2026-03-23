@@ -1,0 +1,36 @@
+{
+"corda-project:sources-kotlin/corda/experimental/blobwriter/src/main/kotlin/net/corda/blobwriter/BlobWriter.kt": [
+48,
+50,
+51,
+52,
+53,
+54,
+55,
+56,
+57,
+58,
+59,
+60,
+61,
+69,
+71,
+72,
+73,
+75
+],
+"corda-project:sources-kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/bridging/AMQPBridgeManager.kt": [
+468
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/DeserializeNeedingCarpentryTests.kt": [
+217,
+237
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/GenericsTests.kt": [
+285,
+524
+],
+"corda-project:sources-kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/carpenter/CompositeMemberCompositeSchemaToClassCarpenterTests.kt": [
+13
+]
+}

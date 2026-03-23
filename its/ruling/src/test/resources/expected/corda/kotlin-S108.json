@@ -1,0 +1,40 @@
+{
+"corda-project:sources-kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/AssociatedList.kt": [
+29,
+31
+],
+"corda-project:sources-kotlin/corda/client/rpc/src/integration-test/kotlin/net/corda/client/rpc/RPCStabilityTests.kt": [
+461,
+471,
+656
+],
+"corda-project:sources-kotlin/corda/client/rpc/src/main/kotlin/net/corda/client/rpc/internal/RPCClientProxyHandler.kt": [
+626
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/persistence/PublicKeyToOwningIdentityCacheImpl.kt": [
+59
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SingleThreadedStateMachineManager.kt": [
+168,
+1153
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/services/transactions/PersistentUniquenessProvider.kt": [
+148
+],
+"corda-project:sources-kotlin/corda/node/src/main/kotlin/net/corda/node/utilities/PersistentMap.kt": [
+54
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/TransactionCallbackTest.kt": [
+43
+],
+"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/ObservablesTests.kt": [
+101,
+132
+],
+"corda-project:sources-kotlin/corda/tools/demobench/src/main/kotlin/net/corda/demobench/views/NodeTerminalView.kt": [
+281
+],
+"corda-project:sources-kotlin/corda/tools/demobench/src/main/kotlin/net/corda/demobench/web/WebServer.kt": [
+103
+]
+}
