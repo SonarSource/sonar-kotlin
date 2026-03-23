@@ -20,9 +20,9 @@ its/plugin/projects/tests-without-main-code/target/
 *.ipr
 .idea/
 out/
-bin/
 
 # ---- Eclipse
+bin/
 .classpath
 .project
 .settings
@@ -43,3 +43,6 @@ Thumbs.db
 Desktop.ini
 
 .java-version
+
+# ---- AI
+CLAUDE.local.md
