@@ -20,7 +20,6 @@ its/plugin/projects/tests-without-main-code/target/
 *.ipr
 .idea/
 out/
-bin/
 
 # ---- Eclipse
 bin/
