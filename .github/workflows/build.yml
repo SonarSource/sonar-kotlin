@@ -139,7 +139,20 @@ jobs:
     permissions:
       id-token: write  # Required for Vault OIDC authentication
       contents: write
+    # without following condition this job can have result "skipped" if needed job "failed" or "skipped"
+    # auto-merge ignores skipped jobs even if they are required by branch protection rules
+    if: ${{ always() && !cancelled() }}
     steps:
+      - name: Check results of all needed jobs
+        run: |
+          R=$(echo "$NEEDS" | jq --compact-output '[.[].result] | unique')
+          if [ "$R" = '["success"]' ]; then
+            exit 0
+          else
+            exit 1
+          fi
+        env:
+          NEEDS: ${{ toJSON(needs) }}
       - uses: SonarSource/ci-github-actions/promote@v1
 
   notify_slack:
