@@ -945,9 +945,30 @@
             <sha256 value="5557e235a8aa2f9766d5dc609d67948f2a8832c2d796cea9ef1d6cbe0b3b7eaf" origin="Verified"/>
          </artifact>
       </component>
+      <component group="net.java.dev.jna" name="jna" version="5.9.0">
+         <artifact name="jna-5.9.0.jar">
+            <sha256 value="eafcc780b445434d3c5ae7fa2fb6665de1a7560d537d2c408a8e80cd14d27161" origin="Verified"/>
+         </artifact>
+         <artifact name="jna-5.9.0.pom">
+            <sha256 value="6bc8b8459150b59e9598f3dad9ad245a1ef2150d082581017184eb163e592829" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="one.util" name="streamex" version="0.7.2">
          <artifact name="streamex-0.7.2.multi-release-jar">
             <sha256 value="2ee26418e492a618dcdeeca33218aaf8c88e4129999d75be3a25d2153a7eb5d2" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.antlr" name="antlr4" version="4.13.2">
+         <artifact name="antlr4-4.13.2.jar">
+            <sha256 value="e6f0b10d2ad206f338afe16867fc47148b6729d6e3a260ea28379b91f03a3657" origin="Verified"/>
+         </artifact>
+         <artifact name="antlr4-4.13.2.pom">
+            <sha256 value="809ee49706dce3674988babfcad36b3c5a0e2fd5cfa0a51209103963e857261b" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.antlr" name="antlr4-master" version="4.13.2">
+         <artifact name="antlr4-master-4.13.2.pom">
+            <sha256 value="0adda026685873f651360178bffc446ceee4833081739e3ae9d6e8f07e8d902a" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.apache.ant" name="ant" version="1.10.15">

@@ -27,7 +27,7 @@ val kotlinCompilerDependencies = setOf(
     ),
     DependencyInfo(
         fqName = "net.java.dev.jna:jna",
-        version = "5.9.0.26",
+        version = "5.9.0",
         packages = listOf("com/sun/jna"),
         // Kotlin is using JNA 5.x (https://github.com/JetBrains/kotlin/blob/master/gradle/versions.properties)
         // which is Apache 2.0; older versions (<4) of JNA were LGPL and had different groupId
@@ -72,7 +72,7 @@ val kotlinCompilerDependencies = setOf(
     ),
     DependencyInfo(
         fqName = "org.antlr:antlr4",
-        version = "4.3.12",
+        version = "4.13.2",
         packages = listOf("org/antlr/v4"),
         licenseName = "BSD-3-Clause"
     ),
