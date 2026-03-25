@@ -84,7 +84,6 @@ jobs:
       - uses: ./.github/actions/cache-orchestrator
       - run: |
           ./gradlew \
-              --no-scan \
               :its:plugin:test -Pplugin -Dsonar.runtimeVersion=DEV
         env:
           DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
@@ -113,7 +112,6 @@ jobs:
             development/github/token/licenses-ro token | GITHUB_TOKEN;
       - run: |
           ./gradlew \
-              --no-scan \
               :its:ruling:test -Pruling -Dsonar.runtimeVersion=LATEST_RELEASE[2025.5]
         env:
           KOTLIN_COMPILER_IT_ENABLED: true
