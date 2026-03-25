@@ -24,7 +24,6 @@ import com.sonar.orchestrator.container.Edition;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
-import com.sonar.orchestrator.locator.Location;
 import com.sonar.orchestrator.locator.MavenLocation;
 import java.io.File;
 import java.io.IOException;
@@ -32,10 +31,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -47,7 +44,7 @@ import org.sonarsource.analyzer.commons.ProfileGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SlangRulingTest {
+class SlangRulingTest {
 
   private static final Logger LOG = LoggerFactory.getLogger(SlangRulingTest.class);
 
@@ -58,10 +55,9 @@ public class SlangRulingTest {
   private static boolean keepSonarqubeRunning = "true".equals(System.getProperty("keepSonarqubeRunning"));
   private static final boolean IGNORE_EXPECTED_ISSUES_AND_REPORT_ALL = "true".equals(System.getProperty("reportAll"));
   private static final boolean CLEAN_PROJECT_BINARIES = "true".equals(System.getProperty("cleanProjects"));
-  private static final Set<String> LANGUAGES = new HashSet<>(Collections.singletonList("kotlin"));
 
   @BeforeAll
-  public static void setUp() {
+  static void setUp() {
     OrchestratorExtensionBuilder builder = OrchestratorExtension.builderEnv()
       .setEdition(Edition.ENTERPRISE_LW)
       .activateLicense()
@@ -85,21 +81,9 @@ public class SlangRulingTest {
   }
 
   private static void addLanguagePlugins(OrchestratorBuilder builder) {
-    String slangVersion = System.getProperty("slangVersion");
-
-    LANGUAGES.forEach(language -> {
-      Location pluginLocation;
-      String plugin = "sonar-" + language +"-plugin";
-      if (slangVersion == null || slangVersion.isEmpty()) {
-        // use the plugin that was built on local machine
-        pluginLocation = FileLocation.byWildcardMavenFilename(new File("../../" + plugin + "/build/libs"), plugin + ".jar");
-      } else {
-        // QA environment downloads the plugin built by the CI job
-        pluginLocation = MavenLocation.of("org.sonarsource.kotlin", plugin, slangVersion);
-      }
-
+      var plugin = "sonar-kotlin-plugin";
+      var pluginLocation = FileLocation.byWildcardMavenFilename(new File("../../" + plugin + "/build/libs"), plugin + ".jar");
       builder.addPlugin(pluginLocation);
-    });
   }
 
   @Test
@@ -278,7 +262,7 @@ public class SlangRulingTest {
     build.setProperty("sonar.scanner.skipJreProvisioning", "true");
     String projectKey = projectKey(project);
     orchestrator.getServer().provisionProject(projectKey, projectKey);
-    LANGUAGES.forEach(lang -> orchestrator.getServer().associateProjectToQualityProfile(projectKey, lang, "rules"));
+    orchestrator.getServer().associateProjectToQualityProfile(projectKey, "kotlin", "rules");
     orchestrator.executeBuild(build);
     String litsDifference = new String(Files.readAllBytes(litsDifferencesFilePath(project)));
     assertThat(litsDifference).isEmpty();

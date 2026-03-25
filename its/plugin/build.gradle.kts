@@ -1,3 +1,7 @@
+plugins {
+    id("org.sonarsource.kotlin.buildsrc.integration-test")
+}
+
 dependencies {
     testImplementation(testLibs.sonarlint.core)
     testImplementation(testLibs.sonar.orchestrator.junit5)
@@ -11,10 +15,8 @@ dependencies {
 sonarqube.isSkipProject = true
 
 tasks.test {
-    useJUnitPlatform()
     onlyIf {
         project.hasProperty("plugin") || project.hasProperty("its")
     }
     systemProperty("java.awt.headless", "true")
-    outputs.upToDateWhen { false }
 }

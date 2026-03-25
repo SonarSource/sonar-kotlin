@@ -205,7 +205,7 @@ tasks.shadowJar {
 // Note that this task is time-consuming
 // and needed only for integration tests and publishing,
 // so it is not part of `gradle build`.
-tasks.register<ProGuardTask>("dist") {
+val distTask = tasks.register<ProGuardTask>("dist") {
     group = "build"
     description = "Assembles sonar-kotlin-plugin.jar for integration tests and publishing"
     libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
@@ -217,11 +217,23 @@ tasks.register<ProGuardTask>("dist") {
     }
 }
 
+val dist: Configuration by configurations.creating {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+    isTransitive = false
+    attributes {
+        attribute(Attribute.of("org.sonarsource.kotlin.dist", String::class.java), "sonar-kotlin-plugin")
+    }
+}
+artifacts.add(dist.name, file("build/libs/sonar-kotlin-plugin.jar")) {
+    builtBy(distTask)
+}
+
 tasks.artifactoryPublish { skip = false }
 publishing {
     // gradle :sonar-kotlin-plugin:publishToMavenLocal
     publications.withType<MavenPublication> {
-        artifact(tasks.named("dist")) {
+        artifact(distTask) {
             classifier = null
         }
         artifact(sourcesJar)
