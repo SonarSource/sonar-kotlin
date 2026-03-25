@@ -1,4 +1,5 @@
 dependencies {
+    testImplementation(project(":sonar-kotlin-plugin", configuration = "dist"))
     testImplementation(testLibs.sonarlint.core)
     testImplementation(testLibs.sonar.orchestrator.junit5)
     testImplementation(testLibs.junit.jupiter)

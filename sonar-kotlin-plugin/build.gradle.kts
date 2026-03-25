@@ -205,7 +205,7 @@ tasks.shadowJar {
 // Note that this task is time-consuming
 // and needed only for integration tests and publishing,
 // so it is not part of `gradle build`.
-tasks.register<ProGuardTask>("dist") {
+val distTask = tasks.register<ProGuardTask>("dist") {
     group = "build"
     description = "Assembles sonar-kotlin-plugin.jar for integration tests and publishing"
     libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
@@ -215,6 +215,11 @@ tasks.register<ProGuardTask>("dist") {
     doLast {
         enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 50_800_000L, 51_300_000L)
     }
+}
+
+val dist: Configuration by configurations.creating
+artifacts.add(dist.name, file("build/libs/sonar-kotlin-plugin.jar")) {
+    builtBy(distTask)
 }
 
 tasks.artifactoryPublish { skip = false }
