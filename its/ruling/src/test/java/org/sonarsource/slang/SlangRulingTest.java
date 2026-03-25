@@ -120,6 +120,14 @@ class SlangRulingTest {
   }
 
   @Test
+  void test_kotlin_java_interop() throws IOException {
+    executeGradleBuildAndAssertDifferences("kotlin-java-interop", Map.of(
+      "sonar.inclusions", "**/*.kt",
+      "sonar.kotlin.source.version", "1.9.20"
+    ));
+  }
+
+  @Test
   void test_kotlin_corda() throws IOException {
     executeSonarScannerAndAssertDifferences("kotlin/corda", Map.of(
       "sonar.inclusions", "sources/kotlin/corda/**/*.kt",
@@ -145,14 +153,6 @@ class SlangRulingTest {
   @Test
   void test_kotlin_language_server() throws IOException {
     executeGradleBuildAndAssertDifferences("kotlin/kotlin-language-server", Map.of());
-  }
-
-  private static String getFileLocationAbsolutePath(FileLocation location) {
-    try {
-      return location.getFile().getCanonicalFile().getAbsolutePath();
-    } catch (IOException e) {
-      return "";
-    }
   }
 
   private static Map<String, String> prepareAnalysisConfiguration(String project, Map<String, String> additionalProperties) throws IOException {
@@ -198,11 +198,14 @@ class SlangRulingTest {
   }
 
   private static Path projectDirectory(String project) throws IOException {
-    Path directory = Path.of("..", "sources").resolve(projectRelativePath(project));
-    if (!Files.exists(directory)) {
-      throw new IOException("Project directory not found: " + directory);
+    Path relativePath = projectRelativePath(project);
+    for (Path base : List.of(Path.of("..", "sources-kotlin"), Path.of("..", "sources"))) {
+      Path directory = base.resolve(relativePath);
+      if (Files.exists(directory)) {
+        return directory.toRealPath();
+      }
     }
-    return directory.toRealPath();
+    throw new IOException("Project directory not found in sources-kotlin or sources/kotlin: " + project);
   }
 
   private static Path rulingDirectory() throws IOException {

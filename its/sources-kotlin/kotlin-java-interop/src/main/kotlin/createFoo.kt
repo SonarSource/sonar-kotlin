@@ -1,0 +1,1 @@
+fun createFoo(): AbstractFoo = FooImpl()
