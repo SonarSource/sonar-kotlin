@@ -1,5 +1,14 @@
+val sonarKotlinPluginDist by configurations.creating {
+    isCanBeConsumed = false
+    isCanBeResolved = true
+    isTransitive = false
+    attributes {
+        attribute(Attribute.of("org.sonarsource.kotlin.dist", String::class.java), "sonar-kotlin-plugin")
+    }
+}
+
 dependencies {
-    testImplementation(project(":sonar-kotlin-plugin", configuration = "dist"))
+    sonarKotlinPluginDist(project(":sonar-kotlin-plugin"))
     testImplementation(testLibs.sonarlint.core)
     testImplementation(testLibs.sonar.orchestrator.junit5)
     testImplementation(testLibs.junit.jupiter)
@@ -16,6 +25,7 @@ tasks.test {
     onlyIf {
         project.hasProperty("plugin") || project.hasProperty("its")
     }
+    inputs.files(sonarKotlinPluginDist)
     systemProperty("java.awt.headless", "true")
     outputs.upToDateWhen { false }
 }

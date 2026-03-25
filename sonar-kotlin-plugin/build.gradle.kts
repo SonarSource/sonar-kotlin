@@ -217,7 +217,14 @@ val distTask = tasks.register<ProGuardTask>("dist") {
     }
 }
 
-val dist: Configuration by configurations.creating
+val dist: Configuration by configurations.creating {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+    isTransitive = false
+    attributes {
+        attribute(Attribute.of("org.sonarsource.kotlin.dist", String::class.java), "sonar-kotlin-plugin")
+    }
+}
 artifacts.add(dist.name, file("build/libs/sonar-kotlin-plugin.jar")) {
     builtBy(distTask)
 }

@@ -3,8 +3,17 @@ plugins {
     kotlin("jvm")
 }
 
+val sonarKotlinPluginDist by configurations.creating {
+    isCanBeConsumed = false
+    isCanBeResolved = true
+    isTransitive = false
+    attributes {
+        attribute(Attribute.of("org.sonarsource.kotlin.dist", String::class.java), "sonar-kotlin-plugin")
+    }
+}
+
 dependencies {
-    testImplementation(project(":sonar-kotlin-plugin", configuration = "dist"))
+    sonarKotlinPluginDist(project(":sonar-kotlin-plugin"))
     testImplementation(testLibs.sonar.orchestrator.junit5)
     testImplementation(testLibs.assertj.core)
     testImplementation(testLibs.junit.jupiter)
@@ -27,4 +36,6 @@ tasks.test {
     // export a classpath containing kotlin standard dependencies
     systemProperty("gradle.main.compile.classpath", sourceSets.main.get().compileClasspath.asPath)
     outputs.upToDateWhen { false }
+
+    inputs.files(sonarKotlinPluginDist)
 }
