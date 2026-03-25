@@ -72,7 +72,7 @@ jobs:
       plugin-artifacts-sqc: "kotlin"
       use-jira-sandbox: ${{ github.event.inputs.dry-run == 'true' }}
       is-draft-release: ${{ github.event.inputs.dry-run == 'true' }}
-      pm-email: "alexandre.gigleux@sonarsource.com"
+      pm-email: ${{ secrets.PM_MAIL_ADDRESS }}
       release-automation-secret-name: "sonar-kotlin-release-automation"
       short-description: ${{ inputs.short-description }}
       rule-props-changed: ${{ inputs.rule-props-changed }}
