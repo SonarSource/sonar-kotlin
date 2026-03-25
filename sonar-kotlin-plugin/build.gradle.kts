@@ -233,7 +233,7 @@ tasks.artifactoryPublish { skip = false }
 publishing {
     // gradle :sonar-kotlin-plugin:publishToMavenLocal
     publications.withType<MavenPublication> {
-        artifact(tasks.named("dist")) {
+        artifact(distTask) {
             classifier = null
         }
         artifact(sourcesJar)
