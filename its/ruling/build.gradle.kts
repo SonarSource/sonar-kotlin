@@ -1,19 +1,10 @@
 plugins {
     // include kotlin in the source main classpath exported bellow as "gradle.main.compile.classpath"
     kotlin("jvm")
-}
-
-val sonarKotlinPluginDist by configurations.creating {
-    isCanBeConsumed = false
-    isCanBeResolved = true
-    isTransitive = false
-    attributes {
-        attribute(Attribute.of("org.sonarsource.kotlin.dist", String::class.java), "sonar-kotlin-plugin")
-    }
+    id("org.sonarsource.kotlin.buildsrc.integration-test")
 }
 
 dependencies {
-    sonarKotlinPluginDist(project(":sonar-kotlin-plugin"))
     testImplementation(testLibs.sonar.orchestrator.junit5)
     testImplementation(testLibs.assertj.core)
     testImplementation(testLibs.junit.jupiter)
@@ -24,11 +15,9 @@ dependencies {
 sonarqube.isSkipProject = true
 
 tasks.test {
-    useJUnitPlatform()
     onlyIf {
         project.hasProperty("its") || project.hasProperty("ruling")
     }
-    inputs.files(sonarKotlinPluginDist)
     listOf("keepSonarqubeRunning", "reportAll", "cleanProjects", "buildProjects")
         .associateWith { System.getProperty(it) }
         .filter { it.value != null }
@@ -36,5 +25,4 @@ tasks.test {
     systemProperty("java.awt.headless", "true")
     // export a classpath containing kotlin standard dependencies
     systemProperty("gradle.main.compile.classpath", sourceSets.main.get().compileClasspath.asPath)
-    outputs.upToDateWhen { false }
 }
