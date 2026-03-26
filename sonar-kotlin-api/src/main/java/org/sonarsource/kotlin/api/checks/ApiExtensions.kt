@@ -210,13 +210,10 @@ fun KtExpression.stringValue(
 
         is KtNameReferenceExpression -> {
             (this@stringValue.mainReference.resolveToSymbol() as? KaVariableSymbol)
-                ?.let {
-                    if (it.isVal) {
-                        (it.psi as? KtProperty)
-                            ?.apply { declarations.add(this) }
-                            ?.initializer?.stringValue(declarations)
-                    } else null
-                }
+                ?.takeIf { it.isVal }
+                ?.let { it.psi as? KtProperty }
+                ?.apply { declarations.add(this) }
+                ?.initializer?.stringValue(declarations)
         }
 
         is KtDotQualifiedExpression -> selectorExpression?.stringValue(declarations)
@@ -238,13 +235,10 @@ private fun KtReferenceExpression.extractFromInitializer(
     declarations: MutableList<PsiElement> = mutableListOf(),
 ) = withKaSession {
     (this@extractFromInitializer.mainReference.resolveToSymbol() as? KaVariableSymbol)
-        ?.let {
-            if (it.isVal) {
-                (it.psi as? KtProperty)
-                    ?.apply { declarations.add(this) }
-                    ?.initializer?.predictRuntimeValueExpression(declarations)
-            } else null
-        }
+        ?.takeIf { it.isVal }
+        ?.let { it.psi as? KtProperty }
+        ?.apply { declarations.add(this) }
+        ?.initializer?.predictRuntimeValueExpression(declarations)
 }
 
 /**
