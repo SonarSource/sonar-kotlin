@@ -24,9 +24,9 @@ import org.jetbrains.kotlin.psi.KtWhenConditionWithExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.reporting.SecondaryLocation
-import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 
 @Rule(key = "S1862")
 class IdenticalConditionsCheck : AbstractCheck() {
@@ -52,8 +52,7 @@ class IdenticalConditionsCheck : AbstractCheck() {
     }
 
     /**
-     * Checks for duplicate conditions in `when` expressions, taking guard conditions into account.
-     * Two `when` entries are considered duplicates only if both their primary conditions and their
+     * Two `when` entries are considered duplicates only if and only if both their primary conditions and their
      * guard expressions (if any) are syntactically equivalent.
      */
     private fun checkWhenConditions(ctx: KotlinFileContext, whenExpression: KtWhenExpression) {
@@ -66,13 +65,17 @@ class IdenticalConditionsCheck : AbstractCheck() {
                 } else {
                     whenCondition as KtElement
                 }
-                ConditionWithGuard(condition, entry.getGuard()?.getExpression())
+                ConditionWithGuard(condition, entry.guard?.getExpression())
             }
 
-        // Group entries that have the same (condition, guard) pair
-        conditionsWithGuards
-            .groupBy { ConditionGuardKey(it.condition, it.guard) }
-            .values
+        conditionsWithGuards.groupEquivalent { it1, it2 ->
+            SyntacticEquivalence.areEquivalent(it1.condition, it2.condition) &&
+                when {
+                    it1.guard == null && it2.guard == null -> true
+                    it1.guard != null && it2.guard != null -> SyntacticEquivalence.areEquivalent(it1.guard, it2.guard)
+                    else -> false
+                }
+        }
             .filter { it.size > 1 }
             .forEach { group ->
                 reportDuplicates(ctx, group.map { it.condition })
@@ -101,27 +104,16 @@ class IdenticalConditionsCheck : AbstractCheck() {
     }
 }
 
-/**
- * Holds a condition expression together with its optional guard expression from a `when` entry.
- */
 private data class ConditionWithGuard(val condition: KtElement, val guard: KtExpression?)
 
-/**
- * Key for grouping `when` entry conditions by syntactic equivalence of both the condition and the guard.
- * Two keys are equal if and only if both the condition and the guard are syntactically equivalent.
- */
-private data class ConditionGuardKey(val condition: KtElement, val guard: KtExpression?) {
-    private val conditionKey = ComparableTree(condition)
-    private val guardKey = guard?.let { ComparableTree(it) }
+private fun <T> Iterable<T>.groupEquivalent(predicate: (T, T) -> Boolean): Iterable<List<T>> {
+    val groups = mutableListOf<MutableList<T>>()
 
-    override fun equals(other: Any?): Boolean {
-        if (other !is ConditionGuardKey) return false
-        return conditionKey == other.conditionKey && guardKey == other.guardKey
+    forEach { element ->
+        val bucket = groups.firstOrNull { group -> group.any { predicate(element, it) } }
+            ?: mutableListOf<T>().apply { groups.add(this) }
+        bucket.add(element)
     }
 
-    override fun hashCode(): Int {
-        var result = conditionKey.hashCode()
-        result = 31 * result + (guardKey?.hashCode() ?: 0)
-        return result
-    }
+    return groups.map { it.toList() }
 }
