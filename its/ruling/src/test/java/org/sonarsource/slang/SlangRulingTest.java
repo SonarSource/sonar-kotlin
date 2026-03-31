@@ -251,12 +251,7 @@ class SlangRulingTest {
       properties.put("org.gradle.debug.port", debugPort);
     }
     executeBuildAndAssertDifferences(project, gradleBuild(project, properties)
-      // don't run tests of the analyzed projects, only assemble artifacts to have all dependencies
-      .setTasks("build")
-      .addArguments(
-        "--init-script", rulingDirectory().resolve("apply-sonarqube-plugin.gradle.kts").toString(),
-        "sonar",
-        "-x", "test"));
+      .setTasks("build").addArguments("sonar", "-x", "test"));
   }
 
   private void executeSonarScannerAndAssertDifferences(String project, Map<String, String> additionalProperties) throws IOException {
