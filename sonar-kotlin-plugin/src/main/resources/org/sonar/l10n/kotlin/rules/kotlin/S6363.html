@@ -1,18 +1,22 @@
-<p>Exposing the Android file system to WebViews is security-sensitive.</p>
 <p>Granting file access to WebViews, particularly through the <code>file://</code> scheme, introduces a risk of local file inclusion vulnerabilities.
-The severity of this risk depends heavily on the specific <code>WebSettings</code> configured. Overly permissive settings can allow malicious scripts
+The severity of this risk depends heavily on the specific settings configured for the WebView. Overly permissive settings can allow malicious scripts
 to access a wide range of local files, potentially exposing sensitive data such as Personally Identifiable Information (PII) or private application
 data, leading to data breaches and other security compromises.</p>
 <h2>Ask Yourself Whether</h2>
 <ul>
-  <li> You open files that may be created or altered by external sources. </li>
-  <li> You open arbitrary URLs from external sources. </li>
+  <li>You open files that may be created or altered by external sources.</li>
+  <li>You open arbitrary URLs from external sources.</li>
 </ul>
 <p>There is a risk if you answered yes to any of these questions.</p>
 <h2>Recommended Secure Coding Practices</h2>
 <p>Avoid opening <code>file://</code> URLs from external sources in WebView components. If your application accepts arbitrary URLs from external
-sources, do not enable this functionality. Instead, utilize <code>androidx.webkit.WebViewAssetLoader</code> to access files, including assets and
-resources, via <code>http(s)://</code> schemes.</p>
+sources, do not enable this functionality.</p>
+<p>On Android, it is recommended to use <code>androidx.webkit.WebViewAssetLoader</code> to access files, including assets and resources, via a custom,
+controllable scheme.</p>
+<p>On iOS, it is recommended to use Bundles to access local files, keeping access limited a controlled subset using the
+<code>allowingReadAccessTo</code> parameter of the <code>loadFileURL</code> method. If <code>allowFileAccessFromFileURLs</code> and
+<code>allowUniversalAccessFromFileURLs</code> are not enabled, it is not possible to access files outside the intended directory. It is also possible
+to create a custom scheme to access local files, but this is more complex and might lead to unintended security issues.</p>
 <p>For enhanced security, ensure that the options to load <code>file://</code> URLs are explicitly set to false.</p>
 <h2>Sensitive Code Example</h2>
 <pre>
@@ -71,18 +75,18 @@ file system.</p>
 <code>Build.VERSION_CODES.Q</code> and earlier, it is still recommended to explicitly set those values to false.</p>
 <h2>See</h2>
 <ul>
-  <li> OWASP - <a href="https://owasp.org/Top10/A01_2021-Broken_Access_Control/">Top 10 2021 Category A1 - Broken Access Control</a> </li>
-  <li> OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure">Top 10 2017 Category A3 - Sensitive Data
-  Exposure</a> </li>
-  <li> OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">Top 10 2017 Category A6 - Security
-  Misconfiguration</a> </li>
-  <li> OWASP - <a href="https://owasp.org/www-project-mobile-top-10/2023-risks/m8-security-misconfiguration">Mobile Top 10 2024 Category M8 - Security
-  Misconfiguration</a> </li>
-  <li> OWASP - <a href="https://mas.owasp.org/checklists/MASVS-PLATFORM/">Mobile AppSec Verification Standard - Platform Interaction Requirements</a>
-  </li>
-  <li> CWE - <a href="https://cwe.mitre.org/data/definitions/79">CWE-79 - Improper Neutralization of Input During Web Page Generation ('Cross-site
-  Scripting')</a> </li>
-  <li> Android Documentation - <a href="https://developer.android.com/privacy-and-security/risks/webview-unsafe-file-inclusion">WebViews - Unsafe File
-  Inclusion</a> </li>
+  <li>OWASP - <a href="https://owasp.org/Top10/A01_2021-Broken_Access_Control/">Top 10 2021 Category A1 - Broken Access Control</a></li>
+  <li>OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure">Top 10 2017 Category A3 - Sensitive Data
+  Exposure</a></li>
+  <li>OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">Top 10 2017 Category A6 - Security
+  Misconfiguration</a></li>
+  <li>OWASP - <a href="https://owasp.org/www-project-mobile-top-10/2023-risks/m8-security-misconfiguration">Mobile Top 10 2024 Category M8 - Security
+  Misconfiguration</a></li>
+  <li>OWASP - <a href="https://mas.owasp.org/checklists/MASVS-PLATFORM/">Mobile AppSec Verification Standard - Platform Interaction
+  Requirements</a></li>
+  <li>CWE - <a href="https://cwe.mitre.org/data/definitions/79">CWE-79 - Improper Neutralization of Input During Web Page Generation ('Cross-site
+  Scripting')</a></li>
+  <li>Android Documentation - <a href="https://developer.android.com/privacy-and-security/risks/webview-unsafe-file-inclusion">WebViews - Unsafe File
+  Inclusion</a></li>
 </ul>
 

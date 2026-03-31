@@ -11,6 +11,11 @@ plugins {
     kotlin("jvm")
     id("jacoco-report-aggregation")
     id("org.sonarsource.cloud-native.license-file-generator")
+    id("org.sonarsource.cloud-native.rule-api")
+}
+
+ruleApi {
+    languageToSonarpediaDirectory.put("Kotlin", ".")
 }
 
 buildscript {

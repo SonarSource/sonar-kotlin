@@ -1,8 +1,8 @@
 <h2>Why is this an issue?</h2>
 <p>There are two types of sequence and stream operations:</p>
 <ul>
-  <li> Intermediate operations, which return another sequence or stream </li>
-  <li> Terminal operations, which return something else </li>
+  <li>Intermediate operations, which return another sequence or stream</li>
+  <li>Terminal operations, which return something else</li>
 </ul>
 <p>Intermediate operations are lazy, meaning they aren’t actually executed until and unless a terminal sequence operation is performed on their
 results. Consequently, if the result of an intermediate sequence operation is not fed to a terminal operation, it serves no purpose, which is almost
@@ -34,6 +34,6 @@ listOf("Hello", " ", "World").stream()
 </pre>
 <h2>Resources</h2>
 <ul>
-  <li> <a href="https://kotlinlang.org/docs/sequences.html#sequence-operations">Sequence operations</a> </li>
+  <li><a href="https://kotlinlang.org/docs/sequences.html#sequence-operations">Sequence operations</a></li>
 </ul>
 

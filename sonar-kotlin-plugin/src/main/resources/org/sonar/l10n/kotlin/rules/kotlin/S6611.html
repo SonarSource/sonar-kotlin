@@ -10,10 +10,10 @@ then <code>NullPointerException</code> will be thrown. While in some cases it co
 <p>You should avoid using the non-null assertion operator when accessing <code>Map</code> elements.</p>
 <p>Instead, you can:</p>
 <ul>
-  <li> return an instance of a nullable type. </li>
-  <li> use <code>getValue</code>. This will throw <code>NoSuchElementException</code> when an element is not present. </li>
-  <li> use either <code>getOrElse</code> or <code>getOrDefault</code> functions and explicitly specify the behavior in case of a null value. </li>
-  <li> use an elvis operator <code>?:</code> to specify the behavior in case of a null value. </li>
+  <li>return an instance of a nullable type.</li>
+  <li>use <code>getValue</code>. This will throw <code>NoSuchElementException</code> when an element is not present.</li>
+  <li>use either <code>getOrElse</code> or <code>getOrDefault</code> functions and explicitly specify the behavior in case of a null value.</li>
+  <li>use an elvis operator <code>?:</code> to specify the behavior in case of a null value.</li>
 </ul>
 <h3>Code examples</h3>
 <h4>Noncompliant code example</h4>
@@ -39,13 +39,13 @@ l[123] ?: "empty" // Compliant, has default
 <h2>Resources</h2>
 <h3>Documentation</h3>
 <ul>
-  <li> <a href="https://kotlinlang.org/docs/null-safety.html">Kotlin Documentation - Null safety</a> </li>
-  <li> <a href="https://kotlinlang.org/docs/map-operations.html">Kotlin Documentation - Map-specific operations</a> </li>
-  <li> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/get-or-else.html">Kotlin Documentation - getOrElse</a> </li>
-  <li> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/get-or-default.html">Kotlin Documentation - getOrDefault</a> </li>
+  <li><a href="https://kotlinlang.org/docs/null-safety.html">Kotlin Documentation - Null safety</a></li>
+  <li><a href="https://kotlinlang.org/docs/map-operations.html">Kotlin Documentation - Map-specific operations</a></li>
+  <li><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/get-or-else.html">Kotlin Documentation - getOrElse</a></li>
+  <li><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/get-or-default.html">Kotlin Documentation - getOrDefault</a></li>
 </ul>
 <h3>Articles &amp; blog posts</h3>
 <ul>
-  <li> <a href="https://medium.com/@igorwojda/kotlin-combating-non-null-assertions-5282d7b97205">Kotlin — combating non-null assertions (!!)</a> </li>
+  <li><a href="https://medium.com/@igorwojda/kotlin-combating-non-null-assertions-5282d7b97205">Kotlin — combating non-null assertions (!!)</a></li>
 </ul>
 

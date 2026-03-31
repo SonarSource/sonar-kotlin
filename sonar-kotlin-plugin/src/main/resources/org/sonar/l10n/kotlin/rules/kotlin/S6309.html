@@ -1,8 +1,8 @@
 <h2>Why is this an issue?</h2>
 <p>There are two ways to define asynchronous functions in Kotlin:</p>
 <ul>
-  <li> using the modifier <code>suspend</code> in the function declaration </li>
-  <li> creating an extension function on <code>CoroutineScope</code> </li>
+  <li>using the modifier <code>suspend</code> in the function declaration</li>
+  <li>creating an extension function on <code>CoroutineScope</code></li>
 </ul>
 <p>The <code>suspend</code> modifier is generally used for functions that might take some time to complete. The caller coroutine might potentially be
 suspended.</p>
@@ -46,6 +46,6 @@ fun CoroutineScope.f(): Channel&lt;Int&gt; {
 </pre>
 <h2>Resources</h2>
 <ul>
-  <li> <a href="https://elizarov.medium.com/coroutine-context-and-scope-c8b255d59055">Coroutine Context and Scope</a> </li>
+  <li><a href="https://elizarov.medium.com/coroutine-context-and-scope-c8b255d59055">Coroutine Context and Scope</a></li>
 </ul>
 

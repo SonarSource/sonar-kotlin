@@ -1,8 +1,7 @@
 <h2>Why is this an issue?</h2>
 <p>By convention, calls to suspending functions should not block the thread, eliminating the requirement of calling suspending functions on background
 threads. Any long-running blocking operations should be moved to background threads within the suspending function that performs these operations. If
-suspending functions do block, this is breaking the Kotlin coroutines conventions (also see <a
-href="https://github.com/SonarSource/rspec/pull/173">{rule:kotlin:S6307}</a>).</p>
+suspending functions do block, this is breaking the Kotlin coroutines conventions (also see {rule:kotlin:S6307}).</p>
 <p>As suspending functions can generally be called directly within other suspending functions, there is no need to move such a call to a background
 thread. This does not bring much benefit while adding complexity and making the code harder to understand.</p>
 <p>In fact, various libraries explicitly provide suspending APIs for otherwise long-running blocking operations. The complexity of moving the
@@ -39,7 +38,10 @@ suspend fun callee() {
 </pre>
 <h2>Resources</h2>
 <ul>
-  <li> <a href="https://kotlinlang.org/docs/composing-suspending-functions.html">Composing suspending functions</a> in the Kotlin docs </li>
-  <li> <a href="https://github.com/SonarSource/rspec/pull/173">{rule:kotlin:S6307}: Suspending functions should be main-safe</a> </li>
+  <li><a href="https://kotlinlang.org/docs/composing-suspending-functions.html">Composing suspending functions</a> in the Kotlin docs</li>
+</ul>
+<h3>Related rules</h3>
+<ul>
+  <li>{rule:kotlin:S6307} Suspending functions should be main-safe</li>
 </ul>
 

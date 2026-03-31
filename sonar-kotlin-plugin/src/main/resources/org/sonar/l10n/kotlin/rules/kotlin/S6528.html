@@ -15,34 +15,34 @@ comparison operator increases the complexity of the expression and introduces co
 with <code>any(predicate)</code>, <code>none(predicate)</code> or <code>contains(element)</code>.</p>
 <p>There are four possible scenarios:</p>
 <ol>
-  <li> The predicate is a simple binary expression checking for equality, and the found object is compared to not be <code>null</code>:
+  <li>The predicate is a simple binary expression checking for equality, and the found object is compared to not be <code>null</code>:
     <ul>
-      <li> Replace <code>find { it == element } != null</code> with <code>contains(element)</code>. </li>
-      <li> Replace <code>findLast { it == element } != null</code> with <code>contains(element)</code>. </li>
-      <li> Replace <code>firstOrNull { x → x == element } != null</code> with <code>contains(element)</code>. </li>
-      <li> Replace <code>lastOrNull { x → x == element } != null</code> with <code>contains(element)</code>. </li>
-    </ul>  </li>
-  <li> The predicate is a simple binary expression checking for equality, and the found object is compared to be <code>null</code>:
+      <li>Replace <code>find { it == element } != null</code> with <code>contains(element)</code>.</li>
+      <li>Replace <code>findLast { it == element } != null</code> with <code>contains(element)</code>.</li>
+      <li>Replace <code>firstOrNull { x → x == element } != null</code> with <code>contains(element)</code>.</li>
+      <li>Replace <code>lastOrNull { x → x == element } != null</code> with <code>contains(element)</code>.</li>
+    </ul></li>
+  <li>The predicate is a simple binary expression checking for equality, and the found object is compared to be <code>null</code>:
     <ul>
-      <li> Replace <code>find { it == element } == null</code> with <code>!contains(element)</code>. </li>
-      <li> Replace <code>findLast { it == element } == null</code> with <code>!contains(element)</code>. </li>
-      <li> Replace <code>firstOrNull { x → x == element } == null</code> with <code>!contains(element)</code>. </li>
-      <li> Replace <code>lastOrNull { x → x == element } == null</code> with <code>!contains(element)</code>. </li>
-    </ul>  </li>
-  <li> The predicate is any binary expression not checking for equality, and the found object is compared to not be <code>null</code>:
+      <li>Replace <code>find { it == element } == null</code> with <code>!contains(element)</code>.</li>
+      <li>Replace <code>findLast { it == element } == null</code> with <code>!contains(element)</code>.</li>
+      <li>Replace <code>firstOrNull { x → x == element } == null</code> with <code>!contains(element)</code>.</li>
+      <li>Replace <code>lastOrNull { x → x == element } == null</code> with <code>!contains(element)</code>.</li>
+    </ul></li>
+  <li>The predicate is any binary expression not checking for equality, and the found object is compared to not be <code>null</code>:
     <ul>
-      <li> Replace <code>find { it &gt; 5 } != null</code> with <code>any { it &gt; 5 }</code>. </li>
-      <li> Replace <code>findLast { it != 5 } != null</code> with <code>any { it != 5 }</code>. </li>
-      <li> Replace <code>firstOrNull { x → x &lt; 5 } != null</code> with <code>any { x → x &lt; 5 }</code>. </li>
-      <li> Replace <code>lastOrNull { x → x != 5 } != null</code> with <code>any { x → x != 5 }</code>. </li>
-    </ul>  </li>
-  <li> The predicate is any binary expression not checking for equality, and the found object is compared to be <code>null</code>:
+      <li>Replace <code>find { it &gt; 5 } != null</code> with <code>any { it &gt; 5 }</code>.</li>
+      <li>Replace <code>findLast { it != 5 } != null</code> with <code>any { it != 5 }</code>.</li>
+      <li>Replace <code>firstOrNull { x → x &lt; 5 } != null</code> with <code>any { x → x &lt; 5 }</code>.</li>
+      <li>Replace <code>lastOrNull { x → x != 5 } != null</code> with <code>any { x → x != 5 }</code>.</li>
+    </ul></li>
+  <li>The predicate is any binary expression not checking for equality, and the found object is compared to be <code>null</code>:
     <ul>
-      <li> Replace <code>find { it &gt; 5 } == null</code> with <code>none { it &gt; 5 }</code>. </li>
-      <li> Replace <code>findLast { it != 5 } == null</code> with <code>none { it != 5 }</code>. </li>
-      <li> Replace <code>firstOrNull { x → x &lt; 5 } == null</code> with <code>none { x → x &lt; 5 }</code>. </li>
-      <li> Replace <code>lastOrNull { x → x != 5 } == null</code> with <code>none { x → x != 5 }</code>. </li>
-    </ul>  </li>
+      <li>Replace <code>find { it &gt; 5 } == null</code> with <code>none { it &gt; 5 }</code>.</li>
+      <li>Replace <code>findLast { it != 5 } == null</code> with <code>none { it != 5 }</code>.</li>
+      <li>Replace <code>firstOrNull { x → x &lt; 5 } == null</code> with <code>none { x → x &lt; 5 }</code>.</li>
+      <li>Replace <code>lastOrNull { x → x != 5 } == null</code> with <code>none { x → x != 5 }</code>.</li>
+    </ul></li>
 </ol>
 <h3>Code examples</h3>
 <h4>Noncompliant code example</h4>
@@ -68,6 +68,6 @@ fun example(list: List&lt;Int&gt;) {
 <h2>Resources</h2>
 <h3>Documentation</h3>
 <ul>
-  <li> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/">Kotlin API Docs, Package kotlin.collections</a> </li>
+  <li><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/">Kotlin API Docs, Package kotlin.collections</a></li>
 </ul>
 

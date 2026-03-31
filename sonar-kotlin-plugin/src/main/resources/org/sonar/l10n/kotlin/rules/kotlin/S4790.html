@@ -4,31 +4,31 @@ value gives an attacker the same access as if he had the originally-hashed value
 MD4, MD6, HAVAL-128, HMAC-MD5, DSA (which uses SHA-1), RIPEMD, RIPEMD-128, RIPEMD-160, HMACRIPEMD160.</p>
 <p>The following APIs are tracked for use of obsolete crypto algorithms:</p>
 <ul>
-  <li> <code>java.security.AlgorithmParameters</code> (JDK) </li>
-  <li> <code>java.security.AlgorithmParameterGenerator</code> (JDK) </li>
-  <li> <code>java.security.MessageDigest</code> (JDK) </li>
-  <li> <code>java.security.KeyFactory</code> (JDK) </li>
-  <li> <code>java.security.KeyPairGenerator</code> (JDK) </li>
-  <li> <code>java.security.Signature</code> (JDK) </li>
-  <li> <code>javax.crypto.Mac</code> (JDK) </li>
-  <li> <code>javax.crypto.KeyGenerator</code> (JDK) </li>
-  <li> <code>org.apache.commons.codec.digest.DigestUtils</code> (Apache Commons Codec) </li>
-  <li> <code>org.springframework.util.DigestUtils</code> </li>
-  <li> <code>com.google.common.hash.Hashing</code> (Guava) </li>
-  <li> <code>org.springframework.security.authentication.encoding.ShaPasswordEncoder</code> (Spring Security 4.2.x) </li>
-  <li> <code>org.springframework.security.authentication.encoding.Md5PasswordEncoder</code> (Spring Security 4.2.x) </li>
-  <li> <code>org.springframework.security.crypto.password.LdapShaPasswordEncoder</code> (Spring Security 5.0.x) </li>
-  <li> <code>org.springframework.security.crypto.password.Md4PasswordEncoder</code> (Spring Security 5.0.x) </li>
-  <li> <code>org.springframework.security.crypto.password.MessageDigestPasswordEncoder</code> (Spring Security 5.0.x) </li>
-  <li> <code>org.springframework.security.crypto.password.NoOpPasswordEncoder</code> (Spring Security 5.0.x) </li>
-  <li> <code>org.springframework.security.crypto.password.StandardPasswordEncoder</code> (Spring Security 5.0.x) </li>
+  <li><code>java.security.AlgorithmParameters</code> (JDK)</li>
+  <li><code>java.security.AlgorithmParameterGenerator</code> (JDK)</li>
+  <li><code>java.security.MessageDigest</code> (JDK)</li>
+  <li><code>java.security.KeyFactory</code> (JDK)</li>
+  <li><code>java.security.KeyPairGenerator</code> (JDK)</li>
+  <li><code>java.security.Signature</code> (JDK)</li>
+  <li><code>javax.crypto.Mac</code> (JDK)</li>
+  <li><code>javax.crypto.KeyGenerator</code> (JDK)</li>
+  <li><code>org.apache.commons.codec.digest.DigestUtils</code> (Apache Commons Codec)</li>
+  <li><code>org.springframework.util.DigestUtils</code></li>
+  <li><code>com.google.common.hash.Hashing</code> (Guava)</li>
+  <li><code>org.springframework.security.authentication.encoding.ShaPasswordEncoder</code> (Spring Security 4.2.x)</li>
+  <li><code>org.springframework.security.authentication.encoding.Md5PasswordEncoder</code> (Spring Security 4.2.x)</li>
+  <li><code>org.springframework.security.crypto.password.LdapShaPasswordEncoder</code> (Spring Security 5.0.x)</li>
+  <li><code>org.springframework.security.crypto.password.Md4PasswordEncoder</code> (Spring Security 5.0.x)</li>
+  <li><code>org.springframework.security.crypto.password.MessageDigestPasswordEncoder</code> (Spring Security 5.0.x)</li>
+  <li><code>org.springframework.security.crypto.password.NoOpPasswordEncoder</code> (Spring Security 5.0.x)</li>
+  <li><code>org.springframework.security.crypto.password.StandardPasswordEncoder</code> (Spring Security 5.0.x)</li>
 </ul>
 <h2>Ask Yourself Whether</h2>
 <p>The hashed value is used in a security context like:</p>
 <ul>
-  <li> User-password storage. </li>
-  <li> Security token generation (used to confirm e-mail when registering on a website, reset password, etc …​). </li>
-  <li> To compute some message integrity. </li>
+  <li>User-password storage.</li>
+  <li>Security token generation (used to confirm e-mail when registering on a website, reset password, etc …​).</li>
+  <li>To compute some message integrity.</li>
 </ul>
 <p>There is a risk if you answered yes to any of those questions.</p>
 <h2>Recommended Secure Coding Practices</h2>
@@ -46,16 +46,16 @@ val md1: MessageDigest = MessageDigest.getInstance("SHA-512"); // Compliant
 </pre>
 <h2>See</h2>
 <ul>
-  <li> OWASP - <a href="https://owasp.org/Top10/A02_2021-Cryptographic_Failures/">Top 10 2021 Category A2 - Cryptographic Failures</a> </li>
-  <li> OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure">Top 10 2017 Category A3 - Sensitive Data
-  Exposure</a> </li>
-  <li> OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">Top 10 2017 Category A6 - Security
-  Misconfiguration</a> </li>
-  <li> OWASP - <a href="https://mas.owasp.org/checklists/MASVS-CRYPTO/">Mobile AppSec Verification Standard - Cryptography Requirements</a> </li>
-  <li> OWASP - <a href="https://owasp.org/www-project-mobile-top-10/2016-risks/m5-insufficient-cryptography">Mobile Top 10 2016 Category M5 -
-  Insufficient Cryptography</a> </li>
-  <li> OWASP - <a href="https://owasp.org/www-project-mobile-top-10/2023-risks/m10-insufficient-cryptography">Mobile Top 10 2024 Category M10 -
-  Insufficient Cryptography</a> </li>
-  <li> CWE - <a href="https://cwe.mitre.org/data/definitions/1240">CWE-1240 - Use of a Risky Cryptographic Primitive</a> </li>
+  <li>OWASP - <a href="https://owasp.org/Top10/A02_2021-Cryptographic_Failures/">Top 10 2021 Category A2 - Cryptographic Failures</a></li>
+  <li>OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure">Top 10 2017 Category A3 - Sensitive Data
+  Exposure</a></li>
+  <li>OWASP - <a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration">Top 10 2017 Category A6 - Security
+  Misconfiguration</a></li>
+  <li>OWASP - <a href="https://mas.owasp.org/checklists/MASVS-CRYPTO/">Mobile AppSec Verification Standard - Cryptography Requirements</a></li>
+  <li>OWASP - <a href="https://owasp.org/www-project-mobile-top-10/2016-risks/m5-insufficient-cryptography">Mobile Top 10 2016 Category M5 -
+  Insufficient Cryptography</a></li>
+  <li>OWASP - <a href="https://owasp.org/www-project-mobile-top-10/2023-risks/m10-insufficient-cryptography">Mobile Top 10 2024 Category M10 -
+  Insufficient Cryptography</a></li>
+  <li>CWE - <a href="https://cwe.mitre.org/data/definitions/1240">CWE-1240 - Use of a Risky Cryptographic Primitive</a></li>
 </ul>
 
