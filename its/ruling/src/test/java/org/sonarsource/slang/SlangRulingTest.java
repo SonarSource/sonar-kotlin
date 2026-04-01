@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import org.sonarsource.analyzer.commons.ProfileGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.sonarsource.slang.OrchestratorSynchronizerKt.startOrchestrator;
 
 /**
  * Ruling tests for the `sonar-kotlin` plugin.
@@ -77,7 +78,7 @@ class SlangRulingTest {
     addLanguagePlugins(builder);
 
     orchestrator = builder.build();
-    orchestrator.start();
+    OrchestratorSynchronizer.runSynchronized(() -> startOrchestrator(orchestrator));
 
     ProfileGenerator.RulesConfiguration kotlinRulesConfiguration = new ProfileGenerator.RulesConfiguration();
     kotlinRulesConfiguration.add("S1451", "headerFormat", "/\\*\n \\* Copyright \\d{4}-\\d{4} JetBrains s\\.r\\.o\\.");
@@ -262,6 +263,8 @@ class SlangRulingTest {
     Map<String, String> properties = prepareAnalysisConfiguration(project, additionalProperties);
 
     SonarScanner build = SonarScanner.create(FileLocation.of("../").getFile())
+      // Set working directory per project instead of .scannerwork in scanner's cwd to allow parallel execution of tests
+      .setProperty("sonar.working.directory", "build/sonar-workdir/" + project)
       .setSourceDirs("./")
       .setProperties(properties)
       .setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx1024m");
