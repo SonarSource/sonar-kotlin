@@ -1,13 +1,4 @@
 {
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/codegen/AbstractBytecodeListingTest.kt": [
-154
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors/src/org/jetbrains/kotlin/resolve/DescriptorUtils.kt": [
-250
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/conversion/copy/ConvertJavaCopyPasteProcessor.kt": [
-239
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/facet/KotlinFacetEditorGeneralTab.kt": [
 182
 ],
@@ -15,26 +6,16 @@
 159,
 160
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/move/changePackage/ChangePackageIntention.kt": [
-77,
-78
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/utils/LineCollector.kt": [
 52
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.translator/src/org/jetbrains/kotlin/js/translate/context/DeclarationExporter.kt": [
 120
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/samples/test/samples/properties/delegates.kt": [
-50
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/collections/CollectionTest.kt": [
 442
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/collections/SequenceTest.kt": [
 355
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/org/jetbrains/uast/test/common/IdentifiersTestBase.kt": [
-36
 ]
 }

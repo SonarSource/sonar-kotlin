@@ -16,13 +16,15 @@
  */
 package org.sonarsource.kotlin.tools
 
+import java.io.File
 import org.jetbrains.org.objectweb.asm.ClassReader
 import org.jetbrains.org.objectweb.asm.ClassVisitor
 import org.jetbrains.org.objectweb.asm.ClassWriter
 import org.jetbrains.org.objectweb.asm.MethodVisitor
 import org.jetbrains.org.objectweb.asm.Opcodes
 import org.jetbrains.org.objectweb.asm.tree.ClassNode
-import java.io.File
+
+private const val OUTPUT_DIR = "build/patch"
 
 fun main() {
     patchAppScheduledExecutorService()
@@ -60,7 +62,7 @@ private fun patchKtVisitor() {
     methodNode.visitInsn(Opcodes.ARETURN)
     classNode.accept(classWriter)
 
-    val output = File("build/patch").resolve(cls)
+    val output = File(OUTPUT_DIR).resolve(cls)
     output.parentFile.mkdirs()
     output.writeBytes(classWriter.toByteArray())
 }
@@ -111,7 +113,7 @@ private fun patchAppScheduledExecutorService() {
 
     if (!patched) throw AssertionError()
 
-    val output = File("build/patch").resolve(cls)
+    val output = File(OUTPUT_DIR).resolve(cls)
     output.parentFile.mkdirs()
     output.writeBytes(classWriter.toByteArray())
 }

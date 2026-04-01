@@ -24,7 +24,6 @@ dependencies {
     }
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.9.0")
     implementation("com.github.ben-manes.caffeine:caffeine:2.9.3")
-
     compileOnly(libs.sonar.plugin.api)
     compileOnly(libs.slf4j.api)
     implementation(libs.sonar.analyzer.commons)
@@ -51,13 +50,18 @@ dependencies {
 val test: Test by tasks
 test.dependsOn(project(":kotlin-checks-test-sources").tasks.named("build"))
 
-task<JavaExec>("printAst") {
-    group = "Application"
+tasks.register<JavaExec>("printAst") {
+    group = "application"
+    description = "Print the AST of a file for debugging purposes"
+
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("org.sonarsource.kotlin.ast.AstPrinterKt")
 }
 
-val patchTask = task<JavaExec>("patchKotlinCompiler") {
+val patchTask = tasks.register<JavaExec>("patchKotlinCompiler") {
+    group = "build"
+    description = "Patch Kotlin compiler to enable usage in the plugin"
+
     outputs.dir(layout.buildDirectory.dir("patch"))
     classpath = sourceSets.main.get().runtimeClasspath
     mainClass.set("org.sonarsource.kotlin.tools.PatchKotlinCompilerKt")

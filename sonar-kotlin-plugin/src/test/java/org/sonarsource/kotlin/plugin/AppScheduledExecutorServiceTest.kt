@@ -17,9 +17,9 @@
 package org.sonarsource.kotlin.plugin
 
 import com.intellij.util.concurrency.AppScheduledExecutorService
+import java.util.concurrent.ScheduledExecutorService
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import java.util.concurrent.ScheduledExecutorService
 
 private class AppScheduledExecutorServiceTest {
     /**

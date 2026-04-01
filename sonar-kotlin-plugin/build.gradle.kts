@@ -154,6 +154,7 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
             "org/jetbrains/kotlin/psi/KtVisitor.class", // patched version is included separately
             "com/intellij/util/concurrency/AppScheduledExecutorService\$MyThreadFactory.class", // patched version is included separately
             "META-INF/native/**/*jansi*",
+            "pluginsCompatibleWithK2Mode.txt", // a text file that we don't use
 
             "META-INF/services/org/jline", // service provider files for jline
             *excludedPackages.map { "$it/**" }.toTypedArray()
@@ -213,7 +214,7 @@ val distTask = tasks.register<ProGuardTask>("dist") {
     outjars("build/libs/sonar-kotlin-plugin.jar")
     configuration("proguard.txt")
     doLast {
-        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 50_800_000L, 51_300_000L)
+        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 53_300_000L, 53_800_000L)
     }
 }
 

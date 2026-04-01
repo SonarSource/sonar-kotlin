@@ -421,6 +421,11 @@
             <sha256 value="25f22491fe353aef9d1ad9374181987d6118a3130b677f7dab5b2571fdce7a76" origin="Verified"/>
          </artifact>
       </component>
+      <component group="com.jetbrains.intellij.platform" name="util" version="241.19416.19">
+         <artifact name="util-241.19416.19.jar">
+            <sha256 value="ab4788508b5ec132aeeef69d7dd429db8bc1735cc398aa9f872f3b291cb69e5e" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="com.pinterest" name="ktlint" version="0.47.1">
          <artifact name="ktlint-0.47.1.jar">
             <sha256 value="8189250ff059de2bb39589b0e557a53c4981c9a832b07be8d625bbc9b8805851" origin="Verified"/>
@@ -940,9 +945,30 @@
             <sha256 value="5557e235a8aa2f9766d5dc609d67948f2a8832c2d796cea9ef1d6cbe0b3b7eaf" origin="Verified"/>
          </artifact>
       </component>
+      <component group="net.java.dev.jna" name="jna" version="5.9.0">
+         <artifact name="jna-5.9.0.jar">
+            <sha256 value="eafcc780b445434d3c5ae7fa2fb6665de1a7560d537d2c408a8e80cd14d27161" origin="Verified"/>
+         </artifact>
+         <artifact name="jna-5.9.0.pom">
+            <sha256 value="6bc8b8459150b59e9598f3dad9ad245a1ef2150d082581017184eb163e592829" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="one.util" name="streamex" version="0.7.2">
          <artifact name="streamex-0.7.2.multi-release-jar">
             <sha256 value="2ee26418e492a618dcdeeca33218aaf8c88e4129999d75be3a25d2153a7eb5d2" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.antlr" name="antlr4" version="4.13.2">
+         <artifact name="antlr4-4.13.2.jar">
+            <sha256 value="e6f0b10d2ad206f338afe16867fc47148b6729d6e3a260ea28379b91f03a3657" origin="Verified"/>
+         </artifact>
+         <artifact name="antlr4-4.13.2.pom">
+            <sha256 value="809ee49706dce3674988babfcad36b3c5a0e2fd5cfa0a51209103963e857261b" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.antlr" name="antlr4-master" version="4.13.2">
+         <artifact name="antlr4-master-4.13.2.pom">
+            <sha256 value="0adda026685873f651360178bffc446ceee4833081739e3ae9d6e8f07e8d902a" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.apache.ant" name="ant" version="1.10.15">
@@ -1238,6 +1264,11 @@
             <sha256 value="3308645f467b266e5884c264508224b6729e8edc166e6d435f5b626c14e0fd19" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.gwtproject" name="gwt" version="2.11.0">
+         <artifact name="gwt-2.11.0.pom">
+            <sha256 value="f67aa041caecabf02ed7650d4efb10ab3da6a98f05898f35ef8b77efd67e8fa5" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.gwtproject" name="gwt-user" version="2.11.0">
          <artifact name="gwt-user-2.11.0.jar">
             <sha256 value="ce970506ac4f80682bae5f5ae54fa4b907715adf30a0490615290b016b3ea735" origin="Verified"/>
@@ -1337,6 +1368,11 @@
             <sha256 value="95b092c233d346b1d349c374a2f6691e8cc2c7974b8c223c6e5865568e6be31c" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="abi-tools" version="2.3.20">
+         <artifact name="abi-tools-2.3.20.jar">
+            <sha256 value="47d7c18113d98585065ab524cba1c470b4c369307697ca9d1c810e50b93d0bd1" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="abi-tools-api" version="2.2.21">
          <artifact name="abi-tools-api-2.2.21.jar">
             <sha256 value="239901f317c189b4b4cc8bc5e966943dc19e39259539e668baa5d7ef18eb916a" origin="Verified"/>
@@ -1350,6 +1386,11 @@
             <sha256 value="fc55e5de81ef6475b08571baa7606fdb3876ec96bce61fdcbda9f5e56a05f8c0" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="abi-tools-api" version="2.3.20">
+         <artifact name="abi-tools-api-2.3.20.jar">
+            <sha256 value="53685f5783b0490683898d755abae4d418b6e83ba06134858afddcb5945899e9" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="analysis-api-for-ide" version="2.3.10">
          <artifact name="analysis-api-for-ide-2.3.10.jar">
             <sha256 value="47db94b0240122449cb95aa00dd8b9d0722948b81f8390b9d27d38797c0fc784" origin="Verified"/>
@@ -1359,6 +1400,14 @@
          </artifact>
          <artifact name="analysis-api-impl-base-for-ide-2.2.21.pom">
             <sha256 value="1abfa06d58672e09a2df16fc0753371c50610fafc2493265081d41be32887e6a" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="analysis-api-for-ide" version="2.3.20">
+         <artifact name="analysis-api-for-ide-2.3.20.jar">
+            <sha256 value="3b6900c6ea4b693cf8006d072a1a7f3933e728b6783850159a9803324681c2a9" origin="Verified"/>
+         </artifact>
+         <artifact name="analysis-api-for-ide-2.3.20.pom">
+            <sha256 value="d8d3c3489b39075a36e93b98ce25ceb07175ad3c7ccc471c7254ae7839600906" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="analysis-api-impl-base-for-ide" version="2.3.10">
@@ -1372,6 +1421,14 @@
             <sha256 value="5d0da117505780aaa9acb8f73956fd6785439561094f96b42e38b5e944bfefe7" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="analysis-api-impl-base-for-ide" version="2.3.20">
+         <artifact name="analysis-api-impl-base-for-ide-2.3.20.jar">
+            <sha256 value="99b55864097149bdc13ac39a52c6143d6e332b1f0570965fba21c8640c9ebec2" origin="Verified"/>
+         </artifact>
+         <artifact name="analysis-api-impl-base-for-ide-2.3.20.pom">
+            <sha256 value="4fbf77f639630f666a55a07e26fb85f9dec5cafead1fd31cf0bc0a996721b3a1" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="analysis-api-k2-for-ide" version="2.3.10">
          <artifact name="analysis-api-k2-for-ide-2.3.10.jar">
             <sha256 value="851a64ca4fdfc074a791ed52924ec4694bb75c2bbc25bef1b1bc8b50cbd0ca0b" origin="Verified"/>
@@ -1383,12 +1440,28 @@
             <sha256 value="09fc3b81d53ff181a56c3ee526a7bce18806c96a1def645ebb700eb23a48870b" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="analysis-api-k2-for-ide" version="2.3.20">
+         <artifact name="analysis-api-k2-for-ide-2.3.20.jar">
+            <sha256 value="7b572ed151b70497eedc42db8f567618db717734f2d50c739cabcdbaf9e8f521" origin="Verified"/>
+         </artifact>
+         <artifact name="analysis-api-k2-for-ide-2.3.20.pom">
+            <sha256 value="47bb0a177157b4369d71eb4a2098ecbe63505e6eda1c9d1b42d5fa32ad85250e" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="analysis-api-platform-interface-for-ide" version="2.3.10">
          <artifact name="analysis-api-platform-interface-for-ide-2.3.10.jar">
             <sha256 value="33db5c2be1f298109a32c67efc9ff9f2351812cd18b1d3e3b6142b8c1f6562a0" origin="Verified"/>
          </artifact>
          <artifact name="analysis-api-platform-interface-for-ide-2.3.10.pom">
             <sha256 value="6d3189c033cbebe463a126f4fa99377c6b61b51813563780f1df7cccc95768ea" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="analysis-api-platform-interface-for-ide" version="2.3.20">
+         <artifact name="analysis-api-platform-interface-for-ide-2.3.20.jar">
+            <sha256 value="9d8899a03244ce190c36eb8febfef9714ef579312906ed0e1856b8637f0e8468" origin="Verified"/>
+         </artifact>
+         <artifact name="analysis-api-platform-interface-for-ide-2.3.20.pom">
+            <sha256 value="a1b80fe009223e160ea3447cc3b4e8a01f2554a5efbc498cbe9df86f0314d8c4" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="analysis-api-standalone-for-ide" version="2.3.10">
@@ -1402,6 +1475,14 @@
             <sha256 value="9b44b17d78951f79b5647f42a08f5df520b0d87077afa6efc2f9e05239b789aa" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="analysis-api-standalone-for-ide" version="2.3.20">
+         <artifact name="analysis-api-standalone-for-ide-2.3.20.jar">
+            <sha256 value="69346bdf765eb11e2fcdc75d5d2fc28595fc7d848d86af8e1fc6dcf9df9b202c" origin="Verified"/>
+         </artifact>
+         <artifact name="analysis-api-standalone-for-ide-2.3.20.pom">
+            <sha256 value="3a12d3d0b954d2045fe52dc32bf99566327bb6132c1d91cd6fbd19a16328a357" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="fus-statistics-gradle-plugin" version="2.2.21">
          <artifact name="fus-statistics-gradle-plugin-2.2.21-gradle813.jar">
             <sha256 value="27dcf4aeaa5bbb64d861bd29ed60d482f0ffd96244c81e2426b9dac5e7fdc63f" origin="Verified"/>
@@ -1410,6 +1491,11 @@
       <component group="org.jetbrains.kotlin" name="fus-statistics-gradle-plugin" version="2.3.10">
          <artifact name="fus-statistics-gradle-plugin-2.3.10-gradle813.jar">
             <sha256 value="691e2d2a68cb9e0a088f1957de7cfba568e249187699486123d6075fdff39d17" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="fus-statistics-gradle-plugin" version="2.3.20">
+         <artifact name="fus-statistics-gradle-plugin-2.3.20-gradle813.jar">
+            <sha256 value="a4f10a3f0ea5ddd1f555a4f706e09ea7f552b3c8522bb1006361dd306e35e76a" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-assignment" version="2.2.21">
@@ -1432,6 +1518,11 @@
             <sha256 value="ac04e6f4d7a1b0d38d34c6fffd233dd12a66ce29158f25faf00c75ecacd443bc" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-build-statistics" version="2.3.20">
+         <artifact name="kotlin-build-statistics-2.3.20.jar">
+            <sha256 value="a6d27b3c83617652dd065606f98cf59cfbe263f8c20ebe4ebd5a6f2689eb0d4f" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-build-tools-api" version="2.2.21">
          <artifact name="kotlin-build-tools-api-2.2.21.jar">
             <sha256 value="31645ca52239b221ebd060a00fff8d8516ffdc88bbd9f4e4cd7ddb41a7068c70" origin="Verified"/>
@@ -1442,9 +1533,24 @@
             <sha256 value="1186720b910684df9dad9cb96015ccf19176ec5655ceb09b01fbc45230bd1f64" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-build-tools-api" version="2.3.20">
+         <artifact name="kotlin-build-tools-api-2.3.20.jar">
+            <sha256 value="22f1ab223854b949099f6b259cef541d5b58a3643df9a49c4577c63c416e843b" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-build-tools-compat" version="2.3.10">
          <artifact name="kotlin-build-tools-compat-2.3.10.jar">
             <sha256 value="d8232d07ebac56e11726a0666143dd4a617bedbe3a0bf1f14020f8045d8ac9b3" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-build-tools-compat" version="2.3.20">
+         <artifact name="kotlin-build-tools-compat-2.3.20.jar">
+            <sha256 value="44c307b4edd4cac51f960a8134112d664c93076700cda5e866e94d9a4296340e" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-build-tools-cri-impl" version="2.3.20">
+         <artifact name="kotlin-build-tools-cri-impl-2.3.20.jar">
+            <sha256 value="54eced630f28124ccfe2e464e6cacc281e528a8a50a89725721554c9693548fe" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-build-tools-impl" version="2.2.21">
@@ -1455,6 +1561,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-build-tools-impl" version="2.3.10">
          <artifact name="kotlin-build-tools-impl-2.3.10.jar">
             <sha256 value="32f02a6af72b8e0c82f26343b68e0d1da1c844827478feb2fa9dc40df5f9bb5a" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-build-tools-impl" version="2.3.20">
+         <artifact name="kotlin-build-tools-impl-2.3.20.jar">
+            <sha256 value="9681bc2164a8bd9f6ddf4c085cf4a836b92d27506667d73bab9f6d855336c910" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-compiler" version="2.2.21">
@@ -1474,6 +1585,14 @@
          </artifact>
          <artifact name="kotlin-compiler-2.3.10.pom">
             <sha256 value="460f995d5623de28a00c5f01209243906e650e593c8768fdde8b9ae7022334da" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-compiler" version="2.3.20">
+         <artifact name="kotlin-compiler-2.3.20.jar">
+            <sha256 value="4198518f6d840f2f665b2e3c8319a854281f6af43790aca563e3f6b9c46bca68" origin="Verified"/>
+         </artifact>
+         <artifact name="kotlin-compiler-2.3.20.pom">
+            <sha256 value="4f966730b224bb99120833e142a5e7f2152eb83777204bedbc98b810a2f9578b" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-compiler-embeddable" version="1.7.10">
@@ -1496,6 +1615,11 @@
             <sha256 value="ac6a182785345380b5db5085dbeea3f5f0e925e2e100e54ab059b5787d4f6e40" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-compiler-embeddable" version="2.3.20">
+         <artifact name="kotlin-compiler-embeddable-2.3.20.jar">
+            <sha256 value="976f989d0b5f5d80e8e8a8ad4b73da0bfc27fdd965b9fa38362b2be79ecc1337" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-compiler-runner" version="2.2.21">
          <artifact name="kotlin-compiler-runner-2.2.21.jar">
             <sha256 value="a3a422e06bcd35a32a798d191ef6ebb35ea6b39c3553e941d39c01e631fc5c77" origin="Verified"/>
@@ -1506,6 +1630,11 @@
             <sha256 value="0a9192fb80251ccad1cdbf2caba28488e8d46869d2e5e4957ca179c27c0a4ee0" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-compiler-runner" version="2.3.20">
+         <artifact name="kotlin-compiler-runner-2.3.20.jar">
+            <sha256 value="c069f30a403be70c8152f8aa9f25eccba188eead54263ae02af14421437a2208" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-daemon-client" version="2.2.21">
          <artifact name="kotlin-daemon-client-2.2.21.jar">
             <sha256 value="3ce2ca3c5d7bc7c87c4149ac2c593d21a791d6776229ae123db645a3017de814" origin="Verified"/>
@@ -1514,6 +1643,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-daemon-client" version="2.3.10">
          <artifact name="kotlin-daemon-client-2.3.10.jar">
             <sha256 value="d21a6f77d9803a615e6d150857377e10a9e8c7cd06ae6e1c1eb99920fda38b93" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-daemon-client" version="2.3.20">
+         <artifact name="kotlin-daemon-client-2.3.20.jar">
+            <sha256 value="c71a7c1be8fbff04e0af45c9ee8cb7a61d8953bca6b8bf225a5719c725a90b44" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-daemon-embeddable" version="1.7.10">
@@ -1536,6 +1670,11 @@
             <sha256 value="3597117800e60923bcadd0187fa5dbcaa66f82900829d6925d1ea41dd7e27a30" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-daemon-embeddable" version="2.3.20">
+         <artifact name="kotlin-daemon-embeddable-2.3.20.jar">
+            <sha256 value="8870bab840b8087c96c4ddc06088b4aedf5131c408af3674306304f1f96af3f4" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-gradle-plugin" version="2.2.21">
          <artifact name="kotlin-gradle-plugin-2.2.21-gradle813.jar">
             <sha256 value="b7a52865c6a5e160d2cf61e4d423ce44a6a20de0a6b23d03404b6d01a2811737" origin="Verified"/>
@@ -1546,6 +1685,11 @@
             <sha256 value="b8160f458f50923df03fd01b204d95e80f63c4adb140f8949ce50b43d794bde3" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-gradle-plugin" version="2.3.20">
+         <artifact name="kotlin-gradle-plugin-2.3.20-gradle813.jar">
+            <sha256 value="46e16ee26594f480fecb92c96daae37530e835026b78e37ef3251e957f03f6fb" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-gradle-plugin-annotations" version="2.2.21">
          <artifact name="kotlin-gradle-plugin-annotations-2.2.21.jar">
             <sha256 value="3594c40c7005d044952f80f704172bb6fd1844241025194fb16bee6d45da2e5b" origin="Verified"/>
@@ -1554,6 +1698,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-gradle-plugin-annotations" version="2.3.10">
          <artifact name="kotlin-gradle-plugin-annotations-2.3.10.jar">
             <sha256 value="cb3f00da7221c73b9fe395b71c5c579ee326260c573a38c219deadeef524764b" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-gradle-plugin-annotations" version="2.3.20">
+         <artifact name="kotlin-gradle-plugin-annotations-2.3.20.jar">
+            <sha256 value="e1662ed747322b63f61d4fadd99ab78104c45eaf09c11a789862415e81c18dc4" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-gradle-plugin-api" version="2.2.21">
@@ -1569,6 +1718,11 @@
             <sha256 value="292101c3bc45766e6029421b3899322446ccefd5abcd0278863f5210d3494922" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-gradle-plugin-api" version="2.3.20">
+         <artifact name="kotlin-gradle-plugin-api-2.3.20-gradle813.jar">
+            <sha256 value="c9bc17df69bf39907c597c1e19bec4b479c75aac75fbfd6321e3445b49712e88" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-gradle-plugin-idea" version="2.2.21">
          <artifact name="kotlin-gradle-plugin-idea-2.2.21.jar">
             <sha256 value="ec969c5f0b099f823846232238f9bd64f3d3741e62ea9050ad2e432fad79d0a0" origin="Verified"/>
@@ -1576,6 +1730,11 @@
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-gradle-plugin-idea" version="2.3.10">
          <artifact name="kotlin-gradle-plugin-idea-2.3.10.jar">
+            <sha256 value="952e73948e2a20d398c26b87a6bb70ccf66418fbaf1527c3515b188ea9d4bd60" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-gradle-plugin-idea" version="2.3.20">
+         <artifact name="kotlin-gradle-plugin-idea-2.3.20.jar">
             <sha256 value="952e73948e2a20d398c26b87a6bb70ccf66418fbaf1527c3515b188ea9d4bd60" origin="Verified"/>
          </artifact>
       </component>
@@ -1589,6 +1748,11 @@
             <sha256 value="681656525912ebe0644b6b90ada1483c139c5e930d4f8ea48820dbe181cffbda" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-gradle-plugin-idea-proto" version="2.3.20">
+         <artifact name="kotlin-gradle-plugin-idea-proto-2.3.20.jar">
+            <sha256 value="e4289cbf9ff49407f041ddc6336e1b577a6ca4cf2be1d2a31338271c13eed3ed" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-gradle-plugin-model" version="2.2.21">
          <artifact name="kotlin-gradle-plugin-model-2.2.21.jar">
             <sha256 value="908e6e5c890bb49dbc9266dccf28bdb0c258c48647039aed702fe9d586640186" origin="Verified"/>
@@ -1597,6 +1761,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-klib-abi-reader" version="2.3.10">
          <artifact name="kotlin-klib-abi-reader-2.3.10.jar">
             <sha256 value="9d160a0c6c612a114486144df0577b55795f5da0b867fe38e7cbaf614cc040cd" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-klib-abi-reader" version="2.3.20">
+         <artifact name="kotlin-klib-abi-reader-2.3.20.jar">
+            <sha256 value="5c0a3aa720408dd2f63e760875dd3f67db7ed16b3f000280e0881c6070ce4f63" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-klib-commonizer-api" version="2.2.21">
@@ -1609,6 +1778,11 @@
             <sha256 value="2b4e23a496bda46f243cbfbaa66eb1c4c901b531c1feecc69e79f1bc44f58693" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-klib-commonizer-api" version="2.3.20">
+         <artifact name="kotlin-klib-commonizer-api-2.3.20.jar">
+            <sha256 value="be9377485412d00f01e78299cb30be4802591c2730342b6ebdafc0894f752743" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-klib-commonizer-embeddable" version="2.2.21">
          <artifact name="kotlin-klib-commonizer-embeddable-2.2.21.jar">
             <sha256 value="fff95b9b5995798116407a7c0ca2da28f7d3304eee65191c7fe79b404f5f7308" origin="Verified"/>
@@ -1617,6 +1791,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-klib-commonizer-embeddable" version="2.3.10">
          <artifact name="kotlin-klib-commonizer-embeddable-2.3.10.jar">
             <sha256 value="e238f33720f64e5937925af772f8bd8738af337109bf36223ebca382a5324b60" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-klib-commonizer-embeddable" version="2.3.20">
+         <artifact name="kotlin-klib-commonizer-embeddable-2.3.20.jar">
+            <sha256 value="e0579663051c6da2b23d95fc2c3a412a76279db83a7901ee86a7e3acf6e71e34" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-metadata-jvm" version="2.0.0">
@@ -1639,6 +1818,11 @@
             <sha256 value="c1df5bc6530b4c744b13788dbf8540a469898fdfbcde6abca9119184f5d3707c" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-metadata-jvm" version="2.3.20">
+         <artifact name="kotlin-metadata-jvm-2.3.20.jar">
+            <sha256 value="17264b9690feed34aa8b8e7d556fb2e7951f6800462f117243fba96201014f7d" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-native-utils" version="2.2.21">
          <artifact name="kotlin-native-utils-2.2.21.jar">
             <sha256 value="e74b14406dae0a02388187c62c1731183ba7d0d8e60675682de511a90afa6c56" origin="Verified"/>
@@ -1647,6 +1831,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-native-utils" version="2.3.10">
          <artifact name="kotlin-native-utils-2.3.10.jar">
             <sha256 value="9200d16967b221aaf6014e4eb0257316798a47bb2816723d3d9c646853d72e13" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-native-utils" version="2.3.20">
+         <artifact name="kotlin-native-utils-2.3.20.jar">
+            <sha256 value="4319c2764795efbdff2b78ee95455157d7af0b9155698baa1ba52a6abe3abf2d" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-reflect" version="1.5.21">
@@ -1718,6 +1907,14 @@
             <sha256 value="c228a31855d5df5b386e119f1728cfa9e43d2dcdb78139c292a8d3ed267ac587" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-script-runtime" version="2.3.20">
+         <artifact name="kotlin-script-runtime-2.3.20.jar">
+            <sha256 value="6fcdb7da6e65cf8cc43e5aabab94bdcc48825e7933686f8a1bf694eb88f8e00e" origin="Verified"/>
+         </artifact>
+         <artifact name="kotlin-script-runtime-2.3.20.pom">
+            <sha256 value="66099676703a081fd9ac43139665883e5c145020b640759de0539d8916ff247f" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-scripting-common" version="2.2.21">
          <artifact name="kotlin-scripting-common-2.2.21.jar">
             <sha256 value="414ed91c3f5e4492b23cb9537842b4651038e25dad84107939f434c2203f2a92" origin="Verified"/>
@@ -1726,6 +1923,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-scripting-common" version="2.3.10">
          <artifact name="kotlin-scripting-common-2.3.10.jar">
             <sha256 value="7e9143d22c80b3d02c96982431b1c96ba091eff7bf4390ab4b8949ecee43f285" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-scripting-common" version="2.3.20">
+         <artifact name="kotlin-scripting-common-2.3.20.jar">
+            <sha256 value="b4c239d87b23be182f05bf57cf5e81f95d70bf7ef4a989eb98b73389c6ebc89f" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-scripting-compiler-embeddable" version="2.2.21">
@@ -1738,6 +1940,11 @@
             <sha256 value="72394f7f14b6a3b9afc2e1cc9dc17a1d9610357155b4cb9acc663a3b442ec290" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-scripting-compiler-embeddable" version="2.3.20">
+         <artifact name="kotlin-scripting-compiler-embeddable-2.3.20.jar">
+            <sha256 value="bd55f8f61bd41cec529656c2d47784bcba5ac260e94f4156c272c314966eef59" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-scripting-compiler-impl-embeddable" version="2.2.21">
          <artifact name="kotlin-scripting-compiler-impl-embeddable-2.2.21.jar">
             <sha256 value="788a3060c8e7997f8ae16ba5c0280d05005af0a42029f18cb10c5625b979fac3" origin="Verified"/>
@@ -1748,6 +1955,11 @@
             <sha256 value="133a9ce185aa47d151a612f2cc5962d32b8ca605f8e227a1d7f1e1b09e26ee6e" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-scripting-compiler-impl-embeddable" version="2.3.20">
+         <artifact name="kotlin-scripting-compiler-impl-embeddable-2.3.20.jar">
+            <sha256 value="806fd63b3bcec5e6b5eeb1a0843d6ab094d55786a8465e474a2439295a1c0a25" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-scripting-jvm" version="2.2.21">
          <artifact name="kotlin-scripting-jvm-2.2.21.jar">
             <sha256 value="83820c5fcc5d28f045f914ecd5900bbbcf8115b0d7007334de069fe6c70669e6" origin="Verified"/>
@@ -1756,6 +1968,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-scripting-jvm" version="2.3.10">
          <artifact name="kotlin-scripting-jvm-2.3.10.jar">
             <sha256 value="bf232a519af02952e101086fabd4884436257656c45db081783cac4b149664b7" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-scripting-jvm" version="2.3.20">
+         <artifact name="kotlin-scripting-jvm-2.3.20.jar">
+            <sha256 value="7047ce0353f49125c3c746792d4f76c3265d7b72fe62694b7eec075bba02528c" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-stdlib" version="1.4.10">
@@ -1795,6 +2012,14 @@
          </artifact>
          <artifact name="kotlin-stdlib-2.3.10.pom">
             <sha256 value="4a3f8ed8a44c7ed8b31ae5101334880587c10970653f4b3b944fdb23830b2420" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-stdlib" version="2.3.20">
+         <artifact name="kotlin-stdlib-2.3.20.jar">
+            <sha256 value="0ae12504a5040ebaf37703908483420d1a5624dd1d93f357665f8c77c848a01e" origin="Verified"/>
+         </artifact>
+         <artifact name="kotlin-stdlib-2.3.20.pom">
+            <sha256 value="c83c02d9a7e2e954730491c33c2f1dc03c27662e27b566ec2b44d2d018639b98" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-stdlib-common" version="1.4.10">
@@ -1838,6 +2063,14 @@
             <sha256 value="a5a35b038bdeab9e4b4815036f996ee3743963ac4e3eca162c6385ba824b6382" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-stdlib-jdk7" version="2.3.20">
+         <artifact name="kotlin-stdlib-jdk7-2.3.20.jar">
+            <sha256 value="18231e75c68026d90f5487c8dc753be307c273a5eed574cee5a7118dfb04bc14" origin="Verified"/>
+         </artifact>
+         <artifact name="kotlin-stdlib-jdk7-2.3.20.pom">
+            <sha256 value="02ee3da19a200670544ab349b2df3e4d67ee95818f74328e3173de575710fc10" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-stdlib-jdk8" version="1.7.10">
          <artifact name="kotlin-stdlib-jdk8-1.7.10.jar">
             <sha256 value="8aafdd60c94f454c92e5066d266a5ed53ecc63c78f623b3fd9db56fea4032873" origin="Verified"/>
@@ -1864,6 +2097,14 @@
             <sha256 value="95a63c5b2752fd65af8d8c11d3a9e2b28b508cbbc3eb3c5caca3962f43c5145e" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-stdlib-jdk8" version="2.3.20">
+         <artifact name="kotlin-stdlib-jdk8-2.3.20.jar">
+            <sha256 value="4d2f1d22a64efd04554108ba71297e10ff399fc0d61f56feb7a9266104be757d" origin="Verified"/>
+         </artifact>
+         <artifact name="kotlin-stdlib-jdk8-2.3.20.pom">
+            <sha256 value="0a1e7406394b2478d906f05c6bfa55ec757973cf8bd2e66156975cfdea38f08e" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-test" version="1.5.21">
          <artifact name="kotlin-test-1.5.21.jar">
             <sha256 value="6b61c7cf635d91a67f407b2e4475bbafa779da7a70b01c0b0cd83fa4e9f4783c" origin="Verified"/>
@@ -1884,6 +2125,11 @@
             <sha256 value="367142781299bc0f9120c1deec0e62934a1af9ea7f01aaa9c5a5354dc5d8d7d9" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-tooling-core" version="2.3.20">
+         <artifact name="kotlin-tooling-core-2.3.20.jar">
+            <sha256 value="367142781299bc0f9120c1deec0e62934a1af9ea7f01aaa9c5a5354dc5d8d7d9" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-util-io" version="2.2.21">
          <artifact name="kotlin-util-io-2.2.21.jar">
             <sha256 value="266aa4026a106f59fcefc3f151768870af91cef15e4011fac0aa1f1f567d49f4" origin="Verified"/>
@@ -1894,6 +2140,11 @@
             <sha256 value="e01c370e7f37fc4d0293b9571141f53709e5109e28ec9d5082732d3820d67f2e" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-util-io" version="2.3.20">
+         <artifact name="kotlin-util-io-2.3.20.jar">
+            <sha256 value="0e76e7471e91c53ea68d2d24ef1f29fb592ac5fbb0d1d10faa916430eff3daca" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-util-klib" version="2.2.21">
          <artifact name="kotlin-util-klib-2.2.21.jar">
             <sha256 value="55400a917e6b984a6197eae78b5b52edbdf2cd6e0a7c3843f7954481bafb243f" origin="Verified"/>
@@ -1902,6 +2153,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-util-klib" version="2.3.10">
          <artifact name="kotlin-util-klib-2.3.10.jar">
             <sha256 value="e5bde04fc8d2f21d7059f05ca74d54b5890a0b8cc2a890ff2208c2841ec765f8" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-util-klib" version="2.3.20">
+         <artifact name="kotlin-util-klib-2.3.20.jar">
+            <sha256 value="9562b8d3b7a04beba2b14c05671e713859ea54bbc0a2107e65b2bcf273fa8448" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-util-klib-metadata" version="2.2.21">
@@ -1917,6 +2173,11 @@
             <sha256 value="2e05ea16f93fa881d42686ac2e7b5336fec359670c0193ba5ccc7bb5290f2b3d" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-util-klib-metadata" version="2.3.20">
+         <artifact name="kotlin-util-klib-metadata-2.3.20.jar">
+            <sha256 value="a8994e0bca6846dfb19f458c4cc15d7b13779ca1b0d9f34880b5ff2c2a2b73b3" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="low-level-api-fir-for-ide" version="2.3.10">
          <artifact name="low-level-api-fir-for-ide-2.3.10.jar">
             <sha256 value="1ffb974cf68db3797898d0cd19a0416a41069cf5fa1791cb91df6413f799ff2d" origin="Verified"/>
@@ -1925,12 +2186,28 @@
             <sha256 value="e55d8bbe6b7ed07b8e3392d16efb5b270bab90603c1f00e0684b2df920a7281c" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="low-level-api-fir-for-ide" version="2.3.20">
+         <artifact name="low-level-api-fir-for-ide-2.3.20.jar">
+            <sha256 value="3ce630838ee613083b4eb98f41a27abeea770770b67ea54277b47665a3014921" origin="Verified"/>
+         </artifact>
+         <artifact name="low-level-api-fir-for-ide-2.3.20.pom">
+            <sha256 value="f33daf7203305ff319a5e83ff15db7ebe7dbd483b3fd9988dca2c0594fe0aa34" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="symbol-light-classes-for-ide" version="2.3.10">
          <artifact name="symbol-light-classes-for-ide-2.3.10.jar">
             <sha256 value="298e61756dab332adc36712f14803e47f65f114f736c41cace04eaef2cce380e" origin="Verified"/>
          </artifact>
          <artifact name="symbol-light-classes-for-ide-2.3.10.pom">
             <sha256 value="3fdc7ee3e7adbabd703570d545b42329cef6cac349b579e53cc43cde21f5309a" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="symbol-light-classes-for-ide" version="2.3.20">
+         <artifact name="symbol-light-classes-for-ide-2.3.20.jar">
+            <sha256 value="c9238e904a8fe0a30c0b470d2b7d7661f384fd82f07e86720a852be6788e1c85" origin="Verified"/>
+         </artifact>
+         <artifact name="symbol-light-classes-for-ide-2.3.20.pom">
+            <sha256 value="c85d8b9235d3314548d36afda943a6221e843d80f28243d490216d44a7550c0d" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlinx" name="kotlinx-collections-immutable-jvm" version="0.3.7">
@@ -2045,7 +2322,6 @@
       <component group="org.jfrog.buildinfo" name="build-info-extractor-gradle" version="6.0.4">
          <artifact name="build-info-extractor-gradle-6.0.4.jar">
             <sha256 value="600c9fea2dfc79d6b7939cd3038d9dbaa7a408c7c5542d63be0f12c73527421c" origin="Verified (artifact from repox)">
-               <!-- This is the value for artifact on Maven Central -->
                <also-trust value="dd6b96e2cd58731914b2ce9dff0708e4e91e5f8e8d933b8dfdb09c09341061bf"/>
             </sha256>
          </artifact>
@@ -2431,6 +2707,11 @@
       <component group="org.sonarsource.sonarqube" name="sonar-ws" version="25.1.0.102122">
          <artifact name="sonar-ws-25.1.0.102122.jar">
             <sha256 value="5d213ae59e07cd7b3788c1ba9743afed75613435d8d8aa4ea952eb6569bfa5cd" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.sonatype.oss" name="oss-parent" version="4">
+         <artifact name="oss-parent-4.pom">
+            <sha256 value="c513995cf019d9213d4fda666589937b2bf1bea5c4cdd337e6170e80b18406ee" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.sonatype.oss" name="oss-parent" version="7">
