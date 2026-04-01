@@ -1,32 +1,29 @@
 {
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/KotlinLanguageServer.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/KotlinLanguageServer.kt": [
 0
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/externalsources/Decompiler.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/externalsources/Decompiler.kt": [
 0
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/j2k/JavaToKotlinConverter.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/j2k/JavaToKotlinConverter.kt": [
 0
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/util/LoggingMessageCollector.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/util/LoggingMessageCollector.kt": [
 0
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/resolvemain/Simple.kt": [
+"kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/util/AsyncExecutor.kt": [
 0
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/AsyncExecutor.kt": [
+"kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/util/Debouncer.kt": [
 0
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/Debouncer.kt": [
+"kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/util/DelegatePrintStream.kt": [
 0
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/DelegatePrintStream.kt": [
+"kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/util/KotlinLSException.kt": [
 0
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/KotlinLSException.kt": [
-0
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/util/Utils.kt": [
+"kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/util/Utils.kt": [
 0
 ]
 }

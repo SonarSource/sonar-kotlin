@@ -1,21 +1,18 @@
 {
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/KotlinLanguageServer.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/KotlinLanguageServer.kt": [
 74
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/KotlinWorkspaceService.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/KotlinWorkspaceService.kt": [
 86
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt": [
 104,
 159
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/definition/GoToDefinition.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/definition/GoToDefinition.kt": [
 50
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/overridemembers/OverrideMembers.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/overridemembers/OverrideMembers.kt": [
 80
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/kotlinCompilerPerformance/BigFile.kt": [
-481
 ]
 }

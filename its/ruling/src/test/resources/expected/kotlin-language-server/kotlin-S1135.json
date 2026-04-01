@@ -1,86 +1,73 @@
 {
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/CompiledFile.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/CompiledFile.kt": [
 67
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/CompilerClassPath.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/CompilerClassPath.kt": [
 54
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/KotlinTextDocumentService.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/KotlinTextDocumentService.kt": [
 160
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/SourcePath.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/SourcePath.kt": [
 56,
 74,
 254
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/AddMissingImportsQuickFix.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/AddMissingImportsQuickFix.kt": [
 50
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt": [
 154,
 157,
 433,
 474
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/completion/Completions.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/completion/Completions.kt": [
 95,
 125,
 145
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/externalsources/JdkSourceArchiveProvider.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/externalsources/JdkSourceArchiveProvider.kt": [
 16
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/imports/Imports.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/imports/Imports.kt": [
 31
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/index/Symbol.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/index/Symbol.kt": [
 6
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/index/SymbolIndex.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/index/SymbolIndex.kt": [
 187
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/j2k/JavaElementConverter.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/j2k/JavaElementConverter.kt": [
 111,
 300,
 350,
 505
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/overridemembers/OverrideMembers.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/overridemembers/OverrideMembers.kt": [
 36,
 74,
 77,
 175,
 179
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/references/FindReferences.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/references/FindReferences.kt": [
 118,
 182
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/semantictokens/SemanticTokens.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/semantictokens/SemanticTokens.kt": [
 114
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/signaturehelp/SignatureHelp.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/signaturehelp/SignatureHelp.kt": [
 43,
 88,
 124
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/AdditionalWorkspaceTest.kt": [
-34
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/JavaToKotlinTest.kt": [
+"kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/SourceExclusions.kt": [
 10
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/SimpleScriptTest.kt": [
-34,
-46
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceTo.kt": [
-11
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/SourceExclusions.kt": [
-10
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/classpath/BackupClassPathResolver.kt": [
+"kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/classpath/BackupClassPathResolver.kt": [
 99
 ]
 }

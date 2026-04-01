@@ -1,0 +1,25 @@
+{
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/completion/Completions.kt": [
+177,
+218,
+218,
+227,
+227,
+233,
+233,
+294,
+305,
+448,
+449
+],
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/completion/RenderCompletionItem.kt": [
+21,
+21
+],
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/definition/GoToDefinition.kt": [
+26
+],
+"kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/classpath/GradleClassPathResolver.kt": [
+108
+]
+}

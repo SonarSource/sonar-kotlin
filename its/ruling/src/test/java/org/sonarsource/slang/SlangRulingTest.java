@@ -159,9 +159,11 @@ class SlangRulingTest {
 
   @Test
   void test_kotlin_language_server() throws IOException {
-    executeSonarScannerAndAssertDifferences("kotlin-language-server", Map.of(
-      "sonar.inclusions", "sources-kotlin/kotlin-language-server/**/*.kt",
-      "sonar.kotlin.source.version", "2.1.0"
+    executeGradleBuildAndAssertDifferences("kotlin-language-server", Map.of(
+      "sonar.inclusions", "**/*.kt",
+      "sonar.kotlin.source.version", "2.1.0",
+      // https://github.com/fwcd/kotlin-language-server/blob/main/buildSrc/build.gradle.kts
+      "org.gradle.project.javaVersion", "17"
     ));
   }
 
@@ -251,7 +253,9 @@ class SlangRulingTest {
       properties.put("org.gradle.debug.port", debugPort);
     }
     executeBuildAndAssertDifferences(project, gradleBuild(project, properties)
-      .setTasks("build").addArguments("sonar", "-x", "test"));
+      .setTasks("build").addArguments(
+        "--init-script", rulingDirectory().resolve("apply-sonarqube-plugin.gradle.kts").toString(),
+        "sonar", "-x", "test"));
   }
 
   private void executeSonarScannerAndAssertDifferences(String project, Map<String, String> additionalProperties) throws IOException {

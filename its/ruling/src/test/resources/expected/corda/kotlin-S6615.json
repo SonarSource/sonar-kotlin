@@ -8,18 +8,6 @@
 "corda-project:sources-kotlin/corda/node/src/integration-test/kotlin/net/corda/node/services/CordaServiceIssueOnceAtStartupTests.kt": [
 61
 ],
-"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/statemachine/FlowClientIdTests.kt": [
-155,
-175,
-494,
-545
-],
-"corda-project:sources-kotlin/corda/node/src/test/kotlin/net/corda/node/services/statemachine/FlowFrameworkTests.kt": [
-696,
-744,
-805,
-867
-],
 "corda-project:sources-kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/internal/FlowStackSnapshot.kt": [
 56
 ]

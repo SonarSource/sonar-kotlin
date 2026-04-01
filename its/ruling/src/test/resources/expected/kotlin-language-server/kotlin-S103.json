@@ -1,18 +1,15 @@
 {
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/KotlinLanguageServer.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/KotlinLanguageServer.kt": [
 32
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/ImplementAbstractMembersQuickFix.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/ImplementAbstractMembersQuickFix.kt": [
 105
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/compiler/Compiler.kt": [
 556
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/overridemembers/OverrideMembers.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/overridemembers/OverrideMembers.kt": [
 77,
 114
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/kotlin/org/javacs/kt/CompletionsTest.kt": [
-226
 ]
 }

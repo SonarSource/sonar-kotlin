@@ -1,21 +1,5 @@
 {
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/j2k/JavaElementConverter.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/j2k/JavaElementConverter.kt": [
 58
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/FunctionScope.kt": [
-8,
-12
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/InstanceMember.kt": [
-32
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/Visibility.kt": [
-6,
-11,
-18,
-23
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceGetSetValue.kt": [
-11
 ]
 }

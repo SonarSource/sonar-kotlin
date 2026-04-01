@@ -1,0 +1,8 @@
+{
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/completion/RenderCompletionItem.kt": [
+89
+],
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/inlayhints/InlayHint.kt": [
+136
+]
+}

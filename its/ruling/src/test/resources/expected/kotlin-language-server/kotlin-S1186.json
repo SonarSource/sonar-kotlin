@@ -1,80 +1,15 @@
 {
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/KotlinLanguageServer.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/KotlinLanguageServer.kt": [
 174
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/progress/Progress.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/progress/Progress.kt": [
 15,
 17
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/main/kotlin/org/javacs/kt/util/LoggingMessageCollector.kt": [
+"kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/util/LoggingMessageCollector.kt": [
 9
 ],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/BackquotedFunction.kt": [
-5
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/FillEmptyBody.kt": [
-2
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/Statics.kt": [
-11,
-17
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/TrailingLambda.kt": [
-1,
-3
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/completions/Visibility.kt": [
-6,
-7,
-8,
-11,
-12,
-13,
-18,
-19,
-20,
-23,
-24,
-25,
-29,
-31
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/definition/GoFrom.kt": [
-7
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/definition/GoTo.kt": [
-2
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/hover/ObjectReference.kt": [
-14
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/hover/ResolveToFile.kt": [
-2
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/inlayhints/Parameters.kt": [
-9
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/quickfixes/SomeSubclass.kt": [
-11
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceGetterSetter.kt": [
-3
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/references/ReferenceTo.kt": [
-2
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/signatureHelp/SignatureHelp.kt": [
-15,
-22,
-25,
-28,
-31,
-34
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/server/src/test/resources/symbols/DocumentSymbols.kt": [
-4
-],
-"kotlin-language-server-project:sources-kotlin/kotlin-language-server/shared/src/main/kotlin/org/javacs/kt/Logger.kt": [
+"kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/Logger.kt": [
 28,
 30
 ]
