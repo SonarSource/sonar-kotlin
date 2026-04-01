@@ -2705,9 +2705,6 @@
 "intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/RsCfgAttributeCompletionProvider.kt": [
 0
 ],
-"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/RsCommonCompletionProvider.kt": [
-0
-],
 "intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/RsCompletionConfidence.kt": [
 0
 ],

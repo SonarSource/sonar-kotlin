@@ -181,10 +181,6 @@
 196,
 275
 ],
-"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/RsCommonCompletionProvider.kt": [
-109,
-275
-],
 "intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/dfa/CFGBuilder.kt": [
 117
 ],

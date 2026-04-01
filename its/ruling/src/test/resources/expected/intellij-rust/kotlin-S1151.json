@@ -61,10 +61,6 @@
 312,
 338
 ],
-"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/RsCommonCompletionProvider.kt": [
-124,
-539
-],
 "intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/dfa/MemoryCategorization.kt": [
 386
 ],

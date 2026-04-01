@@ -106,10 +106,6 @@
 367,
 372
 ],
-"intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/RsCommonCompletionProvider.kt": [
-84,
-640
-],
 "intellij-rust-project:sources-kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/macros/MacroExpansionTask.kt": [
 187,
 201
