@@ -16,11 +16,7 @@
 "kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/RPCApi.kt": [
 211
 ],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/CordaRPCOpsImpl.kt": [
-203
-],
 "kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/transactions/BFTNonValidatingNotaryService.kt": [
-72,
 74
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/CordaRPCOpsImplTest.kt": [
@@ -28,9 +24,6 @@
 ],
 "kotlin-corda-project:sources/kotlin/corda/samples/network-visualiser/src/main/kotlin/net/corda/netmap/simulation/IRSSimulation.kt": [
 92
-],
-"kotlin-corda-project:sources/kotlin/corda/samples/notary-demo/src/main/kotlin/net/corda/notarydemo/MyCustomNotaryService.kt": [
-31
 ],
 "kotlin-corda-project:sources/kotlin/corda/samples/simm-valuation-demo/contracts-states/src/main/kotlin/net/corda/vega/contracts/PortfolioSwap.kt": [
 11

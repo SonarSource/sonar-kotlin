@@ -43,3 +43,37 @@ interface WithVoidFunctionsN {
     fun voidFunction2(): Void // Noncompliant
 //                       ^^^^
 }
+
+
+interface MonoN<T>
+
+interface WebFilterN {
+    fun filter(): MonoN<Void>
+}
+
+class MyFilterN : WebFilterN {
+    override fun filter(): MonoN<Void> { TODO() } // Compliant, overriding function with Void as type argument
+}
+
+class MyFilterNWithLocalVar : WebFilterN {
+    override fun filter(): MonoN<Void> { // Compliant, overriding function with Void as type argument
+        val local: Function<Void> = TODO() // Noncompliant
+//                          ^^^^
+        return TODO()
+    }
+}
+
+interface GenericProcessorN<T> {
+    fun process(): Map<String, T>
+}
+
+class VoidProcessorN : GenericProcessorN<Void> { // Noncompliant
+//                                       ^^^^
+    override fun process(): Map<String, Void> { TODO() } // Compliant, overriding function with Void as type argument
+}
+
+fun nonOverrideFunWithVoidTypeArgN(): List<Void> { TODO() } // Noncompliant
+//                                         ^^^^
+
+fun nonOverrideFunWithVoidParamN(x: Function<Void>) {} // Noncompliant
+//                                           ^^^^
