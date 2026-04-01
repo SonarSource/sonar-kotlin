@@ -84,7 +84,7 @@ class MainSafeCoroutinesCheck : AbstractCheck() {
             if (resolvedCall matches THREAD_SLEEP_MATCHER) {
                 context.reportIssue(call.calleeExpression!!, """Replace this "Thread.sleep()" call with "delay()".""")
             } else {
-                resolvedCall?.partiallyAppliedSymbol?.symbol?.let { descriptor ->
+                resolvedCall?.symbol?.let { descriptor ->
                     if (call.isInsideNonSafeDispatcher()
                         && descriptor.throwsExceptions(BLOCKING_ANNOTATIONS)
                     ) {

@@ -98,7 +98,7 @@ private class SingleConstructorCallExtractor(
         if (singletonClassCandidates.isEmpty() || !constructorMatcher.matches(expression)) return
 
         val kaConstructorSymbol = expression.resolveToCall()?.successfulFunctionCallOrNull()
-            ?.partiallyAppliedSymbol?.symbol as? KaConstructorSymbol ?: return
+            ?.symbol as? KaConstructorSymbol ?: return
         val fqName = kaConstructorSymbol.containingClassId?.asFqNameString() ?: return
         singleConstructorCallByClass.put(fqName, expression)?.let {
             singleConstructorCallByClass.remove(fqName)

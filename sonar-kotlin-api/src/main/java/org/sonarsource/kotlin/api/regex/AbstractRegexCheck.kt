@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.api.regex
 
+import java.util.regex.Pattern
 import org.jetbrains.kotlin.analysis.api.resolution.KaExplicitReceiverValue
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.symbols.name
@@ -45,7 +46,6 @@ import org.sonarsource.kotlin.api.frontend.TextRangeTracker
 import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 import org.sonarsource.kotlin.api.visiting.withKaSession
-import java.util.regex.Pattern
 import org.sonarsource.kotlin.api.checks.isPlus as isConcat
 
 val PATTERN_COMPILE_MATCHER = FunMatcher(qualifier = "java.util.regex.Pattern", name = "compile")
@@ -57,7 +57,7 @@ private fun argGetter(argIndex: Int) = { resolvedCall: KaFunctionCall<*> ->
 }
 
 private val referenceTargetGetter = { resolvedCall: KaFunctionCall<*> ->
-    when (val receiver = resolvedCall.partiallyAppliedSymbol.extensionReceiver) {
+    when (val receiver = resolvedCall.extensionReceiver) {
         is KaExplicitReceiverValue -> receiver.expression
         else -> null
     }

@@ -19,6 +19,7 @@ package org.sonarsource.kotlin.api.sensors
 import com.intellij.openapi.util.Disposer
 import java.io.File
 import java.io.IOException
+import kotlin.jvm.optionals.getOrElse
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.slf4j.Logger
 import org.sonar.api.batch.fs.InputFile
@@ -148,7 +149,7 @@ abstract class AbstractKotlinSensorExecuteContext(
             } catch (e: Exception) {
                 inputFileContext.reportAnalysisError(e.message, null)
                 logger.error("Cannot analyse '${inputFileContext.inputFile}' with '$visitorId': ${e.message}", e)
-                if (sensorContext.config().getBoolean(FAIL_FAST_PROPERTY_NAME).orElse(false)) {
+                if (sensorContext.config().getBoolean(FAIL_FAST_PROPERTY_NAME).getOrElse { false }) {
                     throw IllegalStateException(
                         "Exception in '$visitorId' while analyzing '${inputFileContext.inputFile}'",
                         e

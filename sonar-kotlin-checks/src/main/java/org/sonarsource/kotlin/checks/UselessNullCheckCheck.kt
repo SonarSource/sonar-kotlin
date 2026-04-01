@@ -113,7 +113,7 @@ class UselessNullCheckCheck : AbstractCheck() {
                 comparesToNull = false,
             ) {
                 +"non-null check "
-                code(resolvedCall.partiallyAppliedSymbol.symbol.name.toString())
+                code(resolvedCall.symbol.name.toString())
             }
         }
     }

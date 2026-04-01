@@ -32,13 +32,12 @@ import org.sonarsource.kotlin.api.visiting.withKaSession
 @Rule(key = "S6318")
 class RedundantSuspendModifierCheck : AbstractCheck() {
 
-    override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext) = withKaSession {
+    override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext): Unit = withKaSession {
         val suspendModifier = function.suspendModifier() ?: return
         with(function) {
             if (hasBody() && !overrides()) {
                 findDescendantOfType<KtNameReferenceExpression> {
                     (it.resolveToCall()?.successfulFunctionCallOrNull()
-                        ?.partiallyAppliedSymbol
                         ?.symbol as? KaNamedFunctionSymbol)?.isSuspend
                         ?: true
                 } ?: context.reportIssue(suspendModifier, """Remove this unnecessary "suspend" modifier.""")

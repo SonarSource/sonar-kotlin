@@ -16,9 +16,9 @@
  */
 package org.sonarsource.kotlin.checks
 
+import com.intellij.psi.PsiElement
 import java.util.regex.Pattern
 import java.util.stream.Collectors
-import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.analysis.api.resolution.KaExplicitReceiverValue
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
@@ -47,13 +47,13 @@ import org.sonarsource.kotlin.api.checks.getFirstArgumentExpression
 import org.sonarsource.kotlin.api.checks.getParentCall
 import org.sonarsource.kotlin.api.checks.matches
 import org.sonarsource.kotlin.api.checks.predictRuntimeStringValue
+import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.secondaryOf
 import org.sonarsource.kotlin.api.regex.AbstractRegexCheck
 import org.sonarsource.kotlin.api.regex.PATTERN_COMPILE_MATCHER
 import org.sonarsource.kotlin.api.regex.REGEX_MATCHER
 import org.sonarsource.kotlin.api.regex.RegexContext
 import org.sonarsource.kotlin.api.regex.TO_REGEX_MATCHER
-import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.sonarsource.kotlin.api.frontend.secondaryOf
 import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private const val MESSAGE = "Remove MULTILINE mode or change the regex."
@@ -161,11 +161,10 @@ class EmptyLineRegexCheck : AbstractRegexCheck() {
 }
 
 private fun KaFunctionCall<*>?.getReceiverExpression(): KtExpression? {
-    val partiallyAppliedSymbol = this?.partiallyAppliedSymbol
-    val receiverValue = partiallyAppliedSymbol?.dispatchReceiver ?: partiallyAppliedSymbol?.extensionReceiver
+    val receiverValue = this?.dispatchReceiver ?: this?.extensionReceiver
     return when (receiverValue) {
         is KaExplicitReceiverValue -> receiverValue.expression
-        else -> return null
+        else -> null
     }
 }
 
@@ -208,10 +207,8 @@ private fun getStringInMatcherFind(ref: KtElement): KtExpression? = withKaSessio
     if (!(resolvedCall matches PATTERN_MATCHER)) return null
 
     return when (val preParent = ref.parent.parent) {
-        is KtExpression -> if (preParent.resolveToCall()?.successfulFunctionCallOrNull() matches PATTERN_FIND) extractArgument(resolvedCall) else null
-        is KtProperty -> if (preParent.findUsages().any { it.getParentCall() matches PATTERN_FIND }) {
-            extractArgument(resolvedCall)
-        } else null
+        is KtExpression if (preParent.resolveToCall()?.successfulFunctionCallOrNull() matches PATTERN_FIND) -> extractArgument(resolvedCall)
+        is KtProperty if (preParent.findUsages().any { it.getParentCall() matches PATTERN_FIND }) -> extractArgument(resolvedCall)
         else -> null
     }
 }

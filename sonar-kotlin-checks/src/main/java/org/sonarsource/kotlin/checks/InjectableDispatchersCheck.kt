@@ -46,11 +46,11 @@ class InjectableDispatchersCheck : CallAbstractCheck() {
         resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext,
-    ) = withKaSession {
+    ): Unit = withKaSession {
         val argExpr = resolvedCall.argumentMapping.keys.firstOrNull() ?: return
         val argValueExpr = argExpr.predictRuntimeValueExpression() as? KtQualifiedExpression ?: return
         val variableAccessCall: KaVariableAccessCall = argValueExpr.resolveToCall()?.successfulVariableAccessCall() ?: return
-        val receiver = variableAccessCall.partiallyAppliedSymbol.dispatchReceiver?.type ?: return
+        val receiver = variableAccessCall.dispatchReceiver?.type ?: return
         if (receiver.isClassType(dispatchersClassId)) {
             val secondaries = if (argExpr !== argValueExpr) {
                 listOf(kotlinFileContext.secondaryOf(argValueExpr, "Hard-coded dispatcher"))

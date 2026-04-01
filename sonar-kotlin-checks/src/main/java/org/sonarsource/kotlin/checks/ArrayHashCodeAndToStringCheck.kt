@@ -65,7 +65,7 @@ class ArrayHashCodeAndToStringCheck : CallAbstractCheck() {
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext
     ) {
-        val methodName = resolvedCall.partiallyAppliedSymbol.symbol.name?.asString()
+        val methodName = resolvedCall.symbol.name?.asString()
         val replacement = when (matchedFun) {
             OBJECT_ARRAY_MATCHER -> OBJECT_ARRAY_REPLACEMENT[methodName]
             ARRAY_CONTENT_MATCHER -> if (receiverIsArrayOfArray(callExpression))
