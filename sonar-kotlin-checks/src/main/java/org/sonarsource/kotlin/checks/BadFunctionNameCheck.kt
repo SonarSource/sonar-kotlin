@@ -17,11 +17,14 @@
 package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.rule.RuleKey
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+
+private val TEST_ANNOTATION_NAMES = setOf("Test", "ParameterizedTest", "RepeatedTest")
 
 @Rule(key = "S100")
 class BadFunctionNameCheck : AbstractCheck() {
@@ -46,12 +49,25 @@ class BadFunctionNameCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val name = function.name ?: /* in case of anonymous functions */ return
-        if (!name.matches(formatRegex)) {
+        if (!name.matches(formatRegex) && !isBacktickedTestFunction(function, kotlinFileContext)) {
             kotlinFileContext.reportIssue(
                 function.nameIdentifier!!,
                 """Rename function "$name" to match the regular expression $format"""
             )
         }
     }
+
+    private fun isBacktickedTestFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext): Boolean {
+        val nameIdentifierText = function.nameIdentifier?.text ?: return false
+        if (!nameIdentifierText.startsWith('`')) return false
+
+        return isTestFile(kotlinFileContext) || hasTestAnnotation(function)
+    }
+
+    private fun isTestFile(kotlinFileContext: KotlinFileContext): Boolean =
+        kotlinFileContext.inputFileContext.inputFile.type() == InputFile.Type.TEST
+
+    private fun hasTestAnnotation(function: KtNamedFunction): Boolean =
+        function.annotationEntries.any { TEST_ANNOTATION_NAMES.contains(it.shortName?.asString()) }
 
 }

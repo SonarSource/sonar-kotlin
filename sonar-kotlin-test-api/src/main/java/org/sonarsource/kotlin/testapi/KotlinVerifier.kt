@@ -51,6 +51,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
     var classpath: List<String> = System.getProperty("java.class.path").split(File.pathSeparatorChar) + DEFAULT_KOTLIN_CLASSPATH
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
     var isAndroid = false
+    var fileType: InputFile.Type = InputFile.Type.MAIN
 
     fun verify() {
         verifyFile {
@@ -98,7 +99,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
                 val start = comment.range.start()
                 verifier.addComment(start.line(), start.lineOffset() + 1, comment.text, 2, 0)
             }
-        val ctx = TestContext(verifier, check, inputFile = DummyInputFile(path), isAndroid = isAndroid)
+        val ctx = TestContext(verifier, check, inputFile = DummyInputFile(path, fileType), isAndroid = isAndroid)
         ctx.scan(root)
         return verifier
     }

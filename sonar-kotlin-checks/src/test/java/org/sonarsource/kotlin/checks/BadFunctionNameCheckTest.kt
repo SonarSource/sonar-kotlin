@@ -16,4 +16,17 @@
  */
 package org.sonarsource.kotlin.checks
 
-class BadFunctionNameCheckTest : CheckTest(BadFunctionNameCheck())
+import org.junit.jupiter.api.Test
+import org.sonar.api.batch.fs.InputFile
+import org.sonarsource.kotlin.testapi.KotlinVerifier
+
+class BadFunctionNameCheckTest : CheckTest(BadFunctionNameCheck()) {
+
+    @Test
+    fun `backtick function names in test files should not raise issues`() {
+        KotlinVerifier(BadFunctionNameCheck()) {
+            this.fileName = "BadFunctionNameCheckSampleTestFile.kt"
+            this.fileType = InputFile.Type.TEST
+        }.verify()
+    }
+}
