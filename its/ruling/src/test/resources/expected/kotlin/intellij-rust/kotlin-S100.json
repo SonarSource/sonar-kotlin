@@ -80,14 +80,6 @@
 30,
 40
 ],
-"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/toolchain/CargoCommandLineTest.kt": [
-14,
-22,
-30,
-38,
-46,
-54
-],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/toolchain/CargoTest.kt": [
 16,
 25,
@@ -1989,9 +1981,6 @@
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/psi/RsCodeFragmentFactoryTest.kt": [
 12,
 20
-],
-"kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/psi/RsNumericLiteralValueTest.kt": [
-43
 ],
 "kotlin-intellij-rust-project:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsClosuresResolveTest.kt": [
 25,
