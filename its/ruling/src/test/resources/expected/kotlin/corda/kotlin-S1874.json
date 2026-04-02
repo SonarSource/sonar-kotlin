@@ -46,21 +46,11 @@
 36,
 38
 ],
-"kotlin-corda-project:sources/kotlin/corda/experimental/behave/src/main/kotlin/net/corda/behave/node/Distribution.kt": [
-97
-],
-"kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/config/ConfigUtilities.kt": [
-113
-],
 "kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/protonwrapper/netty/ConnectionChange.kt": [
 8
 ],
 "kotlin-corda-project:sources/kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/AttachmentsClassLoaderStaticContractTests.kt": [
 81
-],
-"kotlin-corda-project:sources/kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/config/ConfigParsingTest.kt": [
-84,
-84
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/AMQPBridgeTest.kt": [
 9
@@ -74,13 +64,6 @@
 "kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/services/distributed/DistributedServiceTests.kt": [
 74,
 76
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/services/network/NetworkMapTest.kt": [
-64,
-80
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/utilities/registration/NodeRegistrationTest.kt": [
-84
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/AbstractNode.kt": [
 496,
@@ -114,19 +97,6 @@
 178,
 295
 ],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/network/NetworkMapClient.kt": [
-31,
-34,
-41,
-48,
-59,
-67,
-75
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/utilities/registration/HTTPNetworkRegistrationService.kt": [
-21,
-31
-],
 "kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/CordaRPCOpsImplTest.kt": [
 161,
 167
@@ -134,27 +104,9 @@
 "kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/internal/serialization/RoundTripObservableSerializerTests.kt": [
 88
 ],
-"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/config/NodeConfigurationImplTest.kt": [
-45,
-134,
-156,
-157,
-168,
-170,
-171
-],
 "kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/messaging/ArtemisMessagingTest.kt": [
 9,
 75
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/network/NetworkMapClientTest.kt": [
-44
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/network/NetworkMapUpdaterTest.kt": [
-64
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/network/NetworkParametersReaderTest.kt": [
-45
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/DBTransactionStorageTests.kt": [
 169
@@ -179,15 +131,12 @@
 29
 ],
 "kotlin-corda-project:sources/kotlin/corda/samples/attachment-demo/src/main/kotlin/net/corda/attachmentdemo/AttachmentDemo.kt": [
-139,
-147
+139
 ],
 "kotlin-corda-project:sources/kotlin/corda/samples/irs-demo/src/integration-test/kotlin/net/corda/test/spring/SpringDriver.kt": [
 8,
 42,
 50,
-52,
-52,
 61
 ],
 "kotlin-corda-project:sources/kotlin/corda/samples/network-visualiser/src/main/kotlin/net/corda/netmap/simulation/IRSSimulation.kt": [
@@ -197,9 +146,6 @@
 16,
 54,
 64
-],
-"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/AttachmentsClassLoader.kt": [
-72
 ],
 "kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/PropertySerializer.kt": [
 140
@@ -223,19 +169,6 @@
 ],
 "kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/carpenter/ClassCarpenterTest.kt": [
 33
-],
-"kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/http/HttpApi.kt": [
-14,
-21,
-28,
-34,
-41
-],
-"kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/http/HttpUtils.kt": [
-43
-],
-"kotlin-corda-project:sources/kotlin/corda/tools/blobinspector/src/main/kotlin/net/corda/blobinspector/Main.kt": [
-113
 ],
 "kotlin-corda-project:sources/kotlin/corda/tools/demobench/src/main/kotlin/net/corda/demobench/views/NodeTerminalView.kt": [
 191
