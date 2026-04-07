@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.analysis.api.types.KaErrorType
-import org.jetbrains.kotlin.analysis.api.types.KaTypeNullability
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -166,7 +165,7 @@ private fun KtExpression.isNotNullable(): Boolean =
             this@isNotNullable.expressionType?.let { resolvedType ->
                 resolvedType !is KaErrorType &&
                         resolvedType !is KaTypeParameterType &&
-                        resolvedType.nullability == KaTypeNullability.NON_NULLABLE
+                        !resolvedType.isMarkedNullable && !resolvedType.hasFlexibleNullability
             }
         } == true
     }
