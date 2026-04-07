@@ -140,6 +140,11 @@ class KotlinVirtualFile(
     override fun getTimeStamp(): Long =
         throw UnsupportedOperationException()
 
+    /**
+     * See also [org.jetbrains.kotlin.cli.common.localfs.KotlinLocalVirtualFile]
+     */
+    override fun getModificationStamp() = 0L
+
     override fun getLength(): Long = file.length()
 
     override fun refresh(p0: Boolean, p1: Boolean, p2: Runnable?) =
