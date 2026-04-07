@@ -15,6 +15,8 @@ class IndexedAccessCheckSample {
     }
 
     fun withIndexedAccessors(lisp: Lisp<Int>, list: MutableList<Int>, map: MutableMap<String, Int>, grid: Grid) {
+        lisp.get(index = 1) // Compliant, named arguments are allowed
+        grid.get(row = 1, 2) // Compliant, named arguments are allowed
         lisp.get(1) // Compliant, not an operator
         list[1] // Compliant
         list[1] = 42 // Compliant
