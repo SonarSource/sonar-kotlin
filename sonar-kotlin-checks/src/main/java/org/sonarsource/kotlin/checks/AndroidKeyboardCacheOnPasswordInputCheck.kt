@@ -18,7 +18,6 @@ package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.util.descendantsOfType
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
-import org.jetbrains.kotlin.analysis.api.resolution.KaSimpleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
@@ -146,7 +145,7 @@ class AndroidKeyboardCacheOnPasswordInputCheck : CallAbstractCheck() {
 
     private fun isKeyboardOptionsWithCacheEnabledReferenceExpression(expression: KtReferenceExpression): Boolean = withKaSession {
         val variableAccessCall = expression.resolveToCall()?.successfulVariableAccessCall() ?: return@withKaSession false
-        val symbol = (variableAccessCall as? KaSimpleVariableAccessCall)?.symbol ?: return@withKaSession false
+        val symbol = variableAccessCall.symbol
         val value = (symbol.psi as? KtProperty)?.takeIf { !it.isVar }?.initializer
             ?: (symbol.psi as? KtParameter)?.defaultValue
             ?: return@withKaSession false

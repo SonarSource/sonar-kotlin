@@ -117,7 +117,7 @@ private fun List<KtNamedFunction>.unambiguousFunction() = if (this.size == 1) th
 private fun capitalize(name: String): String = name.replaceFirstChar { it.uppercase() }
 
 private fun KaType.isNotNullable(classId: ClassId) = withKaSession {
-    !nullability.isNullable && this@isNotNullable.isClassType(classId)
+    !isNullable && this@isNotNullable.isClassType(classId)
 }
 
 private fun KtNamedFunction.isIncompatiblePropertyAccessor(): Boolean = isAbstract() || overrides() || isAnnotated

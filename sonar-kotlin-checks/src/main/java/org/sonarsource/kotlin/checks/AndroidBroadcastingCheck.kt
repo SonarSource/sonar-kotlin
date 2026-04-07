@@ -58,7 +58,7 @@ class AndroidBroadcastingCheck : CallAbstractCheck() {
         kotlinFileContext: KotlinFileContext
     ) {
         val arguments = resolvedCall.argumentMapping.keys.toList()
-        val name = resolvedCall.partiallyAppliedSymbol.symbol.name?.asString() ?: return
+        val name = resolvedCall.symbol.name?.asString() ?: return
 
         if (
             name in STICKY_BROADCAST_NAMES ||

@@ -61,7 +61,7 @@ class MobileDatabaseEncryptionKeysCheck : CallAbstractCheck() {
         resolvedCall: KaFunctionCall<*>,
         kotlinFileContext: KotlinFileContext
     ) {
-        val symbol = resolvedCall.partiallyAppliedSymbol.symbol
+        val symbol = resolvedCall.symbol
         val functionName = if (symbol is KaConstructorSymbol) "<init>" else symbol.name?.asString() ?: return
         val valueArgumentsList = resolvedCall.argumentMapping.keys.toList()
         if (valueArgumentsList.size < 2 && functionName != ENCRYPTION_KEY) return
@@ -104,7 +104,7 @@ private fun KtElement.isHardCoded(secondaries: MutableList<PsiElement>): Boolean
 
 fun KtCallExpression.returnsHardcoded(secondaries: MutableList<PsiElement>): Boolean = withKaSession {
     val resultingDescriptor = this@returnsHardcoded.resolveToCall()?.successfulFunctionCallOrNull() ?: return false
-    val declaration = resultingDescriptor.partiallyAppliedSymbol.symbol.psi as? KtNamedFunction ?: return false
+    val declaration = resultingDescriptor.symbol.psi as? KtNamedFunction ?: return false
 
     if (!declaration.hasBody()) return false
     return if (declaration.hasBlockBody()) {

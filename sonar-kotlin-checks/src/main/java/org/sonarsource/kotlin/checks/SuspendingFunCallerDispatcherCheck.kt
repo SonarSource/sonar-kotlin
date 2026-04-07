@@ -44,7 +44,7 @@ class SuspendingFunCallerDispatcherCheck : CallAbstractCheck() {
         if (callExpressions.isNotEmpty()
             && callExpressions.all {
                 (it.resolveToCall()
-                    ?.singleFunctionCallOrNull()?.partiallyAppliedSymbol?.signature?.symbol as? KaNamedFunctionSymbol)?.isSuspend == true
+                    ?.singleFunctionCallOrNull()?.signature?.symbol as? KaNamedFunctionSymbol)?.isSuspend == true
             }
             && arguments.size == 2
         ) {

@@ -56,9 +56,9 @@ class IgnoredOperationStatusCheck : CallAbstractCheck() {
 
     override fun visitFunctionCall(callExpression: KtCallExpression, resolvedCall: KaFunctionCall<*>, kotlinFileContext: KotlinFileContext) = withKaSession {
         if (!callExpression.isUsedAsExpression) {
-            val name = resolvedCall.partiallyAppliedSymbol.signature.symbol.name
-            val returnType = resolvedCall.partiallyAppliedSymbol.signature.returnType.simpleName() ?: /* TODO improve message: */ "this method"
-            val message = """Do something with the "$returnType" value returned by "${name}"."""
+            val name = resolvedCall.signature.symbol.name
+            val returnType = resolvedCall.signature.returnType.simpleName() ?: /* TODO improve message: */ "this method"
+            val message = """Do something with the "$returnType" value returned by "$name"."""
             kotlinFileContext.reportIssue(callExpression.calleeExpression!!, message)
         }
     }

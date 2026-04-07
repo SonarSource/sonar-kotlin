@@ -76,8 +76,7 @@ class FunMatcherImpl(
         when (resolvedCall) {
             null -> false
             is KaFunctionCall -> {
-                val symbol = resolvedCall.partiallyAppliedSymbol
-                matches(symbol.dispatchReceiver, symbol.signature.symbol, symbol.signature)
+                matches(resolvedCall.dispatchReceiver, resolvedCall.signature.symbol, resolvedCall.signature)
             }
             is KaVariableAccessCall -> {
                 val propertySymbol = (resolvedCall.symbol as? KaPropertySymbol) ?: return false

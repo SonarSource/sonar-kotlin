@@ -159,8 +159,7 @@ fun KtExpression.predictRuntimeValueExpression(
 
 fun KtExpression.predictReceiverExpression(): KtExpression? = withKaSession {
     val resolvedCall = this@predictReceiverExpression.resolveToCall()?.successfulFunctionCallOrNull()
-    val symbol = resolvedCall?.partiallyAppliedSymbol
-    val receiver = symbol?.extensionReceiver ?: symbol?.dispatchReceiver
+    val receiver = resolvedCall?.extensionReceiver ?: resolvedCall?.dispatchReceiver
     when (receiver) {
         is KaExplicitReceiverValue -> receiver.expression.predictRuntimeValueExpression()
         is KaImplicitReceiverValue -> receiver.symbol.containingSymbol
@@ -254,20 +253,12 @@ private fun KtReferenceExpression.extractFromInitializer(
 private fun KtReferenceExpression.extractLetAlsoTargetExpression() =
     findReceiverScopeFunctionLiteral()?.findLetAlsoRunWithTargetExpression()
 
-/**
- * Will try to resolve what `this` is an alias for inside a `with`, `run` or `apply` scope.
- */
-private fun KaImplicitReceiverValue.extractWithRunApplyTargetExpression(
-    startNode: PsiElement
-) =
-    findReceiverScopeFunctionLiteral(startNode)?.findLetAlsoRunWithTargetExpression()
-
 private fun KtFunctionLiteral.findLetAlsoRunWithTargetExpression(): KtExpression? = withKaSession {
     getParentCall()?.let { larwCallCandidate ->
         withKaSession {
-            when (larwCallCandidate.partiallyAppliedSymbol.symbol.name?.asString()) {
+            when (larwCallCandidate.symbol.name?.asString()) {
                 in KOTLIN_CHAIN_CALL_CONSTRUCTS -> {
-                    (larwCallCandidate.partiallyAppliedSymbol.extensionReceiver as? KaExplicitReceiverValue)?.expression?.predictRuntimeValueExpression()
+                    (larwCallCandidate.extensionReceiver as? KaExplicitReceiverValue)?.expression?.predictRuntimeValueExpression()
                 }
 
                 "with" -> {
@@ -306,11 +297,6 @@ private fun KtReferenceExpression.findReceiverScopeFunctionLiteral(): KtFunction
         else -> null
     }
 }
-
-private fun KaImplicitReceiverValue.findReceiverScopeFunctionLiteral(
-    startNode: PsiElement,
-): KtFunctionLiteral? =
-    symbol.findFunctionLiteral(startNode)
 
 private fun KaSymbol.findFunctionLiteral(
     startNode: PsiElement,
@@ -410,7 +396,7 @@ fun KaFunctionSymbol.throwsExceptions(exceptions: Collection<String>) =
                 .find { arg -> arg.name.asString() == "exceptionClasses" }
                 ?.expression as? KaAnnotationValue.ArrayValue)
                 ?.values
-                ?.mapNotNull { it as? KaAnnotationValue.ClassLiteralValue }
+                ?.filterIsInstance<KaAnnotationValue.ClassLiteralValue>()
                 ?.map { it.classId?.asFqNameString() }
                 ?.any(exceptions::contains)
             ?: false
