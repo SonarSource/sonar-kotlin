@@ -43,6 +43,7 @@ class IndexedAccessCheck : CallAbstractCheck() {
     ) {
         val dotExpression = callExpression.parent as? KtDotQualifiedExpression ?: return
         if (dotExpression.receiverExpression is KtSuperExpression) return
+        if (callExpression.typeArgumentList != null) return
         kotlinFileContext.reportIssue(callExpression.calleeExpression!!, "Replace function call with indexed accessor.")
     }
 }
