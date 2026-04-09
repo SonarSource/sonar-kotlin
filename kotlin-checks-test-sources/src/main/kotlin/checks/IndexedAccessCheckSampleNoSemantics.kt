@@ -8,7 +8,14 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class IndexedAccessCheckSampleNoSemantics {
 
-    fun withoutIndexedAccessors(list: MutableList<Int>, map: MutableMap<String, Int>, grid: Grid2, value: Any, cal: Calendar, future: CompletableFuture<Int>) {
+    fun withoutIndexedAccessors(
+        list: MutableList<Int>,
+        map: MutableMap<String, Int>,
+        grid: Grid2,
+        value: Any,
+        cal: Calendar,
+        future: CompletableFuture<Int>,
+    ) {
         list.get(1) // Noncompliant {{Replace function call with indexed accessor.}}
 //           ^^^
         list.set(1, 42) // Noncompliant {{Replace function call with indexed accessor.}}
@@ -23,7 +30,15 @@ class IndexedAccessCheckSampleNoSemantics {
         future.get(1L, TimeUnit.SECONDS) // Noncompliant {{Replace function call with indexed accessor.}}
     }
 
-    fun withIndexedAccessors(lisp: Lisp2<Int>, maybeNullList: MutableList<Int>?,  list: MutableList<Int>, map: MutableMap<String, Int>, grid: Grid2, num: AtomicInteger, root: GenericAccessorClass2) {
+    fun withIndexedAccessors(
+        lisp: Lisp2<Int>,
+        maybeNullList: MutableList<Int>?,
+        list: MutableList<Int>,
+        map: MutableMap<String, Int>,
+        grid: Grid2,
+        num: AtomicInteger,
+        root: GenericAccessorClass2,
+    ) {
         num.get() // Compliant, class doesn't have an index access operator
         lisp.get(1) // Compliant, not an operator
         list[1] // Compliant
@@ -33,9 +48,9 @@ class IndexedAccessCheckSampleNoSemantics {
         grid[1, 2] // Compliant
         grid[1, 2] = 42 // Compliant
         list.getOrNull(2) // Complaint, not an operator
-        list.getOrElse(3) {42} // Complaint, not an operator
+        list.getOrElse(3) { 42 } // Complaint, not an operator
         map.getValue("a") // Complaint, not an operator
-        map.getOrElse("c") {42} // Complaint, not an operator
+        map.getOrElse("c") { 42 } // Complaint, not an operator
         root.get<String>("id") // Compliant: explicit type parameter cannot be expressed with [] syntax
         maybeNullList?.get(0) // Compliant: safe call uses KtSafeQualifiedExpression, not KtDotQualifiedExpression
     }
