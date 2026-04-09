@@ -27,7 +27,7 @@ import kotlin.io.path.absolute
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.readText
 
-class DummyInputFile(val path: Path? = null) : InputFile {
+class DummyInputFile(val path: Path? = null, private val fileType: InputFile.Type = InputFile.Type.MAIN) : InputFile {
 
     var status: InputFile.Status = InputFile.Status.CHANGED
 
@@ -53,7 +53,7 @@ class DummyInputFile(val path: Path? = null) : InputFile {
 
     override fun language() = KotlinLanguage.NAME
 
-    override fun type() = InputFile.Type.MAIN
+    override fun type() = fileType
 
     override fun inputStream() = content.byteInputStream()
 
