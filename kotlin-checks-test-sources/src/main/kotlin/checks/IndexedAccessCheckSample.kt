@@ -19,10 +19,12 @@ class IndexedAccessCheckSample {
         grid.get(1, 2) // Noncompliant {{Replace function call with indexed accessor.}}
         grid.set(1, 2, 42) // Noncompliant {{Replace function call with indexed accessor.}}
         value.get(42) // Noncompliant {{Replace function call with indexed accessor.}}
-        val currentYear: Int = Calendar.getInstance().get(Calendar.YEAR) // Noncompliant {{Replace function call with indexed accessor.}}
+        cal.get(Calendar.YEAR) // Noncompliant {{Replace function call with indexed accessor.}}
+        future.get(1L, TimeUnit.SECONDS) // Noncompliant {{Replace function call with indexed accessor.}}
+
     }
 
-    fun withIndexedAccessors(lisp: Lisp<Int>, maybeNullList: MutableList<Int>?,  list: MutableList<Int>, map: MutableMap<String, Int>, grid: Grid, num: AtomicInteger, root: GenericAccessorClass, future: CompletableFuture<Int>) {
+    fun withIndexedAccessors(lisp: Lisp<Int>, maybeNullList: MutableList<Int>?,  list: MutableList<Int>, map: MutableMap<String, Int>, grid: Grid, num: AtomicInteger, root: GenericAccessorClass) {
         num.get() // Compliant, class doesn't have an index access operator
         lisp.get(1) // Compliant, not an operator
         list[1] // Compliant
@@ -37,7 +39,6 @@ class IndexedAccessCheckSample {
         map.getOrElse("c") {42} // Complaint, not an operator
         root.get<String>("id") // Compliant: explicit type parameter cannot be expressed with [] syntax
         maybeNullList?.get(0) // Compliant: safe call uses KtSafeQualifiedExpression, not KtDotQualifiedExpression
-        future.get(1L, TimeUnit.SECONDS) // Noncompliant {{Replace function call with indexed accessor.}}
     }
 }
 
@@ -109,11 +110,8 @@ class ChildClass : ParentClass() {
     }
 }
 
-// Models operator get with a type parameter — explicit type arguments
-// cannot be expressed with [] syntax (e.g., root.get<String>("id") has
-// no [] equivalent since root<String>["id"] is not valid Kotlin).
+
 class GenericAccessorClass {
-    @Suppress("UNCHECKED_CAST")
     operator fun <T> get(key: String): T = TODO()
 }
 

@@ -109,11 +109,8 @@ class ChildClass2 : ParentClass() {
     }
 }
 
-// Models operator get with a type parameter — explicit type arguments
-// cannot be expressed with [] syntax (e.g., root.get<String>("id") has
-// no [] equivalent since root<String>["id"] is not valid Kotlin).
+
 class GenericAccessorClass2 {
-    @Suppress("UNCHECKED_CAST")
     operator fun <T> get(key: String): T = TODO()
 }
 
