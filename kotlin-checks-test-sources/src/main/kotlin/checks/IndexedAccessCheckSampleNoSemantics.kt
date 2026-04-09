@@ -109,7 +109,6 @@ class ChildClass2 : ParentClass() {
     }
 }
 
-
 class GenericAccessorClass2 {
     operator fun <T> get(key: String): T = TODO()
 }
