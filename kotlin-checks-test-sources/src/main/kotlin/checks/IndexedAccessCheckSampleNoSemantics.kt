@@ -79,7 +79,7 @@ open class ParentClass2 {
     val size: Int get() = _array.size
 }
 
-class ChildClass2 : ParentClass() {
+class ChildClass2 : ParentClass2() {
 
     override operator fun get(index: Int): String {
         return super.get(index) // Compliant, because `super[index]` does not compile
