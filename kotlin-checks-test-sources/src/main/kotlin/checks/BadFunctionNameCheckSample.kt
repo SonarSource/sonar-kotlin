@@ -17,6 +17,9 @@ class BadFunctionNameCheckSample {
     @Test
     fun `should do A when B is called`() {} // Compliant - backtick name with @Test annotation
 
+    @kotlin.test.Test
+    fun `should do A when B is called (fq annotation)`() {}
+
     @Test
     fun `test with spaces in name`() {} // Compliant - backtick name with @Test annotation
 
