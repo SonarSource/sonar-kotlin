@@ -49,18 +49,9 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/test/org/jetbrains/kotlin/incremental/parsing/ClassesFqNamesTest.kt": [
 34
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.js/src/org/jetbrains/kotlin/ir/backend/js/JsIrBackendContext.kt": [
-55
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/JvmBackendContext.kt": [
-87
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/intrinsics/Concat.kt": [
 63,
 63
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/intrinsics/IrIntrinsicFunction.kt": [
-33
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/expressions/impl/IrBlockImpl.kt": [
 56

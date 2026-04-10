@@ -18,7 +18,9 @@ package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
@@ -66,17 +68,21 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
     }
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
-        val occurrences = collectStringTemplatesNotInAnnotations(file)
+        val occurrences = collectStringTemplates(file)
             .map { it to it.asString() }
             .filter { (_, text) -> text.length > MINIMAL_LITERAL_LENGTH && !NO_SEPARATOR_REGEXP.matches(text) }
             .groupBy({ (_, text) -> text }) { it.first }
         check(context, occurrences)
     }
 
-    private fun collectStringTemplatesNotInAnnotations(node: PsiElement): Sequence<KtStringTemplateExpression> =
+    private fun collectStringTemplates(node: PsiElement): Sequence<KtStringTemplateExpression> =
         when {
             node is KtStringTemplateExpression && !node.hasInterpolation() -> sequenceOf(node)
             node is KtAnnotationEntry -> emptySequence()
-            else -> node.children.asSequence().flatMap { collectStringTemplatesNotInAnnotations(it) }
+            node is KtCallExpression && node.isTodoCall() -> emptySequence()
+            else -> node.children.asSequence().flatMap { collectStringTemplates(it) }
         }
+
+    private fun KtCallExpression.isTodoCall(): Boolean =
+        (calleeExpression as? KtNameReferenceExpression)?.getReferencedName() == "TODO"
 }

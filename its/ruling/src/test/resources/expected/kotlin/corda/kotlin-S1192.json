@@ -228,9 +228,6 @@
 "kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/CorDappSerializerTests.kt": [
 77
 ],
-"kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/OverridePKSerializerTest.kt": [
-29
-],
 "kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationOutputTests.kt": [
 325,
 1296

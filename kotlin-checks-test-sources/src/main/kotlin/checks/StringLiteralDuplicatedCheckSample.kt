@@ -73,4 +73,8 @@ class StringLiteralDuplicatedCheckSample {
     @Deprecated("Conversion of Char to Number is deprecated. Use Char.code property instead.", ReplaceWith("this.code.toShort()"))
     fun d3() {
     }
+
+    fun todoCompliant1(): Nothing = TODO("not yet implemented") // Compliant - string literals in TODO() calls should be ignored
+    fun todoCompliant2(): Nothing = TODO("not yet implemented")
+    fun todoCompliant3(): Nothing = TODO("not yet implemented")
 }
