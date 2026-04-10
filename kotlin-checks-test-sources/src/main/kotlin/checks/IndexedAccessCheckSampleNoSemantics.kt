@@ -25,6 +25,7 @@ class IndexedAccessCheckSampleNoSemantics {
         grid.get(1, 2) // Noncompliant {{Replace function call with indexed accessor.}}
         grid.set(1, 2, 42) // Noncompliant {{Replace function call with indexed accessor.}}
         value.get(42) // FN, Any has no get operator, only exposed via an extension function in Importable.kt, function in , can't resolve without semantics
+        // Java get/set methods can be replaced with indexed access operators via Java-Interop (https://kotlinlang.org/docs/java-interop.html#operators)
         cal.get(Calendar.YEAR) // Noncompliant {{Replace function call with indexed accessor.}}
         // FP without semantics: incorrect resolution due to singleFunctionCallOrNull
         future.get(1L, TimeUnit.SECONDS) // Noncompliant {{Replace function call with indexed accessor.}}
