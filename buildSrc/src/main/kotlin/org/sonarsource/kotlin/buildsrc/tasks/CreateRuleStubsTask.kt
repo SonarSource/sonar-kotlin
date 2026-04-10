@@ -1,11 +1,11 @@
 package org.sonarsource.kotlin.buildsrc.tasks
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.provideDelegate
-
 import java.nio.file.Path
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.createFile
@@ -15,12 +15,12 @@ import kotlin.io.path.writeLines
 import kotlin.io.path.writeText
 
 @OptIn(ExperimentalPathApi::class)
-abstract class CreateRuleStubsTask internal constructor(
+abstract class CreateRuleStubsTask : DefaultTask {
+
     private val templates: RuleStubTemplates
-) : DefaultTask() {
 
     @get:Input
-    val ruleKey: String by project
+    abstract val ruleKey: Property<String>
 
     @get:Input
     val className: String by project
@@ -28,6 +28,13 @@ abstract class CreateRuleStubsTask internal constructor(
     @get:Input
     @get:Optional
     val message: String? by project
+
+    internal constructor(templates: RuleStubTemplates) {
+        this.templates = templates
+
+        // https://docs.gradle.org/current/userguide/lazy_configuration.html#where_to_apply_conventions_from
+        ruleKey.convention(project.providers.gradleProperty("rule"))
+    }
 
     @TaskAction
     fun execute() {
@@ -39,7 +46,7 @@ abstract class CreateRuleStubsTask internal constructor(
         }
 
         logger.info("Using properties: ")
-        logger.info("  ruleKey: $ruleKey")
+        logger.info("  ruleKey: ${ruleKey.get()}")
         logger.info("  className: $checkClassName")
         logger.info("  message: $message")
         logger.info("  templates: ${templates::class.simpleName}")
@@ -57,7 +64,7 @@ abstract class CreateRuleStubsTask internal constructor(
 
     private fun createCheckClass(checkClassName: String) = createNewFile(
         templates.checksDir.resolve("${checkClassName}.kt"),
-        generateCheckClass(ruleKey, checkClassName, message?.let { """private const val MESSAGE = "$it"""" })
+        generateCheckClass(ruleKey.get(), checkClassName, message?.let { """private const val MESSAGE = "$it"""" })
     )
 
     private fun createTestClass(checkClassName: String): Boolean {
@@ -86,7 +93,7 @@ abstract class CreateRuleStubsTask internal constructor(
         """.trimIndent()
 
     private fun RuleStubTemplates.createSampleFile(checkClassName: String) =
-        createNewFile(samplesDir.resolve("${checkClassName}Sample.$sampleFileExt"), generateCheckFile("${checkClassName}Sample", ruleKey))
+        createNewFile(samplesDir.resolve("${checkClassName}Sample.$sampleFileExt"), generateCheckFile("${checkClassName}Sample", ruleKey.get()))
 
     private fun createNewFile(targetFile: Path, content: String) = if (targetFile.notExists()) {
         targetFile.createFile()

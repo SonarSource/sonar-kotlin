@@ -38,8 +38,7 @@ on:
         type: boolean
         description: |
           Toggle whether the pre release checks should include a rule metadata update.
-          It is false for now as the action is broken, because of RSPEC repo went private, see GHA-184 for more details.
-        default: false
+        default: true
       dry-run:
         description: "Test mode: uses Jira sandbox and creates draft GitHub release"
         type: boolean

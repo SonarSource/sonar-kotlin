@@ -52,14 +52,14 @@ internal class KotlinRulesDefinitionTest {
     fun owaspSecurityStandard2021() {
         val repository: RulesDefinition.Repository? = repositoryForVersion(Version.create(9, 3))
         val rule = repository?.rule("S1313")!!
-        Assertions.assertThat(rule.securityStandards()).containsExactlyInAnyOrder("owaspTop10:a3", "owaspTop10-2021:a1")
+        Assertions.assertThat(rule.securityStandards()).containsExactlyInAnyOrder("cwe:547", "owaspTop10:a3", "owaspTop10-2021:a1")
     }
 
     @Test
     fun owaspSecurityStandard() {
         val repository: RulesDefinition.Repository? = repositoryForVersion(Version.create(8, 9))
         val rule = repository?.rule("S1313")!!
-        Assertions.assertThat(rule.securityStandards()).containsExactly("owaspTop10:a3")
+        Assertions.assertThat(rule.securityStandards()).containsExactly("cwe:547", "owaspTop10:a3")
     }
 
     @Test

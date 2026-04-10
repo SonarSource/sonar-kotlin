@@ -8,7 +8,7 @@ fun setCoordinates(x1: Int, y1: Int, z1: Int, x2: Int, y2: Int, z2: Int) { // No
 </pre>
 <p>The solution can be to:</p>
 <ul>
-  <li> Split the function into smaller ones </li>
+  <li>Split the function into smaller ones</li>
 </ul>
 <pre>
 // Each function does a part of what the original setCoordinates function was doing, so confusion risks are lower
@@ -21,7 +21,7 @@ fun setSize(width: Int, height: Int, depth: Int) {
 }
 </pre>
 <ul>
-  <li> Find a better data structure for the parameters that group data in a way that makes sense for the specific application domain </li>
+  <li>Find a better data structure for the parameters that group data in a way that makes sense for the specific application domain</li>
 </ul>
 <pre>
 data class Point(val x: Int, val y: Int, val z: Int) // In geometry, Point is a logical structure to group data

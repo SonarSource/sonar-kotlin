@@ -43,6 +43,8 @@ jobs:
             development/kv/data/sign key | SIGN_KEY;
             development/kv/data/sign passphrase | SIGN_PASSPHRASE;
             development/kv/data/sign key_id | SIGN_KEY_ID;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer username | ARTIFACTORY_DEPLOY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer access_token | ARTIFACTORY_DEPLOY_PASSWORD;
       - id: build-number
@@ -60,6 +62,8 @@ jobs:
           ORG_GRADLE_PROJECT_signingPassword: ${{ fromJSON(steps.secrets.outputs.vault).SIGN_PASSPHRASE }}
           ORG_GRADLE_PROJECT_signingKeyId: ${{ fromJSON(steps.secrets.outputs.vault).SIGN_KEY_ID }}
           ARTIFACTORY_URL: https://repox.jfrog.io/artifactory
+          ARTIFACTORY_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
+          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           ARTIFACTORY_DEPLOY_REPO: sonarsource-public-qa
           ARTIFACTORY_DEPLOY_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_USERNAME }}
           ARTIFACTORY_DEPLOY_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_PASSWORD }}

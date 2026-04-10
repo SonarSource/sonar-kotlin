@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.sonarsource.kotlin.buildsrc.tasks.CreateKotlinGradleRuleStubsTask
 import org.sonarsource.kotlin.buildsrc.tasks.CreateKotlinRuleStubsTask
-import org.sonarsource.kotlin.buildsrc.tasks.FetchRuleMetadata
 
 plugins {
     java
@@ -297,14 +296,11 @@ artifactory {
 tasks.register<CreateKotlinRuleStubsTask>("setupRuleStubs") {
     group = "Rules"
     description = "Generate required stubs for a new Kotlin rule"
-    finalizedBy(tasks.getByPath(":generateRuleMetadata"))
+    finalizedBy(":sonar-kotlin-plugin:ruleApiGenerateRuleKotlin")
 }
 
 tasks.register<CreateKotlinGradleRuleStubsTask>("setupGradleRuleStubs") {
     group = "Rules"
     description = "Generate required stubs for a new Kotlin Gradle DSL rule"
-    finalizedBy(tasks.getByPath(":generateRuleMetadata"))
+    finalizedBy(":sonar-kotlin-plugin:ruleApiGenerateRuleKotlin")
 }
-
-tasks.register<FetchRuleMetadata.FetchSpecificRulesMetadata>("generateRuleMetadata")
-tasks.register<FetchRuleMetadata.FetchAllRulesMetadata>("updateRuleMetadata")

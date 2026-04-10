@@ -33,6 +33,19 @@ fun checkEquality() {
     }
 }
 </pre>
+<pre data-diff-id="2" data-diff-type="noncompliant">
+fun checkEquality(personA: Person?, personB: Person?): Boolean {
+    if (personA == null &amp;&amp; personB == null) {
+        return true
+    }
+    if (personA == null || personB == null) {
+        return false
+    }
+    if (!personA.equals(personB)) { // Noncompliant, should use `!=` instead to remove redundant nullability checks
+        // ...
+    }
+}
+</pre>
 <h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
 fun checkEquality() {
@@ -46,10 +59,18 @@ fun checkEquality() {
     }
 }
 </pre>
+<pre data-diff-id="2" data-diff-type="compliant">
+fun checkEquality(personA: Person?, personB: Person?): Boolean {
+    if (personA != personB) { // Compliant
+        // ...
+    }
+}
+</pre>
 <h2>Resources</h2>
 <h3>Documentation</h3>
 <ul>
-  <li> <a href="https://kotlinlang.org/docs/operator-overloading.html#equality-and-inequality-operators">Kotlin Docs, Equality and inequality
-  operators</a> </li>
+  <li><a href="https://kotlinlang.org/docs/equality.html#structural-equality">Kotlin Docs, Structural equality</a></li>
+  <li><a href="https://kotlinlang.org/docs/operator-overloading.html#equality-and-inequality-operators">Kotlin Docs, Equality and inequality
+  operators</a></li>
 </ul>
 

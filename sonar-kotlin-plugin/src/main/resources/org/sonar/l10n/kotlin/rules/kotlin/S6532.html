@@ -2,11 +2,11 @@
 <p>It is a common pattern to validate required preconditions at the beginning of a function or block. There are two different kinds of
 preconditions:</p>
 <ul>
-  <li> Preconditions about argument values. An example is the assertion that a function argument lies within a specific range. An
-  <code>IllegalArgumentException</code> should be thrown if these preconditions are violated. </li>
-  <li> Preconditions about the state of the owner or the execution context of the function. An example is when a specific method, such as
+  <li>Preconditions about argument values. An example is the assertion that a function argument lies within a specific range. An
+  <code>IllegalArgumentException</code> should be thrown if these preconditions are violated.</li>
+  <li>Preconditions about the state of the owner or the execution context of the function. An example is when a specific method, such as
   <code>open</code>, <code>init</code> or <code>prepare</code>, must be called before the current method can be executed. An
-  <code>IllegalStateException</code> should be thrown if these preconditions are violated. </li>
+  <code>IllegalStateException</code> should be thrown if these preconditions are violated.</li>
 </ul>
 <p>The Kotlin standard library provides the functions <code>check()</code>, <code>require()</code>, <code>checkNotNull()</code> and
 <code>requireNotNull()</code> for this purpose. They should be used instead of directly throwing an <code>IllegalArgumentException</code> or an
@@ -30,36 +30,68 @@ there is more consistency in what kind of exception is thrown in which situation
   </colgroup>
   <tbody>
     <tr>
-      <td><p><strong>Replace</strong></p></td>
-      <td><p><strong>With</strong></p></td>
+      <td>
+        <p><strong>Replace</strong></p>
+      </td>
+      <td>
+        <p><strong>With</strong></p>
+      </td>
     </tr>
     <tr>
-      <td><p><code>if (!condition) throw IllegalArgumentException()</code></p></td>
-      <td><p><code>require(condition)</code></p></td>
+      <td>
+        <p><code>if (!condition) throw IllegalArgumentException()</code></p>
+      </td>
+      <td>
+        <p><code>require(condition)</code></p>
+      </td>
     </tr>
     <tr>
-      <td><p><code>if (reference == null) throw IllegalArgumentException()</code></p></td>
-      <td><p><code>requireNotNull(reference)</code></p></td>
+      <td>
+        <p><code>if (reference == null) throw IllegalArgumentException()</code></p>
+      </td>
+      <td>
+        <p><code>requireNotNull(reference)</code></p>
+      </td>
     </tr>
     <tr>
-      <td><p><code>require(reference != null)</code></p></td>
-      <td><p><code>requireNotNull(reference)</code></p></td>
+      <td>
+        <p><code>require(reference != null)</code></p>
+      </td>
+      <td>
+        <p><code>requireNotNull(reference)</code></p>
+      </td>
     </tr>
     <tr>
-      <td><p><code>if (!condition) throw IllegalStateException()</code></p></td>
-      <td><p><code>check(condition)</code></p></td>
+      <td>
+        <p><code>if (!condition) throw IllegalStateException()</code></p>
+      </td>
+      <td>
+        <p><code>check(condition)</code></p>
+      </td>
     </tr>
     <tr>
-      <td><p><code>if (reference == null) throw IllegalStateException()</code></p></td>
-      <td><p><code>checkNotNull(reference)</code></p></td>
+      <td>
+        <p><code>if (reference == null) throw IllegalStateException()</code></p>
+      </td>
+      <td>
+        <p><code>checkNotNull(reference)</code></p>
+      </td>
     </tr>
     <tr>
-      <td><p><code>check(reference != null)</code></p></td>
-      <td><p><code>checkNotNull(reference)</code></p></td>
+      <td>
+        <p><code>check(reference != null)</code></p>
+      </td>
+      <td>
+        <p><code>checkNotNull(reference)</code></p>
+      </td>
     </tr>
     <tr>
-      <td><p><code>throw IllegalStateException()</code></p></td>
-      <td><p><code>error()</code></p></td>
+      <td>
+        <p><code>throw IllegalStateException()</code></p>
+      </td>
+      <td>
+        <p><code>error()</code></p>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -119,12 +151,8 @@ fun statePreconditions() {
 <h2>Resources</h2>
 <h3>Documentation</h3>
 <ul>
-  <li> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/require.html">Kotlin API Docs, require</a> </li>
-  <li> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/check.html">Kotlin API Docs, check</a> </li>
-</ul>
-<h3>Articles &amp; blog posts</h3>
-<ul>
-  <li> <a href="https://bignerdranch.com/blog/write-better-code-using-kotlins-require-check-and-assert/">Jeremy W. Sherman, Write Better Code Using
-  Kotlin’s Require, Check and Assert</a> </li>
+  <li><a href="https://kotlinlang.org/docs/exceptions.html">Kotlin API Docs, Exceptions</a></li>
+  <li><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/require.html">Kotlin API Docs, require</a></li>
+  <li><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/check.html">Kotlin API Docs, check</a></li>
 </ul>
 

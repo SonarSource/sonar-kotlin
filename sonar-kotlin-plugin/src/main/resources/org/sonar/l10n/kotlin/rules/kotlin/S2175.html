@@ -4,23 +4,23 @@
 type, those methods will always return <code>false</code> or <code>null</code>. This is most likely unintended and hides a design problem.</p>
 <p>This rule raises an issue when the type of the argument of the following APIs is unrelated to the type used for the collection declaration:</p>
 <ul>
-  <li> <code>MutableCollection.remove</code> </li>
-  <li> <code>MutableCollection.removeAll</code> </li>
-  <li> <code>MutableCollection.retainAll</code> </li>
-  <li> <code>Array.contains</code> </li>
-  <li> <code>Array.indexOf</code> </li>
-  <li> <code>Array.lastIndexOf</code> </li>
-  <li> <code>Collection.containsAll</code> </li>
-  <li> <code>Iterable.contains</code> </li>
-  <li> <code>Iterable.indexOf</code> </li>
-  <li> <code>Iterable.lastIndexOf</code> </li>
-  <li> <code>List.indexOf</code> </li>
-  <li> <code>List.lastIndexOf</code> </li>
-  <li> <code>Map.contains</code> </li>
-  <li> <code>Map.containsKey</code> </li>
-  <li> <code>Map.containsValue</code> </li>
-  <li> <code>Map.get</code> </li>
-  <li> <code>MutableMap.remove</code> </li>
+  <li><code>MutableCollection.remove</code></li>
+  <li><code>MutableCollection.removeAll</code></li>
+  <li><code>MutableCollection.retainAll</code></li>
+  <li><code>Array.contains</code></li>
+  <li><code>Array.indexOf</code></li>
+  <li><code>Array.lastIndexOf</code></li>
+  <li><code>Collection.containsAll</code></li>
+  <li><code>Iterable.contains</code></li>
+  <li><code>Iterable.indexOf</code></li>
+  <li><code>Iterable.lastIndexOf</code></li>
+  <li><code>List.indexOf</code></li>
+  <li><code>List.lastIndexOf</code></li>
+  <li><code>Map.contains</code></li>
+  <li><code>Map.containsKey</code></li>
+  <li><code>Map.containsValue</code></li>
+  <li><code>Map.get</code></li>
+  <li><code>MutableMap.remove</code></li>
 </ul>
 <h3>Noncompliant code example</h3>
 <pre>
