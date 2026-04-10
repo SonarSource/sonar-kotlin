@@ -141,11 +141,11 @@ will also put the rule into the list of checks and call `generateRuleMetadata` t
 To use this task, you need to know the rule key and a fitting name for the check class. For instance, if you want to implement the new
 rule `S42` in the class `AnswersEverythingCheck`, you can call the following in the root of the project:
 
-    ./gradlew setupRuleStubs -PruleKey=S42 -PclassName=AnswersEverythingCheck
+    ./gradlew setupRuleStubs -Prule=S42 -PclassName=AnswersEverythingCheck
 
 To create stubs for Kotlin Gradle DSL rules instead of Kotlin rules, use `setupGradleRuleStubs`, as in: 
 
-    ./gradlew setupGradleRuleStubs -PruleKey=S6626 -PclassName=TaskDefinitionsCheck
+    ./gradlew setupGradleRuleStubs -Prule=S6626 -PclassName=TaskDefinitionsCheck
 
 ### Updating external linter rule mappings
 
