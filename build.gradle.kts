@@ -238,17 +238,9 @@ sonarqube {
         property("sonar.links.issue", "https://jira.sonarsource.com/browse/SONARKT")
         property("sonar.exclusions", "**/build/**/*")
         property("sonar.sca.exclusions", "**/its/**,**/kotlin-checks-test-sources/**,**/samples/**")
-    }
-}
-
-subprojects {
-    sonarqube.properties {
         property(
-            "sonar.coverage.jacoco.xmlReportPaths",
-            listOf(
-                "build/reports/jacoco/test/jacocoTestReport.xml",
-                "${project.rootDir}/sonar-kotlin-plugin/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
-            ).joinToString(",")
+            "sonar.coverage.jacoco.aggregateXmlReportPaths",
+            "${project.rootDir}/sonar-kotlin-plugin/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml"
         )
     }
 }
