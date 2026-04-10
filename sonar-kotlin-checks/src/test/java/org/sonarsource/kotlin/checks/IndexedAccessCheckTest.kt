@@ -16,4 +16,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-internal class IndexedAccessCheckTest : CheckTest(IndexedAccessCheck())
+internal class IndexedAccessCheckTest : CheckTestWithNoSemantics(IndexedAccessCheck(), shouldReport = true)

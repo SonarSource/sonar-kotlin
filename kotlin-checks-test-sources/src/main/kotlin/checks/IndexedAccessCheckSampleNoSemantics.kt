@@ -6,29 +6,41 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
-class IndexedAccessCheckSample {
+class IndexedAccessCheckSampleNoSemantics {
 
-    fun withoutIndexedAccessors(list: MutableList<Int>, map: MutableMap<String, Int>, grid: Grid, value: Any, cal: Calendar, future: CompletableFuture<Int>) {
+    fun withoutIndexedAccessors(
+        list: MutableList<Int>,
+        map: MutableMap<String, Int>,
+        grid: Grid2,
+        value: Any,
+        cal: Calendar,
+        future: CompletableFuture<Int>,
+    ) {
         list.get(1) // Noncompliant {{Replace function call with indexed accessor.}}
 //           ^^^
         list.set(1, 42) // Noncompliant {{Replace function call with indexed accessor.}}
 //           ^^^
         map.get("b") // Noncompliant {{Replace function call with indexed accessor.}}
-        map.set("b", 42) // Noncompliant {{Replace function call with indexed accessor.}}
-//          ^^^
+        map.set("b", 42) // FN, MutableMap.set is an extension function not available without classpath
         grid.get(1, 2) // Noncompliant {{Replace function call with indexed accessor.}}
         grid.set(1, 2, 42) // Noncompliant {{Replace function call with indexed accessor.}}
-        value.get(42) // Noncompliant {{Replace function call with indexed accessor.}}
+        value.get(42) // FN, Any has no get operator, only exposed via an extension function in Importable.kt, function in , can't resolve without semantics
         // Java get/set methods can be replaced with indexed access operators via Java-Interop (https://kotlinlang.org/docs/java-interop.html#operators)
         cal.get(Calendar.YEAR) // Noncompliant {{Replace function call with indexed accessor.}}
+        // FP without semantics: incorrect resolution due to singleFunctionCallOrNull
         future.get(1L, TimeUnit.SECONDS) // Noncompliant {{Replace function call with indexed accessor.}}
-
     }
 
-    fun withIndexedAccessors(lisp: Lisp<Int>, maybeNullList: MutableList<Int>?,  list: MutableList<Int>, map: MutableMap<String, Int>, grid: Grid, num: AtomicInteger, root: GenericAccessorClass) {
+    fun withIndexedAccessors(
+        lisp: Lisp2<Int>,
+        maybeNullList: MutableList<Int>?,
+        list: MutableList<Int>,
+        map: MutableMap<String, Int>,
+        grid: Grid2,
+        num: AtomicInteger,
+        root: GenericAccessorClass2,
+    ) {
         num.get() // Compliant, class doesn't have an index access operator
-        lisp.get(index = 1) // Compliant, named arguments are allowed
-        grid.get(row = 1, 2) // Compliant, named arguments are allowed
         lisp.get(1) // Compliant, not an operator
         list[1] // Compliant
         list[1] = 42 // Compliant
@@ -37,24 +49,24 @@ class IndexedAccessCheckSample {
         grid[1, 2] // Compliant
         grid[1, 2] = 42 // Compliant
         list.getOrNull(2) // Complaint, not an operator
-        list.getOrElse(3) {42} // Complaint, not an operator
+        list.getOrElse(3) { 42 } // Complaint, not an operator
         map.getValue("a") // Complaint, not an operator
-        map.getOrElse("c") {42} // Complaint, not an operator
+        map.getOrElse("c") { 42 } // Complaint, not an operator
         root.get<String>("id") // Compliant: explicit type parameter cannot be expressed with [] syntax
         maybeNullList?.get(0) // Compliant: safe call uses KtSafeQualifiedExpression, not KtDotQualifiedExpression
     }
 }
 
-interface Grid {
+interface Grid2 {
     operator fun get(row: Int, column: Int): Int
     operator fun set(row: Int, column: Int, value: Int)
 }
 
-interface Lisp<T> {
+interface Lisp2<T> {
     fun get(index: Int)
 }
 
-open class ParentClass {
+open class ParentClass2 {
     private val _array = mutableListOf<String>()
 
     open operator fun get(index: Int): String {
@@ -68,7 +80,7 @@ open class ParentClass {
     val size: Int get() = _array.size
 }
 
-class ChildClass : ParentClass() {
+class ChildClass2 : ParentClass2() {
 
     override operator fun get(index: Int): String {
         return super.get(index) // Compliant, because `super[index]` does not compile
@@ -104,16 +116,16 @@ class ChildClass : ParentClass() {
 
     inner class InnerClass {
         operator fun get(index: Int): String {
-            return this@ChildClass.get(index) // Noncompliant {{Replace function call with indexed accessor.}}
+            return this@ChildClass2.get(index) // Noncompliant {{Replace function call with indexed accessor.}}
         }
 
         operator fun set(index: Int, value: String) {
-            this@ChildClass.set(index, value) // Noncompliant {{Replace function call with indexed accessor.}}
+            this@ChildClass2.set(index, value) // Noncompliant {{Replace function call with indexed accessor.}}
         }
     }
 }
 
-class GenericAccessorClass {
+class GenericAccessorClass2 {
     operator fun <T> get(key: String): T = TODO()
 }
 
