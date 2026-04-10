@@ -1,10 +1,10 @@
 /*
  * SonarSource Kotlin
- * Copyright (C) 2018-2026 SonarSource Sàrl
+ * Copyright (C) SonarSource Sàrl
  * mailto:info AT sonarsource DOT com
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the Sonar Source-Available License Version 1.0.1, as published by SonarSource Sàrl.
+ * You can redistribute and/or modify this program under the terms of
+ * the Sonar Source-Available License Version 1, as published by SonarSource Sàrl.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,6 +22,8 @@ import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+
+private val TEST_ANNOTATION_NAMES = setOf("Test", "ParameterizedTest", "RepeatedTest")
 
 @Rule(key = "S100")
 class BadFunctionNameCheck : AbstractCheck() {
@@ -46,12 +48,22 @@ class BadFunctionNameCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val name = function.name ?: /* in case of anonymous functions */ return
-        if (!name.matches(formatRegex)) {
+        if (!name.matches(formatRegex) && !isBacktickedTestFunction(function)) {
             kotlinFileContext.reportIssue(
                 function.nameIdentifier!!,
                 """Rename function "$name" to match the regular expression $format"""
             )
         }
     }
+
+    private fun isBacktickedTestFunction(function: KtNamedFunction): Boolean {
+        val nameIdentifierText = function.nameIdentifier?.text ?: return false
+        if (!nameIdentifierText.startsWith('`')) return false
+
+        return hasTestAnnotation(function)
+    }
+
+    private fun hasTestAnnotation(function: KtNamedFunction): Boolean =
+        function.annotationEntries.any { TEST_ANNOTATION_NAMES.contains(it.shortName?.asString()) }
 
 }

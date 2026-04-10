@@ -1,10 +1,10 @@
 /*
  * SonarSource Kotlin
- * Copyright (C) 2018-2026 SonarSource Sàrl
+ * Copyright (C) SonarSource Sàrl
  * mailto:info AT sonarsource DOT com
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the Sonar Source-Available License Version 1.0.1, as published by SonarSource Sàrl.
+ * You can redistribute and/or modify this program under the terms of
+ * the Sonar Source-Available License Version 1, as published by SonarSource Sàrl.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -51,6 +51,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
     var classpath: List<String> = System.getProperty("java.class.path").split(File.pathSeparatorChar) + DEFAULT_KOTLIN_CLASSPATH
     var deps: List<String> = getClassPath(DEFAULT_TEST_JARS_DIRECTORY)
     var isAndroid = false
+    var fileType: InputFile.Type = InputFile.Type.MAIN
 
     fun verify() {
         verifyFile {
@@ -98,7 +99,7 @@ class KotlinVerifier(private val check: AbstractCheck) {
                 val start = comment.range.start()
                 verifier.addComment(start.line(), start.lineOffset() + 1, comment.text, 2, 0)
             }
-        val ctx = TestContext(verifier, check, inputFile = DummyInputFile(path), isAndroid = isAndroid)
+        val ctx = TestContext(verifier, check, inputFile = DummyInputFile(path, fileType), isAndroid = isAndroid)
         ctx.scan(root)
         return verifier
     }

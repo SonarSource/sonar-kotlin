@@ -31,7 +31,7 @@ configure(subprojects.filter { it.name != "kotlin-checks-test-sources" }) {
         }
 
         kotlin {
-            licenseHeaderFile(rootProject.file("LICENSE_HEADER")).updateYearWithLatest(true)
+            licenseHeaderFile(rootProject.file("LICENSE_HEADER"))
 
             target(
                 project.sourceSets.main.get().findSourceFilesToTarget(),
@@ -51,6 +51,10 @@ configure(subprojects.filter { it.name != "kotlin-checks-test-sources" }) {
             trimTrailingWhitespace()
             indentWithSpaces()
             endWithNewline()
+        }
+        format("javaMisc") {
+            target("src/**/package-info.java")
+            licenseHeaderFile(rootProject.file("LICENSE_HEADER"), "@javax.annotation")
         }
     }
 }

@@ -1,10 +1,10 @@
 /*
  * SonarSource Kotlin
- * Copyright (C) 2018-2026 SonarSource Sàrl
+ * Copyright (C) SonarSource Sàrl
  * mailto:info AT sonarsource DOT com
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the Sonar Source-Available License Version 1.0.1, as published by SonarSource Sàrl.
+ * You can redistribute and/or modify this program under the terms of
+ * the Sonar Source-Available License Version 1, as published by SonarSource Sàrl.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,7 +27,7 @@ import kotlin.io.path.absolute
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.readText
 
-class DummyInputFile(val path: Path? = null) : InputFile {
+class DummyInputFile(val path: Path? = null, private val fileType: InputFile.Type = InputFile.Type.MAIN) : InputFile {
 
     var status: InputFile.Status = InputFile.Status.CHANGED
 
@@ -53,7 +53,7 @@ class DummyInputFile(val path: Path? = null) : InputFile {
 
     override fun language() = KotlinLanguage.NAME
 
-    override fun type() = InputFile.Type.MAIN
+    override fun type() = fileType
 
     override fun inputStream() = content.byteInputStream()
 
