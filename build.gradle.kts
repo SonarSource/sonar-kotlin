@@ -7,9 +7,9 @@ plugins {
     java
     id("jacoco")
     id("com.jfrog.artifactory") version "5.2.5"
-    id("org.sonarqube") version "7.1.0.6387"
+    id("org.sonarqube") version "7.2.3.7755"
     id("org.jetbrains.kotlin.jvm") apply false
-    id("com.diffplug.spotless") version "6.11.0"
+    id("com.diffplug.spotless") version "6.25.0"
     `maven-publish`
     signing
 }
@@ -118,7 +118,7 @@ subprojects {
     }
 
     jacoco {
-        toolVersion = "0.8.13"
+        toolVersion = "0.8.14"
     }
 
     tasks.jacocoTestReport {

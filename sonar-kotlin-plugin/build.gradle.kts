@@ -7,7 +7,7 @@ import java.util.Date
 import java.util.jar.JarInputStream
 
 plugins {
-    id("com.gradleup.shadow") version "8.3.1"
+    id("com.gradleup.shadow") version "8.3.10"
     kotlin("jvm")
     id("jacoco-report-aggregation")
     id("org.sonarsource.cloud-native.license-file-generator")
@@ -20,7 +20,7 @@ ruleApi {
 
 buildscript {
     dependencies {
-        classpath("com.guardsquare:proguard-gradle:7.6.1")
+        classpath("com.guardsquare:proguard-gradle:7.9.0")
     }
 }
 
