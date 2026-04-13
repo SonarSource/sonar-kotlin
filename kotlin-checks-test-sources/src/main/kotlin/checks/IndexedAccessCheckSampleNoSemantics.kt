@@ -1,10 +1,14 @@
 package checks
 
 import otherpackage.get
+import java.nio.ByteBuffer
+import java.util.BitSet
 import java.util.Calendar
+import java.util.Stack
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicIntegerArray
 
 class IndexedAccessCheckSampleNoSemantics {
 
@@ -13,8 +17,12 @@ class IndexedAccessCheckSampleNoSemantics {
         map: MutableMap<String, Int>,
         grid: Grid2,
         value: Any,
-        cal: Calendar,
-        future: CompletableFuture<Int>,
+        buffer: ByteBuffer,
+        stack: Stack<String>,
+        atomicArray: AtomicIntegerArray,
+        bitSet: BitSet,
+        arrayList: ArrayList<Int>,
+        hashMap: HashMap<String, Int>,
     ) {
         list.get(1) // Noncompliant {{Replace function call with indexed accessor.}}
 //           ^^^
@@ -25,10 +33,24 @@ class IndexedAccessCheckSampleNoSemantics {
         grid.get(1, 2) // Noncompliant {{Replace function call with indexed accessor.}}
         grid.set(1, 2, 42) // Noncompliant {{Replace function call with indexed accessor.}}
         value.get(42) // FN, Any has no get operator, only exposed via an extension function in Importable.kt, function in , can't resolve without semantics
-        // Java get/set methods can be replaced with indexed access operators via Java-Interop (https://kotlinlang.org/docs/java-interop.html#operators)
-        cal.get(Calendar.YEAR) // Noncompliant {{Replace function call with indexed accessor.}}
-        // FP without semantics: incorrect resolution due to singleFunctionCallOrNull
-        future.get(1L, TimeUnit.SECONDS) // Noncompliant {{Replace function call with indexed accessor.}}
+        // Java interop allowed types - indexed access is idiomatic for these
+        buffer.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        stack.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        atomicArray.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        atomicArray.set(0, 42) // Noncompliant {{Replace function call with indexed accessor.}}
+        bitSet.get(5) // Noncompliant {{Replace function call with indexed accessor.}}
+        bitSet.set(5, true) // Noncompliant {{Replace function call with indexed accessor.}}
+        // Concrete Java collection implementations - caught via List/Map supertype check with semantics
+        arrayList.get(0) // FN, supertype check requires classpath to resolve ArrayList extends List
+        arrayList.set(0, 42) // FN, same reason
+        hashMap.get("key") // FN, supertype check requires classpath to resolve HashMap extends Map
+    }
+
+    fun javaInteropExcluded(cal: Calendar, future: CompletableFuture<Int>) {
+        // Java get/set methods are operators via Java-Interop, but indexed access is not idiomatic for these types
+        cal.get(Calendar.YEAR) // Compliant - Java interop operator, not in allowed types
+        cal.set(Calendar.YEAR, 2024) // Compliant - Java interop operator, not in allowed types
+        future.get(1L, TimeUnit.SECONDS) // Compliant - Java interop operator, not in allowed types
     }
 
     fun withIndexedAccessors(
