@@ -18,10 +18,10 @@ package org.sonarsource.kotlin.checks
 
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtSuperExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
@@ -99,11 +99,8 @@ class IndexedAccessCheck : CallAbstractCheck() {
      * with the `operator` keyword in Kotlin source).
      */
     private fun isJavaInteropOperator(resolvedCall: KaFunctionCall<*>): Boolean {
-        val receiverType = getReceiverTypeFqn(resolvedCall)
-        // Kotlin-declared types always have Kotlin-defined operators, not Java interop
-        if (receiverType != null && receiverType.startsWith("kotlin.")) return false
-        // If the function is declared in Kotlin source, it's not a Java interop operator
-        return resolvedCall.symbol.psi !is KtNamedFunction
+        return resolvedCall.symbol.origin == KaSymbolOrigin.JAVA_SOURCE
+            || resolvedCall.symbol.origin == KaSymbolOrigin.JAVA_LIBRARY
     }
 
     /**

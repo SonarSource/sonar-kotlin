@@ -1,5 +1,6 @@
 package checks
 
+import otherpackage.KotlinLibContainer
 import otherpackage.get
 import java.nio.ByteBuffer
 import java.util.BitSet
@@ -53,6 +54,13 @@ class IndexedAccessCheckSample {
         cal.get(Calendar.YEAR) // Compliant - Java interop operator, not in allowed types
         cal.set(Calendar.YEAR, 2024) // Compliant - Java interop operator, not in allowed types
         future.get(1L, TimeUnit.SECONDS) // Compliant - Java interop operator, not in allowed types
+    }
+
+    fun kotlinLibraryTypes(container: KotlinLibContainer<String>) {
+        // Compiled Kotlin library types with operator fun get/set should still be flagged.
+        // These are NOT Java interop operators — they are genuine Kotlin operators from a library.
+        container.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        container.set(0, "value") // Noncompliant {{Replace function call with indexed accessor.}}
     }
 
     fun withIndexedAccessors(lisp: Lisp<Int>, maybeNullList: MutableList<Int>?,  list: MutableList<Int>, map: MutableMap<String, Int>, grid: Grid, num: AtomicInteger, root: GenericAccessorClass) {

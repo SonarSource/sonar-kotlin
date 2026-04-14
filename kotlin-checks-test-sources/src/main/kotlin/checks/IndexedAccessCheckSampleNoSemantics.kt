@@ -1,5 +1,6 @@
 package checks
 
+import otherpackage.KotlinLibContainer
 import otherpackage.get
 import java.nio.ByteBuffer
 import java.util.BitSet
@@ -51,6 +52,12 @@ class IndexedAccessCheckSampleNoSemantics {
         cal.get(Calendar.YEAR) // Compliant - Java interop operator, not in allowed types
         cal.set(Calendar.YEAR, 2024) // Compliant - Java interop operator, not in allowed types
         future.get(1L, TimeUnit.SECONDS) // Compliant - Java interop operator, not in allowed types
+    }
+
+    fun kotlinLibraryTypes(container: KotlinLibContainer<String>) {
+        // FN without semantics: operator fun get/set can't be resolved without classpath
+        container.get(0)
+        container.set(0, "value")
     }
 
     fun withIndexedAccessors(
