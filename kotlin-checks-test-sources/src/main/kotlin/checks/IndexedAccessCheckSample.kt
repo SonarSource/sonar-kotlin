@@ -1,5 +1,9 @@
 package checks
 
+import com.google.common.collect.ImmutableList
+import com.google.common.collect.RangeMap
+import com.google.common.collect.Table
+import okhttp3.Headers
 import otherpackage.KotlinLibContainer
 import otherpackage.get
 import java.nio.ByteBuffer
@@ -56,11 +60,24 @@ class IndexedAccessCheckSample {
         future.get(1L, TimeUnit.SECONDS) // Compliant - Java interop operator, not in allowed types
     }
 
-    fun kotlinLibraryTypes(container: KotlinLibContainer<String>) {
+    fun kotlinLibraryTypes(container: KotlinLibContainer<String>, headers: Headers) {
         // Compiled Kotlin library types with operator fun get/set should still be flagged.
         // These are NOT Java interop operators — they are genuine Kotlin operators from a library.
         container.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
         container.set(0, "value") // Noncompliant {{Replace function call with indexed accessor.}}
+        headers.get("Content-Type") // Noncompliant {{Replace function call with indexed accessor.}}
+    }
+
+    fun javaLibraryTypes(
+        immutableList: ImmutableList<String>,
+        table: Table<String, String, Int>,
+        rangeMap: RangeMap<Int, String>,
+    ) {
+        // Java library types extending List/Map — allowed Java interop, should still raise
+        immutableList.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        // Java library types NOT extending List/Map — Java interop excluded
+        table.get("row", "col") // Compliant - Java interop operator, not in allowed types
+        rangeMap.get(42) // Compliant - Java interop operator, not in allowed types
     }
 
     fun withIndexedAccessors(lisp: Lisp<Int>, maybeNullList: MutableList<Int>?,  list: MutableList<Int>, map: MutableMap<String, Int>, grid: Grid, num: AtomicInteger, root: GenericAccessorClass) {

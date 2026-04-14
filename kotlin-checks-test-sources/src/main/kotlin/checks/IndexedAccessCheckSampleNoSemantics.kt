@@ -1,5 +1,9 @@
 package checks
 
+import com.google.common.collect.ImmutableList
+import com.google.common.collect.RangeMap
+import com.google.common.collect.Table
+import okhttp3.Headers
 import otherpackage.KotlinLibContainer
 import otherpackage.get
 import java.nio.ByteBuffer
@@ -54,10 +58,22 @@ class IndexedAccessCheckSampleNoSemantics {
         future.get(1L, TimeUnit.SECONDS) // Compliant - Java interop operator, not in allowed types
     }
 
-    fun kotlinLibraryTypes(container: KotlinLibContainer<String>) {
+    fun kotlinLibraryTypes(container: KotlinLibContainer<String>, headers: Headers) {
         // FN without semantics: operator fun get/set can't be resolved without classpath
         container.get(0)
         container.set(0, "value")
+        headers.get("Content-Type")
+    }
+
+    fun javaLibraryTypes(
+        immutableList: ImmutableList<String>,
+        table: Table<String, String, Int>,
+        rangeMap: RangeMap<Int, String>,
+    ) {
+        // FN without semantics: supertype/interop checks require classpath
+        immutableList.get(0)
+        table.get("row", "col")
+        rangeMap.get(42)
     }
 
     fun withIndexedAccessors(
