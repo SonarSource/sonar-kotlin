@@ -76,7 +76,7 @@ class CollectionInappropriateCallsCheck : CallAbstractCheck() {
         resolvedCall: KaFunctionCall<*>,
         matchedFun: FunMatcherImpl,
         kotlinFileContext: KotlinFileContext,
-    ) = withKaSession {
+    ): Unit = withKaSession {
         // all evaluated methods have one and one only argument
         val arg = callExpression.valueArguments.first()
         var argType = arg.getArgumentExpression()?.expressionType ?: return
@@ -87,7 +87,7 @@ class CollectionInappropriateCallsCheck : CallAbstractCheck() {
             ?: collectionType.typeArguments.getOrNull(collectionArgumentIndex)?.type
             ?: return
 
-        // for methods like removeAll, containsAll etc.. we pass a collection as argument,
+        // for methods like removeAll, containsAll, etc. we pass a collection as argument,
         // and so we want to check the type of the collection<argument> instead
         if (matchedFun == COLLECTION_ARGUMENT_EXTENSIONS_MATCHER) {
             if (argType !is KaClassType) return
