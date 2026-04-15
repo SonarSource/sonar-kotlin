@@ -37,7 +37,7 @@ dependencyResolutionManagement {
 
         create("libs") {
             val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
-            val gson = version("gson", "2.10.1")
+            val gson = version("gson", "2.11.0")
             val staxmate = version("staxmate", "2.4.1")
 
             library("gson", "com.google.code.gson", "gson").versionRef(gson)

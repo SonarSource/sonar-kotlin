@@ -79,6 +79,19 @@
         "its/sources/**"
       ],
       "enabled": false
+    },
+    {
+      // These versions must stay aligned with the Kotlin compiler version used in the project.
+      // Check the correct versions at: https://github.com/JetBrains/kotlin/blob/v2.3.20/gradle/libs.versions.toml
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "org.jetbrains.kotlinx:kotlinx-serialization-core",
+        "com.github.ben-manes.caffeine:caffeine",
+        "com.google.code.gson:gson"
+      ],
+      "enabled": false
     }
   ]
 }
