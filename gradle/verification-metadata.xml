@@ -258,6 +258,11 @@
             <sha256 value="115ef0c2ee42b1285271bb5b240de11f980a7fa1021b5ae1c9f9cfbe48756aaa" origin="Verified"/>
          </artifact>
       </component>
+      <component group="com.github.jk1" name="gradle-license-report" version="3.1.2">
+         <artifact name="gradle-license-report-3.1.2.jar">
+            <sha256 value="bac61b9608da0d10d14be747927509d71923c505cb16e9c805ab51e7782fda38" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="com.github.kittinunf.fuel" name="fuel" version="2.3.1">
          <artifact name="fuel-2.3.1.jar">
             <sha256 value="9e38b4b2b4f6bae5491c0975c1c4784ba9b7edc4a54f37acbca30db2c6516a35" origin="Verified"/>
