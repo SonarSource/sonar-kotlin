@@ -69,7 +69,7 @@ internal class ComparableTree(private val tree: KtElement) {
     companion object {
         private fun computeHash(tree: KtElement): Int {
             val children = tree.children.filterIsInstance<KtElement>()
-            return if (children.isNullOrEmpty()) {
+            return if (children.isEmpty()) {
                 tree.text.trim().hashCode()
             } else {
                 children.contentHashCode()
