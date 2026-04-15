@@ -33,7 +33,7 @@ dependencyResolutionManagement {
         val kotlinVersion: String by extra
         val analyzerCommonsVersionStr = "2.18.0.3393"
         val sonarPluginApi = "11.1.0.2693"
-        val slf4jApi = "1.7.30"
+        val slf4jApi = "1.7.36"
 
         create("libs") {
             val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
@@ -52,7 +52,7 @@ dependencyResolutionManagement {
             library("sonar-regex-parsing", "org.sonarsource.analyzer-commons", "sonar-regex-parsing").versionRef(analyzerCommons)
             library("sonar-xml-parsing", "org.sonarsource.analyzer-commons", "sonar-xml-parsing").versionRef(analyzerCommons)
             library("staxmate", "com.fasterxml.staxmate", "staxmate").versionRef(staxmate)
-            library("stax2-api", "org.codehaus.woodstox", "stax2-api").version("4.2.1")
+            library("stax2-api", "org.codehaus.woodstox", "stax2-api").version("4.3.0")
         }
 
         create("utilLibs") {
@@ -98,7 +98,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.gradle.develocity") version("3.18.2")
+    id("com.gradle.develocity") version("3.19.2")
 }
 
 val isCI: Boolean = System.getenv("CI") != null
