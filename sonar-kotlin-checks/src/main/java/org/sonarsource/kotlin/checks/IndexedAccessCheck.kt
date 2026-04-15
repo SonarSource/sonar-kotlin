@@ -89,10 +89,6 @@ class IndexedAccessCheck : CallAbstractCheck() {
         kotlinFileContext.reportIssue(callExpression.calleeExpression!!, "Replace function call with indexed accessor.")
     }
 
-    private fun getReceiverTypeFqn(resolvedCall: KaFunctionCall<*>): String? = withKaSession {
-        (resolvedCall.dispatchReceiver ?: resolvedCall.extensionReceiver)?.type?.asFqNameString()
-    }
-
     /**
      * Checks whether the resolved function is a Java interop operator (i.e., a Java method
      * that Kotlin treats as an operator via interop, rather than a function explicitly declared
@@ -108,9 +104,9 @@ class IndexedAccessCheck : CallAbstractCheck() {
      * of Java types where indexed access operator syntax is idiomatic.
      */
     private fun isAllowedJavaInteropType(resolvedCall: KaFunctionCall<*>): Boolean = withKaSession {
-        if (getReceiverTypeFqn(resolvedCall) in JAVA_INTEROP_ALLOWED_TYPES) return true
-        // Any List or Map implementation supports idiomatic indexed access
         val type = (resolvedCall.dispatchReceiver ?: resolvedCall.extensionReceiver)?.type ?: return false
+        if (type.asFqNameString() in JAVA_INTEROP_ALLOWED_TYPES) return true
+        // Any List or Map implementation supports idiomatic indexed access
         return type.isSubtypeOf(LIST_CLASS_ID) || type.isSubtypeOf(MAP_CLASS_ID)
     }
 }
