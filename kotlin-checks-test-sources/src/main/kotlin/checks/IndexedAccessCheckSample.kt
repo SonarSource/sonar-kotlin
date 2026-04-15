@@ -1,14 +1,34 @@
 package checks
 
+import com.google.common.collect.ImmutableList
+import com.google.common.collect.RangeMap
+import com.google.common.collect.Table
+import okhttp3.Headers
+import otherpackage.KotlinLibContainer
 import otherpackage.get
+import java.nio.ByteBuffer
+import java.util.BitSet
 import java.util.Calendar
+import java.util.Stack
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicIntegerArray
 
 class IndexedAccessCheckSample {
 
-    fun withoutIndexedAccessors(list: MutableList<Int>, map: MutableMap<String, Int>, grid: Grid, value: Any, cal: Calendar, future: CompletableFuture<Int>) {
+    fun withoutIndexedAccessors(
+        list: MutableList<Int>,
+        map: MutableMap<String, Int>,
+        grid: Grid,
+        value: Any,
+        buffer: ByteBuffer,
+        stack: Stack<String>,
+        atomicArray: AtomicIntegerArray,
+        bitSet: BitSet,
+        arrayList: ArrayList<Int>,
+        hashMap: HashMap<String, Int>,
+    ) {
         list.get(1) // Noncompliant {{Replace function call with indexed accessor.}}
 //           ^^^
         list.set(1, 42) // Noncompliant {{Replace function call with indexed accessor.}}
@@ -19,10 +39,45 @@ class IndexedAccessCheckSample {
         grid.get(1, 2) // Noncompliant {{Replace function call with indexed accessor.}}
         grid.set(1, 2, 42) // Noncompliant {{Replace function call with indexed accessor.}}
         value.get(42) // Noncompliant {{Replace function call with indexed accessor.}}
-        // Java get/set methods can be replaced with indexed access operators via Java-Interop (https://kotlinlang.org/docs/java-interop.html#operators)
-        cal.get(Calendar.YEAR) // Noncompliant {{Replace function call with indexed accessor.}}
-        future.get(1L, TimeUnit.SECONDS) // Noncompliant {{Replace function call with indexed accessor.}}
+        // Java interop allowed types - indexed access is idiomatic for these
+        buffer.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        stack.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        atomicArray.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        atomicArray.set(0, 42) // Noncompliant {{Replace function call with indexed accessor.}}
+        bitSet.get(5) // Noncompliant {{Replace function call with indexed accessor.}}
+        bitSet.set(5, true) // Noncompliant {{Replace function call with indexed accessor.}}
+        // Concrete Java collection implementations - caught via List/Map supertype check
+        arrayList.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        arrayList.set(0, 42) // Noncompliant {{Replace function call with indexed accessor.}}
+        hashMap.get("key") // Noncompliant {{Replace function call with indexed accessor.}}
+    }
 
+    fun javaInteropExcluded(cal: Calendar, future: CompletableFuture<Int>) {
+        // Java get/set methods are operators via Java-Interop (https://kotlinlang.org/docs/java-interop.html#operators)
+        // but indexed access is not idiomatic for these types, so we don't raise
+        cal.get(Calendar.YEAR) // Compliant - Java interop operator, not in allowed types
+        cal.set(Calendar.YEAR, 2024) // Compliant - Java interop operator, not in allowed types
+        future.get(1L, TimeUnit.SECONDS) // Compliant - Java interop operator, not in allowed types
+    }
+
+    fun kotlinLibraryTypes(container: KotlinLibContainer<String>, headers: Headers) {
+        // Compiled Kotlin library types with operator fun get/set should still be flagged.
+        // These are NOT Java interop operators — they are genuine Kotlin operators from a library.
+        container.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        container.set(0, "value") // Noncompliant {{Replace function call with indexed accessor.}}
+        headers.get("Content-Type") // Noncompliant {{Replace function call with indexed accessor.}}
+    }
+
+    fun javaLibraryTypes(
+        immutableList: ImmutableList<String>,
+        table: Table<String, String, Int>,
+        rangeMap: RangeMap<Int, String>,
+    ) {
+        // Java library types extending List/Map — allowed Java interop, should still raise
+        immutableList.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        // Java library types NOT extending List/Map — Java interop excluded
+        table.get("row", "col") // Compliant - Java interop operator, not in allowed types
+        rangeMap.get(42) // Compliant - Java interop operator, not in allowed types
     }
 
     fun withIndexedAccessors(lisp: Lisp<Int>, maybeNullList: MutableList<Int>?,  list: MutableList<Int>, map: MutableMap<String, Int>, grid: Grid, num: AtomicInteger, root: GenericAccessorClass) {

@@ -27,3 +27,13 @@ fun functionTakingAny(value: Any) {}
 fun String.stringExtFun1() {}
 fun String.stringExtFun2() {}
 infix fun String.someInfixFun(foo: String) = this
+
+/**
+ * A Kotlin class with operator fun get/set, simulating a third-party Kotlin library type
+ * (e.g., Arrow, KotlinX collections, or any user-defined library).
+ * When resolved from compiled class files (not source), symbol.psi will be null.
+ */
+class KotlinLibContainer<T>(private val items: List<T>) {
+    operator fun get(index: Int): T = items[index]
+    operator fun set(index: Int, value: T) { /* no-op for test */ }
+}
