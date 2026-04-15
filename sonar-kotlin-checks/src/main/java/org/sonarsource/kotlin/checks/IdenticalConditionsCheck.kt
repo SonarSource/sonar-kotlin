@@ -24,15 +24,15 @@ import org.jetbrains.kotlin.psi.KtWhenConditionWithExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
-import org.sonarsource.kotlin.api.reporting.SecondaryLocation
-import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.reporting.KotlinTextRanges.textRange
+import org.sonarsource.kotlin.api.reporting.SecondaryLocation
 
 @Rule(key = "S1862")
 class IdenticalConditionsCheck : AbstractCheck() {
 
     override fun visitWhenExpression(expression: KtWhenExpression, kotlinFileContext: KotlinFileContext) {
-        checkConditions(kotlinFileContext, collectConditions(expression))
+        checkWhenConditions(kotlinFileContext, expression)
     }
 
     override fun visitIfExpression(expression: KtIfExpression, kotlinFileContext: KotlinFileContext) {
@@ -47,29 +47,53 @@ class IdenticalConditionsCheck : AbstractCheck() {
 
     private fun checkConditions(ctx: KotlinFileContext, conditions: List<KtElement>) {
         for (group in SyntacticEquivalence.findDuplicatedGroups(conditions)) {
-            val original = group[0]
-            group.stream().skip(1)
-                .forEach { duplicated ->
-                    val originalRange = ctx.textRange(original)
-                    ctx.reportIssue(
-                        duplicated,
-                        "This condition duplicates the one on line ${originalRange.start().line()}.",
-                        listOf(SecondaryLocation(originalRange, "Original")),
-                    )
-                }
+            reportDuplicates(ctx, group)
         }
     }
 
-    private fun collectConditions(whenExpression: KtWhenExpression): List<KtElement> =
-        whenExpression.entries.mapNotNull {
-            it.conditions.map { whenCondition ->
-                if (whenCondition is KtWhenConditionWithExpression) {
+    /**
+     * Two `when` entries are considered duplicates only if and only if both their primary conditions and their
+     * guard expressions (if any) are syntactically equivalent.
+     */
+    private fun checkWhenConditions(ctx: KotlinFileContext, whenExpression: KtWhenExpression) {
+        val conditionsWithGuards = whenExpression.entries
+            .filter { !it.isElse && it.conditions.size == 1 }
+            .map { entry ->
+                val whenCondition = entry.conditions.single()
+                val condition = if (whenCondition is KtWhenConditionWithExpression) {
                     whenCondition.expression!!.skipParentheses()
                 } else {
-                    whenCondition
+                    whenCondition as KtElement
                 }
+                ConditionWithGuard(condition, entry.guard?.getExpression())
             }
-        }.filter { it.size == 1 }.map { it.single() }
+
+        conditionsWithGuards.groupEquivalent { it1, it2 ->
+            SyntacticEquivalence.areEquivalent(it1.condition, it2.condition) &&
+                when {
+                    it1.guard == null && it2.guard == null -> true
+                    it1.guard != null && it2.guard != null -> SyntacticEquivalence.areEquivalent(it1.guard, it2.guard)
+                    else -> false
+                }
+        }
+            .filter { it.size > 1 }
+            .forEach { group ->
+                reportDuplicates(ctx, group.map { it.condition })
+            }
+    }
+
+    private fun reportDuplicates(ctx: KotlinFileContext, group: List<KtElement>) {
+        val original = group[0]
+        group.stream().skip(1)
+            .forEach { duplicated ->
+                val originalRange = ctx.textRange(original)
+                ctx.reportIssue(
+                    duplicated,
+                    "This condition duplicates the one on line ${originalRange.start().line()}.",
+                    listOf(SecondaryLocation(originalRange, "Original")),
+                )
+            }
+    }
 
     private fun collectConditions(ifTree: KtIfExpression, list: MutableList<KtExpression>): List<KtElement> {
         list.add(ifTree.condition!!.skipParentheses())
@@ -78,4 +102,18 @@ class IdenticalConditionsCheck : AbstractCheck() {
             collectConditions(elseBranch, list)
         } else list
     }
+}
+
+private data class ConditionWithGuard(val condition: KtElement, val guard: KtExpression?)
+
+private fun <T> Iterable<T>.groupEquivalent(predicate: (T, T) -> Boolean): Iterable<List<T>> {
+    val groups = mutableListOf<MutableList<T>>()
+
+    forEach { element ->
+        val bucket = groups.firstOrNull { group -> group.any { predicate(element, it) } }
+            ?: mutableListOf<T>().apply { groups.add(this) }
+        bucket.add(element)
+    }
+
+    return groups.map { it.toList() }
 }
