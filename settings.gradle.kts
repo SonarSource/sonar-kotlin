@@ -121,3 +121,10 @@ develocity {
         }
     }
 }
+
+buildCache {
+    remote(develocity.buildCache) {
+        isEnabled = true
+        isPush = isCI
+    }
+}
