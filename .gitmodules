@@ -4,3 +4,4 @@
 [submodule "build-logic/common"]
 	path = build-logic/common
 	url = https://github.com/SonarSource/cloud-native-gradle-modules
+	branch = petertrr/exclude-bouncy-castle
