@@ -16,6 +16,7 @@ on:
 jobs:
   bump-version:
     runs-on: github-ubuntu-latest-s
+    timeout-minutes: 15
     permissions:
       contents: write # write for peter-evans/create-pull-request, read for actions/checkout
       pull-requests: write # write for peter-evans/create-pull-request

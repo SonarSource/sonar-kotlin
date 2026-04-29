@@ -4,7 +4,17 @@ on:
     branches:
       - master
       - branch-*
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - '.github/*.md'
+      - 'LICENSE'
   pull_request:
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - '.github/*.md'
+      - 'LICENSE'
   workflow_dispatch:
   schedule:
     - cron: "0 2 * * *" # at 02:00 UTC every day
@@ -20,6 +30,7 @@ permissions:
 jobs:
   build:
     runs-on: github-ubuntu-latest-s
+    timeout-minutes: 60
     steps:
       - &configure_GITHUB_JOB_ID_environment_variable
         # https://github.com/actions/runner/issues/324#issuecomment-3324382354
@@ -69,6 +80,7 @@ jobs:
           ARTIFACTORY_DEPLOY_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_PASSWORD }}
   qa_plugin:
     runs-on: github-ubuntu-latest-s
+    timeout-minutes: 60
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
@@ -97,6 +109,7 @@ jobs:
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
   qa_ruling:
     runs-on: github-ubuntu-latest-m
+    timeout-minutes: 60
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
@@ -130,6 +143,7 @@ jobs:
       - qa_plugin
       - qa_ruling
     runs-on: github-ubuntu-latest-s
+    timeout-minutes: 15
     permissions:
       id-token: write  # Required for Vault OIDC authentication
       contents: write
@@ -161,6 +175,7 @@ jobs:
       id-token: write
       statuses: read
     runs-on: github-ubuntu-latest-s
+    timeout-minutes: 15
     steps:
       - uses: SonarSource/release-github-actions/notify-slack@v1
         with:

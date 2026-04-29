@@ -3,11 +3,21 @@ name: Pull Request Closed
 on:
   pull_request:
     types: [closed]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - '.github/*.md'
+      - 'LICENSE'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   PullRequestClosed_job:
     name: Pull Request Closed
     runs-on: github-ubuntu-latest-s
+    timeout-minutes: 15
     permissions:
       id-token: write
       pull-requests: read
