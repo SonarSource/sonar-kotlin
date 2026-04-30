@@ -4,10 +4,15 @@ on:
   pull_request_review:
     types: [submitted]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   SubmitReview_job:
     name: Submit Review
     runs-on: github-ubuntu-latest-s
+    timeout-minutes: 15
     permissions:
       id-token: write
     # For external PR, ticket should be moved manually

@@ -6,9 +6,11 @@ on:
       - master
       - 'dogfood/**'
 
+
 jobs:
   dogfood_merge:
     runs-on: github-ubuntu-latest-s
+    timeout-minutes: 15
     name: Update dogfood branch
     permissions:
       id-token: write # required for SonarSource/vault-action-wrapper
