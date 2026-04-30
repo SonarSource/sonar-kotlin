@@ -4,17 +4,7 @@ on:
     branches:
       - master
       - branch-*
-    paths-ignore:
-      - '**/*.md'
-      - 'docs/**'
-      - '.github/*.md'
-      - 'LICENSE'
   pull_request:
-    paths-ignore:
-      - '**/*.md'
-      - 'docs/**'
-      - '.github/*.md'
-      - 'LICENSE'
   workflow_dispatch:
   schedule:
     - cron: "0 2 * * *" # at 02:00 UTC every day
