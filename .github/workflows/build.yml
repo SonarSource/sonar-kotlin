@@ -133,7 +133,7 @@ jobs:
       - qa_plugin
       - qa_ruling
     runs-on: github-ubuntu-latest-s
-    timeout-minutes: 15
+    timeout-minutes: 10
     permissions:
       id-token: write  # Required for Vault OIDC authentication
       contents: write
@@ -165,7 +165,7 @@ jobs:
       id-token: write
       statuses: read
     runs-on: github-ubuntu-latest-s
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: SonarSource/release-github-actions/notify-slack@v1
         with:
