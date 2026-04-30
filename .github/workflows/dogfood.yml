@@ -5,11 +5,7 @@ on:
     branches:
       - master
       - 'dogfood/**'
-    paths-ignore:
-      - '**/*.md'
-      - 'docs/**'
-      - '.github/*.md'
-      - 'LICENSE'
+
 
 jobs:
   dogfood_merge:
