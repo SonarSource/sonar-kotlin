@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Update Rule Metadata
         id: update-rule-metadata
-        uses: SonarSource/release-github-actions/update-rule-metadata@v1
+        uses: SonarSource/release-github-actions/update-rule-metadata@1.5.6
 
       - name: Check Rule Metadata Changes
         run: |

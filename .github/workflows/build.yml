@@ -36,7 +36,7 @@ jobs:
           distribution: temurin
           java-version: 21
       - id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
+        uses: SonarSource/vault-action-wrapper@3.4.0
         with:
           secrets: |
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
@@ -49,7 +49,7 @@ jobs:
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer username | ARTIFACTORY_DEPLOY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer access_token | ARTIFACTORY_DEPLOY_PASSWORD;
       - id: build-number
-        uses: SonarSource/ci-github-actions/get-build-number@v1
+        uses: SonarSource/ci-github-actions/get-build-number@1.3.35
       - run: |
           ./gradlew \
               build \
@@ -80,7 +80,7 @@ jobs:
           distribution: temurin
           java-version: 21
       - id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
+        uses: SonarSource/vault-action-wrapper@3.4.0
         with:
           secrets: |
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
@@ -110,7 +110,7 @@ jobs:
           distribution: temurin
           java-version: 17
       - id: secrets
-        uses: SonarSource/vault-action-wrapper@v3
+        uses: SonarSource/vault-action-wrapper@3.4.0
         with:
           secrets: |
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
@@ -151,7 +151,7 @@ jobs:
           fi
         env:
           NEEDS: ${{ toJSON(needs) }}
-      - uses: SonarSource/ci-github-actions/promote@v1
+      - uses: SonarSource/ci-github-actions/promote@1.3.35
 
   notify_slack:
     name: Notify Slack on Failure
@@ -167,7 +167,7 @@ jobs:
     runs-on: github-ubuntu-latest-s
     timeout-minutes: 10
     steps:
-      - uses: SonarSource/release-github-actions/notify-slack@v1
+      - uses: SonarSource/release-github-actions/notify-slack@1.5.6
         with:
           project-name: "SonarKotlin"
           slack-channel: "squad-security-cloud-notifs"
