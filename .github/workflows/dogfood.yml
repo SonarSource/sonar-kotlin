@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: get secrets
         id: secrets
-        uses: SonarSource/vault-action-wrapper@dc8fe04652687f7278f3ecd27905967836bab0eb  # tag=2.7.4-1
+        uses: SonarSource/vault-action-wrapper@c154b4a417b51cb98dd71137f49bf20e77c56820  # 3.4.0
         with:
           secrets: |
             development/github/token/{REPO_OWNER_NAME_DASH}-dogfood-merge token | dogfood_token;
