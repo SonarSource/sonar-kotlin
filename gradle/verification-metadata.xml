@@ -2679,6 +2679,11 @@
             <sha256 value="eba7f1c854296e4ce1418fb01360f8f10c5683e7c45aa3472018417a067636f3" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlinx" name="kotlinx-serialization-core-jvm" version="1.7.3">
+         <artifact name="kotlinx-serialization-core-jvm-1.7.3.jar">
+            <sha256 value="f0adde45864144475385cf4aa7e0b7feb27f61fcf9472665ed98cc971b06b1eb" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlinx" name="kotlinx-serialization-core-jvm" version="1.9.0">
          <artifact name="kotlinx-serialization-core-jvm-1.9.0.jar">
             <sha256 value="1f0afa172110e45a7231ef1b44ae8fd84c1ebaff96f3fc3ad68ef8c48120b59c" origin="Verified"/>
