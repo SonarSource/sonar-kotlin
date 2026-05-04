@@ -8,6 +8,11 @@ class EqualsMethodUsageCheckSampleNoSemantics {
 //               ^^^^^^
         }
 
+        // Negated 1-arg equals should also be flagged
+        if (!str1.equals(str2)) { // Noncompliant {{Replace "!" and "equals" with binary operator "!=".}}
+//                ^^^^^^
+        }
+
         // These should NOT be flagged - equals with ignoreCase is NOT equivalent to ==
         // Regression test for SONARKT-259
         if (str1.equals(str2, ignoreCase = true)) { // Compliant
