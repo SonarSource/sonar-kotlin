@@ -23,6 +23,7 @@ jobs:
     uses: SonarSource/gh-action_release/.github/workflows/main.yaml@v7
     with:
       version: ${{ inputs.version }}
+      dryRun: ${{ inputs.dryRun }}
       publishToBinaries: true
       mavenCentralSync: true
       slackChannel: squad-security-cloud-notifs
