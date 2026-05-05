@@ -1,6 +1,6 @@
 ---
 name: sonar-release
-# This workflow is triggered when publishing a new github release
+# This workflow is triggered manually via workflow_dispatch
 # yamllint disable-line rule:truthy
 on:
   workflow_dispatch:
