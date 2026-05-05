@@ -16,4 +16,4 @@
  */
 package org.sonarsource.kotlin.checks
 
-internal class EqualsMethodUsageCheckTest : CheckTest(EqualsMethodUsageCheck())
+internal class EqualsMethodUsageCheckTest : CheckTestWithNoSemantics(EqualsMethodUsageCheck(), shouldReport = true)
