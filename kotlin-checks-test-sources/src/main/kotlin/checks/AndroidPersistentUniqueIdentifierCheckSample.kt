@@ -14,6 +14,18 @@ typealias AndroidxAdsAdvertisingIdClient = androidx.ads.identifier.AdvertisingId
 typealias ComHuaweiAdvertisingIdClient = com.huawei.hms.ads.identifier.AdvertisingIdClient
 typealias SettingsSecureAlias = android.provider.Settings.Secure
 
+interface SomeHolder {
+    val element: Any?  // interface property -> unstable for smart cast
+}
+
+private fun reproduceSmartcastCrash(holder: SomeHolder, list: List<String>) {
+    when (holder.element) {
+        !is String -> return
+        !in list -> return  // Compliant - should not crash
+        else -> {}
+    }
+}
+
 class AndroidPersistentUniqueIdentifierCheckSample {
 
     class BluetoothAdapterTests {

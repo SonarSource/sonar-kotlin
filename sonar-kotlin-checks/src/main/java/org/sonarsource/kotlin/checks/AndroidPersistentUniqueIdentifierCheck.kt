@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.psi.KtWhenConditionInRange
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
@@ -85,6 +86,7 @@ class AndroidPersistentUniqueIdentifierCheck : CallAbstractCheck() {
     override val functionsToVisit = instanceMatches.keys
 
     override fun visitReferenceExpression(expression: KtReferenceExpression, data: KotlinFileContext) = withKaSession {
+        if (expression.parent is KtWhenConditionInRange) return@withKaSession
         val resolvedCall = expression.resolveToCall()
         val call = resolvedCall?.successfulCallOrNull<KaCallableMemberCall<*, *>>() ?: return@withKaSession
         if (staticSettingsSecureGetStringFunMatcher.matches(call)) {
