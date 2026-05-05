@@ -9,6 +9,11 @@ on:
         type: string
         description: Version
         required: true
+      dryRun:
+        type: boolean
+        description: Flag to enable the dry-run execution
+        default: false
+        required: false
 
 jobs:
   release:
