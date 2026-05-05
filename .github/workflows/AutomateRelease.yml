@@ -47,7 +47,7 @@ on:
         type: boolean
         description: |
           Add verbose job summaries
-        default: true
+        default: false
 
 jobs:
   release:
