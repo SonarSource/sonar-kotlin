@@ -43,20 +43,16 @@ on:
         description: "Test mode: uses Jira sandbox and creates draft GitHub release"
         type: boolean
         default: false
+      verbose:
+        type: boolean
+        description: |
+          Add verbose job summaries
+        default: false
 
 jobs:
-  lock-branch:
-    name: Lock ${{ inputs.branch }} branch
-    uses: ./.github/workflows/ToggleLockBranch.yml
-    permissions:
-      id-token: write
-    with:
-      branch: ${{ inputs.branch }}
-
   release:
     name: Release
-    uses: SonarSource/release-github-actions/.github/workflows/cloud-security-automated-release.yml@v1
-    needs: lock-branch
+    uses: SonarSource/release-github-actions/.github/workflows/automated-release.yml@v1
     permissions:
       statuses: read
       id-token: write
@@ -79,27 +75,10 @@ jobs:
       release-notes: ${{ inputs.release-notes }}
       sq-ide-short-description: ${{ inputs.sq-ide-short-description }}
       new-version: ${{ inputs.new-version }}
-      create-sli-ticket: true
-      create-slvs-ticket: false
-      create-sle-ticket: false
-      create-slvscode-ticket: false
       require-rule-metadata-update: ${{ inputs.require-rule-metadata-update }}
-
-  unlock-branch:
-    name: Unlock ${{ inputs.branch }} branch
-    uses: ./.github/workflows/ToggleLockBranch.yml
-    needs: release
-    permissions:
-      id-token: write
-    with:
-      branch: ${{ inputs.branch }}
-
-  bump_versions:
-    name: Bump versions
-    needs: [release, unlock-branch]
-    uses: ./.github/workflows/bump-versions.yaml
-    permissions:
-      contents: write
-      pull-requests: write
-    with:
-      version: ${{ needs.release.outputs.new-version }}-SNAPSHOT
+      slack-channel: "squad-security-cloud-notifs"
+      create-sli-ticket: true
+      runner-environment: sonar-xs
+      release-process: "https://xtranet-sonarsource.atlassian.net/wiki/x/RADLAQE"
+      verbose: ${{ inputs.verbose }}
+      bump-version: true
