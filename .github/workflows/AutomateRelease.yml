@@ -82,3 +82,4 @@ jobs:
       release-process: "https://xtranet-sonarsource.atlassian.net/wiki/x/RADLAQE"
       verbose: ${{ inputs.verbose }}
       bump-version: true
+      bump-version-exclusions: "its,sonar-kotlin-surefire"
