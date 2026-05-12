@@ -157,8 +157,11 @@ class SlangRulingTest {
 
   private static Map<String, String> prepareAnalysisConfiguration(String project, Map<String, String> additionalProperties) throws IOException {
     Map<String, String> properties = new HashMap<>(additionalProperties);
-    properties.put("sonar.projectKey", projectKey(project));
+    String projectKey = projectKey(project);
+    properties.put("sonar.projectKey", projectKey);
     properties.put("sonar.projectName", project);
+    // Set per-project working directory to allow parallel test execution
+    properties.put("sonar.working.directory", "build/sonar-workdir/" + projectKey);
     properties.put("sonar.projectVersion", "1");
     properties.put("sonar.sourceEncoding", "UTF-8");
     properties.put("sonar.slang.converter.validation", "log");
@@ -247,8 +250,6 @@ class SlangRulingTest {
     SonarScanner build = SonarScanner.create(FileLocation.of("../").getFile())
       .setSourceDirs("./")
       .setProperties(properties)
-      // Set per-project working directory to allow parallel test execution
-      .setProperty("sonar.working.directory", "build/sonar-workdir/" + projectKey(project))
       .setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx1024m");
 
     String debugPort = System.getProperty("sonar.rulingDebugPort");
