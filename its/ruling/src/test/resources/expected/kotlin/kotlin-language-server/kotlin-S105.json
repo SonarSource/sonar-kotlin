@@ -1,4 +1,7 @@
 {
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/KotlinLanguageServer.kt": [
+0
+],
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/externalsources/Decompiler.kt": [
 0
 ],
@@ -9,9 +12,6 @@
 0
 ],
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/util/LoggingMessageCollector.kt": [
-0
-],
-"kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/SourceExclusions.kt": [
 0
 ],
 "kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/util/AsyncExecutor.kt": [

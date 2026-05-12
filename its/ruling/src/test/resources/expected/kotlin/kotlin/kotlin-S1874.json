@@ -27,6 +27,9 @@
 143,
 144
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/src/org/jetbrains/kotlin/cli/common/CLITool.kt": [
+96
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/container/tests/org/jetbrains/kotlin/container/tests/ComponentContainerTest.kt": [
 20,
 25,
@@ -500,6 +503,10 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/codeInsight/generate/AbstractCodeInsightActionTest.kt": [
 43
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/filters/AbstractKotlinExceptionFilterTest.kt": [
+81,
+87
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/inspections/AbstractLocalInspectionTest.kt": [
 83
 ],
@@ -937,7 +944,15 @@
 62
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/io/ReadWrite.kt": [
-87
+87,
+156
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/text/StringJVMTest.kt": [
+43,
+46
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/utils/LazyJVMTest.kt": [
+127
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/samples/test/samples/_sampleUtils.kt": [
 21
@@ -966,6 +981,13 @@
 36,
 40,
 44
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/idl2k/src/main/kotlin/download.kt": [
+58,
+71
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/idl2k/src/main/kotlin/main.kt": [
+66
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-compiler-client-embeddable-test/src/test/kotlin/org/jetbrains/kotlin/compiler/client/CompilerClientIT.kt": [
 20,
@@ -1269,6 +1291,9 @@
 53,
 54
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/plugin/KotlinPlugin.kt": [
+771
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/test/kotlin/org/jetbrains/kotlin/gradle/dsl/KotlinJvmOptionsImplTest.kt": [
 5,
 8
@@ -1295,6 +1320,12 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-multiplatform/shared/src/test/kotlin/org/jetbrains/SharedTest.kt": [
 4,
 7
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-script-util/src/main/kotlin/org/jetbrains/kotlin/script/util/impl/pathUtil.kt": [
+60
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-script-util/src/main/kotlin/org/jetbrains/kotlin/script/util/resolvers/maven.kt": [
+84
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-script-util/src/test/kotlin/org/jetbrains/kotlin/script/util/ScriptUtilContextTests.kt": [
 20,

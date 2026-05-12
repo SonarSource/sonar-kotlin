@@ -1,15 +1,15 @@
 {
-"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/ImplementAbstractFunctionsQuickFix.kt": [
-136
-],
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/completion/Completions.kt": [
-254
+288
 ],
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/definition/GoToDefinition.kt": [
 28
 ],
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/overridemembers/OverrideMembers.kt": [
+158
+],
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/semantictokens/SemanticTokens.kt": [
-126
+121
 ],
 "kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/util/StringUtils.kt": [
 17

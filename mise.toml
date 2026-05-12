@@ -1,0 +1,3 @@
+[tools]
+# Tool versions for sonar-kotlin
+java = "21.0"
