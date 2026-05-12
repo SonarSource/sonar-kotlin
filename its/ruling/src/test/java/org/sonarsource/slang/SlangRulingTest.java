@@ -247,6 +247,8 @@ class SlangRulingTest {
     SonarScanner build = SonarScanner.create(FileLocation.of("../").getFile())
       .setSourceDirs("./")
       .setProperties(properties)
+      // Set per-project working directory to allow parallel test execution
+      .setProperty("sonar.working.directory", "build/sonar-workdir/" + projectKey(project))
       .setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx1024m");
 
     String debugPort = System.getProperty("sonar.rulingDebugPort");
