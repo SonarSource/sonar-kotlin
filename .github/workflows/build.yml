@@ -31,10 +31,10 @@ jobs:
       - &checkout-build-logic
         id: checkout-build-logic
         run: git submodule update --init -- build-logic/common
-      - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+      - &setup-mise
+        uses: jdx/mise-action@6d1e696aa24c1aa1bcc1adea0212707c71ab78a8 # v3.6.1
         with:
-          distribution: temurin
-          java-version: 21
+          version: 2026.2.24
       - id: secrets
         uses: SonarSource/vault-action-wrapper@v3
         with:
@@ -75,10 +75,7 @@ jobs:
       - *configure_GITHUB_JOB_ID_environment_variable
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
       - *checkout-build-logic
-      - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
-        with:
-          distribution: temurin
-          java-version: 21
+      - *setup-mise
       - id: secrets
         uses: SonarSource/vault-action-wrapper@v3
         with:
@@ -105,10 +102,7 @@ jobs:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
           submodules: true
-      - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
-        with:
-          distribution: temurin
-          java-version: 17
+      - *setup-mise
       - id: secrets
         uses: SonarSource/vault-action-wrapper@v3
         with:
@@ -119,7 +113,7 @@ jobs:
             development/github/token/licenses-ro token | GITHUB_TOKEN;
       - run: |
           ./gradlew \
-              :its:ruling:test -Pruling -Dsonar.runtimeVersion=LATEST_RELEASE[2025.5]
+              :its:ruling:test -Pruling -Dsonar.runtimeVersion=LATEST_RELEASE
         env:
           KOTLIN_COMPILER_IT_ENABLED: true
           DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}

@@ -41,7 +41,7 @@
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/AddMissingImportsQuickFix.kt": [
 0
 ],
-"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/ImplementAbstractFunctionsQuickFix.kt": [
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/ImplementAbstractMembersQuickFix.kt": [
 0
 ],
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/codeaction/quickfix/QuickFix.kt": [
@@ -92,6 +92,18 @@
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/formatting/Formatter.kt": [
 0
 ],
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/formatting/FormattingService.kt": [
+0
+],
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/formatting/KtfmtFormatter.kt": [
+0
+],
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/formatting/NopFormatter.kt": [
+0
+],
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/highlight/DocumentHighlight.kt": [
+0
+],
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/hover/Hovers.kt": [
 0
 ],
@@ -113,6 +125,9 @@
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/index/SymbolIndex.kt": [
 0
 ],
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/inlayhints/InlayHint.kt": [
+0
+],
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/j2k/JavaElementConverter.kt": [
 0
 ],
@@ -123,6 +138,9 @@
 0
 ],
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/j2k/PlatformTypeConverter.kt": [
+0
+],
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/overridemembers/OverrideMembers.kt": [
 0
 ],
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/position/Position.kt": [
@@ -158,16 +176,25 @@
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/util/PsiUtils.kt": [
 0
 ],
+"kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/util/RangeUtils.kt": [
+0
+],
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/util/TcpSockets.kt": [
 0
 ],
 "kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/Logger.kt": [
 0
 ],
+"kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/ScriptsConfiguration.kt": [
+0
+],
 "kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/SourceExclusions.kt": [
 0
 ],
 "kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/classpath/BackupClassPathResolver.kt": [
+0
+],
+"kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/classpath/CachedClassPathResolver.kt": [
 0
 ],
 "kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/classpath/ClassPathEntry.kt": [
@@ -192,6 +219,9 @@
 0
 ],
 "kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/classpath/WithStdlibResolver.kt": [
+0
+],
+"kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/database/DatabaseService.kt": [
 0
 ],
 "kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/util/AsyncExecutor.kt": [

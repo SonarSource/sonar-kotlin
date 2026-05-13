@@ -1,13 +1,13 @@
 {
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/completion/Completions.kt": [
-108
+109
 ],
 "kotlin-kotlin-language-server-project:server/src/main/kotlin/org/javacs/kt/semantictokens/SemanticTokens.kt": [
-135,
+129,
+132,
 138,
-144,
-163,
-194
+156,
+185
 ],
 "kotlin-kotlin-language-server-project:shared/src/main/kotlin/org/javacs/kt/util/StringUtils.kt": [
 47
