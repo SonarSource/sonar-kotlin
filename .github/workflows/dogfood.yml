@@ -9,7 +9,7 @@ on:
 
 jobs:
   dogfood_merge:
-    runs-on: github-ubuntu-latest-s
+    runs-on: warp-custom-ubuntu-24-04
     timeout-minutes: 15
     name: Update dogfood branch
     permissions:
