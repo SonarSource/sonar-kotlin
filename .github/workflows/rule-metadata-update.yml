@@ -4,7 +4,7 @@ on:
   
 jobs:
   rule-metadata-update:
-    runs-on: github-ubuntu-latest-s
+    runs-on: warp-custom-ubuntu-24-04
     timeout-minutes: 30
     permissions:
       id-token: write     # required by SonarSource/vault-action-wrapper
