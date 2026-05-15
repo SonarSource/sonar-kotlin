@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: github-ubuntu-latest-s
+    runs-on: warp-custom-ubuntu-24-04
     timeout-minutes: 30
     steps:
       - &configure_GITHUB_JOB_ID_environment_variable
@@ -69,7 +69,7 @@ jobs:
           ARTIFACTORY_DEPLOY_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_USERNAME }}
           ARTIFACTORY_DEPLOY_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_PASSWORD }}
   qa_plugin:
-    runs-on: github-ubuntu-latest-s
+    runs-on: warp-custom-ubuntu-24-04
     timeout-minutes: 30
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
@@ -95,7 +95,7 @@ jobs:
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
   qa_ruling:
-    runs-on: github-ubuntu-latest-m
+    runs-on: warp-custom-ubuntu-24-04
     timeout-minutes: 60
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
@@ -126,7 +126,7 @@ jobs:
       - build
       - qa_plugin
       - qa_ruling
-    runs-on: github-ubuntu-latest-s
+    runs-on: warp-custom-ubuntu-24-04
     timeout-minutes: 10
     permissions:
       id-token: write  # Required for Vault OIDC authentication
@@ -158,7 +158,7 @@ jobs:
     permissions:
       id-token: write
       statuses: read
-    runs-on: github-ubuntu-latest-s
+    runs-on: warp-custom-ubuntu-24-04
     timeout-minutes: 10
     steps:
       - uses: SonarSource/release-github-actions/notify-slack@v1
