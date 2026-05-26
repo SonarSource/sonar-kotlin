@@ -172,3 +172,44 @@ class GenericAccessorClass {
     operator fun <T> get(key: String): T = TODO()
 }
 
+class ChainableBuilder {
+    operator fun set(key: String, value: String): ChainableBuilder {
+        return this
+    }
+
+    operator fun get(key: String): String = ""
+
+    fun build(): String = ""
+}
+
+class ChainableMap {
+    operator fun set(key: String, value: Int): ChainableMap {
+        return this
+    }
+
+    operator fun get(key: String): Int = 0
+
+    fun size(): Int = 0
+}
+
+fun chainedSetters(builder: ChainableBuilder, chainableMap: ChainableMap) {
+    // Chained set calls - the result of set() is used for further chaining, so indexed access would break the chain.
+    // The intermediate set calls (whose return value is used) are compliant.
+    // The last set call in the chain is still noncompliant because its return value is not used.
+    builder.set("a", "1").set("b", "2").set("c", "3") // Noncompliant {{Replace function call with indexed accessor.}}
+    builder.set("a", "1").set("b", "2") // Noncompliant {{Replace function call with indexed accessor.}}
+    builder.set("a", "1").build() // Compliant - set result used in chain
+
+    // Chained get calls - indexed access still works (builder["a"].length is valid)
+    builder.get("a").length // Noncompliant {{Replace function call with indexed accessor.}}
+
+    chainableMap.set("a", 1).set("b", 2) // Noncompliant {{Replace function call with indexed accessor.}}
+    chainableMap.set("a", 1).size() // Compliant - set result used in chain
+
+    // Non-chained calls on types with chainable setters should still be flagged
+    builder.set("a", "1") // Noncompliant {{Replace function call with indexed accessor.}}
+    builder.get("a") // Noncompliant {{Replace function call with indexed accessor.}}
+    chainableMap.set("a", 1) // Noncompliant {{Replace function call with indexed accessor.}}
+    chainableMap.get("a") // Noncompliant {{Replace function call with indexed accessor.}}
+}
+

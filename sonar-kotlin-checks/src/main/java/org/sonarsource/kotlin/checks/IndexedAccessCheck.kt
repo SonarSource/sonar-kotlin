@@ -85,8 +85,26 @@ class IndexedAccessCheck : CallAbstractCheck() {
         if (dotExpression.receiverExpression is KtSuperExpression) return
         if (callExpression.typeArgumentList != null) return
         if(callExpression.valueArguments.any {  it.isNamed() }) return
+        if (isChainedSetCall(callExpression, dotExpression)) return
         if (isJavaInteropOperator(resolvedCall) && !isAllowedJavaInteropType(resolvedCall)) return
         kotlinFileContext.reportIssue(callExpression.calleeExpression!!, "Replace function call with indexed accessor.")
+    }
+
+    /**
+     * Checks whether a `set` call is part of a method chain, meaning its return value is used
+     * for further chaining. For example, in `builder.set("a", "1").set("b", "2")`, the inner
+     * `builder.set("a", "1")` is the receiver of the outer dot-qualified expression. Replacing
+     * such calls with indexed access operators would break the chain, since indexed access
+     * assignment (`a[k] = v`) returns Unit.
+     *
+     * This only applies to `set` calls. `get` calls can always be replaced with indexed access
+     * because the indexed access expression (`a[k]`) returns the same value as `a.get(k)`,
+     * so chaining still works (e.g., `map.get("a").length` can become `map["a"].length`).
+     */
+    private fun isChainedSetCall(callExpression: KtCallExpression, dotExpression: KtDotQualifiedExpression): Boolean {
+        if (callExpression.calleeExpression?.text != "set") return false
+        val parent = dotExpression.parent as? KtDotQualifiedExpression ?: return false
+        return parent.receiverExpression == dotExpression
     }
 
     /**
