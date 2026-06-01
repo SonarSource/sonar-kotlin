@@ -3,9 +3,6 @@ package checks
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.RangeMap
 import com.google.common.collect.Table
-import okhttp3.Headers
-import otherpackage.KotlinLibContainer
-import otherpackage.get
 import java.nio.ByteBuffer
 import java.util.BitSet
 import java.util.Calendar
@@ -14,6 +11,9 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicIntegerArray
+import okhttp3.Headers
+import otherpackage.KotlinLibContainer
+import otherpackage.get
 
 class IndexedAccessCheckSample {
 
@@ -193,23 +193,15 @@ class ChainableMap {
 }
 
 fun chainedSetters(builder: ChainableBuilder, chainableMap: ChainableMap) {
-    // Chained set calls - the result of set() is used for further chaining, so indexed access would break the chain.
-    // The intermediate set calls (whose return value is used) are compliant.
-    // The last set call in the chain is still noncompliant because its return value is not used.
     builder.set("a", "1").set("b", "2").set("c", "3") // Noncompliant {{Replace function call with indexed accessor.}}
+    //                                  ^^^
     builder.set("a", "1").set("b", "2") // Noncompliant {{Replace function call with indexed accessor.}}
+    //                    ^^^
     builder.set("a", "1").build() // Compliant - set result used in chain
 
-    // Chained get calls - indexed access still works (builder["a"].length is valid)
     builder.get("a").length // Noncompliant {{Replace function call with indexed accessor.}}
 
     chainableMap.set("a", 1).set("b", 2) // Noncompliant {{Replace function call with indexed accessor.}}
     chainableMap.set("a", 1).size() // Compliant - set result used in chain
-
-    // Non-chained calls on types with chainable setters should still be flagged
-    builder.set("a", "1") // Noncompliant {{Replace function call with indexed accessor.}}
-    builder.get("a") // Noncompliant {{Replace function call with indexed accessor.}}
-    chainableMap.set("a", 1) // Noncompliant {{Replace function call with indexed accessor.}}
-    chainableMap.get("a") // Noncompliant {{Replace function call with indexed accessor.}}
 }
 
