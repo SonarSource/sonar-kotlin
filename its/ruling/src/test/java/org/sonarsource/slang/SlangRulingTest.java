@@ -53,9 +53,6 @@ class SlangRulingTest {
 
   private static final String SQ_VERSION_PROPERTY = "sonar.runtimeVersion";
   private static final String DEFAULT_SQ_VERSION = "LATEST_RELEASE";
-  // TODO: Make latest_release
-  static final String SCANNER_VERSION = "6.2.1.4610";
-
   public static final Configuration CONFIGURATION = Configuration.createEnv();
   private static OrchestratorExtension orchestrator;
   private static boolean keepSonarqubeRunning = "true".equals(System.getProperty("keepSonarqubeRunning"));
@@ -79,7 +76,7 @@ class SlangRulingTest {
     orchestrator = builder.build();
     orchestrator.start();
     // installed scanner will be shared by all tests
-    new SonarScannerInstaller(new Locators(CONFIGURATION)).install(Version.create(SCANNER_VERSION), CONFIGURATION.fileSystem().workspace().toFile());
+    new SonarScannerInstaller(new Locators(CONFIGURATION)).install(Version.create(SonarScanner.DEFAULT_SCANNER_VERSION), CONFIGURATION.fileSystem().workspace().toFile());
 
     ProfileGenerator.RulesConfiguration kotlinRulesConfiguration = new ProfileGenerator.RulesConfiguration();
     kotlinRulesConfiguration.add("S1451", "headerFormat", "/\\*\n \\* Copyright \\d{4}-\\d{4} JetBrains s\\.r\\.o\\.");
@@ -149,14 +146,6 @@ class SlangRulingTest {
   @Test
   void test_kotlin_language_server() throws IOException {
     executeGradleBuildAndAssertDifferences("kotlin/kotlin-language-server", Map.of());
-  }
-
-  private static String getFileLocationAbsolutePath(FileLocation location) {
-    try {
-      return location.getFile().getCanonicalFile().getAbsolutePath();
-    } catch (IOException e) {
-      return "";
-    }
   }
 
   private static Map<String, String> prepareAnalysisConfiguration(String project, Map<String, String> additionalProperties) throws IOException {
