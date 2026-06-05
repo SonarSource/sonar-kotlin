@@ -16,7 +16,10 @@
  */
 package org.sonarsource.slang;
 
+import com.sonar.orchestrator.config.Configuration;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
+import com.sonar.orchestrator.locator.Locator;
+import com.sonar.orchestrator.locator.Locators;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -88,7 +91,8 @@ public class SonarLintTest {
       .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion(System.getProperty(TestsHelper.SQ_VERSION_PROPERTY, TestsHelper.DEFAULT_SQ_VERSION))
       .build();
-    var locators = orchestrator.getConfiguration().locators();
+    Configuration configuration = Configuration.createEnv();
+    var locators = new Locators(configuration);
     return orchestrator.getDistribution().getPluginLocations().stream()
       .filter(location -> !location.toString().contains("sonar-reset-data-plugin"))
       .map(plugin -> locators.locate(plugin).toPath())
