@@ -29,6 +29,7 @@ import org.sonarsource.kotlin.api.common.KotlinLanguage
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensor
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
 import org.sonarsource.kotlin.api.visiting.KtChecksVisitor
+import org.sonarsource.kotlin.metrics.TelemetryData
 import java.io.File
 import java.nio.file.Files
 
@@ -41,6 +42,7 @@ private val LOG = LoggerFactory.getLogger(KotlinGradleSensor::class.java)
 class KotlinGradleSensor(
     checkFactory: CheckFactory,
     language: KotlinLanguage,
+    private val telemetryData: TelemetryData,
 ) : AbstractKotlinSensor(
     checkFactory, emptyList(), language, KOTLIN_GRADLE_CHECKS
 ) {
@@ -60,6 +62,21 @@ class KotlinGradleSensor(
         sensorContext, filesToAnalyze, progressReport, listOf(KtChecksVisitor(checks)), filenames, LOG
     ) {
         override val classpath: List<String> = listOf()
+
+        override fun onFileRead() {
+            telemetryData.filesProcessed++
+            telemetryData.scriptsProcessed++
+        }
+
+        override fun onParseFailure() {
+            telemetryData.parseFailures++
+            telemetryData.scriptParseFailures++
+        }
+
+        override fun onReadFailure() {
+            telemetryData.readFailures++
+            telemetryData.scriptReadFailures++
+        }
     }
 
     override fun getFilesToAnalyse(sensorContext: SensorContext): Iterable<InputFile> {

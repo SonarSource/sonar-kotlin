@@ -18,7 +18,9 @@ package org.sonarsource.kotlin.gradle
 
 import io.mockk.every
 import io.mockk.mockkStatic
+import io.mockk.spyk
 import io.mockk.unmockkAll
+import java.io.IOException
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.junit.jupiter.api.AfterEach
@@ -31,6 +33,7 @@ import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.gradle.checks.MissingSettingsCheck
 import org.sonarsource.kotlin.gradle.checks.MissingVerificationMetadataCheck
+import org.sonarsource.kotlin.metrics.TelemetryData
 import org.sonarsource.kotlin.testapi.AbstractSensorTest
 import kotlin.io.path.createFile
 
@@ -288,8 +291,54 @@ internal class KotlinGraldeSensorTest : AbstractSensorTest() {
         context.fileSystem().add(verificationMetadataFile)
     }
 
-    private fun sensor(checkFactory: CheckFactory): KotlinGradleSensor {
-        return KotlinGradleSensor(checkFactory, language())
+    @Test
+    fun test_file_read_increments_telemetry_counters() {
+        val telemetryData = TelemetryData()
+        addBuildFile()
+        addSettingsKtsFile()
+        sensor(checkFactory(), telemetryData).execute(context)
+        assertThat(telemetryData.filesProcessed).isEqualTo(2)
+        assertThat(telemetryData.scriptsProcessed).isEqualTo(2)
+    }
+
+    @Test
+    fun test_script_parse_failure_increments_telemetry_counter() {
+        val telemetryData = TelemetryData()
+        val invalidContent = "enum class A { <!REDECLARATION!>FOO<!>,<!REDECLARATION!>FOO<!> }"
+        context.fileSystem().add(createInputFile("build.gradle.kts", invalidContent))
+        sensor(checkFactory(), telemetryData).execute(context)
+        assertThat(telemetryData.filesProcessed).isEqualTo(1)
+        assertThat(telemetryData.scriptsProcessed).isEqualTo(1)
+        assertThat(telemetryData.scriptParseFailures).isEqualTo(1)
+    }
+
+    @Test
+    fun test_script_read_failure_increments_telemetry_counter() {
+        val telemetryData = TelemetryData()
+        val buildFile = spyk(createInputFile("build.gradle.kts", "class A"))
+        every { buildFile.contents() } throws IOException("Can't read")
+        context.fileSystem().add(buildFile)
+        sensor(checkFactory(), telemetryData).execute(context)
+        assertThat(telemetryData.filesProcessed).isEqualTo(1)
+        assertThat(telemetryData.scriptsProcessed).isEqualTo(1)
+        assertThat(telemetryData.readFailures).isEqualTo(1)
+        assertThat(telemetryData.scriptReadFailures).isEqualTo(1)
+    }
+
+    @Test
+    fun test_file_read_increments_telemetry_counters_including_read_failures() {
+        val telemetryData = TelemetryData()
+        val buildFile = spyk(createInputFile("build.gradle.kts", "class A"))
+        every { buildFile.contents() } throws IOException("Can't read")
+        context.fileSystem().add(buildFile)
+        addSettingsKtsFile()
+        sensor(checkFactory(), telemetryData).execute(context)
+        assertThat(telemetryData.filesProcessed).isEqualTo(2)
+        assertThat(telemetryData.scriptsProcessed).isEqualTo(2)
+    }
+
+    private fun sensor(checkFactory: CheckFactory, telemetryData: TelemetryData = TelemetryData()): KotlinGradleSensor {
+        return KotlinGradleSensor(checkFactory, language(), telemetryData)
     }
 }
 

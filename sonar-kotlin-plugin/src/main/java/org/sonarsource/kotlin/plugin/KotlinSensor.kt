@@ -81,6 +81,18 @@ class KotlinSensor(
         override val classpath: List<String> =
             sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
                     sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList()
+
+        override fun onFileRead() {
+            telemetryData.filesProcessed++
+        }
+
+        override fun onParseFailure() {
+            telemetryData.parseFailures++
+        }
+
+        override fun onReadFailure() {
+            telemetryData.readFailures++
+        }
     }
 
     private fun visitors(sensorContext: SensorContext): List<KotlinFileVisitor> =
