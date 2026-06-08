@@ -45,8 +45,10 @@ class KotlinProjectSensorTest {
                     "kotlin.reports.surefire.classes.failed" to "0",
                     "kotlin.reports.surefire.classes.imported" to "0",
                     "kotlin.files.processed" to "0",
+                    "kotlin.files.read.failures" to "0",
                     "kotlin.files.parse.failures" to "0",
                     "kotlin.scripts.processed" to "0",
+                    "kotlin.scripts.read.failures" to "0",
                     "kotlin.scripts.parse.failures" to "0",
                 )
             )
@@ -58,8 +60,10 @@ class KotlinProjectSensorTest {
             "kotlin.reports.surefire.classes.failed" to "0",
             "kotlin.reports.surefire.classes.imported" to "0",
             "kotlin.files.processed" to "0",
+            "kotlin.files.read.failures" to "0",
             "kotlin.files.parse.failures" to "0",
             "kotlin.scripts.processed" to "0",
+            "kotlin.scripts.read.failures" to "0",
             "kotlin.scripts.parse.failures" to "0",
         ))
     }
