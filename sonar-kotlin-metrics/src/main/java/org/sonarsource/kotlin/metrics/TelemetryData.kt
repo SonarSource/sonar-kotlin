@@ -25,8 +25,10 @@ class TelemetryData {
     var hasAndroidImports = false
     var surefireClassesImported = 0
     var surefireClassesFailed = 0
+    // .kt + .kts counters
     var filesAnalyzedCounter = 0
     var parseFailuresCounter = 0
+    // .kts only counters
     var scriptsAnalyzedCounter = 0
     var scriptParseFailuresCounter = 0
 }
