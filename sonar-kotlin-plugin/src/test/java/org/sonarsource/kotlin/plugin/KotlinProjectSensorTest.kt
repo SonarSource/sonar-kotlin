@@ -44,7 +44,7 @@ class KotlinProjectSensorTest {
                     "kotlin.android" to "0",
                     "kotlin.reports.surefire.classes.failed" to "0",
                     "kotlin.reports.surefire.classes.imported" to "0",
-                    "kotlin.parse_failures_counter" to "0",
+                    "kotlin.parse.failures" to "0",
                 )
             )
 
@@ -54,7 +54,7 @@ class KotlinProjectSensorTest {
             "kotlin.android" to "1",
             "kotlin.reports.surefire.classes.failed" to "0",
             "kotlin.reports.surefire.classes.imported" to "0",
-            "kotlin.parse_failures_counter" to "0",
+            "kotlin.parse.failures" to "0",
         ))
     }
 

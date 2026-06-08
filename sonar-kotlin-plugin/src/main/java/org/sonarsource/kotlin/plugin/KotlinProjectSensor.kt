@@ -36,7 +36,7 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
             context.addTelemetryProperty("kotlin.android", if (telemetryData.hasAndroidImports) "1" else "0")
             context.addTelemetryProperty("kotlin.reports.surefire.classes.imported", telemetryData.surefireClassesImported.toString())
             context.addTelemetryProperty("kotlin.reports.surefire.classes.failed", telemetryData.surefireClassesFailed.toString())
-            context.addTelemetryProperty("kotlin.parse_failures_counter", telemetryData.parseFailuresCounter.toString())
+            context.addTelemetryProperty("kotlin.parse.failures", telemetryData.parseFailuresCounter.toString())
         }
     }
 }
