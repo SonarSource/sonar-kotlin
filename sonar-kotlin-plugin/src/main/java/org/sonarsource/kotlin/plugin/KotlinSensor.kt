@@ -89,6 +89,10 @@ class KotlinSensor(
         override fun onParseFailure() {
             telemetryData.parseFailures++
         }
+
+        override fun onReadFailure() {
+            telemetryData.readFailures++
+        }
     }
 
     private fun visitors(sensorContext: SensorContext): List<KotlinFileVisitor> =

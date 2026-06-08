@@ -38,9 +38,11 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
             context.addTelemetryProperty("kotlin.reports.surefire.classes.failed", telemetryData.surefireClassesFailed.toString())
             // files - .kt and .kts counters
             context.addTelemetryProperty("kotlin.files.processed", telemetryData.filesProcessed.toString())
+            context.addTelemetryProperty("kotlin.files.read.failures", telemetryData.readFailures.toString())
             context.addTelemetryProperty("kotlin.files.parse.failures", telemetryData.parseFailures.toString())
             // scripts - .kts only
             context.addTelemetryProperty("kotlin.scripts.processed", telemetryData.scriptsProcessed.toString())
+            context.addTelemetryProperty("kotlin.scripts.read.failures", telemetryData.scriptReadFailures.toString())
             context.addTelemetryProperty("kotlin.scripts.parse.failures", telemetryData.scriptParseFailures.toString())
         }
     }

@@ -27,8 +27,10 @@ class TelemetryData {
     var surefireClassesFailed = 0
     // .kt + .kts counters
     var filesProcessed = 0
+    var readFailures = 0
     var parseFailures = 0
     // .kts only counters
     var scriptsProcessed = 0
+    var scriptReadFailures = 0
     var scriptParseFailures = 0
 }

@@ -86,6 +86,10 @@ abstract class AbstractKotlinSensorExecuteContext(
         // no-op by default; subclasses override to react to parse failures (e.g. increment a telemetry counter)
     }
 
+    open fun onReadFailure() {
+        // no-op by default; subclasses override to react to read failures (e.g. increment a telemetry counter)
+    }
+
     val environment: Environment by lazy {
         /** [analyzeFiles] */
         val env = Environment(
@@ -121,6 +125,7 @@ abstract class AbstractKotlinSensorExecuteContext(
                 val parseException = toParseException("read", it, e)
                 logParsingError(it, parseException)
                 inputFileContext.reportAnalysisParseError(KOTLIN_REPOSITORY_KEY, it, parseException.position)
+                onReadFailure()
                 null
             }
         }

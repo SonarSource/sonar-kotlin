@@ -288,6 +288,27 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     @Test
+    fun test_read_failure_increments_telemetry_counter() {
+        val telemetryData = TelemetryData()
+        val inputFile = spyk(createInputFile("file1.kt", "class A"))
+        every { inputFile.contents() } throws IOException("Can't read")
+        context.fileSystem().add(inputFile)
+        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
+        assertThat(telemetryData.readFailures).isEqualTo(1)
+    }
+
+    @Test
+    fun test_file_read_increments_telemetry_counter_including_read_failures() {
+        val telemetryData = TelemetryData()
+        val inputFile = spyk(createInputFile("file1.kt", "class A"))
+        every { inputFile.contents() } throws IOException("Can't read")
+        context.fileSystem().add(inputFile)
+        context.fileSystem().add(createInputFile("file2.kt", "class B"))
+        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
+        assertThat(telemetryData.filesProcessed).isEqualTo(2)
+    }
+
+    @Test
     fun test_parsing_failure_increments_telemetry_counter_for_multiple_files() {
         val invalidContent = "enum class A { <!REDECLARATION!>FOO<!>,<!REDECLARATION!>FOO<!> }"
         val telemetryData = TelemetryData()

@@ -18,7 +18,9 @@ package org.sonarsource.kotlin.gradle
 
 import io.mockk.every
 import io.mockk.mockkStatic
+import io.mockk.spyk
 import io.mockk.unmockkAll
+import java.io.IOException
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.junit.jupiter.api.AfterEach
@@ -308,6 +310,31 @@ internal class KotlinGraldeSensorTest : AbstractSensorTest() {
         assertThat(telemetryData.filesProcessed).isEqualTo(1)
         assertThat(telemetryData.scriptsProcessed).isEqualTo(1)
         assertThat(telemetryData.scriptParseFailures).isEqualTo(1)
+    }
+
+    @Test
+    fun test_script_read_failure_increments_telemetry_counter() {
+        val telemetryData = TelemetryData()
+        val buildFile = spyk(createInputFile("build.gradle.kts", "class A"))
+        every { buildFile.contents() } throws IOException("Can't read")
+        context.fileSystem().add(buildFile)
+        sensor(checkFactory(), telemetryData).execute(context)
+        assertThat(telemetryData.filesProcessed).isEqualTo(1)
+        assertThat(telemetryData.scriptsProcessed).isEqualTo(1)
+        assertThat(telemetryData.readFailures).isEqualTo(1)
+        assertThat(telemetryData.scriptReadFailures).isEqualTo(1)
+    }
+
+    @Test
+    fun test_file_read_increments_telemetry_counters_including_read_failures() {
+        val telemetryData = TelemetryData()
+        val buildFile = spyk(createInputFile("build.gradle.kts", "class A"))
+        every { buildFile.contents() } throws IOException("Can't read")
+        context.fileSystem().add(buildFile)
+        addSettingsKtsFile()
+        sensor(checkFactory(), telemetryData).execute(context)
+        assertThat(telemetryData.filesProcessed).isEqualTo(2)
+        assertThat(telemetryData.scriptsProcessed).isEqualTo(2)
     }
 
     private fun sensor(checkFactory: CheckFactory, telemetryData: TelemetryData = TelemetryData()): KotlinGradleSensor {

@@ -69,7 +69,13 @@ class KotlinGradleSensor(
         }
 
         override fun onParseFailure() {
+            telemetryData.parseFailures++
             telemetryData.scriptParseFailures++
+        }
+
+        override fun onReadFailure() {
+            telemetryData.readFailures++
+            telemetryData.scriptReadFailures++
         }
     }
 
