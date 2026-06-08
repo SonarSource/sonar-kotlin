@@ -260,7 +260,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     @Test
-    fun `parse failure increments parse failures counter in telemetry`() {
+    fun test_parsing_failure_increments_telemetry_counter() {
         val telemetryData = TelemetryData()
         val inputFile = createInputFile("file1.kt", "enum class A { <!REDECLARATION!>FOO<!>,<!REDECLARATION!>FOO<!> }")
         context.fileSystem().add(inputFile)
