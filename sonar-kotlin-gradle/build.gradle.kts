@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.sonar.analyzer.commons.recognizers)
 
     implementation(project(":sonar-kotlin-api"))
+    implementation(project(":sonar-kotlin-metrics"))
     implementation(project(":sonar-kotlin-surefire"))
 
     testImplementation(testLibs.junit.jupiter)

@@ -82,6 +82,10 @@ class KotlinSensor(
             sensorContext.config().getStringArray(SONAR_JAVA_BINARIES).toList() +
                     sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList()
 
+        override fun onFileRead() {
+            telemetryData.filesAnalyzedCounter++
+        }
+
         override fun onParseFailure() {
             telemetryData.parseFailuresCounter++
         }

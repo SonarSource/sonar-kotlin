@@ -260,6 +260,24 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     @Test
+    fun test_file_read_increments_telemetry_counter() {
+        val telemetryData = TelemetryData()
+        context.fileSystem().add(createInputFile("file1.kt", "class A"))
+        context.fileSystem().add(createInputFile("file2.kt", "class B"))
+        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
+        assertThat(telemetryData.filesAnalyzedCounter).isEqualTo(2)
+    }
+
+    @Test
+    fun test_file_read_increments_telemetry_counter_including_parse_failures() {
+        val telemetryData = TelemetryData()
+        context.fileSystem().add(createInputFile("file1.kt", "class A"))
+        context.fileSystem().add(createInputFile("file2.kt", "enum class A { <!REDECLARATION!>FOO<!>,<!REDECLARATION!>FOO<!> }"))
+        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
+        assertThat(telemetryData.filesAnalyzedCounter).isEqualTo(2)
+    }
+
+    @Test
     fun test_parsing_failure_increments_telemetry_counter() {
         val telemetryData = TelemetryData()
         val inputFile = createInputFile("file1.kt", "enum class A { <!REDECLARATION!>FOO<!>,<!REDECLARATION!>FOO<!> }")

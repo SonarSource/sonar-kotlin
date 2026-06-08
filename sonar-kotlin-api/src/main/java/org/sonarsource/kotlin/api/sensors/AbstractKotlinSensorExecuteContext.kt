@@ -78,6 +78,10 @@ abstract class AbstractKotlinSensorExecuteContext(
 
     abstract val classpath: List<String>
 
+    open fun onFileRead() {
+        // no-op by default; subclasses override to react to each file being processed (e.g. increment a telemetry counter)
+    }
+
     open fun onParseFailure() {
         // no-op by default; subclasses override to react to parse failures (e.g. increment a telemetry counter)
     }
@@ -100,6 +104,7 @@ abstract class AbstractKotlinSensorExecuteContext(
 
     val kotlinFiles: List<KotlinSyntaxStructure> by lazy {
         inputFiles.mapNotNull {
+            onFileRead()
             val inputFileContext = InputFileContextImpl(sensorContext, it, isInAndroidContext)
             try {
                 // The current logic relies on eager loading of all files before the analysis starts.
