@@ -44,10 +44,10 @@ class KotlinProjectSensorTest {
                     "kotlin.android" to "0",
                     "kotlin.reports.surefire.classes.failed" to "0",
                     "kotlin.reports.surefire.classes.imported" to "0",
-                    "kotlin.analyzed.files" to "0",
-                    "kotlin.parse.failures" to "0",
-                    "kotlin.analyzed.scripts" to "0",
-                    "kotlin.script.parse.failures" to "0",
+                    "kotlin.files.analyzed" to "0",
+                    "kotlin.files.parse.failures" to "0",
+                    "kotlin.scripts.analyzed" to "0",
+                    "kotlin.scripts.parse.failures" to "0",
                 )
             )
 
@@ -57,10 +57,10 @@ class KotlinProjectSensorTest {
             "kotlin.android" to "1",
             "kotlin.reports.surefire.classes.failed" to "0",
             "kotlin.reports.surefire.classes.imported" to "0",
-            "kotlin.analyzed.files" to "0",
-            "kotlin.parse.failures" to "0",
-            "kotlin.analyzed.scripts" to "0",
-            "kotlin.script.parse.failures" to "0",
+            "kotlin.files.analyzed" to "0",
+            "kotlin.files.parse.failures" to "0",
+            "kotlin.scripts.analyzed" to "0",
+            "kotlin.scripts.parse.failures" to "0",
         ))
     }
 
