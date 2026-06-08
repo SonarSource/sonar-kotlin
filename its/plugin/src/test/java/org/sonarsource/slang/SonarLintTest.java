@@ -17,6 +17,7 @@
 package org.sonarsource.slang;
 
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
+import com.sonar.orchestrator.locator.Locators;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,8 +39,6 @@ import org.sonarsource.sonarlint.core.analysis.api.AnalysisConfiguration;
 import org.sonarsource.sonarlint.core.analysis.api.AnalysisEngineConfiguration;
 import org.sonarsource.sonarlint.core.analysis.command.AnalyzeCommand;
 import org.sonarsource.sonarlint.core.analysis.command.RegisterModuleCommand;
-import org.sonarsource.sonarlint.core.commons.ImpactSeverity;
-import org.sonarsource.sonarlint.core.commons.SoftwareQuality;
 import org.sonarsource.sonarlint.core.commons.api.SonarLanguage;
 
 import java.io.File;
@@ -88,7 +87,7 @@ public class SonarLintTest {
       .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion(System.getProperty(TestsHelper.SQ_VERSION_PROPERTY, TestsHelper.DEFAULT_SQ_VERSION))
       .build();
-    var locators = orchestrator.getConfiguration().locators();
+    var locators = new Locators(orchestrator.getConfiguration());
     return orchestrator.getDistribution().getPluginLocations().stream()
       .filter(location -> !location.toString().contains("sonar-reset-data-plugin"))
       .map(plugin -> locators.locate(plugin).toPath())

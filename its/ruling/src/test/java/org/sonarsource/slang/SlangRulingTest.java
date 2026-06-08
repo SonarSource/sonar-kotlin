@@ -16,15 +16,18 @@
  */
 package org.sonarsource.slang;
 
-import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.build.Build;
 import com.sonar.orchestrator.build.GradleBuild;
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.build.SonarScannerInstaller;
+import com.sonar.orchestrator.config.Configuration;
 import com.sonar.orchestrator.container.Edition;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
+import com.sonar.orchestrator.locator.Locators;
 import com.sonar.orchestrator.locator.MavenLocation;
+import com.sonar.orchestrator.util.Version;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -50,7 +53,7 @@ class SlangRulingTest {
 
   private static final String SQ_VERSION_PROPERTY = "sonar.runtimeVersion";
   private static final String DEFAULT_SQ_VERSION = "LATEST_RELEASE";
-
+  public static final Configuration CONFIGURATION = Configuration.createEnv();
   private static OrchestratorExtension orchestrator;
   private static boolean keepSonarqubeRunning = "true".equals(System.getProperty("keepSonarqubeRunning"));
   private static final boolean IGNORE_EXPECTED_ISSUES_AND_REPORT_ALL = "true".equals(System.getProperty("reportAll"));
@@ -66,10 +69,14 @@ class SlangRulingTest {
       .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin", "sonar-lits-plugin", "0.11.0.2659"))
       .setServerProperty("sonar.telemetry.enable", "false");
 
-    addLanguagePlugins(builder);
+    var plugin = "sonar-kotlin-plugin";
+    var pluginLocation = FileLocation.byWildcardMavenFilename(new File("../../" + plugin + "/build/libs"), plugin + ".jar");
+    builder.addPlugin(pluginLocation);
 
     orchestrator = builder.build();
     orchestrator.start();
+    // installed scanner will be shared by all tests
+    new SonarScannerInstaller(new Locators(CONFIGURATION)).install(Version.create(SonarScanner.DEFAULT_SCANNER_VERSION), CONFIGURATION.fileSystem().workspace().toFile());
 
     ProfileGenerator.RulesConfiguration kotlinRulesConfiguration = new ProfileGenerator.RulesConfiguration();
     kotlinRulesConfiguration.add("S1451", "headerFormat", "/\\*\n \\* Copyright \\d{4}-\\d{4} JetBrains s\\.r\\.o\\.");
@@ -78,12 +85,6 @@ class SlangRulingTest {
     File kotlinProfile = ProfileGenerator.generateProfile(SlangRulingTest.orchestrator.getServer().getUrl(), "kotlin", "kotlin", kotlinRulesConfiguration, Collections.emptySet());
 
     orchestrator.getServer().restoreProfile(FileLocation.of(kotlinProfile));
-  }
-
-  private static void addLanguagePlugins(OrchestratorBuilder builder) {
-      var plugin = "sonar-kotlin-plugin";
-      var pluginLocation = FileLocation.byWildcardMavenFilename(new File("../../" + plugin + "/build/libs"), plugin + ".jar");
-      builder.addPlugin(pluginLocation);
   }
 
   @Test
@@ -147,18 +148,13 @@ class SlangRulingTest {
     executeGradleBuildAndAssertDifferences("kotlin/kotlin-language-server", Map.of());
   }
 
-  private static String getFileLocationAbsolutePath(FileLocation location) {
-    try {
-      return location.getFile().getCanonicalFile().getAbsolutePath();
-    } catch (IOException e) {
-      return "";
-    }
-  }
-
   private static Map<String, String> prepareAnalysisConfiguration(String project, Map<String, String> additionalProperties) throws IOException {
     Map<String, String> properties = new HashMap<>(additionalProperties);
-    properties.put("sonar.projectKey", projectKey(project));
+    String projectKey = projectKey(project);
+    properties.put("sonar.projectKey", projectKey);
     properties.put("sonar.projectName", project);
+    // Set per-project working directory to allow parallel test execution
+    properties.put("sonar.working.directory", "build/sonar-workdir/" + projectKey);
     properties.put("sonar.projectVersion", "1");
     properties.put("sonar.sourceEncoding", "UTF-8");
     properties.put("sonar.slang.converter.validation", "log");
