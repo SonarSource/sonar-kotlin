@@ -78,7 +78,9 @@ abstract class AbstractKotlinSensorExecuteContext(
 
     abstract val classpath: List<String>
 
-    open fun onParseFailure() {}
+    open fun onParseFailure() {
+        // no-op by default; subclasses override to react to parse failures (e.g. increment a telemetry counter)
+    }
 
     val environment: Environment by lazy {
         /** [analyzeFiles] */
