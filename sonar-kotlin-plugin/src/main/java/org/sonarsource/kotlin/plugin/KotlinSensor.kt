@@ -83,11 +83,11 @@ class KotlinSensor(
                     sensorContext.config().getStringArray(SONAR_JAVA_LIBRARIES).toList()
 
         override fun onFileRead() {
-            telemetryData.filesAnalyzedCounter++
+            telemetryData.filesProcessed++
         }
 
         override fun onParseFailure() {
-            telemetryData.parseFailuresCounter++
+            telemetryData.parseFailures++
         }
     }
 

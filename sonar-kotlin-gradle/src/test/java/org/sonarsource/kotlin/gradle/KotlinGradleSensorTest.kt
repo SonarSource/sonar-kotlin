@@ -295,8 +295,8 @@ internal class KotlinGraldeSensorTest : AbstractSensorTest() {
         addBuildFile()
         addSettingsKtsFile()
         sensor(checkFactory(), telemetryData).execute(context)
-        assertThat(telemetryData.filesAnalyzedCounter).isEqualTo(2)
-        assertThat(telemetryData.scriptsAnalyzedCounter).isEqualTo(2)
+        assertThat(telemetryData.filesProcessed).isEqualTo(2)
+        assertThat(telemetryData.scriptsProcessed).isEqualTo(2)
     }
 
     @Test
@@ -305,9 +305,9 @@ internal class KotlinGraldeSensorTest : AbstractSensorTest() {
         val invalidContent = "enum class A { <!REDECLARATION!>FOO<!>,<!REDECLARATION!>FOO<!> }"
         context.fileSystem().add(createInputFile("build.gradle.kts", invalidContent))
         sensor(checkFactory(), telemetryData).execute(context)
-        assertThat(telemetryData.filesAnalyzedCounter).isEqualTo(1)
-        assertThat(telemetryData.scriptsAnalyzedCounter).isEqualTo(1)
-        assertThat(telemetryData.scriptParseFailuresCounter).isEqualTo(1)
+        assertThat(telemetryData.filesProcessed).isEqualTo(1)
+        assertThat(telemetryData.scriptsProcessed).isEqualTo(1)
+        assertThat(telemetryData.scriptParseFailures).isEqualTo(1)
     }
 
     private fun sensor(checkFactory: CheckFactory, telemetryData: TelemetryData = TelemetryData()): KotlinGradleSensor {

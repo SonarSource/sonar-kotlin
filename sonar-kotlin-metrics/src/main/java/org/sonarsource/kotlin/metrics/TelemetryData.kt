@@ -26,9 +26,9 @@ class TelemetryData {
     var surefireClassesImported = 0
     var surefireClassesFailed = 0
     // .kt + .kts counters
-    var filesAnalyzedCounter = 0
-    var parseFailuresCounter = 0
+    var filesProcessed = 0
+    var parseFailures = 0
     // .kts only counters
-    var scriptsAnalyzedCounter = 0
-    var scriptParseFailuresCounter = 0
+    var scriptsProcessed = 0
+    var scriptParseFailures = 0
 }

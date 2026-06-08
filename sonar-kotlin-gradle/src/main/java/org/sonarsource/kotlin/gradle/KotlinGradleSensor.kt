@@ -64,12 +64,12 @@ class KotlinGradleSensor(
         override val classpath: List<String> = listOf()
 
         override fun onFileRead() {
-            telemetryData.filesAnalyzedCounter++
-            telemetryData.scriptsAnalyzedCounter++
+            telemetryData.filesProcessed++
+            telemetryData.scriptsProcessed++
         }
 
         override fun onParseFailure() {
-            telemetryData.scriptParseFailuresCounter++
+            telemetryData.scriptParseFailures++
         }
     }
 

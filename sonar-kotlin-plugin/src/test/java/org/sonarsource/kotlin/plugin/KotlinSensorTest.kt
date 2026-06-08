@@ -265,7 +265,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         context.fileSystem().add(createInputFile("file1.kt", "class A"))
         context.fileSystem().add(createInputFile("file2.kt", "class B"))
         KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
-        assertThat(telemetryData.filesAnalyzedCounter).isEqualTo(2)
+        assertThat(telemetryData.filesProcessed).isEqualTo(2)
     }
 
     @Test
@@ -274,7 +274,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         context.fileSystem().add(createInputFile("file1.kt", "class A"))
         context.fileSystem().add(createInputFile("file2.kt", "enum class A { <!REDECLARATION!>FOO<!>,<!REDECLARATION!>FOO<!> }"))
         KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
-        assertThat(telemetryData.filesAnalyzedCounter).isEqualTo(2)
+        assertThat(telemetryData.filesProcessed).isEqualTo(2)
     }
 
     @Test
@@ -284,7 +284,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         context.fileSystem().add(inputFile)
         val checkFactory = checkFactory("S1764")
         KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
-        assertThat(telemetryData.parseFailuresCounter).isEqualTo(1)
+        assertThat(telemetryData.parseFailures).isEqualTo(1)
     }
 
     @Test
@@ -295,7 +295,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         context.fileSystem().add(createInputFile("file2.kt", invalidContent))
         val checkFactory = checkFactory("S1764")
         KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
-        assertThat(telemetryData.parseFailuresCounter).isEqualTo(2)
+        assertThat(telemetryData.parseFailures).isEqualTo(2)
     }
 
     @Test
