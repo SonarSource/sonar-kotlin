@@ -260,6 +260,16 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     @Test
+    fun `parse failure increments parse failures counter in telemetry`() {
+        val telemetryData = TelemetryData()
+        val inputFile = createInputFile("file1.kt", "enum class A { <!REDECLARATION!>FOO<!>,<!REDECLARATION!>FOO<!> }")
+        context.fileSystem().add(inputFile)
+        val checkFactory = checkFactory("S1764")
+        KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
+        assertThat(telemetryData.parseFailuresCounter).isEqualTo(1)
+    }
+
+    @Test
     fun test_with_classpath() {
         val settings = MapSettings()
         settings.setProperty(SONAR_JAVA_BINARIES, System.getProperty("java.class.path").split(File.pathSeparatorChar).joinToString(","))

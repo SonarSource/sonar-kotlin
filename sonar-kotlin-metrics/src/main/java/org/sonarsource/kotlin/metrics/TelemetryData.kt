@@ -25,4 +25,5 @@ class TelemetryData {
     var hasAndroidImports = false
     var surefireClassesImported = 0
     var surefireClassesFailed = 0
+    var parseFailuresCounter = 0
 }

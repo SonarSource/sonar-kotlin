@@ -78,6 +78,8 @@ abstract class AbstractKotlinSensorExecuteContext(
 
     abstract val classpath: List<String>
 
+    open fun onParseFailure() {}
+
     val environment: Environment by lazy {
         /** [analyzeFiles] */
         val env = Environment(
@@ -106,6 +108,7 @@ abstract class AbstractKotlinSensorExecuteContext(
             } catch (e: ParseException) {
                 logParsingError(it, toParseException("parse", it, e))
                 inputFileContext.reportAnalysisParseError(KOTLIN_REPOSITORY_KEY, it, e.position)
+                onParseFailure()
                 null
             } catch (e: Exception) {
                 val parseException = toParseException("read", it, e)
