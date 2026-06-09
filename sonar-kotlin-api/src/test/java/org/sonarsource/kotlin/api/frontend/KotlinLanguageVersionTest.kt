@@ -32,12 +32,12 @@ class KotlinLanguageVersionTest {
 
     @Test
     fun first_non_deprecated() {
-        assertThat(LanguageVersion.FIRST_NON_DEPRECATED).isEqualTo(LanguageVersion.KOTLIN_2_1)
+        assertThat(LanguageVersion.FIRST_NON_DEPRECATED).isEqualTo(LanguageVersion.KOTLIN_2_2)
     }
 
     @Test
     fun latest_stable() {
-        assertThat(LanguageVersion.LATEST_STABLE).isEqualTo(LanguageVersion.KOTLIN_2_3)
+        assertThat(LanguageVersion.LATEST_STABLE).isEqualTo(LanguageVersion.KOTLIN_2_4)
     }
 
 }

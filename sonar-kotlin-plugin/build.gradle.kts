@@ -28,6 +28,10 @@ val kotlinCompilerEmbedded: Configuration by configurations.creating {
     isTransitive = false
 }
 
+configurations.all {
+    exclude("org.jetbrains.kotlin", "kotlin-build-tools-api")
+}
+
 dependencies {
     compileOnly(libs.sonar.plugin.api)
     compileOnly(libs.slf4j.api)
@@ -141,7 +145,9 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
         "org/codehaus/stax2", // a stripped down version of the class breaks our usage, we include the full version ourselves
         "org/fusesource/jansi", // jansi dependency not used
         "org/apache/log4j", // everything should be using slf4j, we don't need to bundle a logging implementation
-        "javax/inject" // a compile-time dependency
+        "javax/inject", // a compile-time dependency
+
+        "org/jetbrains/kotlin/buildtools" // build tools are not needed during analysis
     )
 
     from(
@@ -219,7 +225,7 @@ val distTask = tasks.register<ProGuardTask>("dist") {
     outjars("build/libs/sonar-kotlin-plugin.jar")
     configuration("proguard.txt")
     doLast {
-        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 53_500_000L, 54_000_000L)
+        enforceJarSizeAndCheckContent(file("build/libs/sonar-kotlin-plugin.jar"), 54_250_000L, 54_750_000L)
     }
 }
 
