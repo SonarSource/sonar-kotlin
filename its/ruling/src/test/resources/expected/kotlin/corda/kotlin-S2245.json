@@ -18,35 +18,16 @@
 82,
 104
 ],
-"kotlin-corda-project:sources/kotlin/corda/experimental/avalanche/src/main/kotlin/net/corda/avalanche/Main.kt": [
-71
-],
-"kotlin-corda-project:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/contracts/asset/cash/selection/AbstractCashSelection.kt": [
-111
-],
 "kotlin-corda-project:sources/kotlin/corda/finance/src/test/kotlin/net/corda/finance/contracts/asset/CashTests.kt": [
 504
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/services/RaftNotaryServiceTests.kt": [
-72,
-81
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/serialization/kryo/KryoStreamsTest.kt": [
-48
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/serialization/kryo/KryoTests.kt": [
-343
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/NotaryChangeTests.kt": [
 171,
 172,
-173,
-196,
-217
+173
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/HibernateConfigurationTest.kt": [
 141,
-305,
 659,
 739,
 746
