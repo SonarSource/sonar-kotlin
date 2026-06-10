@@ -16,4 +16,36 @@
  */
 package org.sonarsource.kotlin.checks
 
-class PseudoRandomCheckTest : CheckTest(PseudoRandomCheck())
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.testapi.KotlinVerifier
+
+class PseudoRandomCheckTest : CheckTest(PseudoRandomCheck()) {
+
+    @Test
+    fun `no security context`() {
+        KotlinVerifier(check) {
+            this.fileName = "${checkName}SampleNoContext.kt"
+        }.verifyNoIssue()
+    }
+
+    @Test
+    fun `security keywords in scope`() {
+        KotlinVerifier(check) {
+            this.fileName = "${checkName}SampleSecurityKeywords.kt"
+        }.verify()
+    }
+
+    @Test
+    fun `crypto import gate`() {
+        KotlinVerifier(check) {
+            this.fileName = "${checkName}SampleCryptoImport.kt"
+        }.verify()
+    }
+
+    @Test
+    fun `top level scope fallback`() {
+        KotlinVerifier(check) {
+            this.fileName = "${checkName}SampleTopLevel.kt"
+        }.verify()
+    }
+}
