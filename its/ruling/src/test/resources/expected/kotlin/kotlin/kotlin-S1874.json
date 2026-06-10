@@ -3,18 +3,15 @@
 87
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/build-common/test/org/jetbrains/kotlin/build/JvmBuildMetaInfoTest.kt": [
-23,
 26,
 53,
 62
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/build-common/test/org/jetbrains/kotlin/build/SerializationUtilsTest.kt": [
-20,
 32,
 46
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/ieee754.kt": [
-16,
 61
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/intrinsics/TypeIntrinsics.kt": [
@@ -31,7 +28,6 @@
 96
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/container/tests/org/jetbrains/kotlin/container/tests/ComponentContainerTest.kt": [
-20,
 25,
 33,
 39,
@@ -54,7 +50,6 @@
 353
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-client/src/org/jetbrains/kotlin/daemon/client/CompilerCallbackServicesFacadeServer.kt": [
-19,
 39
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-client/src/org/jetbrains/kotlin/daemon/client/KotlinCompilerClient.kt": [
@@ -79,19 +74,15 @@
 121
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/RemoteCompilationCanceledStatusClient.kt": [
-20,
 30
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/RemoteIncrementalCacheClient.kt": [
-19,
 26
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/RemoteIncrementalCompilationComponentsClient.kt": [
-22,
 26
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/RemoteLookupTrackerClient.kt": [
-20,
 29
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend.script/src/org/jetbrains/kotlin/script/AsyncDependencyResolverWrapper.kt": [
@@ -118,7 +109,6 @@
 96
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/frontend/di/injection.kt": [
-32,
 68
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/tower/NewResolutionOldInference.kt": [
@@ -140,7 +130,6 @@
 193
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/test/org/jetbrains/kotlin/incremental/BuildDiffsStorageTest.kt": [
-23,
 42,
 52,
 61,
@@ -148,11 +137,9 @@
 80
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/test/org/jetbrains/kotlin/incremental/BuildLogParserParametrizedTest.kt": [
-20,
 32
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/test/org/jetbrains/kotlin/incremental/parsing/ClassesFqNamesTest.kt": [
-13,
 31,
 42,
 57,
@@ -162,11 +149,9 @@
 118
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/test/org/jetbrains/kotlin/incremental/snapshots/FileSnapshotMapTest.kt": [
-7,
 29
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/incremental-compilation-impl/test/org/jetbrains/kotlin/incremental/snapshots/FileSnapshotTest.kt": [
-5,
 12,
 21,
 29,
@@ -251,7 +236,6 @@
 482
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/inference/components/SimpleConstraintSystemImpl.kt": [
-23,
 53
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/serialization/src/org/jetbrains/kotlin/serialization/AnnotationSerializer.kt": [
@@ -265,7 +249,6 @@
 38
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/codegen/TestStdlibWithDxTest.kt": [
-20,
 26,
 30
 ],
@@ -273,14 +256,12 @@
 694
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/scripts/ScriptProviderTest.kt": [
-13,
 20
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/serialization/jvm/JvmNameResolverTest.kt": [
 49
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/util/ArgsToParamsMatchingTest.kt": [
-24,
 28,
 51
 ],
@@ -341,7 +322,6 @@
 292
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/script/ScriptDefinitionsManager.kt": [
-41,
 178,
 242
 ],
@@ -350,11 +330,9 @@
 58
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/script/ScriptTemplatesProviderAdapter.kt": [
-9,
 11
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/gradle/MultiplatformProjectImportingTest.kt": [
-28,
 37,
 84,
 141,
@@ -369,7 +347,6 @@
 821
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/idea/codeInsight/gradle/GradleConfiguratorTest.kt": [
-21,
 25,
 66,
 116,
@@ -403,7 +380,6 @@
 1658
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/idea/codeInsight/gradle/GradleFacetImportTest.kt": [
-47,
 85,
 163,
 205,
@@ -437,7 +413,6 @@
 2007
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/idea/codeInsight/gradle/GradleInspectionTest.kt": [
-28,
 31,
 64,
 97,
@@ -449,11 +424,9 @@
 310
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/idea/codeInsight/gradle/GradleMultiplatformRunTest.kt": [
-35,
 38
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/idea/codeInsight/gradle/GradleUpdateConfigurationQuickFixTest.kt": [
-28,
 49,
 54,
 59,
@@ -471,7 +444,6 @@
 246
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-maven/test/org/jetbrains/kotlin/idea/maven/KotlinMavenArchetypesProviderTest.kt": [
-23,
 31,
 51,
 70,
@@ -479,7 +451,6 @@
 112
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-maven/test/org/jetbrains/kotlin/idea/maven/MavenUpdateConfigurationQuickFixTest.kt": [
-29,
 52,
 57,
 62,
@@ -497,7 +468,6 @@
 192
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/findUsages/FindUsagesMultiModuleTest.kt": [
-20,
 25
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/codeInsight/generate/AbstractCodeInsightActionTest.kt": [
@@ -526,7 +496,6 @@
 180
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/repl/IdeReplExecutionTest.kt": [
-25,
 82,
 96,
 97,
@@ -538,7 +507,6 @@
 142
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/tests/org/jetbrains/kotlin/idea/repl/IdeaJsr223Test.kt": [
-20,
 29,
 47
 ],
@@ -613,7 +581,6 @@
 169
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/EncodeSignatureTest.kt": [
-37,
 40,
 47,
 53,
@@ -633,47 +600,39 @@
 188
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/JsonTest.kt": [
-27,
 30,
 70,
 84
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/ast/NameResolutionTest.kt": [
-29,
 38,
 41,
 44,
 47
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/DeadCodeEliminationTest.kt": [
-19,
 22
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/DoWhileGuardEliminationTest.kt": [
-19,
 22,
 24,
 26,
 28
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/EmptyStatementEliminationTest.kt": [
-19,
 22,
 24,
 26,
 28
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/IfStatementReductionTest.kt": [
-19,
 22,
 24
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/LabeledBlockToDoWhileTransformationTest.kt": [
-21,
 24
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/RedundantStatementEliminationTest.kt": [
-19,
 22,
 24,
 26,
@@ -682,7 +641,6 @@
 32
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/TemporaryAssignmentEliminationTest.kt": [
-20,
 24,
 26,
 28,
@@ -695,7 +653,6 @@
 42
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/TemporaryVariableEliminationTest.kt": [
-19,
 22,
 24,
 26,
@@ -713,7 +670,6 @@
 50
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.tests/test/org/jetbrains/kotlin/js/test/optimizer/WhileConditionFoldingTest.kt": [
-19,
 22,
 24,
 26,
@@ -728,24 +684,19 @@
 44
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/js/js.translator/src/org/jetbrains/kotlin/js/translate/expression/WhenTranslator.kt": [
-41,
 56,
 188
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/browser-example-with-library/src/test/kotlin/sample/SampleTest.kt": [
-3,
 13
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/browser-example/src/test/kotlin/sample/SampleTest.kt": [
-3,
 13
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/js-example/src/test/kotlin/sample/SampleTest.kt": [
-5,
 8
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/kotlin-jsr223-daemon-local-eval-example/src/test/kotlin/org/jetbrains/kotlin/script/jsr223/KotlinJsr223ScriptEngineIT.kt": [
-22,
 32,
 53,
 64,
@@ -754,7 +705,6 @@
 118
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/kotlin-jsr223-local-example/src/test/kotlin/org/jetbrains/kotlin/script/jsr223/KotlinJsr223ScriptEngineIT.kt": [
-23,
 34,
 55,
 66,
@@ -767,13 +717,11 @@
 195
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/scripting/jvm-maven-deps/host/test/org/jetbrains/kotlin/script/examples/jvm/resolve/maven/test/resolveTest.kt": [
-10,
 16,
 26,
 37
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/scripting/jvm-simple-script/host/test/org/jetbrains/kotlin/script/examples/jvm/simple/test/simpleTest.kt": [
-11,
 16,
 26
 ],
@@ -781,12 +729,10 @@
 12
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/kotlin.test/jvm/src/test/kotlin/StackTraceJVMTest.kt": [
-8,
 15,
 22
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/kotlinx-metadata/jvm/test/kotlinx/metadata/test/MetadataSmokeTest.kt": [
-13,
 25,
 61
 ],
@@ -794,7 +740,6 @@
 35
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk7/test/TryWithResourcesAutoCloseableTest.kt": [
-20,
 41,
 48,
 55,
@@ -806,7 +751,6 @@
 119
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk7/test/TryWithResourcesCloseableTest.kt": [
-21,
 41,
 48,
 55,
@@ -818,22 +762,18 @@
 119
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/collections/CollectionTest.kt": [
-19,
 29,
 40
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/collections/IterableTest.kt": [
-19,
 28,
 38,
 45
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/collections/ListTest.kt": [
-19,
 25
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/collections/MapTest.kt": [
-19,
 26,
 38,
 50,
@@ -846,18 +786,15 @@
 126
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/collections/StreamsTest.kt": [
-20,
 26,
 37,
 52,
 60
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/text/RegexTest.kt": [
-19,
 23
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre7/test/TryWithResourcesAutoCloseableTest.kt": [
-20,
 41,
 48,
 55,
@@ -869,7 +806,6 @@
 119
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre7/test/TryWithResourcesCloseableTest.kt": [
-21,
 41,
 48,
 55,
@@ -881,22 +817,18 @@
 119
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/collections/CollectionTest.kt": [
-19,
 29,
 40
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/collections/IterableTest.kt": [
-19,
 28,
 38,
 45
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/collections/ListTest.kt": [
-19,
 25
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/collections/MapTest.kt": [
-19,
 26,
 38,
 50,
@@ -909,14 +841,12 @@
 126
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/collections/StreamsTest.kt": [
-20,
 26,
 37,
 52,
 60
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jre8/test/text/RegexTest.kt": [
-19,
 23
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/internal/PlatformImplementations.kt": [
@@ -933,7 +863,6 @@
 33
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/io/Console.kt": [
-10,
 18,
 23,
 31,
@@ -973,7 +902,6 @@
 51
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/test/kotlin/org.jetbrains.kotlin.tools.tests/RuntimePublicAPITest.kt": [
-10,
 20,
 24,
 28,
@@ -990,15 +918,12 @@
 66
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-compiler-client-embeddable-test/src/test/kotlin/org/jetbrains/kotlin/compiler/client/CompilerClientIT.kt": [
-20,
 74
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-compiler-embeddable/test/kotlin/org/jetbrains/kotlin/compiler/embeddable/CompilerEmbeddableSmokeTests.kt": [
-20,
 46
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/AbstractKotlinAndroidGradleTests.kt": [
-9,
 21,
 89,
 128,
@@ -1015,7 +940,6 @@
 400
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/BuildCacheIT.kt": [
-20,
 31,
 47,
 62,
@@ -1024,18 +948,15 @@
 137
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/BuildCacheRelocationIT.kt": [
-21,
 42
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/ClassFileIsRemovedIT.kt": [
-6,
 12,
 17,
 28,
 33
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/CoroutinesIT.kt": [
-21,
 30,
 48,
 53,
@@ -1049,13 +970,11 @@
 93
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/ExecutionStrategyIT.kt": [
-5,
 24,
 29,
 34
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/IncrementalCompilationMultiProjectIT.kt": [
-9,
 16,
 32,
 52,
@@ -1074,13 +993,11 @@
 307
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/JavaUpToDateIT.kt": [
-9,
 12,
 34,
 51
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/Kapt3AndroidIT.kt": [
-5,
 31,
 54,
 73,
@@ -1089,7 +1006,6 @@
 114
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/Kapt3IT.kt": [
-21,
 38,
 52,
 79,
@@ -1109,7 +1025,6 @@
 398
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/KaptIncrementalIT.kt": [
-7,
 26,
 49,
 74,
@@ -1120,7 +1035,6 @@
 217
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/Kotlin2JsGradlePluginIT.kt": [
-7,
 14,
 60,
 78,
@@ -1140,12 +1054,10 @@
 318
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/KotlinDaemonIT.kt": [
-21,
 29,
 80
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/KotlinGradlePluginIT.kt": [
-23,
 33,
 54,
 77,
@@ -1182,7 +1094,6 @@
 797
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/KotlinGradlePluginMultiVersionIT.kt": [
-6,
 11,
 60,
 101,
@@ -1190,7 +1101,6 @@
 120
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/MultiplatformGradleIT.kt": [
-24,
 30,
 53,
 72,
@@ -1204,13 +1114,11 @@
 266
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/PluginsDslIT.kt": [
-7,
 13,
 22,
 31
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/SimpleKotlinGradleIT.kt": [
-4,
 10,
 35,
 46,
@@ -1222,7 +1130,6 @@
 93
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/SubpluginsIT.kt": [
-9,
 14,
 33,
 58,
@@ -1234,51 +1141,40 @@
 135
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/TestRootAffectedIT.kt": [
-5,
 8,
 37,
 56
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/UpToDatenessIT.kt": [
-7,
 11,
 21,
 31
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/jps/KotlinGradlePluginJpsParametrizedIT.kt": [
-4,
 16
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidJackProject/Android/src/test/kotlin/org/jetbrains/kotlin/gradle/InternalDummyTest.kt": [
-20,
 23
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidProject/Android/src/test/kotlin/org/jetbrains/kotlin/gradle/InternalDummyTest.kt": [
-4,
 7
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/destinationDirReferencedDuringEvaluation/src/test/kotlin/foo/GreeterTest.kt": [
-3,
 7
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kapt2/localAnnotationProcessor/example/src/test/java/test.kt": [
-3,
 8
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kapt2/simple/src/test/java/foo/InternalDummyTest.kt": [
-3,
 6
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kotlin2JsProjectWithCustomSourceset/src/integrationTest/kotlin/MainIT.kt": [
-4,
 7
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/kotlin2JsProjectWithTests/src/test/kotlin/MainTest.kt": [
-3,
 7
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/pluginsDsl/allopenPluginsDsl/src/test/kotlin/HelloTest.kt": [
-3,
 10
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/compilerRunner/GradleKotlinCompilerRunner.kt": [
@@ -1295,22 +1191,18 @@
 771
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/test/kotlin/org/jetbrains/kotlin/gradle/dsl/KotlinJvmOptionsImplTest.kt": [
-5,
 8
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/test/kotlin/org/jetbrains/kotlin/gradle/plugin/RegexTaskToFriendTaskMapperTest.kt": [
-20,
 23,
 30,
 37
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/test/kotlin/org/jetbrains/kotlin/gradle/utils/GradleVersionTest.kt": [
-19,
 23,
 35
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-accessToInternal/src/test/java/org/jetbrains/HelloWorldTest.kt": [
-19,
 29,
 34
 ],
@@ -1318,7 +1210,6 @@
 6
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-multiplatform/shared/src/test/kotlin/org/jetbrains/SharedTest.kt": [
-4,
 7
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-script-util/src/main/kotlin/org/jetbrains/kotlin/script/util/impl/pathUtil.kt": [
@@ -1328,17 +1219,14 @@
 84
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-script-util/src/test/kotlin/org/jetbrains/kotlin/script/util/ScriptUtilContextTests.kt": [
-20,
 24
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-script-util/src/test/kotlin/org/jetbrains/kotlin/script/util/ScriptUtilIT.kt": [
-39,
 62,
 75,
 88
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlinp/test/org/jetbrains/kotlin/kotlinp/test/KotlinpCompilerTestDataTest.kt": [
-11,
 23
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/src/org/jetbrains/kotlin/kapt3/Kapt3Extension.kt": [
@@ -1355,13 +1243,11 @@
 873
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/test/org/jetbrains/kotlin/kapt3/test/JavaKaptContextTest.kt": [
-28,
 101,
 113,
 134
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/test/org/jetbrains/kotlin/kapt3/test/KotlinKapt3IntegrationTests.kt": [
-22,
 45,
 53,
 62,
@@ -1370,11 +1256,9 @@
 114
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/KotlinExpressionValueTest.kt": [
-8,
 11
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/KotlinUastApiTest.kt": [
-17,
 24,
 40,
 51,
@@ -1398,7 +1282,6 @@
 311
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/KotlinUastIdentifiersTest.kt": [
-8,
 12,
 15,
 18,
@@ -1406,11 +1289,9 @@
 24
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/KotlinUastResolveTest.kt": [
-5,
 12
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/KotlinUastTypesTest.kt": [
-3,
 6,
 8,
 10,
@@ -1419,7 +1300,6 @@
 16
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/KotlinUastValuesTest.kt": [
-3,
 7,
 10,
 13,
@@ -1427,7 +1307,6 @@
 19
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/uast-kotlin/tests/SimpleKotlinRenderLogTest.kt": [
-3,
 6,
 8,
 10,

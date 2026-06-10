@@ -78,6 +78,7 @@ fun kotlinCoreEnvironment(
     )
 }
 
+@OptIn(CompilerConfiguration.Internals::class)
 fun compilerConfiguration(
     classpath: List<String>,
     languageVersion: LanguageVersion,
