@@ -130,8 +130,6 @@ import org.sonarsource.kotlin.checks.TooLongLineCheck
 import org.sonarsource.kotlin.checks.TooManyCasesCheck
 import org.sonarsource.kotlin.checks.TooManyLinesOfCodeFileCheck
 import org.sonarsource.kotlin.checks.TooManyParametersCheck
-import org.sonarsource.kotlin.checks.UnencryptedDatabaseOnMobileCheck
-import org.sonarsource.kotlin.checks.UnencryptedFilesInMobileApplicationsCheck
 import org.sonarsource.kotlin.checks.UnicodeAwareCharClassesCheck
 import org.sonarsource.kotlin.checks.UnnecessaryImportsCheck
 import org.sonarsource.kotlin.checks.UnpredictableHashSaltCheck
@@ -269,8 +267,6 @@ val KOTLIN_CHECKS = listOf(
     TooManyCasesCheck::class.java,
     TooManyLinesOfCodeFileCheck::class.java,
     TooManyParametersCheck::class.java,
-    UnencryptedDatabaseOnMobileCheck::class.java,
-    UnencryptedFilesInMobileApplicationsCheck::class.java,
     UnicodeAwareCharClassesCheck::class.java,
     UnnecessaryImportsCheck::class.java,
     UnpredictableHashSaltCheck::class.java,
