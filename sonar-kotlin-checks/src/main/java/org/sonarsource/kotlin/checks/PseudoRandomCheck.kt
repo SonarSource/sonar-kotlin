@@ -19,6 +19,7 @@ package org.sonarsource.kotlin.checks
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import java.util.IdentityHashMap
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -93,14 +94,11 @@ class PseudoRandomCheck : CallAbstractCheck() {
         RANDOM_CONSTRUCTORS_MATCHER,
     )
 
-    private var cryptoImportPresent: Boolean = false
-
-    override fun visitKtFile(file: KtFile, kotlinFileContext: KotlinFileContext) {
-        cryptoImportPresent = file.importDirectives.any { directive ->
-            val fqn = directive.importedFqName?.asString() ?: return@any false
-            CRYPTO_IMPORT_PREFIXES.any { fqn.startsWith(it) }
-        }
-    }
+    // Stateless w.r.t. traversal order: lookups are keyed by file/scope references rather than
+    // relying on visitKtFile firing before visitFunctionCall. Entries naturally bound to the set
+    // of files/scopes seen during this check instance's lifetime.
+    private val cryptoImportCache: MutableMap<KtFile, Boolean> = IdentityHashMap()
+    private val scopeCache: MutableMap<PsiElement, Boolean> = IdentityHashMap()
 
     override fun visitFunctionCall(
         callExpression: KtCallExpression,
@@ -114,22 +112,31 @@ class PseudoRandomCheck : CallAbstractCheck() {
         ) {
             return
         }
-        if (!isInSecurityContext(callExpression)) {
+        if (!isInSecurityContext(callExpression, kotlinFileContext.ktFile)) {
             return
         }
         kotlinFileContext.reportIssue(calleeExpression, MESSAGE)
     }
 
-    private fun isInSecurityContext(callExpression: KtCallExpression): Boolean {
-        if (cryptoImportPresent) {
+    private fun isInSecurityContext(callExpression: KtCallExpression, file: KtFile): Boolean {
+        if (cryptoImportCache.computeIfAbsent(file, ::computeHasCryptoImport)) {
             return true
         }
         val scope = findDeclarationScope(callExpression) ?: return false
-        return collectIdentifierNames(scope).any { name ->
-            tokenizeIdentifier(name).any { it in SECURITY_KEYWORDS }
-        }
+        return scopeCache.computeIfAbsent(scope, ::computeScopeHasSecurityKeyword)
     }
 }
+
+private fun computeHasCryptoImport(file: KtFile): Boolean =
+    file.importDirectives.any { directive ->
+        val fqn = directive.importedFqName?.asString() ?: return@any false
+        CRYPTO_IMPORT_PREFIXES.any { fqn.startsWith(it) }
+    }
+
+private fun computeScopeHasSecurityKeyword(scope: PsiElement): Boolean =
+    collectIdentifierNames(scope).any { name ->
+        tokenizeIdentifier(name).any { it in SECURITY_KEYWORDS }
+    }
 
 private fun KtCallExpression.isChainedMethodInvocation() = parent?.let {
     it is KtDotQualifiedExpression && it.receiverExpression is KtDotQualifiedExpression &&
