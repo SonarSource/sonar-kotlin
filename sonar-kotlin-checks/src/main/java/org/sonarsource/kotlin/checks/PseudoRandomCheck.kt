@@ -19,6 +19,7 @@ package org.sonarsource.kotlin.checks
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.psi.util.parents
 import java.util.IdentityHashMap
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -92,9 +93,6 @@ class PseudoRandomCheck : CallAbstractCheck() {
         RANDOM_CONSTRUCTORS_MATCHER,
     )
 
-    // Stateless w.r.t. traversal order: lookups are keyed by file/scope references rather than
-    // relying on visitKtFile firing before visitFunctionCall. Entries naturally bound to the set
-    // of files/scopes seen during this check instance's lifetime.
     private val cryptoImportCache: MutableMap<KtFile, Boolean> = IdentityHashMap()
     private val scopeCache: MutableMap<PsiElement, Boolean> = IdentityHashMap()
 
@@ -126,10 +124,9 @@ class PseudoRandomCheck : CallAbstractCheck() {
 }
 
 private fun computeHasCryptoImport(file: KtFile): Boolean =
-    file.importDirectives.any { directive ->
-        val fqn = directive.importedFqName?.asString() ?: return@any false
-        CRYPTO_IMPORT_PREFIXES.any { fqn.startsWith(it) }
-    }
+    file.importDirectives
+        .mapNotNull { it.importedFqName?.asString() }
+        .any { fqn -> CRYPTO_IMPORT_PREFIXES.any { fqn.startsWith(it) } }
 
 private fun computeScopeHasSecurityKeyword(scope: PsiElement): Boolean =
     collectIdentifierNames(scope).any { name ->
@@ -141,21 +138,12 @@ private fun KtCallExpression.isChainedMethodInvocation() = parent?.let {
         (it.receiverExpression as KtDotQualifiedExpression).selectorExpression is KtCallExpression
 } ?: false
 
-// Mirrors Dart `declarationScope`: closest enclosing named function for local code; falls back to
-// the enclosing class/object for property initializers and init blocks; falls back to the KtFile
-// for top-level property initializers.
-private fun findDeclarationScope(element: PsiElement): PsiElement? {
-    var current: PsiElement? = element.parent
-    while (current != null) {
-        when (current) {
-            is KtNamedFunction -> return current
-            is KtClassOrObject -> return current
-            is KtFile -> return current
-        }
-        current = current.parent
-    }
-    return null
-}
+// Declaration scope: closest enclosing named function for local code; falls back to the enclosing
+// class/object for property initializers and init blocks; falls back to the KtFile for top-level
+// property initializers.
+private fun findDeclarationScope(element: PsiElement): PsiElement? =
+    element.parents(withSelf = false)
+        .firstOrNull { it is KtNamedFunction || it is KtClassOrObject || it is KtFile }
 
 private fun collectIdentifierNames(scope: PsiElement): List<String> {
     val names = mutableListOf<String>()
@@ -168,9 +156,8 @@ private fun collectIdentifierNames(scope: PsiElement): List<String> {
     return names
 }
 
-// Mirrors Dart `_splitIntoWords`: split on `_` first; for each non-empty part, either keep it as
-// a single lowercase word when all-uppercase (with at least one letter), or split further on
-// capital-letter boundaries.
+// Split on `_` first; for each non-empty part, either keep it as a single lowercase word when
+// all-uppercase (with at least one letter), or split further on capital-letter boundaries.
 internal fun tokenizeIdentifier(identifier: String): List<String> {
     val words = mutableListOf<String>()
     for (part in identifier.split('_')) {

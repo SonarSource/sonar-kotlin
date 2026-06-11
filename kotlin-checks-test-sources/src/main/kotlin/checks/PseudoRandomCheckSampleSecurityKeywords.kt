@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom
 import org.apache.commons.lang3.RandomUtils
 import org.apache.commons.lang3.RandomStringUtils
 
-// SONARKT-770: no crypto import. Security keywords reached via per-scope identifier scan.
+// No crypto import: security keywords reached via per-scope identifier scan.
 class PseudoRandomCheckSampleSecurityKeywords {
 
     // --- Method-scope keyword tokenized from camelCase (`userPassword` -> [user, password]). ---
@@ -44,18 +44,18 @@ class PseudoRandomCheckSampleSecurityKeywords {
         val r = Random() // Noncompliant
     }
 
-    // --- Keyword "key" (new in Kotlin spec, absent from Java). ---
+    // --- Keyword "key" matches via parameter/variable name. ---
     fun keyDerivation() {
         val key = ByteArray(16)
         val kr = kotlin.random.Random(0) // Noncompliant
     }
 
-    // --- Keyword "hash" (new in Kotlin spec, absent from Java). ---
+    // --- Keyword "hash" matches via method name. ---
     fun computeHash() {
         val r = Random() // Noncompliant
     }
 
-    // --- Keyword "symmetric" (new in Kotlin spec, absent from Java). ---
+    // --- Keyword "symmetric" matches via method name. ---
     fun symmetricCipherSetup() {
         val r = Random() // Noncompliant
     }

@@ -3,8 +3,7 @@ package checks
 import java.util.Random
 import org.springframework.security.crypto.encrypt.Encryptors
 
-// SONARKT-770 Part 1: file imports `org.springframework.security.*` -> all PRNG calls flagged
-// regardless of any per-scope keyword check.
+// file imports `org.springframework.security.*` -> all PRNG calls flagged
 class PseudoRandomCheckSampleCryptoImport {
 
     val cryptoFactory: () -> Any = { Encryptors.noOpText() }
