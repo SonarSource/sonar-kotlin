@@ -16,6 +16,8 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -23,6 +25,7 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTypeArgumentList
 import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
@@ -46,13 +49,31 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
     override fun visitTypeReference(typeReference: KtTypeReference, kotlinFileContext: KotlinFileContext) = withKaSession {
         if (typeReference.type.isClassType(voidClassId) &&
             !isATypeArgumentOfAnInheritableClass(typeReference) &&
-            !isInOverrideOrAbstractFunction(typeReference)
+            !isInOverrideOrAbstractFunction(typeReference) &&
+            !isATypeArgumentOfAJavaClass(typeReference)
         ) {
             kotlinFileContext.reportIssue(
                 typeReference,
                 message
             )
         }
+    }
+
+    /**
+     * Checks if the `Void` type reference is a type argument of a class that comes from Java
+     * (e.g. `Mono<Void>` from Project Reactor). Many Java library classes that are parameterized
+     * with `Void` cannot be parameterized with `Unit`, so suggesting the refactoring would be a
+     * false positive. We take the safe approach and skip these, accepting that this introduces
+     * false negatives for Java classes that could actually use `Unit`.
+     */
+    private fun isATypeArgumentOfAJavaClass(typeReference: KtTypeReference): Boolean = withKaSession {
+        // The enclosing parameterized type reference, e.g. `Mono<Void>` for the `Void` argument.
+        val enclosingTypeReference = typeReference.getParentOfType<KtTypeArgumentList>(true)
+            ?.getParentOfType<KtUserType>(true)
+            ?.getParentOfType<KtTypeReference>(true)
+            ?: return false
+        val origin = enclosingTypeReference.type.symbol?.origin
+        return origin == KaSymbolOrigin.JAVA_SOURCE || origin == KaSymbolOrigin.JAVA_LIBRARY
     }
 }
 
