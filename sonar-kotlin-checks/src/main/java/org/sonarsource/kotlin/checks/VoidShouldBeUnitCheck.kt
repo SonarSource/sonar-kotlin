@@ -50,7 +50,7 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
         if (typeReference.type.isClassType(voidClassId) &&
             !isATypeArgumentOfAnInheritableClass(typeReference) &&
             !isInOverrideOrAbstractFunction(typeReference) &&
-            !isATypeArgumentOfAJavaClass(typeReference)
+            !isATypeArgumentOfJavaClass(typeReference)
         ) {
             kotlinFileContext.reportIssue(
                 typeReference,
@@ -59,15 +59,7 @@ class VoidShouldBeUnitCheck : AbstractCheck() {
         }
     }
 
-    /**
-     * Checks if the `Void` type reference is a type argument of a class that comes from Java
-     * (e.g. `Mono<Void>` from Project Reactor). Many Java library classes that are parameterized
-     * with `Void` cannot be parameterized with `Unit`, so suggesting the refactoring would be a
-     * false positive. We take the safe approach and skip these, accepting that this introduces
-     * false negatives for Java classes that could actually use `Unit`.
-     */
-    private fun isATypeArgumentOfAJavaClass(typeReference: KtTypeReference): Boolean = withKaSession {
-        // The enclosing parameterized type reference, e.g. `Mono<Void>` for the `Void` argument.
+    private fun isATypeArgumentOfJavaClass(typeReference: KtTypeReference): Boolean = withKaSession {
         val enclosingTypeReference = typeReference.getParentOfType<KtTypeArgumentList>(true)
             ?.getParentOfType<KtUserType>(true)
             ?.getParentOfType<KtTypeReference>(true)

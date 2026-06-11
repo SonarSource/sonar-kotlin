@@ -78,12 +78,8 @@ fun nonOverrideFunWithVoidTypeArgN(): List<Void> { TODO() } // Noncompliant
 fun nonOverrideFunWithVoidParamN(x: Function<Void>) {} // Noncompliant
 //                                           ^^^^
 
-// SONARKT-772: without semantics, Java class origin is unknown, so Void in type args is still reported.
-fun javaClassWithVoidTypeArgN(): JavaMono<Void> { TODO() } // Noncompliant
-//                                        ^^^^
+fun javaClassWithVoidTypeArgN(): JavaBox<Void> { TODO() } // Noncompliant
 
-fun javaClassWithVoidParamN(x: JavaMono<Void>) {} // Noncompliant
-//                                      ^^^^
+fun javaClassWithVoidParamN(x: JavaBox<Void>) {} // Noncompliant
 
-val javaClassWithVoidPropertyN: JavaMono<Void>? = null // Noncompliant
-//                                        ^^^^
+val javaClassWithVoidPropertyN: JavaBox<Void>? = null // Noncompliant

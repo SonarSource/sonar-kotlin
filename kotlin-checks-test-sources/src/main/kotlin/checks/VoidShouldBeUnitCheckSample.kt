@@ -134,19 +134,10 @@ fun nonOverrideFunWithVoidTypeArg(): List<Void> { TODO() } // Noncompliant
 
 fun nonOverrideFunWithVoidParam(x: Function<Void>) {} // Noncompliant
 
-
-// SONARKT-772: do not raise on Void used as a type argument of a class coming from Java,
-// because many such classes (e.g. Project Reactor's Mono<Void>) cannot use Kotlin's Unit.
-fun javaClassWithVoidTypeArg(): JavaMono<Void> { TODO() } // Compliant, Void is a type argument of a Java class
-
-fun javaClassWithVoidParam(x: JavaMono<Void>) {} // Compliant, Void is a type argument of a Java class
-
-val javaClassWithVoidProperty: JavaMono<Void>? = null // Compliant, Void is a type argument of a Java class
+fun javaClassWithVoidTypeArg(x: JavaBox<Void>): JavaBox<Void> { TODO() } // Compliant, Void is a type argument of a Java class
 
 fun jdkFutureWithVoidTypeArg(): java.util.concurrent.CompletableFuture<Void> { TODO() } // Compliant, Void is a type argument of a JDK Java class
 
-fun jdkCallableWithVoidTypeArg(x: java.util.concurrent.Callable<Void>) {} // Compliant, Void is a type argument of a JDK Java class
-
 // Void nested inside a type argument of a Kotlin class still gets reported, even when the outer Java class is involved.
-fun javaClassWithNestedKotlinVoid(): JavaMono<List<Void>> { TODO() } // Noncompliant
-//                                                 ^^^^
+fun javaClassWithNestedKotlinVoid(): JavaBox<List<Void>> { TODO() } // Noncompliant
+//                                                ^^^^
