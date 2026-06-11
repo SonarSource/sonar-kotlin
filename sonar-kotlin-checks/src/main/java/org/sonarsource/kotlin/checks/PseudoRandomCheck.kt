@@ -64,8 +64,6 @@ private val RANDOM_CONSTRUCTORS_MATCHER = FunMatcher(matchConstructor = true) {
     )
 }
 
-// SONARKT-770: ported from DART-276 security-context heuristic.
-// When any of these prefixes appear in the file's imports, all PRNG usages in the file are reported.
 private val CRYPTO_IMPORT_PREFIXES = listOf(
     "java.security.",
     "javax.crypto.",
