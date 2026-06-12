@@ -3,9 +3,6 @@ package checks
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.RangeMap
 import com.google.common.collect.Table
-import okhttp3.Headers
-import otherpackage.KotlinLibContainer
-import otherpackage.get
 import java.nio.ByteBuffer
 import java.util.BitSet
 import java.util.Calendar
@@ -14,6 +11,9 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicIntegerArray
+import okhttp3.Headers
+import otherpackage.KotlinLibContainer
+import otherpackage.get
 
 class IndexedAccessCheckSample {
 
@@ -170,5 +170,38 @@ class ChildClass : ParentClass() {
 
 class GenericAccessorClass {
     operator fun <T> get(key: String): T = TODO()
+}
+
+class ChainableBuilder {
+    operator fun set(key: String, value: String): ChainableBuilder {
+        return this
+    }
+
+    operator fun get(key: String): String = ""
+
+    fun build(): String = ""
+}
+
+class ChainableMap {
+    operator fun set(key: String, value: Int): ChainableMap {
+        return this
+    }
+
+    operator fun get(key: String): Int = 0
+
+    fun size(): Int = 0
+}
+
+fun chainedSetters(builder: ChainableBuilder, chainableMap: ChainableMap) {
+    builder.set("a", "1").set("b", "2").set("c", "3") // Noncompliant {{Replace function call with indexed accessor.}}
+    //                                  ^^^
+    builder.set("a", "1").set("b", "2") // Noncompliant {{Replace function call with indexed accessor.}}
+    //                    ^^^
+    builder.set("a", "1").build() // Compliant - set result used in chain
+
+    builder.get("a").length // Noncompliant {{Replace function call with indexed accessor.}}
+
+    chainableMap.set("a", 1).set("b", 2) // Noncompliant {{Replace function call with indexed accessor.}}
+    chainableMap.set("a", 1).size() // Compliant - set result used in chain
 }
 
