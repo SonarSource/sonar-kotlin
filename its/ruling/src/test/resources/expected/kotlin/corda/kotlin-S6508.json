@@ -22,9 +22,6 @@
 "kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/CordaRPCOpsImplTest.kt": [
 382
 ],
-"kotlin-corda-project:sources/kotlin/corda/samples/network-visualiser/src/main/kotlin/net/corda/netmap/simulation/IRSSimulation.kt": [
-92
-],
 "kotlin-corda-project:sources/kotlin/corda/samples/simm-valuation-demo/contracts-states/src/main/kotlin/net/corda/vega/contracts/PortfolioSwap.kt": [
 11
 ],
