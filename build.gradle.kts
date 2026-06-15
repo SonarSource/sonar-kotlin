@@ -243,7 +243,7 @@ sonarqube {
         property("sonar.projectName", projectTitle)
         property("sonar.links.scm", "https://github.com/SonarSource/sonar-kotlin")
         property("sonar.links.issue", "https://jira.sonarsource.com/browse/SONARKT")
-        property("sonar.exclusions", "**/build/**/*")
+        property("sonar.exclusions", "**/build/**/*,**/package-info.java")
         property("sonar.sca.exclusions", "**/its/**,**/kotlin-checks-test-sources/**,**/samples/**")
         property(
             "sonar.coverage.jacoco.aggregateXmlReportPaths",
