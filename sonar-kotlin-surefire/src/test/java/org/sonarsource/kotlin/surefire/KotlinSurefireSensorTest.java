@@ -69,7 +69,6 @@ class KotlinSurefireSensorTest {
 
   @Test
   void should_execute_if_filesystem_contains_kotlin_files() {
-    surefireSensor = new KotlinSurefireSensor(new KotlinSurefireParser(kotlinResourcesLocator), new MapSettings().asConfig(), pathResolver, telemetryData);
     DefaultSensorDescriptor defaultSensorDescriptor = new DefaultSensorDescriptor();
     surefireSensor.describe(defaultSensorDescriptor);
     assertThat(defaultSensorDescriptor.languages()).containsOnly("kotlin");
@@ -90,126 +89,126 @@ class KotlinSurefireSensorTest {
 
   @Test
   void shouldHandleTestSuiteDetails() throws URISyntaxException {
-    SensorContextTester context = SensorContextTester.create(new File(""));
-    context.fileSystem()
+    SensorContextTester localContext = SensorContextTester.create(new File(""));
+    localContext.fileSystem()
       .add(resource("org.sonar.core.ExtensionsFinderTest"))
       .add(resource("org.sonar.core.ExtensionsFinderTest2"))
       .add(resource("org.sonar.core.ExtensionsFinderTest3"));
 
-    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldHandleTestSuiteDetails/");
+    collect(localContext, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldHandleTestSuiteDetails/");
 
-    assertThat(context.measures(":org.sonar.core.ExtensionsFinderTest")).hasSize(5);
-    assertThat(context.measures(":org.sonar.core.ExtensionsFinderTest2")).hasSize(5);
-    assertThat(context.measures(":org.sonar.core.ExtensionsFinderTest3")).hasSize(5);
+    assertThat(localContext.measures(":org.sonar.core.ExtensionsFinderTest")).hasSize(5);
+    assertThat(localContext.measures(":org.sonar.core.ExtensionsFinderTest2")).hasSize(5);
+    assertThat(localContext.measures(":org.sonar.core.ExtensionsFinderTest3")).hasSize(5);
 
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest", CoreMetrics.TESTS).value()).isEqualTo(4);
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest", CoreMetrics.TEST_EXECUTION_TIME).value()).isEqualTo(111L);
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest", CoreMetrics.TESTS).value()).isEqualTo(4);
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest", CoreMetrics.TEST_EXECUTION_TIME).value()).isEqualTo(111L);
 
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest", CoreMetrics.TEST_FAILURES).value()).isEqualTo(1);
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest", CoreMetrics.TEST_ERRORS).value()).isEqualTo(1);
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest", CoreMetrics.SKIPPED_TESTS).value()).isZero();
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest", CoreMetrics.TEST_FAILURES).value()).isEqualTo(1);
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest", CoreMetrics.TEST_ERRORS).value()).isEqualTo(1);
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest", CoreMetrics.SKIPPED_TESTS).value()).isZero();
 
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest2", CoreMetrics.TESTS).value()).isEqualTo(2);
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest2", CoreMetrics.TEST_EXECUTION_TIME).value()).isEqualTo(2);
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest2", CoreMetrics.TEST_FAILURES).value()).isZero();
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest2", CoreMetrics.TEST_ERRORS).value()).isZero();
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest2", CoreMetrics.SKIPPED_TESTS).value()).isZero();
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest2", CoreMetrics.TESTS).value()).isEqualTo(2);
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest2", CoreMetrics.TEST_EXECUTION_TIME).value()).isEqualTo(2);
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest2", CoreMetrics.TEST_FAILURES).value()).isZero();
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest2", CoreMetrics.TEST_ERRORS).value()).isZero();
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest2", CoreMetrics.SKIPPED_TESTS).value()).isZero();
 
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest3", CoreMetrics.TESTS).value()).isEqualTo(1);
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest3", CoreMetrics.TEST_EXECUTION_TIME).value()).isEqualTo(16);
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest3", CoreMetrics.TEST_FAILURES).value()).isZero();
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest3", CoreMetrics.TEST_ERRORS).value()).isZero();
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest3", CoreMetrics.SKIPPED_TESTS).value()).isEqualTo(1);
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest3", CoreMetrics.TESTS).value()).isEqualTo(1);
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest3", CoreMetrics.TEST_EXECUTION_TIME).value()).isEqualTo(16);
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest3", CoreMetrics.TEST_FAILURES).value()).isZero();
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest3", CoreMetrics.TEST_ERRORS).value()).isZero();
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest3", CoreMetrics.SKIPPED_TESTS).value()).isEqualTo(1);
   }
 
   @Test
   void shouldSaveErrorsAndFailuresInXML() throws URISyntaxException {
-    SensorContextTester context = SensorContextTester.create(new File(""));
-    context.fileSystem()
+    SensorContextTester localContext = SensorContextTester.create(new File(""));
+    localContext.fileSystem()
       .add(resource("org.sonar.core.ExtensionsFinderTest"))
       .add(resource("org.sonar.core.ExtensionsFinderTest2"))
       .add(resource("org.sonar.core.ExtensionsFinderTest3"));
 
-    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldSaveErrorsAndFailuresInXML/");
+    collect(localContext, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldSaveErrorsAndFailuresInXML/");
 
     // 1 classes, 5 measures by class
-    assertThat(context.measures(":org.sonar.core.ExtensionsFinderTest")).hasSize(5);
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest", CoreMetrics.SKIPPED_TESTS).value()).isEqualTo(1);
-    assertThat(context.measure(":org.sonar.core.ExtensionsFinderTest", CoreMetrics.TESTS).value()).isEqualTo(7);
+    assertThat(localContext.measures(":org.sonar.core.ExtensionsFinderTest")).hasSize(5);
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest", CoreMetrics.SKIPPED_TESTS).value()).isEqualTo(1);
+    assertThat(localContext.measure(":org.sonar.core.ExtensionsFinderTest", CoreMetrics.TESTS).value()).isEqualTo(7);
   }
 
   @Test
   void shouldSupportLongAttributeValues() throws URISyntaxException {
     // We don't support file keys with length > 400 characters anymore (SONAR-14584).
-    SensorContextTester context = SensorContextTester.create(new File(""));
-    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/should_support_long_attribute_values/");
-    assertThat(context.allAnalysisErrors()).isEmpty();
+    SensorContextTester sensorContext = SensorContextTester.create(new File(""));
+    collect(sensorContext, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/should_support_long_attribute_values/");
+    assertThat(sensorContext.allAnalysisErrors()).isEmpty();
   }
 
   @Test
   void shouldManageClassesWithDefaultPackage() throws URISyntaxException {
-    SensorContextTester context = SensorContextTester.create(new File(""));
-    context.fileSystem()
+    SensorContextTester localContext = SensorContextTester.create(new File(""));
+    localContext.fileSystem()
       .add(resource("NoPackagesTest"));
 
-    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldManageClassesWithDefaultPackage/");
+    collect(localContext, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldManageClassesWithDefaultPackage/");
 
-    assertThat(context.measure(":NoPackagesTest", CoreMetrics.TESTS).value()).isEqualTo(2);
+    assertThat(localContext.measure(":NoPackagesTest", CoreMetrics.TESTS).value()).isEqualTo(2);
   }
 
   @Test
   void successRatioIsZeroWhenAllTestsFail() throws URISyntaxException {
-    SensorContextTester context = SensorContextTester.create(new File(""));
-    context.fileSystem()
+    SensorContextTester localContext = SensorContextTester.create(new File(""));
+    localContext.fileSystem()
       .add(resource("org.sonar.Foo"));
 
-    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/successRatioIsZeroWhenAllTestsFail/");
+    collect(localContext, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/successRatioIsZeroWhenAllTestsFail/");
 
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isEqualTo(2);
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isEqualTo(1);
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_ERRORS).value()).isEqualTo(1);
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isEqualTo(2);
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isEqualTo(1);
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.TEST_ERRORS).value()).isEqualTo(1);
   }
 
   @Test
   void measuresShouldNotIncludeSkippedTests() throws URISyntaxException {
-    SensorContextTester context = SensorContextTester.create(new File(""));
-    context.fileSystem()
+    SensorContextTester localContext = SensorContextTester.create(new File(""));
+    localContext.fileSystem()
       .add(resource("org.sonar.Foo"));
 
-    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/measuresShouldNotIncludeSkippedTests/");
+    collect(localContext, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/measuresShouldNotIncludeSkippedTests/");
 
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isEqualTo(2);
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isEqualTo(1);
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_ERRORS).value()).isZero();
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.SKIPPED_TESTS).value()).isEqualTo(1);
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isEqualTo(2);
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isEqualTo(1);
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.TEST_ERRORS).value()).isZero();
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.SKIPPED_TESTS).value()).isEqualTo(1);
   }
 
   @Test
   void noSuccessRatioIfNoTests() throws URISyntaxException {
-    SensorContextTester context = SensorContextTester.create(new File(""));
-    context.fileSystem()
+    SensorContextTester localContext = SensorContextTester.create(new File(""));
+    localContext.fileSystem()
       .add(resource("org.sonar.Foo"));
 
-    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/noSuccessRatioIfNoTests/");
+    collect(localContext, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/noSuccessRatioIfNoTests/");
 
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isZero();
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isZero();
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_ERRORS).value()).isZero();
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.SKIPPED_TESTS).value()).isEqualTo(2);
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isZero();
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isZero();
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.TEST_ERRORS).value()).isZero();
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.SKIPPED_TESTS).value()).isEqualTo(2);
   }
 
   @Test
   void should_support_reportNameSuffix() throws URISyntaxException {
-    SensorContextTester context = SensorContextTester.create(new File(""));
-    context.fileSystem()
+    SensorContextTester localContext = SensorContextTester.create(new File(""));
+    localContext.fileSystem()
       .add(resource("org.sonar.Foo"));
 
-    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/should_support_reportNameSuffix/");
+    collect(localContext, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/should_support_reportNameSuffix/");
 
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isEqualTo(4);
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isEqualTo(2);
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_ERRORS).value()).isZero();
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.SKIPPED_TESTS).value()).isEqualTo(2);
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isEqualTo(4);
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isEqualTo(2);
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.TEST_ERRORS).value()).isZero();
+    assertThat(localContext.measure(":org.sonar.Foo", CoreMetrics.SKIPPED_TESTS).value()).isEqualTo(2);
   }
 
   @Test
@@ -227,8 +226,8 @@ class KotlinSurefireSensorTest {
     assertThat(telemetryData.getSurefireClassesFailed()).isEqualTo(3);
   }
 
-  private void collect(SensorContextTester context, String path) throws URISyntaxException {
+  private void collect(SensorContextTester sensorContext, String path) throws URISyntaxException {
     File file = new File(getClass().getResource(path).toURI());
-    surefireSensor.collect(context, Collections.singletonList(file));
+    surefireSensor.collect(sensorContext, Collections.singletonList(file));
   }
 }
