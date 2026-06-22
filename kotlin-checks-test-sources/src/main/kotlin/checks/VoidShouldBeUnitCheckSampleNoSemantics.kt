@@ -77,3 +77,9 @@ fun nonOverrideFunWithVoidTypeArgN(): List<Void> { TODO() } // Noncompliant
 
 fun nonOverrideFunWithVoidParamN(x: Function<Void>) {} // Noncompliant
 //                                           ^^^^
+
+fun javaClassWithVoidTypeArgN(): JavaBox<Void> { TODO() } // Noncompliant
+
+fun javaClassWithVoidParamN(x: JavaBox<Void>) {} // Noncompliant
+
+val javaClassWithVoidPropertyN: JavaBox<Void>? = null // Noncompliant
