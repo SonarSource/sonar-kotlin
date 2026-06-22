@@ -48,11 +48,6 @@ on:
         description: |
           Add verbose job summaries
         default: false
-      sqaa-integration:
-        type: boolean
-        description: |
-          Integrate into SQAA (create a PR in sonar-analysis-as-a-service).
-        default: true
 
 jobs:
   release:
@@ -70,6 +65,7 @@ jobs:
       plugin-name: "kotlin"
       plugin-artifacts-sqs: "kotlin"
       plugin-artifacts-sqc: "kotlin"
+      sqaa-integration: true
       use-jira-sandbox: ${{ github.event.inputs.dry-run == 'true' }}
       is-draft-release: ${{ github.event.inputs.dry-run == 'true' }}
       pm-email: "alexandre.gigleux@sonarsource.com"
@@ -86,6 +82,5 @@ jobs:
       runner-environment: sonar-xs
       release-process: "https://xtranet-sonarsource.atlassian.net/wiki/x/RADLAQE"
       verbose: ${{ inputs.verbose }}
-      sqaa-integration: ${{ inputs.sqaa-integration }}
       bump-version: true
       bump-version-exclusions: "its,sonar-kotlin-surefire"
