@@ -32,6 +32,15 @@ import org.sonarsource.kotlin.api.frontend.KotlinVirtualFile
 import org.sonarsource.kotlin.api.frontend.compilerConfiguration
 import org.sonarsource.kotlin.api.frontend.createK2AnalysisSession
 import java.io.File
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.types.KaErrorType
+import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstance
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.assertDoesNotThrow
 
 private class SonarKaSessionTest {
 
@@ -53,6 +62,44 @@ private class SonarKaSessionTest {
                 assertThrows<UnsupportedOperationException> {
                     this.compile(ktFile, c, t) { _ -> false }
                 }
+            }
+        }
+    }
+
+    @Test
+    fun `should return KaErrorType instead of raising exception when obtaining type for KtTypeReference`() {
+        val ktFile = ktFile(
+            """
+//class ObservableList<K> {
+//    fun addListener(listener: Listener<K>) {
+//    }
+//
+//    fun interface Listener<K> {
+//        fun callback(change: Change<out K>)
+//
+//        interface Change<K>
+//    }
+//}
+
+fun <K> example(list: ObservableList<K>) {
+    list.addListener { _: ObservableList.Listener.Change<out K> ->
+    }
+}
+        """.trimIndent()
+        )
+
+        val action: KaSession.() -> KaType = {
+            ktFile.collectDescendantsOfType<KtTypeReference>()[2].type
+        }
+
+        kaSession(ktFile) {
+            val type = withKaSession(action)
+            assertTrue(type is KaErrorType)
+        }
+
+        assertDoesNotThrow {
+            analyze(ktFile) {
+                action()
             }
         }
     }
