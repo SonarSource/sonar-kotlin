@@ -23,12 +23,8 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaCompilationResult
 import org.jetbrains.kotlin.analysis.api.components.KaCompilerTarget
 import org.jetbrains.kotlin.analysis.api.diagnostics.KaDiagnostic
-import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtTypeReference
-import org.slf4j.LoggerFactory
 import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.frontend.KotlinTree
@@ -47,27 +43,6 @@ internal class SonarKaSession(
     private val originalKaSession: KaSession
 ) : KaSession by originalKaSession {
     /**
-     * Unlike original [org.jetbrains.kotlin.analysis.api.components.KaTypeProvider.type], instead of
-     * [raising exception](https://github.com/JetBrains/kotlin/blob/v2.4.0/analysis/analysis-api/src/org/jetbrains/kotlin/analysis/api/components/KaTypeProvider.kt#L222-L227)
-     * such as
-     *
-     * > org.jetbrains.kotlin.analysis.low.level.api.fir.api.InvalidFirElementTypeException: unexpected element of type: no element found
-     *
-     * returns [org.jetbrains.kotlin.analysis.api.types.KaErrorType] in case of absence of some types.
-     */
-    override val KtTypeReference.type: KaType
-        get() {
-            return try {
-                with(originalKaSession) {
-                    this@type.type
-                }
-            } catch (e: Exception) {
-                LOG.debug("Unexpected result during type resolution", e)
-                buildClassType(ClassId.fromString("<error>"))
-            }
-        }
-
-    /**
      * Always throws [UnsupportedOperationException] to get rid of dependency on codegen.
      */
     @OptIn(KaExperimentalApi::class)
@@ -78,11 +53,6 @@ internal class SonarKaSession(
         allowedErrorFilter: (KaDiagnostic) -> Boolean,
     ): KaCompilationResult =
         throw UnsupportedOperationException()
-
-    companion object {
-        @JvmStatic
-        private val LOG = LoggerFactory.getLogger(SonarKaSession::class.java)
-    }
 }
 
 /**

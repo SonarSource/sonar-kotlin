@@ -38,6 +38,7 @@ import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
+import org.slf4j.LoggerFactory
 
 /**
  * @see [org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISessionBuilder.buildKtModuleProviderByCompilerConfiguration]
@@ -88,8 +89,12 @@ private class SonarLogger(category: String) : DefaultLogger(category) {
      * Unlike overridden does not throw [AssertionError].
      */
     override fun error(message: String?, t: Throwable?, vararg details: String?) {
-        System.err.println("ERROR: " + message + detailsToString(*details) + attachmentsToString(t))
-        t?.printStackTrace(System.err)
+        LOG.debug("ERROR: " + message + detailsToString(*details) + attachmentsToString(t), t)
+    }
+
+    companion object {
+        @JvmStatic
+        internal val LOG = LoggerFactory.getLogger(SonarLogger::class.java)
     }
 }
 
