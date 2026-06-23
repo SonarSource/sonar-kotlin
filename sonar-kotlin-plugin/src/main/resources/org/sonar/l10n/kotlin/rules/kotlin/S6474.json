@@ -1,6 +1,6 @@
 {
-  "title": "Using remote artifacts without authenticity and integrity checks is security-sensitive",
-  "type": "SECURITY_HOTSPOT",
+  "title": "Remote artifacts should be verified for authenticity and integrity",
+  "type": "VULNERABILITY",
   "code": {
     "impacts": {
       "SECURITY": "LOW"
@@ -12,9 +12,11 @@
     "func": "Constant\/Issue",
     "constantCost": "15min"
   },
+  "quickfix": "unknown",
   "tags": [
     "dockerfile",
-    "cwe"
+    "cwe",
+    "former-hotspot"
   ],
   "defaultSeverity": "Minor",
   "ruleSpecification": "RSPEC-6474",
