@@ -65,6 +65,7 @@ jobs:
       plugin-name: "kotlin"
       plugin-artifacts-sqs: "kotlin"
       plugin-artifacts-sqc: "kotlin"
+      sqaa-integration: true
       use-jira-sandbox: ${{ github.event.inputs.dry-run == 'true' }}
       is-draft-release: ${{ github.event.inputs.dry-run == 'true' }}
       pm-email: "alexandre.gigleux@sonarsource.com"
