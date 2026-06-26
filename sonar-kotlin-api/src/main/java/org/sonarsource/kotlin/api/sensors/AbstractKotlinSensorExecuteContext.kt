@@ -28,6 +28,7 @@ import org.sonar.api.batch.sensor.SensorContext
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.checks.InputFileContextImpl
+import org.sonarsource.kotlin.api.checks.TestFileClassifier
 import org.sonarsource.kotlin.api.common.DEFAULT_KOTLIN_LANGUAGE_VERSION
 import org.sonarsource.kotlin.api.common.FAIL_FAST_PROPERTY_NAME
 import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_VERSION
@@ -57,6 +58,15 @@ abstract class AbstractKotlinSensorExecuteContext(
     private val isInAndroidContext: Boolean by lazy {
         sensorContext.config().getBoolean(SONAR_ANDROID_DETECTED).orElse(false)
     }
+    private val testFiles: TestFileClassifier by lazy {
+        TestFileClassifier.of(
+            sensorContext.config(),
+            "**/test/**", "**/tests/**",
+            "**/*Test.kt", "**/*Tests.kt", "**/*Spec.kt", "**/*IT.kt")
+    }
+
+    private fun isTestFile(inputFile: InputFile): Boolean =
+        inputFile.type() == InputFile.Type.TEST || testFiles.looksLikeTestFile(inputFile.uri().path)
 
     private val inputFileToVirtualFile: Map<InputFile, KotlinVirtualFile> by lazy {
         val virtualFileSystem = KotlinFileSystem()
@@ -109,7 +119,7 @@ abstract class AbstractKotlinSensorExecuteContext(
     val kotlinFiles: List<KotlinSyntaxStructure> by lazy {
         inputFiles.mapNotNull {
             onFileRead()
-            val inputFileContext = InputFileContextImpl(sensorContext, it, isInAndroidContext)
+            val inputFileContext = InputFileContextImpl(sensorContext, it, isInAndroidContext, isTestFile(it))
             try {
                 // The current logic relies on eager loading of all files before the analysis starts.
                 // To trigger potential IO exceptions and report them, we need to do this call.
@@ -138,7 +148,7 @@ abstract class AbstractKotlinSensorExecuteContext(
                 !EMPTY_FILE_CONTENT_PATTERN.matches(it.inputFile.contents())
             }.forEach { (ktFile, doc, inputFile) ->
                 if (sensorContext.isCancelled) return false
-                val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext)
+                val inputFileContext = InputFileContextImpl(sensorContext, inputFile, isInAndroidContext, isTestFile(inputFile))
                 val tree = KotlinTree(ktFile, doc)
 
                 measureDuration(inputFile.filename()) {

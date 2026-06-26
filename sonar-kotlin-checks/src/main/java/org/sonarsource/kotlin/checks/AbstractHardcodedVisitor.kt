@@ -50,6 +50,7 @@ abstract class AbstractHardcodedVisitor : AbstractCheck() {
     }
 
     override fun visitBinaryExpression(expression: KtBinaryExpression, context: KotlinFileContext) {
+        if (context.inputFileContext.isTestFile) return
         if (expression.operationToken == KtTokens.EQ || expression.operationToken == KtTokens.PLUSEQ) {
             val left = expression.left
             left?.identifier()?.let { checkVariable(context, left, it, expression.right!!) }
@@ -57,12 +58,14 @@ abstract class AbstractHardcodedVisitor : AbstractCheck() {
     }
 
     override fun visitProperty(property: KtProperty, context: KotlinFileContext) {
+        if (context.inputFileContext.isTestFile) return
         property.initializer?.let {
             checkVariable(context, property.nameIdentifier!!, property.name!!, it)
         }
     }
 
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression, context: KotlinFileContext) {
+        if (context.inputFileContext.isTestFile) return
         val content = if (!expression.hasInterpolation()) expression.asConstant() else ""
         literalPatterns()
             .mapNotNull { regex -> regex.find(content) }

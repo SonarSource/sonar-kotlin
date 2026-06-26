@@ -16,4 +16,16 @@
  */
 package org.sonarsource.kotlin.checks
 
-class HardcodedCredentialsCheckTest : CheckTest(HardcodedCredentialsCheck())
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.testapi.KotlinVerifier
+
+class HardcodedCredentialsCheckTest : CheckTest(HardcodedCredentialsCheck()) {
+
+    @Test
+    fun `no issues are raised in test files`() {
+        KotlinVerifier(HardcodedCredentialsCheck()) {
+            this.fileName = "HardcodedCredentialsInTestFileSample.kt"
+            this.isTestFile = true
+        }.verifyNoIssue()
+    }
+}

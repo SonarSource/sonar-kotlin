@@ -41,6 +41,7 @@ class InputFileContextImpl(
     override val sensorContext: SensorContext,
     override val inputFile: InputFile,
     override val isAndroid: Boolean,
+    override val isTestFile: Boolean = false,
 ) : InputFileContext {
 
     override var filteredRules: Map<String, Set<TextRange>> = HashMap()
