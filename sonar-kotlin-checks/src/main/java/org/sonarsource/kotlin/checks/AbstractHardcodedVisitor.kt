@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.sonarsource.analyzer.commons.appsec.SecretClassifier
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
@@ -80,7 +81,7 @@ abstract class AbstractHardcodedVisitor : AbstractCheck() {
             && isSensitiveStringLiteral(this.asConstant())
 
     open fun isSensitiveStringLiteral(value: String): Boolean {
-        return value.isNotEmpty()
+        return value.isNotEmpty() && !SecretClassifier.isKnownNonSecret(value)
     }
 
     private fun KotlinFileContext.report(tree: PsiElement, matchName: String) {
