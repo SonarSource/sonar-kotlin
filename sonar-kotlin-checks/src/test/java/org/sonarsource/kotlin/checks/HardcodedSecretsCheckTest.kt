@@ -16,4 +16,16 @@
  */
 package org.sonarsource.kotlin.checks
 
-internal class HardcodedSecretsCheckTest : CheckTest(HardcodedSecretsCheck())
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.testapi.KotlinVerifier
+
+internal class HardcodedSecretsCheckTest : CheckTest(HardcodedSecretsCheck()) {
+
+    @Test
+    fun `no issues are raised in test files`() {
+        KotlinVerifier(HardcodedSecretsCheck()) {
+            this.fileName = "HardcodedSecretsInTestFileSample.kt"
+            this.isTestFile = true
+        }.verifyNoIssue()
+    }
+}
