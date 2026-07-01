@@ -31,7 +31,9 @@ dependencyResolutionManagement {
     versionCatalogs {
 
         val kotlinVersion: String by extra
-        val analyzerCommonsVersionStr = "2.18.0.3393"
+        // SONARKT-782 / APPSEC-3451: temporary master build providing appsec.SecretClassifier.
+        // Replace with the official sonar-analyzer-commons release once it is published.
+        val analyzerCommonsVersionStr = "2.25.0.4953"
         val sonarPluginApi = "11.1.0.2693"
         val slf4jApi = "1.7.36"
 

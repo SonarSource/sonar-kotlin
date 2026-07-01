@@ -61,7 +61,7 @@ class HardcodedSecretsCheck : AbstractHardcodedVisitor() {
     }
 
     override fun isSensitiveStringLiteral(value: String): Boolean {
-        return value.isNotEmpty()
+        return super.isSensitiveStringLiteral(value)
                 && value.length >= MINIMUM_CREDENTIAL_LENGTH
                 && getEntropyDetector().hasEnoughEntropy(value)
                 && HumanLanguageDetector.humanLanguageScore(value) < maxLanguageScore()

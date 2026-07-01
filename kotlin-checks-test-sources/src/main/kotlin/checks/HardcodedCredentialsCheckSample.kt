@@ -11,25 +11,25 @@ class HardcodedCredentialsCheckSample {
         "login=a&password="
         val value = ""
         "login=a&password= " + value
-        "login=a&password=a" // Noncompliant
-        x = "login=a&password=xxx" // Noncompliant {{"password" detected here, make sure this is not a hard-coded credential.}}
-//          ^^^^^^^^^^^^^^^^^^^^^^
-        "login=a&password=xxx" // Noncompliant
-        "login=a&passwd=xxx" // Noncompliant {{"passwd" detected here, make sure this is not a hard-coded credential.}}
-        "login=a&pwd=xxx" // Noncompliant {{"pwd" detected here, make sure this is not a hard-coded credential.}}
-        "login=a&passphrase=xxx" // Noncompliant {{"passphrase" detected here, make sure this is not a hard-coded credential.}}
-        var variableNameWithPasswordInIt = "xxx" // Noncompliant {{"Password" detected here, make sure this is not a hard-coded credential.}}
+        "login=a&password=Rb7kZpQ2" // Noncompliant
+        x = "login=a&password=Rb7kZpQ2" // Noncompliant {{"password" detected here, make sure this is not a hard-coded credential.}}
+//          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        "login=a&password=Rb7kZpQ2" // Noncompliant
+        "login=a&passwd=Rb7kZpQ2" // Noncompliant {{"passwd" detected here, make sure this is not a hard-coded credential.}}
+        "login=a&pwd=Rb7kZpQ2" // Noncompliant {{"pwd" detected here, make sure this is not a hard-coded credential.}}
+        "login=a&passphrase=Rb7kZpQ2" // Noncompliant {{"passphrase" detected here, make sure this is not a hard-coded credential.}}
+        var variableNameWithPasswordInIt = "Rb7kZpQ2" // Noncompliant {{"Password" detected here, make sure this is not a hard-coded credential.}}
 //          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        var variableNameWithPasswdInIt = "xxx" // Noncompliant
-        variableNameWithPasswdInIt += "xxx" // Noncompliant
-        var variableNameWithPwdInIt = "xxx"  // Noncompliant {{"Pwd" detected here, make sure this is not a hard-coded credential.}}
+        var variableNameWithPasswdInIt = "Rb7kZpQ2" // Noncompliant
+        variableNameWithPasswdInIt += "Rb7kZpQ2" // Noncompliant
+        var variableNameWithPwdInIt = "Rb7kZpQ2"  // Noncompliant {{"Pwd" detected here, make sure this is not a hard-coded credential.}}
 
-        A("").variableNameWithPwdInIt = "xxx" // Noncompliant
+        A("").variableNameWithPwdInIt = "Rb7kZpQ2" // Noncompliant
 
-        val constValue = "login=a&password=xxx" // Noncompliant
-        var passwd = "xxxx" // Noncompliant
-        var passphrase = "xxx" // Noncompliant
-        var okVariable = "xxxx"
+        val constValue = "login=a&password=Rb7kZpQ2" // Noncompliant
+        var passwd = "Rb7kZpQ2" // Noncompliant
+        var passphrase = "Rb7kZpQ2" // Noncompliant
+        var okVariable = "Rb7kZpQ2"
         B.variableNameWithPwdInIt = ""
         passwd = ""
 
@@ -39,7 +39,10 @@ class HardcodedCredentialsCheckSample {
         myPassword = "users/connection.secretPassword" // Compliant
         myPassword = "secretPasswd" // Noncompliant {{"Password" detected here, make sure this is not a hard-coded credential.}}
         myPassword = "secretPasswd" // Noncompliant {{"Password" detected here, make sure this is not a hard-coded credential.}}
-        var params = "user=admin&password=Password123" // Noncompliant {{"password" detected here, make sure this is not a hard-coded credential.}}
+        var params = "user=admin&password=Rb7kZpQ2" // Noncompliant {{"password" detected here, make sure this is not a hard-coded credential.}}
+
+// Values recognized as non-secrets by the shared SecretClassifier are not reported.
+        var dbPassword = "<placeholder>" // Compliant, placeholder
 
 // Database queries are compliant
         var query = "password=?"
@@ -66,7 +69,7 @@ class HardcodedCredentialsCheckSample {
 
     private fun userObject(user: User): String {
         // Compliant
-        return """ 
+        return """
             |{
             |  username="${user.username}"
             |  password="${user.password}"
@@ -81,5 +84,5 @@ data class User(val username: String, val password: String, val permissions: Lis
 class A(var variableNameWithPwdInIt: String)
 
 object B {
-    var variableNameWithPwdInIt: String = "xxx" // Noncompliant
+    var variableNameWithPwdInIt: String = "Rb7kZpQ2" // Noncompliant
 }
