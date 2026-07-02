@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.api.checks;
 
+import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
@@ -52,6 +53,18 @@ class TestFileClassifierTest {
   private static InputFile file(String relativePath) {
     return new TestInputFileBuilder("module", relativePath).build();
   }
+
+  // A context flavour an analyzer would supply, carrying structural info its detector reads.
+  private static final class AnnotatedContext implements TestFileClassifier.Context {
+    final boolean hasTestImport;
+
+    AnnotatedContext(boolean hasTestImport) {
+      this.hasTestImport = hasTestImport;
+    }
+  }
+
+  private static final Predicate<TestFileClassifier.Context> IMPORTS_TEST_FRAMEWORK =
+    context -> context instanceof AnnotatedContext && ((AnnotatedContext) context).hasTestImport;
 
   @Test
   void matches_test_paths_when_test_sources_not_configured() {
@@ -107,6 +120,31 @@ class TestFileClassifierTest {
     var testFile = file("a/FooTest.kt");
     assertThat(classifier.looksLikeTestFile(testFile, TestFileClassifier.Context.empty()))
       .isEqualTo(classifier.looksLikeTestFile(testFile));
+  }
+
+  @Test
+  void detector_classifies_from_the_context_when_no_path_matches() {
+    var classifier = TestFileClassifier.of(config(), IMPORTS_TEST_FRAMEWORK);
+    var mainFile = file("src/main/kotlin/Foo.kt");
+    assertThat(classifier.looksLikeTestFile(mainFile, new AnnotatedContext(true))).isTrue();
+    assertThat(classifier.looksLikeTestFile(mainFile, new AnnotatedContext(false))).isFalse();
+    // empty context (e.g. a path-only call): the detector cannot classify
+    assertThat(classifier.looksLikeTestFile(mainFile)).isFalse();
+  }
+
+  @Test
+  void detector_and_patterns_are_combined() {
+    var classifier = TestFileClassifier.of(config(), IMPORTS_TEST_FRAMEWORK, GLOBS);
+    // path pattern hit, no structural info needed
+    assertThat(classifier.looksLikeTestFile(file("a/FooTest.kt"))).isTrue();
+    // no path hit, detector hit
+    assertThat(classifier.looksLikeTestFile(file("src/main/kotlin/Foo.kt"), new AnnotatedContext(true))).isTrue();
+  }
+
+  @Test
+  void detector_is_gated_by_configured_test_sources() {
+    var classifier = TestFileClassifier.of(config("sonar.tests", "src/test"), IMPORTS_TEST_FRAMEWORK, GLOBS);
+    assertThat(classifier.looksLikeTestFile(file("src/main/kotlin/Foo.kt"), new AnnotatedContext(true))).isFalse();
   }
 
   @Test

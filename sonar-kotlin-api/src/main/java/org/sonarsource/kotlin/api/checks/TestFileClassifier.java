@@ -18,6 +18,7 @@ package org.sonarsource.kotlin.api.checks;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.slf4j.Logger;
@@ -27,20 +28,13 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.utils.WildcardPattern;
 
 /**
- * Decides whether a file is a test file for rule-execution purposes only; it never influences metric
- * computation, which always relies on the platform {@link org.sonar.api.batch.fs.InputFile#type()}.
+ * Test-file heuristic for rule execution only; it never affects metrics, which use the platform
+ * {@link org.sonar.api.batch.fs.InputFile#type()}. Applies only when the project has not declared its
+ * test sources.
  *
- * <p>An analyzer registers its test-file path patterns together with the project {@link Configuration}
- * that gates the heuristic (evaluated once at registration, as it is a per-project fact). The
- * heuristic is a fallback for when the project has not declared its test sources.
- *
- * <p>Usage:
- * <pre>{@code
- * // once per analysis, where Configuration is available (e.g. the sensor):
- * var testFiles = TestFileClassifier.of(sensorContext.config(), "**​/test/**", "**​/*Test.kt");
- * // per file (matched on the project-relative path, so workspace directories are not matched):
- * if (testFiles.looksLikeTestFile(inputFile)) { ... }
- * }</pre>
+ * <p>Registered once with the project {@link Configuration} (which gates the heuristic) plus path
+ * globs and, optionally, a {@code detector} for richer checks that reads a caller-supplied
+ * {@link Context}. Per file, {@link #looksLikeTestFile(InputFile)} returns the classification.
  */
 public final class TestFileClassifier {
 
@@ -63,46 +57,47 @@ public final class TestFileClassifier {
       .map(WildcardPattern::create)
       .collect(Collectors.toUnmodifiableList());
 
+  private static final Predicate<Context> NO_DETECTOR = context -> false;
+
   private final List<WildcardPattern> patterns;
+  private final Predicate<Context> detector;
   private final boolean testSourcesConfigured;
   // Warn once, here, so the heuristic behaves the same for every analyzer using this classifier.
   private boolean heuristicWarningEmitted = false;
 
-  private TestFileClassifier(List<WildcardPattern> patterns, boolean testSourcesConfigured) {
+  private TestFileClassifier(List<WildcardPattern> patterns, Predicate<Context> detector, boolean testSourcesConfigured) {
     this.patterns = patterns;
+    this.detector = detector;
     this.testSourcesConfigured = testSourcesConfigured;
   }
 
-  /**
-   * Registers the test-file scope: {@code globs} (Ant path patterns) are matched against the file path.
-   * When no globs are given, a generic set of test directories is used as a fallback.
-   * The {@code configuration} gates the heuristic; the gate is evaluated once here.
-   */
+  /** Registers path {@code globs} (Ant patterns); with none, a generic set of test directories is used. */
   public static TestFileClassifier of(Configuration configuration, String... globs) {
+    return of(configuration, NO_DETECTOR, globs);
+  }
+
+  /** As {@link #of(Configuration, String...)}, plus a {@code detector} matched when no glob does. */
+  public static TestFileClassifier of(Configuration configuration, Predicate<Context> detector, String... globs) {
     List<WildcardPattern> patterns = globs.length == 0
       ? DEFAULT_PATTERNS
       : Arrays.stream(globs).map(WildcardPattern::create).collect(Collectors.toUnmodifiableList());
-    return new TestFileClassifier(patterns, isTestSourceConfigured(configuration));
+    return new TestFileClassifier(patterns, detector, isTestSourceConfigured(configuration));
   }
 
-  /**
-   * True when the file is recognized as a test file and the project has not configured test sources.
-   * Convenience overload with an empty {@link Context}.
-   */
+  /** Path-only classification; convenience overload with an empty {@link Context}. */
   public boolean looksLikeTestFile(InputFile inputFile) {
     return looksLikeTestFile(inputFile, Context.empty());
   }
 
   /**
-   * True when the file's project-relative path matches a registered glob and the project has not
-   * configured test sources. Emits a one-time warning the first time the heuristic classifies a file,
-   * so users are nudged to set {@code sonar.tests}. {@code context} is unused today; it is the stable
-   * per-file extension point.
+   * True when test sources are not configured and either a glob matches the project-relative path or the
+   * detector accepts {@code context}. Warns once when the heuristic first classifies a file.
    */
   @SuppressWarnings("deprecation") // relativePath() is the only project-relative accessor
   public boolean looksLikeTestFile(InputFile inputFile, Context context) {
     String path = inputFile.relativePath();
-    boolean detected = !testSourcesConfigured && patterns.stream().anyMatch(pattern -> pattern.match(path));
+    boolean detected = !testSourcesConfigured
+      && (patterns.stream().anyMatch(pattern -> pattern.match(path)) || detector.test(context));
     if (detected && !heuristicWarningEmitted) {
       heuristicWarningEmitted = true;
       LOG.warn(HEURISTIC_APPLIED_WARNING);
@@ -122,12 +117,12 @@ public final class TestFileClassifier {
   }
 
   /**
-   * Per-file information a future classifier may inspect (e.g. the parsed tree, annotations, imports).
-   * Unused today; it stays a stable per-file extension point.
+   * Per-file input a detector inspects. An analyzer implements it to carry what its detector needs
+   * (e.g. the parsed tree) and downcasts to that implementation.
    */
   public interface Context {
 
-    /** Returns a context that carries no additional information. */
+    /** A context carrying no information; detectors needing more return false. */
     static Context empty() {
       return EMPTY_CONTEXT;
     }
