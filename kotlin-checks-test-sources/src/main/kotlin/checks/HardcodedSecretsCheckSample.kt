@@ -97,9 +97,9 @@ internal class HardCodedSecretCheckSample {
 
         // Secret containing words and random characters should be filtered
         val secret001 = "sk_live_xf2fh0Hu3LqXlqqUg2DEWhEz" // Noncompliant
-        val secret777 = "sk_live_aaaaaaaaaaaaaaaaaaaaaaaa" // Compliant, not enough entropy
+        val secret777 = "Hj4Hj4Hj4Hj4Hj4Hj4Hj4" // Compliant, classifier passes it (kns=false, len>=17) so low entropy is the sole reason it is filtered
         val secret003 = "commits/8f3b7d1e5a9c2f6b4d0e7a" // Noncompliant
-        val secret004 = "examples/commit/revision/469001e9700fea0"
+        val secret004 = "examples/commit/revision/469001e9700fea0" // Compliant, excluded by the classifier (matches the "example" substring), not by the human-language check
         val secret006 = "Xk9Lm2Qp7Rs4Tv8W" // Compliant
         val secret007 = "Hj4pZ9wLdN2sKq7Vt" // Noncompliant
         val secret008 = "9f3b7d1e5a8c2f6b4" // Noncompliant
