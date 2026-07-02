@@ -25,7 +25,7 @@ internal class HardCodedSecretCheckSample {
         val variableA = "login=a&secret= "
         val variableB = "secret=&login=Hj4pZ9wLdN2sKq7VtXy" // Compliant
         val variableC = "Okapi-key=42, Okapia Johnstoni, Forest/Zebra Giraffe" // Compliant
-        val variableD = "gran-papi-key=Known by everybody in the world like PWD" // Compliant
+        val variableD = "gran-papi-key=Known by everybody in the world like PWD123456" // Compliant
         // Noncompliant@+1
         val variableE = """
       login=a
