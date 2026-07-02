@@ -66,7 +66,7 @@ abstract class AbstractKotlinSensorExecuteContext(
     }
 
     private fun isTestFile(inputFile: InputFile): Boolean =
-        inputFile.type() == InputFile.Type.TEST || testFiles.looksLikeTestFile(inputFile.uri().path)
+        inputFile.type() == InputFile.Type.TEST || testFiles.looksLikeTestFile(inputFile)
 
     private val inputFileToVirtualFile: Map<InputFile, KotlinVirtualFile> by lazy {
         val virtualFileSystem = KotlinFileSystem()

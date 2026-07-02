@@ -19,6 +19,8 @@ package org.sonarsource.kotlin.api.checks;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.event.Level;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.testfixtures.log.LogTesterJUnit5;
@@ -47,58 +49,62 @@ class TestFileClassifierTest {
     return TestFileClassifier.of(config, GLOBS);
   }
 
+  private static InputFile file(String relativePath) {
+    return new TestInputFileBuilder("module", relativePath).build();
+  }
+
   @Test
   void matches_test_paths_when_test_sources_not_configured() {
     var classifier = classifier(config());
-    assertThat(classifier.looksLikeTestFile("src/main/kotlin/FooTest.kt")).isTrue();
-    assertThat(classifier.looksLikeTestFile("a/FooTests.kt")).isTrue();
-    assertThat(classifier.looksLikeTestFile("a/FooSpec.kt")).isTrue();
-    assertThat(classifier.looksLikeTestFile("a/FooIT.kt")).isTrue();
-    assertThat(classifier.looksLikeTestFile("src/test/kotlin/Foo.kt")).isTrue();
-    assertThat(classifier.looksLikeTestFile("module/tests/Foo.kt")).isTrue();
+    assertThat(classifier.looksLikeTestFile(file("src/main/kotlin/FooTest.kt"))).isTrue();
+    assertThat(classifier.looksLikeTestFile(file("a/FooTests.kt"))).isTrue();
+    assertThat(classifier.looksLikeTestFile(file("a/FooSpec.kt"))).isTrue();
+    assertThat(classifier.looksLikeTestFile(file("a/FooIT.kt"))).isTrue();
+    assertThat(classifier.looksLikeTestFile(file("src/test/kotlin/Foo.kt"))).isTrue();
+    assertThat(classifier.looksLikeTestFile(file("module/tests/Foo.kt"))).isTrue();
   }
 
   @Test
   void does_not_match_non_test_paths() {
     var classifier = classifier(config());
-    assertThat(classifier.looksLikeTestFile("src/main/kotlin/Foo.kt")).isFalse();
+    assertThat(classifier.looksLikeTestFile(file("src/main/kotlin/Foo.kt"))).isFalse();
     // case-sensitive suffix: "audit.kt" must not match "*IT.kt"
-    assertThat(classifier.looksLikeTestFile("src/main/kotlin/audit.kt")).isFalse();
-    assertThat(classifier.looksLikeTestFile("")).isFalse();
+    assertThat(classifier.looksLikeTestFile(file("src/main/kotlin/audit.kt"))).isFalse();
   }
 
   @Test
   void gate_disables_heuristic_when_test_sources_configured() {
-    var testPath = "src/main/kotlin/FooTest.kt";
-    assertThat(classifier(config("sonar.tests", "src/test")).looksLikeTestFile(testPath)).isFalse();
-    assertThat(classifier(config("sonar.test.inclusions", "**/*Test.kt")).looksLikeTestFile(testPath)).isFalse();
-    assertThat(classifier(config("sonar.test.exclusions", "**/generated/**")).looksLikeTestFile(testPath)).isFalse();
+    var testFile = file("src/main/kotlin/FooTest.kt");
+    assertThat(classifier(config("sonar.tests", "src/test")).looksLikeTestFile(testFile)).isFalse();
+    assertThat(classifier(config("sonar.test.inclusions", "**/*Test.kt")).looksLikeTestFile(testFile)).isFalse();
+    assertThat(classifier(config("sonar.test.exclusions", "**/generated/**")).looksLikeTestFile(testFile)).isFalse();
   }
 
   @Test
   void gate_ignores_blank_property() {
-    assertThat(classifier(config("sonar.tests", "  ")).looksLikeTestFile("a/FooTest.kt")).isTrue();
+    assertThat(classifier(config("sonar.tests", "  ")).looksLikeTestFile(file("a/FooTest.kt"))).isTrue();
   }
 
   @Test
   void opt_out_property_disables_heuristic() {
     var classifier = classifier(config(TestFileClassifier.HEURISTIC_DISABLED_KEY, "true"));
-    assertThat(classifier.looksLikeTestFile("a/FooTest.kt")).isFalse();
+    assertThat(classifier.looksLikeTestFile(file("a/FooTest.kt"))).isFalse();
   }
 
   @Test
   void context_overload_matches_convenience_overload() {
     var classifier = classifier(config());
-    assertThat(classifier.looksLikeTestFile("a/FooTest.kt", TestFileClassifier.Context.empty()))
-      .isEqualTo(classifier.looksLikeTestFile("a/FooTest.kt"));
+    var testFile = file("a/FooTest.kt");
+    assertThat(classifier.looksLikeTestFile(testFile, TestFileClassifier.Context.empty()))
+      .isEqualTo(classifier.looksLikeTestFile(testFile));
   }
 
   @Test
   void warns_once_when_the_heuristic_first_classifies_a_test_file() {
     var classifier = classifier(config());
-    classifier.looksLikeTestFile("a/FooTest.kt");
-    classifier.looksLikeTestFile("b/BarTest.kt");
-    classifier.looksLikeTestFile("c/Main.kt"); // no match, no extra warning
+    classifier.looksLikeTestFile(file("a/FooTest.kt"));
+    classifier.looksLikeTestFile(file("b/BarTest.kt"));
+    classifier.looksLikeTestFile(file("c/Main.kt")); // no match, no extra warning
 
     assertThat(logTester.logs(Level.WARN)).hasSize(1);
     assertThat(logTester.logs(Level.WARN).get(0)).contains("sonar.tests");
@@ -107,7 +113,7 @@ class TestFileClassifierTest {
   @Test
   void does_not_warn_when_test_sources_are_configured() {
     var classifier = classifier(config("sonar.tests", "src/test"));
-    classifier.looksLikeTestFile("a/FooTest.kt");
+    classifier.looksLikeTestFile(file("a/FooTest.kt"));
 
     assertThat(logTester.logs(Level.WARN)).isEmpty();
   }
