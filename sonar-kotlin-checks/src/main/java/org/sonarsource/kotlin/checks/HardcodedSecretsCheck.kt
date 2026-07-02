@@ -25,7 +25,6 @@ private const val DEFAULT_SECRET_WORDS = "api[_.-]?key,auth,credential,secret,to
 private const val DEFAULT_RANDOMNESS_SENSIBILITY = "3.0"
 
 private const val MAX_RANDOMNESS_SENSIBILITY = 10
-private const val MINIMUM_CREDENTIAL_LENGTH = 17
 private const val LANGUAGE_SCORE_INCREMENT = 0.3
 
 @Rule(key = "S6418")
@@ -62,7 +61,6 @@ class HardcodedSecretsCheck : AbstractHardcodedVisitor() {
 
     override fun isSensitiveStringLiteral(value: String): Boolean {
         return super.isSensitiveStringLiteral(value)
-                && value.length >= MINIMUM_CREDENTIAL_LENGTH
                 && getEntropyDetector().hasEnoughEntropy(value)
                 && HumanLanguageDetector.humanLanguageScore(value) < maxLanguageScore()
     }

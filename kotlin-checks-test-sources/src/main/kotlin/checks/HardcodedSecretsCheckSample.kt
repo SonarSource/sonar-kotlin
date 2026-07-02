@@ -97,17 +97,17 @@ internal class HardCodedSecretCheckSample {
 
         // Secret containing words and random characters should be filtered
         val secret001 = "sk_live_xf2fh0Hu3LqXlqqUg2DEWhEz" // Noncompliant
-        val secret777 = "Hj4Hj4Hj4Hj4Hj4Hj4Hj4" // Compliant, classifier passes it (kns=false, len>=17) so low entropy is the sole reason it is filtered
+        val secret777 = "Hj4Hj4Hj4Hj4Hj4Hj4Hj4" // Compliant, classifier passes it (kns=false) so low entropy is the sole reason it is filtered
         val secret003 = "commits/8f3b7d1e5a9c2f6b4d0e7a" // Noncompliant
         val secret004 = "examples/commit/revision/469001e9700fea0" // Compliant, excluded by the classifier (matches the "example" substring), not by the human-language check
-        val secret006 = "Xk9Lm2Qp7Rs4Tv8W" // Compliant
+        val secret006 = "Xk9Lm2Qp7Rs4Tv8W" // Noncompliant
         val secret007 = "Hj4pZ9wLdN2sKq7Vt" // Noncompliant
         val secret008 = "9f3b7d1e5a8c2f6b4" // Noncompliant
         val secret009 = "907481352690748135269074813526" // Noncompliant
         val secret010 = "Hj4pZ9wLdN2sKq7VtXyKm3Rn8Qp" // Noncompliant
         val secret011 = "748903526174890352617489035261" // Noncompliant
         val secret012 = "639182047563918204756391820475" // Noncompliant
-        val secret013 = "234.167.076.123"
+        val secret013 = "234.167.076.123" // Noncompliant
         val secret015 = "org.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH"
         // Example of Telegram bot token
         val secret016 = "bot907481:ABD-EFG9wghIkl-zyx57W2v1u907ew11" // Noncompliant
