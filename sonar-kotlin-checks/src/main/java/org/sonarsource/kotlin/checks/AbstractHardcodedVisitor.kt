@@ -81,7 +81,7 @@ abstract class AbstractHardcodedVisitor : AbstractCheck() {
             && isSensitiveStringLiteral(this.asConstant())
 
     open fun isSensitiveStringLiteral(value: String): Boolean {
-        return value.isNotEmpty() && !SecretClassifier.isKnownNonSecret(value)
+        return !SecretClassifier.isKnownNonSecret(value)
     }
 
     private fun KotlinFileContext.report(tree: PsiElement, matchName: String) {
