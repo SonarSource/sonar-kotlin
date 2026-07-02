@@ -65,6 +65,16 @@ class TestFileClassifierTest {
   }
 
   @Test
+  void falls_back_to_generic_test_directories_when_no_patterns_registered() {
+    var classifier = TestFileClassifier.of(config()); // no globs registered
+    assertThat(classifier.looksLikeTestFile(file("src/test/kotlin/Foo.kt"))).isTrue();
+    assertThat(classifier.looksLikeTestFile(file("a/tests/Foo.kt"))).isTrue();
+    assertThat(classifier.looksLikeTestFile(file("a/__tests__/Foo.js"))).isTrue();
+    // fallback matches directories only, not test-named files
+    assertThat(classifier.looksLikeTestFile(file("src/main/kotlin/FooTest.kt"))).isFalse();
+  }
+
+  @Test
   void does_not_match_non_test_paths() {
     var classifier = classifier(config());
     assertThat(classifier.looksLikeTestFile(file("src/main/kotlin/Foo.kt"))).isFalse();

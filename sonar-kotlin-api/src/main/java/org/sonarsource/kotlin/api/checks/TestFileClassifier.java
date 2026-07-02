@@ -19,6 +19,7 @@ package org.sonarsource.kotlin.api.checks;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.InputFile;
@@ -56,6 +57,12 @@ public final class TestFileClassifier {
   private static final Context EMPTY_CONTEXT = new Context() {
   };
 
+  // Fallback when no patterns are registered: test directories only, to minimize false positives.
+  private static final List<WildcardPattern> DEFAULT_PATTERNS =
+    Stream.of("**/test/**", "**/tests/**", "**/__tests__/**")
+      .map(WildcardPattern::create)
+      .collect(Collectors.toUnmodifiableList());
+
   private final List<WildcardPattern> patterns;
   private final boolean testSourcesConfigured;
   // Warn once, here, so the heuristic behaves the same for every analyzer using this classifier.
@@ -68,12 +75,14 @@ public final class TestFileClassifier {
 
   /**
    * Registers the test-file scope: {@code globs} (Ant path patterns) are matched against the file path.
+   * When no globs are given, a generic set of test directories is used as a fallback.
    * The {@code configuration} gates the heuristic; the gate is evaluated once here.
    */
   public static TestFileClassifier of(Configuration configuration, String... globs) {
-    return new TestFileClassifier(
-      Arrays.stream(globs).map(WildcardPattern::create).collect(Collectors.toUnmodifiableList()),
-      isTestSourceConfigured(configuration));
+    List<WildcardPattern> patterns = globs.length == 0
+      ? DEFAULT_PATTERNS
+      : Arrays.stream(globs).map(WildcardPattern::create).collect(Collectors.toUnmodifiableList());
+    return new TestFileClassifier(patterns, isTestSourceConfigured(configuration));
   }
 
   /**
@@ -90,8 +99,7 @@ public final class TestFileClassifier {
    * so users are nudged to set {@code sonar.tests}. {@code context} is unused today; it is the stable
    * per-file extension point.
    */
-  @SuppressWarnings("deprecation") // relativePath() is the only project-relative accessor; matching it
-  // avoids the false hits a workspace directory in the absolute path would produce.
+  @SuppressWarnings("deprecation") // relativePath() is the only project-relative accessor
   public boolean looksLikeTestFile(InputFile inputFile, Context context) {
     String path = inputFile.relativePath();
     boolean detected = !testSourcesConfigured && patterns.stream().anyMatch(pattern -> pattern.match(path));
