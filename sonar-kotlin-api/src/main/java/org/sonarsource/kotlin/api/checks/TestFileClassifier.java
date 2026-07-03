@@ -47,9 +47,10 @@ public final class TestFileClassifier {
     "Test files were detected using a path heuristic because \"sonar.tests\" is not set. To improve the " +
       "analysis accuracy, it is recommended to configure it, e.g.: \"sonar.tests=src/test\".";
 
+  private static final class EmptyContext implements Context {}
+
   // Single shared empty context; held on the outer class so the interface exposes only empty().
-  private static final Context EMPTY_CONTEXT = new Context() {
-  };
+  private static final Context EMPTY_CONTEXT = new EmptyContext();
 
   // Fallback when no patterns are registered: test directories only, to minimize false positives.
   private static final List<WildcardPattern> DEFAULT_PATTERNS =
@@ -93,7 +94,8 @@ public final class TestFileClassifier {
    * True when test sources are not configured and either a glob matches the project-relative path or the
    * detector accepts {@code context}. Warns once when the heuristic first classifies a file.
    */
-  @SuppressWarnings("deprecation") // relativePath() is the only project-relative accessor
+  // relativePath() is the only project-relative accessor
+  @SuppressWarnings("deprecation")
   public boolean looksLikeTestFile(InputFile inputFile, Context context) {
     String path = inputFile.relativePath();
     boolean detected = !testSourcesConfigured
