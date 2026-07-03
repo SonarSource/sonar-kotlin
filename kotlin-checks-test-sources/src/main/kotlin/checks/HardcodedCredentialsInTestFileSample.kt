@@ -1,11 +1,12 @@
 package checks
 
-// No "Noncompliant" markers: these credentials would be reported in main code,
-// but the check is expected to stay silent when the file is classified as a test file.
+// These values would trigger S2068 in main code but are suppressed when the file is a test file.
 internal class HardcodedCredentialsInTestFileSample {
     fun f() {
-        val params = "user=admin&password=Password123"
-        var passwd = "xxxx"
-        passwd = "yyyy"
+        println("login=a&password=Rb7kZpQ2")
+        var passwd = "Rb7kZpQ2"
+        println(passwd)
+        passwd = "Rb7kZpQ2"
+        println(passwd)
     }
 }

@@ -1,10 +1,10 @@
 package checks
 
-// No "Noncompliant" markers: these secrets would be reported in main code,
-// but the check is expected to stay silent when the file is classified as a test file.
+// These values would trigger S6418 in main code but are suppressed when the file is a test file.
 internal class HardcodedSecretsInTestFileSample {
     fun f() {
-        val mySecret = "abcdefghijklmnopqrs"
-        val params = "login=a&secret=abcdefghijklmnopqrs"
+        val mySecret = "Hj4pZ9wLdN2sKq7VtXy"
+        println("login=a&secret=Hj4pZ9wLdN2sKq7VtXy")
+        println(mySecret)
     }
 }
