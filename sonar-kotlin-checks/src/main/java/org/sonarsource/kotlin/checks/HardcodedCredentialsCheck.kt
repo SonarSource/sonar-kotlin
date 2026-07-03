@@ -55,6 +55,7 @@ class HardcodedCredentialsCheck : AbstractHardcodedVisitor() {
     }
 
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression, context: KotlinFileContext) {
+        if (context.inputFileContext.isTestFile) return
         val content = if (!expression.hasInterpolation()) expression.asConstant() else ""
         if (isURIWithCredentials(content)) {
             context.reportIssue(expression, "Review this hard-coded URL, which may contain a credential.")

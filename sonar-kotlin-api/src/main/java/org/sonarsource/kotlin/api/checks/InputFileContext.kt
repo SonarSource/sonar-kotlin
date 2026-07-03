@@ -28,6 +28,7 @@ interface InputFileContext {
     val inputFile: InputFile
     val sensorContext: SensorContext
     val isAndroid: Boolean
+    val isTestFile: Boolean get() = false
 
     fun reportIssue(
         ruleKey: RuleKey,
