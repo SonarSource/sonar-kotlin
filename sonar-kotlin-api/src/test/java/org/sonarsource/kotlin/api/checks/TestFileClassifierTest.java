@@ -96,11 +96,17 @@ class TestFileClassifierTest {
   }
 
   @Test
-  void gate_disables_heuristic_when_test_sources_configured() {
+  void gate_disables_heuristic_when_sonar_tests_configured() {
     var testFile = file("src/main/kotlin/FooTest.kt");
     assertThat(classifier(config("sonar.tests", "src/test")).looksLikeTestFile(testFile)).isFalse();
-    assertThat(classifier(config("sonar.test.inclusions", "**/*Test.kt")).looksLikeTestFile(testFile)).isFalse();
-    assertThat(classifier(config("sonar.test.exclusions", "**/generated/**")).looksLikeTestFile(testFile)).isFalse();
+  }
+
+  @Test
+  void gate_stays_active_when_only_inclusions_or_exclusions_configured() {
+    // sonar.test.inclusions/exclusions only refine an existing test-source set; they do not declare one
+    var testFile = file("src/main/kotlin/FooTest.kt");
+    assertThat(classifier(config("sonar.test.inclusions", "**/*Test.kt")).looksLikeTestFile(testFile)).isTrue();
+    assertThat(classifier(config("sonar.test.exclusions", "**/generated/**")).looksLikeTestFile(testFile)).isTrue();
   }
 
   @Test

@@ -109,8 +109,6 @@ public final class TestFileClassifier {
 
   private static boolean isTestSourceConfigured(Configuration config) {
     return isSet(config, "sonar.tests")
-      || isSet(config, "sonar.test.inclusions")
-      || isSet(config, "sonar.test.exclusions")
       || config.getBoolean(HEURISTIC_DISABLED_KEY).orElse(false);
   }
 
