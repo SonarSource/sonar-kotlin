@@ -26,9 +26,9 @@ import org.slf4j.Logger
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonarsource.analyzer.commons.ProgressReport
+import org.sonarsource.analyzer.commons.appsec.TestFileClassifier
 import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.checks.InputFileContextImpl
-import org.sonarsource.kotlin.api.checks.TestFileClassifier
 import org.sonarsource.kotlin.api.common.DEFAULT_KOTLIN_LANGUAGE_VERSION
 import org.sonarsource.kotlin.api.common.FAIL_FAST_PROPERTY_NAME
 import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_VERSION
