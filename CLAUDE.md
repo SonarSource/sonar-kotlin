@@ -35,11 +35,17 @@ This updates `gradle/verification-metadata.xml`. The task is additive — it app
 # Run a single test class
 ./gradlew :sonar-kotlin-checks:test --tests "org.sonarsource.kotlin.checks.CollectionShouldBeImmutableCheckTest"
 
-# Run integration tests (requires: git submodule update --init its/sources)
+# Integration and ruling tests both need the source projects submodule:
+git submodule update --init its/sources
+
+# Run integration tests
 ./gradlew build -Pits --info --console=plain --no-daemon
 
 # Run ruling tests only
 ./gradlew build -Pruling --info --console=plain --no-daemon
+# A ruling "failure" that reads "Issues differences: 0" plus "Files listed in
+# Expected directory were not analyzed" means its/sources is missing/uninitialized,
+# not a rule regression. Non-zero "Issues differences" is the real signal.
 
 # Run plugin tests only
 ./gradlew build -Pplugin --info --console=plain --no-daemon
