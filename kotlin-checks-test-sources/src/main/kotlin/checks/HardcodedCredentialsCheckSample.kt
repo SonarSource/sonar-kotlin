@@ -37,8 +37,7 @@ class HardcodedCredentialsCheckSample {
         var password = "password" // Compliant
         var myPassword = "users/connection.secretPassword" // Compliant
         myPassword = "users/connection.secretPassword" // Compliant
-        myPassword = "secretPasswd" // Noncompliant {{"Password" detected here, make sure this is not a hard-coded credential.}}
-        myPassword = "secretPasswd" // Noncompliant {{"Password" detected here, make sure this is not a hard-coded credential.}}
+        myPassword = "secretPasswd" // Compliant, filtered out by secretsclassifier
         var params = "user=admin&password=Rb7kZpQ2" // Noncompliant {{"password" detected here, make sure this is not a hard-coded credential.}}
 
 // Values recognized as non-secrets by the shared SecretClassifier are not reported.

@@ -13,6 +13,16 @@ Before first build, initialize the build-logic submodule:
 git submodule update --init -- build-logic/common
 ```
 
+## Dependency Version Bumps
+
+Dependency versions are declared as version catalogs in `settings.gradle.kts` (e.g. the single `analyzerCommonsVersionStr` drives every `sonar-analyzer-commons` artifact). This repo enforces dependency verification, so after changing any version you must refresh the checksums or the build fails with a verification error:
+
+```shell
+./gradlew --write-verification-metadata sha256
+```
+
+This updates `gradle/verification-metadata.xml`. The task is additive — it appends entries for the new version but leaves the old ones in place (matching how prior bumps in this repo were done); don't hand-prune the superseded entries.
+
 ## Common Commands
 
 ```shell
@@ -25,11 +35,17 @@ git submodule update --init -- build-logic/common
 # Run a single test class
 ./gradlew :sonar-kotlin-checks:test --tests "org.sonarsource.kotlin.checks.CollectionShouldBeImmutableCheckTest"
 
-# Run integration tests (requires: git submodule update --init its/sources)
+# Integration and ruling tests both need the source projects submodule:
+git submodule update --init its/sources
+
+# Run integration tests
 ./gradlew build -Pits --info --console=plain --no-daemon
 
 # Run ruling tests only
 ./gradlew build -Pruling --info --console=plain --no-daemon
+# A ruling "failure" that reads "Issues differences: 0" plus "Files listed in
+# Expected directory were not analyzed" means its/sources is missing/uninitialized,
+# not a rule regression. Non-zero "Issues differences" is the real signal.
 
 # Run plugin tests only
 ./gradlew build -Pplugin --info --console=plain --no-daemon
