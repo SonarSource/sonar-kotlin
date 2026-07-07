@@ -13,6 +13,16 @@ Before first build, initialize the build-logic submodule:
 git submodule update --init -- build-logic/common
 ```
 
+## Dependency Version Bumps
+
+Dependency versions are declared as version catalogs in `settings.gradle.kts` (e.g. the single `analyzerCommonsVersionStr` drives every `sonar-analyzer-commons` artifact). This repo enforces dependency verification, so after changing any version you must refresh the checksums or the build fails with a verification error:
+
+```shell
+./gradlew --write-verification-metadata sha256
+```
+
+This updates `gradle/verification-metadata.xml`. The task is additive — it appends entries for the new version but leaves the old ones in place (matching how prior bumps in this repo were done); don't hand-prune the superseded entries.
+
 ## Common Commands
 
 ```shell
