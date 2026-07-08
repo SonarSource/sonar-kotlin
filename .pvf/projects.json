@@ -1,0 +1,26 @@
+[
+  {
+    "name": "javalin",
+    "url": "javalin/javalin.git",
+    "ref": "bbe45ad98db2eb06c2708bea3c196ba2eb0ca9f0",
+    "jmh-args": "-f 1 -wi 1 -i 8",
+    "runner": "sonar-m",
+    "conf": {
+      "sonar.sourceEncoding": "UTF-8",
+      "sonar.sources": ".",
+      "sonar.inclusions": "**/*.kt,**/*.kts"
+    }
+  },
+  {
+    "name": "pikt",
+    "url": "iamgio/pikt.git",
+    "ref": "8f6547e5e42be36dd9f2d2f2eac8a5353caa3569",
+    "jmh-args": "-f 1 -wi 1 -i 8",
+    "runner": "sonar-m",
+    "conf": {
+      "sonar.sourceEncoding": "UTF-8",
+      "sonar.sources": ".",
+      "sonar.inclusions": "**/*.kt,**/*.kts"
+    }
+  }
+]

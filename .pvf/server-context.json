@@ -1,0 +1,20 @@
+{
+  "baseline": {
+    "engineVersion": "LATEST_RELEASE",
+    "plugins": [
+      { "groupId": "org.sonarsource.kotlin", "artifactId": "sonar-kotlin-plugin", "version": "provided" }
+    ],
+    "languages": [
+      { "key": "kotlin", "name": "Kotlin", "fileSuffixes": [".kt", ".kts"] }
+    ]
+  },
+  "candidate": {
+    "engineVersion": "LATEST_RELEASE",
+    "plugins": [
+      { "groupId": "org.sonarsource.kotlin", "artifactId": "sonar-kotlin-plugin", "version": "provided" }
+    ],
+    "languages": [
+      { "key": "kotlin", "name": "Kotlin", "fileSuffixes": [".kt", ".kts"] }
+    ]
+  }
+}

@@ -1,0 +1,79 @@
+name: Performance Validation
+
+# Run name examples:
+#   "SonarKotlin - Nightly"                                (scheduled)
+#   "SonarKotlin - DEV vs LATEST_RELEASE"                  (manual)
+#   "SonarKotlin - DEV vs LATEST_RELEASE - my description" (manual with description)
+run-name: "SonarKotlin - ${{ github.event_name == 'schedule' && 'Nightly' || format('{0} vs {1}{2}', inputs.candidate-version || 'DEV', inputs.baseline-version || 'LATEST_RELEASE', inputs.run-description && format(' - {0}', inputs.run-description) || '') }}"
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  push:
+    branches:
+      - mg/SONARKT-787
+  workflow_dispatch:
+    inputs:
+      run-description:
+        description: 'Optional description to append to the run name.'
+        required: false
+        default: ''
+      use-fast-run:
+        description: 'Run benchmarks with minimal JMH iterations for faster feedback.'
+        required: false
+        default: 'false'
+      baseline-version:
+        description: 'Baseline version to compare against.'
+        required: false
+        default: 'LATEST_RELEASE'
+      candidate-version:
+        description: 'Candidate version to test.'
+        required: false
+        default: 'DEV'
+      baseline-overrides:
+        description: 'Semicolon-separated artifactId:version pairs to override baseline plugin versions (e.g. sonar-kotlin-plugin:DEV).'
+        required: false
+        default: ''
+      candidate-overrides:
+        description: 'Semicolon-separated artifactId:version pairs to override candidate plugin versions (e.g. sonar-kotlin-plugin:DEV).'
+        required: false
+        default: ''
+
+permissions:
+  id-token: write
+  contents: write
+  pages: write
+  statuses: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    uses: SonarSource/performance-validation-framework/.github/workflows/mono-sensor-performance-validation.yml@a72c1ae4d2c7d6d8400eb8a09c394b966ef5d87b
+    with:
+      pvf-ref: a72c1ae4d2c7d6d8400eb8a09c394b966ef5d87b
+
+      suite: sonar-kotlin-performance
+      suite-display-name: Kotlin Performance
+      sensor-context-key: sonar.kotlin.context
+      plugin-artifact-id: sonar-kotlin-plugin
+
+      pvf-token-vault-path: development/github/token/SonarSource-sonar-kotlin-pvf-reader
+
+      server-context-file: .pvf/server-context.json
+      resolved-server-context-file: .pvf/server-context-resolved.json
+      matrix-file: .pvf/projects.json
+      sensor-properties-file: .pvf/scanner.json
+
+      slack-channel: ${{ github.event_name == 'schedule' && 'squad-security-cloud-notifs' || '' }}
+
+      baseline-version: ${{ inputs.baseline-version || 'LATEST_RELEASE' }}
+      candidate-version: ${{ inputs.candidate-version || 'DEV' }}
+      baseline-overrides: ${{ inputs.baseline-overrides || '' }}
+      candidate-overrides: ${{ inputs.candidate-overrides || '' }}
+      use-fast-run: ${{ inputs.use-fast-run == 'true' }}
+      trigger: ${{ github.event_name }}
+      run-description: ${{ inputs.run-description || '' }}
+      live-days: '15'
