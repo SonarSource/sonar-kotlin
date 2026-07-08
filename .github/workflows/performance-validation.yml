@@ -51,9 +51,9 @@ concurrency:
 
 jobs:
   validate:
-    uses: SonarSource/performance-validation-framework/.github/workflows/mono-sensor-performance-validation.yml@a72c1ae4d2c7d6d8400eb8a09c394b966ef5d87b
+    uses: SonarSource/performance-validation-framework/.github/workflows/mono-sensor-performance-validation.yml@61265ffa2648cbec0e8b82cf7a1114dc5b2dbb39
     with:
-      pvf-ref: a72c1ae4d2c7d6d8400eb8a09c394b966ef5d87b
+      pvf-ref: 61265ffa2648cbec0e8b82cf7a1114dc5b2dbb39
 
       suite: sonar-kotlin-performance
       suite-display-name: Kotlin Performance
