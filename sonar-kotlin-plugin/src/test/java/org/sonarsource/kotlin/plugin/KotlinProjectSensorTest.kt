@@ -41,6 +41,7 @@ class KotlinProjectSensorTest {
         assertThat(telemetry)
             .containsExactlyInAnyOrderEntriesOf(
                 mapOf(
+                    "kotlin.pluginVersion" to "1.2.3-TEST",
                     "kotlin.android" to "0",
                     "kotlin.reports.surefire.classes.failed" to "0",
                     "kotlin.reports.surefire.classes.imported" to "0",
@@ -56,6 +57,7 @@ class KotlinProjectSensorTest {
         sensor.telemetryData.hasAndroidImports = true
         sensor.execute(context)
         assertThat(telemetry).containsExactlyInAnyOrderEntriesOf(mapOf(
+            "kotlin.pluginVersion" to "1.2.3-TEST",
             "kotlin.android" to "1",
             "kotlin.reports.surefire.classes.failed" to "0",
             "kotlin.reports.surefire.classes.imported" to "0",
@@ -66,6 +68,16 @@ class KotlinProjectSensorTest {
             "kotlin.scripts.read.failures" to "0",
             "kotlin.scripts.parse.failures" to "0",
         ))
+    }
+
+    @Test
+    fun `resolvePluginVersion reads version from resource`() {
+        assertThat(KotlinProjectSensor.resolvePluginVersion()).isEqualTo("1.2.3-TEST")
+    }
+
+    @Test
+    fun `resolvePluginVersion falls back to unknown when resource is missing`() {
+        assertThat(KotlinProjectSensor.resolvePluginVersion("does/not/exist.properties")).isEqualTo("unknown")
     }
 
 }
