@@ -39,7 +39,8 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
                 KotlinProjectSensor::class.java.classLoader.getResourceAsStream(resourceName)?.use { stream ->
                     val props = Properties()
                     props.load(stream)
-                    return props.getProperty("plugin.version", "unknown")
+                    val version = props.getProperty("plugin.version", "unknown")
+                    return if (version.contains("\${")) "unknown" else version
                 }
             } catch (e: IOException) {
                 // fall through to fallback
@@ -52,9 +53,9 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
         descriptor.onlyOnLanguage(KOTLIN_LANGUAGE_KEY).name("KotlinProjectSensor")
     }
 
-    fun addAndLogTelemetryProperty(context: SensorContext, propetyName: String, propertyValue: String) {
-        context.addTelemetryProperty(propetyName, propertyValue);
-        LOG.debug("TELEMETRY: $propetyName=$propertyValue");
+    fun addAndLogTelemetryProperty(context: SensorContext, propertyName: String, propertyValue: String) {
+        context.addTelemetryProperty(propertyName, propertyValue);
+        LOG.debug("TELEMETRY: $propertyName=$propertyValue");
     }
 
     fun fileProcessingTelemetry(context: SensorContext) {

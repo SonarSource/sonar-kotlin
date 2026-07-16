@@ -80,4 +80,9 @@ class KotlinProjectSensorTest {
         assertThat(KotlinProjectSensor.resolvePluginVersion("does/not/exist.properties")).isEqualTo("unknown")
     }
 
+    @Test
+    fun `resolvePluginVersion falls back to unknown when placeholder was not substituted`() {
+        assertThat(KotlinProjectSensor.resolvePluginVersion("org/sonar/plugins/kotlin/pluginVersionUnsubstituted.properties")).isEqualTo("unknown")
+    }
+
 }
