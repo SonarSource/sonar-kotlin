@@ -12,6 +12,7 @@ plugins {
     id("jacoco-report-aggregation")
     id("org.sonarsource.cloud-native.license-file-generator")
     id("org.sonarsource.cloud-native.rule-api")
+    id("org.sonarsource.cloud-native.project-version-provisioning")
 }
 
 ruleApi {
