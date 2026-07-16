@@ -23,7 +23,6 @@ import org.sonar.api.scanner.sensor.ProjectSensor
 import org.sonar.api.utils.Version
 import org.sonarsource.kotlin.api.common.KOTLIN_LANGUAGE_KEY
 import org.sonarsource.kotlin.metrics.TelemetryData
-import java.io.IOException
 import java.util.Properties
 
 class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSensor {
@@ -31,6 +30,7 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
 
     companion object {
         private const val PLUGIN_VERSION_RESOURCE = "org/sonar/plugins/kotlin/pluginVersion.properties"
+        private const val UNKNOWN_VERSION = "unknown"
 
         fun resolvePluginVersion(): String = resolvePluginVersion(PLUGIN_VERSION_RESOURCE)
 
@@ -39,13 +39,13 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
                 KotlinProjectSensor::class.java.classLoader.getResourceAsStream(resourceName)?.use { stream ->
                     val props = Properties()
                     props.load(stream)
-                    val version = props.getProperty("plugin.version", "unknown")
-                    return if (version.contains("\${")) "unknown" else version
+                    val version = props.getProperty("plugin.version", UNKNOWN_VERSION)
+                    return if (version.contains("\${")) UNKNOWN_VERSION else version
                 }
-            } catch (e: IOException) {
-                // fall through to fallback
+            } catch (e: Exception) {
+                // fall through to fallback; Properties#load can throw IllegalArgumentException on malformed content
             }
-            return "unknown"
+            return UNKNOWN_VERSION
         }
     }
 
@@ -53,22 +53,22 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
         descriptor.onlyOnLanguage(KOTLIN_LANGUAGE_KEY).name("KotlinProjectSensor")
     }
 
-    fun addAndLogTelemetryProperty(context: SensorContext, propertyName: String, propertyValue: String) {
-        context.addTelemetryProperty(propertyName, propertyValue);
-        LOG.debug("TELEMETRY: $propertyName=$propertyValue");
+    fun addAndLogTelemetryProperty(context: SensorContext, propertyName: String, propertyValue: Any) {
+        val stringValue = propertyValue.toString()
+        context.addTelemetryProperty(propertyName, stringValue)
+        LOG.debug("TELEMETRY: $propertyName=$stringValue")
     }
 
-    fun fileProcessingTelemetry(context: SensorContext) {
+    fun fileProcessingTelemetry(context: SensorContext) = with(telemetryData) {
         // files - .kt and .kts counters
-        addAndLogTelemetryProperty(context, "kotlin.files.processed", telemetryData.filesProcessed.toString())
-        addAndLogTelemetryProperty(context, "kotlin.files.read.failures", telemetryData.readFailures.toString())
-        addAndLogTelemetryProperty(context, "kotlin.files.parse.failures", telemetryData.parseFailures.toString())
+        addAndLogTelemetryProperty(context, "kotlin.files.processed", filesProcessed)
+        addAndLogTelemetryProperty(context, "kotlin.files.read.failures", readFailures)
+        addAndLogTelemetryProperty(context, "kotlin.files.parse.failures", parseFailures)
         // scripts - .kts only
-        addAndLogTelemetryProperty(context, "kotlin.scripts.processed", telemetryData.scriptsProcessed.toString())
-        addAndLogTelemetryProperty(context, "kotlin.scripts.read.failures", telemetryData.scriptReadFailures.toString())
-        addAndLogTelemetryProperty(context, "kotlin.scripts.parse.failures", telemetryData.scriptParseFailures.toString())
+        addAndLogTelemetryProperty(context, "kotlin.scripts.processed", scriptsProcessed)
+        addAndLogTelemetryProperty(context, "kotlin.scripts.read.failures", scriptReadFailures)
+        addAndLogTelemetryProperty(context, "kotlin.scripts.parse.failures", scriptParseFailures)
     }
-
 
     /**
      * Executed once for entire project after all executions of [KotlinSensor.execute] for individual modules.
@@ -76,9 +76,11 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
     override fun execute(context: SensorContext) {
         if (context.runtime().apiVersion.isGreaterThanOrEqual(Version.create(10, 9))) {
             addAndLogTelemetryProperty(context, "kotlin.pluginVersion", resolvePluginVersion())
-            addAndLogTelemetryProperty(context, "kotlin.android", if (telemetryData.hasAndroidImports) "1" else "0")
-            addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.imported", telemetryData.surefireClassesImported.toString())
-            addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.failed", telemetryData.surefireClassesFailed.toString())
+            with(telemetryData) {
+                addAndLogTelemetryProperty(context, "kotlin.android", if (hasAndroidImports) "1" else "0")
+                addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.imported", surefireClassesImported)
+                addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.failed", surefireClassesFailed)
+            }
 
             fileProcessingTelemetry(context)
         }
