@@ -21,6 +21,8 @@ jobs:
   build:
     runs-on: github-ubuntu-latest-s
     timeout-minutes: 30
+    outputs:
+      project-version: ${{ steps.project-version.outputs.project-version }}
     steps:
       - &configure_GITHUB_JOB_ID_environment_variable
         # https://github.com/actions/runner/issues/324#issuecomment-3324382354
@@ -68,6 +70,12 @@ jobs:
           ARTIFACTORY_DEPLOY_REPO: sonarsource-public-qa
           ARTIFACTORY_DEPLOY_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_USERNAME }}
           ARTIFACTORY_DEPLOY_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_PASSWORD }}
+      - name: Get project version
+        id: project-version
+        run: |
+          echo "project-version=$(./gradlew properties --no-scan --no-daemon --console plain \
+            -DbuildNumber=${{ steps.build-number.outputs.BUILD_NUMBER }} \
+            | grep '^version:' | awk '{print $2}')" >> "$GITHUB_OUTPUT"
   qa_plugin:
     runs-on: github-ubuntu-latest-s
     timeout-minutes: 30
@@ -91,6 +99,7 @@ jobs:
           ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
   qa_ruling:
     runs-on: github-ubuntu-latest-m
     timeout-minutes: 60
@@ -143,6 +152,19 @@ jobs:
           ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+  performance_validation:
+    name: Performance Validation
+    needs: [build]
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && github.event_name == 'pull_request' }}
+    permissions:
+      id-token: write
+      contents: write
+      pages: write
+      statuses: read
+    uses: SonarSource/sonar-kotlin-pvf/.github/workflows/performance-validation.yml@master
+    with:
+      candidate-version: ${{ needs.build.outputs.project-version }}
+
   promote:
     needs:
       - build
