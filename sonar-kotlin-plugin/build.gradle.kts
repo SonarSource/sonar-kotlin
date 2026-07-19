@@ -7,7 +7,7 @@ import java.util.Date
 import java.util.jar.JarInputStream
 
 plugins {
-    id("com.gradleup.shadow") version "8.3.10"
+    id("com.gradleup.shadow") version "8.3.11"
     kotlin("jvm")
     id("jacoco-report-aggregation")
     id("org.sonarsource.cloud-native.license-file-generator")
@@ -21,7 +21,7 @@ ruleApi {
 
 buildscript {
     dependencies {
-        classpath("com.guardsquare:proguard-gradle:7.6.1")
+        classpath("com.guardsquare:proguard-gradle:7.9.1")
     }
 }
 
@@ -110,8 +110,8 @@ tasks.jar {
                 "Sonar-Version" to "6.7",
                 "SonarLint-Supported" to "true",
                 "Version" to project.version.toString(),
-                "Jre-Min-Version" to java.sourceCompatibility.majorVersion
-            )
+                "Jre-Min-Version" to java.sourceCompatibility.majorVersion,
+            ),
         )
     }
 }
@@ -148,7 +148,7 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
         "org/apache/log4j", // everything should be using slf4j, we don't need to bundle a logging implementation
         "javax/inject", // a compile-time dependency
 
-        "org/jetbrains/kotlin/buildtools" // build tools are not needed during analysis
+        "org/jetbrains/kotlin/buildtools", // build tools are not needed during analysis
     )
 
     from(
@@ -159,7 +159,7 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
                 ?: throw GradleException("kotlin-compiler dependency not found")
 
             zipTree(compilerJar)
-        }
+        },
     ) {
         exclude(
             "META-INF/*.kotlin_module",
@@ -169,7 +169,7 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
             "pluginsCompatibleWithK2Mode.txt", // a text file that we don't use
 
             "META-INF/services/org/jline", // service provider files for jline
-            *excludedPackages.map { "$it/**" }.toTypedArray()
+            *excludedPackages.map { "$it/**" }.toTypedArray(),
         )
     }
 
@@ -199,7 +199,7 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
         if (packagesNotVisited.isNotEmpty()) {
             throw GradleException(
                 "Some expected packages were not found in kotlin-compiler: $packagesNotVisited. " +
-                    "Please check if the kotlin-compiler dependency has changed and exclude any old dependencies that are no longer present"
+                    "Please check if the kotlin-compiler dependency has changed and exclude any old dependencies that are no longer present",
             )
         }
     }
@@ -292,6 +292,6 @@ tasks.check {
 licenseReport {
     configurations = arrayOf(
         kotlinCompilerEmbedded.name,
-        "runtimeClasspath"
+        "runtimeClasspath",
     )
 }
