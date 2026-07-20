@@ -140,6 +140,7 @@ jobs:
       statuses: read
     uses: SonarSource/sonar-kotlin-pvf/.github/workflows/performance-validation.yml@master
     with:
+      baseline-version: 'DEV'
       candidate-version: ${{ needs.build.outputs.project-version }}
 
   promote:
