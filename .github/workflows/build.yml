@@ -73,9 +73,19 @@ jobs:
       - name: Get project version
         id: project-version
         run: |
-          echo "project-version=$(./gradlew properties --no-scan --no-daemon --console plain \
+          set -euo pipefail
+          VERSION=$(./gradlew properties --no-scan --no-daemon --console plain \
             -DbuildNumber=${{ steps.build-number.outputs.BUILD_NUMBER }} \
-            | grep '^version:' | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+            | grep '^version:' | awk '{print $2}')
+          if [ -z "$VERSION" ]; then
+            echo "::error::Failed to determine project version from './gradlew properties' output"
+            exit 1
+          fi
+          echo "project-version=$VERSION" >> "$GITHUB_OUTPUT"
+        env:
+          ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
+          ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+
   qa_plugin:
     runs-on: github-ubuntu-latest-s
     timeout-minutes: 30
