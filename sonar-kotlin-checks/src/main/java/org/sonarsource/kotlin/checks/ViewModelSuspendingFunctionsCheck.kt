@@ -26,6 +26,8 @@ import org.sonarsource.kotlin.api.checks.suspendModifier
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.withKaSession
 
+private const val VISIBLE_FOR_TESTING_ANNOTATION = "VisibleForTesting"
+
 @Rule(key = "S6313")
 class ViewModelSuspendingFunctionsCheck : AbstractCheck() {
     private val viewModelClassId = ClassId.fromString("androidx/lifecycle/ViewModel")
@@ -33,6 +35,7 @@ class ViewModelSuspendingFunctionsCheck : AbstractCheck() {
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         function.suspendModifier()?.let {
             if (!function.isPrivate()
+                && !function.isVisibleForTesting()
                 && function.extendsViewModel()
             ) {
                 kotlinFileContext.reportIssue(it,
@@ -40,6 +43,9 @@ class ViewModelSuspendingFunctionsCheck : AbstractCheck() {
             }
         }
     }
+
+    private fun KtNamedFunction.isVisibleForTesting(): Boolean =
+        annotationEntries.any { it.shortName?.asString() == VISIBLE_FOR_TESTING_ANNOTATION }
 
     private fun KtNamedFunction.extendsViewModel(): Boolean = withKaSession {
         val containingSymbol = symbol.containingSymbol
