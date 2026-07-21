@@ -14,7 +14,7 @@ dependencies {
         "org.jetbrains.kotlin:analysis-api-impl-base-for-ide", // old name "high-level-api-impl-base"
         "org.jetbrains.kotlin:analysis-api-k2-for-ide", // old name "high-level-api-k2"
         "org.jetbrains.kotlin:low-level-api-fir-for-ide",
-        "org.jetbrains.kotlin:symbol-light-classes-for-ide"
+        "org.jetbrains.kotlin:symbol-light-classes-for-ide",
     ).forEach {
         val kotlinVersion: String by project.ext
         api("$it:$kotlinVersion") {

@@ -7,9 +7,9 @@ plugins {
     java
     id("jacoco")
     id("com.jfrog.artifactory") version "5.2.5"
-    id("org.sonarqube") version "7.2.3.7755"
+    id("org.sonarqube") version "7.3.1.8318"
     id("org.jetbrains.kotlin.jvm") apply false
-    id("com.diffplug.spotless") version "6.11.0"
+    id("com.diffplug.spotless") version "6.25.0"
     `maven-publish`
     signing
 }
@@ -40,6 +40,12 @@ configure(subprojects.filter { it.name != "kotlin-checks-test-sources" }) {
         kotlinGradle {
             target("*.gradle.kts")
             ktlint()
+                .setEditorConfigPath("$rootDir/.editorconfig")
+                .editorConfigOverride(mapOf(
+                    // setting this in .editorconfig doesn't seem to have any effect, at least on ktlint 1.1.1
+                    // also see https://github.com/diffplug/spotless/issues/1913
+                    "max_line_length" to "off",
+                ))
         }
 
         format("misc") {
@@ -125,7 +131,7 @@ subprojects {
     }
 
     jacoco {
-        toolVersion = "0.8.14"
+        toolVersion = "0.8.15"
     }
 
     tasks.jacocoTestReport {
