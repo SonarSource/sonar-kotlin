@@ -20,7 +20,7 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.sonar.api.SonarEdition
 import org.sonar.api.SonarQubeSide
-import org.sonar.api.internal.SonarRuntimeImpl
+import org.sonar.scanner.plugin.api.impl.internal.SonarRuntimeImpl
 import org.sonar.api.rule.RuleScope
 import org.sonar.api.rules.RuleType
 import org.sonar.api.server.rule.RulesDefinition

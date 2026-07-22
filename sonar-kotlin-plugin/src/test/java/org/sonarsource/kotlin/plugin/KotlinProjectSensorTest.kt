@@ -21,7 +21,7 @@ import io.mockk.slot
 import io.mockk.spyk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.sonar.api.batch.sensor.internal.SensorContextTester
+import com.sonarsource.scanner.engine.sensor.test.fixtures.SensorContextTester
 import java.nio.file.Path
 import org.sonarsource.kotlin.metrics.TelemetryData
 

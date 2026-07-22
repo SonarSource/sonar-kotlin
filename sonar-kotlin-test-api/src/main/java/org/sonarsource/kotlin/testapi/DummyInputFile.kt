@@ -20,8 +20,8 @@ import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.TextPointer
 import org.sonar.api.batch.fs.TextRange
-import org.sonar.api.batch.fs.internal.DefaultTextPointer
-import org.sonar.api.batch.fs.internal.DefaultTextRange
+import org.sonar.scanner.plugin.api.impl.fs.DefaultTextPointer
+import org.sonar.scanner.plugin.api.impl.fs.DefaultTextRange
 import java.nio.file.Path
 import kotlin.io.path.absolute
 import kotlin.io.path.isRegularFile

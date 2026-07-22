@@ -18,7 +18,7 @@ package org.sonarsource.kotlin.plugin
 
 import org.assertj.core.api.AssertionsForClassTypes
 import org.junit.jupiter.api.Test
-import org.sonar.api.config.internal.MapSettings
+import org.sonar.scanner.plugin.api.impl.config.MapSettings
 import org.sonarsource.kotlin.api.common.KOTLIN_FILE_SUFFIXES_KEY
 import org.sonarsource.kotlin.api.common.KotlinLanguage
 

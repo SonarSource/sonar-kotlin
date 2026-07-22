@@ -35,11 +35,11 @@ import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.CheckFactory
 import org.sonar.api.batch.sensor.cache.WriteCache
 import org.sonar.api.batch.sensor.highlighting.TypeOfText
-import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor
-import org.sonar.api.batch.sensor.internal.SensorContextTester
-import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
-import org.sonar.api.config.internal.MapSettings
-import org.sonar.api.internal.SonarRuntimeImpl
+import org.sonar.scanner.plugin.api.impl.sensor.DefaultSensorDescriptor
+import com.sonarsource.scanner.engine.sensor.test.fixtures.SensorContextTester
+import org.sonar.scanner.plugin.api.impl.sensor.issue.DefaultNoSonarFilter
+import org.sonar.scanner.plugin.api.impl.config.MapSettings
+import org.sonar.scanner.plugin.api.impl.internal.SonarRuntimeImpl
 import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.utils.Version
 import org.sonar.check.Rule

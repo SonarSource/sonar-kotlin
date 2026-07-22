@@ -40,9 +40,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import org.sonar.api.SonarEdition
 import org.sonar.api.SonarQubeSide
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder
-import org.sonar.api.batch.sensor.internal.SensorContextTester
-import org.sonar.api.internal.SonarRuntimeImpl
+import com.sonarsource.scanner.engine.sensor.test.fixtures.TestInputFileBuilder
+import com.sonarsource.scanner.engine.sensor.test.fixtures.SensorContextTester
+import org.sonar.scanner.plugin.api.impl.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
 import org.sonarsource.kotlin.api.frontend.Environment
 import org.sonarsource.kotlin.api.visiting.kaSession

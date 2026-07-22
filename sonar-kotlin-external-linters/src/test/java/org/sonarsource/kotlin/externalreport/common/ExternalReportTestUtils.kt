@@ -19,8 +19,8 @@ package org.sonarsource.kotlin.externalreport.common
 import org.assertj.core.api.Assertions.assertThat
 import org.slf4j.event.Level
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder
-import org.sonar.api.batch.sensor.internal.SensorContextTester
+import com.sonarsource.scanner.engine.sensor.test.fixtures.TestInputFileBuilder
+import com.sonarsource.scanner.engine.sensor.test.fixtures.SensorContextTester
 import org.sonar.api.testfixtures.log.LogTesterJUnit5
 import org.sonarsource.kotlin.api.common.RULE_REPOSITORY_LANGUAGE
 import java.io.IOException

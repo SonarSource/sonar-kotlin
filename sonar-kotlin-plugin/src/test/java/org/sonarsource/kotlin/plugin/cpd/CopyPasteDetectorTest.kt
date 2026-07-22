@@ -27,9 +27,9 @@ import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.api.io.TempDir
 import org.slf4j.event.Level
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder
-import org.sonar.api.batch.sensor.cpd.internal.TokensLine
-import org.sonar.api.batch.sensor.internal.SensorContextTester
+import com.sonarsource.scanner.engine.sensor.test.fixtures.TestInputFileBuilder
+import org.sonar.duplications.internal.pmd.TokensLine
+import com.sonarsource.scanner.engine.sensor.test.fixtures.SensorContextTester
 import org.sonar.api.testfixtures.log.LogTesterJUnit5
 import org.sonarsource.kotlin.plugin.DummyReadCache
 import org.sonarsource.kotlin.plugin.DummyWriteCache

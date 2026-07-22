@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder
+import com.sonarsource.scanner.engine.sensor.test.fixtures.TestInputFileBuilder
 import org.sonarsource.kotlin.api.frontend.Environment
 import org.sonarsource.kotlin.api.visiting.kaSession
 import org.sonarsource.kotlin.testapi.DEFAULT_KOTLIN_CLASSPATH

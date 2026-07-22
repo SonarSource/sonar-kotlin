@@ -80,6 +80,7 @@ dependencyResolutionManagement {
             val orchestrator = version("orchestrator", "6.1.0.3962")
             val sonarlint = version("sonarlint", "10.13.0.79996")
             val sonarqube = version("sonarqube", "25.1.0.102122")
+            val scannerEngine = version("scannerEngine", "13.4.1.4007")
 
             library("assertj-core", "org.assertj", "assertj-core").versionRef(assertj)
             library("junit-jupiter", "org.junit.jupiter", "junit-jupiter").versionRef(junit)
@@ -88,11 +89,13 @@ dependencyResolutionManagement {
             library("sonar-analyzer-test-commons", "org.sonarsource.analyzer-commons", "sonar-analyzer-test-commons")
                 .versionRef(analyzerCommons)
             library("sonar-orchestrator-junit5", "org.sonarsource.orchestrator", "sonar-orchestrator-junit5").versionRef(orchestrator)
-            library("sonar-plugin-api-impl", "org.sonarsource.sonarqube", "sonar-plugin-api-impl").versionRef(sonarqube)
+            library("sonar-plugin-api-scanner-impl", "org.sonarsource.scanner.engine", "plugin-api-scanner-impl").versionRef(scannerEngine)
+            library("sonar-sensor-test-fixtures", "org.sonarsource.scanner.engine", "sensor-test-fixtures").versionRef(scannerEngine)
             library("sonar-plugin-api-test-fixtures", "org.sonarsource.api.plugin", "sonar-plugin-api-test-fixtures")
                 .version(sonarPluginApi)
             library("sonar-ws", "org.sonarsource.sonarqube", "sonar-ws").versionRef(sonarqube)
             library("sonarlint-core", "org.sonarsource.sonarlint.core", "sonarlint-core").versionRef(sonarlint)
+            library("logback-classic", "ch.qos.logback", "logback-classic").version("1.5.38")
         }
     }
 }

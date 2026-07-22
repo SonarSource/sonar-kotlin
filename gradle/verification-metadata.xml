@@ -40,6 +40,11 @@
             <sha256 value="06c68fb7468143c3c6512d13bb8eb6676724b019330de3a5ab493e267dde2084" origin="Verified"/>
          </artifact>
       </component>
+      <component group="ch.qos.logback" name="logback-classic" version="1.5.38">
+         <artifact name="logback-classic-1.5.38.jar">
+            <sha256 value="afb439c61fa287c9e1925523b13baab03617e724406a389d48b61c2c3e46b700" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="ch.qos.logback" name="logback-core" version="1.2.9">
          <artifact name="logback-core-1.2.9.jar">
             <sha256 value="4a9ef7ed809b1fbc6992bf87d404087c247e7a9766e25bb84377b58ed5c9eb58" origin="Verified"/>
@@ -63,6 +68,11 @@
       <component group="ch.qos.logback" name="logback-core" version="1.3.15">
          <artifact name="logback-core-1.3.15.jar">
             <sha256 value="90b72ec457f30f8f42a280a409ab2bc4499fec16983005d1d91015199be7047b" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="ch.qos.logback" name="logback-core" version="1.5.38">
+         <artifact name="logback-core-1.5.38.jar">
+            <sha256 value="a855a0fc97b1d06f4efb1c3bba5ebd0eb508d8b58e68e89e4bbc23a85135c883" origin="Verified"/>
          </artifact>
       </component>
       <component group="com.android.tools" name="r8" version="9.1.31">
@@ -806,6 +816,11 @@
             <sha256 value="5c3881e4f556855e9c532927ee0c9dfde94cc66760d5805c031a59887070af5f" origin="Verified"/>
          </artifact>
       </component>
+      <component group="commons-codec" name="commons-codec" version="1.21.0">
+         <artifact name="commons-codec-1.21.0.jar">
+            <sha256 value="4da851cb6abfb98bfe9eb77c5e5fc47f5414fa28b94e21b7fd9a646705dc167f" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="commons-codec" name="commons-codec" version="1.22.0">
          <artifact name="commons-codec-1.22.0.jar">
             <sha256 value="d164fe79f262c32d9b18a0b5b2d317d1c27653d5e98fd2b998c24bf901c72ce4" origin="Verified"/>
@@ -1289,6 +1304,11 @@
       <component group="org.apache.commons" name="commons-csv" version="1.12.0">
          <artifact name="commons-csv-1.12.0.jar">
             <sha256 value="e11a33d65e5f2e92769c0b13c548e0c2da01e37c1581417ea3fd7d5d9474fee6" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.apache.commons" name="commons-csv" version="1.14.1">
+         <artifact name="commons-csv-1.14.1.jar">
+            <sha256 value="32be0e1e76673092f5d12cb790bd2acb6c2ab04c4ea6efc69ea5ee17911c24fe" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.apache.commons" name="commons-csv" version="1.9.0">
@@ -2920,6 +2940,11 @@
             <sha256 value="08f532b5ba39aa00a5317945633b02c247066372524e6e5d6b4a3dcae11f30c1" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.sonarsource.api.plugin" name="sonar-plugin-api" version="13.8.0.4399">
+         <artifact name="sonar-plugin-api-13.8.0.4399.jar">
+            <sha256 value="95f71c4f3d64da0a441d046cf2879f0999aad9efa40ea20f84767e1d20da7f78" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.sonarsource.api.plugin" name="sonar-plugin-api" version="9.14.0.375">
          <artifact name="sonar-plugin-api-9.14.0.375.jar">
             <sha256 value="ca679099e12bb6a797b60ad35954f4d0cb0b87b136a96f74245745118256e3df" origin="Verified"/>
@@ -2993,6 +3018,31 @@
       <component group="org.sonarsource.scanner.api" name="sonar-scanner-api" version="2.16.2.588">
          <artifact name="sonar-scanner-api-2.16.2.588.jar">
             <sha256 value="4df4526499760242c2d5d76ee8bc38326b4549c344e034e12bc392d2b8a618ac" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.sonarsource.scanner.engine" name="plugin-api-scanner-impl" version="13.4.1.4007">
+         <artifact name="plugin-api-scanner-impl-13.4.1.4007.jar">
+            <sha256 value="aa6b45ca71c15d4fc9e65221b5bc7ff3ddc9ee38f9ea90f490c51ab6aec2fde8" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.sonarsource.scanner.engine" name="sensor-test-fixtures" version="13.4.1.4007">
+         <artifact name="sensor-test-fixtures-13.4.1.4007.jar">
+            <sha256 value="6d58904167cb0bcf7b4a4c863177be0e43b55d7e292d23cd3b10fafbb7d335bb" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.sonarsource.scanner.engine" name="sonar-channel" version="13.4.1.4007">
+         <artifact name="sonar-channel-13.4.1.4007.jar">
+            <sha256 value="1a3cc215a35771e29acd4996be8b62b9cdacc2c502ce71a94036f8df388df2b1" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.sonarsource.scanner.engine" name="sonar-duplications" version="13.4.1.4007">
+         <artifact name="sonar-duplications-13.4.1.4007.jar">
+            <sha256 value="642c060cc33b3d864eaf9c7560c79ddafd0c9e6f5d04241ff5919b65c82bfea6" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.sonarsource.scanner.engine" name="sonar-scanner-extension-framework" version="13.4.1.4007">
+         <artifact name="sonar-scanner-extension-framework-13.4.1.4007.jar">
+            <sha256 value="91bedbe678ac4a1ad077afd375c7be0d611112e403c3a1d9331de8e5576f90e5" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.sonarsource.scanner.gradle" name="sonarqube-gradle-plugin" version="7.2.3.7755">

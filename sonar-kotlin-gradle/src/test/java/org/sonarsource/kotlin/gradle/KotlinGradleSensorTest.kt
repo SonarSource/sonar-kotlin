@@ -26,8 +26,8 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.sonar.api.batch.rule.CheckFactory
-import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor
-import org.sonar.api.config.internal.MapSettings
+import org.sonar.scanner.plugin.api.impl.sensor.DefaultSensorDescriptor
+import org.sonar.scanner.plugin.api.impl.config.MapSettings
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext

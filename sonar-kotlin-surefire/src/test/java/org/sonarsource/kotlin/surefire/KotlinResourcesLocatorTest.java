@@ -23,9 +23,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultIndexedFile;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.fs.internal.predicates.DefaultFilePredicates;
+import org.sonar.scanner.plugin.api.impl.fs.DefaultIndexedFile;
+import org.sonar.scanner.plugin.api.impl.fs.DefaultInputFile;
+import org.sonar.scanner.plugin.api.impl.fs.predicates.DefaultFilePredicates;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;

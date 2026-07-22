@@ -18,7 +18,7 @@ package org.sonarsource.kotlin.plugin
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
+import org.sonar.scanner.plugin.api.impl.sensor.issue.DefaultNoSonarFilter
 import org.sonar.api.rule.RuleKey
 import org.sonarsource.kotlin.metrics.TelemetryData
 import org.sonarsource.kotlin.testapi.AbstractSensorTest

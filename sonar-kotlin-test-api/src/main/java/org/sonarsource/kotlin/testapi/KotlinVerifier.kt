@@ -20,7 +20,7 @@ import io.mockk.InternalPlatformDsl.toStr
 import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder
+import com.sonarsource.scanner.engine.sensor.test.fixtures.TestInputFileBuilder
 import org.sonarsource.analyzer.commons.checks.verifier.SingleFileVerifier
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.Environment
