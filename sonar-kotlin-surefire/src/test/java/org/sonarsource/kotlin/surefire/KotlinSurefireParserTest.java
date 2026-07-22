@@ -227,7 +227,7 @@ class KotlinSurefireParserTest {
   private List<File> getDirs(String... directoryNames) {
     return Stream.of(directoryNames)
       .map(directoryName -> new File("src/test/resources/org/sonarsource/kotlin/surefire/api/SurefireParserTest/" + directoryName))
-      .collect(Collectors.toList());
+      .toList();
   }
 
   private SensorContextTester mockContext() {

@@ -57,7 +57,7 @@ public class KotlinSurefireParser {
     return dirs.stream()
       .map(dir -> getReports(dir, reportDirSetByUser))
       .flatMap(Arrays::stream)
-      .collect(Collectors.toList());
+      .toList();
   }
 
   private static File[] getReports(File dir, boolean reportDirSetByUser) {
