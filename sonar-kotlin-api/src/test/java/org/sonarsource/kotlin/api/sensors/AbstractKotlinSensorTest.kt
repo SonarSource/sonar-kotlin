@@ -32,8 +32,8 @@ import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.CheckFactory
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
-import org.sonar.api.config.internal.ConfigurationBridge
-import org.sonar.api.config.internal.MapSettings
+import org.sonar.scanner.plugin.api.impl.config.ConfigurationBridge
+import org.sonar.scanner.plugin.api.impl.config.MapSettings
 import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.checks.AbstractCheck

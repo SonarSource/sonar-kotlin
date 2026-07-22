@@ -22,9 +22,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.slf4j.event.Level
 import org.sonar.api.batch.rule.Severity
-import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor
+import org.sonar.scanner.plugin.api.impl.sensor.DefaultSensorDescriptor
 import org.sonar.api.batch.sensor.issue.ExternalIssue
-import org.sonar.api.config.internal.MapSettings
+import org.sonar.scanner.plugin.api.impl.config.MapSettings
 import org.sonar.api.rules.RuleType
 import org.sonar.api.testfixtures.log.LogTesterJUnit5
 import org.sonarsource.kotlin.externalreport.common.ExternalReportTestUtils

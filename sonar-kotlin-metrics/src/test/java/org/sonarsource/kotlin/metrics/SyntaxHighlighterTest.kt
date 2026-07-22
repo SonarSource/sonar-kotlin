@@ -27,8 +27,8 @@ import org.sonar.api.batch.sensor.highlighting.TypeOfText.CONSTANT
 import org.sonar.api.batch.sensor.highlighting.TypeOfText.KEYWORD
 import org.sonar.api.batch.sensor.highlighting.TypeOfText.STRING
 import org.sonar.api.batch.sensor.highlighting.TypeOfText.STRUCTURED_COMMENT
-import org.sonar.api.batch.sensor.internal.SensorContextTester
-import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter
+import com.sonarsource.scanner.engine.sensor.test.fixtures.SensorContextTester
+import org.sonar.scanner.plugin.api.impl.sensor.issue.DefaultNoSonarFilter
 import org.sonarsource.kotlin.plugin.KotlinProjectSensor
 // TODO: refactor later; metrics should not depend on plugin!
 import org.sonarsource.kotlin.plugin.KotlinSensor

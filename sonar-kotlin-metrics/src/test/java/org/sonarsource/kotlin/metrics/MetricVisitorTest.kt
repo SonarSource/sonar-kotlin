@@ -26,9 +26,9 @@ import org.junit.jupiter.api.io.TempDir
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.DefaultInputFile
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder
-import org.sonar.api.batch.sensor.internal.SensorContextTester
+import org.sonar.scanner.plugin.api.impl.fs.DefaultInputFile
+import com.sonarsource.scanner.engine.sensor.test.fixtures.TestInputFileBuilder
+import com.sonarsource.scanner.engine.sensor.test.fixtures.SensorContextTester
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContext
 import org.sonar.api.measures.FileLinesContextFactory

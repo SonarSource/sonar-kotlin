@@ -23,8 +23,8 @@ import org.sonar.api.Plugin
 import org.sonar.api.SonarEdition
 import org.sonar.api.SonarQubeSide
 import org.sonar.api.SonarRuntime
-import org.sonar.api.internal.PluginContextImpl
-import org.sonar.api.internal.SonarRuntimeImpl
+import org.sonar.scanner.extension.PluginContextImpl
+import org.sonar.scanner.plugin.api.impl.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
 import kotlin.time.ExperimentalTime
 import org.sonar.api.config.Configuration
