@@ -1,22 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("jvm")
-}
-
-// The scanner-engine test-fixture artifacts this module depends on (compileOnly) require JVM 17+.
-// This module is only ever consumed via testImplementation (never packaged into the shipped plugin jar),
-// so it's safe to compile it at a higher bytecode target than the rest of the plugin.
-java.sourceCompatibility = JavaVersion.VERSION_17
-
-tasks.withType<JavaCompile> {
-    options.release.set(17)
-}
-
-tasks.withType<KotlinCompile>().all {
-    compilerOptions.jvmTarget = JvmTarget.JVM_17
-    compilerOptions.freeCompilerArgs.add("-Xjdk-release=17")
 }
 
 dependencies {

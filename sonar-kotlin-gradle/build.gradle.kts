@@ -1,18 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("jvm")
-}
-
-// The scanner-engine test-fixture artifacts (testImplementation below) require JVM 17+;
-// bump only the test compilation target, main stays at the repo-wide baseline.
-tasks.withType<JavaCompile>().matching { it.name == "compileTestJava" }.configureEach {
-    options.release.set(17)
-}
-tasks.withType<KotlinCompile>().matching { it.name == "compileTestKotlin" }.configureEach {
-    compilerOptions.jvmTarget = JvmTarget.JVM_17
-    compilerOptions.freeCompilerArgs.add("-Xjdk-release=17")
 }
 
 dependencies {
