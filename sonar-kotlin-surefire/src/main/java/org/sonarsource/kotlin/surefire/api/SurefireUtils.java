@@ -64,7 +64,7 @@ public final class SurefireUtils {
         .map(String::trim)
         .map(path -> getFileFromPath(fs, pathResolver, path))
         .filter(Objects::nonNull)
-        .collect(Collectors.toList());
+        .toList();
     }
     return null;
   }
