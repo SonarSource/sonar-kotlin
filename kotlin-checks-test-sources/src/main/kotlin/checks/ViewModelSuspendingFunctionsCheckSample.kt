@@ -1,12 +1,23 @@
 package checks
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.delay
 
 class ViewModelSuspendingFunctionsCheckSample: ViewModel() {
-    
+
     fun function() {}
-    
+
+    @VisibleForTesting
+    suspend fun visibleForTestingSuspendingFunction() { // Compliant
+        delay(500L)
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    suspend fun visibleForTestingWithOtherwiseSuspendingFunction() { // Compliant
+        delay(500L)
+    }
+
     suspend fun suspendingFunction() { // Noncompliant {{Classes extending "ViewModel" should not expose suspending functions.}}
 //  ^^^^^^^
         privateSuspendingFunction()
