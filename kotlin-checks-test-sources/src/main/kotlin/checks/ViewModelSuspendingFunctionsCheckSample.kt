@@ -12,7 +12,12 @@ class ViewModelSuspendingFunctionsCheckSample: ViewModel() {
     suspend fun visibleForTestingSuspendingFunction() { // Compliant
         delay(500L)
     }
-    
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    suspend fun visibleForTestingWithOtherwiseSuspendingFunction() { // Compliant
+        delay(500L)
+    }
+
     suspend fun suspendingFunction() { // Noncompliant {{Classes extending "ViewModel" should not expose suspending functions.}}
 //  ^^^^^^^
         privateSuspendingFunction()
