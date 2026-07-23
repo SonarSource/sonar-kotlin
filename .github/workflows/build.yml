@@ -56,7 +56,7 @@ jobs:
           ./gradlew \
               build \
               sonar -Dsonar.host.url=https://next.sonarqube.com/sonarqube \
-              ${{ github.event_name != 'pull_request' && 'artifactoryPublish' || '' }} \
+              artifactoryPublish \
               -DbuildNumber=${{ steps.build-number.outputs.BUILD_NUMBER }}
         env:
           DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
