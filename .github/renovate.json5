@@ -21,7 +21,9 @@
   },
   "ignorePaths": [
     "its/**",
-    "**/test/**"
+    "**/test/**",
+    // these dependencies are only there to enable type resolution in tests; do need to auto-update them
+    "kotlin-checks-test-sources/build.gradle.kts"
   ],
   "packageRules": [
     {
@@ -92,6 +94,18 @@
         "com.google.code.gson:gson"
       ],
       "enabled": false
+    },
+    {
+      // kotlinVersion in gradle.properties sets Kotlin compiler dependencies; should always be updated separately from other dependencies
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin",
+        "org.jetbrains.kotlin:kotlin-compiler"
+      ],
+      "groupName": "kotlinVersion",
+      "groupSlug": "kotlin-version"
     }
   ]
 }
