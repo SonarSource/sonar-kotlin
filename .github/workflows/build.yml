@@ -117,7 +117,7 @@ jobs:
           ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
   qa_sq_integration:
-    runs-on: github-ubuntu-latest-s
+    runs-on: github-ubuntu-latest-m
     timeout-minutes: 30
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
