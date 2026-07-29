@@ -2950,6 +2950,11 @@
             <sha256 value="813a68dd8af7c2c2fa901fdadb3cdc21581fcb74c7649b46bb8fdaa79108da08" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.sonarsource.api.plugin" name="sonar-plugin-api" version="13.2.0.3137">
+         <artifact name="sonar-plugin-api-13.2.0.3137.jar">
+            <sha256 value="b2e5c2b4bbf6e70761171b556279499ec30f3f576fd5b0c1b7e2f3bfd9a8864e" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.sonarsource.api.plugin" name="sonar-plugin-api" version="13.8.0.4399">
          <artifact name="sonar-plugin-api-13.8.0.4399.jar">
             <sha256 value="95f71c4f3d64da0a441d046cf2879f0999aad9efa40ea20f84767e1d20da7f78" origin="Verified"/>

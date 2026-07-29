@@ -84,7 +84,7 @@ dependencyResolutionManagement {
             val sonarqube = version("sonarqube", "25.1.0.102122")
             val scannerEngine = version("scannerEngine", "13.4.1.4007")
             val sit = version("sit", "1.2.0.1354")
-            val sonarPluginApiSit = version("sonarPluginApiSit", "12.0.0.2960")
+            val sonarPluginApiSit = version("sonarPluginApiSit", "13.2.0.3137")
             val xerces = version("xerces", "2.12.2")
 
             library("assertj-core", "org.assertj", "assertj-core").versionRef(assertj)

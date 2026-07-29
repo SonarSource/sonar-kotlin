@@ -1,7 +1,4 @@
 plugins {
-    // include kotlin in the source main classpath exported below as "gradle.main.compile.classpath",
-    // needed by the kotlin-language-server ruling corpus
-    kotlin("jvm")
     id("org.sonarsource.cloud-native.integration-test")
 }
 
@@ -26,9 +23,6 @@ tasks.integrationTest {
         .filter { it.value != null }
         .forEach { systemProperty(it.key, it.value) }
     systemProperty("java.awt.headless", "true")
-    // export a classpath containing kotlin standard dependencies, needed by the
-    // kotlin-language-server ruling corpus for sonar.java.libraries
-    systemProperty("gradle.main.compile.classpath", sourceSets.main.get().compileClasspath.asPath)
 }
 
 sonarqube.isSkipProject = true
