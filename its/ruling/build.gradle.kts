@@ -1,28 +1,43 @@
 plugins {
-    // include kotlin in the source main classpath exported bellow as "gradle.main.compile.classpath"
+    // include kotlin in the source main classpath exported below as "gradle.main.compile.classpath"
     kotlin("jvm")
-    id("org.sonarsource.kotlin.buildsrc.integration-test")
+    id("org.sonarsource.cloud-native.integration-test")
 }
 
 dependencies {
-    testImplementation(testLibs.sonar.orchestrator.junit5)
-    testImplementation(testLibs.assertj.core)
-    testImplementation(testLibs.junit.jupiter)
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation(libs.sonar.analyzer.commons)
+    integrationTestImplementation(testLibs.sit)
+    // Required: without it the engine fails with
+    //   IllegalStateException: Unable to load components interface org.sonar.api.batch.sensor.Sensor
+    integrationTestImplementation(testLibs.sonar.plugin.api.sit)
+    // Required: without it ScannerMain.<clinit> throws
+    //   FactoryConfigurationError: Provider for javax.xml.parsers.SAXParserFactory cannot be created
+    integrationTestRuntimeOnly(testLibs.xerces.impl)
+    integrationTestImplementation(testLibs.assertj.core)
+    integrationTestImplementation(libs.gson)
+    integrationTestImplementation(testLibs.junit.jupiter)
+    integrationTestRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    integrationTestCompileOnly(libs.jsr305)
 }
 
-sonarqube.isSkipProject = true
+integrationTest {
+    testSources.set(file("src/integrationTest/java"))
+}
 
-tasks.test {
-    onlyIf {
-        project.hasProperty("its") || project.hasProperty("ruling")
-    }
-    listOf("keepSonarqubeRunning", "reportAll", "cleanProjects", "buildProjects")
+tasks.integrationTest {
+    dependsOn(":sonar-kotlin-plugin:dist")
+    listOf("reportAll")
         .associateWith { System.getProperty(it) }
         .filter { it.value != null }
         .forEach { systemProperty(it.key, it.value) }
-    systemProperty("java.awt.headless", "true")
     // export a classpath containing kotlin standard dependencies
     systemProperty("gradle.main.compile.classpath", sourceSets.main.get().compileClasspath.asPath)
+    // Each SIT run leaks engine class loaders; a fresh JVM per class keeps heap bounded.
+    setForkEvery(1)
+    // The ruling scan holds the whole its/sources corpus in memory; run it alone rather than in parallel forks.
+    maxParallelForks = 1
+    // The engine now runs inside this JVM (the orchestrator used to fork a scanner process with its own -Xmx),
+    // and the ruling corpus needs considerably more than the Gradle default.
+    maxHeapSize = "4g"
 }
+
+sonarqube.isSkipProject = true

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profile>
+  <name>suppress-warnings-profile</name>
+  <language>kotlin</language>
+  <rules>
+    <rule>
+      <repositoryKey>kotlin</repositoryKey>
+      <key>S1145</key> <!-- Useless "if(true) {...}" and "if(false){...}" blocks should be removed -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>kotlin</repositoryKey>
+      <key>S3776</key> <!-- Cognitive complexity -->
+      <priority>INFO</priority>
+    </rule>
+    <rule>
+      <repositoryKey>kotlin</repositoryKey>
+      <key>S1479</key> <!-- when statements should not have too many cases -->
+      <priority>INFO</priority>
+    </rule>
+  </rules>
+</profile>
