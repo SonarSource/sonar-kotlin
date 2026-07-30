@@ -31,12 +31,12 @@ tasks.integrationTest {
         .forEach { systemProperty(it.key, it.value) }
     // export a classpath containing kotlin standard dependencies
     systemProperty("gradle.main.compile.classpath", sourceSets.main.get().compileClasspath.asPath)
-    // Each SIT run leaks engine class loaders; a fresh JVM per class keeps heap bounded.
+    // Each SIT run leaks engine class loaders; a single shared JVM keeps heap bounded across the whole suite.
     setForkEvery(1)
-    // Concurrent forks made the heaviest corpus (test_kotlin_compiler, CI-only) crash with internal K2/FIR
-    // analysis errors regardless of per-fork heap size (qa_ruling failures on a64d4e4b and 37cd2057), so
-    // corpora run serially again; see junit-platform.properties for why JUnit-level parallelism within a
-    // single fork isn't an option either (shared, non-thread-safe engine state).
+    // The heaviest corpus (test_kotlin_compiler, CI-only) crashes the K2/FIR Analysis API with an internal
+    // resolution error when it runs alone in a freshly-forked JVM. Splitting the corpora into separate test
+    // classes (one fork each) reproduced this every time regardless of heap size or fork count; keeping all
+    // corpora as @Test methods on one class run in a single fork avoids the cold-JVM path entirely.
     maxParallelForks = 1
     // The engine now runs inside this JVM (the orchestrator used to fork a scanner process with its own -Xmx),
     // and the ruling corpus needs considerably more than the Gradle default.
