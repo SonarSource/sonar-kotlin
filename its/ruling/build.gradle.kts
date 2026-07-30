@@ -33,17 +33,14 @@ tasks.integrationTest {
     systemProperty("gradle.main.compile.classpath", sourceSets.main.get().compileClasspath.asPath)
     // Each SIT run leaks engine class loaders; a fresh JVM per class keeps heap bounded.
     setForkEvery(1)
-    // One test class per corpus (see AbstractKotlinRulingTest), each forked into its own JVM/classloader, so
-    // corpora now run in parallel across forks. JUnit-level parallelism within a single fork is still not an
-    // option; see junit-platform.properties for why (shared, non-thread-safe engine state).
-    maxParallelForks = 2
+    // Concurrent forks made the heaviest corpus (test_kotlin_compiler, CI-only) crash with internal K2/FIR
+    // analysis errors regardless of per-fork heap size (qa_ruling failures on a64d4e4b and 37cd2057), so
+    // corpora run serially again; see junit-platform.properties for why JUnit-level parallelism within a
+    // single fork isn't an option either (shared, non-thread-safe engine state).
+    maxParallelForks = 1
     // The engine now runs inside this JVM (the orchestrator used to fork a scanner process with its own -Xmx),
-    // and the ruling corpus needs considerably more than the Gradle default. Sized down from 4g so that two
-    // concurrent forks don't exceed what a single fork used to request on its own; the heaviest corpus
-    // (test_kotlin_compiler, CI-only) crashed with internal K2/FIR analysis errors under 2x4g concurrent
-    // forks on the CI runner (see qa_ruling failure on a64d4e4b). Kept closer to 4g than a straight half,
-    // since that corpus previously ran comfortably at 4g with zero contention.
-    maxHeapSize = "3g"
+    // and the ruling corpus needs considerably more than the Gradle default.
+    maxHeapSize = "4g"
 }
 
 sonarqube.isSkipProject = true
