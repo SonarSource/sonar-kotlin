@@ -83,17 +83,14 @@ jobs:
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
-            development/github/token/licenses-ro token | GITHUB_TOKEN;
-      - uses: ./.github/actions/cache-orchestrator
       - run: |
           ./gradlew \
-              :its:plugin:test -Pplugin -Dsonar.runtimeVersion=DEV
+              :its:plugin:integrationTest --info -Pits
         env:
           DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
           ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
-          GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
   qa_ruling:
     runs-on: github-ubuntu-latest-m
     timeout-minutes: 60
@@ -110,12 +107,37 @@ jobs:
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
-            development/github/token/licenses-ro token | GITHUB_TOKEN;
       - run: |
           ./gradlew \
-              :its:ruling:test -Pruling -Dsonar.runtimeVersion=LATEST_RELEASE
+              :its:ruling:integrationTest --info -Pruling
         env:
           KOTLIN_COMPILER_IT_ENABLED: true
+          DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
+          ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
+          ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+          ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+  qa_sq_integration:
+    runs-on: github-ubuntu-latest-m
+    timeout-minutes: 30
+    steps:
+      - *configure_GITHUB_JOB_ID_environment_variable
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          submodules: true
+      - *setup-mise
+      - id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/kv/data/develocity token | DEVELOCITY_TOKEN;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
+            development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/github/token/licenses-ro token | GITHUB_TOKEN;
+      - uses: ./.github/actions/cache-orchestrator
+      - run: |
+          ./gradlew \
+              :its:sq-integration:integrationTest --info -Pits -Dsonar.runtimeVersion=DEV
+        env:
           DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
           ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
@@ -126,6 +148,7 @@ jobs:
       - build
       - qa_plugin
       - qa_ruling
+      - qa_sq_integration
     runs-on: github-ubuntu-latest-s
     timeout-minutes: 10
     permissions:
@@ -149,7 +172,7 @@ jobs:
 
   notify_slack:
     name: Notify Slack on Failure
-    needs: [ build, qa_plugin, qa_ruling, promote ]
+    needs: [ build, qa_plugin, qa_ruling, qa_sq_integration, promote ]
     if: >-
       failure() && ! cancelled() &&
       (github.ref_name == github.event.repository.default_branch ||
