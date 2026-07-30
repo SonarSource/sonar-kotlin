@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.config.LanguageVersion
 import org.slf4j.Logger
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.SensorContext
+import org.sonar.api.notifications.AnalysisWarnings
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.analyzer.commons.appsec.TestFileClassifier
 import org.sonarsource.kotlin.api.checks.InputFileContext
@@ -100,6 +101,15 @@ abstract class AbstractKotlinSensorExecuteContext(
         // no-op by default; subclasses override to react to read failures (e.g. increment a telemetry counter)
     }
 
+    open fun onAnalysisCrash(inputFile: InputFile) {
+        // no-op by default; subclasses react to a recoverable per-file analysis crash (e.g. a StackOverflowError)
+    }
+
+    open fun onAnalysisComplete() {
+        // no-op by default; called once after the per-file loop (a normally-completing scan) so subclasses can
+        // post aggregated results such as a customer-visible warning about partially-analyzed files
+    }
+
     val environment: Environment by lazy {
         /** [analyzeFiles] */
         val env = Environment(
@@ -137,6 +147,15 @@ abstract class AbstractKotlinSensorExecuteContext(
                 inputFileContext.reportAnalysisParseError(KOTLIN_REPOSITORY_KEY, it, parseException.position)
                 onReadFailure()
                 null
+            } catch (e: StackOverflowError) {
+                // A StackOverflowError is a java.lang.Error, not an Exception, so it escapes the catch above.
+                // It can originate in the recursive PSI construction of a deeply-nested file. Contain it here so
+                // the up-front parse of all files does not abort the whole scan. Keep the handler stack-frugal:
+                // log a short message and do NOT pass the throwable to the logger (avoid formatting its huge trace).
+                inputFileContext.reportAnalysisParseError(KOTLIN_REPOSITORY_KEY, it, null)
+                onAnalysisCrash(it)
+                logger.error("Cannot parse '$it': ${e.javaClass.name}")
+                null
             }
         }
     }
@@ -156,6 +175,7 @@ abstract class AbstractKotlinSensorExecuteContext(
                 }
                 progressReport.nextFile()
             }
+            onAnalysisComplete()
             return true
         } finally {
             Disposer.dispose(environment.disposable)
@@ -183,6 +203,23 @@ abstract class AbstractKotlinSensorExecuteContext(
             try {
                 measureDuration(visitorId) {
                     visitor.scan(inputFileContext, tree)
+                }
+            } catch (e: StackOverflowError) {
+                // A StackOverflowError is a java.lang.Error, not an Exception, so it escapes the catch below.
+                // It can originate deep in the Kotlin compiler's type resolver (e.g. an invalid cyclic typealias)
+                // or in the analyzer's own recursive PSI walkers. Contain it here so a single crashing file is
+                // reported and skipped instead of aborting the whole scan. This handler runs at a shallow frame
+                // (the deep frames have already unwound), so it has ample stack headroom -- but keep it frugal:
+                // log a short message and do NOT pass the throwable to the logger (avoid formatting its huge trace).
+                val message = "Analysis of '${inputFileContext.inputFile}' with '$visitorId' failed: ${e.javaClass.name}"
+                inputFileContext.reportAnalysisError(message, null)
+                logger.error(message)
+                onAnalysisCrash(inputFileContext.inputFile)
+                if (sensorContext.config().getBoolean(FAIL_FAST_PROPERTY_NAME).getOrElse { false }) {
+                    throw IllegalStateException(
+                        "Exception in '$visitorId' while analyzing '${inputFileContext.inputFile}'",
+                        e
+                    )
                 }
             } catch (e: Exception) {
                 inputFileContext.reportAnalysisError(e.message, null)
@@ -221,3 +258,20 @@ internal fun determineKotlinLanguageVersion(sensorContext: SensorContext, logger
 
 private fun toParseException(action: String, inputFile: InputFile, cause: Throwable) =
     ParseException("Cannot $action '$inputFile': ${cause.message}", (cause as? ParseException)?.position, cause)
+
+/**
+ * Posts a project-level, customer-visible warning (SonarQube background-task warnings) so that files which could
+ * not be fully analyzed due to a recoverable internal crash are surfaced honestly instead of being presented as
+ * complete. No-op when [crashedFiles] is empty. The listed file names are capped so the message cannot balloon on
+ * a large poisoned codebase. Unlike telemetry, the scanner log, or a rule-gated issue, [AnalysisWarnings.addUnique]
+ * is never gated by profile/rule and always renders in the UI.
+ */
+fun postAnalysisCrashWarning(analysisWarnings: AnalysisWarnings, crashedFiles: List<String>) {
+    if (crashedFiles.isEmpty()) return
+    val shown = crashedFiles.take(10).joinToString(", ")
+    val more = if (crashedFiles.size > 10) " (and ${crashedFiles.size - 10} more)" else ""
+    analysisWarnings.addUnique(
+        "The Kotlin analyzer could not fully analyze ${crashedFiles.size} file(s) due to an internal error; " +
+            "results for those files may be incomplete: $shown$more."
+    )
+}

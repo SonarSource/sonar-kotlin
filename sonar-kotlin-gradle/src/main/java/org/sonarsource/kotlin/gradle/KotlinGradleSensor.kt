@@ -22,12 +22,14 @@ import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.batch.rule.CheckFactory
+import org.sonar.api.notifications.AnalysisWarnings
 import org.sonar.api.rule.RuleKey
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.common.KOTLIN_REPOSITORY_KEY
 import org.sonarsource.kotlin.api.common.KotlinLanguage
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensor
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
+import org.sonarsource.kotlin.api.sensors.postAnalysisCrashWarning
 import org.sonarsource.kotlin.api.visiting.KtChecksVisitor
 import org.sonarsource.kotlin.metrics.TelemetryData
 import java.io.File
@@ -43,6 +45,7 @@ class KotlinGradleSensor(
     checkFactory: CheckFactory,
     language: KotlinLanguage,
     private val telemetryData: TelemetryData,
+    private val analysisWarnings: AnalysisWarnings,
 ) : AbstractKotlinSensor(
     checkFactory, emptyList(), language, KOTLIN_GRADLE_CHECKS
 ) {
@@ -76,6 +79,18 @@ class KotlinGradleSensor(
         override fun onReadFailure() {
             telemetryData.readFailures++
             telemetryData.scriptReadFailures++
+        }
+
+        private val crashedFiles = mutableListOf<String>()
+
+        override fun onAnalysisCrash(inputFile: InputFile) {
+            telemetryData.analysisCrashes++
+            telemetryData.scriptAnalysisCrashes++
+            crashedFiles += inputFile.toString()
+        }
+
+        override fun onAnalysisComplete() {
+            postAnalysisCrashWarning(analysisWarnings, crashedFiles)
         }
     }
 

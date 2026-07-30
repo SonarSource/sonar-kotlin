@@ -41,6 +41,7 @@ import org.sonar.scanner.plugin.api.impl.sensor.issue.DefaultNoSonarFilter
 import org.sonar.scanner.plugin.api.impl.config.MapSettings
 import org.sonar.scanner.plugin.api.impl.internal.SonarRuntimeImpl
 import org.sonar.api.measures.CoreMetrics
+import org.sonar.api.notifications.AnalysisWarnings
 import org.sonar.api.utils.Version
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
@@ -63,6 +64,9 @@ private val LOG = LoggerFactory.getLogger(KotlinSensor::class.java)
 @ExperimentalTime
 internal class KotlinSensorTest : AbstractSensorTest() {
     private val disposable = Disposer.newDisposable()
+
+    // Fresh per test (JUnit5 default PER_METHOD lifecycle) so crash-warning verifications don't bleed across tests.
+    private val analysisWarnings = mockk<AnalysisWarnings>(relaxed = true)
 
     @AfterEach
     fun dispose() {
@@ -264,7 +268,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val telemetryData = TelemetryData()
         context.fileSystem().add(createInputFile("file1.kt", "class A"))
         context.fileSystem().add(createInputFile("file2.kt", "class B"))
-        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
+        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray(), analysisWarnings).execute(context)
         assertThat(telemetryData.filesProcessed).isEqualTo(2)
     }
 
@@ -273,7 +277,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val telemetryData = TelemetryData()
         context.fileSystem().add(createInputFile("file1.kt", "class A"))
         context.fileSystem().add(createInputFile("file2.kt", "enum class A { <!REDECLARATION!>FOO<!>,<!REDECLARATION!>FOO<!> }"))
-        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
+        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray(), analysisWarnings).execute(context)
         assertThat(telemetryData.filesProcessed).isEqualTo(2)
     }
 
@@ -283,7 +287,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val inputFile = createInputFile("file1.kt", "enum class A { <!REDECLARATION!>FOO<!>,<!REDECLARATION!>FOO<!> }")
         context.fileSystem().add(inputFile)
         val checkFactory = checkFactory("S1764")
-        KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
+        KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray(), analysisWarnings).execute(context)
         assertThat(telemetryData.parseFailures).isEqualTo(1)
     }
 
@@ -293,7 +297,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         val inputFile = spyk(createInputFile("file1.kt", "class A"))
         every { inputFile.contents() } throws IOException("Can't read")
         context.fileSystem().add(inputFile)
-        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
+        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray(), analysisWarnings).execute(context)
         assertThat(telemetryData.readFailures).isEqualTo(1)
     }
 
@@ -304,7 +308,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         every { inputFile.contents() } throws IOException("Can't read")
         context.fileSystem().add(inputFile)
         context.fileSystem().add(createInputFile("file2.kt", "class B"))
-        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
+        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray(), analysisWarnings).execute(context)
         assertThat(telemetryData.filesProcessed).isEqualTo(2)
     }
 
@@ -315,7 +319,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         context.fileSystem().add(createInputFile("file1.kt", invalidContent))
         context.fileSystem().add(createInputFile("file2.kt", invalidContent))
         val checkFactory = checkFactory("S1764")
-        KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()).execute(context)
+        KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray(), analysisWarnings).execute(context)
         assertThat(telemetryData.parseFailures).isEqualTo(2)
     }
 
@@ -387,6 +391,70 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         assertDoesNotThrow { sensor.execute(context) }
         assertThat(logTester.logs(Level.ERROR))
             .containsExactly("Cannot analyse 'file1.kt' with 'KtChecksVisitor': This is a test message")
+    }
+
+    private fun crashSensor(checkFactory: CheckFactory, telemetryData: TelemetryData = TelemetryData()): KotlinSensor {
+        mockkStatic("org.sonarsource.kotlin.plugin.KotlinCheckListKt")
+        every { KOTLIN_CHECKS } returns listOf(StackOverflowThrowingCheck::class.java)
+        return KotlinSensor(
+            checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray(), analysisWarnings
+        )
+    }
+
+    @Test
+    fun `a per-file StackOverflowError is contained and the scan still analyzes the other files`() {
+        context.fileSystem().add(createInputFile("good1.kt", "class A { fun a() = TODO() }"))
+        context.fileSystem().add(createInputFile("poison.kt", "class P { fun p() = TODO() }"))
+        context.fileSystem().add(createInputFile("good2.kt", "class B { fun b() = TODO() }"))
+        val telemetryData = TelemetryData()
+        val sensor = crashSensor(checkFactory("SOERule1"), telemetryData)
+
+        assertDoesNotThrow { sensor.execute(context) }
+
+        // the crashing file is surfaced honestly as an analysis error ...
+        assertThat(context.allAnalysisErrors().map { it.inputFile().filename() }).contains("poison.kt")
+        // ... while the other files are still fully analyzed (their issues are reported)
+        assertThat(context.allIssues().map { (it.primaryLocation().inputComponent() as InputFile).filename() })
+            .containsExactlyInAnyOrder("good1.kt", "good2.kt")
+        // telemetry counts it and a customer-visible warning names it
+        assertThat(telemetryData.analysisCrashes).isEqualTo(1)
+        verify(exactly = 1) { analysisWarnings.addUnique(match { it.contains("poison.kt") }) }
+    }
+
+    @Test
+    fun `failFast rethrows on a StackOverflowError crash`() {
+        context.setSettings(MapSettings().apply { setProperty(FAIL_FAST_PROPERTY_NAME, true) })
+        context.fileSystem().add(createInputFile("poison.kt", "class P { fun p() = TODO() }"))
+        val sensor = crashSensor(checkFactory("SOERule1"))
+
+        assertThrows<IllegalStateException> { sensor.execute(context) }
+    }
+
+    @Test
+    fun `a StackOverflowError crash is logged with a short message and no stack-trace dump`() {
+        context.fileSystem().add(createInputFile("poison.kt", "class P { fun p() = TODO() }"))
+        crashSensor(checkFactory("SOERule1")).execute(context)
+
+        assertThat(logTester.logs(Level.ERROR))
+            .containsExactly("Analysis of 'poison.kt' with 'KtChecksVisitor' failed: java.lang.StackOverflowError")
+    }
+
+    @Test
+    fun `a clean multi-file scan posts no analysis warning`() {
+        context.fileSystem().add(createInputFile("good1.kt", "class A { fun a() = TODO() }"))
+        context.fileSystem().add(createInputFile("good2.kt", "class B { fun b() = TODO() }"))
+        sensor(checkFactory("S1764")).execute(context)
+
+        verify(exactly = 0) { analysisWarnings.addUnique(any()) }
+    }
+
+    @Test
+    fun `a real cyclic typealias does not abort the scan`() {
+        context.fileSystem().add(createInputFile("good1.kt", "class A { fun a() = TODO() }"))
+        context.fileSystem().add(createInputFile("poison.kt", "typealias A = A.Nested"))
+        context.fileSystem().add(createInputFile("good2.kt", "class B { fun b() = TODO() }"))
+
+        assertDoesNotThrow { sensor(checkFactory("S1764")).execute(context) }
     }
 
     @Test
@@ -766,7 +834,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
 
     private fun sensor(checkFactory: CheckFactory): KotlinSensor {
-        return KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), TelemetryData(), emptyArray())
+        return KotlinSensor(checkFactory, fileLinesContextFactory, DefaultNoSonarFilter(), language(), TelemetryData(), emptyArray(), analysisWarnings)
     }
 }
 
@@ -774,6 +842,18 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 internal class ExceptionThrowingCheck : AbstractCheck() {
     override fun visitNamedFunction(function: KtNamedFunction, data: KotlinFileContext?) {
         throw TestException("This is a test message")
+    }
+}
+
+@Rule(key = "SOERule1")
+internal class StackOverflowThrowingCheck : AbstractCheck() {
+    override fun visitNamedFunction(function: KtNamedFunction, kfc: KotlinFileContext) {
+        // Deterministically exercise the StackOverflowError containment path (Change 1) without depending on the
+        // Kotlin compiler actually overflowing: crash on the "poison" file, report a normal issue on the others.
+        if (kfc.inputFileContext.inputFile.filename().contains("poison")) {
+            throw StackOverflowError()
+        }
+        kfc.reportIssue(function.nameIdentifier!!, "boom")
     }
 }
 
