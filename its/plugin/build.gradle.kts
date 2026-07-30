@@ -6,7 +6,7 @@ dependencies {
     integrationTestImplementation(testLibs.sit)
     // Required: without it the engine fails with
     //   IllegalStateException: Unable to load components interface org.sonar.api.batch.sensor.Sensor
-    integrationTestImplementation(testLibs.sonar.plugin.api.sit)
+    integrationTestImplementation(libs.sonar.plugin.api)
     // Required: without it ScannerMain.<clinit> throws
     //   FactoryConfigurationError: Provider for javax.xml.parsers.SAXParserFactory cannot be created
     integrationTestRuntimeOnly(testLibs.xerces.impl)

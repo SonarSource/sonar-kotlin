@@ -33,7 +33,7 @@ dependencyResolutionManagement {
 
         val kotlinVersion: String by extra
         val analyzerCommonsVersionStr = "2.27.0.5007"
-        val sonarPluginApi = "11.1.0.2693"
+        val sonarPluginApi = "13.2.0.3137"
         val slf4jApi = "1.7.36"
 
         create("libs") {
@@ -84,7 +84,6 @@ dependencyResolutionManagement {
             val sonarqube = version("sonarqube", "25.1.0.102122")
             val scannerEngine = version("scannerEngine", "13.4.1.4007")
             val sit = version("sit", "1.2.0.1354")
-            val sonarPluginApiSit = version("sonarPluginApiSit", "13.2.0.3137")
             val xerces = version("xerces", "2.12.2")
 
             library("assertj-core", "org.assertj", "assertj-core").versionRef(assertj)
@@ -101,11 +100,7 @@ dependencyResolutionManagement {
             library("sonar-ws", "org.sonarsource.sonarqube", "sonar-ws").versionRef(sonarqube)
             library("sonarlint-core", "org.sonarsource.sonarlint.core", "sonarlint-core").versionRef(sonarlint)
             library("logback-classic", "ch.qos.logback", "logback-classic").version("1.5.38")
-            // SIT runs the scanner engine in-process; needs a newer sonar-plugin-api than the one the
-            // plugin itself compiles against, or the engine fails with
-            // "Unable to load components interface org.sonar.api.batch.sensor.Sensor".
             library("sit", "com.sonarsource.scanner.integrationtester", "sonar-scanner-integration-tester").versionRef(sit)
-            library("sonar-plugin-api-sit", "org.sonarsource.api.plugin", "sonar-plugin-api").versionRef(sonarPluginApiSit)
             // Without it, ScannerMain.<clinit> throws FactoryConfigurationError: Provider for class
             // javax.xml.parsers.SAXParserFactory cannot be created.
             library("xerces-impl", "xerces", "xercesImpl").versionRef(xerces)
