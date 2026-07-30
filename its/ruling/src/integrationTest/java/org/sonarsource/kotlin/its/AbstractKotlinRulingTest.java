@@ -22,6 +22,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sonar.orchestrator.locator.FileLocation;
+import com.sonarsource.scanner.integrationtester.dsl.ActiveRule;
 import com.sonarsource.scanner.integrationtester.dsl.EngineVersion;
 import com.sonarsource.scanner.integrationtester.dsl.Log;
 import com.sonarsource.scanner.integrationtester.dsl.ScannerInput;
@@ -34,6 +35,7 @@ import com.sonarsource.scanner.integrationtester.runner.ScannerRunner;
 import com.sonarsource.scanner.integrationtester.runner.ScannerRunnerConfig;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -46,23 +48,29 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.jar.JarFile;
+import java.util.regex.Pattern;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Ruling test running the analyzer through the sonar-scanner-integration-tester (SIT) instead of the orchestrator:
- * the scanner engine runs in-process against a mock server, so no SonarQube server and no license are needed.
- * Issues are read directly off the in-process scanner report and diffed here in Java against the golden files
- * under {@code src/integrationTest/resources/expected}, rather than routing through the sonar-lits-plugin.
+ * Base class for ruling tests running the analyzer through the sonar-scanner-integration-tester (SIT) instead of
+ * the orchestrator: the scanner engine runs in-process against a mock server, so no SonarQube server and no
+ * license are needed. Issues are read directly off the in-process scanner report and diffed here in Java against
+ * the golden files under {@code src/integrationTest/resources/expected}, rather than routing through the
+ * sonar-lits-plugin.
+ * <p>
+ * One concrete subclass per corpus, each with a single {@code @Test} method: concurrent scans in the same
+ * JVM/classloader are unsafe (see {@code junit-platform.properties}), and Gradle's {@code maxParallelForks} forks
+ * per test class rather than per test method, so splitting the corpora into their own classes is what lets
+ * {@code its/ruling/build.gradle.kts} actually run them in parallel, each in its own isolated JVM/classloader.
  * <p>
  * {@code test_kotlin_language_server} is not ported here: it needs a real Gradle build to supply the Java
  * classpath and its golden files are project-dir-relative. It stays on the orchestrator in {@code :its:sq-integration}.
  */
-class KotlinRulingTest {
+abstract class AbstractKotlinRulingTest {
 
   private static final String LANGUAGE_KEY = "kotlin";
 
@@ -89,7 +97,7 @@ class KotlinRulingTest {
 
   @BeforeAll
   static void setUp() {
-    var activeRules = RulingRules.nativeRules(KOTLIN_PLUGIN_LOCATION, LANGUAGE_KEY, Map.of(
+    var activeRules = nativeRules(KOTLIN_PLUGIN_LOCATION, LANGUAGE_KEY, Map.of(
       "S1451", Map.of(
         "headerFormat", HEADER_FORMAT,
         "isRegularExpression", "true")));
@@ -111,63 +119,7 @@ class KotlinRulingTest {
     ScannerRunner.closeAllClassLoaders();
   }
 
-  @Test
-  @EnabledIfEnvironmentVariable(named = "KOTLIN_COMPILER_IT_ENABLED", matches = "true")
-  void test_kotlin_compiler() throws IOException {
-    List<String> exclusions = List.of(
-      "**/testData/**/*",
-      "sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/CompileServiceImpl.kt",
-      "sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/psiUtil/ktPsiUtil.kt",
-      "sources/kotlin/kotlin/compiler/psi/src/org/jetbrains/kotlin/psi/psiUtil/psiUtils.kt",
-      "sources/kotlin/kotlin/j2k/src/org/jetbrains/kotlin/j2k/ast/Statements.kt",
-      "sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.w3c.dom.kt",
-      "sources/kotlin/kotlin/libraries/stdlib/js/src/org.w3c/org.khronos.webgl.kt"
-    );
-    analyzeAndAssertDifferences("kotlin", Map.of(
-      "sonar.inclusions", "sources/kotlin/kotlin/**/*.kt",
-      "sonar.exclusions", String.join(",", exclusions)));
-  }
-
-  @Test
-  void test_resources_sources() throws IOException {
-    analyzeAndAssertDifferences("test-resources-sources", Map.of(
-      "sonar.inclusions", "ruling/src/integrationTest/resources/sources/kotlin/**/*.kt",
-      "sonar.java.libraries", System.getProperty("gradle.main.compile.classpath").replace(File.pathSeparatorChar, ',')
-    ));
-  }
-
-  @Test
-  void test_kotlin_android() throws IOException {
-    analyzeAndAssertDifferences("android-architecture-components", Map.of(
-      "sonar.inclusions", "sources/kotlin/android-architecture-components/**/*.kt",
-      "sonar.exclusions", "**/testData/**/*"
-    ));
-  }
-
-  @Test
-  void test_kotlin_corda() throws IOException {
-    analyzeAndAssertDifferences("corda", Map.of(
-      "sonar.inclusions", "sources/kotlin/corda/**/*.kt",
-      "sonar.exclusions", "**/testData/**/*"
-    ));
-  }
-
-  @Test
-  void test_kotlin_intellij_rust() throws IOException {
-    analyzeAndAssertDifferences("intellij-rust", Map.of(
-      "sonar.inclusions", "sources/kotlin/intellij-rust/**/*.kt",
-      "sonar.exclusions", "**/testData/**/*"
-    ));
-  }
-
-  @Test
-  void test_kotlin_okio() throws IOException {
-    analyzeAndAssertDifferences("okio", Map.of(
-      "sonar.inclusions", "sources/kotlin/okio/**/*.kt",
-      "sonar.exclusions", "**/testData/**/*"));
-  }
-
-  private void analyzeAndAssertDifferences(String projectName, Map<String, String> additionalProperties) throws IOException {
+  protected void analyzeAndAssertDifferences(String projectName, Map<String, String> additionalProperties) throws IOException {
     String projectKey = REPO_KEY + "-" + projectName + "-project";
 
     Map<String, String> properties = new HashMap<>(additionalProperties);
@@ -326,5 +278,42 @@ class KotlinRulingTest {
       unexpected.forEach(line -> differences.add("[" + ruleKey + "] " + (line == 0 ? path : path + ":" + line) + " unexpected"));
     }
     return differences;
+  }
+
+  /**
+   * Builds the active-rules list for the ruling test by scanning the plugin jar's rule metadata, replacing
+   * {@code org.sonarsource.analyzer.commons.ProfileGenerator} (which needed a live server to register a profile).
+   */
+  private static List<ActiveRule> nativeRules(Path analyzerJar, String languageKey, Map<String, Map<String, String>> parametersByRuleKey) {
+    Pattern pattern = Pattern.compile("(?:org|com)/sonar/l10n/" + Pattern.quote(languageKey)
+      + "/rules/" + Pattern.quote(languageKey) + "/([^/]+)\\.json");
+    var ruleKeys = new TreeSet<String>();
+    try (JarFile jar = new JarFile(analyzerJar.toFile())) {
+      var entries = jar.entries();
+      while (entries.hasMoreElements()) {
+        var matcher = pattern.matcher(entries.nextElement().getName());
+        if (matcher.matches() && !"Sonar_way_profile".equals(matcher.group(1))) {
+          ruleKeys.add(matcher.group(1));
+        }
+      }
+    } catch (IOException e) {
+      throw new UncheckedIOException("Cannot read rules from analyzer JAR " + analyzerJar, e);
+    }
+    if (ruleKeys.isEmpty()) {
+      throw new IllegalStateException("No rules found for language '" + languageKey + "' in " + analyzerJar);
+    }
+    return ruleKeys.stream()
+      .map(ruleKey -> activeRule(languageKey, ruleKey, parametersByRuleKey.getOrDefault(ruleKey, Map.of())))
+      .toList();
+  }
+
+  private static ActiveRule activeRule(String languageKey, String ruleKey, Map<String, String> parameters) {
+    var builder = ActiveRule.builder()
+      .withKey(languageKey, ruleKey)
+      .withName(ruleKey)
+      .withLanguageKey(languageKey)
+      .withSeverity(ActiveRule.Severity.INFO);
+    parameters.forEach(builder::withParameter);
+    return builder.build();
   }
 }
