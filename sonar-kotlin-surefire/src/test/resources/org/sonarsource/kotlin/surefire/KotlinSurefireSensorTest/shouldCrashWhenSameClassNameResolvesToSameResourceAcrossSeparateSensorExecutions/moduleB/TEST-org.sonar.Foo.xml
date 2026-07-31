@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" skipped="1" tests="2" time="0.020" failures="1" name="org.sonar.Foo">
+  <testcase classname="org.sonar.Foo" time="0.010" name="testB1">
+    <failure type="java.lang.AssertionError" message="boom">java.lang.AssertionError: boom</failure>
+  </testcase>
+  <testcase classname="org.sonar.Foo" time="0.010" name="testB2">
+    <skipped/>
+  </testcase>
+</testsuite>

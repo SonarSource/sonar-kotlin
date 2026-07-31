@@ -19,6 +19,7 @@ package org.sonarsource.kotlin.surefire;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,7 @@ import org.sonarsource.kotlin.metrics.TelemetryData;
 import org.sonarsource.kotlin.surefire.api.SurefireUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -210,6 +212,29 @@ class KotlinSurefireSensorTest {
     assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isEqualTo(2);
     assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_ERRORS).value()).isZero();
     assertThat(context.measure(":org.sonar.Foo", CoreMetrics.SKIPPED_TESTS).value()).isEqualTo(2);
+  }
+
+  @Test
+  void shouldCrashWhenSameClassNameResolvesToSameResourceAcrossSeparateSensorExecutions() throws URISyntaxException {
+    // analysis of a multi-module project invokes KotlinSurefireSensor#execute() once per module
+    var context = SensorContextTester.create(new File(""));
+    context.fileSystem()
+      .add(resource("org.sonar.Foo"));
+
+    var reportDirModuleA = new File(getClass()
+      .getResource("/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/" +
+        "shouldCrashWhenSameClassNameResolvesToSameResourceAcrossSeparateSensorExecutions/moduleA/")
+      .toURI());
+    var reportDirModuleB = new File(getClass()
+      .getResource("/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/" +
+        "shouldCrashWhenSameClassNameResolvesToSameResourceAcrossSeparateSensorExecutions/moduleB/")
+      .toURI());
+
+    surefireSensor.collect(context, List.of(reportDirModuleA));
+
+    assertThatIllegalStateException()
+      .isThrownBy(() -> surefireSensor.collect(context, List.of(reportDirModuleB)))
+      .withMessage("Can not add the same measure twice");
   }
 
   @Test
