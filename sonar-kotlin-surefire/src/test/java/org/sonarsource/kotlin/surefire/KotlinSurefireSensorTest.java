@@ -20,7 +20,6 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
@@ -59,7 +58,7 @@ class KotlinSurefireSensorTest {
     context.setFileSystem(fs);
 
     kotlinResourcesLocator = mock(KotlinResourcesLocator.class);
-    when(kotlinResourcesLocator.findResourceByClassName(anyString())).thenAnswer(invocation -> Optional.of(resource((String) invocation.getArguments()[0])));
+    when(kotlinResourcesLocator.findResourceByClassName(anyString())).thenAnswer(invocation -> List.of(resource((String) invocation.getArguments()[0])));
 
     telemetryData = new TelemetryData();
     surefireSensor = new KotlinSurefireSensor(new KotlinSurefireParser(kotlinResourcesLocator), new MapSettings().asConfig(), pathResolver, telemetryData);
@@ -244,12 +243,24 @@ class KotlinSurefireSensorTest {
 
   @Test
   void shouldTrackTelemetryForNotFoundResources() throws URISyntaxException {
-    when(kotlinResourcesLocator.findResourceByClassName(anyString())).thenReturn(Optional.empty());
+    when(kotlinResourcesLocator.findResourceByClassName(anyString())).thenReturn(List.of());
 
     collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldHandleTestSuiteDetails/");
 
     assertThat(telemetryData.getSurefireClassesImported()).isZero();
     assertThat(telemetryData.getSurefireClassesFailed()).isEqualTo(3);
+  }
+
+  @Test
+  void shouldTrackTelemetryForDuplicatedResources() throws URISyntaxException {
+    when(kotlinResourcesLocator.findResourceByClassName(anyString()))
+      .thenAnswer(invocation -> List.of(resource((String) invocation.getArguments()[0]), resource((String) invocation.getArguments()[0])));
+
+    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldHandleTestSuiteDetails/");
+
+    assertThat(telemetryData.getSurefireClassesImported()).isZero();
+    assertThat(telemetryData.getSurefireClassesFailed()).isZero();
+    assertThat(telemetryData.getSurefireClassesDuplicated()).isEqualTo(3);
   }
 
   private void collect(SensorContextTester context, String path) throws URISyntaxException {

@@ -26,7 +26,6 @@ import org.sonar.api.batch.fs.InputFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @ScannerSide
 public class KotlinResourcesLocator {
@@ -36,18 +35,22 @@ public class KotlinResourcesLocator {
   public KotlinResourcesLocator(FileSystem fs) {
     this.fs = fs;
   }
-  
-  public Optional<InputFile> findResourceByClassName(String className) {
+
+  /**
+   * Returns every indexed Kotlin file whose path matches the given class name. Callers must handle
+   * the case where more than one file matches: this happens when a flat, multi-module analysis
+   * indexes the same class name from several modules, and there is no reliable way to tell which
+   * match the surefire report at hand actually refers to.
+   */
+  public List<InputFile> findResourceByClassName(String className) {
     String fileName = className.replace(".", "/");
     LOGGER.info("Searching for {}", fileName);
     FilePredicates p = fs.predicates();
     FilePredicate fileNamePredicates =
       getFileNamePredicateFromSuffixes(p, fileName, new String[]{".kt"});
-    if (fs.hasFiles(fileNamePredicates)) {
-      return Optional.of(fs.inputFiles(fileNamePredicates).iterator().next());
-    } else {
-      return Optional.empty();
-    }
+    List<InputFile> matches = new ArrayList<>();
+    fs.inputFiles(fileNamePredicates).forEach(matches::add);
+    return matches;
   }
 
   private static FilePredicate getFileNamePredicateFromSuffixes(

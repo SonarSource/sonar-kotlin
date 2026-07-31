@@ -25,6 +25,7 @@ class TelemetryData {
     var hasAndroidImports = false
     var surefireClassesImported = 0
     var surefireClassesFailed = 0
+    var surefireClassesDuplicated = 0
     // .kt + .kts counters
     var filesProcessed = 0
     var readFailures = 0

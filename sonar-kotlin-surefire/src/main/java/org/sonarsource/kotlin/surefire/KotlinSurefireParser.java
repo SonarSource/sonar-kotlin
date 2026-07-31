@@ -21,7 +21,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.xml.stream.XMLStreamException;
 import org.slf4j.Logger;
@@ -116,12 +115,15 @@ public class KotlinSurefireParser {
       UnitTestClassReport report = entry.getValue();
       if (report.getTests() > 0) {
         negativeTimeTestNumber += report.getNegativeTimeTestNumber();
-        Optional<InputFile> inputFile = kotlinResourcesLocator.findResourceByClassName(entry.getKey());
-        if (inputFile.isPresent()) {
-          save(report, inputFile.get(), context);
+        List<InputFile> inputFiles = kotlinResourcesLocator.findResourceByClassName(entry.getKey());
+        if (inputFiles.size() == 1) {
+          save(report, inputFiles.get(0), context);
           telemetryData.setSurefireClassesImported(telemetryData.getSurefireClassesImported() + 1);
-        } else {
+        } else if (inputFiles.isEmpty()) {
           telemetryData.setSurefireClassesFailed(telemetryData.getSurefireClassesFailed() + 1);
+        } else {
+          LOGGER.warn("Class name {} resolves to {} files, skipping measure import to avoid ambiguous results", entry.getKey(), inputFiles.size());
+          telemetryData.setSurefireClassesDuplicated(telemetryData.getSurefireClassesDuplicated() + 1);
         }
       }
     }

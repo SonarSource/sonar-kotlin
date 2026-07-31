@@ -18,7 +18,7 @@ package org.sonarsource.kotlin.surefire;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.Optional;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.FileSystem;
@@ -40,28 +40,40 @@ class KotlinResourcesLocatorTest {
     new DefaultIndexedFile("", new File("/").toPath(), "",""),
     x -> {},
     x -> {});
+  private final InputFile other = new DefaultInputFile(
+    new DefaultIndexedFile("", new File("/").toPath(), "",""),
+    x -> {},
+    x -> {});
 
   @BeforeEach
   void setUp() {
     when(fileSystem.predicates()).thenReturn(new DefaultFilePredicates(new File("/").toPath()));
-    when(fileSystem.inputFiles(any())).thenReturn(Collections.singletonList(expected));
   }
 
   @Test
   void findResourceByClassName() {
-    when(fileSystem.hasFiles(any())).thenReturn(true);
+    when(fileSystem.inputFiles(any())).thenReturn(Collections.singletonList(expected));
 
-    Optional<InputFile> inputFile = kotlinResourcesLocator.findResourceByClassName("MyClass");
+    List<InputFile> inputFiles = kotlinResourcesLocator.findResourceByClassName("MyClass");
 
-    assertEquals(Optional.of(expected), inputFile);
+    assertEquals(List.of(expected), inputFiles);
   }
 
   @Test
   void findNoResourceByClassName() {
-    when(fileSystem.hasFiles(any())).thenReturn(false);
+    when(fileSystem.inputFiles(any())).thenReturn(Collections.emptyList());
 
-    Optional<InputFile> inputFile = kotlinResourcesLocator.findResourceByClassName("MyClass");
+    List<InputFile> inputFiles = kotlinResourcesLocator.findResourceByClassName("MyClass");
 
-    assertEquals(Optional.empty(), inputFile);
+    assertEquals(List.of(), inputFiles);
+  }
+
+  @Test
+  void findMultipleResourcesByClassName() {
+    when(fileSystem.inputFiles(any())).thenReturn(List.of(expected, other));
+
+    List<InputFile> inputFiles = kotlinResourcesLocator.findResourceByClassName("MyClass");
+
+    assertEquals(List.of(expected, other), inputFiles);
   }
 }
