@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: get secrets
         id: secrets
-        uses: SonarSource/vault-action-wrapper@dc8fe04652687f7278f3ecd27905967836bab0eb  # tag=2.7.4-1
+        uses: SonarSource/vault-action-wrapper@f4794f0a6d33f37c1900a4d8975a65cd53300dba  # 2.8.0
         with:
           secrets: |
             development/github/token/{REPO_OWNER_NAME_DASH}-dogfood-merge token | dogfood_token;
@@ -25,7 +25,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).dogfood_token }}
         id: dogfood
-        uses: SonarSource/gh-action_dogfood_merge@v1
+        uses: SonarSource/gh-action_dogfood_merge@1.1.0
         with:
           dogfood-branch: 'dogfood-on-peach'
       # Use the output from the `dogfood` step
