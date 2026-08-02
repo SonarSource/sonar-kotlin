@@ -27,12 +27,12 @@ jobs:
         # for Develocity
         run: echo "GITHUB_JOB_ID=${{ job.check_run_id }}" >> $GITHUB_ENV
         shell: bash
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - &checkout-build-logic
         id: checkout-build-logic
         run: git submodule update --init -- build-logic/common
       - &setup-mise
-        uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
+        uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 # v4.2.3
         with:
           version: 2026.2.24
       - id: secrets
@@ -73,7 +73,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - *checkout-build-logic
       - *setup-mise
       - id: secrets
@@ -96,7 +96,7 @@ jobs:
     timeout-minutes: 60
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           submodules: true
       - *setup-mise
@@ -121,7 +121,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           submodules: true
       - *setup-mise
