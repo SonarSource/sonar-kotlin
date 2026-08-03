@@ -124,7 +124,13 @@ public class KotlinSurefireParser {
       if (report.getTests() > 0) {
         negativeTimeTestNumber += report.getNegativeTimeTestNumber();
         List<InputFile> inputFiles = kotlinResourcesLocator.findResourceByClassName(entry.getKey());
-        if (inputFiles.size() == 1) {
+        if (inputFiles.isEmpty()) {
+          telemetryData.setSurefireClassesFailed(telemetryData.getSurefireClassesFailed() + 1);
+        } else {
+          if (inputFiles.size() > 1) {
+            LOGGER.debug("Class name {} resolves to {} files, importing measures for the first one", entry.getKey(), inputFiles.size());
+            telemetryData.setSurefireClassesDuplicated(telemetryData.getSurefireClassesDuplicated() + 1);
+          }
           InputFile inputFile = inputFiles.get(0);
           if (importedInputFileKeys.add(inputFile.key())) {
             save(report, inputFile, context);
@@ -133,11 +139,6 @@ public class KotlinSurefireParser {
             LOGGER.debug("Measures for {} were already saved, skipping to avoid saving the same measure twice", inputFile);
             telemetryData.setSurefireClassesOverlapping(telemetryData.getSurefireClassesOverlapping() + 1);
           }
-        } else if (inputFiles.isEmpty()) {
-          telemetryData.setSurefireClassesFailed(telemetryData.getSurefireClassesFailed() + 1);
-        } else {
-          LOGGER.warn("Class name {} resolves to {} files, skipping measure import to avoid ambiguous results", entry.getKey(), inputFiles.size());
-          telemetryData.setSurefireClassesDuplicated(telemetryData.getSurefireClassesDuplicated() + 1);
         }
       }
     }

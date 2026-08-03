@@ -259,7 +259,7 @@ class KotlinSurefireSensorTest {
 
     collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldHandleTestSuiteDetails/");
 
-    assertThat(telemetryData.getSurefireClassesImported()).isZero();
+    assertThat(telemetryData.getSurefireClassesImported()).isEqualTo(3);
     assertThat(telemetryData.getSurefireClassesFailed()).isZero();
     assertThat(telemetryData.getSurefireClassesDuplicated()).isEqualTo(3);
   }

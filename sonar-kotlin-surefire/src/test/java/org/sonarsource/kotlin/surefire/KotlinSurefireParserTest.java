@@ -96,7 +96,7 @@ class KotlinSurefireParserTest {
   }
 
   @Test
-  void should_not_store_measure_and_should_track_duplicated_telemetry_when_class_name_resolves_to_multiple_files() {
+  void should_store_measure_for_first_candidate_and_should_track_duplicated_telemetry_when_class_name_resolves_to_multiple_files() {
     when(kotlinResourcesLocator.findResourceByClassName(anyString()))
       .thenAnswer(invocation -> List.of(
         TestInputFileBuilder.create("", (String) invocation.getArguments()[0]).build(),
@@ -105,8 +105,8 @@ class KotlinSurefireParserTest {
     SensorContextTester context = mockContext();
     parser.collect(context, getDirs("multipleReports"), false, telemetryData);
 
-    assertThat(context.measures(":ch.hortis.sonar.mvn.mc.MetricsCollectorRegistryTest")).isEmpty();
-    verifyTelemetry(0, 0, 6);
+    assertThat(context.measures(":ch.hortis.sonar.mvn.mc.MetricsCollectorRegistryTest")).hasSize(5);
+    verifyTelemetry(6, 0, 6);
   }
 
   @Test
