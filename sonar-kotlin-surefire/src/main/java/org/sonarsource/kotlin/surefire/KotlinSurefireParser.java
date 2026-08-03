@@ -19,8 +19,10 @@ package org.sonarsource.kotlin.surefire;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.xml.stream.XMLStreamException;
 import org.slf4j.Logger;
@@ -38,6 +40,12 @@ import org.sonarsource.kotlin.surefire.data.UnitTestIndex;
 public class KotlinSurefireParser {
   private static final Logger LOGGER = LoggerFactory.getLogger(KotlinSurefireParser.class);
   private final KotlinResourcesLocator kotlinResourcesLocator;
+  /**
+   * Keys of {@link InputFile}s with measures already saved, tracked across the multiple
+   * {@link #collect} calls a flat, multi-module analysis makes, since the same file can
+   * otherwise be resolved again from another module's report and crash on re-saving.
+   */
+  private final Set<String> importedInputFileKeys = new HashSet<>();
   private TelemetryData telemetryData;
 
   public KotlinSurefireParser(KotlinResourcesLocator kotlinResourcesLocator) {
@@ -117,8 +125,14 @@ public class KotlinSurefireParser {
         negativeTimeTestNumber += report.getNegativeTimeTestNumber();
         List<InputFile> inputFiles = kotlinResourcesLocator.findResourceByClassName(entry.getKey());
         if (inputFiles.size() == 1) {
-          save(report, inputFiles.get(0), context);
-          telemetryData.setSurefireClassesImported(telemetryData.getSurefireClassesImported() + 1);
+          InputFile inputFile = inputFiles.get(0);
+          if (importedInputFileKeys.add(inputFile.key())) {
+            save(report, inputFile, context);
+            telemetryData.setSurefireClassesImported(telemetryData.getSurefireClassesImported() + 1);
+          } else {
+            LOGGER.debug("Measures for {} were already saved, skipping to avoid saving the same measure twice", inputFile);
+            telemetryData.setSurefireClassesOverlapping(telemetryData.getSurefireClassesOverlapping() + 1);
+          }
         } else if (inputFiles.isEmpty()) {
           telemetryData.setSurefireClassesFailed(telemetryData.getSurefireClassesFailed() + 1);
         } else {

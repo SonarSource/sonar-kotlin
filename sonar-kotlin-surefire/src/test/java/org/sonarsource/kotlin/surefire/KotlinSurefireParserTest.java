@@ -237,6 +237,21 @@ class KotlinSurefireParserTest {
     verifyTelemetry(3, 0, 0);
   }
 
+  @Test
+  void shouldNotSaveMeasureTwiceAndShouldTrackOverlappingTelemetryWhenSameClassResolvesToSameFileAcrossMultipleCalls() {
+    SensorContextTester context = mockContext();
+
+    parser.collect(context, getDirs("onlyTestSuiteReport"), true, telemetryData);
+    assertThat(context.measures(":org.sonar.SecondTest")).hasSize(5);
+    assertThat(context.measures(":org.sonar.JavaNCSSCollectorTest")).hasSize(5);
+    verifyTelemetry(2, 0, 0, 0);
+
+    parser.collect(context, getDirs("onlyTestSuiteReport"), true, telemetryData);
+    assertThat(context.measures(":org.sonar.SecondTest")).hasSize(5);
+    assertThat(context.measures(":org.sonar.JavaNCSSCollectorTest")).hasSize(5);
+    verifyTelemetry(2, 0, 0, 2);
+  }
+
   private List<File> getDirs(String... directoryNames) {
     return Stream.of(directoryNames)
       .map(directoryName -> new File("src/test/resources/org/sonarsource/kotlin/surefire/api/SurefireParserTest/" + directoryName))
@@ -248,8 +263,13 @@ class KotlinSurefireParserTest {
   }
 
   private void verifyTelemetry(int expectedImported, int expectedFailed, int expectedDuplicated) {
+    verifyTelemetry(expectedImported, expectedFailed, expectedDuplicated, 0);
+  }
+
+  private void verifyTelemetry(int expectedImported, int expectedFailed, int expectedDuplicated, int expectedOverlapping) {
     assertThat(telemetryData.getSurefireClassesImported()).isEqualTo(expectedImported);
     assertThat(telemetryData.getSurefireClassesFailed()).isEqualTo(expectedFailed);
     assertThat(telemetryData.getSurefireClassesDuplicated()).isEqualTo(expectedDuplicated);
+    assertThat(telemetryData.getSurefireClassesOverlapping()).isEqualTo(expectedOverlapping);
   }
 }

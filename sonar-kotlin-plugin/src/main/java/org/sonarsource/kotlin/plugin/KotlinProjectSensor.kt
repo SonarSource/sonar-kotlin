@@ -81,6 +81,7 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
                 addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.imported", surefireClassesImported)
                 addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.failed", surefireClassesFailed)
                 addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.duplicated", surefireClassesDuplicated)
+                addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.overlapping", surefireClassesOverlapping)
             }
 
             fileProcessingTelemetry(context)

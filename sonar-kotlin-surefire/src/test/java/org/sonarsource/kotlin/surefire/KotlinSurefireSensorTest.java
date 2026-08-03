@@ -35,7 +35,6 @@ import org.sonarsource.kotlin.metrics.TelemetryData;
 import org.sonarsource.kotlin.surefire.api.SurefireUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -214,7 +213,7 @@ class KotlinSurefireSensorTest {
   }
 
   @Test
-  void shouldCrashWhenSameClassNameResolvesToSameResourceAcrossSeparateSensorExecutions() throws URISyntaxException {
+  void shouldNotCrashAndShouldTrackOverlappingTelemetryWhenSameClassNameResolvesToSameResourceAcrossSeparateSensorExecutions() throws URISyntaxException {
     // analysis of a multi-module project invokes KotlinSurefireSensor#execute() once per module
     var context = SensorContextTester.create(new File(""));
     context.fileSystem()
@@ -230,10 +229,12 @@ class KotlinSurefireSensorTest {
       .toURI());
 
     surefireSensor.collect(context, List.of(reportDirModuleA));
+    surefireSensor.collect(context, List.of(reportDirModuleB));
 
-    assertThatIllegalStateException()
-      .isThrownBy(() -> surefireSensor.collect(context, List.of(reportDirModuleB)))
-      .withMessage("Can not add the same measure twice");
+    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isEqualTo(2);
+    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isZero();
+    assertThat(telemetryData.getSurefireClassesImported()).isEqualTo(1);
+    assertThat(telemetryData.getSurefireClassesOverlapping()).isEqualTo(1);
   }
 
   @Test
