@@ -18,7 +18,7 @@ package org.sonarsource.kotlin.surefire;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.Optional;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.FileSystem;
@@ -27,7 +27,7 @@ import org.sonar.scanner.plugin.api.impl.fs.DefaultIndexedFile;
 import org.sonar.scanner.plugin.api.impl.fs.DefaultInputFile;
 import org.sonar.scanner.plugin.api.impl.fs.predicates.DefaultFilePredicates;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -40,28 +40,40 @@ class KotlinResourcesLocatorTest {
     new DefaultIndexedFile("", new File("/").toPath(), "",""),
     x -> {},
     x -> {});
+  private final InputFile other = new DefaultInputFile(
+    new DefaultIndexedFile("", new File("/").toPath(), "",""),
+    x -> {},
+    x -> {});
 
   @BeforeEach
   void setUp() {
     when(fileSystem.predicates()).thenReturn(new DefaultFilePredicates(new File("/").toPath()));
-    when(fileSystem.inputFiles(any())).thenReturn(Collections.singletonList(expected));
   }
 
   @Test
   void findResourceByClassName() {
-    when(fileSystem.hasFiles(any())).thenReturn(true);
+    when(fileSystem.inputFiles(any())).thenReturn(Collections.singletonList(expected));
 
-    Optional<InputFile> inputFile = kotlinResourcesLocator.findResourceByClassName("MyClass");
+    List<InputFile> inputFiles = kotlinResourcesLocator.findResourceByClassName("MyClass");
 
-    assertEquals(Optional.of(expected), inputFile);
+    assertThat(inputFiles).containsExactly(expected);
   }
 
   @Test
   void findNoResourceByClassName() {
-    when(fileSystem.hasFiles(any())).thenReturn(false);
+    when(fileSystem.inputFiles(any())).thenReturn(Collections.emptyList());
 
-    Optional<InputFile> inputFile = kotlinResourcesLocator.findResourceByClassName("MyClass");
+    List<InputFile> inputFiles = kotlinResourcesLocator.findResourceByClassName("MyClass");
 
-    assertEquals(Optional.empty(), inputFile);
+    assertThat(inputFiles).isEmpty();
+  }
+
+  @Test
+  void findMultipleResourcesByClassName() {
+    when(fileSystem.inputFiles(any())).thenReturn(List.of(expected, other));
+
+    List<InputFile> inputFiles = kotlinResourcesLocator.findResourceByClassName("MyClass");
+
+    assertThat(inputFiles).containsExactly(expected, other);
   }
 }

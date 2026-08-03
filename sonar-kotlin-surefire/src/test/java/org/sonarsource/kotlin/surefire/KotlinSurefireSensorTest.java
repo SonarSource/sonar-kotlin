@@ -19,7 +19,7 @@ package org.sonarsource.kotlin.surefire;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.Collections;
-import java.util.Optional;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
@@ -57,7 +57,7 @@ class KotlinSurefireSensorTest {
     context.setFileSystem(fs);
 
     kotlinResourcesLocator = mock(KotlinResourcesLocator.class);
-    when(kotlinResourcesLocator.findResourceByClassName(anyString())).thenAnswer(invocation -> Optional.of(resource((String) invocation.getArguments()[0])));
+    when(kotlinResourcesLocator.findResourceByClassName(anyString())).thenAnswer(invocation -> List.of(resource((String) invocation.getArguments()[0])));
 
     telemetryData = new TelemetryData();
     surefireSensor = new KotlinSurefireSensor(new KotlinSurefireParser(kotlinResourcesLocator), new MapSettings().asConfig(), pathResolver, telemetryData);
@@ -213,18 +213,55 @@ class KotlinSurefireSensorTest {
   }
 
   @Test
+  void shouldNotCrashAndShouldTrackOverlappingTelemetryWhenSameClassNameResolvesToSameResourceAcrossSeparateSensorExecutions() throws URISyntaxException {
+    // analysis of a multi-module project invokes KotlinSurefireSensor#execute() once per module
+    var sensorContext = SensorContextTester.create(new File(""));
+    sensorContext.fileSystem()
+      .add(resource("org.sonar.Foo"));
+
+    var reportDirModuleA = new File(getClass()
+      .getResource("/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/" +
+        "shouldCrashWhenSameClassNameResolvesToSameResourceAcrossSeparateSensorExecutions/moduleA/")
+      .toURI());
+    var reportDirModuleB = new File(getClass()
+      .getResource("/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/" +
+        "shouldCrashWhenSameClassNameResolvesToSameResourceAcrossSeparateSensorExecutions/moduleB/")
+      .toURI());
+
+    surefireSensor.collect(sensorContext, List.of(reportDirModuleA));
+    surefireSensor.collect(sensorContext, List.of(reportDirModuleB));
+
+    assertThat(sensorContext.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isEqualTo(2);
+    assertThat(sensorContext.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isZero();
+    assertThat(telemetryData.getSurefireClassesImported()).isEqualTo(1);
+    assertThat(telemetryData.getSurefireClassesOverlapping()).isEqualTo(1);
+  }
+
+  @Test
   void testToStringMethod() {
     assertThat(surefireSensor).hasToString("KotlinSurefireSensor");
   }
 
   @Test
   void shouldTrackTelemetryForNotFoundResources() throws URISyntaxException {
-    when(kotlinResourcesLocator.findResourceByClassName(anyString())).thenReturn(Optional.empty());
+    when(kotlinResourcesLocator.findResourceByClassName(anyString())).thenReturn(List.of());
 
     collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldHandleTestSuiteDetails/");
 
     assertThat(telemetryData.getSurefireClassesImported()).isZero();
     assertThat(telemetryData.getSurefireClassesFailed()).isEqualTo(3);
+  }
+
+  @Test
+  void shouldTrackTelemetryForDuplicatedResources() throws URISyntaxException {
+    when(kotlinResourcesLocator.findResourceByClassName(anyString()))
+      .thenAnswer(invocation -> List.of(resource((String) invocation.getArguments()[0]), resource((String) invocation.getArguments()[0])));
+
+    collect(context, "/org/sonarsource/kotlin/surefire/KotlinSurefireSensorTest/shouldHandleTestSuiteDetails/");
+
+    assertThat(telemetryData.getSurefireClassesImported()).isEqualTo(3);
+    assertThat(telemetryData.getSurefireClassesFailed()).isZero();
+    assertThat(telemetryData.getSurefireClassesDuplicated()).isEqualTo(3);
   }
 
   private void collect(SensorContextTester context, String path) throws URISyntaxException {
