@@ -36,12 +36,6 @@ public class KotlinResourcesLocator {
     this.fs = fs;
   }
 
-  /**
-   * Returns every indexed Kotlin file whose path matches the given class name. Callers must handle
-   * the case where more than one file matches: this happens when a flat, multi-module analysis
-   * indexes the same class name from several modules, and there is no reliable way to tell which
-   * match the surefire report at hand actually refers to.
-   */
   public List<InputFile> findResourceByClassName(String className) {
     String fileName = className.replace(".", "/");
     LOGGER.info("Searching for {}", fileName);

@@ -27,7 +27,7 @@ import org.sonar.scanner.plugin.api.impl.fs.DefaultIndexedFile;
 import org.sonar.scanner.plugin.api.impl.fs.DefaultInputFile;
 import org.sonar.scanner.plugin.api.impl.fs.predicates.DefaultFilePredicates;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -56,7 +56,7 @@ class KotlinResourcesLocatorTest {
 
     List<InputFile> inputFiles = kotlinResourcesLocator.findResourceByClassName("MyClass");
 
-    assertEquals(List.of(expected), inputFiles);
+    assertThat(inputFiles).containsExactly(expected);
   }
 
   @Test
@@ -65,7 +65,7 @@ class KotlinResourcesLocatorTest {
 
     List<InputFile> inputFiles = kotlinResourcesLocator.findResourceByClassName("MyClass");
 
-    assertEquals(List.of(), inputFiles);
+    assertThat(inputFiles).isEmpty();
   }
 
   @Test
@@ -74,6 +74,6 @@ class KotlinResourcesLocatorTest {
 
     List<InputFile> inputFiles = kotlinResourcesLocator.findResourceByClassName("MyClass");
 
-    assertEquals(List.of(expected, other), inputFiles);
+    assertThat(inputFiles).containsExactly(expected, other);
   }
 }
