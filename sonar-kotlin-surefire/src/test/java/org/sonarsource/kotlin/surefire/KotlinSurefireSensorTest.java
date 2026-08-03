@@ -215,8 +215,8 @@ class KotlinSurefireSensorTest {
   @Test
   void shouldNotCrashAndShouldTrackOverlappingTelemetryWhenSameClassNameResolvesToSameResourceAcrossSeparateSensorExecutions() throws URISyntaxException {
     // analysis of a multi-module project invokes KotlinSurefireSensor#execute() once per module
-    var context = SensorContextTester.create(new File(""));
-    context.fileSystem()
+    var sensorContext = SensorContextTester.create(new File(""));
+    sensorContext.fileSystem()
       .add(resource("org.sonar.Foo"));
 
     var reportDirModuleA = new File(getClass()
@@ -228,11 +228,11 @@ class KotlinSurefireSensorTest {
         "shouldCrashWhenSameClassNameResolvesToSameResourceAcrossSeparateSensorExecutions/moduleB/")
       .toURI());
 
-    surefireSensor.collect(context, List.of(reportDirModuleA));
-    surefireSensor.collect(context, List.of(reportDirModuleB));
+    surefireSensor.collect(sensorContext, List.of(reportDirModuleA));
+    surefireSensor.collect(sensorContext, List.of(reportDirModuleB));
 
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isEqualTo(2);
-    assertThat(context.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isZero();
+    assertThat(sensorContext.measure(":org.sonar.Foo", CoreMetrics.TESTS).value()).isEqualTo(2);
+    assertThat(sensorContext.measure(":org.sonar.Foo", CoreMetrics.TEST_FAILURES).value()).isZero();
     assertThat(telemetryData.getSurefireClassesImported()).isEqualTo(1);
     assertThat(telemetryData.getSurefireClassesOverlapping()).isEqualTo(1);
   }
