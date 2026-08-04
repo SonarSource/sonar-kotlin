@@ -172,7 +172,7 @@ jobs:
     # Wait for `promote`, not just `build`: the candidate artifact is only copied into a
     # publicly-readable Artifactory repo during promotion. Dispatching right after `build`
     # races PVF against promotion and PVF loses (artifact not found yet).
-    needs: [build, qa_plugin, qa_ruling, promote]
+    needs: [build, qa_plugin, qa_ruling, qa_sq_integration, promote]
     if: >-
       github.event_name == 'pull_request' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
