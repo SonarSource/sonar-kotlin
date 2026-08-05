@@ -287,8 +287,6 @@ fun postAnalysisCrashWarning(analysisWarnings: AnalysisWarnings, crashedFiles: C
  * the constructor that supplies this no-op, so plugin instantiation does not fail. See the sibling analyzers
  * (e.g. sonar-text's DefaultAnalysisWarningsWrapper) for the same pattern.
  */
-object NoOpAnalysisWarnings : AnalysisWarnings {
-    override fun addUnique(text: String) {
-        // no-op: this container does not surface analysis warnings
-    }
+val NoOpAnalysisWarnings = AnalysisWarnings {
+    // no-op: this container does not surface analysis warnings
 }
