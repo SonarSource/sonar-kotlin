@@ -213,6 +213,7 @@ jobs:
             -f event_type=sonar-kotlin-pr-pvf \
             -f "client_payload[baseline-version]=DEV" \
             -f "client_payload[candidate-version]=${CANDIDATE}" \
+            -f "client_payload[scannerDebug]=${{ contains(github.event.pull_request.labels.*.name, 'pvf-debug') }}" \
             -f "client_payload[commit-sha]=${{ github.event.pull_request.head.sha }}" \
             -f "client_payload[pr-number]=${{ github.event.pull_request.number }}" \
             -f "client_payload[source-repo]=${{ github.repository }}"
