@@ -19,6 +19,7 @@ package org.sonarsource.kotlin.plugin
 import com.intellij.openapi.util.Disposer
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
@@ -49,6 +50,7 @@ import org.sonarsource.kotlin.api.common.FAIL_FAST_PROPERTY_NAME
 import org.sonarsource.kotlin.api.common.SONAR_ANDROID_DETECTED
 import org.sonarsource.kotlin.api.common.SONAR_JAVA_BINARIES
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.frontend.KotlinSyntaxStructure
 import org.sonarsource.kotlin.plugin.caching.contentHashKey
 import org.sonarsource.kotlin.plugin.cpd.computeCPDTokensCacheKey
 import org.sonarsource.kotlin.testapi.AbstractSensorTest
@@ -416,9 +418,13 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         // ... while the other files are still fully analyzed (their issues are reported)
         assertThat(context.allIssues().map { (it.primaryLocation().inputComponent() as InputFile).filename() })
             .containsExactlyInAnyOrder("good1.kt", "good2.kt")
-        // telemetry counts it and a customer-visible warning names it
+        // telemetry counts it once and a single customer-visible warning names it and flags the whole scan
         assertThat(telemetryData.analysisCrashes).isEqualTo(1)
-        verify(exactly = 1) { analysisWarnings.addUnique(match { it.contains("poison.kt") }) }
+        verify(exactly = 1) {
+            analysisWarnings.addUnique(match {
+                it.contains("poison.kt") && it.contains("1 file crashed") && it.contains("analysis may be incomplete")
+            })
+        }
     }
 
     @Test
@@ -449,7 +455,60 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     @Test
-    fun `a real cyclic typealias does not abort the scan`() {
+    fun `a StackOverflowError while building the syntax structure is contained (parse path)`() {
+        // Regression for Change 2 (the SOE catch in the kotlinFiles parse lazy). A StackOverflowError raised inside
+        // KotlinSyntaxStructure.of -- e.g. the K2 type resolver overflowing on an invalid cyclic typealias -- must be
+        // contained during parsing so only the crashing file is skipped. Without the catch this Error escapes
+        // catch(Exception) and aborts the whole scan. We inject the overflow via a mock because the real compiler does
+        // not reliably overflow in the test JVM (see `a cyclic typealias ...` below), which would make this a no-op.
+        context.fileSystem().add(createInputFile("good1.kt", "class A { fun a() = TODO() }"))
+        context.fileSystem().add(createInputFile("poison.kt", "class P { fun p() = TODO() }"))
+        context.fileSystem().add(createInputFile("good2.kt", "class B { fun b() = TODO() }"))
+
+        mockkObject(KotlinSyntaxStructure.Companion)
+        every { KotlinSyntaxStructure.of(any(), any(), any()) } answers {
+            if (secondArg<InputFile>().filename() == "poison.kt") throw StackOverflowError()
+            callOriginal()
+        }
+
+        val telemetryData = TelemetryData()
+        val sensor = KotlinSensor(
+            checkFactory("S1764"), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData,
+            emptyArray(), analysisWarnings
+        )
+
+        assertDoesNotThrow { sensor.execute(context) }
+
+        assertThat(context.allAnalysisErrors().map { it.inputFile().filename() }).contains("poison.kt")
+        assertThat(telemetryData.analysisCrashes).isEqualTo(1)
+        assertThat(logTester.logs(Level.ERROR))
+            .contains("Cannot parse 'poison.kt': java.lang.StackOverflowError")
+        verify(exactly = 1) { analysisWarnings.addUnique(match { it.contains("poison.kt") }) }
+    }
+
+    @Test
+    fun `sensor built without AnalysisWarnings (SonarLint fallback constructor) still analyzes`() {
+        // Regression for the SonarLint DI finding: AnalysisWarnings is a @ScannerSide-only component that SonarLint's
+        // container does not provide. The sensor must expose a no-warnings constructor so SonarLint's greedy resolver
+        // can instantiate it (falling back to NoOpAnalysisWarnings) instead of failing to load the whole plugin.
+        context.fileSystem().add(createInputFile("file1.kt", "class A"))
+        context.fileSystem().add(createInputFile("file2.kt", "class B"))
+        val telemetryData = TelemetryData()
+
+        // NB: the 6-arg constructor -- no AnalysisWarnings argument.
+        val sensor = KotlinSensor(
+            checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()
+        )
+
+        assertDoesNotThrow { sensor.execute(context) }
+        assertThat(telemetryData.filesProcessed).isEqualTo(2)
+    }
+
+    @Test
+    fun `a cyclic typealias is analyzed without crashing the scan`() {
+        // Smoke test only: the real compiler does not overflow on this input in the test JVM, so this does NOT exercise
+        // the crash-recovery path (that is covered by the mocked StackOverflowError tests above). It guards against a
+        // regression where merely parsing/analyzing a self-referential typealias would break the scan.
         context.fileSystem().add(createInputFile("good1.kt", "class A { fun a() = TODO() }"))
         context.fileSystem().add(createInputFile("poison.kt", "typealias A = A.Nested"))
         context.fileSystem().add(createInputFile("good2.kt", "class B { fun b() = TODO() }"))

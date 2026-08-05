@@ -29,6 +29,7 @@ import org.sonarsource.kotlin.api.common.KOTLIN_REPOSITORY_KEY
 import org.sonarsource.kotlin.api.common.KotlinLanguage
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensor
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
+import org.sonarsource.kotlin.api.sensors.NoOpAnalysisWarnings
 import org.sonarsource.kotlin.api.sensors.postAnalysisCrashWarning
 import org.sonarsource.kotlin.api.visiting.KtChecksVisitor
 import org.sonarsource.kotlin.metrics.TelemetryData
@@ -49,6 +50,15 @@ class KotlinGradleSensor(
 ) : AbstractKotlinSensor(
     checkFactory, emptyList(), language, KOTLIN_GRADLE_CHECKS
 ) {
+
+    // Fallback for containers that do not provide AnalysisWarnings (SonarLint). The scanner (SonarQube) provides
+    // AnalysisWarnings and the greediest satisfiable constructor above is used; SonarLint has no AnalysisWarnings
+    // bean, so its container falls back to this constructor with a no-op instead of failing to instantiate the plugin.
+    constructor(
+        checkFactory: CheckFactory,
+        language: KotlinLanguage,
+        telemetryData: TelemetryData,
+    ) : this(checkFactory, language, telemetryData, NoOpAnalysisWarnings)
 
     override fun describe(descriptor: SensorDescriptor) {
         descriptor
@@ -81,12 +91,14 @@ class KotlinGradleSensor(
             telemetryData.scriptReadFailures++
         }
 
-        private val crashedFiles = mutableListOf<String>()
+        // A Set so a file that crashes in more than one visitor is counted and listed once, not once per visitor.
+        private val crashedFiles = mutableSetOf<String>()
 
         override fun onAnalysisCrash(inputFile: InputFile) {
-            telemetryData.analysisCrashes++
-            telemetryData.scriptAnalysisCrashes++
-            crashedFiles += inputFile.toString()
+            if (crashedFiles.add(inputFile.toString())) {
+                telemetryData.analysisCrashes++
+                telemetryData.scriptAnalysisCrashes++
+            }
         }
 
         override fun onAnalysisComplete() {

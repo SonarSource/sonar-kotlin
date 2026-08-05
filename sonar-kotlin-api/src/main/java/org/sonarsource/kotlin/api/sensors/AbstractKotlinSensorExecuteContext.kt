@@ -260,18 +260,35 @@ private fun toParseException(action: String, inputFile: InputFile, cause: Throwa
     ParseException("Cannot $action '$inputFile': ${cause.message}", (cause as? ParseException)?.position, cause)
 
 /**
- * Posts a project-level, customer-visible warning (SonarQube background-task warnings) so that files which could
- * not be fully analyzed due to a recoverable internal crash are surfaced honestly instead of being presented as
- * complete. No-op when [crashedFiles] is empty. The listed file names are capped so the message cannot balloon on
- * a large poisoned codebase. Unlike telemetry, the scanner log, or a rule-gated issue, [AnalysisWarnings.addUnique]
+ * Posts a project-level, customer-visible warning (SonarQube background-task warnings) when one or more files
+ * crashed during analysis. The crash is recovered (the file is skipped and the scan completes), but recovery is
+ * best-effort: the crashing file is not fully analyzed, and because the crash can leave shared analysis state
+ * (e.g. the Kotlin compiler's type resolver) in a degraded state, results for *other* files in the same run may
+ * also be affected. The warning is therefore phrased about the analysis as a whole rather than only the listed
+ * files. No-op when [crashedFiles] is empty. The listed file names are capped so the message cannot balloon on a
+ * large poisoned codebase. Unlike telemetry, the scanner log, or a rule-gated issue, [AnalysisWarnings.addUnique]
  * is never gated by profile/rule and always renders in the UI.
  */
-fun postAnalysisCrashWarning(analysisWarnings: AnalysisWarnings, crashedFiles: List<String>) {
+fun postAnalysisCrashWarning(analysisWarnings: AnalysisWarnings, crashedFiles: Collection<String>) {
     if (crashedFiles.isEmpty()) return
     val shown = crashedFiles.take(10).joinToString(", ")
     val more = if (crashedFiles.size > 10) " (and ${crashedFiles.size - 10} more)" else ""
+    val fileWord = if (crashedFiles.size == 1) "file" else "files"
     analysisWarnings.addUnique(
-        "The Kotlin analyzer could not fully analyze ${crashedFiles.size} file(s) due to an internal error; " +
-            "results for those files may be incomplete: $shown$more."
+        "${crashedFiles.size} $fileWord crashed during analysis; the Kotlin analyzer recovered and completed the " +
+            "scan, but the analysis may be incomplete: $shown$more."
     )
+}
+
+/**
+ * No-op [AnalysisWarnings] used as a constructor fallback in containers where [AnalysisWarnings] is not available.
+ * [AnalysisWarnings] is a `@ScannerSide`-only component: the SonarQube scanner provides it (and the sensors' primary,
+ * greediest constructor is used there), but SonarLint does not register it. Under SonarLint the sensors fall back to
+ * the constructor that supplies this no-op, so plugin instantiation does not fail. See the sibling analyzers
+ * (e.g. sonar-text's DefaultAnalysisWarningsWrapper) for the same pattern.
+ */
+object NoOpAnalysisWarnings : AnalysisWarnings {
+    override fun addUnique(text: String) {
+        // no-op: this container does not surface analysis warnings
+    }
 }

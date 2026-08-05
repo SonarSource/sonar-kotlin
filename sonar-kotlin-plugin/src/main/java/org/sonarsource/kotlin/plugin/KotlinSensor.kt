@@ -37,6 +37,7 @@ import org.sonarsource.kotlin.api.common.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.api.logging.debug
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensor
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
+import org.sonarsource.kotlin.api.sensors.NoOpAnalysisWarnings
 import org.sonarsource.kotlin.api.sensors.postAnalysisCrashWarning
 import org.sonarsource.kotlin.plugin.caching.ContentHashCache
 import org.sonarsource.kotlin.plugin.cpd.CopyPasteDetector
@@ -66,6 +67,21 @@ class KotlinSensor(
 ): AbstractKotlinSensor(
     checkFactory, instantiateRules(checkFactory, extensionsProviders), language, KOTLIN_CHECKS
 ) {
+
+    // Fallback for containers that do not provide AnalysisWarnings (SonarLint). The scanner (SonarQube) provides
+    // AnalysisWarnings and the greediest satisfiable constructor above is used; SonarLint has no AnalysisWarnings
+    // bean, so its container falls back to this constructor with a no-op instead of failing to instantiate the plugin.
+    constructor(
+        checkFactory: CheckFactory,
+        fileLinesContextFactory: FileLinesContextFactory,
+        noSonarFilter: NoSonarFilter,
+        language: KotlinLanguage,
+        telemetryData: TelemetryData,
+        extensionsProviders: Array<KotlinPluginExtensionsProvider>,
+    ) : this(
+        checkFactory, fileLinesContextFactory, noSonarFilter, language, telemetryData, extensionsProviders,
+        NoOpAnalysisWarnings
+    )
 
     override fun describe(descriptor: SensorDescriptor) {
         descriptor
@@ -97,11 +113,13 @@ class KotlinSensor(
             telemetryData.readFailures++
         }
 
-        private val crashedFiles = mutableListOf<String>()
+        // A Set so a file that crashes in more than one visitor is counted and listed once, not once per visitor.
+        private val crashedFiles = mutableSetOf<String>()
 
         override fun onAnalysisCrash(inputFile: InputFile) {
-            telemetryData.analysisCrashes++
-            crashedFiles += inputFile.toString()
+            if (crashedFiles.add(inputFile.toString())) {
+                telemetryData.analysisCrashes++
+            }
         }
 
         override fun onAnalysisComplete() {
