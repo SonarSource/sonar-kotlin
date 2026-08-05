@@ -487,24 +487,6 @@ internal class KotlinSensorTest : AbstractSensorTest() {
     }
 
     @Test
-    fun `sensor built without AnalysisWarnings (SonarLint fallback constructor) still analyzes`() {
-        // Regression for the SonarLint DI finding: AnalysisWarnings is a @ScannerSide-only component that SonarLint's
-        // container does not provide. The sensor must expose a no-warnings constructor so SonarLint's greedy resolver
-        // can instantiate it (falling back to NoOpAnalysisWarnings) instead of failing to load the whole plugin.
-        context.fileSystem().add(createInputFile("file1.kt", "class A"))
-        context.fileSystem().add(createInputFile("file2.kt", "class B"))
-        val telemetryData = TelemetryData()
-
-        // NB: the 6-arg constructor -- no AnalysisWarnings argument.
-        val sensor = KotlinSensor(
-            checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), telemetryData, emptyArray()
-        )
-
-        assertDoesNotThrow { sensor.execute(context) }
-        assertThat(telemetryData.filesProcessed).isEqualTo(2)
-    }
-
-    @Test
     fun `a cyclic typealias is analyzed without crashing the scan`() {
         // Smoke test only: the real compiler does not overflow on this input in the test JVM, so this does NOT exercise
         // the crash-recovery path (that is covered by the mocked StackOverflowError tests above). It guards against a

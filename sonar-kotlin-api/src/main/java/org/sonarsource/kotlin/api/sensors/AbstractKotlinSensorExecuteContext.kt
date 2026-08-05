@@ -26,6 +26,7 @@ import org.slf4j.Logger
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.notifications.AnalysisWarnings
+import org.sonarsource.api.sonarlint.SonarLintSide
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.analyzer.commons.appsec.TestFileClassifier
 import org.sonarsource.kotlin.api.checks.InputFileContext
@@ -281,12 +282,17 @@ fun postAnalysisCrashWarning(analysisWarnings: AnalysisWarnings, crashedFiles: C
 }
 
 /**
- * No-op [AnalysisWarnings] used as a constructor fallback in containers where [AnalysisWarnings] is not available.
- * [AnalysisWarnings] is a `@ScannerSide`-only component: the SonarQube scanner provides it (and the sensors' primary,
- * greediest constructor is used there), but SonarLint does not register it. Under SonarLint the sensors fall back to
- * the constructor that supplies this no-op, so plugin instantiation does not fail. See the sibling analyzers
- * (e.g. sonar-text's DefaultAnalysisWarningsWrapper) for the same pattern.
+ * A no-op [AnalysisWarnings] made available in the SonarLint analysis container.
+ *
+ * [AnalysisWarnings] is a `@ScannerSide`-only component: the SonarQube scanner provides it, but SonarLint does not
+ * register any implementation, so a sensor that requires it via its (single) constructor cannot be instantiated
+ * under SonarLint. Registering this `@SonarLintSide` component in the plugin (only for the SonarLint product) gives
+ * the container an [AnalysisWarnings] bean to inject, keeping the sensors single-constructor. It is deliberately
+ * *not* `@ScannerSide` so it never competes with the real scanner-provided implementation.
  */
-val NoOpAnalysisWarnings = AnalysisWarnings {
-    // no-op: this container does not surface analysis warnings
+@SonarLintSide
+class NoOpAnalysisWarnings : AnalysisWarnings {
+    override fun addUnique(text: String) {
+        // no-op: SonarLint does not surface analysis warnings
+    }
 }
