@@ -21,6 +21,8 @@ jobs:
   build:
     runs-on: github-ubuntu-latest-s
     timeout-minutes: 30
+    outputs:
+      project-version: ${{ steps.project-version.outputs.project-version }}
     steps:
       - &configure_GITHUB_JOB_ID_environment_variable
         # https://github.com/actions/runner/issues/324#issuecomment-3324382354
@@ -54,7 +56,7 @@ jobs:
           ./gradlew \
               build \
               sonar -Dsonar.host.url=https://next.sonarqube.com/sonarqube \
-              ${{ github.event_name != 'pull_request' && 'artifactoryPublish' || '' }} \
+              artifactoryPublish \
               -DbuildNumber=${{ steps.build-number.outputs.BUILD_NUMBER }}
         env:
           DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
@@ -68,6 +70,22 @@ jobs:
           ARTIFACTORY_DEPLOY_REPO: sonarsource-public-qa
           ARTIFACTORY_DEPLOY_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_USERNAME }}
           ARTIFACTORY_DEPLOY_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_DEPLOY_PASSWORD }}
+      - name: Get project version
+        id: project-version
+        run: |
+          set -euo pipefail
+          VERSION=$(./gradlew properties --no-scan --no-daemon --console plain \
+            -DbuildNumber=${{ steps.build-number.outputs.BUILD_NUMBER }} \
+            | grep '^version:' | awk '{print $2}')
+          if [ -z "$VERSION" ]; then
+            echo "::error::Failed to determine project version from './gradlew properties' output"
+            exit 1
+          fi
+          echo "project-version=$VERSION" >> "$GITHUB_OUTPUT"
+        env:
+          ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
+          ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+
   qa_plugin:
     runs-on: github-ubuntu-latest-s
     timeout-minutes: 30
@@ -83,6 +101,8 @@ jobs:
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+            development/github/token/licenses-ro token | GITHUB_TOKEN;
+      - uses: ./.github/actions/cache-orchestrator
       - run: |
           ./gradlew \
               :its:plugin:integrationTest --info -Pits
@@ -91,6 +111,7 @@ jobs:
           ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
   qa_ruling:
     runs-on: github-ubuntu-latest-m
     timeout-minutes: 60
@@ -143,6 +164,70 @@ jobs:
           ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+  # Public repos cannot call private reusable workflows (GitHub limitation).
+  # Trigger PVF in private sonar-kotlin-pvf via repository_dispatch; results are
+  # reported back as the `performance-validation` commit status.
+  trigger_performance_validation:
+    name: Trigger Performance Validation
+    # Wait for `promote`, not just `build`: the candidate artifact is only copied into a
+    # publicly-readable Artifactory repo during promotion. Dispatching right after `build`
+    # races PVF against promotion and PVF loses (artifact not found yet).
+    needs: [build, qa_plugin, qa_ruling, qa_sq_integration, promote]
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      !cancelled() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(github.event.pull_request.labels.*.name, 'skip-pvf') &&
+      !contains(github.event.pull_request.title, '[skip pvf]')
+    runs-on: github-ubuntu-latest-s
+    timeout-minutes: 10
+    permissions:
+      id-token: write
+      statuses: write
+    steps:
+      - id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/github/token/{REPO_OWNER_NAME_DASH}-pvf-trigger token | GITHUB_TOKEN;
+      - name: Set pending status
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha }}" \
+            -f state=pending \
+            -f context=performance-validation \
+            -f description="PVF triggered" \
+            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      - name: Dispatch PVF on sonar-kotlin-pvf
+        id: dispatch
+        env:
+          GH_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+          CANDIDATE: ${{ needs.build.outputs.project-version }}
+        run: |
+          set -euo pipefail
+          gh api repos/SonarSource/sonar-kotlin-pvf/dispatches \
+            --method POST \
+            -f event_type=sonar-kotlin-pr-pvf \
+            -f "client_payload[baseline-version]=DEV" \
+            -f "client_payload[candidate-version]=${CANDIDATE}" \
+            -f "client_payload[commit-sha]=${{ github.event.pull_request.head.sha }}" \
+            -f "client_payload[pr-number]=${{ github.event.pull_request.number }}" \
+            -f "client_payload[source-repo]=${{ github.repository }}"
+      - name: Mark status error if dispatch failed
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha }}" \
+            -f state=error \
+            -f context=performance-validation \
+            -f description="Failed to trigger PVF" \
+            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
   promote:
     needs:
       - build
