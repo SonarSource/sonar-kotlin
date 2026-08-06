@@ -8,6 +8,7 @@ This SonarSource project is a code analyzer for Kotlin projects to help develope
 Features
 --------
 
+* test me
 * 50+ rules (including 10+ security rules using semantic)
 * Metrics (cognitive complexity, cyclomatic complexity, number of lines etc.)
 * Import of [test coverage reports](https://docs.sonarqube.org/display/PLUG/Code+Coverage+by+Unit+Tests+for+Java+Project)
