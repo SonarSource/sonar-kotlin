@@ -17,6 +17,7 @@
 package org.sonarsource.kotlin.gradle
 
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkAll
@@ -338,7 +339,7 @@ internal class KotlinGraldeSensorTest : AbstractSensorTest() {
     }
 
     private fun sensor(checkFactory: CheckFactory, telemetryData: TelemetryData = TelemetryData()): KotlinGradleSensor {
-        return KotlinGradleSensor(checkFactory, language(), telemetryData)
+        return KotlinGradleSensor(checkFactory, language(), telemetryData, mockk(relaxed = true))
     }
 }
 

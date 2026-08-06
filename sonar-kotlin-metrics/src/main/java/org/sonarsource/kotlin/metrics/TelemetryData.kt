@@ -31,8 +31,10 @@ class TelemetryData {
     var filesProcessed = 0
     var readFailures = 0
     var parseFailures = 0
+    var analysisCrashes = 0
     // .kts only counters
     var scriptsProcessed = 0
     var scriptReadFailures = 0
     var scriptParseFailures = 0
+    var scriptAnalysisCrashes = 0
 }

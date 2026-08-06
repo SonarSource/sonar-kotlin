@@ -50,9 +50,11 @@ class KotlinProjectSensorTest {
                     "kotlin.files.processed" to "0",
                     "kotlin.files.read.failures" to "0",
                     "kotlin.files.parse.failures" to "0",
+                    "kotlin.files.analysis.crashes" to "0",
                     "kotlin.scripts.processed" to "0",
                     "kotlin.scripts.read.failures" to "0",
                     "kotlin.scripts.parse.failures" to "0",
+                    "kotlin.scripts.analysis.crashes" to "0",
                 )
             )
 
@@ -68,9 +70,11 @@ class KotlinProjectSensorTest {
             "kotlin.files.processed" to "0",
             "kotlin.files.read.failures" to "0",
             "kotlin.files.parse.failures" to "0",
+            "kotlin.files.analysis.crashes" to "0",
             "kotlin.scripts.processed" to "0",
             "kotlin.scripts.read.failures" to "0",
             "kotlin.scripts.parse.failures" to "0",
+            "kotlin.scripts.analysis.crashes" to "0",
         ))
     }
 

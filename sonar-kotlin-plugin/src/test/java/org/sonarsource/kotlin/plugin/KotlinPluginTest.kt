@@ -47,7 +47,8 @@ internal class KotlinPluginTest {
 
     @Test
     fun testSonarLint() {
-        testSonarLint(7)
+        // 7 shared extensions + NoOpAnalysisWarnings (registered only for SonarLint, which does not provide one).
+        testSonarLint(8)
     }
 
 
