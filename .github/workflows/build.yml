@@ -177,6 +177,7 @@ jobs:
       github.event_name == 'pull_request' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       !cancelled() &&
+      needs.build.result == 'success' &&
       !contains(needs.*.result, 'failure') &&
       !contains(github.event.pull_request.labels.*.name, 'skip-pvf') &&
       !contains(github.event.pull_request.title, '[skip pvf]')
