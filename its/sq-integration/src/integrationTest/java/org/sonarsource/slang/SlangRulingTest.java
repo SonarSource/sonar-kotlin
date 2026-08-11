@@ -162,10 +162,11 @@ class SlangRulingTest {
   }
 
   private static GradleBuild gradleBuild(String project, Map<String, String> properties) throws IOException {
+    Path initScript = moduleDirectory().resolve(Path.of("src", "integrationTest", "resources", "pin-sonarqube-plugin.init.gradle.kts"));
     return GradleBuild.create(projectDirectory(project).toFile())
       .setProperties(properties)
       .setEnvironmentVariable("GRADLE_OPTS", "-Xmx1024m")
-      .addArguments("--stacktrace", "--info", "--console=plain", "-x", "test")
+      .addArguments("--stacktrace", "--info", "--console=plain", "-x", "test", "--init-script", initScript.toString())
       .setTimeoutSeconds(600);
   }
 
