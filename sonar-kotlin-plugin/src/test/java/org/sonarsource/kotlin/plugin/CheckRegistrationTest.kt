@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.plugin
 
+import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.sonar.scanner.plugin.api.impl.sensor.issue.DefaultNoSonarFilter
@@ -40,6 +41,7 @@ class CheckRegistrationTest : AbstractSensorTest() {
             language(),
             TelemetryData(),
             arrayOf(DummyKotlinPluginExtensionsProvider()),
+            mockk(relaxed = true),
         ).execute(context)
 
         assertEquals(1, context.allIssues().size)

@@ -26,6 +26,7 @@ import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.issue.NoSonarFilter
 import org.sonar.api.measures.FileLinesContextFactory
+import org.sonar.api.notifications.AnalysisWarnings
 import com.sonarsource.plugins.kotlin.api.KotlinPluginExtensionsProvider
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.kotlin.api.checks.AbstractCheck
@@ -36,6 +37,7 @@ import org.sonarsource.kotlin.api.common.SONAR_JAVA_LIBRARIES
 import org.sonarsource.kotlin.api.logging.debug
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensor
 import org.sonarsource.kotlin.api.sensors.AbstractKotlinSensorExecuteContext
+import org.sonarsource.kotlin.api.sensors.postAnalysisCrashWarning
 import org.sonarsource.kotlin.plugin.caching.ContentHashCache
 import org.sonarsource.kotlin.plugin.cpd.CopyPasteDetector
 import org.sonarsource.kotlin.plugin.cpd.copyCPDTokensFromPrevious
@@ -60,6 +62,7 @@ class KotlinSensor(
     language: KotlinLanguage,
     private val telemetryData: TelemetryData,
     extensionsProviders: Array<KotlinPluginExtensionsProvider>,
+    private val analysisWarnings: AnalysisWarnings,
 ): AbstractKotlinSensor(
     checkFactory, instantiateRules(checkFactory, extensionsProviders), language, KOTLIN_CHECKS
 ) {
@@ -92,6 +95,19 @@ class KotlinSensor(
 
         override fun onReadFailure() {
             telemetryData.readFailures++
+        }
+
+        // A Set, so a file crashing in several visitors is counted and listed once
+        private val crashedFiles = mutableSetOf<String>()
+
+        override fun onAnalysisCrash(inputFile: InputFile) {
+            if (crashedFiles.add(inputFile.toString())) {
+                telemetryData.analysisCrashes++
+            }
+        }
+
+        override fun onAnalysisComplete() {
+            postAnalysisCrashWarning(analysisWarnings, crashedFiles)
         }
     }
 
