@@ -67,7 +67,7 @@ private val LOG = LoggerFactory.getLogger(KotlinSensor::class.java)
 internal class KotlinSensorTest : AbstractSensorTest() {
     private val disposable = Disposer.newDisposable()
 
-    // Fresh per test (JUnit5 default PER_METHOD lifecycle) so crash-warning verifications don't bleed across tests.
+    // Fresh per test (JUnit5 default PER_METHOD lifecycle) so analysis warnings don't leak across test
     private val analysisWarnings = mockk<AnalysisWarnings>(relaxed = true)
 
     @AfterEach
@@ -413,12 +413,9 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
         assertDoesNotThrow { sensor.execute(context) }
 
-        // the crashing file is surfaced honestly as an analysis error ...
         assertThat(context.allAnalysisErrors().map { it.inputFile().filename() }).contains("poison.kt")
-        // ... while the other files are still fully analyzed (their issues are reported)
         assertThat(context.allIssues().map { (it.primaryLocation().inputComponent() as InputFile).filename() })
             .containsExactlyInAnyOrder("good1.kt", "good2.kt")
-        // telemetry counts it once and a single customer-visible warning names it and flags the whole scan
         assertThat(telemetryData.analysisCrashes).isEqualTo(1)
         verify(exactly = 1) {
             analysisWarnings.addUnique(match {
@@ -442,7 +439,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
         crashSensor(checkFactory("SOERule1")).execute(context)
 
         assertThat(logTester.logs(Level.ERROR))
-            .containsExactly("Analysis of 'poison.kt' with 'KtChecksVisitor' failed: java.lang.StackOverflowError")
+            .containsExactly("Cannot analyse 'poison.kt' with 'KtChecksVisitor': java.lang.StackOverflowError")
     }
 
     @Test
@@ -456,11 +453,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun `a StackOverflowError while building the syntax structure is contained (parse path)`() {
-        // Regression for Change 2 (the SOE catch in the kotlinFiles parse lazy). A StackOverflowError raised inside
-        // KotlinSyntaxStructure.of -- e.g. the K2 type resolver overflowing on an invalid cyclic typealias -- must be
-        // contained during parsing so only the crashing file is skipped. Without the catch this Error escapes
-        // catch(Exception) and aborts the whole scan. We inject the overflow via a mock because the real compiler does
-        // not reliably overflow in the test JVM (see `a cyclic typealias ...` below), which would make this a no-op.
+        // The overflow is injected via a mock because the real compiler does not reliably overflow in the test JVM
         context.fileSystem().add(createInputFile("good1.kt", "class A { fun a() = TODO() }"))
         context.fileSystem().add(createInputFile("poison.kt", "class P { fun p() = TODO() }"))
         context.fileSystem().add(createInputFile("good2.kt", "class B { fun b() = TODO() }"))
@@ -488,9 +481,7 @@ internal class KotlinSensorTest : AbstractSensorTest() {
 
     @Test
     fun `a cyclic typealias is analyzed without crashing the scan`() {
-        // Smoke test only: the real compiler does not overflow on this input in the test JVM, so this does NOT exercise
-        // the crash-recovery path (that is covered by the mocked StackOverflowError tests above). It guards against a
-        // regression where merely parsing/analyzing a self-referential typealias would break the scan.
+        // Smoke test: the compiler does not overflow on this input in the test JVM, so crash recovery is not exercised
         context.fileSystem().add(createInputFile("good1.kt", "class A { fun a() = TODO() }"))
         context.fileSystem().add(createInputFile("poison.kt", "typealias A = A.Nested"))
         context.fileSystem().add(createInputFile("good2.kt", "class B { fun b() = TODO() }"))
@@ -889,8 +880,6 @@ internal class ExceptionThrowingCheck : AbstractCheck() {
 @Rule(key = "SOERule1")
 internal class StackOverflowThrowingCheck : AbstractCheck() {
     override fun visitNamedFunction(function: KtNamedFunction, kfc: KotlinFileContext) {
-        // Deterministically exercise the StackOverflowError containment path (Change 1) without depending on the
-        // Kotlin compiler actually overflowing: crash on the "poison" file, report a normal issue on the others.
         if (kfc.inputFileContext.inputFile.filename().contains("poison")) {
             throw StackOverflowError()
         }

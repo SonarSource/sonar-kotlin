@@ -81,7 +81,7 @@ class KotlinGradleSensor(
             telemetryData.scriptReadFailures++
         }
 
-        // A Set so a file that crashes in more than one visitor is counted and listed once, not once per visitor.
+        // A Set, so a file crashing in several visitors is counted and listed once
         private val crashedFiles = mutableSetOf<String>()
 
         override fun onAnalysisCrash(inputFile: InputFile) {

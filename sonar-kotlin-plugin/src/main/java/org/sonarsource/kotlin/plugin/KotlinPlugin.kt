@@ -66,12 +66,8 @@ class KotlinPlugin : Plugin, KotlinPluginExtensionsProvider {
         context.addExtension(KotlinGradleSensor::class.java)
 
         if (context.runtime.product == SonarProduct.SONARLINT) {
-            // The scanner provides AnalysisWarnings; SonarLint does not. Register a no-op so the sensors (which
-            // require AnalysisWarnings via their constructor) can be instantiated in the SonarLint container.
             context.addExtension(NoOpAnalysisWarnings::class.java)
-        }
-
-        if (context.runtime.product != SonarProduct.SONARLINT) {
+        } else {
             context.addExtensions(
                 KotlinResourcesLocator::class.java,
                 KotlinSurefireParser::class.java,
