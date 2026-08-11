@@ -24,6 +24,7 @@ include("sonar-kotlin-gradle")
 
 include("its:plugin")
 include("its:ruling")
+include("its:sq-integration")
 include("kotlin-checks-test-sources")
 include("utils-kotlin")
 
@@ -32,7 +33,7 @@ dependencyResolutionManagement {
 
         val kotlinVersion: String by extra
         val analyzerCommonsVersionStr = "2.27.0.5007"
-        val sonarPluginApi = "11.1.0.2693"
+        val sonarPluginApi = "13.2.0.3137"
         val slf4jApi = "1.7.36"
 
         create("libs") {
@@ -41,6 +42,7 @@ dependencyResolutionManagement {
             val staxmate = version("staxmate", "2.4.1")
 
             library("gson", "com.google.code.gson", "gson").versionRef(gson)
+            library("jsr305", "com.google.code.findbugs", "jsr305").version("3.0.2")
             library("kotlin-compiler", "org.jetbrains.kotlin", "kotlin-compiler").version(kotlinVersion)
             library("sonar-analyzer-commons", "org.sonarsource.analyzer-commons", "sonar-analyzer-commons").versionRef(analyzerCommons)
             library("sonar-analyzer-commons-recognizers", "org.sonarsource.analyzer-commons", "sonar-analyzer-recognizers")
@@ -81,6 +83,8 @@ dependencyResolutionManagement {
             val sonarlint = version("sonarlint", "10.13.0.79996")
             val sonarqube = version("sonarqube", "25.1.0.102122")
             val scannerEngine = version("scannerEngine", "13.4.1.4007")
+            val sit = version("sit", "1.2.0.1354")
+            val xerces = version("xerces", "2.12.2")
 
             library("assertj-core", "org.assertj", "assertj-core").versionRef(assertj)
             library("junit-jupiter", "org.junit.jupiter", "junit-jupiter").versionRef(junit)
@@ -96,6 +100,10 @@ dependencyResolutionManagement {
             library("sonar-ws", "org.sonarsource.sonarqube", "sonar-ws").versionRef(sonarqube)
             library("sonarlint-core", "org.sonarsource.sonarlint.core", "sonarlint-core").versionRef(sonarlint)
             library("logback-classic", "ch.qos.logback", "logback-classic").version("1.5.38")
+            library("sit", "com.sonarsource.scanner.integrationtester", "sonar-scanner-integration-tester").versionRef(sit)
+            // Without it, ScannerMain.<clinit> throws FactoryConfigurationError: Provider for class
+            // javax.xml.parsers.SAXParserFactory cannot be created.
+            library("xerces-impl", "xerces", "xercesImpl").versionRef(xerces)
         }
     }
 }

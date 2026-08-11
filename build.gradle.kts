@@ -95,7 +95,24 @@ allprojects {
     }
 
     repositories {
-        mavenCentral()
+        val artifactoryUsername =
+            System.getenv("ARTIFACTORY_PRIVATE_USERNAME") ?: project.findProperty("artifactoryUsername")
+        val artifactoryPassword =
+            System.getenv("ARTIFACTORY_PRIVATE_PASSWORD") ?: project.findProperty("artifactoryPassword")
+        if (artifactoryUsername is String && artifactoryPassword is String) {
+            // Routes through Repox so private SonarSource-only artifacts (e.g. sonar-scanner-integration-tester,
+            // used by the SIT-based integration tests) resolve alongside the usual public dependencies.
+            maven {
+                name = "artifactory"
+                url = uri("https://repox.jfrog.io/repox/sonarsource")
+                credentials {
+                    username = artifactoryUsername
+                    password = artifactoryPassword
+                }
+            }
+        } else {
+            mavenCentral()
+        }
         maven(url = "https://packages.jetbrains.team/maven/p/ij/intellij-dependencies") {
             content {
                 includeGroup("org.jetbrains.kotlin")
@@ -179,64 +196,66 @@ subprojects {
         }
     }
 
-    val sourcesJar by tasks.registering(Jar::class) {
-        dependsOn(JavaPlugin.CLASSES_TASK_NAME)
-        archiveClassifier.set("sources")
-        from(sourceSets.main.get().allSource)
-    }
+    if (!project.path.startsWith(":its") && !project.path.startsWith(":private:its")) {
+        val sourcesJar by tasks.registering(Jar::class) {
+            dependsOn(JavaPlugin.CLASSES_TASK_NAME)
+            archiveClassifier.set("sources")
+            from(sourceSets.main.get().allSource)
+        }
 
-    val javadocJar by tasks.registering(Jar::class) {
-        dependsOn(javadoc)
-        archiveClassifier.set("javadoc")
-        from(tasks["javadoc"])
-    }
+        val javadocJar by tasks.registering(Jar::class) {
+            dependsOn(javadoc)
+            archiveClassifier.set("javadoc")
+            from(tasks["javadoc"])
+        }
 
-    publishing {
-        publications {
-            create<MavenPublication>("mavenJava") {
-                pom {
-                    name.set(projectTitle)
-                    description.set(project.description)
-                    url.set("http://www.sonarqube.org/")
-                    organization {
-                        name.set("SonarSource")
+        publishing {
+            publications {
+                create<MavenPublication>("mavenJava") {
+                    pom {
+                        name.set(projectTitle)
+                        description.set(project.description)
                         url.set("http://www.sonarqube.org/")
-                    }
-                    licenses {
-                        license {
-                            name.set("SSALv1")
-                            url.set("https://sonarsource.com/license/ssal/")
-                            distribution.set("repo")
+                        organization {
+                            name.set("SonarSource")
+                            url.set("http://www.sonarqube.org/")
                         }
-                    }
-                    scm {
-                        url.set("https://github.com/SonarSource/sonar-kotlin")
-                    }
-                    developers {
-                        developer {
-                            id.set("sonarsource-team")
-                            name.set("SonarSource Team")
+                        licenses {
+                            license {
+                                name.set("SSALv1")
+                                url.set("https://sonarsource.com/license/ssal/")
+                                distribution.set("repo")
+                            }
+                        }
+                        scm {
+                            url.set("https://github.com/SonarSource/sonar-kotlin")
+                        }
+                        developers {
+                            developer {
+                                id.set("sonarsource-team")
+                                name.set("SonarSource Team")
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
-    signing {
-        val signingKeyId: String? by project
-        val signingKey: String? by project
-        val signingPassword: String? by project
-        useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-        sign(publishing.publications)
-        setRequired { gradle.taskGraph.hasTask(":artifactoryPublish") }
-    }
+        signing {
+            val signingKeyId: String? by project
+            val signingKey: String? by project
+            val signingPassword: String? by project
+            useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+            sign(publishing.publications)
+            setRequired { gradle.taskGraph.hasTask(":artifactoryPublish") }
+        }
 
-    tasks.withType<Sign> {
-        onlyIf {
-            val artifactorySkip: Boolean = tasks.artifactoryPublish.get().skip
-            !artifactorySkip &&
-                gradle.taskGraph.hasTask(":artifactoryPublish")
+        tasks.withType<Sign> {
+            onlyIf {
+                val artifactorySkip: Boolean = tasks.artifactoryPublish.get().skip
+                !artifactorySkip &&
+                    gradle.taskGraph.hasTask(":artifactoryPublish")
+            }
         }
     }
 }

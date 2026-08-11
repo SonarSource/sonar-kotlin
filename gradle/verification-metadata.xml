@@ -726,6 +726,11 @@
             <sha256 value="62e1cbcd7246cc10306ce0d23f344f9066c397d0266d582a433644a9328f5b1d" origin="Verified"/>
          </artifact>
       </component>
+      <component group="com.sonarsource.scanner.integrationtester" name="sonar-scanner-integration-tester" version="1.2.0.1354">
+         <artifact name="sonar-scanner-integration-tester-1.2.0.1354.jar">
+            <sha256 value="42dfd266a020538d93887438db2e3b68fa191e2600800237f5b17c4680d3f4c2" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="com.squareup.okhttp3" name="logging-interceptor" version="4.12.0">
          <artifact name="logging-interceptor-4.12.0.jar">
             <sha256 value="f3e8d5f0903c250c2b55d2f47fcfe008e80634385da8385161c7a63aaed0c74c" origin="Verified"/>
@@ -2940,6 +2945,16 @@
             <sha256 value="08f532b5ba39aa00a5317945633b02c247066372524e6e5d6b4a3dcae11f30c1" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.sonarsource.api.plugin" name="sonar-plugin-api" version="12.0.0.2960">
+         <artifact name="sonar-plugin-api-12.0.0.2960.jar">
+            <sha256 value="813a68dd8af7c2c2fa901fdadb3cdc21581fcb74c7649b46bb8fdaa79108da08" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.sonarsource.api.plugin" name="sonar-plugin-api" version="13.2.0.3137">
+         <artifact name="sonar-plugin-api-13.2.0.3137.jar">
+            <sha256 value="b2e5c2b4bbf6e70761171b556279499ec30f3f576fd5b0c1b7e2f3bfd9a8864e" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.sonarsource.api.plugin" name="sonar-plugin-api" version="13.8.0.4399">
          <artifact name="sonar-plugin-api-13.8.0.4399.jar">
             <sha256 value="95f71c4f3d64da0a441d046cf2879f0999aad9efa40ea20f84767e1d20da7f78" origin="Verified"/>
@@ -2958,6 +2973,11 @@
       <component group="org.sonarsource.api.plugin" name="sonar-plugin-api-test-fixtures" version="11.1.0.2693">
          <artifact name="sonar-plugin-api-test-fixtures-11.1.0.2693.jar">
             <sha256 value="e6c2681a5a6a1b1778826931fb52628af3250041668ec7db878ec783071b5c22" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.sonarsource.api.plugin" name="sonar-plugin-api-test-fixtures" version="13.2.0.3137">
+         <artifact name="sonar-plugin-api-test-fixtures-13.2.0.3137.jar">
+            <sha256 value="85a185a41d7ce08bd59bc686d85ae1bad336c38b2db23db1b5a091688901f620" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.sonarsource.git.blame" name="git-files-blame" version="1.1.0.1835">
