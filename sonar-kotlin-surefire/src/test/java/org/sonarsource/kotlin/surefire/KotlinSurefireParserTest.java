@@ -19,7 +19,6 @@ package org.sonarsource.kotlin.surefire;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -65,7 +64,7 @@ class KotlinSurefireParserTest {
     telemetryData = new TelemetryData();
 
     doAnswer(
-      invocation -> Optional.of(TestInputFileBuilder.create("", (String) invocation.getArguments()[0]).build())
+      invocation -> List.of(TestInputFileBuilder.create("", (String) invocation.getArguments()[0]).build())
     )
       .when(kotlinResourcesLocator)
       .findResourceByClassName(anyString());
@@ -81,19 +80,33 @@ class KotlinSurefireParserTest {
     context = mock(SensorContext.class);
     parser.collect(context, getDirs("file.txt"), true, telemetryData);
     verify(context, never()).newMeasure();
-    verifyTelemetry(0, 0);
+    verifyTelemetry(0, 0, 0);
   }
 
   @Test
   void should_store_zero_tests_when_source_file_is_not_found() {
 
-    when(kotlinResourcesLocator.findResourceByClassName(anyString())).thenReturn(Optional.empty());
+    when(kotlinResourcesLocator.findResourceByClassName(anyString())).thenReturn(List.of());
 
     SensorContext context = mock(SensorContext.class);
     when(context.fileSystem()).thenReturn(new DefaultFileSystem(Paths.get("/test")));
     parser.collect(context, getDirs("multipleReports"), false, telemetryData);
     verify(context, never()).newMeasure();
-    verifyTelemetry(0, 6);
+    verifyTelemetry(0, 6, 0);
+  }
+
+  @Test
+  void should_store_measure_for_first_candidate_and_should_track_duplicated_telemetry_when_class_name_resolves_to_multiple_files() {
+    when(kotlinResourcesLocator.findResourceByClassName(anyString()))
+      .thenAnswer(invocation -> List.of(
+        TestInputFileBuilder.create("", (String) invocation.getArguments()[0]).build(),
+        TestInputFileBuilder.create("", (String) invocation.getArguments()[0]).build()));
+
+    SensorContextTester context = mockContext();
+    parser.collect(context, getDirs("multipleReports"), false, telemetryData);
+
+    assertThat(context.measures(":ch.hortis.sonar.mvn.mc.MetricsCollectorRegistryTest")).hasSize(5);
+    verifyTelemetry(6, 0, 6);
   }
 
   @Test
@@ -110,7 +123,7 @@ class KotlinSurefireParserTest {
     assertThat(context.measures(":ch.hortis.sonar.mvn.mc.JDependsCollectorTest")).hasSize(5);
     assertThat(context.measures(":ch.hortis.sonar.mvn.mc.JavaNCSSCollectorTest")).hasSize(5);
 
-    verifyTelemetry(6, 0);
+    verifyTelemetry(6, 0, 0);
   }
 
   @Test
@@ -124,7 +137,7 @@ class KotlinSurefireParserTest {
     assertThat(context.measures(":ch.hortis.sonar.mvn.mc.JDependsCollectorTest")).hasSize(5);
     assertThat(context.measures(":ch.hortis.sonar.mvn.mc.JavaNCSSCollectorTest")).hasSize(5);
 
-    verifyTelemetry(6, 0);
+    verifyTelemetry(6, 0, 0);
   }
 
   // SONAR-2841: if there's only a test suite report, then it should be read.
@@ -136,7 +149,7 @@ class KotlinSurefireParserTest {
     assertThat(context.measures(":org.sonar.SecondTest")).hasSize(5);
     assertThat(context.measures(":org.sonar.JavaNCSSCollectorTest")).hasSize(5);
 
-    verifyTelemetry(2, 0);
+    verifyTelemetry(2, 0, 0);
   }
 
   /**
@@ -147,7 +160,7 @@ class KotlinSurefireParserTest {
     SensorContext context = mock(SensorContext.class);
     parser.collect(context, getDirs("noReports"), true, telemetryData);
     verify(context, never()).newMeasure();
-    verifyTelemetry(0, 0);
+    verifyTelemetry(0, 0, 0);
   }
 
   @Test
@@ -155,7 +168,7 @@ class KotlinSurefireParserTest {
     SensorContext context = mock(SensorContext.class);
     parser.collect(context, getDirs("noTests"), true, telemetryData);
     verify(context, never()).newMeasure();
-    verifyTelemetry(0, 0);
+    verifyTelemetry(0, 0, 0);
   }
 
   @Test
@@ -165,7 +178,7 @@ class KotlinSurefireParserTest {
     assertThat(context.measure(":org.apache.commons.collections.bidimap.AbstractTestBidiMap", CoreMetrics.TESTS).value()).isEqualTo(7);
     assertThat(context.measure(":org.apache.commons.collections.bidimap.AbstractTestBidiMap", CoreMetrics.TEST_ERRORS).value()).isEqualTo(1);
     assertThat(context.measures(":org.apache.commons.collections.bidimap.AbstractTestBidiMap$TestBidiMapEntrySet")).isEmpty();
-    verifyTelemetry(1, 0);
+    verifyTelemetry(1, 0, 0);
   }
 
   @Test
@@ -173,7 +186,7 @@ class KotlinSurefireParserTest {
     SensorContextTester context = mockContext();
     parser.collect(context, getDirs("nestedInnerClasses"), true, telemetryData);
     assertThat(context.measure(":org.sonar.plugins.surefire.NestedInnerTest", CoreMetrics.TESTS).value()).isEqualTo(3);
-    verifyTelemetry(1, 0);
+    verifyTelemetry(1, 0, 0);
   }
 
   @Test
@@ -181,7 +194,7 @@ class KotlinSurefireParserTest {
     SensorContextTester context = mockContext();
     parser.collect(context, getDirs("innerClassExtraFile"), true, telemetryData);
     assertThat(context.measure(":com.example.project.CalculatorTests", CoreMetrics.TESTS).value()).isEqualTo(6);
-    verifyTelemetry(1, 0);
+    verifyTelemetry(1, 0, 0);
   }
 
   @Test
@@ -195,7 +208,7 @@ class KotlinSurefireParserTest {
     assertThat(context.measure(":java.Foo", CoreMetrics.TEST_ERRORS).value()).isZero();
     assertThat(context.measure(":java.Foo", CoreMetrics.TEST_FAILURES).value()).isZero();
     assertThat(context.measure(":java.Foo", CoreMetrics.TEST_EXECUTION_TIME).value()).isEqualTo(659);
-    verifyTelemetry(1, 0);
+    verifyTelemetry(1, 0, 0);
   }
 
   @Test
@@ -218,10 +231,25 @@ class KotlinSurefireParserTest {
     SensorContextTester context = mockContext();
 
     parser.collect(context, getDirs("onlyTestSuiteReport"), true, telemetryData);
-    verifyTelemetry(2, 0);
+    verifyTelemetry(2, 0, 0);
 
     parser.collect(context, getDirs("negativeTestTime"), true, telemetryData);
-    verifyTelemetry(3, 0);
+    verifyTelemetry(3, 0, 0);
+  }
+
+  @Test
+  void shouldNotSaveMeasureTwiceAndShouldTrackOverlappingTelemetryWhenSameClassResolvesToSameFileAcrossMultipleCalls() {
+    SensorContextTester context = mockContext();
+
+    parser.collect(context, getDirs("onlyTestSuiteReport"), true, telemetryData);
+    assertThat(context.measures(":org.sonar.SecondTest")).hasSize(5);
+    assertThat(context.measures(":org.sonar.JavaNCSSCollectorTest")).hasSize(5);
+    verifyTelemetry(2, 0, 0, 0);
+
+    parser.collect(context, getDirs("onlyTestSuiteReport"), true, telemetryData);
+    assertThat(context.measures(":org.sonar.SecondTest")).hasSize(5);
+    assertThat(context.measures(":org.sonar.JavaNCSSCollectorTest")).hasSize(5);
+    verifyTelemetry(2, 0, 0, 2);
   }
 
   private List<File> getDirs(String... directoryNames) {
@@ -234,8 +262,14 @@ class KotlinSurefireParserTest {
     return SensorContextTester.create(new File(""));
   }
 
-  private void verifyTelemetry(int expectedImported, int expectedFailed) {
+  private void verifyTelemetry(int expectedImported, int expectedFailed, int expectedDuplicated) {
+    verifyTelemetry(expectedImported, expectedFailed, expectedDuplicated, 0);
+  }
+
+  private void verifyTelemetry(int expectedImported, int expectedFailed, int expectedDuplicated, int expectedOverlapping) {
     assertThat(telemetryData.getSurefireClassesImported()).isEqualTo(expectedImported);
     assertThat(telemetryData.getSurefireClassesFailed()).isEqualTo(expectedFailed);
+    assertThat(telemetryData.getSurefireClassesDuplicated()).isEqualTo(expectedDuplicated);
+    assertThat(telemetryData.getSurefireClassesOverlapping()).isEqualTo(expectedOverlapping);
   }
 }

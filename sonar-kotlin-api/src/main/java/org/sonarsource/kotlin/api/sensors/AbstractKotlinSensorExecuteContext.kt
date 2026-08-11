@@ -25,6 +25,8 @@ import org.jetbrains.kotlin.config.LanguageVersion
 import org.slf4j.Logger
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.SensorContext
+import org.sonar.api.notifications.AnalysisWarnings
+import org.sonarsource.api.sonarlint.SonarLintSide
 import org.sonarsource.analyzer.commons.ProgressReport
 import org.sonarsource.analyzer.commons.appsec.TestFileClassifier
 import org.sonarsource.kotlin.api.checks.InputFileContext
@@ -100,6 +102,14 @@ abstract class AbstractKotlinSensorExecuteContext(
         // no-op by default; subclasses override to react to read failures (e.g. increment a telemetry counter)
     }
 
+    open fun onAnalysisCrash(inputFile: InputFile) {
+        // no-op by default; subclasses override to react to a recovered analysis crash (e.g. increment a telemetry counter)
+    }
+
+    open fun onAnalysisComplete() {
+        // no-op by default; called once after the last file; subclasses override to report aggregated results
+    }
+
     val environment: Environment by lazy {
         /** [analyzeFiles] */
         val env = Environment(
@@ -137,6 +147,13 @@ abstract class AbstractKotlinSensorExecuteContext(
                 inputFileContext.reportAnalysisParseError(KOTLIN_REPOSITORY_KEY, it, parseException.position)
                 onReadFailure()
                 null
+            } catch (e: StackOverflowError) {
+                // In case the Kotlin compiler crashes with SOE on e.g. recursive types,
+                // do not abort the whole scan; log a message without a huge stack trace
+                inputFileContext.reportAnalysisParseError(KOTLIN_REPOSITORY_KEY, it, null)
+                onAnalysisCrash(it)
+                logger.error("Cannot parse '$it': ${e.javaClass.name}")
+                null
             }
         }
     }
@@ -156,6 +173,7 @@ abstract class AbstractKotlinSensorExecuteContext(
                 }
                 progressReport.nextFile()
             }
+            onAnalysisComplete()
             return true
         } finally {
             Disposer.dispose(environment.disposable)
@@ -193,6 +211,19 @@ abstract class AbstractKotlinSensorExecuteContext(
                         e
                     )
                 }
+            } catch (e: StackOverflowError) {
+                // In case the Kotlin compiler crashes with SOE on e.g. recursive types,
+                // do not abort the whole scan; log a message without a huge stack trace
+                val message = "Cannot analyse '${inputFileContext.inputFile}' with '$visitorId': ${e.javaClass.name}"
+                inputFileContext.reportAnalysisError(message, null)
+                logger.error(message)
+                onAnalysisCrash(inputFileContext.inputFile)
+                if (sensorContext.config().getBoolean(FAIL_FAST_PROPERTY_NAME).getOrElse { false }) {
+                    throw IllegalStateException(
+                        "Exception in '$visitorId' while analyzing '${inputFileContext.inputFile}'",
+                        e
+                    )
+                }
             }
         }
     }
@@ -221,3 +252,29 @@ internal fun determineKotlinLanguageVersion(sensorContext: SensorContext, logger
 
 private fun toParseException(action: String, inputFile: InputFile, cause: Throwable) =
     ParseException("Cannot $action '$inputFile': ${cause.message}", (cause as? ParseException)?.position, cause)
+
+/**
+ * Posts a customer-visible warning naming the files that crashed during analysis. A crash can leave shared analysis
+ * state (e.g. the compiler's type resolver) degraded, so the warning flags the whole analysis as possibly incomplete.
+ */
+fun postAnalysisCrashWarning(analysisWarnings: AnalysisWarnings, crashedFiles: Collection<String>) {
+    if (crashedFiles.isEmpty()) return
+    val shown = crashedFiles.take(10).joinToString(", ")
+    val more = if (crashedFiles.size > 10) " (and ${crashedFiles.size - 10} more)" else ""
+    val fileWord = if (crashedFiles.size == 1) "file" else "files"
+    analysisWarnings.addUnique(
+        "${crashedFiles.size} $fileWord crashed during analysis; the Kotlin analyzer recovered and completed the " +
+            "scan, but the analysis may be incomplete: $shown$more."
+    )
+}
+
+/**
+ * [AnalysisWarnings] is `@ScannerSide`-only, so SonarLint has no implementation to inject into the sensors. This
+ * `@SonarLintSide` bean fills that gap; it is deliberately not `@ScannerSide` so it never competes with the real one.
+ */
+@SonarLintSide
+class NoOpAnalysisWarnings : AnalysisWarnings {
+    override fun addUnique(text: String) {
+        // no-op: SonarLint does not surface analysis warnings
+    }
+}

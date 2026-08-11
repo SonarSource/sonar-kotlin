@@ -23,6 +23,7 @@ import org.sonar.api.config.PropertyDefinition
 import org.sonarsource.kotlin.api.common.KOTLIN_FILE_SUFFIXES_DEFAULT_VALUE
 import org.sonarsource.kotlin.api.common.KOTLIN_FILE_SUFFIXES_KEY
 import org.sonarsource.kotlin.api.common.KotlinLanguage
+import org.sonarsource.kotlin.api.sensors.NoOpAnalysisWarnings
 import org.sonarsource.kotlin.externalreport.androidlint.AndroidLintRulesDefinition
 import org.sonarsource.kotlin.externalreport.androidlint.AndroidLintSensor
 import org.sonarsource.kotlin.externalreport.detekt.DetektRulesDefinition
@@ -64,7 +65,9 @@ class KotlinPlugin : Plugin, KotlinPluginExtensionsProvider {
 
         context.addExtension(KotlinGradleSensor::class.java)
 
-        if (context.runtime.product != SonarProduct.SONARLINT) {
+        if (context.runtime.product == SonarProduct.SONARLINT) {
+            context.addExtension(NoOpAnalysisWarnings::class.java)
+        } else {
             context.addExtensions(
                 KotlinResourcesLocator::class.java,
                 KotlinSurefireParser::class.java,

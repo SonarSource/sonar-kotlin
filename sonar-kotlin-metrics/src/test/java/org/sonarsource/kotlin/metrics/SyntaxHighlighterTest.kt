@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.metrics
 
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.ObjectAssert
 import org.junit.jupiter.api.Test
@@ -47,7 +48,7 @@ class SyntaxHighlighterTest : AbstractSensorTest() {
         val inputFile: InputFile = createInputFile("file1.kt", fileToTest.readText())
 
         context.fileSystem().add(inputFile)
-        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), TelemetryData(), emptyArray()).execute(context)
+        KotlinSensor(checkFactory(), fileLinesContextFactory, DefaultNoSonarFilter(), language(), TelemetryData(), emptyArray(), mockk(relaxed = true)).execute(context)
 
         assertThat(context, inputFile)
             .isHighlighted(1, 1, KEYWORD)

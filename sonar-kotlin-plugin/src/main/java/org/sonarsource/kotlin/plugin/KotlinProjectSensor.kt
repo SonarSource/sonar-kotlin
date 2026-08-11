@@ -64,10 +64,12 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
         addAndLogTelemetryProperty(context, "kotlin.files.processed", filesProcessed)
         addAndLogTelemetryProperty(context, "kotlin.files.read.failures", readFailures)
         addAndLogTelemetryProperty(context, "kotlin.files.parse.failures", parseFailures)
+        addAndLogTelemetryProperty(context, "kotlin.files.analysis.crashes", analysisCrashes)
         // scripts - .kts only
         addAndLogTelemetryProperty(context, "kotlin.scripts.processed", scriptsProcessed)
         addAndLogTelemetryProperty(context, "kotlin.scripts.read.failures", scriptReadFailures)
         addAndLogTelemetryProperty(context, "kotlin.scripts.parse.failures", scriptParseFailures)
+        addAndLogTelemetryProperty(context, "kotlin.scripts.analysis.crashes", scriptAnalysisCrashes)
     }
 
     /**
@@ -80,6 +82,8 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
                 addAndLogTelemetryProperty(context, "kotlin.android", if (hasAndroidImports) "1" else "0")
                 addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.imported", surefireClassesImported)
                 addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.failed", surefireClassesFailed)
+                addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.duplicated", surefireClassesDuplicated)
+                addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.overlapping", surefireClassesOverlapping)
             }
 
             fileProcessingTelemetry(context)
