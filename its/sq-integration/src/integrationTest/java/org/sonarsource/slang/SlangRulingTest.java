@@ -161,11 +161,16 @@ class SlangRulingTest {
     return moduleDirectory().resolve(Path.of("build", projectKey(project) + "-differences"));
   }
 
+  private static Path pinSonarqubePluginScript() throws IOException {
+    return moduleDirectory().resolve(Path.of("src", "integrationTest", "resources", "pin-sonarqube-plugin.gradle"));
+  }
+
   private static GradleBuild gradleBuild(String project, Map<String, String> properties) throws IOException {
     return GradleBuild.create(projectDirectory(project).toFile())
       .setProperties(properties)
       .setEnvironmentVariable("GRADLE_OPTS", "-Xmx1024m")
       .addArguments("--stacktrace", "--info", "--console=plain", "-x", "test")
+      .addArguments("--init-script", pinSonarqubePluginScript().toString())
       .setTimeoutSeconds(600);
   }
 
