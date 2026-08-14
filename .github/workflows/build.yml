@@ -169,14 +169,12 @@ jobs:
   # reported back as the `performance-validation` commit status.
   trigger_performance_validation:
     name: Trigger Performance Validation
-    # Wait for `promote`, not just `build`: the candidate artifact is only copied into a
-    # publicly-readable Artifactory repo during promotion. Dispatching right after `build`
-    # races PVF against promotion and PVF loses (artifact not found yet).
-    needs: [build, qa_plugin, qa_ruling, qa_sq_integration, promote]
+    needs: [build]
     if: >-
       github.event_name == 'pull_request' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       !cancelled() &&
+      needs.build.result == 'success' &&
       !contains(needs.*.result, 'failure') &&
       !contains(github.event.pull_request.labels.*.name, 'skip-pvf') &&
       !contains(github.event.pull_request.title, '[skip pvf]')
