@@ -31,6 +31,7 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
     companion object {
         private const val PLUGIN_VERSION_RESOURCE = "org/sonar/plugins/kotlin/pluginVersion.properties"
         private const val UNKNOWN_VERSION = "unknown"
+        const val EXTENDED_LOGGING_PROPERTY_NAME = "sonar.internal.kotlin.extendedLogging"
 
         fun resolvePluginVersion(): String = resolvePluginVersion(PLUGIN_VERSION_RESOURCE)
 
@@ -53,23 +54,25 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
         descriptor.onlyOnLanguage(KOTLIN_LANGUAGE_KEY).name("KotlinProjectSensor")
     }
 
-    fun addAndLogTelemetryProperty(context: SensorContext, propertyName: String, propertyValue: Any) {
+    fun addAndLogTelemetryProperty(context: SensorContext, extendedLogging: Boolean, propertyName: String, propertyValue: Any) {
         val stringValue = propertyValue.toString()
         context.addTelemetryProperty(propertyName, stringValue)
-        LOG.debug("TELEMETRY: $propertyName=$stringValue")
+        if (extendedLogging) {
+            LOG.debug("TELEMETRY: $propertyName=$stringValue")
+        }
     }
 
-    fun fileProcessingTelemetry(context: SensorContext) = with(telemetryData) {
+    fun fileProcessingTelemetry(context: SensorContext, extendedLogging: Boolean) = with(telemetryData) {
         // files - .kt and .kts counters
-        addAndLogTelemetryProperty(context, "kotlin.files.processed", filesProcessed)
-        addAndLogTelemetryProperty(context, "kotlin.files.read.failures", readFailures)
-        addAndLogTelemetryProperty(context, "kotlin.files.parse.failures", parseFailures)
-        addAndLogTelemetryProperty(context, "kotlin.files.analysis.crashes", analysisCrashes)
+        addAndLogTelemetryProperty(context, extendedLogging, "kotlin.files.processed", filesProcessed)
+        addAndLogTelemetryProperty(context, extendedLogging, "kotlin.files.read.failures", readFailures)
+        addAndLogTelemetryProperty(context, extendedLogging, "kotlin.files.parse.failures", parseFailures)
+        addAndLogTelemetryProperty(context, extendedLogging, "kotlin.files.analysis.crashes", analysisCrashes)
         // scripts - .kts only
-        addAndLogTelemetryProperty(context, "kotlin.scripts.processed", scriptsProcessed)
-        addAndLogTelemetryProperty(context, "kotlin.scripts.read.failures", scriptReadFailures)
-        addAndLogTelemetryProperty(context, "kotlin.scripts.parse.failures", scriptParseFailures)
-        addAndLogTelemetryProperty(context, "kotlin.scripts.analysis.crashes", scriptAnalysisCrashes)
+        addAndLogTelemetryProperty(context, extendedLogging, "kotlin.scripts.processed", scriptsProcessed)
+        addAndLogTelemetryProperty(context, extendedLogging, "kotlin.scripts.read.failures", scriptReadFailures)
+        addAndLogTelemetryProperty(context, extendedLogging, "kotlin.scripts.parse.failures", scriptParseFailures)
+        addAndLogTelemetryProperty(context, extendedLogging, "kotlin.scripts.analysis.crashes", scriptAnalysisCrashes)
     }
 
     /**
@@ -77,16 +80,17 @@ class KotlinProjectSensor(internal val telemetryData: TelemetryData) : ProjectSe
      */
     override fun execute(context: SensorContext) {
         if (context.runtime().apiVersion.isGreaterThanOrEqual(Version.create(10, 9))) {
-            addAndLogTelemetryProperty(context, "kotlin.pluginVersion", resolvePluginVersion())
+            val extendedLogging = context.config().getBoolean(EXTENDED_LOGGING_PROPERTY_NAME).orElse(false)
+            addAndLogTelemetryProperty(context, extendedLogging, "kotlin.pluginVersion", resolvePluginVersion())
             with(telemetryData) {
-                addAndLogTelemetryProperty(context, "kotlin.android", if (hasAndroidImports) "1" else "0")
-                addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.imported", surefireClassesImported)
-                addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.failed", surefireClassesFailed)
-                addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.duplicated", surefireClassesDuplicated)
-                addAndLogTelemetryProperty(context, "kotlin.reports.surefire.classes.overlapping", surefireClassesOverlapping)
+                addAndLogTelemetryProperty(context, extendedLogging, "kotlin.android", if (hasAndroidImports) "1" else "0")
+                addAndLogTelemetryProperty(context, extendedLogging, "kotlin.reports.surefire.classes.imported", surefireClassesImported)
+                addAndLogTelemetryProperty(context, extendedLogging, "kotlin.reports.surefire.classes.failed", surefireClassesFailed)
+                addAndLogTelemetryProperty(context, extendedLogging, "kotlin.reports.surefire.classes.duplicated", surefireClassesDuplicated)
+                addAndLogTelemetryProperty(context, extendedLogging, "kotlin.reports.surefire.classes.overlapping", surefireClassesOverlapping)
             }
 
-            fileProcessingTelemetry(context)
+            fileProcessingTelemetry(context, extendedLogging)
         }
     }
 }

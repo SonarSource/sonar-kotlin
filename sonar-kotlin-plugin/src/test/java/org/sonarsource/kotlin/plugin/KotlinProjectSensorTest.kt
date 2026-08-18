@@ -21,11 +21,17 @@ import io.mockk.slot
 import io.mockk.spyk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import com.sonarsource.scanner.engine.sensor.test.fixtures.SensorContextTester
 import java.nio.file.Path
+import org.slf4j.event.Level
+import org.sonar.api.testfixtures.log.LogTesterJUnit5
 import org.sonarsource.kotlin.metrics.TelemetryData
 
 class KotlinProjectSensorTest {
+
+    @RegisterExtension
+    val logTester = LogTesterJUnit5().setLevel(Level.DEBUG)
 
     @Test
     fun `execute reports telemetry`() {
