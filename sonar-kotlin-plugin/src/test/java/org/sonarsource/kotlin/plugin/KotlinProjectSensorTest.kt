@@ -29,9 +29,9 @@ import org.sonar.api.testfixtures.log.LogTesterJUnit5
 import org.sonar.scanner.plugin.api.impl.config.MapSettings
 import org.sonarsource.kotlin.metrics.TelemetryData
 
-class KotlinProjectSensorTest {
+private const val PLUGIN_VERSION = "1.2.3-TEST"
 
-    private val pluginVersion = "1.2.3-TEST"
+class KotlinProjectSensorTest {
 
     @RegisterExtension
     val logTester = LogTesterJUnit5().setLevel(Level.DEBUG)
@@ -50,7 +50,7 @@ class KotlinProjectSensorTest {
         assertThat(telemetry)
             .containsExactlyInAnyOrderEntriesOf(
                 mapOf(
-                    "kotlin.pluginVersion" to pluginVersion,
+                    "kotlin.pluginVersion" to PLUGIN_VERSION,
                     "kotlin.android" to "0",
                     "kotlin.reports.surefire.classes.failed" to "0",
                     "kotlin.reports.surefire.classes.imported" to "0",
@@ -70,7 +70,7 @@ class KotlinProjectSensorTest {
         sensor.telemetryData.hasAndroidImports = true
         sensor.execute(context)
         assertThat(telemetry).containsExactlyInAnyOrderEntriesOf(mapOf(
-            "kotlin.pluginVersion" to pluginVersion,
+            "kotlin.pluginVersion" to PLUGIN_VERSION,
             "kotlin.android" to "1",
             "kotlin.reports.surefire.classes.failed" to "0",
             "kotlin.reports.surefire.classes.imported" to "0",
@@ -108,7 +108,7 @@ class KotlinProjectSensorTest {
 
         assertThat(logTester.logs(Level.DEBUG))
             .contains(
-                "TELEMETRY: kotlin.pluginVersion=$pluginVersion",
+                "TELEMETRY: kotlin.pluginVersion=$PLUGIN_VERSION",
                 "TELEMETRY: kotlin.android=0",
                 "TELEMETRY: kotlin.files.processed=0",
                 "TELEMETRY: kotlin.scripts.analysis.crashes=0",
@@ -117,7 +117,7 @@ class KotlinProjectSensorTest {
 
     @Test
     fun `resolvePluginVersion reads version from resource`() {
-        assertThat(KotlinProjectSensor.resolvePluginVersion()).isEqualTo(pluginVersion)
+        assertThat(KotlinProjectSensor.resolvePluginVersion()).isEqualTo(PLUGIN_VERSION)
     }
 
     @Test
