@@ -84,3 +84,4 @@ jobs:
       verbose: ${{ inputs.verbose }}
       bump-version: true
       bump-version-exclusions: "its,sonar-kotlin-surefire"
+      ktlo-jira-project-key: "CLOUDSEC"
