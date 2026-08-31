@@ -8,8 +8,10 @@ possible.</p>
 <p>Deprecated classes, interfaces, and their members should not be used, inherited or extended because they will eventually be removed. The
 deprecation period allows you to make a smooth transition away from the aging, soon-to-be-retired technology.</p>
 <p>Check the documentation or the deprecation message to understand why the code was deprecated and what the recommended alternative is.</p>
-<pre>
-@Deprecated("This function is deprecated, use newFunction instead", ReplaceWith("newFunction()"))
+<h3>Code examples</h3>
+<h4>Noncompliant code example</h4>
+<pre data-diff-id="1" data-diff-type="noncompliant">
+@Deprecated("Use newFunction instead", ReplaceWith("newFunction()"))
 fun oldFunction() {
     println("This is the old function.")
 }
@@ -18,8 +20,55 @@ fun newFunction() {
     println("This is the new function.")
 }
 
-oldFunction() // Noncompliant: "oldFunction is deprecated"
+oldFunction() // Noncompliant
 </pre>
+<h4>Compliant solution</h4>
+<pre data-diff-id="1" data-diff-type="compliant">
+@Deprecated("Use newFunction instead", ReplaceWith("newFunction()"))
+fun oldFunction() {
+    println("This is the old function.")
+}
+
+fun newFunction() {
+    println("This is the new function.")
+}
+
+newFunction() // Compliant
+</pre>
+<h3>Exceptions</h3>
+<p>The following usages are not reported:</p>
+<ul>
+  <li>References to deprecated types in non-executable, structural positions: parameter types, return types, field/property types, and type arguments.
+  These positions do not invoke the deprecated API at runtime.
+    <pre>
+@Deprecated("")
+open class DeprecatedClass
+
+fun returnsDeprecated(): DeprecatedClass? = null   // Compliant - return type
+fun takesDeprecated(arg: DeprecatedClass) {}       // Compliant - parameter type
+
+class Holder {
+    val field: DeprecatedClass? = null             // Compliant - field type
+    fun withTypeArg(list: List&lt;DeprecatedClass&gt;) {}// Compliant - type argument
+}
+</pre></li>
+  <li>Any usage inside a declaration that is itself marked <code>@Deprecated</code>. Deprecated code is expected to reference other deprecated APIs
+  during the migration period.
+    <pre>
+@Deprecated("")
+open class DeprecatedClass
+
+@Deprecated("Use NewClass instead")
+class OldClass {
+    val member: DeprecatedClass = DeprecatedClass() // Compliant - enclosing class is deprecated
+}
+
+@Deprecated("Use newFunction instead")
+fun oldFunction() {
+    DeprecatedClass() // Compliant - enclosing function is deprecated
+}
+</pre></li>
+</ul>
 <h2>Resources</h2>
 <h3>Documentation</h3>
 <ul>
