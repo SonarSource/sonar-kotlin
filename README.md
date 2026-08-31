@@ -74,7 +74,7 @@ You can also run single ruling tests, e.g.:
 
 * By default, the SonarQube version used is LATEST_RELEASE, you can use the following property to set a different one:
 
-      -Dsonar.runtimeVersion=2026.4
+      -Dsonar.runtimeVersion=9.7.1.62043
 
 * By default, analyzed projects are built by gradle only if changed, but you can force a clean build by using:
 
