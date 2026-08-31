@@ -120,7 +120,7 @@ class UsesDeprecatedInSignatures {
     fun withTypeArg(list: List<DeprecatedString>) {} // Compliant - type argument
 }
 
-// actual usages of deprecated types must be reported
+// region actual usages of deprecated types must be reported
 
 // constructor call
 class ExtendsDeprecatedClass : DeprecatedCode() // Noncompliant
@@ -137,6 +137,11 @@ fun typeChecks(x: Any) {
     if (x is DeprecatedCode) {} // Noncompliant
     // cast
     val y = x as DeprecatedCode // Noncompliant
+    // when is-pattern
+    when (x) {
+        is DeprecatedCode -> {} // Noncompliant
+        else -> {}
+    }
 }
 
 //  annotation without parentheses must not be suppressed as type reference

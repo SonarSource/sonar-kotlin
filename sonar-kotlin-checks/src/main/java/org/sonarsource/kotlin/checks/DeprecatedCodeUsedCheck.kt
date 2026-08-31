@@ -27,6 +27,7 @@ import org.jetbrains.kotlin.psi.KtEnumEntrySuperclassReferenceExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtSuperTypeCallEntry
+import org.jetbrains.kotlin.psi.KtWhenConditionIsPattern
 import org.jetbrains.kotlin.psi.KtSuperTypeEntry
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
@@ -58,6 +59,7 @@ private fun PsiElement.isTypeReferencePosition(): Boolean {
         is KtSuperTypeEntry,                // class Foo : DeprecatedInterface
         is KtDelegatedSuperTypeEntry,       // class Foo : DeprecatedInterface by d
         is KtIsExpression,                  // x is DeprecatedCode
+        is KtWhenConditionIsPattern,        // when (x) { is DeprecatedCode -> ... }
         is KtBinaryExpressionWithTypeRHS -> // x as DeprecatedCode
             false
         // structural / signature positions — suppress
