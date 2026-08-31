@@ -58,6 +58,9 @@ open class DeprecatedCode {
 }
 
 @Deprecated("")
+interface DeprecatedInterface
+
+@Deprecated("")
 fun deprecatedFunction() {}
 
 @Deprecated("")
@@ -117,7 +120,24 @@ class UsesDeprecatedInSignatures {
     fun withTypeArg(list: List<DeprecatedString>) {} // Compliant - type argument
 }
 
-class ExtendsDeprecatedWithoutConstructorCall : DeprecatedCode() // Noncompliant
+// actual usages of deprecated types must be reported
+
+// constructor call
+class ExtendsDeprecatedClass : DeprecatedCode() // Noncompliant
+
+// interface supertype
+class ImplementsDeprecatedInterface : DeprecatedInterface // Noncompliant
+
+// by-delegation
+class DelegatesViaDeprecatedInterface(d: DeprecatedInterface) : DeprecatedInterface by d // Noncompliant
+//                                                              ^^^^^^^^^^^^^^^^^^^
+
+fun typeChecks(x: Any) {
+    // is-check
+    if (x is DeprecatedCode) {} // Noncompliant
+    // cast
+    val y = x as DeprecatedCode // Noncompliant
+}
 
 //  annotation without parentheses must not be suppressed as type reference
 @DeprecatedAnnotation // Noncompliant
