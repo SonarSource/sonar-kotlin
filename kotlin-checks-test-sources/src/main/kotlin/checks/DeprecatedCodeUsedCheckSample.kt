@@ -68,7 +68,7 @@ annotation class DeprecatedAnnotation
 typealias DeprecatedString = String
 
 @Deprecated("")
-private operator fun DeprecatedString.minus(s: String) = this + s // Noncompliant
+private operator fun DeprecatedString.minus(s: String) = this + s // Compliant - enclosing function is deprecated (cluster 6)
 
 class DeprecatedParameterUsedInFollowingParameter(
     @Deprecated("This is deprecated") val deprecatedParameter: String, // Compliant: not used, but declared
@@ -108,3 +108,30 @@ fun nestedFunctions() {
 
     oldFunction() // FN
 }
+
+// region nested usage of deprecated code within a deprecated scope
+
+@Deprecated("This whole class is deprecated")
+class DeprecatedClassUsingOtherDeprecated {
+    // field declaration in deprecated class references another deprecated type
+    val member: DeprecatedCode = DeprecatedCode() // Compliant - enclosing class is deprecated
+
+    // calling other deprecated APIs from within the deprecated class body
+    fun usesOtherDeprecatedApis() {
+        deprecatedFunction() // Compliant - enclosing class is deprecated
+        val x = DeprecatedCode() // Compliant - enclosing class is deprecated
+    }
+
+    companion object {
+        // factory method in companion object calling its own deprecated class constructor
+        fun create(): DeprecatedClassUsingOtherDeprecated = DeprecatedClassUsingOtherDeprecated() // Compliant - enclosing class is deprecated
+    }
+}
+
+@Deprecated("Use newWay instead")
+fun deprecatedFunctionCallingOtherDeprecated() {
+    deprecatedFunction() // Compliant - enclosing function is deprecated
+    DeprecatedCode() // Compliant - enclosing function is deprecated
+}
+
+// endregion

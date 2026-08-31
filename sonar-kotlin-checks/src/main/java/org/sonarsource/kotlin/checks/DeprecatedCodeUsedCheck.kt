@@ -18,11 +18,13 @@ package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
+import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtEnumEntrySuperclassReferenceExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtSuperTypeCallEntry
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
@@ -34,10 +36,15 @@ class DeprecatedCodeUsedCheck : AbstractCheck() {
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) = withKaSession {
         context.kaDiagnostics
             .filter { it.factoryName == FirErrors.DEPRECATION.name }
+            .filterNot { it.psi.isInsideDeprecatedScope() }
             .forEach { context.reportIssue(it.psi.elementToReport(), "Deprecated code should not be used.") }
     }
 
 }
+
+private fun PsiElement.isInsideDeprecatedScope(): Boolean =
+    parents.filterIsInstance<KtAnnotated>()
+        .any { annotated -> annotated.annotationEntries.any { it.shortName?.asString() == "Deprecated" } }
 
 private fun PsiElement.elementToReport() = when (this) {
     is KtCallExpression -> calleeExpression
