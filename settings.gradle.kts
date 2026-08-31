@@ -82,7 +82,7 @@ dependencyResolutionManagement {
             val orchestrator = version("orchestrator", "6.1.0.3962")
             val sonarlint = version("sonarlint", "10.13.0.79996")
             val sonarqube = version("sonarqube", "25.1.0.102122")
-            val scannerEngine = version("scannerEngine", "13.4.1.4007")
+            val scannerEngine = version("scannerEngine", "13.8.0.4534")
             val sit = version("sit", "1.2.0.1354")
             val xerces = version("xerces", "2.12.2")
 

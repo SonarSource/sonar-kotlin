@@ -1932,6 +1932,11 @@
             <sha256 value="66917335497f9ab75a36c34b3d90bad2bc8dc256c34b2413ecd0c9467fcf597d" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-build-tools-api" version="2.4.20-RC-300">
+         <artifact name="kotlin-build-tools-api-2.4.20-RC-300.jar">
+            <sha256 value="905664bb5781c496fd8390c7b315e79da71aaebdb71b05ebd9d4a586ea5af7de" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-build-tools-api" version="2.4.20-neptune-251">
          <artifact name="kotlin-build-tools-api-2.4.20-neptune-251.jar">
             <sha256 value="e933fc0d55e6352029b950b60c7405720249e7f38479b146886f0950e9bd37ae" origin="Verified"/>
@@ -1957,6 +1962,11 @@
             <sha256 value="5168b866945f6ac1ffcb6d4c88cf582497249469c2e4a4eafc0bcd35b5a264a9" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-build-tools-cri-impl" version="2.4.20-RC-300">
+         <artifact name="kotlin-build-tools-cri-impl-2.4.20-RC-300.jar">
+            <sha256 value="a9e4eebad1f5166439c3661861b89ee12dd7596fd23b2e0e86b21401267d7ae6" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-build-tools-cri-impl" version="2.4.20-neptune-251">
          <artifact name="kotlin-build-tools-cri-impl-2.4.20-neptune-251.jar">
             <sha256 value="02aaf4163c743df3cb0378f511e04dfe5df80266667ddc85b976b4238b010507" origin="Verified"/>
@@ -1970,6 +1980,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-build-tools-impl" version="2.4.0">
          <artifact name="kotlin-build-tools-impl-2.4.0.jar">
             <sha256 value="076c0a7f84d303f1e390774410c8678b8b584faa3f642435f93d2e4e81dabe7c" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-build-tools-impl" version="2.4.20-RC-300">
+         <artifact name="kotlin-build-tools-impl-2.4.20-RC-300.jar">
+            <sha256 value="981b5c6f8f0e469758dec4d2fc66affba271cd40bb473a185bedc011f4cc8f11" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-build-tools-impl" version="2.4.20-neptune-251">
@@ -2015,6 +2030,11 @@
             <sha256 value="c2b25e8c1c93ec416ba4327f5e31eaec0f0c8847241b9353e294b8db9dce564f" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-compiler-embeddable" version="2.4.20-RC-300">
+         <artifact name="kotlin-compiler-embeddable-2.4.20-RC-300.jar">
+            <sha256 value="2151d7d775586e8b8fcb616510a6802fed73fd947ed0b2aa125066b1de56e8f7" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-compiler-embeddable" version="2.4.20-neptune-251">
          <artifact name="kotlin-compiler-embeddable-2.4.20-neptune-251.jar">
             <sha256 value="da8ffa33f65dc7002f5f2a770abf4d57facbe31b6054dbd43b8217c6b8458578" origin="Verified"/>
@@ -2030,6 +2050,11 @@
             <sha256 value="ad9608152740e92d94a278b4ff2ca82c4bf5ff8ef219220e3c07aeb554638cee" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-compiler-runner" version="2.4.20-RC-300">
+         <artifact name="kotlin-compiler-runner-2.4.20-RC-300.jar">
+            <sha256 value="6c5cc09763d556b15bddddbfbc781e4eae5ac7451c939c916ad8e5575d71100d" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-compiler-runner" version="2.4.20-neptune-251">
          <artifact name="kotlin-compiler-runner-2.4.20-neptune-251.jar">
             <sha256 value="f3f0994bed1d527e3337deab0eaa28464a960fecad01af701df0ccf71be18859" origin="Verified"/>
@@ -2043,6 +2068,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-daemon-client" version="2.4.0">
          <artifact name="kotlin-daemon-client-2.4.0.jar">
             <sha256 value="f546f0b3699c4984f320dd03080de05cad61064208ba8f37df0d3f8f4a7fd14a" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-daemon-client" version="2.4.20-RC-300">
+         <artifact name="kotlin-daemon-client-2.4.20-RC-300.jar">
+            <sha256 value="c298bec82379fac98cd306d0f96977cbe0605c391ee77513e55d241f8c06db10" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-daemon-client" version="2.4.20-neptune-251">
@@ -2073,6 +2103,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-daemon-embeddable" version="2.4.0">
          <artifact name="kotlin-daemon-embeddable-2.4.0.jar">
             <sha256 value="383093af5e078435b60043d19bfa83eb6191be0f4d13a28fb1c8a0f3ab24fe66" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-daemon-embeddable" version="2.4.20-RC-300">
+         <artifact name="kotlin-daemon-embeddable-2.4.20-RC-300.jar">
+            <sha256 value="abff4331e2640d7e7ca612e46d04ab7ff133ed8879d7f246328ffc783ad50103" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-daemon-embeddable" version="2.4.20-neptune-251">
@@ -2248,6 +2283,11 @@
             <sha256 value="196e8ecbf63daf477e34e67c2f871ee232ae7bf8b377432d876d1bbf9d273de3" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-script-runtime" version="2.4.20-RC-300">
+         <artifact name="kotlin-script-runtime-2.4.20-RC-300.jar">
+            <sha256 value="b191b1064fdb8c60dc150a8831e4aabb3f291351752c53400955f4cda04e7edb" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.jetbrains.kotlin" name="kotlin-script-runtime" version="2.4.20-neptune-251">
          <artifact name="kotlin-script-runtime-2.4.20-neptune-251.jar">
             <sha256 value="e380bafd5328ca332fbae363874b7ae5de2ae42b70021ad2c3065873b2fbedb5" origin="Verified"/>
@@ -2321,6 +2361,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-stdlib" version="2.4.0">
          <artifact name="kotlin-stdlib-2.4.0.jar">
             <sha256 value="ccb14ff83fabcb11458b798dbc9824748ccdffeec79c9aba789e6ed1cda86b1c" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-stdlib" version="2.4.20-RC-300">
+         <artifact name="kotlin-stdlib-2.4.20-RC-300.jar">
+            <sha256 value="6fd2e60fb4518979f16166ec4e7e00dd2fc10967eee403c57ca65061d54c7b1a" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-stdlib" version="2.4.20-neptune-251">
@@ -2411,6 +2456,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-tooling-core" version="2.4.0">
          <artifact name="kotlin-tooling-core-2.4.0.jar">
             <sha256 value="59ea305372e3a2b7417764dcfecf645066a0d9b1792ab40afd15c1cc8535b58a" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-tooling-core" version="2.4.20-RC-300">
+         <artifact name="kotlin-tooling-core-2.4.20-RC-300.jar">
+            <sha256 value="5fc5db083803232857408ed5c25bcc307c703b04bdef6cb2c34ebf4db611a622" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-tooling-core" version="2.4.20-neptune-251">
@@ -3040,29 +3090,29 @@
             <sha256 value="4df4526499760242c2d5d76ee8bc38326b4549c344e034e12bc392d2b8a618ac" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.scanner.engine" name="plugin-api-scanner-impl" version="13.4.1.4007">
-         <artifact name="plugin-api-scanner-impl-13.4.1.4007.jar">
-            <sha256 value="aa6b45ca71c15d4fc9e65221b5bc7ff3ddc9ee38f9ea90f490c51ab6aec2fde8" origin="Verified"/>
+      <component group="org.sonarsource.scanner.engine" name="plugin-api-scanner-impl" version="13.8.0.4534">
+         <artifact name="plugin-api-scanner-impl-13.8.0.4534.jar">
+            <sha256 value="3eb78ab8474cc5da595f5145d629502dea602531c3ed1aafb6cdb8b0b8d69d93" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.scanner.engine" name="sensor-test-fixtures" version="13.4.1.4007">
-         <artifact name="sensor-test-fixtures-13.4.1.4007.jar">
-            <sha256 value="6d58904167cb0bcf7b4a4c863177be0e43b55d7e292d23cd3b10fafbb7d335bb" origin="Verified"/>
+      <component group="org.sonarsource.scanner.engine" name="sensor-test-fixtures" version="13.8.0.4534">
+         <artifact name="sensor-test-fixtures-13.8.0.4534.jar">
+            <sha256 value="cbf1bf321b97813361459485654fbd21af80da258f86a5d95360a9ca2d17cec9" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.scanner.engine" name="sonar-channel" version="13.4.1.4007">
-         <artifact name="sonar-channel-13.4.1.4007.jar">
-            <sha256 value="1a3cc215a35771e29acd4996be8b62b9cdacc2c502ce71a94036f8df388df2b1" origin="Verified"/>
+      <component group="org.sonarsource.scanner.engine" name="sonar-channel" version="13.8.0.4534">
+         <artifact name="sonar-channel-13.8.0.4534.jar">
+            <sha256 value="a37b8ec88e32d619f3eec6ea0071e487fdb80822e2301b1494e739e641d11cd0" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.scanner.engine" name="sonar-duplications" version="13.4.1.4007">
-         <artifact name="sonar-duplications-13.4.1.4007.jar">
-            <sha256 value="642c060cc33b3d864eaf9c7560c79ddafd0c9e6f5d04241ff5919b65c82bfea6" origin="Verified"/>
+      <component group="org.sonarsource.scanner.engine" name="sonar-duplications" version="13.8.0.4534">
+         <artifact name="sonar-duplications-13.8.0.4534.jar">
+            <sha256 value="b0a9a51be22d7f53450282e6d3a3398d2919af49c593e4eb159e09ab79f796f5" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.scanner.engine" name="sonar-scanner-extension-framework" version="13.4.1.4007">
-         <artifact name="sonar-scanner-extension-framework-13.4.1.4007.jar">
-            <sha256 value="91bedbe678ac4a1ad077afd375c7be0d611112e403c3a1d9331de8e5576f90e5" origin="Verified"/>
+      <component group="org.sonarsource.scanner.engine" name="sonar-scanner-extension-framework" version="13.8.0.4534">
+         <artifact name="sonar-scanner-extension-framework-13.8.0.4534.jar">
+            <sha256 value="5646a97e4d123b51ebf99e6cf2e9e77cfb288103bbfe72858f34f85902d6f0ce" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.sonarsource.scanner.gradle" name="sonarqube-gradle-plugin" version="7.2.3.7755">
