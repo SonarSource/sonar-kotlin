@@ -45,10 +45,16 @@ git submodule update --init its/sources
 ./gradlew :its:plugin:integrationTest --info --console=plain --no-daemon
 
 # Update ruling golden files after changing a rule:
-# The tests always write actual results to its/ruling/build/reports/ruling/ (even on failure).
-# After running, copy the updated file(s) for the affected rule(s):
-#   cp its/ruling/build/reports/ruling/<corpus>/kotlin-S<NNNN>.json \
-#      its/ruling/src/integrationTest/resources/expected/kotlin/<corpus>/kotlin-S<NNNN>.json
+# 1. Standard corpora — actual results go to its/ruling/build/reports/ruling/ (even on failure):
+#    cp its/ruling/build/reports/ruling/<corpus>/kotlin-S<NNNN>.json \
+#       its/ruling/src/integrationTest/resources/expected/kotlin/<corpus>/kotlin-S<NNNN>.json
+# 2. kotlin corpus (test_kotlin_compiler) — skipped by default, enable with:
+#    KOTLIN_COMPILER_IT_ENABLED=true ./gradlew :its:ruling:integrationTest ...
+#    Goldens are in the same its/ruling/.../expected/kotlin/ directory.
+# 3. kotlin-language-server corpus — run by :its:sq-integration:integrationTest;
+#    actual results go to its/sq-integration/build/tmp/actual/kotlin/kotlin-language-server/
+#    cp its/sq-integration/build/tmp/actual/kotlin/kotlin-language-server/kotlin-S<NNNN>.json \
+#       its/sq-integration/src/integrationTest/resources/expected/kotlin/kotlin-language-server/kotlin-S<NNNN>.json
 ```
 
 ## Implementing a New Rule
