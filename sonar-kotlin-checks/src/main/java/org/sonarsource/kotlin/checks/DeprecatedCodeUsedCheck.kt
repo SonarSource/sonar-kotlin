@@ -19,10 +19,13 @@ package org.sonarsource.kotlin.checks
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
 import org.jetbrains.kotlin.psi.KtAnnotated
+import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtConstructorCalleeExpression
 import org.jetbrains.kotlin.psi.KtEnumEntrySuperclassReferenceExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtSuperTypeCallEntry
+import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.sonar.check.Rule
@@ -37,9 +40,15 @@ class DeprecatedCodeUsedCheck : AbstractCheck() {
         context.kaDiagnostics
             .filter { it.factoryName == FirErrors.DEPRECATION.name }
             .filterNot { it.psi.isInsideDeprecatedScope() }
+            .filterNot { it.psi.isTypeReferencePosition() }
             .forEach { context.reportIssue(it.psi.elementToReport(), "Deprecated code should not be used.") }
     }
 
+}
+
+private fun PsiElement.isTypeReferencePosition(): Boolean {
+    val typeRef = (sequenceOf(this) + parents).filterIsInstance<KtTypeReference>().firstOrNull() ?: return false
+    return typeRef.parent !is KtConstructorCalleeExpression && typeRef.parent !is KtAnnotationEntry
 }
 
 private fun PsiElement.isInsideDeprecatedScope(): Boolean =

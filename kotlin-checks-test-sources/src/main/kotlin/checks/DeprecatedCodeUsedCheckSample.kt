@@ -12,8 +12,7 @@ class Example : DeprecatedCode() // Noncompliant {{Deprecated code should not be
 //   ^^^^^^^^^^^^^^^^^^^^
 class DeprecatedCodeUsedCheckSample {
 
-    fun usesDeprecated(kStr: DeprecatedString): String { // Noncompliant
-//                           ^^^^^^^^^^^^^^^^
+    fun usesDeprecated(kStr: DeprecatedString): String {
 
         DeprecatedConstructor("") // Noncompliant
 
@@ -108,6 +107,23 @@ fun nestedFunctions() {
 
     oldFunction() // FN
 }
+
+// deprecated type in structural (non-executable) positions should not be flagged
+
+fun returnsDeprecated(): DeprecatedCode? = null // Compliant - return type
+
+class UsesDeprecatedInSignatures {
+    val field: DeprecatedCode? = null // Compliant - field type
+    fun withTypeArg(list: List<DeprecatedString>) {} // Compliant - type argument
+}
+
+class ExtendsDeprecatedWithoutConstructorCall : DeprecatedCode() // Noncompliant
+
+//  annotation without parentheses must not be suppressed as type reference
+@DeprecatedAnnotation // Noncompliant
+class AnnotatedWithDeprecatedAnnotation
+
+// endregion
 
 // region nested usage of deprecated code within a deprecated scope
 
