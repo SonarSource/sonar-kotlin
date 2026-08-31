@@ -45,77 +45,50 @@ For more information see [README.md](https://github.com/SonarSource/cloud-native
 
 ## Integration Tests
 
-By default, Integration Tests (ITs) are skipped during the build. If you want to run them, you need first to retrieve the related projects
-which are used as input:
+Integration and ruling tests require the source projects submodule:
 
     git submodule update --init its/sources
 
-Then build and run the Integration Tests using the `its` property:
+Run ruling tests (uses SIT — no SonarQube server needed):
 
-    ./gradlew build -Pits --info --console=plain --no-daemon
+    ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon
 
-You can also build and run only Ruling Tests using the `ruling` property:
+Run plugin tests:
 
-    ./gradlew build -Pruling --info --console=plain --no-daemon
+    ./gradlew :its:plugin:integrationTest --info --console=plain --no-daemon
 
-You can also build and run only Plugin Tests using the `plugin` property:
+To run a single ruling test method, e.g.:
 
-    ./gradlew build -Pplugin --info --console=plain --no-daemon
+    ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon --tests "org.sonarsource.kotlin.its.KotlinRulingTest.test_kotlin_corda"
 
-To run e.g. the ruling tests in the IDE, create a new Run/Debug Configuration where you run the following:
+### Updating ruling golden files
 
-    :its:ruling:test --info --console=plain -Pruling
+The ruling tests diff actual scanner output against golden files under
+`its/ruling/src/integrationTest/resources/expected/`. After changing a rule, update the
+affected golden files:
 
-You can also run single ruling tests, e.g.:
+1. Run the ruling tests — actual results are always written to `its/ruling/build/reports/ruling/`
+   even when the tests fail.
+2. Copy the updated file(s) for the affected rule(s):
 
-    :its:ruling:test --info --console=plain -Pruling --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_corda"
+       cp its/ruling/build/reports/ruling/<corpus>/kotlin-S<NNNN>.json \
+          its/ruling/src/integrationTest/resources/expected/kotlin/<corpus>/kotlin-S<NNNN>.json
 
-**Additional ruling parameters**
-
-* By default, the SonarQube version used is LATEST_RELEASE, you can use the following property to set a different one:
-
-      -Dsonar.runtimeVersion=9.7.1.62043
-
-* By default, analyzed projects are built by gradle only if changed, but you can force a clean build by using:
-
-      -DcleanProjects=true
-
-* To keep SonarQube running at the end of the analysis:
-
-       -DkeepSonarqubeRunning=true
-
-* To see in SonarQube not only the issue differences but all the issues:
-
-       -DkeepSonarqubeRunning=true -DreportAll=true
-
-### Debugging ruling tests
-
-You can debug the scanner when running ruling tests. As a new JVM is spawned to run the analysis you can't simply click 'debug' on a ruling
-test, however. You need to tell the Sonar Scanner (which is being used to run the analysis in the background) to launch a debuggable JVM.
-Then you can attach to this JVM instance and debug as normal via your IDE.
-
-The ruling test already provides a convenient API where all you need to do is supply the port you want to debug on (e.g. 5005)
-to `sonar.rulingDebugPort`. So, for instance, if you start the ruling tests from the CLI, run:
-
-    ./gradlew :its:ruling:test -Pruling --info --console=plain --no-daemon -Dsonar.rulingDebugPort=5005
-
-You can obviously do the same in the IDE and/or only run a particular test:
-
-    :its:ruling:test -Pruling --info --console=plain --tests "org.sonarsource.slang.SlangRulingTest.test_kotlin_corda" -Dsonar.rulingDebugPort=5005
+3. Re-run the ruling tests to confirm they pass.
 
 ## Utilities and Developing
 
 ### Generating/downloading rule metadata
 
-The Gradle task `generateRuleMetadata` will download the rule metadata from the [RSPEC repository](https://github.com/SonarSource/rspec/).
+The Gradle task `ruleApiGenerateRuleKotlin` will download the rule metadata from the [RSPEC repository](https://github.com/SonarSource/rspec/).
 
 For example, execute the following in the project root to fetch the metadata for rule `S42`:
 
-    ./gradlew generateRuleMetadata -PruleKey=S42
+    ./gradlew :sonar-kotlin-plugin:ruleApiGenerateRuleKotlin -Prule=S42
 
 If fetching from a branch:
 
-    ./gradlew generateRuleMetadata -PruleKey=S4830 -Pbranch=a_branch
+    ./gradlew :sonar-kotlin-plugin:ruleApiGenerateRuleKotlin -Prule=S4830 -Pbranch=a_branch
 
 Alternatively, you can let the tool auto-detect the branch. If you do not provide a branch, it will look at the PRs
 open in the RSPEC repository that contain the rule key in their name. If it finds any, you will be presented with a
@@ -131,12 +104,12 @@ choice of which branch to fetch the metadata from. Points to note about this fea
 
 If you want to update all rules' metadata, you can use:
 
-    ./gradlew updateRuleMetadata
+    ./gradlew :sonar-kotlin-plugin:ruleApiUpdateKotlin
 
 ### Implementing a new rule
 
 The Gradle task `setupRuleStubs` will create the commonly required files for implementing a new rule, including usual boilerplate code. It
-will also put the rule into the list of checks and call `generateRuleMetadata` to download the rule's metadata.
+will also put the rule into the list of checks and call `ruleApiGenerateRuleKotlin` to download the rule's metadata.
 
 To use this task, you need to know the rule key and a fitting name for the check class. For instance, if you want to implement the new
 rule `S42` in the class `AnswersEverythingCheck`, you can call the following in the root of the project:
