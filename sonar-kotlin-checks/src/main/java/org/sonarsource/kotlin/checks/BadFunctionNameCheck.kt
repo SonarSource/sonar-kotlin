@@ -26,6 +26,9 @@ import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
 private val TEST_ANNOTATION_NAMES = setOf("Test", "ParameterizedTest", "RepeatedTest")
 
+private val PASCAL_CASE_REGEX = Regex("^[A-Z][a-zA-Z0-9]*$")
+private val CAMEL_CASE_REGEX = Regex("^[a-z][a-zA-Z0-9]*$")
+
 @Rule(key = "S100")
 class BadFunctionNameCheck : AbstractCheck() {
 
@@ -49,7 +52,11 @@ class BadFunctionNameCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val name = function.name ?: /* in case of anonymous functions */ return
-        if (!function.hasModifier(KtTokens.EXTERNAL_KEYWORD) && !name.matches(formatRegex) && !isBacktickedTestFunction(function)) {
+        if (function.hasModifier(KtTokens.EXTERNAL_KEYWORD)) return
+        if (isBacktickedAllowedFunction(function)) return
+        if (function.annotationEntries.any { it.shortName?.asString() == "Composable" }) {
+            checkComposableNaming(function, name, kotlinFileContext)
+        } else if (!name.matches(formatRegex)) {
             kotlinFileContext.reportIssue(
                 function.nameIdentifier!!,
                 """Rename function "$name" to match the regular expression $format"""
@@ -57,14 +64,37 @@ class BadFunctionNameCheck : AbstractCheck() {
         }
     }
 
-    private fun isBacktickedTestFunction(function: KtNamedFunction): Boolean {
+    private fun checkComposableNaming(function: KtNamedFunction, name: String, kotlinFileContext: KotlinFileContext) {
+        val returnsUnit = !function.hasDeclaredReturnType() || function.typeReference?.text == "Unit"
+        val isPrivateOrInternal = function.hasModifier(KtTokens.PRIVATE_KEYWORD) || function.hasModifier(KtTokens.INTERNAL_KEYWORD)
+
+        val (follows, expectedPattern) = when {
+            returnsUnit && isPrivateOrInternal ->
+                (name.matches(PASCAL_CASE_REGEX) || name.matches(CAMEL_CASE_REGEX)) to
+                "${PASCAL_CASE_REGEX.pattern}|${CAMEL_CASE_REGEX.pattern}"
+            returnsUnit ->
+                name.matches(PASCAL_CASE_REGEX) to PASCAL_CASE_REGEX.pattern
+            else ->
+                name.matches(CAMEL_CASE_REGEX) to CAMEL_CASE_REGEX.pattern
+        }
+
+        if (!follows) {
+            kotlinFileContext.reportIssue(
+                function.nameIdentifier!!,
+                """Rename function "$name" to match the regular expression $expectedPattern"""
+            )
+        }
+    }
+
+    private fun isBacktickedAllowedFunction(function: KtNamedFunction): Boolean {
         val nameIdentifierText = function.nameIdentifier?.text ?: return false
         if (!nameIdentifierText.startsWith('`')) return false
 
-        return hasTestAnnotation(function)
+        return hasAnnotation(function, TEST_ANNOTATION_NAMES)
+                || (hasAnnotation(function, setOf("Preview")) && hasAnnotation(function, setOf("Composable")))
     }
 
-    private fun hasTestAnnotation(function: KtNamedFunction): Boolean =
-        function.annotationEntries.any { TEST_ANNOTATION_NAMES.contains(it.shortName?.asString()) }
+    private fun hasAnnotation(function: KtNamedFunction, annotations: Set<String>): Boolean =
+        function.annotationEntries.any { annotations.contains(it.shortName?.asString()) }
 
 }

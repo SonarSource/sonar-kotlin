@@ -10,16 +10,17 @@ fun MyScreen() {} // Compliant
 @Composable
 fun MyDialog(): Unit {} // Compliant
 
-// Public @Composable + Unit + camelCase → matches the camelCase format already
+// Public @Composable + Unit + camelCase → Noncompliant (public UI components must be PascalCase)
 @Composable
-fun myHelperComposable() {} // Compliant
+fun myHelperComposable() {} // Noncompliant {{Rename function "myHelperComposable" to match the regular expression ^[A-Z][a-zA-Z0-9]*$}}
+//  ^^^^^^^^^^^^^^^^^^
 
 // Public @Composable + Unit + name that is neither PascalCase nor camelCase → Noncompliant
 @Composable
-fun My_Screen() {} // Noncompliant {{Rename function "My_Screen" to match the regular expression ^[a-z][a-zA-Z0-9]*$}}
+fun My_Screen() {} // Noncompliant {{Rename function "My_Screen" to match the regular expression ^[A-Z][a-zA-Z0-9]*$}}
 //  ^^^^^^^^^
 
-// Public @Composable + non-Unit return type → NOT exempt even with PascalCase
+// Public @Composable + non-Unit return type → must follow camelCase (composable factory function)
 @Composable
 fun MyFactory(): String = "value" // Noncompliant {{Rename function "MyFactory" to match the regular expression ^[a-z][a-zA-Z0-9]*$}}
 //  ^^^^^^^^^
@@ -34,17 +35,22 @@ private fun myPrivateHelper() {} // Compliant
 
 // Private @Composable + name that is neither PascalCase nor camelCase → Noncompliant
 @Composable
-private fun My_PrivateComponent() {} // Noncompliant {{Rename function "My_PrivateComponent" to match the regular expression ^[a-z][a-zA-Z0-9]*$}}
+private fun My_PrivateComponent() {} // Noncompliant {{Rename function "My_PrivateComponent" to match the regular expression ^[A-Z][a-zA-Z0-9]*$|^[a-z][a-zA-Z0-9]*$}}
 //          ^^^^^^^^^^^^^^^^^^^
 
-// @Preview + @Composable + backtick name → exempt (human-readable preview label in IDE)
+// @Preview + @Composable + backtick name → exempt (human-readable preview label in the Android Studio IDE)
 @Preview
 @Composable
-fun `User Profile - Dark Mode Preview`() {} // Compliant - backtick with @Preview
+fun `User Profile - Dark Mode Preview`() {} // Compliant - backtick with @Preview and @Composable
+
+// @Preview without @Composable + backtick → NOT exempt (@Preview alone is not sufficient)
+@Preview
+fun `My Preview`() {} // Noncompliant {{Rename function "My Preview" to match the regular expression ^[a-z][a-zA-Z0-9]*$}}
+//  ^^^^^^^^^^^^
 
 // @Composable + backtick without @Preview or @Test → NOT exempt
 @Composable
-fun `my composable helper`() {} // Noncompliant {{Rename function "my composable helper" to match the regular expression ^[a-z][a-zA-Z0-9]*$}}
+fun `my composable helper`() {} // Noncompliant {{Rename function "my composable helper" to match the regular expression ^[A-Z][a-zA-Z0-9]*$}}
 //  ^^^^^^^^^^^^^^^^^^^^^^
 
 // Non-@Composable PascalCase → Noncompliant (the @Composable exemption does not apply)
@@ -57,9 +63,8 @@ open class ComposableClassSample {
     @Composable
     protected fun MyProtectedComponent() {} // Compliant
 
-    // Internal @Composable + PascalCase → NOT exempt (only public and protected)
+    // Internal @Composable + PascalCase → exempt (private/internal also allow PascalCase)
     @Composable
-    internal fun MyInternalComponent() {} // Noncompliant {{Rename function "MyInternalComponent" to match the regular expression ^[a-z][a-zA-Z0-9]*$}}
-//               ^^^^^^^^^^^^^^^^^^^
+    internal fun MyInternalComponent() {} // Compliant
 
 }
