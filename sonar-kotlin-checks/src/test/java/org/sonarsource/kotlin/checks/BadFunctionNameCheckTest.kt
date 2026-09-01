@@ -16,4 +16,16 @@
  */
 package org.sonarsource.kotlin.checks
 
-class BadFunctionNameCheckTest : CheckTest(BadFunctionNameCheck())
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.testapi.KotlinVerifier
+
+class BadFunctionNameCheckTest : CheckTest(BadFunctionNameCheck()) {
+
+    @Test
+    fun `with camelCase format and composable exemptions`() {
+        KotlinVerifier(BadFunctionNameCheck().apply { format = "^[a-z][a-zA-Z0-9]*$" }) {
+            fileName = "BadFunctionNameCheckComposableSample.kt"
+        }.verify()
+    }
+
+}

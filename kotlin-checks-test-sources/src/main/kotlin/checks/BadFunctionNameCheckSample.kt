@@ -33,4 +33,8 @@ class BadFunctionNameCheckSample {
     fun `non test backtick name with spaces`() {} // Noncompliant {{Rename function "non test backtick name with spaces" to match the regular expression ^[a-zA-Z][a-zA-Z0-9]*$}}
 //      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+    // External (FFI/JNI) functions — name is owned by the native ABI, renaming would break interop
+    external fun ffi_native_long_function_name() // Compliant - external modifier
+    external fun generate_seed() // Compliant - external modifier
+
 }
