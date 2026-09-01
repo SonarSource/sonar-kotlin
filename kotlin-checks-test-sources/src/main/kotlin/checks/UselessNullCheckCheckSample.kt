@@ -158,3 +158,25 @@ private class CapturedNullableTypeRegressionTests {
     private fun projectedNullableArray(values: Array<out String?>): String =
         values[0] ?: "fallback" // Compliant: regression test
 }
+
+private class SafeCallConventionOperatorRegressionTests {
+    private interface Container {
+        val list: List<String>
+        var number: Int
+    }
+
+    private fun elvis(container: Container?): String =
+        container?.list[0] ?: "fallback" // Compliant: regression test
+
+    private fun assertion(container: Container?): String =
+        container?.list[0]!! // Compliant: regression test
+
+    private fun safeAccess(container: Container?): Int? =
+        container?.list[0]?.length // Compliant: regression test
+
+    private fun comparison(container: Container?): Boolean =
+        container?.list[0] != null // Compliant: regression test
+
+    private fun increment(container: Container?): Int =
+        container?.number++ ?: -1 // Compliant: regression test
+}

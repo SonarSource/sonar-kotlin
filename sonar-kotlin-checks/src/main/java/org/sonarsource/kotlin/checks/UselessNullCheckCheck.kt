@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.analysis.api.types.KaErrorType
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
+import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -50,13 +51,25 @@ class UselessNullCheckCheck : AbstractCheck() {
     override fun visitBinaryExpression(binaryExpression: KtBinaryExpression, kotlinFileContext: KotlinFileContext) {
         when (binaryExpression.operationToken) {
             KtTokens.EQEQ -> binaryExpression.operandComparedToNull()?.let {
-                raiseIssueIfUselessCheck(kotlinFileContext, it, binaryExpression, comparesToNull = true) {
+                raiseIssueIfUselessCheck(
+                    kotlinFileContext,
+                    it,
+                    binaryExpression,
+                    comparesToNull = true,
+                    requiredCompilerDiagnosticName = FirErrors.SENSELESS_COMPARISON.name,
+                ) {
                     +"null check"
                 }
             }
 
             KtTokens.EXCLEQ -> binaryExpression.operandComparedToNull()?.let {
-                raiseIssueIfUselessCheck(kotlinFileContext, it, binaryExpression, comparesToNull = false) {
+                raiseIssueIfUselessCheck(
+                    kotlinFileContext,
+                    it,
+                    binaryExpression,
+                    comparesToNull = false,
+                    requiredCompilerDiagnosticName = FirErrors.SENSELESS_COMPARISON.name,
+                ) {
                     +"non-null check"
                 }
             }
@@ -66,6 +79,7 @@ class UselessNullCheckCheck : AbstractCheck() {
                 binaryExpression.left!!,
                 binaryExpression.operationReference,
                 comparesToNull = false,
+                requiredCompilerDiagnosticName = FirErrors.USELESS_ELVIS.name,
             ) {
                 +"elvis operation "
                 code("?:")
@@ -80,6 +94,7 @@ class UselessNullCheckCheck : AbstractCheck() {
             safeDotExpression.receiverExpression,
             safeDotExpression.operationTokenNode.psi,
             comparesToNull = false,
+            requiredCompilerDiagnosticName = FirErrors.UNNECESSARY_SAFE_CALL.name,
         ) {
             +"null-safe access "
             code("?.")
@@ -93,6 +108,7 @@ class UselessNullCheckCheck : AbstractCheck() {
                 unaryExpression.baseExpression!!,
                 unaryExpression.operationReference,
                 comparesToNull = false,
+                requiredCompilerDiagnosticName = FirErrors.UNNECESSARY_NOT_NULL_ASSERTION.name,
             ) {
                 +"non-null assertion "
                 code("!!")
@@ -133,7 +149,8 @@ class UselessNullCheckCheck : AbstractCheck() {
         expression: KtExpression,
         issueLocation: PsiElement,
         comparesToNull: Boolean,
-        nullCheckTypeForMessage: Message.() -> Unit
+        requiredCompilerDiagnosticName: String? = null,
+        nullCheckTypeForMessage: Message.() -> Unit,
     ) {
         val resolvedExpression = expression.predictRuntimeValueExpression()
 
@@ -141,7 +158,10 @@ class UselessNullCheckCheck : AbstractCheck() {
             if (comparesToNull) "succeeds" else "fails"
         } else if (
         // We are not using the resolvedExpression on purpose here, as it can cause FPs. See SONARKT-373.
-            expression.isNotNullable()
+            expression.isNotNullable() && (
+                requiredCompilerDiagnosticName == null ||
+                    kfc.hasCompilerDiagnostic(requiredCompilerDiagnosticName, issueLocation)
+            )
         ) {
             if (comparesToNull) "fails" else "succeeds"
         } else {
@@ -155,6 +175,11 @@ class UselessNullCheckCheck : AbstractCheck() {
         }
     }
 }
+
+private fun KotlinFileContext.hasCompilerDiagnostic(factoryName: String, issueLocation: PsiElement): Boolean =
+    kaDiagnostics.any { diagnostic ->
+        diagnostic.factoryName == factoryName && diagnostic.psi.textRange.contains(issueLocation.textRange)
+    }
 
 private fun KtExpression.isNotNullable(): Boolean =
     when (this) {
