@@ -53,14 +53,7 @@
 39
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-client/src/org/jetbrains/kotlin/daemon/client/KotlinCompilerClient.kt": [
-155,
-171,
 280
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/CompileService.kt": [
-114,
-127,
-157
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/JpsCompilerServicesFacade.kt": [
 19
@@ -69,54 +62,18 @@
 98,
 103,
 108,
-113,
-118,
-121
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/RemoteCompilationCanceledStatusClient.kt": [
-30
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/RemoteIncrementalCacheClient.kt": [
-26
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/RemoteIncrementalCompilationComponentsClient.kt": [
-26
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/RemoteLookupTrackerClient.kt": [
-29
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend.script/src/org/jetbrains/kotlin/script/AsyncDependencyResolverWrapper.kt": [
-31,
-37
+113
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend.script/src/org/jetbrains/kotlin/script/ScriptContentLoader.kt": [
 59
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend.script/src/org/jetbrains/kotlin/script/scriptTemplate.kt": [
-32,
-62,
-62,
-62,
-62,
-70,
-73,
-74,
-74,
-81,
-83,
-84,
-89,
-96
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/frontend/di/injection.kt": [
-68
+62
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/tower/NewResolutionOldInference.kt": [
 239,
 242,
-455,
-571,
-579
+455
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/constants/evaluate/OperationsMapGenerated.kt": [
 41,
@@ -206,34 +163,11 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.psi2ir/src/org/jetbrains/kotlin/psi2ir/generators/CallGenerator.kt": [
 108
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/builders/ExpressionHelpers.kt": [
-184,
-192,
-205,
-212
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/builders/IrMemberFunctionBuilder.kt": [
-42
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/builders/Scope.kt": [
-40
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/expressions/impl/IrCallImpl.kt": [
 145
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/expressions/impl/IrDelegatingConstructorCallImpl.kt": [
-76
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/expressions/impl/IrEnumConstructorCallImpl.kt": [
-69
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/util/DeepCopyIrTree.kt": [
-32,
-145,
-427,
-450,
-463,
-482
+32
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/resolution/src/org/jetbrains/kotlin/resolve/calls/inference/components/SimpleConstraintSystemImpl.kt": [
 53
@@ -320,17 +254,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/KotlinIndicesHelper.kt": [
 292
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/script/ScriptDefinitionsManager.kt": [
-178,
-242
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/script/ScriptTemplatesProvider.kt": [
-57,
-58
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-core/src/org/jetbrains/kotlin/idea/core/script/ScriptTemplatesProviderAdapter.kt": [
-11
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/gradle/MultiplatformProjectImportingTest.kt": [
 37,
@@ -725,9 +648,6 @@
 16,
 26
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/kotlin.test/junit/src/main/kotlin/Annotations.kt": [
-12
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/kotlin.test/jvm/src/test/kotlin/StackTraceJVMTest.kt": [
 15,
 22
@@ -882,9 +802,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jvm/test/utils/LazyJVMTest.kt": [
 127
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/samples/test/samples/_sampleUtils.kt": [
-21
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/test/kotlin/org.jetbrains.kotlin.tools.tests/CasesPublicAPITest.kt": [
 27,
@@ -1233,7 +1150,6 @@
 135
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-compiler/src/org/jetbrains/kotlin/kapt3/Kapt3Plugin.kt": [
-95,
 170,
 186,
 186,

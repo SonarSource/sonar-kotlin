@@ -12,8 +12,7 @@ class Example : DeprecatedCode() // Noncompliant {{Deprecated code should not be
 //   ^^^^^^^^^^^^^^^^^^^^
 class DeprecatedCodeUsedCheckSample {
 
-    fun usesDeprecated(kStr: DeprecatedString): String { // Noncompliant
-//                           ^^^^^^^^^^^^^^^^
+    fun usesDeprecated(kStr: DeprecatedString): String {
 
         DeprecatedConstructor("") // Noncompliant
 
@@ -59,6 +58,9 @@ open class DeprecatedCode {
 }
 
 @Deprecated("")
+interface DeprecatedInterface
+
+@Deprecated("")
 fun deprecatedFunction() {}
 
 @Deprecated("")
@@ -68,7 +70,7 @@ annotation class DeprecatedAnnotation
 typealias DeprecatedString = String
 
 @Deprecated("")
-private operator fun DeprecatedString.minus(s: String) = this + s // Noncompliant
+private operator fun DeprecatedString.minus(s: String) = this + s // Compliant - enclosing function is deprecated
 
 class DeprecatedParameterUsedInFollowingParameter(
     @Deprecated("This is deprecated") val deprecatedParameter: String, // Compliant: not used, but declared
@@ -108,3 +110,69 @@ fun nestedFunctions() {
 
     oldFunction() // FN
 }
+
+// deprecated type in structural (non-executable) positions should not be flagged
+
+fun returnsDeprecated(): DeprecatedCode? = null // Compliant - return type
+
+class UsesDeprecatedInSignatures {
+    val field: DeprecatedCode? = null // Compliant - field type
+    fun withTypeArg(list: List<DeprecatedString>) {} // Compliant - type argument
+}
+
+// region actual usages of deprecated types must be reported
+
+// constructor call
+class ExtendsDeprecatedClass : DeprecatedCode() // Noncompliant
+
+// interface supertype
+class ImplementsDeprecatedInterface : DeprecatedInterface // Noncompliant
+
+// by-delegation
+class DelegatesViaDeprecatedInterface(d: DeprecatedInterface) : DeprecatedInterface by d // Noncompliant
+//                                                              ^^^^^^^^^^^^^^^^^^^
+
+fun typeChecks(x: Any) {
+    // is-check
+    if (x is DeprecatedCode) {} // Noncompliant
+    // cast
+    val y = x as DeprecatedCode // Noncompliant
+    // when is-pattern
+    when (x) {
+        is DeprecatedCode -> {} // Noncompliant
+        else -> {}
+    }
+}
+
+// annotation without parentheses must not be suppressed as type reference
+@DeprecatedAnnotation // Noncompliant
+class AnnotatedWithDeprecatedAnnotation
+
+// endregion
+
+// region nested usage of deprecated code within a deprecated scope
+
+@Deprecated("This whole class is deprecated")
+class DeprecatedClassUsingOtherDeprecated {
+    // field declaration in deprecated class references another deprecated type
+    val member: DeprecatedCode = DeprecatedCode() // Compliant - enclosing class is deprecated
+
+    // calling other deprecated APIs from within the deprecated class body
+    fun usesOtherDeprecatedApis() {
+        deprecatedFunction() // Compliant - enclosing class is deprecated
+        val x = DeprecatedCode() // Compliant - enclosing class is deprecated
+    }
+
+    companion object {
+        // factory method in companion object calling its own deprecated class constructor
+        fun create(): DeprecatedClassUsingOtherDeprecated = DeprecatedClassUsingOtherDeprecated() // Compliant - enclosing class is deprecated
+    }
+}
+
+@Deprecated("Use newWay instead")
+fun deprecatedFunctionCallingOtherDeprecated() {
+    deprecatedFunction() // Compliant - enclosing function is deprecated
+    DeprecatedCode() // Compliant - enclosing function is deprecated
+}
+
+// endregion

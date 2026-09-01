@@ -83,26 +83,13 @@
 "kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/DataSourceFactory.kt": [
 41
 ],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/artemis/BrokerJaasLoginModule.kt": [
-123,
-124,
-177
-],
 "kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/artemis/CertificateChainCheckPolicy.kt": [
-12,
-20,
-31,
 34,
-45,
 48,
-59,
 61,
-76,
 78
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/config/NodeConfiguration.kt": [
-40,
-178,
 295
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/network/NetworkMapClient.kt": [
@@ -133,9 +120,6 @@
 168,
 170,
 171
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/messaging/ArtemisMessagingTest.kt": [
-75
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/network/NetworkMapClientTest.kt": [
 44
@@ -173,8 +157,6 @@
 147
 ],
 "kotlin-corda-project:sources/kotlin/corda/samples/irs-demo/src/integration-test/kotlin/net/corda/test/spring/SpringDriver.kt": [
-42,
-50,
 52,
 52,
 61
@@ -233,8 +215,7 @@
 53
 ],
 "kotlin-corda-project:sources/kotlin/corda/tools/explorer/src/main/kotlin/net/corda/explorer/model/SettingsModel.kt": [
-16,
-77
+16
 ],
 "kotlin-corda-project:sources/kotlin/corda/tools/shell/src/main/kotlin/net/corda/tools/shell/InteractiveShell.kt": [
 227
