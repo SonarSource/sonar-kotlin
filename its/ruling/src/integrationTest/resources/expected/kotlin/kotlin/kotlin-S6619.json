@@ -5,9 +5,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/buildSrc/src/main/kotlin/pill/render.kt": [
 201
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/coroutines/CoroutineTransformerMethodVisitor.kt": [
-361
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/AnonymousObjectTransformer.kt": [
 164
 ],
@@ -16,22 +13,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/inline/inlineCodegenUtils.kt": [
 143
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/optimization/CapturedVarsOptimizationMethodTransformer.kt": [
-157,
-183
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/optimization/DeadCodeEliminationMethodTransformer.kt": [
-65,
-83
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/optimization/boxing/PopBackwardPropagationTransformer.kt": [
-90
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/backend/src/org/jetbrains/kotlin/codegen/optimization/boxing/RedundantBoxingMethodTransformer.kt": [
-70,
-159,
-167
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/src/org/jetbrains/kotlin/cli/jvm/JvmRuntimeVersionsConsistencyChecker.kt": [
 338
@@ -116,9 +97,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/core/deserialization/src/org/jetbrains/kotlin/serialization/deserialization/ClassDeserializer.kt": [
 44
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/eval4j/src/org/jetbrains/eval4j/interpreterLoop.kt": [
-97
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/formatter/src/org/jetbrains/kotlin/idea/formatter/KotlinCommonBlock.kt": [
 609,
 625
@@ -141,9 +119,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/project/Platform.kt": [
 165
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/references/referenceUtil.kt": [
-273
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/search/usagesSearch/operators/InvokeOperatorReferenceSearcher.kt": [
 54
 ],
@@ -156,17 +131,7 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/BasicCompletionSession.kt": [
 157,
-160,
-245,
-268,
-356,
-746
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/CompletionSession.kt": [
-372
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/FromUnresolvedNamesCompletion.kt": [
-44
+160
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/KeywordValues.kt": [
 97
@@ -355,10 +320,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/kotlin-jsr223-local-example/src/test/kotlin/org/jetbrains/kotlin/script/jsr223/KotlinJsr223ScriptEngineIT.kt": [
 137
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/common/src/generated/_Arrays.kt": [
-1250,
-1780
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/jdk8/test/collections/MapTest.kt": [
 139,

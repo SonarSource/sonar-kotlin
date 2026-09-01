@@ -57,6 +57,7 @@ class UselessNullCheckCheck : AbstractCheck() {
                     binaryExpression,
                     comparesToNull = true,
                     requiredCompilerDiagnosticName = FirErrors.SENSELESS_COMPARISON.name,
+                    diagnosticScope = binaryExpression,
                 ) {
                     +"null check"
                 }
@@ -69,6 +70,7 @@ class UselessNullCheckCheck : AbstractCheck() {
                     binaryExpression,
                     comparesToNull = false,
                     requiredCompilerDiagnosticName = FirErrors.SENSELESS_COMPARISON.name,
+                    diagnosticScope = binaryExpression,
                 ) {
                     +"non-null check"
                 }
@@ -80,6 +82,7 @@ class UselessNullCheckCheck : AbstractCheck() {
                 binaryExpression.operationReference,
                 comparesToNull = false,
                 requiredCompilerDiagnosticName = FirErrors.USELESS_ELVIS.name,
+                diagnosticScope = binaryExpression,
             ) {
                 +"elvis operation "
                 code("?:")
@@ -95,6 +98,7 @@ class UselessNullCheckCheck : AbstractCheck() {
             safeDotExpression.operationTokenNode.psi,
             comparesToNull = false,
             requiredCompilerDiagnosticName = FirErrors.UNNECESSARY_SAFE_CALL.name,
+            diagnosticScope = safeDotExpression,
         ) {
             +"null-safe access "
             code("?.")
@@ -109,6 +113,7 @@ class UselessNullCheckCheck : AbstractCheck() {
                 unaryExpression.operationReference,
                 comparesToNull = false,
                 requiredCompilerDiagnosticName = FirErrors.UNNECESSARY_NOT_NULL_ASSERTION.name,
+                diagnosticScope = unaryExpression,
             ) {
                 +"non-null assertion "
                 code("!!")
@@ -150,6 +155,7 @@ class UselessNullCheckCheck : AbstractCheck() {
         issueLocation: PsiElement,
         comparesToNull: Boolean,
         requiredCompilerDiagnosticName: String? = null,
+        diagnosticScope: PsiElement = issueLocation,
         nullCheckTypeForMessage: Message.() -> Unit,
     ) {
         val resolvedExpression = expression.predictRuntimeValueExpression()
@@ -160,7 +166,7 @@ class UselessNullCheckCheck : AbstractCheck() {
         // We are not using the resolvedExpression on purpose here, as it can cause FPs. See SONARKT-373.
             expression.isNotNullable() && (
                 requiredCompilerDiagnosticName == null ||
-                    kfc.hasCompilerDiagnostic(requiredCompilerDiagnosticName, issueLocation)
+                    kfc.hasCompilerDiagnostic(requiredCompilerDiagnosticName, diagnosticScope, issueLocation)
             )
         ) {
             if (comparesToNull) "fails" else "succeeds"
@@ -176,9 +182,16 @@ class UselessNullCheckCheck : AbstractCheck() {
     }
 }
 
-private fun KotlinFileContext.hasCompilerDiagnostic(factoryName: String, issueLocation: PsiElement): Boolean =
+private fun KotlinFileContext.hasCompilerDiagnostic(
+    factoryName: String,
+    scope: PsiElement,
+    issueLocation: PsiElement,
+): Boolean =
     kaDiagnostics.any { diagnostic ->
-        diagnostic.factoryName == factoryName && diagnostic.psi.textRange.contains(issueLocation.textRange)
+        // A diagnostic on an enclosing expression may also cover the issue location, so constrain it to this operation.
+        diagnostic.factoryName == factoryName &&
+                diagnostic.psi.textRange.contains(issueLocation.textRange) &&
+                scope.textRange.contains(diagnostic.psi.textRange)
     }
 
 private fun KtExpression.isNotNullable(): Boolean =

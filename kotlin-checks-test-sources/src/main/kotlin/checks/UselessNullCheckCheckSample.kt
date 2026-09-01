@@ -157,6 +157,9 @@ private class CapturedNullableTypeRegressionTests {
 
     private fun projectedNullableArray(values: Array<out String?>): String =
         values[0] ?: "fallback" // Compliant: regression test
+
+    private fun projectedNullableArrayRequireNotNull(values: Array<out String?>): String =
+        requireNotNull(values[0]) // Compliant: regression test
 }
 
 private class SafeCallConventionOperatorRegressionTests {
@@ -179,4 +182,8 @@ private class SafeCallConventionOperatorRegressionTests {
 
     private fun increment(container: Container?): Int =
         container?.number++ ?: -1 // Compliant: regression test
+
+    private fun nestedElvis(nonNullValue: String, container: Container?): String =
+        nonNullValue ?: container?.list[0] ?: "fallback" // Noncompliant {{Remove this useless elvis operation `?:`, it always succeeds.}}
+//                   ^^
 }
