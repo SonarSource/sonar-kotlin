@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList
 import com.google.common.collect.RangeMap
 import com.google.common.collect.Table
 import java.nio.ByteBuffer
+import java.nio.CharBuffer
 import java.util.BitSet
 import java.util.Calendar
 import java.util.Stack
@@ -11,6 +12,8 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicIntegerArray
+import java.util.concurrent.atomic.AtomicLongArray
+import java.util.concurrent.atomic.AtomicReferenceArray
 import okhttp3.Headers
 import otherpackage.KotlinLibContainer
 import otherpackage.get
@@ -25,6 +28,8 @@ class IndexedAccessCheckSampleNoSemantics {
         buffer: ByteBuffer,
         stack: Stack<String>,
         atomicArray: AtomicIntegerArray,
+        atomicLongArray: AtomicLongArray,
+        atomicReferenceArray: AtomicReferenceArray<String>,
         bitSet: BitSet,
         arrayList: ArrayList<Int>,
         hashMap: HashMap<String, Int>,
@@ -43,6 +48,10 @@ class IndexedAccessCheckSampleNoSemantics {
         stack.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
         atomicArray.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
         atomicArray.set(0, 42) // Noncompliant {{Replace function call with indexed accessor.}}
+        atomicLongArray.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        atomicLongArray.set(0, 42L) // Noncompliant {{Replace function call with indexed accessor.}}
+        atomicReferenceArray.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        atomicReferenceArray.set(0, "value") // Noncompliant {{Replace function call with indexed accessor.}}
         bitSet.get(5) // Noncompliant {{Replace function call with indexed accessor.}}
         bitSet.set(5, true) // Noncompliant {{Replace function call with indexed accessor.}}
         // Concrete Java collection implementations - caught via List/Map supertype check with semantics
@@ -56,6 +65,22 @@ class IndexedAccessCheckSampleNoSemantics {
         cal.get(Calendar.YEAR) // Compliant - Java interop operator, not in allowed types
         cal.set(Calendar.YEAR, 2024) // Compliant - Java interop operator, not in allowed types
         future.get(1L, TimeUnit.SECONDS) // Compliant - Java interop operator, not in allowed types
+    }
+
+    fun bufferBulkReads(byteBuffer: ByteBuffer, charBuffer: CharBuffer, bytes: ByteArray, chars: CharArray) {
+        byteBuffer.get(bytes) // Compliant - copies into the destination instead of selecting an element
+        byteBuffer.get(bytes, 0, bytes.size) // Compliant - relative bulk read
+        byteBuffer.get(0, bytes) // Compliant - absolute bulk read
+        byteBuffer.get(0, bytes, 0, bytes.size) // Compliant - absolute bulk read with destination range
+        charBuffer.get(chars) // Compliant - all Buffer specializations follow the same signature rules
+        charBuffer.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+    }
+
+    fun bitSetRanges(bitSet: BitSet) {
+        bitSet.get(1, 4) // Compliant - returns a range, not the element at two indexes
+        bitSet.set(1) // Compliant - cannot be expressed as indexed assignment
+        bitSet.set(1, 4) // Compliant - sets a range to true
+        bitSet.set(1, 4, false) // Compliant - sets a range to a value
     }
 
     fun kotlinLibraryTypes(container: KotlinLibContainer<String>, headers: Headers) {
@@ -194,15 +219,29 @@ class ChainableMap2 {
     fun size(): Int = 0
 }
 
-fun chainedSetters2(builder: ChainableBuilder2, chainableMap: ChainableMap2) {
-    builder.set("a", "1").set("b", "2").set("c", "3") // Noncompliant {{Replace function call with indexed accessor.}}
-    //                                  ^^^
-    builder.set("a", "1").set("b", "2") // Noncompliant {{Replace function call with indexed accessor.}}
-    //                    ^^^
+fun setCallUsages2(builder: ChainableBuilder2, chainableMap: ChainableMap2, list: MutableList<Int>) {
+    builder.set("standalone", "value") // Noncompliant {{Replace function call with indexed accessor.}}
+    builder.set("a", "1").set("b", "2").set("c", "3") // Compliant - every set belongs to the same fluent chain
+    builder.set("a", "1").set("b", "2") // Compliant - terminal set is preceded by another set
+    (builder.set("a", "1")).set("b", "2") // Compliant - parentheses do not break the setter chain
+    (builder.`set`("a", "1") as ChainableBuilder2).set("b", "2") // Compliant - casts and backticks do not break the setter chain
+    builder.set("a", "1")!!.set("b", "2") // Compliant - non-null assertions do not break the setter chain
     builder.set("a", "1").build() // Compliant - set result used in chain
+    val setResult = builder.set("a", "1") // Compliant - set result is assigned
+    consumeBuilder2(builder.set("a", "1")) // Compliant - set result is passed as an argument
+    val previousValue = list.set(0, 42) // Compliant - indexed assignment would discard the returned old value
+    consumeInt2(previousValue)
 
     builder.get("a").length // Noncompliant {{Replace function call with indexed accessor.}}
 
-    chainableMap.set("a", 1).set("b", 2) // Noncompliant {{Replace function call with indexed accessor.}}
+    chainableMap.set("a", 1).set("b", 2) // Compliant - terminal set is preceded by another set
     chainableMap.set("a", 1).size() // Compliant - set result used in chain
+
+    createBuilder2().set("a", "1") // Noncompliant {{Replace function call with indexed accessor.}}
 }
+
+fun consumeBuilder2(builder: ChainableBuilder2) = Unit
+
+fun createBuilder2() = ChainableBuilder2()
+
+fun consumeInt2(value: Int) = Unit
