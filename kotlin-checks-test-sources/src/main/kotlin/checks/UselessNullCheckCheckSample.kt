@@ -147,3 +147,14 @@ class NullableGeneric {
     infix fun contract(block: () -> Unit) { }
     infix fun <T> T.implies(value: Boolean) { }
 }
+
+private class CapturedNullableTypeRegressionTests {
+    private fun nullableVararg(vararg values: String?): String =
+        values[0] ?: "fallback" // Compliant: regression test
+
+    private fun nullableVarargRequireNotNull(vararg values: String?): String =
+        requireNotNull(values[0]) // Compliant: regression test
+
+    private fun projectedNullableArray(values: Array<out String?>): String =
+        values[0] ?: "fallback" // Compliant: regression test
+}

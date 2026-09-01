@@ -165,7 +165,7 @@ private fun KtExpression.isNotNullable(): Boolean =
             this@isNotNullable.expressionType?.let { resolvedType ->
                 resolvedType !is KaErrorType &&
                         resolvedType !is KaTypeParameterType &&
-                        !resolvedType.isMarkedNullable && !resolvedType.hasFlexibleNullability
+                        !resolvedType.isNullable && !resolvedType.hasFlexibleNullability
             }
         } == true
     }
