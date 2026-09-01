@@ -71,17 +71,6 @@ update the golden files for every corpus that exercises it.
 Golden files live under `its/ruling/src/integrationTest/resources/expected/`.
 Actual results are always written to `its/ruling/build/reports/ruling/` even when tests fail.
 
-1. Run the ruling tests:
-
-       ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon
-
-2. Copy the updated file(s) for the affected rule(s):
-
-       cp its/ruling/build/reports/ruling/<corpus>/kotlin-S<NNNN>.json \
-          its/ruling/src/integrationTest/resources/expected/kotlin/<corpus>/kotlin-S<NNNN>.json
-
-3. Re-run to confirm they pass.
-
 #### kotlin corpus (`test_kotlin_compiler`)
 
 This corpus is skipped by default because it requires heavy Kotlin compiler sources.
@@ -90,24 +79,12 @@ Enable it with an environment variable:
     KOTLIN_COMPILER_IT_ENABLED=true ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon
 
 Actual results land in the same `its/ruling/build/reports/ruling/kotlin/` directory.
-Update golden files the same way as for the standard corpora.
 
 #### kotlin-language-server corpus (`test_kotlin_language_server`)
 
 This corpus is run by the `qa_sq_integration` CI job, not the `qa_ruling` job.
 Golden files live under `its/sq-integration/src/integrationTest/resources/expected/kotlin/kotlin-language-server/`.
 Actual results are written to `its/sq-integration/build/tmp/actual/kotlin/kotlin-language-server/` during the run.
-
-1. Run the sq-integration tests:
-
-       ./gradlew :its:sq-integration:integrationTest --info --console=plain --no-daemon -Dsonar.runtimeVersion=DEV
-
-2. Copy the updated golden files:
-
-       cp its/sq-integration/build/tmp/actual/kotlin/kotlin-language-server/kotlin-S<NNNN>.json \
-          its/sq-integration/src/integrationTest/resources/expected/kotlin/kotlin-language-server/kotlin-S<NNNN>.json
-
-3. Re-run to confirm they pass.
 
 ### Additional ruling parameters
 
