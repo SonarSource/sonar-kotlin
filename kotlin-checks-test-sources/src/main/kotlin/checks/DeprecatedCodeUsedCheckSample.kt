@@ -70,7 +70,7 @@ annotation class DeprecatedAnnotation
 typealias DeprecatedString = String
 
 @Deprecated("")
-private operator fun DeprecatedString.minus(s: String) = this + s // Compliant - enclosing function is deprecated (cluster 6)
+private operator fun DeprecatedString.minus(s: String) = this + s // Compliant - enclosing function is deprecated
 
 class DeprecatedParameterUsedInFollowingParameter(
     @Deprecated("This is deprecated") val deprecatedParameter: String, // Compliant: not used, but declared
@@ -144,7 +144,7 @@ fun typeChecks(x: Any) {
     }
 }
 
-//  annotation without parentheses must not be suppressed as type reference
+// annotation without parentheses must not be suppressed as type reference
 @DeprecatedAnnotation // Noncompliant
 class AnnotatedWithDeprecatedAnnotation
 
