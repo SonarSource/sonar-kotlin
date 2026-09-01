@@ -105,7 +105,7 @@ jobs:
       - uses: ./.github/actions/cache-orchestrator
       - run: |
           ./gradlew \
-              :its:plugin:integrationTest --info -Pits
+              :its:plugin:integrationTest --info
         env:
           DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
           ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
@@ -130,7 +130,7 @@ jobs:
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
       - run: |
           ./gradlew \
-              :its:ruling:integrationTest --info -Pruling
+              :its:ruling:integrationTest --info
         env:
           KOTLIN_COMPILER_IT_ENABLED: true
           DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
@@ -157,7 +157,7 @@ jobs:
       - uses: ./.github/actions/cache-orchestrator
       - run: |
           ./gradlew \
-              :its:sq-integration:integrationTest --info -Pits -Dsonar.runtimeVersion=DEV
+              :its:sq-integration:integrationTest --info -Dsonar.runtimeVersion=DEV
         env:
           DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
           ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
