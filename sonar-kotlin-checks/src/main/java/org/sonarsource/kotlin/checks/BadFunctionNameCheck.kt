@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.sonar.api.rule.RuleKey
 import org.sonar.check.Rule
@@ -48,7 +49,7 @@ class BadFunctionNameCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val name = function.name ?: /* in case of anonymous functions */ return
-        if (!name.matches(formatRegex) && !isBacktickedTestFunction(function)) {
+        if (!function.hasModifier(KtTokens.EXTERNAL_KEYWORD) && !name.matches(formatRegex) && !isBacktickedTestFunction(function)) {
             kotlinFileContext.reportIssue(
                 function.nameIdentifier!!,
                 """Rename function "$name" to match the regular expression $format"""
