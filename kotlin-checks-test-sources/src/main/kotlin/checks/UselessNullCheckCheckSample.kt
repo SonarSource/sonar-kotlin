@@ -147,3 +147,43 @@ class NullableGeneric {
     infix fun contract(block: () -> Unit) { }
     infix fun <T> T.implies(value: Boolean) { }
 }
+
+private class CapturedNullableTypeRegressionTests {
+    private fun nullableVararg(vararg values: String?): String =
+        values[0] ?: "fallback" // Compliant: regression test
+
+    private fun nullableVarargRequireNotNull(vararg values: String?): String =
+        requireNotNull(values[0]) // Compliant: regression test
+
+    private fun projectedNullableArray(values: Array<out String?>): String =
+        values[0] ?: "fallback" // Compliant: regression test
+
+    private fun projectedNullableArrayRequireNotNull(values: Array<out String?>): String =
+        requireNotNull(values[0]) // Compliant: regression test
+}
+
+private class SafeCallConventionOperatorRegressionTests {
+    private interface Container {
+        val list: List<String>
+        var number: Int
+    }
+
+    private fun elvis(container: Container?): String =
+        container?.list[0] ?: "fallback" // Compliant: regression test
+
+    private fun assertion(container: Container?): String =
+        container?.list[0]!! // Compliant: regression test
+
+    private fun safeAccess(container: Container?): Int? =
+        container?.list[0]?.length // Compliant: regression test
+
+    private fun comparison(container: Container?): Boolean =
+        container?.list[0] != null // Compliant: regression test
+
+    private fun increment(container: Container?): Int =
+        container?.number++ ?: -1 // Compliant: regression test
+
+    private fun nestedElvis(nonNullValue: String, container: Container?): String =
+        nonNullValue ?: container?.list[0] ?: "fallback" // Noncompliant {{Remove this useless elvis operation `?:`, it always succeeds.}}
+//                   ^^
+}
