@@ -42,4 +42,11 @@ class StringLiteralDuplicatedCheckTest : CheckTest(StringLiteralDuplicatedCheck(
             isTestFile = true
         }.verifyNoIssue()
     }
+
+    @Test
+    fun `does not fail with a zero threshold and only suppressed occurrences`() {
+        KotlinVerifier(StringLiteralDuplicatedCheck().apply { threshold = 0 }) {
+            fileName = "StringLiteralDuplicatedCheckZeroThresholdSample.kt"
+        }.verifyNoIssue()
+    }
 }

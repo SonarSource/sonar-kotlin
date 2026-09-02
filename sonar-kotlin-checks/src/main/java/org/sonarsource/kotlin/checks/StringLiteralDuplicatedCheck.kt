@@ -17,6 +17,8 @@
 package org.sonarsource.kotlin.checks
 
 import com.intellij.psi.PsiElement
+import java.util.Collections
+import java.util.IdentityHashMap
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
@@ -95,7 +97,6 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
 
     private data class LiteralCandidate(
         val expression: KtStringTemplateExpression,
-        val text: String,
         val outermostConcatenation: KtExpression,
     )
 
@@ -113,31 +114,47 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
 
     private fun check(
         context: KotlinFileContext,
-        candidatesMap: Map<String, List<LiteralCandidate>>,
+        candidatesMap: Map<String, List<KtStringTemplateExpression>>,
     ) {
-        for ((text, candidates) in candidatesMap) {
-            if (candidates.size >= threshold) {
-                val occurrences = candidates.map { candidate ->
-                    StringOccurrence(
-                        candidate.expression,
-                        triggersIssue = !candidate.outermostConcatenation.isNonTriggeringOccurrence(),
-                    )
-                }
-                val triggeringOccurrences = occurrences.filter { it.triggersIssue }
-                if (triggeringOccurrences.size < threshold) continue
+        val inspectedConcatenations: MutableSet<KtExpression> =
+            Collections.newSetFromMap(IdentityHashMap())
+        val adjacentLiteralFragments: MutableSet<KtStringTemplateExpression> =
+            Collections.newSetFromMap(IdentityHashMap())
 
-                val first = triggeringOccurrences.first().expression
-                val size = occurrences.size
-                context.reportIssue(
-                    first,
-                    """Define a constant instead of duplicating this literal "$text" $size times.""",
-                    secondaryLocations = occurrences.asSequence()
-                        .filterNot { it.expression === first }
-                        .map { SecondaryLocation(context.textRange(it.expression), "Duplication") }
-                        .toList(),
-                    gap = size - 1.0,
+        for ((text, candidates) in candidatesMap) {
+            if (candidates.size < threshold) continue
+
+            val relevantCandidates = candidates.mapNotNull { expression ->
+                if (expression in adjacentLiteralFragments) return@mapNotNull null
+
+                val concatenation = expression.outermostConcatenation()
+                if (inspectedConcatenations.add(concatenation)) {
+                    concatenation.collectAdjacentLiteralFragments(adjacentLiteralFragments)
+                }
+                if (expression in adjacentLiteralFragments) null else LiteralCandidate(expression, concatenation)
+            }
+            if (relevantCandidates.size < threshold) continue
+
+            val occurrences = relevantCandidates.map { candidate ->
+                StringOccurrence(
+                    candidate.expression,
+                    triggersIssue = !candidate.outermostConcatenation.isNonTriggeringOccurrence(),
                 )
             }
+            val triggeringOccurrences = occurrences.filter { it.triggersIssue }
+            val first = triggeringOccurrences.firstOrNull()?.expression ?: continue
+            if (triggeringOccurrences.size < threshold) continue
+
+            val size = occurrences.size
+            context.reportIssue(
+                first,
+                """Define a constant instead of duplicating this literal "$text" $size times.""",
+                secondaryLocations = occurrences.asSequence()
+                    .filterNot { it.expression === first }
+                    .map { SecondaryLocation(context.textRange(it.expression), "Duplication") }
+                    .toList(),
+                gap = size - 1.0,
+            )
         }
     }
 
@@ -148,13 +165,15 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
             .mapNotNull { expression ->
                 val text = expression.asString()
                 if (text.length > MINIMAL_LITERAL_LENGTH && !NO_SEPARATOR_REGEXP.matches(text)) {
-                    LiteralCandidate(expression, text, expression.outermostConcatenation())
+                    text to expression
                 } else {
                     null
                 }
             }
-            .filterNot { candidate -> candidate.expression.isAdjacentLiteralFragment(candidate.outermostConcatenation) }
-            .groupBy { candidate -> candidate.text }
+            .groupBy(
+                keySelector = { (text) -> text },
+                valueTransform = { (_, expression) -> expression },
+            )
         check(context, occurrences)
     }
 
@@ -203,13 +222,16 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
         return expression
     }
 
-    private fun KtStringTemplateExpression.isAdjacentLiteralFragment(concatenation: KtExpression): Boolean {
-        if (concatenation === this) return false
-
-        val operands = concatenation.flattenedPlusOperands()
-        val index = operands.indexOfFirst { it === this }
-        return (index > 0 && operands[index - 1].isNonInterpolatedString()) ||
-            (index >= 0 && index < operands.lastIndex && operands[index + 1].isNonInterpolatedString())
+    private fun KtExpression.collectAdjacentLiteralFragments(destination: MutableSet<KtStringTemplateExpression>) {
+        val operands = flattenedPlusOperands()
+        for (index in 0 until operands.lastIndex) {
+            val left = operands[index] as? KtStringTemplateExpression
+            val right = operands[index + 1] as? KtStringTemplateExpression
+            if (left != null && right != null && !left.hasInterpolation() && !right.hasInterpolation()) {
+                destination.add(left)
+                destination.add(right)
+            }
+        }
     }
 
     private fun KtCallExpression.directlyContainingExpression(): KtExpression =
@@ -217,17 +239,22 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
             ?.takeIf { it.selectorExpression === this }
             ?: this
 
-    private fun KtExpression.isNonInterpolatedString(): Boolean =
-        this is KtStringTemplateExpression && !hasInterpolation()
+    private fun KtExpression.flattenedPlusOperands(): List<KtExpression> {
+        val operands = mutableListOf<KtExpression>()
 
-    private fun KtExpression.flattenedPlusOperands(): List<KtExpression> =
-        if (isPlusExpression()) {
-            val binary = this as KtBinaryExpression
-            listOfNotNull(binary.left).flatMap { it.flattenedPlusOperands() } +
-                listOfNotNull(binary.right).flatMap { it.flattenedPlusOperands() }
-        } else {
-            listOf(this)
+        fun collect(expression: KtExpression) {
+            if (expression.isPlusExpression()) {
+                val binary = expression as KtBinaryExpression
+                binary.left?.let { collect(it) }
+                binary.right?.let { collect(it) }
+            } else {
+                operands.add(expression)
+            }
         }
+
+        collect(this)
+        return operands
+    }
 
     private fun PsiElement?.isPlusExpression(): Boolean =
         this is KtBinaryExpression && operationToken == KtTokens.PLUS
