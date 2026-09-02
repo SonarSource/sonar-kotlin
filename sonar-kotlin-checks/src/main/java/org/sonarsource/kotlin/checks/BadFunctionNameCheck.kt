@@ -58,7 +58,7 @@ class BadFunctionNameCheck : AbstractCheck() {
         if (function.overrides()) return
         if (isBacktickedAllowedFunction(function)) return
         if (name.matches(formatRegex)) return
-        if (function.annotationEntries.any { it.shortName?.asString() == "Composable" }) {
+        if (hasAnnotation(function, setOf("Composable"))) {
             checkComposableNaming(function, name, kotlinFileContext)
         } else {
             kotlinFileContext.reportIssue(
@@ -73,20 +73,19 @@ class BadFunctionNameCheck : AbstractCheck() {
         val returnsUnit = withKaSession { function.returnType.isUnitType }
         val isPrivateOrInternal = function.hasModifier(KtTokens.PRIVATE_KEYWORD) || function.hasModifier(KtTokens.INTERNAL_KEYWORD)
 
-        val (follows, expectedPattern) = when {
+        val (follows, convention) = when {
             returnsUnit && isPrivateOrInternal ->
-                (name.matches(PASCAL_CASE_REGEX) || name.matches(CAMEL_CASE_REGEX)) to
-                "${PASCAL_CASE_REGEX.pattern}|${CAMEL_CASE_REGEX.pattern}"
+                (name.matches(PASCAL_CASE_REGEX) || name.matches(CAMEL_CASE_REGEX)) to "PascalCase or camelCase"
             returnsUnit ->
-                name.matches(PASCAL_CASE_REGEX) to PASCAL_CASE_REGEX.pattern
+                name.matches(PASCAL_CASE_REGEX) to "PascalCase"
             else ->
-                name.matches(CAMEL_CASE_REGEX) to CAMEL_CASE_REGEX.pattern
+                name.matches(CAMEL_CASE_REGEX) to "camelCase"
         }
 
         if (!follows) {
             kotlinFileContext.reportIssue(
                 function.nameIdentifier!!,
-                """Rename function "$name" to match the regular expression $expectedPattern"""
+                """Rename function "$name" to use $convention"""
             )
         }
     }

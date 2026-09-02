@@ -39,7 +39,7 @@ class BadFunctionNameCheckSample {
 
 }
 
-// Override — name is fixed by the supertype contract, cannot be renamed
+// region override — name is fixed by the supertype contract, cannot be renamed
 open class BaseWithNonCompliantName {
     open fun bad_name() {} // Noncompliant {{Rename function "bad_name" to match the regular expression ^[a-zA-Z][a-zA-Z0-9]*$}}
 //           ^^^^^^^^
@@ -48,3 +48,5 @@ open class BaseWithNonCompliantName {
 class DerivedWithOverride : BaseWithNonCompliantName() {
     override fun bad_name() {} // Compliant - override, name is fixed by supertype
 }
+
+// endregion

@@ -21,12 +21,12 @@ fun myHelperComposable() {} // Compliant - matches the configured format (^[a-z]
 
 // Public @Composable + Unit + name that is neither PascalCase nor camelCase → Noncompliant
 @Composable
-fun My_Screen() {} // Noncompliant {{Rename function "My_Screen" to match the regular expression ^[A-Z][a-zA-Z0-9]*$}}
+fun My_Screen() {} // Noncompliant {{Rename function "My_Screen" to use PascalCase}}
 //  ^^^^^^^^^
 
 // Public @Composable + non-Unit return type → must follow camelCase (composable factory function)
 @Composable
-fun MyFactory(): String = "value" // Noncompliant {{Rename function "MyFactory" to match the regular expression ^[a-z][a-zA-Z0-9]*$}}
+fun MyFactory(): String = "value" // Noncompliant {{Rename function "MyFactory" to use camelCase}}
 //  ^^^^^^^^^
 
 // Expression-body @Composable with inferred non-Unit return type → camelCase required
@@ -34,7 +34,7 @@ fun MyFactory(): String = "value" // Noncompliant {{Rename function "MyFactory" 
 fun rememberSomething() = RememberedState() // Compliant - inferred return type is RememberedState, not Unit
 
 @Composable
-fun RememberSomething() = RememberedState() // Noncompliant {{Rename function "RememberSomething" to match the regular expression ^[a-z][a-zA-Z0-9]*$}}
+fun RememberSomething() = RememberedState() // Noncompliant {{Rename function "RememberSomething" to use camelCase}}
 //  ^^^^^^^^^^^^^^^^^
 
 // Private @Composable + PascalCase → exempt (private allows both PascalCase and camelCase)
@@ -47,7 +47,7 @@ private fun myPrivateHelper() {} // Compliant
 
 // Private @Composable + name that is neither PascalCase nor camelCase → Noncompliant
 @Composable
-private fun My_PrivateComponent() {} // Noncompliant {{Rename function "My_PrivateComponent" to match the regular expression ^[A-Z][a-zA-Z0-9]*$|^[a-z][a-zA-Z0-9]*$}}
+private fun My_PrivateComponent() {} // Noncompliant {{Rename function "My_PrivateComponent" to use PascalCase or camelCase}}
 //          ^^^^^^^^^^^^^^^^^^^
 
 // @Preview + @Composable + backtick name → exempt (human-readable preview label in the Android Studio IDE)
@@ -62,7 +62,7 @@ fun `My Preview`() {} // Noncompliant {{Rename function "My Preview" to match th
 
 // @Composable + backtick without @Preview or @Test → NOT exempt
 @Composable
-fun `my composable helper`() {} // Noncompliant {{Rename function "my composable helper" to match the regular expression ^[A-Z][a-zA-Z0-9]*$}}
+fun `my composable helper`() {} // Noncompliant {{Rename function "my composable helper" to use PascalCase}}
 //  ^^^^^^^^^^^^^^^^^^^^^^
 
 // Non-@Composable PascalCase → Noncompliant (the @Composable exemption does not apply)
