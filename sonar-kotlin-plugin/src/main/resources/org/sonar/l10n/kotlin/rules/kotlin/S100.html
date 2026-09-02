@@ -9,7 +9,7 @@ fun _DoSomething() {...} // Noncompliant
 <pre>
 fun DoSomething() {...}
 </pre>
-<h2>Exceptions</h2>
+<h3>Exceptions</h3>
 <p>The following functions are not checked by this rule:</p>
 <ul>
   <li><strong>External functions</strong> (declared with the <code>external</code> modifier): the name is owned by the native ABI and cannot be
@@ -19,16 +19,15 @@ fun DoSomething() {...}
   <li><strong>Backtick-named test functions</strong>: functions annotated with <code>@Test</code>, <code>@ParameterizedTest</code>, or
   <code>@RepeatedTest</code> may use backtick names with spaces to express human-readable test descriptions.</li>
 </ul>
-<p>For functions annotated with <code>@Composable</code>, the <a
+<p>For functions annotated with <code>@Composable</code>, when the name does not match the configured <code>format</code>, the <a
 href="https://android.googlesource.com/platform/frameworks/support/+/androidx-main/compose/docs/compose-api-guidelines.md">Jetpack Compose API
-guidelines</a> take precedence over the configured <code>format</code> when the name already violates it:</p>
+guidelines</a> are used instead, and no issue is raised when:</p>
 <ul>
-  <li>Public and protected <code>@Composable</code> functions returning <code>Unit</code> must follow PascalCase (UI component convention).</li>
-  <li>Private and internal <code>@Composable</code> functions returning <code>Unit</code> may use either PascalCase or camelCase.</li>
-  <li><code>@Composable</code> functions returning a non-<code>Unit</code> value must follow camelCase (composable factory convention).</li>
-  <li><code>@Composable</code> functions annotated with <code>@Preview</code> may use backtick names as human-readable labels in the Android Studio
-  preview panel.</li>
+  <li>the function returns <code>Unit</code> and is named in PascalCase (UI component convention);</li>
+  <li>the function returns a non-<code>Unit</code> value and is named in camelCase (composable factory convention);</li>
+  <li>the function is annotated with <code>@Preview</code> and uses a backtick name, used as a human-readable label in the Android Studio preview
+  panel.</li>
 </ul>
-<p>If a <code>@Composable</code> function’s name already satisfies the configured <code>format</code>, it is always compliant regardless of return
-type or visibility.</p>
+<p>A <code>@Composable</code> function whose name already satisfies the configured <code>format</code> is always compliant, regardless of return type
+or visibility.</p>
 
