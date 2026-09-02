@@ -44,6 +44,13 @@ class StringLiteralDuplicatedCheckTest : CheckTest(StringLiteralDuplicatedCheck(
     }
 
     @Test
+    fun `excludes Compose preview function subtrees`() {
+        KotlinVerifier(check) {
+            fileName = "StringLiteralDuplicatedCheckComposePreviewSample.kt"
+        }.verify()
+    }
+
+    @Test
     fun `does not fail with a zero threshold and only suppressed occurrences`() {
         KotlinVerifier(StringLiteralDuplicatedCheck().apply { threshold = 0 }) {
             fileName = "StringLiteralDuplicatedCheckZeroThresholdSample.kt"
