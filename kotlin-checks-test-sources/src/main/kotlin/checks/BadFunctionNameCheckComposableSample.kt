@@ -3,6 +3,8 @@ package checks
 annotation class Composable
 annotation class Preview
 
+class RememberedState
+
 // Public @Composable + Unit + PascalCase → exempt (Compose API guidelines for UI components)
 @Composable
 fun MyScreen() {} // Compliant
@@ -10,10 +12,12 @@ fun MyScreen() {} // Compliant
 @Composable
 fun MyDialog(): Unit {} // Compliant
 
-// Public @Composable + Unit + camelCase → Noncompliant (public UI components must be PascalCase)
 @Composable
-fun myHelperComposable() {} // Noncompliant {{Rename function "myHelperComposable" to match the regular expression ^[A-Z][a-zA-Z0-9]*$}}
-//  ^^^^^^^^^^^^^^^^^^
+fun MyScreen2(): kotlin.Unit {} // Compliant
+
+// Public @Composable + Unit + camelCase → Compliant when the configured format already accepts it
+@Composable
+fun myHelperComposable() {} // Compliant - matches the configured format (^[a-z][a-zA-Z0-9]*$), no additional Compose check is applied
 
 // Public @Composable + Unit + name that is neither PascalCase nor camelCase → Noncompliant
 @Composable
@@ -24,6 +28,14 @@ fun My_Screen() {} // Noncompliant {{Rename function "My_Screen" to match the re
 @Composable
 fun MyFactory(): String = "value" // Noncompliant {{Rename function "MyFactory" to match the regular expression ^[a-z][a-zA-Z0-9]*$}}
 //  ^^^^^^^^^
+
+// Expression-body @Composable with inferred non-Unit return type → camelCase required
+@Composable
+fun rememberSomething() = RememberedState() // Compliant - inferred return type is RememberedState, not Unit
+
+@Composable
+fun RememberSomething() = RememberedState() // Noncompliant {{Rename function "RememberSomething" to match the regular expression ^[a-z][a-zA-Z0-9]*$}}
+//  ^^^^^^^^^^^^^^^^^
 
 // Private @Composable + PascalCase → exempt (private allows both PascalCase and camelCase)
 @Composable
@@ -67,4 +79,22 @@ open class ComposableClassSample {
     @Composable
     internal fun MyInternalComponent() {} // Compliant
 
+}
+
+// @Composable override — name is fixed by the supertype, no convention can be enforced
+fun interface ComposableFactory {
+    fun CreateFoo(): RememberedState // Noncompliant {{Rename function "CreateFoo" to match the regular expression ^[a-z][a-zA-Z0-9]*$}}
+//      ^^^^^^^^^
+}
+
+class ConcreteFactory : ComposableFactory {
+    @Composable
+    override fun CreateFoo(): RememberedState = RememberedState() // Compliant - override, name cannot be changed
+}
+
+// Local @Composable functions — not part of the public API, skip Compose naming conventions
+@Composable
+fun ScreenWithLocalComposable() {
+    @Composable
+    fun LocalSection(): RememberedState = RememberedState() // Compliant - local function
 }

@@ -22,7 +22,9 @@ import org.sonar.api.rule.RuleKey
 import org.sonar.check.Rule
 import org.sonar.check.RuleProperty
 import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
+import org.sonarsource.kotlin.api.visiting.withKaSession
 
 private val TEST_ANNOTATION_NAMES = setOf("Test", "ParameterizedTest", "RepeatedTest")
 
@@ -53,10 +55,12 @@ class BadFunctionNameCheck : AbstractCheck() {
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         val name = function.name ?: /* in case of anonymous functions */ return
         if (function.hasModifier(KtTokens.EXTERNAL_KEYWORD)) return
+        if (function.overrides()) return
         if (isBacktickedAllowedFunction(function)) return
+        if (name.matches(formatRegex)) return
         if (function.annotationEntries.any { it.shortName?.asString() == "Composable" }) {
             checkComposableNaming(function, name, kotlinFileContext)
-        } else if (!name.matches(formatRegex)) {
+        } else {
             kotlinFileContext.reportIssue(
                 function.nameIdentifier!!,
                 """Rename function "$name" to match the regular expression $format"""
@@ -65,7 +69,8 @@ class BadFunctionNameCheck : AbstractCheck() {
     }
 
     private fun checkComposableNaming(function: KtNamedFunction, name: String, kotlinFileContext: KotlinFileContext) {
-        val returnsUnit = !function.hasDeclaredReturnType() || function.typeReference?.text == "Unit"
+        if (function.isLocal) return
+        val returnsUnit = withKaSession { function.returnType.isUnitType }
         val isPrivateOrInternal = function.hasModifier(KtTokens.PRIVATE_KEYWORD) || function.hasModifier(KtTokens.INTERNAL_KEYWORD)
 
         val (follows, expectedPattern) = when {

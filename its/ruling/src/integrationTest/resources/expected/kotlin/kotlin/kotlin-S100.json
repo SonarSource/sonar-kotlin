@@ -21,20 +21,6 @@
 336,
 354
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-client/src/org/jetbrains/kotlin/daemon/client/CompilerCallbackServicesFacadeServer.kt": [
-53,
-56,
-59,
-62,
-65,
-69,
-72,
-75,
-79,
-81,
-91,
-93
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/CompilerCallbackServicesFacade.kt": [
 47,
 50,
@@ -123,13 +109,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/collections/ListSpecificTest.kt": [
 15
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/idl2k/src/main/kotlin/idl.kt": [
-181,
-308,
-375,
-411,
-540
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/AbstractKotlinAndroidGradleTests.kt": [
 392
