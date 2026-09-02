@@ -966,6 +966,11 @@
             <sha256 value="e00e75d6b5cc3d24bed2c9542cc65a080435986fe6ecc569da72a4fb6dfd91c8" origin="Verified"/>
          </artifact>
       </component>
+      <component group="io.github.microutils" name="kotlin-logging-jvm" version="3.0.5">
+         <artifact name="kotlin-logging-jvm-3.0.5.jar">
+            <sha256 value="2a9477a4138487bb7fbb057ee3ac0f455b58f8d4bed94c885fa64260de59e4dc" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="io.github.oshai" name="kotlin-logging-jvm" version="5.1.0">
          <artifact name="kotlin-logging-jvm-5.1.0.jar">
             <sha256 value="0e918ecb22a61b99f1eb9acebd689fdaa9a76dc9fe972c360fd36299a92aa892" origin="Verified"/>
@@ -974,6 +979,11 @@
       <component group="io.github.oshai" name="kotlin-logging-jvm" version="5.1.4">
          <artifact name="kotlin-logging-jvm-5.1.4.jar">
             <sha256 value="e52a2179b7ecf6ea6cc9048395e162c6abfb96e293327c120617c01625d1e6dd" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="io.github.oshai" name="kotlin-logging-jvm" version="8.0.4">
+         <artifact name="kotlin-logging-jvm-8.0.4.jar">
+            <sha256 value="0bbac3f9dac5067b40d02fe461a053782bc8d3ef5162a923581b369adef7e02d" origin="Verified"/>
          </artifact>
       </component>
       <component group="io.gitlab.arturbosch.detekt" name="detekt-api" version="1.23.3">

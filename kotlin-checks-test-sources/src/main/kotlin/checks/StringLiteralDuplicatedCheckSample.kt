@@ -77,4 +77,26 @@ class StringLiteralDuplicatedCheckSample {
     fun todoCompliant1(): Nothing = TODO("not yet implemented") // Compliant - string literals in TODO() calls should be ignored
     fun todoCompliant2(): Nothing = TODO("not yet implemented")
     fun todoCompliant3(): Nothing = TODO("not yet implemented")
+
+    fun fixedLengthBoundary() {
+        "a b c"
+        "a b c"
+        "a b c" // Compliant - five characters
+
+        // Noncompliant@+1
+        "a b c!"
+        "a b c!"
+        "a b c!" // Six characters remain in scope
+    }
+
+    fun adjacentConcatenationFragments(value: String) {
+        val first = "SELECT readable column " + "FROM readable table"
+        val second = "SELECT readable column " + "FROM readable table"
+        val third = "SELECT readable column " + "FROM readable table" // Compliant - adjacent literal fragments
+
+        // Noncompliant@+1
+        val fourth = "non-adjacent concatenation!" + value
+        val fifth = "non-adjacent concatenation!" + value
+        val sixth = "non-adjacent concatenation!" + value
+    }
 }

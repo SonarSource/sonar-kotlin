@@ -16,4 +16,30 @@
  */
 package org.sonarsource.kotlin.checks
 
-class StringLiteralDuplicatedCheckTest : CheckTest(StringLiteralDuplicatedCheck())
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.testapi.KotlinVerifier
+
+class StringLiteralDuplicatedCheckTest : CheckTest(StringLiteralDuplicatedCheck()) {
+
+    @Test
+    fun `excludes logging occurrences from the threshold`() {
+        KotlinVerifier(check) {
+            fileName = "StringLiteralDuplicatedCheckLoggingSample.kt"
+        }.verify()
+    }
+
+    @Test
+    fun `handles exception message occurrences`() {
+        KotlinVerifier(check) {
+            fileName = "StringLiteralDuplicatedCheckExceptionMessageSample.kt"
+        }.verify()
+    }
+
+    @Test
+    fun `does not analyze test files`() {
+        KotlinVerifier(check) {
+            fileName = "StringLiteralDuplicatedCheckTestFileSample.kt"
+            isTestFile = true
+        }.verifyNoIssue()
+    }
+}
