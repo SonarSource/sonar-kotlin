@@ -56,8 +56,8 @@ class StringLiteralDuplicatedCheckLoggingSample {
     }
 
     fun mixedLoggingAndOrdinaryOccurrences(logger: Slf4jLogger) {
-        // Noncompliant@+1 {{Define a constant instead of duplicating this literal "mixed logging and ordinary!" 5 times.}}
         logger.info("mixed logging and ordinary!")
+        // Noncompliant@+1 {{Define a constant instead of duplicating this literal "mixed logging and ordinary!" 5 times.}}
         println("mixed logging and ordinary!")
         println("mixed logging and ordinary!")
         println("mixed logging and ordinary!")

@@ -98,5 +98,10 @@ class StringLiteralDuplicatedCheckSample {
         val fourth = "non-adjacent concatenation!" + value
         val fifth = "non-adjacent concatenation!" + value
         val sixth = "non-adjacent concatenation!" + value
+
+        // Noncompliant@+1
+        println("plain prefix next to interpolation!" + "$value")
+        println("plain prefix next to interpolation!" + "$value")
+        println("plain prefix next to interpolation!" + "$value")
     }
 }

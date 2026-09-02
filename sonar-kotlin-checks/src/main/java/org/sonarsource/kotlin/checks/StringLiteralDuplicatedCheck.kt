@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
@@ -112,17 +113,26 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
 
     private fun check(
         context: KotlinFileContext,
-        occurrencesMap: Map<String, List<StringOccurrence>>,
+        candidatesMap: Map<String, List<LiteralCandidate>>,
     ) {
-        for ((text, occurrences) in occurrencesMap) {
-            val size = occurrences.size
-            if (occurrences.count { it.triggersIssue } >= threshold) {
-                val first = occurrences[0].expression
+        for ((text, candidates) in candidatesMap) {
+            if (candidates.size >= threshold) {
+                val occurrences = candidates.map { candidate ->
+                    StringOccurrence(
+                        candidate.expression,
+                        triggersIssue = !candidate.outermostConcatenation.isNonTriggeringOccurrence(),
+                    )
+                }
+                val triggeringOccurrences = occurrences.filter { it.triggersIssue }
+                if (triggeringOccurrences.size < threshold) continue
+
+                val first = triggeringOccurrences.first().expression
+                val size = occurrences.size
                 context.reportIssue(
                     first,
                     """Define a constant instead of duplicating this literal "$text" $size times.""",
                     secondaryLocations = occurrences.asSequence()
-                        .drop(1)
+                        .filterNot { it.expression === first }
                         .map { SecondaryLocation(context.textRange(it.expression), "Duplication") }
                         .toList(),
                     gap = size - 1.0,
@@ -144,15 +154,7 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
                 }
             }
             .filterNot { candidate -> candidate.expression.isAdjacentLiteralFragment(candidate.outermostConcatenation) }
-            .groupBy(
-                { candidate -> candidate.text },
-                { candidate ->
-                    StringOccurrence(
-                        candidate.expression,
-                        triggersIssue = !candidate.outermostConcatenation.isNonTriggeringOccurrence(),
-                    )
-                },
-            )
+            .groupBy { candidate -> candidate.text }
         check(context, occurrences)
     }
 
@@ -171,7 +173,7 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
         val callArgument = containingCallArgument() ?: return false
         val resolvedCall = callArgument.call.resolveToCall()?.successfulFunctionCallOrNull() ?: return false
         return (callArgument.isDirectValueArgument &&
-            callArgument.call.parent is KtThrowExpression &&
+            callArgument.call.directlyContainingExpression().parent is KtThrowExpression &&
             resolvedCall.symbol is KaConstructorSymbol) ||
             LOGGING_CALL_MATCHERS.any { it.matches(resolvedCall) } ||
             KOTLIN_EXCEPTION_MESSAGE_CALLS.matches(resolvedCall)
@@ -206,9 +208,17 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
 
         val operands = concatenation.flattenedPlusOperands()
         val index = operands.indexOfFirst { it === this }
-        return (index > 0 && operands[index - 1] is KtStringTemplateExpression) ||
-            (index >= 0 && index < operands.lastIndex && operands[index + 1] is KtStringTemplateExpression)
+        return (index > 0 && operands[index - 1].isNonInterpolatedString()) ||
+            (index >= 0 && index < operands.lastIndex && operands[index + 1].isNonInterpolatedString())
     }
+
+    private fun KtCallExpression.directlyContainingExpression(): KtExpression =
+        (parent as? KtDotQualifiedExpression)
+            ?.takeIf { it.selectorExpression === this }
+            ?: this
+
+    private fun KtExpression.isNonInterpolatedString(): Boolean =
+        this is KtStringTemplateExpression && !hasInterpolation()
 
     private fun KtExpression.flattenedPlusOperands(): List<KtExpression> =
         if (isPlusExpression()) {

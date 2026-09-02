@@ -20,6 +20,24 @@ class StringLiteralDuplicatedCheckExceptionMessageSample {
     fun thirdConcatenatedDirectThrownException(suffix: String): Nothing =
         throw UnsupportedOperationException("concatenated thrown message: " + suffix)
 
+    fun qualifiedDirectThrownException(): Nothing =
+        throw java.lang.IllegalArgumentException("qualified thrown exception message!")
+
+    fun anotherQualifiedDirectThrownException(): Nothing =
+        throw java.lang.IllegalArgumentException("qualified thrown exception message!")
+
+    fun thirdQualifiedDirectThrownException(): Nothing =
+        throw java.lang.IllegalArgumentException("qualified thrown exception message!")
+
+    fun nestedQualifiedDirectThrownException(): Nothing =
+        throw ExceptionTypes.NotFound("nested qualified exception message!")
+
+    fun anotherNestedQualifiedDirectThrownException(): Nothing =
+        throw ExceptionTypes.NotFound("nested qualified exception message!")
+
+    fun thirdNestedQualifiedDirectThrownException(): Nothing =
+        throw ExceptionTypes.NotFound("nested qualified exception message!")
+
     fun thrownFactoryCall(): Nothing =
         // Noncompliant@+1
         throw exceptionWithMessage("factory call remains in scope!")
@@ -67,4 +85,8 @@ class CustomExceptionFunctions {
     fun error(message: String) = Unit
     fun require(condition: Boolean, lazyMessage: () -> Any) = Unit
     fun check(condition: Boolean, lazyMessage: () -> Any) = Unit
+}
+
+object ExceptionTypes {
+    class NotFound(message: String) : RuntimeException(message)
 }
