@@ -29,9 +29,7 @@
 802
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/vault/NodeVaultService.kt": [
-405,
-410,
-488
+410
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/internal/security/PasswordTest.kt": [
 27,
@@ -57,13 +55,6 @@
 98,
 108,
 115
-],
-"kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/dsl/TestDSL.kt": [
-141,
-143,
-269,
-275,
-281
 ],
 "kotlin-corda-project:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/dsl/TransactionDSLInterpreter.kt": [
 70,
