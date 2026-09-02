@@ -12,17 +12,9 @@
 146
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/AppendOnlyPersistentMapTest.kt": [
-218,
-227,
-257
+218
 ],
 "kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/DBTransactionStorageTests.kt": [
 143
-],
-"kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/ByteBufferStreams.kt": [
-41
-],
-"kotlin-corda-project:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationOutputTests.kt": [
-1158
 ]
 }

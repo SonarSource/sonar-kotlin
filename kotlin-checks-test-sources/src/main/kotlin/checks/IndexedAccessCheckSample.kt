@@ -1,9 +1,15 @@
 package checks
 
+import android.util.LongSparseArray
+import android.util.SparseArray
+import android.util.SparseBooleanArray
+import android.util.SparseIntArray
+import android.util.SparseLongArray
 import com.google.common.collect.ImmutableList
 import com.google.common.collect.RangeMap
 import com.google.common.collect.Table
 import java.nio.ByteBuffer
+import java.nio.CharBuffer
 import java.util.BitSet
 import java.util.Calendar
 import java.util.Stack
@@ -11,6 +17,8 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicIntegerArray
+import java.util.concurrent.atomic.AtomicLongArray
+import java.util.concurrent.atomic.AtomicReferenceArray
 import okhttp3.Headers
 import otherpackage.KotlinLibContainer
 import otherpackage.get
@@ -25,6 +33,8 @@ class IndexedAccessCheckSample {
         buffer: ByteBuffer,
         stack: Stack<String>,
         atomicArray: AtomicIntegerArray,
+        atomicLongArray: AtomicLongArray,
+        atomicReferenceArray: AtomicReferenceArray<String>,
         bitSet: BitSet,
         arrayList: ArrayList<Int>,
         hashMap: HashMap<String, Int>,
@@ -44,6 +54,10 @@ class IndexedAccessCheckSample {
         stack.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
         atomicArray.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
         atomicArray.set(0, 42) // Noncompliant {{Replace function call with indexed accessor.}}
+        atomicLongArray.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        atomicLongArray.set(0, 42L) // Noncompliant {{Replace function call with indexed accessor.}}
+        atomicReferenceArray.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+        atomicReferenceArray.set(0, "value") // Noncompliant {{Replace function call with indexed accessor.}}
         bitSet.get(5) // Noncompliant {{Replace function call with indexed accessor.}}
         bitSet.set(5, true) // Noncompliant {{Replace function call with indexed accessor.}}
         // Concrete Java collection implementations - caught via List/Map supertype check
@@ -58,6 +72,46 @@ class IndexedAccessCheckSample {
         cal.get(Calendar.YEAR) // Compliant - Java interop operator, not in allowed types
         cal.set(Calendar.YEAR, 2024) // Compliant - Java interop operator, not in allowed types
         future.get(1L, TimeUnit.SECONDS) // Compliant - Java interop operator, not in allowed types
+    }
+
+    fun bufferBulkReads(byteBuffer: ByteBuffer, charBuffer: CharBuffer, bytes: ByteArray, chars: CharArray) {
+        byteBuffer.get(bytes) // Compliant - copies into the destination instead of selecting an element
+        byteBuffer.get(bytes, 0, bytes.size) // Compliant - relative bulk read
+        byteBuffer.get(0, bytes) // Compliant - absolute bulk read
+        byteBuffer.get(0, bytes, 0, bytes.size) // Compliant - absolute bulk read with destination range
+        charBuffer.get(chars) // Compliant - all Buffer specializations follow the same signature rules
+        charBuffer.get(0) // Noncompliant {{Replace function call with indexed accessor.}}
+    }
+
+    fun bitSetRanges(bitSet: BitSet) {
+        bitSet.get(1, 4) // Compliant - returns a range, not the element at two indexes
+        bitSet.set(1) // Compliant - cannot be expressed as indexed assignment
+        bitSet.set(1, 4) // Compliant - sets a range to true
+        bitSet.set(1, 4, false) // Compliant - sets a range to a value
+    }
+
+    fun androidSparseArrays(
+        sparseArray: SparseArray<String>,
+        sparseIntArray: SparseIntArray,
+        sparseBooleanArray: SparseBooleanArray,
+        sparseLongArray: SparseLongArray,
+        longSparseArray: LongSparseArray<String>,
+    ) {
+        sparseArray.get(1) // Noncompliant {{Replace function call with indexed accessor.}}
+        sparseArray.get(1, "default") // Compliant - the second argument is a default value
+        sparseArray.set(1, "value") // Noncompliant {{Replace function call with indexed accessor.}}
+        sparseIntArray.get(1) // Noncompliant {{Replace function call with indexed accessor.}}
+        sparseIntArray.get(1, 42) // Compliant - the second argument is a default value
+        sparseIntArray.set(1, 42) // Noncompliant {{Replace function call with indexed accessor.}}
+        sparseBooleanArray.get(1) // Noncompliant {{Replace function call with indexed accessor.}}
+        sparseBooleanArray.get(1, false) // Compliant - the second argument is a default value
+        sparseBooleanArray.set(1, true) // Noncompliant {{Replace function call with indexed accessor.}}
+        sparseLongArray.get(1) // Noncompliant {{Replace function call with indexed accessor.}}
+        sparseLongArray.get(1, 42L) // Compliant - the second argument is a default value
+        sparseLongArray.set(1, 42L) // Noncompliant {{Replace function call with indexed accessor.}}
+        longSparseArray.get(1L) // Noncompliant {{Replace function call with indexed accessor.}}
+        longSparseArray.get(1L, "default") // Compliant - the second argument is a default value
+        longSparseArray.set(1L, "value") // Noncompliant {{Replace function call with indexed accessor.}}
     }
 
     fun kotlinLibraryTypes(container: KotlinLibContainer<String>, headers: Headers) {
@@ -192,16 +246,29 @@ class ChainableMap {
     fun size(): Int = 0
 }
 
-fun chainedSetters(builder: ChainableBuilder, chainableMap: ChainableMap) {
-    builder.set("a", "1").set("b", "2").set("c", "3") // Noncompliant {{Replace function call with indexed accessor.}}
-    //                                  ^^^
-    builder.set("a", "1").set("b", "2") // Noncompliant {{Replace function call with indexed accessor.}}
-    //                    ^^^
+fun setCallUsages(builder: ChainableBuilder, chainableMap: ChainableMap, list: MutableList<Int>) {
+    builder.set("standalone", "value") // Noncompliant {{Replace function call with indexed accessor.}}
+    builder.set("a", "1").set("b", "2").set("c", "3") // Compliant - every set belongs to the same fluent chain
+    builder.set("a", "1").set("b", "2") // Compliant - terminal set is preceded by another set
+    (builder.set("a", "1")).set("b", "2") // Compliant - parentheses do not break the setter chain
+    (builder.`set`("a", "1") as ChainableBuilder).set("b", "2") // Compliant - casts and backticks do not break the setter chain
+    builder.set("a", "1")!!.set("b", "2") // Compliant - non-null assertions do not break the setter chain
     builder.set("a", "1").build() // Compliant - set result used in chain
+    val setResult = builder.set("a", "1") // Compliant - set result is assigned
+    consumeBuilder(builder.set("a", "1")) // Compliant - set result is passed as an argument
+    val previousValue = list.set(0, 42) // Compliant - indexed assignment would discard the returned old value
+    consumeInt(previousValue)
 
     builder.get("a").length // Noncompliant {{Replace function call with indexed accessor.}}
 
-    chainableMap.set("a", 1).set("b", 2) // Noncompliant {{Replace function call with indexed accessor.}}
+    chainableMap.set("a", 1).set("b", 2) // Compliant - terminal set is preceded by another set
     chainableMap.set("a", 1).size() // Compliant - set result used in chain
+
+    createBuilder().set("a", "1") // Noncompliant {{Replace function call with indexed accessor.}}
 }
 
+fun consumeBuilder(builder: ChainableBuilder) = Unit
+
+fun createBuilder() = ChainableBuilder()
+
+fun consumeInt(value: Int) = Unit
