@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -50,10 +51,9 @@ private const val MESSAGE_ANDROID_MIXED_CONTENT = "Using a relaxed mixed content
 private const val MIXED_CONTENT_ALWAYS_ALLOW = 0
 
 private val UNSAFE_CALLS_GENERAL = mapOf(
-    ConstructorMatcher("org.apache.commons.net.ftp.FTPClient") to msg("FTP", "SFTP, SCP or FTPS"),
-    ConstructorMatcher("org.apache.commons.net.smtp.SMTPClient")
-        to msg("clear-text SMTP", "SMTP over SSL/TLS or SMTP with STARTTLS"),
-    ConstructorMatcher("org.apache.commons.net.telnet.TelnetClient") to msg("Telnet", "SSH"),
+    ConstructorMatcher("org.apache.commons.net.ftp.FTPClient") to msg("ftp"),
+    ConstructorMatcher("org.apache.commons.net.smtp.SMTPClient") to msg("smtp"),
+    ConstructorMatcher("org.apache.commons.net.telnet.TelnetClient") to msg("telnet"),
 )
 
 private val UNSAFE_CALLS_OK_HTTP = listOf(
@@ -64,7 +64,13 @@ private val UNSAFE_CALLS_OK_HTTP = listOf(
 private val ANDROID_SET_MIXED_CONTENT_MODE = FunMatcher(definingSupertype = "android.webkit.WebSettings",
     name = "setMixedContentMode") { withArguments("kotlin.Int") }
 
-private fun msg(insecure: String, replaceWith: String) = "Using $insecure is insecure. Use $replaceWith instead."
+/**
+ * [CleartextProtocolFilter] is the single source of truth for the wording, so that a scheme is phrased
+ * the same way whether it was found in an API call or in a URL literal. The fallback only guards against
+ * a future release dropping a scheme; every scheme used here is currently known to the filter.
+ */
+private fun msg(scheme: String): String = CleartextProtocolFilter.getIssueMessage(scheme)
+    .orElse("Using $scheme is insecure. Use a TLS-protected alternative instead.")
 
 private const val SCHEME_SEPARATOR = "://"
 
@@ -75,11 +81,15 @@ private const val AUTHORITY_DELIMITERS = "/?#"
 private const val PLACEHOLDER_MARKERS = "\${}"
 
 /**
- * Functions that merely test or strip a textual prefix/suffix. A URL passed to one of them is a
- * string pattern, not a connection target, so it must not raise an issue. This is the AST context
- * that [CleartextProtocolFilter] documents as being out of its reach.
+ * Functions that inspect or rewrite the textual form of a string. A URL handed to one of them is a
+ * pattern, not a connection target, so it must not raise an issue. This is the AST context that
+ * [CleartextProtocolFilter] documents as being out of its reach. Matched by resolved name, so that
+ * same-named functions on unrelated types (e.g. `java.nio.file.Path.startsWith`) keep reporting.
  */
-private val PREFIX_TEST_FUNCTIONS = setOf("startsWith", "endsWith", "removePrefix", "removeSuffix")
+private val STRING_PATTERN_FUNCTIONS = setOf(
+    "startsWith", "endsWith", "removePrefix", "removeSuffix",
+    "replace", "contains", "split", "substringAfter", "substringBefore",
+).mapTo(HashSet()) { "kotlin.text.$it" }
 
 @Rule(key = "S5332")
 class ClearTextProtocolCheck : CallAbstractCheck() {
@@ -122,15 +132,17 @@ class ClearTextProtocolCheck : CallAbstractCheck() {
     }
 
     override fun visitStringTemplateExpression(expression: KtStringTemplateExpression, context: KotlinFileContext) {
+        // A clear-text URL in test code is a fixture, not a connection an attacker can observe.
+        if (context.inputFileContext.isTestFile) return
         val url = expression.constantValue() ?: return
         val scheme = cleartextSchemeOf(url) ?: return
-        if (CleartextProtocolFilter.isSafeWithoutTls(url) || expression.isPrefixTestArgument()) return
+        if (CleartextProtocolFilter.isSafeWithoutTls(url) || expression.isStringPatternArgument()) return
         CleartextProtocolFilter.getIssueMessage(scheme).ifPresent { context.reportIssue(expression, it) }
     }
 
     private fun analyzeOkHttpCall(kotlinFileContext: KotlinFileContext, callExpr: KtCallExpression) =
         OkHttpArgumentFinder { arg ->
-            kotlinFileContext.reportIssue(arg, msg("HTTP", "HTTPS"))
+            kotlinFileContext.reportIssue(arg, msg("http"))
         }.visitTree(callExpr)
 }
 
@@ -171,7 +183,9 @@ private fun cleartextSchemeOf(url: String): String? {
     return prefix.dropLast(SCHEME_SEPARATOR.length)
 }
 
-private fun KtStringTemplateExpression.isPrefixTestArgument(): Boolean {
+private fun KtStringTemplateExpression.isStringPatternArgument(): Boolean {
     val call = (parent as? KtValueArgument)?.parent?.parent as? KtCallExpression ?: return false
-    return call.calleeExpression?.text in PREFIX_TEST_FUNCTIONS
+    return withKaSession {
+        call.resolveToCall()?.successfulFunctionCallOrNull()?.symbol?.callableId?.asSingleFqName()?.asString()
+    } in STRING_PATTERN_FUNCTIONS
 }

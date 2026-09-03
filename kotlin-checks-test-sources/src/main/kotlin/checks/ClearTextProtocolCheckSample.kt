@@ -15,14 +15,13 @@ import java.util.Arrays
 
 class ClearTextProtocolCheckSample {
     fun `apache commons noncompliant`() {
-        val telnet = TelnetClient() // Noncompliant {{Using Telnet is insecure. Use SSH instead.}}
+        val telnet = TelnetClient() // Noncompliant {{Using Telnet protocol is insecure. Use SSH instead.}}
         telnet.connect("127.0.0.1")
 
-        val ftpClient = FTPClient() // Noncompliant {{Using FTP is insecure. Use SFTP, SCP or FTPS instead.}}
+        val ftpClient = FTPClient() // Noncompliant {{Using FTP protocol is insecure. Use SFTP, SCP or FTPS instead.}}
         ftpClient.connect("127.0.0.1", 21)
 
-        val smtpClient =
-            SMTPClient() // Noncompliant {{Using clear-text SMTP is insecure. Use SMTP over SSL/TLS or SMTP with STARTTLS instead.}}
+        val smtpClient = SMTPClient() // Noncompliant {{Using SMTP protocol is insecure. Use SMTPS instead.}}
         smtpClient.connect("127.0.0.1")
     }
 
@@ -36,17 +35,17 @@ class ClearTextProtocolCheckSample {
             .connectionSpecs(
                 listOf(
                     ConnectionSpec.MODERN_TLS,
-                    ConnectionSpec.CLEARTEXT // Noncompliant {{Using HTTP is insecure. Use HTTPS instead.}}
+                    ConnectionSpec.CLEARTEXT // Noncompliant {{Using HTTP protocol is insecure. Use HTTPS instead.}}
                 )
             )
             .build()
 
         val client2 = OkHttpClient.Builder()
-            .connectionSpecs(listOf(ConnectionSpec.CLEARTEXT)) // Noncompliant {{Using HTTP is insecure. Use HTTPS instead.}} [[sc=37;ec=61]]
+            .connectionSpecs(listOf(ConnectionSpec.CLEARTEXT)) // Noncompliant {{Using HTTP protocol is insecure. Use HTTPS instead.}} [[sc=37;ec=61]]
             .build();
 
         val spec =
-            ConnectionSpec.Builder(ConnectionSpec.CLEARTEXT) // Noncompliant {{Using HTTP is insecure. Use HTTPS instead.}}
+            ConnectionSpec.Builder(ConnectionSpec.CLEARTEXT) // Noncompliant {{Using HTTP protocol is insecure. Use HTTPS instead.}}
                 .build()
 
         val client3: OkHttpClient = OkHttpClient.Builder()
@@ -134,6 +133,10 @@ class ClearTextProtocolCheckSample {
         val docker = "http://host.docker.internal:5000" // Compliant
         val kubernetes = "http://payments.default.svc.cluster.local/health" // Compliant
         val singleLabel = "http://payments-service:8080/health" // Compliant
+        val androidEmulatorHost = "http://10.0.2.2:8080/api" // Compliant - the emulator's alias for the dev machine
+        val androidEmulatorRouter = "http://10.0.2.1" // Compliant
+        val androidEmulatorDevice = "http://10.0.2.15/status" // Compliant
+        val notTheEmulatorNetwork = "http://10.0.2.7/api" // Noncompliant {{Using HTTP protocol is insecure. Use HTTPS instead.}}
     }
 
     fun `url literals compliant - namespace uri authorities`() {
@@ -231,11 +234,22 @@ class ClearTextProtocolCheckSample {
         val paddedRawString = """  http://api.acme.com  """ // Compliant FN - the scheme is not at the start of the literal
     }
 
-    fun `url literals - prefix tests only exclude the prefix-testing call`(url: String) {
+    fun `url literals - string pattern APIs`(url: String, path: java.nio.file.Path) {
+        val replaced = url.replace("http://api.acme.com", "https://api.acme.com") // Compliant
+        val contained = url.contains("http://api.acme.com") // Compliant
+        val parts = url.split("http://api.acme.com") // Compliant
+        val after = url.substringAfter("http://api.acme.com") // Compliant
+        val before = url.substringBefore("http://api.acme.com") // Compliant
+        // Same name, different type: this one is a real path comparison, not a string pattern
+        val onAPath = path.startsWith("http://api.acme.com") // Noncompliant {{Using HTTP protocol is insecure. Use HTTPS instead.}}
+        val onAList = listOf("a").contains("http://api.acme.com") // Noncompliant {{Using HTTP protocol is insecure. Use HTTPS instead.}}
+    }
+
+    fun `url literals - prefix tests`(url: String) {
         val namedArgument = url.startsWith(prefix = "http://api.acme.com") // Compliant
         val extraArgument = url.startsWith("http://api.acme.com", ignoreCase = true) // Compliant
         val nested = require(url.startsWith("http://api.acme.com")) // Compliant
-        // Any other call keeps reporting: the exclusion is about prefix tests, not about being an argument
+        // Any other call keeps reporting: the exclusion is about string pattern APIs, not about being an argument
         val connected = connect("http://api.acme.com") // Noncompliant {{Using HTTP protocol is insecure. Use HTTPS instead.}}
         val listed = listOf("http://api.acme.com") // Noncompliant {{Using HTTP protocol is insecure. Use HTTPS instead.}}
         val receiver = "http://api.acme.com".length // Noncompliant {{Using HTTP protocol is insecure. Use HTTPS instead.}}
