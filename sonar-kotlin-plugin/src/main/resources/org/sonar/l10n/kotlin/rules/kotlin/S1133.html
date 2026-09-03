@@ -5,4 +5,32 @@
 @Deprecated("") // Noncompliant
 class Example
 </pre>
+<h3>Exceptions</h3>
+<p>The following usages are not reported:</p>
+<ul>
+  <li><code>override</code> functions and properties. These implement an external API contract and cannot be removed unilaterally — the decision
+  belongs to the owner of the parent class or interface.
+    <pre>
+open class Base {
+    open fun legacyMethod() {}
+}
+
+class Derived : Base() {
+    @Deprecated("Deprecated in parent class")
+    override fun legacyMethod() {} // Compliant - removal depends on the parent API
+}
+</pre></li>
+  <li><code>@Deprecated</code> with <code>level = DeprecationLevel.HIDDEN</code>. This is the Kotlin-provided mechanism for controlled
+  binary-compatible removal and signals intentional lifecycle management beyond a plain warning.
+    <pre>
+@Deprecated("Hidden for binary compatibility", level = DeprecationLevel.HIDDEN)
+fun hiddenFunction() {} // Compliant
+</pre></li>
+  <li><code>@Deprecated</code> with <code>level = DeprecationLevel.ERROR</code>. This is used as a deliberate compile-time guard to prevent misuse,
+  not as forgotten code awaiting cleanup.
+    <pre>
+@Deprecated("DO NOT CALL - compile-time guard", level = DeprecationLevel.ERROR)
+fun errorGuard() {} // Compliant
+</pre></li>
+</ul>
 
