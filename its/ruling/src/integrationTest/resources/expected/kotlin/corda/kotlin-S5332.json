@@ -1,0 +1,8 @@
+{
+"kotlin-corda-project:sources/kotlin/corda/node-api/src/test/kotlin/net/corda/nodeapi/internal/crypto/X509UtilitiesTest.kt": [
+110
+],
+"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/config/NodeConfigurationImplTest.kt": [
+45
+]
+}

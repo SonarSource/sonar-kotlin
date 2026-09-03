@@ -32,7 +32,7 @@ dependencyResolutionManagement {
     versionCatalogs {
 
         val kotlinVersion: String by extra
-        val analyzerCommonsVersionStr = "2.27.0.5007"
+        val analyzerCommonsVersionStr = "2.30.0.5193"
         val sonarPluginApi = "13.2.0.3137"
         val slf4jApi = "1.7.36"
 

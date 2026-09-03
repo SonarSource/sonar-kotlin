@@ -25,10 +25,15 @@ import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtEscapeStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtPsiUtil.deparenthesize
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.sonar.check.Rule
+import org.sonarsource.analyzer.commons.appsec.CleartextProtocolFilter
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.ConstructorMatcher
 import org.sonarsource.kotlin.api.checks.FunMatcher
@@ -60,6 +65,21 @@ private val ANDROID_SET_MIXED_CONTENT_MODE = FunMatcher(definingSupertype = "and
     name = "setMixedContentMode") { withArguments("kotlin.Int") }
 
 private fun msg(insecure: String, replaceWith: String) = "Using $insecure is insecure. Use $replaceWith instead."
+
+private const val SCHEME_SEPARATOR = "://"
+
+/** Characters that terminate the authority component of a URL, i.e. everything a host may be followed by. */
+private const val AUTHORITY_DELIMITERS = "/?#"
+
+/** Markers of a value substituted at runtime, e.g. "http://$HOST/". Such a host cannot be judged. */
+private const val PLACEHOLDER_MARKERS = "\${}"
+
+/**
+ * Functions that merely test or strip a textual prefix/suffix. A URL passed to one of them is a
+ * string pattern, not a connection target, so it must not raise an issue. This is the AST context
+ * that [CleartextProtocolFilter] documents as being out of its reach.
+ */
+private val PREFIX_TEST_FUNCTIONS = setOf("startsWith", "endsWith", "removePrefix", "removeSuffix")
 
 @Rule(key = "S5332")
 class ClearTextProtocolCheck : CallAbstractCheck() {
@@ -101,6 +121,13 @@ class ClearTextProtocolCheck : CallAbstractCheck() {
         }
     }
 
+    override fun visitStringTemplateExpression(expression: KtStringTemplateExpression, context: KotlinFileContext) {
+        val url = expression.constantValue() ?: return
+        val scheme = cleartextSchemeOf(url) ?: return
+        if (CleartextProtocolFilter.isSafeWithoutTls(url) || expression.isPrefixTestArgument()) return
+        CleartextProtocolFilter.getIssueMessage(scheme).ifPresent { context.reportIssue(expression, it) }
+    }
+
     private fun analyzeOkHttpCall(kotlinFileContext: KotlinFileContext, callExpr: KtCallExpression) =
         OkHttpArgumentFinder { arg ->
             kotlinFileContext.reportIssue(arg, msg("HTTP", "HTTPS"))
@@ -114,4 +141,37 @@ private class OkHttpArgumentFinder(
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) = withKaSession {
         if (expression.mainReference.resolveToSymbol()?.importableFqName?.asString() == CLEARTEXT_FQN) issueReporter(expression)
     }
+}
+
+/**
+ * The value of this template when it is known statically, i.e. when every entry is plain text or an
+ * escape sequence, or null when an interpolated entry makes the value depend on runtime state.
+ */
+private fun KtStringTemplateExpression.constantValue(): String? {
+    val value = StringBuilder()
+    for (entry in entries) {
+        when (entry) {
+            is KtLiteralStringTemplateEntry -> value.append(entry.text)
+            is KtEscapeStringTemplateEntry -> value.append(entry.unescapedValue)
+            else -> return null
+        }
+    }
+    return value.toString()
+}
+
+/**
+ * The clear-text scheme [url] starts with, without the [SCHEME_SEPARATOR], or null when [url] is not a
+ * clear-text URL naming a host we can judge. URLs without an authority (e.g. the bare `"http://"` prefix
+ * constant) name no endpoint, and a templated authority names one we cannot resolve; neither is reported.
+ */
+private fun cleartextSchemeOf(url: String): String? {
+    val prefix = CleartextProtocolFilter.getCleartextProtocols().firstOrNull { url.startsWith(it, ignoreCase = true) } ?: return null
+    val authority = url.drop(prefix.length).takeWhile { it !in AUTHORITY_DELIMITERS }
+    if (authority.isEmpty() || authority.any { it in PLACEHOLDER_MARKERS }) return null
+    return prefix.dropLast(SCHEME_SEPARATOR.length)
+}
+
+private fun KtStringTemplateExpression.isPrefixTestArgument(): Boolean {
+    val call = (parent as? KtValueArgument)?.parent?.parent as? KtCallExpression ?: return false
+    return call.calleeExpression?.text in PREFIX_TEST_FUNCTIONS
 }
