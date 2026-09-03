@@ -46,11 +46,14 @@ class DeprecatedCodeCheck : AbstractCheck() {
 
 private fun KtAnnotationEntry.isOnOverriddenElement(): Boolean {
     val owner = annotatedElement()
-    return owner is KtModifierListOwner && owner.hasModifier(KtTokens.OVERRIDE_KEYWORD)
+    val declaration = if (owner is KtPropertyAccessor) owner.property else owner
+    return (declaration as? KtModifierListOwner)?.hasModifier(KtTokens.OVERRIDE_KEYWORD) == true
 }
 
 private fun KtAnnotationEntry.hasNonWarningDeprecationLevel(): Boolean {
+    // Deprecated(message, replaceWith, level): `level` may be passed by name or as 3rd positional arg
     val levelArg = valueArguments.find { it.getArgumentName()?.asName?.asString() == "level" }
+        ?: valueArguments.filter { it.getArgumentName() == null }.getOrNull(2)
         ?: return false
     val text = levelArg.getArgumentExpression()?.text ?: return false
     return text.endsWith("HIDDEN") || text.endsWith("ERROR")

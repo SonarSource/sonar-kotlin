@@ -56,16 +56,21 @@ var anonymousClass = @Deprecated("") object : Any() { // Noncompliant
 // region override functions implementing external/parent APIs should not be flagged
 
 open class BaseClass {
-    open fun legacyMethod(): Unit = Unit
+    @Deprecated("")
+    open fun legacyMethod(): Unit = Unit // Noncompliant
     open val legacyProp: String get() = ""
+    open var legacyVar: String = ""
 }
 
 class DerivedClass : BaseClass() {
     @Deprecated("Deprecated in parent class")
-    override fun legacyMethod(): Unit = Unit // Compliant - override, removal is not unilateral
+    override fun legacyMethod(): Unit = Unit // Compliant - override method
 
     @Deprecated("Deprecated in Java")
     override val legacyProp: String get() = "" // Compliant - override property
+
+    override var legacyVar: String = ""
+        @Deprecated("Deprecated in Java") get // Compliant - accessor of an override property
 }
 
 fun interface LegacyInterface {
@@ -99,5 +104,15 @@ class ErrorDeprecatedClass // Compliant
 @Deprecated("Please migrate", level = DeprecationLevel.WARNING)
 fun explicitWarningFunction() {} // Noncompliant
 //  ^^^^^^^^^^^^^^^^^^^^^^^
+
+@Deprecated("Hidden positional", ReplaceWith(""), DeprecationLevel.HIDDEN)
+fun hiddenPositional() {} // Compliant
+
+@Deprecated("Error positional", ReplaceWith(""), DeprecationLevel.ERROR)
+fun errorPositional() {} // Compliant
+
+@Deprecated("Warning positional", ReplaceWith(""), DeprecationLevel.WARNING)
+fun warningPositional() {} // Noncompliant
+//  ^^^^^^^^^^^^^^^^^
 
 //endregion

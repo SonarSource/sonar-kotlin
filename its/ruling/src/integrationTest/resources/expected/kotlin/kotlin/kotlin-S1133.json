@@ -20,9 +20,6 @@
 118,
 121
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend.java/src/org/jetbrains/kotlin/fileClasses/Deprecated.kt": [
-32
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend.java/src/org/jetbrains/kotlin/load/kotlin/VirtualFileKotlinClass.kt": [
 59
 ],
@@ -199,8 +196,7 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/ide-common/src/org/jetbrains/kotlin/idea/caches/resolve/resolutionApi.kt": [
 46,
-159,
-178
+159
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/inspections/IntentionBasedInspection.kt": [
 58
