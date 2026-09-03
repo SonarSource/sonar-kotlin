@@ -80,6 +80,23 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
                 "mu.KLogger",
                 "trace", "debug", "info", "warn", "error",
             ),
+            loggingMatcher(
+                "co.touchlab.kermit.Logger",
+                "v", "d", "i", "w", "e", "a",
+            ),
+            loggingMatcher(
+                "com.github.aakira.napier.Napier",
+                "v", "d", "i", "w", "e", "wtf",
+            ),
+            loggingMatcher("io.ktor.client.plugins.logging.Logger", "log"),
+            loggingMatcher(
+                "timber.log.Timber",
+                "v", "d", "i", "w", "e", "wtf",
+            ),
+            loggingMatcher(
+                "android.util.Log",
+                "v", "d", "i", "w", "e", "wtf", "println",
+            ),
         )
 
         private val KOTLIN_EXCEPTION_MESSAGE_CALLS = FunMatcher(qualifier = "kotlin") {

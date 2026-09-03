@@ -1,11 +1,16 @@
 package checks
 
+import android.util.Log
+import co.touchlab.kermit.Logger as KermitLogger
+import com.github.aakira.napier.Napier
 import io.github.oshai.kotlinlogging.KLogger
+import io.ktor.client.plugins.logging.Logger as KtorLogger
 import java.util.logging.Level
 import java.util.logging.Logger as JulLogger
 import mu.KLogger as LegacyKLogger
 import org.apache.logging.log4j.Logger as Log4jLogger
 import org.slf4j.Logger as Slf4jLogger
+import timber.log.Timber
 
 class StringLiteralDuplicatedCheckLoggingSample {
 
@@ -15,6 +20,8 @@ class StringLiteralDuplicatedCheckLoggingSample {
         log4j: Log4jLogger,
         kotlinLogger: KLogger,
         legacyKotlinLogger: LegacyKLogger,
+        kermitLogger: KermitLogger,
+        ktorLogger: KtorLogger,
         suffix: String,
     ) {
         slf4j.trace("repeated SLF4J message!")
@@ -36,6 +43,30 @@ class StringLiteralDuplicatedCheckLoggingSample {
         legacyKotlinLogger.info { "repeated legacy Kotlin logging message!" }
         legacyKotlinLogger.warn { "repeated legacy Kotlin logging message!" }
         legacyKotlinLogger.error { "repeated legacy Kotlin logging message!" }
+
+        kermitLogger.d("repeated Kermit message!")
+        kermitLogger.d("repeated Kermit message!")
+        kermitLogger.d("repeated Kermit message!")
+
+        kermitLogger.i { "repeated Kermit lambda message!" }
+        kermitLogger.i { "repeated Kermit lambda message!" }
+        kermitLogger.i { "repeated Kermit lambda message!" }
+
+        Napier.d("repeated Napier message!")
+        Napier.d("repeated Napier message!")
+        Napier.d("repeated Napier message!")
+
+        ktorLogger.log("repeated Ktor logging message!")
+        ktorLogger.log("repeated Ktor logging message!")
+        ktorLogger.log("repeated Ktor logging message!")
+
+        Timber.d("repeated Timber message!")
+        Timber.d("repeated Timber message!")
+        Timber.d("repeated Timber message!")
+
+        Log.d("repeated Android log tag!", "repeated Android log message!")
+        Log.d("repeated Android log tag!", "repeated Android log message!")
+        Log.d("repeated Android log tag!", "repeated Android log message!")
 
         slf4j.info("concatenated logging message: " + suffix)
         slf4j.warn("concatenated logging message: " + suffix)
