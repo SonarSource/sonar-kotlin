@@ -31,10 +31,6 @@
 131,
 135
 ],
-"kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/crypto/CompositeSignature.kt": [
-32,
-52
-],
 "kotlin-corda-project:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/flows/FlowLogic.kt": [
 151,
 167,
@@ -118,11 +114,7 @@
 "kotlin-corda-project:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/config/User.kt": [
 10
 ],
-"kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/CordaClock.kt": [
-24
-],
 "kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/config/NodeConfiguration.kt": [
-178,
 343
 ],
 "kotlin-corda-project:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/driver/Driver.kt": [
