@@ -231,6 +231,17 @@ val distTask = tasks.register<ProGuardTask>("dist") {
     group = "build"
     description = "Assembles sonar-kotlin-plugin.jar for integration tests and publishing"
     libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
+    // Every JDK module the bundled code references must be listed here. ProGuard rewrites stack map
+    // frames, and for a type it cannot resolve it widens the frame entry to java/lang/Object, which
+    // makes the class unverifiable. This surfaced as a VerifyError in woodstox'
+    // WstxEventReader.throwUnchecked once its class file version rose to 52: below 52 the JVM silently
+    // fails over to the old inference verifier, which is why such damage can go unnoticed for a long
+    // time. proguard.txt sets -dontwarn, so the unresolved references are not reported either.
+    libraryjars("${System.getProperty("java.home")}/jmods/java.xml.jmod")
+    libraryjars("${System.getProperty("java.home")}/jmods/java.desktop.jmod")
+    libraryjars("${System.getProperty("java.home")}/jmods/java.logging.jmod")
+    libraryjars("${System.getProperty("java.home")}/jmods/java.sql.jmod")
+    libraryjars("${System.getProperty("java.home")}/jmods/java.management.jmod")
     injars(tasks.shadowJar.get().archiveFile)
     outjars("build/libs/sonar-kotlin-plugin.jar")
     configuration("proguard.txt")
