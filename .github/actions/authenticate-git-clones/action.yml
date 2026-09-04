@@ -1,0 +1,18 @@
+name: Authenticate git clones
+description: Configure git and gh to authenticate clone/fetch requests against GitHub, avoiding anonymous rate limits
+
+inputs:
+  gh_token:
+    description: GitHub token to authenticate with
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+      run: |
+        gh auth setup-git
+        git config --global http.proactiveAuth auto  # authenticate on the first request, not after a 401, so cloning never counts as an anonymous GitHub request
+        git config --global url."https://github.com/".insteadOf "git@github.com:"  # so SSH submodule URLs are also authenticated via the credential helper above
