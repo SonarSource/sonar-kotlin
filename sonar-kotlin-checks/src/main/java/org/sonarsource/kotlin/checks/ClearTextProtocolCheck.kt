@@ -16,6 +16,7 @@
  */
 package org.sonarsource.kotlin.checks
 
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.analysis.api.KaIdeApi
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
@@ -29,6 +30,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtEscapeStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
+import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil.deparenthesize
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -77,8 +79,11 @@ private const val SCHEME_SEPARATOR = "://"
 /** Characters that terminate the authority component of a URL, i.e. everything a host may be followed by. */
 private const val AUTHORITY_DELIMITERS = "/?#"
 
-/** Markers of a value substituted at runtime, e.g. "http://$HOST/". Such a host cannot be judged. */
-private const val PLACEHOLDER_MARKERS = "\${}"
+/**
+ * Markers of a value substituted at runtime: interpolation ("http://$HOST/", "http://{host}/") and
+ * printf-style conversions ("http://%s/", "http://%1$s/"). Such a host cannot be judged.
+ */
+private const val PLACEHOLDER_MARKERS = "\${}%"
 
 /**
  * Functions that inspect or rewrite the textual form of a string. A URL handed to one of them is a
@@ -184,7 +189,9 @@ private fun cleartextSchemeOf(url: String): String? {
 }
 
 private fun KtStringTemplateExpression.isStringPatternArgument(): Boolean {
-    val call = (parent as? KtValueArgument)?.parent?.parent as? KtCallExpression ?: return false
+    var node: PsiElement? = parent
+    while (node is KtParenthesizedExpression) node = node.parent
+    val call = (node as? KtValueArgument)?.parent?.parent as? KtCallExpression ?: return false
     return withKaSession {
         call.resolveToCall()?.successfulFunctionCallOrNull()?.symbol?.callableId?.asSingleFqName()?.asString()
     } in STRING_PATTERN_FUNCTIONS

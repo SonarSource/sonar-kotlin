@@ -168,6 +168,12 @@ class ClearTextProtocolCheckSample {
         val interpolated = "http://$host/health" // Compliant - the host is unknown
         val escapedPlaceholder = "http://\$HOST:\$EXTERNAL_PORT" // Compliant - the host is substituted at runtime
         val bracedPlaceholder = "http://{host}/health" // Compliant - the host is substituted at runtime
+        val printfPlaceholder = "http://%s:8080/health" // Compliant - the host is substituted at runtime
+        val indexedPrintfPlaceholder = "http://%1${'$'}s/health" // Compliant - the host is substituted at runtime
+        val formattedHost = "http://%s/health".format(host) // Compliant - the host is substituted at runtime
+        val formattedViaCompanion = String.format("http://%s/health", host) // Compliant
+        // The host is fixed here; only the path is formatted, so it is still a clear-text endpoint
+        val formattedPath = "http://api.acme.com/%s".format(host) // Noncompliant {{Using HTTP protocol is insecure. Use HTTPS instead.}}
         val escapedTab = "http://api.acme.com/a\tb" // Noncompliant {{Using HTTP protocol is insecure. Use HTTPS instead.}}
     }
 
@@ -249,6 +255,8 @@ class ClearTextProtocolCheckSample {
         val namedArgument = url.startsWith(prefix = "http://api.acme.com") // Compliant
         val extraArgument = url.startsWith("http://api.acme.com", ignoreCase = true) // Compliant
         val nested = require(url.startsWith("http://api.acme.com")) // Compliant
+        val redundantParentheses = url.startsWith(("http://api.acme.com")) // Compliant
+        val doubleParentheses = url.removePrefix((("http://api.acme.com"))) // Compliant
         // Any other call keeps reporting: the exclusion is about string pattern APIs, not about being an argument
         val connected = connect("http://api.acme.com") // Noncompliant {{Using HTTP protocol is insecure. Use HTTPS instead.}}
         val listed = listOf("http://api.acme.com") // Noncompliant {{Using HTTP protocol is insecure. Use HTTPS instead.}}
