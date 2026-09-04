@@ -230,18 +230,20 @@ tasks.shadowJar {
 val distTask = tasks.register<ProGuardTask>("dist") {
     group = "build"
     description = "Assembles sonar-kotlin-plugin.jar for integration tests and publishing"
-    libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
-    // Every JDK module the bundled code references must be listed here. ProGuard rewrites stack map
-    // frames, and for a type it cannot resolve it widens the frame entry to java/lang/Object, which
-    // makes the class unverifiable. This surfaced as a VerifyError in woodstox'
-    // WstxEventReader.throwUnchecked once its class file version rose to 52: below 52 the JVM silently
-    // fails over to the old inference verifier, which is why such damage can go unnoticed for a long
-    // time. proguard.txt sets -dontwarn, so the unresolved references are not reported either.
-    libraryjars("${System.getProperty("java.home")}/jmods/java.xml.jmod")
-    libraryjars("${System.getProperty("java.home")}/jmods/java.desktop.jmod")
-    libraryjars("${System.getProperty("java.home")}/jmods/java.logging.jmod")
-    libraryjars("${System.getProperty("java.home")}/jmods/java.sql.jmod")
-    libraryjars("${System.getProperty("java.home")}/jmods/java.management.jmod")
+    // Give ProGuard every JDK module rather than a curated list. ProGuard rewrites stack map frames,
+    // and a type it cannot resolve is widened to java/lang/Object, which makes the class unverifiable
+    // (seen as VerifyError in woodstox' WstxEventReader.throwUnchecked); it also drops classes it
+    // cannot see as reachable. proguard.txt sets -dontwarn, so neither symptom is reported at build
+    // time, and a .jmod holds only its own module - java.desktop does not bring in java.datatransfer -
+    // so a hand-picked list silently rots as dependencies change.
+    val jdkModules = fileTree("${System.getProperty("java.home")}/jmods") { include("*.jmod") }
+    libraryjars(jdkModules)
+    doFirst {
+        check(!jdkModules.isEmpty) {
+            "No .jmod files under ${System.getProperty("java.home")}/jmods, so ProGuard would run with no " +
+                "JDK classpath and silently emit unverifiable bytecode. Build with a full JDK."
+        }
+    }
     injars(tasks.shadowJar.get().archiveFile)
     outjars("build/libs/sonar-kotlin-plugin.jar")
     configuration("proguard.txt")
