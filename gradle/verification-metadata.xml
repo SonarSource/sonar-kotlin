@@ -290,11 +290,6 @@
             <sha256 value="02b9d022e9d47704ff8a7a859a0dbfd3b2882a8311eb7ff1e180f760ccda2712" origin="Verified"/>
          </artifact>
       </component>
-      <component group="com.fasterxml.woodstox" name="woodstox-core" version="7.2.1">
-         <artifact name="woodstox-core-7.2.1.jar">
-            <sha256 value="95d5a916ab82aca0a8c4ca8a2cf7e4fd7eab18817c24f1fdc7738e15d2a58845" origin="Verified"/>
-         </artifact>
-      </component>
       <component group="com.fasterxml.woodstox" name="woodstox-core" version="7.2.2">
          <artifact name="woodstox-core-7.2.2.jar">
             <sha256 value="3bd35f778fb15cd517fae51961ba7a9388eae8e4a836fac1166c7f70740e55cd" origin="Verified"/>
@@ -2913,11 +2908,6 @@
             <sha256 value="cf45fb87f3ba6c9ba897e242b4966b0436cc053498a53e49bdfb4db81730ba63" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.analyzer-commons" name="sonar-analyzer-commons" version="2.30.0.5193">
-         <artifact name="sonar-analyzer-commons-2.30.0.5193.jar">
-            <sha256 value="5c96b1863601695eb147e2a731c8722033d5ed800cc587a39398f218d0e479a5" origin="Verified"/>
-         </artifact>
-      </component>
       <component group="org.sonarsource.analyzer-commons" name="sonar-analyzer-commons" version="2.31.0.5284">
          <artifact name="sonar-analyzer-commons-2.31.0.5284.jar">
             <sha256 value="ed688ea3ce29c79ab9561931bec946fd33a3ffacaa08b829697a78d3b83055bb" origin="Verified"/>
@@ -2946,11 +2936,6 @@
             <sha256 value="a14943ac695a37cb4b3367d928068d6698426391bae3b4bd44704bc21500386b" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.analyzer-commons" name="sonar-analyzer-recognizers" version="2.30.0.5193">
-         <artifact name="sonar-analyzer-recognizers-2.30.0.5193.jar">
-            <sha256 value="b2180dc95299868e9de5b762ecd61174e3388cf4bb8d0374969a442bd2e54ced" origin="Verified"/>
-         </artifact>
-      </component>
       <component group="org.sonarsource.analyzer-commons" name="sonar-analyzer-recognizers" version="2.31.0.5284">
          <artifact name="sonar-analyzer-recognizers-2.31.0.5284.jar">
             <sha256 value="f746d865685906ea9bc84a558c220260907dde4f5c6d88362266b26950d88735" origin="Verified"/>
@@ -2969,11 +2954,6 @@
       <component group="org.sonarsource.analyzer-commons" name="sonar-analyzer-test-commons" version="2.27.0.5007">
          <artifact name="sonar-analyzer-test-commons-2.27.0.5007.jar">
             <sha256 value="a5db65b46b6a7f4e1395c285ed1156b2c801c748cb9608654267bda29d4c6a1e" origin="Verified"/>
-         </artifact>
-      </component>
-      <component group="org.sonarsource.analyzer-commons" name="sonar-analyzer-test-commons" version="2.30.0.5193">
-         <artifact name="sonar-analyzer-test-commons-2.30.0.5193.jar">
-            <sha256 value="bb922e40a458981dafd2359a2c3d66b245e068898ca3adad71f569e0b96c0409" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.sonarsource.analyzer-commons" name="sonar-analyzer-test-commons" version="2.31.0.5284">
@@ -2999,11 +2979,6 @@
             <sha256 value="b3bbe9cfaf6811ecd0ab06ad0496f876b9f76248dc5376c1405c162d4db394b6" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.analyzer-commons" name="sonar-performance-measure" version="2.30.0.5193">
-         <artifact name="sonar-performance-measure-2.30.0.5193.jar">
-            <sha256 value="dab1d0d7b09add39e97a5fa4b7a9113e98f0a72ecdd09c3be2794eb1c33081d3" origin="Verified"/>
-         </artifact>
-      </component>
       <component group="org.sonarsource.analyzer-commons" name="sonar-performance-measure" version="2.31.0.5284">
          <artifact name="sonar-performance-measure-2.31.0.5284.jar">
             <sha256 value="b7335677a04d866d604a4afe8c158431dac4aa366c4ad4d38ad1f38fad3e5a36" origin="Verified"/>
@@ -3027,11 +3002,6 @@
             <sha256 value="553835a881027815b5d5d3cdb49aaa49fde498d98097308a41f48834545d8c8d" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.analyzer-commons" name="sonar-regex-parsing" version="2.30.0.5193">
-         <artifact name="sonar-regex-parsing-2.30.0.5193.jar">
-            <sha256 value="1d8de25d3f8686836a4debe7adfc3cf397d78c6a822e76f8d05229a8fe8f5c28" origin="Verified"/>
-         </artifact>
-      </component>
       <component group="org.sonarsource.analyzer-commons" name="sonar-regex-parsing" version="2.31.0.5284">
          <artifact name="sonar-regex-parsing-2.31.0.5284.jar">
             <sha256 value="1b9131b5babe7b7310934a54a41b9a8d3d173b997aa5ce25019c9977192d73be" origin="Verified"/>
@@ -3053,11 +3023,6 @@
       <component group="org.sonarsource.analyzer-commons" name="sonar-xml-parsing" version="2.27.0.5007">
          <artifact name="sonar-xml-parsing-2.27.0.5007.jar">
             <sha256 value="e67f3927987bc88b29ee4ca72d32714e9babce309fd4f38a27f988480967b65e" origin="Verified"/>
-         </artifact>
-      </component>
-      <component group="org.sonarsource.analyzer-commons" name="sonar-xml-parsing" version="2.30.0.5193">
-         <artifact name="sonar-xml-parsing-2.30.0.5193.jar">
-            <sha256 value="6d96b5d684d21e54cdb921f34115dbaa788d3d36c6308314416c7fdd6d1e0718" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.sonarsource.analyzer-commons" name="sonar-xml-parsing" version="2.31.0.5284">
