@@ -59,71 +59,78 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
         private const val MINIMAL_LITERAL_LENGTH = 5
         private val NO_SEPARATOR_REGEXP = Regex("\\w++")
         private val COMPOSE_PREVIEW_CLASS_ID = ClassId.fromString("androidx/compose/ui/tooling/preview/Preview")
-
-        private val LOGGING_CALL_MATCHERS = listOf(
-            loggingMatcher(
-                "org.slf4j.Logger",
-                "trace", "debug", "info", "warn", "error",
-            ),
-            FunMatcher(qualifier = "java.util.logging.Logger") {
-                withNames("severe", "warning", "info", "config", "fine", "finer", "finest", "log")
-            },
-            loggingMatcher(
-                "org.apache.logging.log4j.Logger",
-                "trace", "debug", "info", "warn", "error", "fatal", "log",
-            ),
-            loggingMatcher(
-                "io.github.oshai.kotlinlogging.KLogger",
-                "trace", "debug", "info", "warn", "error",
-            ),
-            loggingMatcher(
-                "mu.KLogger",
-                "trace", "debug", "info", "warn", "error",
-            ),
-            loggingMatcher(
-                "co.touchlab.kermit.Logger",
-                "v", "d", "i", "w", "e", "a",
-            ),
-            loggingMatcher(
-                "com.github.aakira.napier.Napier",
-                "v", "d", "i", "w", "e", "wtf",
-            ),
-            loggingMatcher("io.ktor.client.plugins.logging.Logger", "log"),
-            loggingMatcher(
-                "timber.log.Timber",
-                "v", "d", "i", "w", "e", "wtf",
-            ),
-            loggingMatcher(
-                "android.util.Log",
-                "v", "d", "i", "w", "e", "wtf", "println",
-            ),
-        )
-
-        private val KOTLIN_EXCEPTION_MESSAGE_CALLS = FunMatcher(qualifier = "kotlin") {
-            withNames("error", "require", "check")
-        }
-
-        private fun loggingMatcher(type: String, vararg names: String): FunMatcherImpl =
-            FunMatcher {
-                withDefiningSupertypes(type)
-                withNames(*names)
-            }
     }
-
-    private data class StringOccurrence(
-        val expression: KtStringTemplateExpression,
-        val triggersIssue: Boolean,
-    )
 
     private data class LiteralCandidate(
         val expression: KtStringTemplateExpression,
         val outermostConcatenation: KtExpression,
     )
 
-    private data class CallArgument(
-        val call: KtCallExpression,
-        val isDirectValueArgument: Boolean,
-    )
+    private object AdjacentStringConcatenationFilter {
+
+        /**
+         * Omits adjacent static fragments because they form one runtime string in a string concatenation.
+         * The outermost concatenation is retained for subsequent occurrence classification.
+         */
+        fun filter(candidates: List<KtStringTemplateExpression>): List<LiteralCandidate> {
+            val inspectedConcatenations: MutableSet<KtExpression> =
+                Collections.newSetFromMap(IdentityHashMap())
+            val adjacentLiteralFragments: MutableSet<KtStringTemplateExpression> =
+                Collections.newSetFromMap(IdentityHashMap())
+
+            return candidates.mapNotNull { expression ->
+                if (expression in adjacentLiteralFragments) return@mapNotNull null
+
+                val concatenation = expression.outermostConcatenation()
+                if (inspectedConcatenations.add(concatenation)) {
+                    concatenation.collectAdjacentLiteralFragments(adjacentLiteralFragments)
+                }
+                if (expression in adjacentLiteralFragments) null else LiteralCandidate(expression, concatenation)
+            }
+        }
+
+        private fun KtStringTemplateExpression.outermostConcatenation(): KtExpression {
+            var expression: KtExpression = this
+            while (expression.parent.isPlusExpression()) {
+                expression = expression.parent as KtBinaryExpression
+            }
+            return expression
+        }
+
+        private fun KtExpression.collectAdjacentLiteralFragments(
+            destination: MutableSet<KtStringTemplateExpression>,
+        ) {
+            val operands = flattenedPlusOperands()
+            for (index in 0 until operands.lastIndex) {
+                val left = operands[index] as? KtStringTemplateExpression
+                val right = operands[index + 1] as? KtStringTemplateExpression
+                if (left != null && right != null && !left.hasInterpolation() && !right.hasInterpolation()) {
+                    destination.add(left)
+                    destination.add(right)
+                }
+            }
+        }
+
+        private fun KtExpression.flattenedPlusOperands(): List<KtExpression> {
+            val operands = mutableListOf<KtExpression>()
+
+            fun collect(expression: KtExpression) {
+                if (expression.isPlusExpression()) {
+                    val binary = expression as KtBinaryExpression
+                    binary.left?.let { collect(it) }
+                    binary.right?.let { collect(it) }
+                } else {
+                    operands.add(expression)
+                }
+            }
+
+            collect(this)
+            return operands
+        }
+
+        private fun PsiElement?.isPlusExpression(): Boolean =
+            this is KtBinaryExpression && operationToken == KtTokens.PLUS
+    }
 
     @RuleProperty(
         key = "threshold",
@@ -136,40 +143,24 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
         context: KotlinFileContext,
         candidatesMap: Map<String, List<KtStringTemplateExpression>>,
     ) {
-        val inspectedConcatenations: MutableSet<KtExpression> =
-            Collections.newSetFromMap(IdentityHashMap())
-        val adjacentLiteralFragments: MutableSet<KtStringTemplateExpression> =
-            Collections.newSetFromMap(IdentityHashMap())
-
         for ((text, candidates) in candidatesMap) {
             if (candidates.size < threshold) continue
 
-            val relevantCandidates = candidates.mapNotNull { expression ->
-                if (expression in adjacentLiteralFragments) return@mapNotNull null
-
-                val concatenation = expression.outermostConcatenation()
-                if (inspectedConcatenations.add(concatenation)) {
-                    concatenation.collectAdjacentLiteralFragments(adjacentLiteralFragments)
-                }
-                if (expression in adjacentLiteralFragments) null else LiteralCandidate(expression, concatenation)
-            }
+            val relevantCandidates = AdjacentStringConcatenationFilter.filter(candidates)
             if (relevantCandidates.size < threshold) continue
 
-            val occurrences = relevantCandidates.map { candidate ->
-                StringOccurrence(
-                    candidate.expression,
-                    triggersIssue = !candidate.outermostConcatenation.isNonTriggeringOccurrence(),
-                )
+            val triggeringCandidates = relevantCandidates.filterNot { candidate ->
+                NonTriggeringOccurrenceClassifier.isNonTriggering(candidate.outermostConcatenation)
             }
-            val triggeringOccurrences = occurrences.filter { it.triggersIssue }
-            val first = triggeringOccurrences.firstOrNull()?.expression ?: continue
-            if (triggeringOccurrences.size < threshold) continue
+            if (triggeringCandidates.size < threshold) continue
+            val first = triggeringCandidates.firstOrNull()?.expression ?: continue
 
-            val size = occurrences.size
+            // Non-triggering occurrences do not cause an issue, but are included once one is reported.
+            val size = relevantCandidates.size
             context.reportIssue(
                 first,
                 """Define a constant instead of duplicating this literal "$text" $size times.""",
-                secondaryLocations = occurrences.asSequence()
+                secondaryLocations = relevantCandidates.asSequence()
                     .filterNot { it.expression === first }
                     .map { SecondaryLocation(context.textRange(it.expression), "Duplication") }
                     .toList(),
@@ -182,17 +173,11 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
         if (context.inputFileContext.isTestFile) return
 
         val occurrences = collectStringTemplates(file)
-            .mapNotNull { expression ->
-                val text = expression.asString()
-                if (text.length > MINIMAL_LITERAL_LENGTH && !NO_SEPARATOR_REGEXP.matches(text)) {
-                    text to expression
-                } else {
-                    null
-                }
-            }
+            .map { expression -> expression.asString() to expression }
+            .filter { (text) -> text.length > MINIMAL_LITERAL_LENGTH && !NO_SEPARATOR_REGEXP.matches(text) }
             .groupBy(
-                keySelector = { (text) -> text },
-                valueTransform = { (_, expression) -> expression },
+                keySelector = { it.first },
+                valueTransform = { it.second },
             )
         check(context, occurrences)
     }
@@ -202,6 +187,7 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
             node is KtStringTemplateExpression && !node.hasInterpolation() -> sequenceOf(node)
             node is KtAnnotationEntry -> emptySequence()
             node is KtCallExpression && node.isTodoCall() -> emptySequence()
+            // Preview functions contain design-time fixtures, rather than production string literals.
             node is KtNamedFunction && node.annotationEntries.isNotEmpty() && node.isComposePreview() -> emptySequence()
             else -> node.children.asSequence().flatMap { collectStringTemplates(it) }
         }
@@ -213,12 +199,70 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
     private fun KtCallExpression.isTodoCall(): Boolean =
         (calleeExpression as? KtNameReferenceExpression)?.getReferencedName() == "TODO"
 
-    private fun KtExpression.isNonTriggeringOccurrence(): Boolean = withKaSession {
-        val callArgument = containingCallArgument() ?: return false
+}
+
+private object NonTriggeringOccurrenceClassifier {
+
+    private val LOGGING_CALL_MATCHERS = listOf(
+        loggingMatcher(
+            "org.slf4j.Logger",
+            "trace", "debug", "info", "warn", "error",
+        ),
+        FunMatcher(qualifier = "java.util.logging.Logger") {
+            withNames("severe", "warning", "info", "config", "fine", "finer", "finest", "log")
+        },
+        loggingMatcher(
+            "org.apache.logging.log4j.Logger",
+            "trace", "debug", "info", "warn", "error", "fatal", "log",
+        ),
+        loggingMatcher(
+            "io.github.oshai.kotlinlogging.KLogger",
+            "trace", "debug", "info", "warn", "error",
+        ),
+        loggingMatcher(
+            "mu.KLogger",
+            "trace", "debug", "info", "warn", "error",
+        ),
+        loggingMatcher(
+            "co.touchlab.kermit.Logger",
+            "v", "d", "i", "w", "e", "a",
+        ),
+        loggingMatcher(
+            "com.github.aakira.napier.Napier",
+            "v", "d", "i", "w", "e", "wtf",
+        ),
+        loggingMatcher("io.ktor.client.plugins.logging.Logger", "log"),
+        loggingMatcher(
+            "timber.log.Timber",
+            "v", "d", "i", "w", "e", "wtf",
+        ),
+        loggingMatcher(
+            "android.util.Log",
+            "v", "d", "i", "w", "e", "wtf", "println",
+        ),
+    )
+
+    private val KOTLIN_EXCEPTION_MESSAGE_CALLS = FunMatcher(qualifier = "kotlin") {
+        withNames("error", "require", "check")
+    }
+
+    private data class CallArgument(
+        val call: KtCallExpression,
+        val isDirectValueArgument: Boolean,
+    )
+
+    /**
+     * Returns whether [expression] is a message for a thrown exception, recognized logging call,
+     * or Kotlin precondition. Such occurrences may be included in a reported duplication, but do
+     * not contribute toward its triggering threshold.
+     */
+    fun isNonTriggering(expression: KtExpression): Boolean = withKaSession {
+        val callArgument = expression.containingCallArgument() ?: return false
         val resolvedCall = callArgument.call.resolveToCall()?.successfulFunctionCallOrNull() ?: return false
         return (callArgument.isDirectValueArgument &&
             callArgument.call.directlyContainingExpression().parent is KtThrowExpression &&
             resolvedCall.symbol is KaConstructorSymbol) ||
+            // Logging and Kotlin precondition messages are intentionally allowed to be repeated.
             LOGGING_CALL_MATCHERS.any { it.matches(resolvedCall) } ||
             KOTLIN_EXCEPTION_MESSAGE_CALLS.matches(resolvedCall)
     }
@@ -230,33 +274,8 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
         val directCall = argumentList?.parent as? KtCallExpression
         if (directCall != null) return CallArgument(directCall, isDirectValueArgument = true)
 
-        val block = parent as? KtBlockExpression ?: return null
-        if (block.statements.lastOrNull() !== this) return null
-        val functionLiteral = block.parent as? KtFunctionLiteral ?: return null
-        val lambdaExpression = functionLiteral.parent as? KtLambdaExpression ?: return null
-        val lambdaArgument = lambdaExpression.parent as? KtLambdaArgument ?: return null
-        val lambdaCall = lambdaArgument.parent as? KtCallExpression ?: return null
+        val lambdaCall = isLastInLambdaCall() ?: return null
         return CallArgument(lambdaCall, isDirectValueArgument = false)
-    }
-
-    private fun KtStringTemplateExpression.outermostConcatenation(): KtExpression {
-        var expression: KtExpression = this
-        while (expression.parent.isPlusExpression()) {
-            expression = expression.parent as KtBinaryExpression
-        }
-        return expression
-    }
-
-    private fun KtExpression.collectAdjacentLiteralFragments(destination: MutableSet<KtStringTemplateExpression>) {
-        val operands = flattenedPlusOperands()
-        for (index in 0 until operands.lastIndex) {
-            val left = operands[index] as? KtStringTemplateExpression
-            val right = operands[index + 1] as? KtStringTemplateExpression
-            if (left != null && right != null && !left.hasInterpolation() && !right.hasInterpolation()) {
-                destination.add(left)
-                destination.add(right)
-            }
-        }
     }
 
     private fun KtCallExpression.directlyContainingExpression(): KtExpression =
@@ -264,23 +283,18 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
             ?.takeIf { it.selectorExpression === this }
             ?: this
 
-    private fun KtExpression.flattenedPlusOperands(): List<KtExpression> {
-        val operands = mutableListOf<KtExpression>()
-
-        fun collect(expression: KtExpression) {
-            if (expression.isPlusExpression()) {
-                val binary = expression as KtBinaryExpression
-                binary.left?.let { collect(it) }
-                binary.right?.let { collect(it) }
-            } else {
-                operands.add(expression)
-            }
-        }
-
-        collect(this)
-        return operands
+    /** Returns the enclosing call when this is the final expression of a trailing lambda argument. */
+    private fun KtExpression.isLastInLambdaCall(): KtCallExpression? {
+        val block = (parent as? KtBlockExpression)?.takeIf { it.statements.lastOrNull() === this } ?: return null
+        val functionLiteral = block.parent as? KtFunctionLiteral ?: return null
+        val lambdaExpression = functionLiteral.parent as? KtLambdaExpression ?: return null
+        val lambdaArgument = lambdaExpression.parent as? KtLambdaArgument ?: return null
+        return lambdaArgument.parent as? KtCallExpression
     }
 
-    private fun PsiElement?.isPlusExpression(): Boolean =
-        this is KtBinaryExpression && operationToken == KtTokens.PLUS
+    private fun loggingMatcher(type: String, vararg names: String): FunMatcherImpl =
+        FunMatcher {
+            withDefiningSupertypes(type)
+            withNames(*names)
+        }
 }
