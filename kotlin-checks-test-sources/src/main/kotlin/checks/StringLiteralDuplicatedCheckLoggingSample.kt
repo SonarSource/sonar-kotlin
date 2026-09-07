@@ -60,9 +60,14 @@ class StringLiteralDuplicatedCheckLoggingSample {
         ktorLogger.log("repeated Ktor logging message!")
         ktorLogger.log("repeated Ktor logging message!")
 
-        Timber.d("repeated Timber message!")
-        Timber.d("repeated Timber message!")
-        Timber.d("repeated Timber message!")
+        Timber.d("repeated Timber Forest message!")
+        Timber.d("repeated Timber Forest message!")
+        Timber.d("repeated Timber Forest message!")
+
+        val taggedTimber = Timber.tag("Timber tag")
+        taggedTimber.d("repeated Timber Tree message!")
+        taggedTimber.d("repeated Timber Tree message!")
+        taggedTimber.d("repeated Timber Tree message!")
 
         Log.d("repeated Android log tag!", "repeated Android log message!")
         Log.d("repeated Android log tag!", "repeated Android log message!")

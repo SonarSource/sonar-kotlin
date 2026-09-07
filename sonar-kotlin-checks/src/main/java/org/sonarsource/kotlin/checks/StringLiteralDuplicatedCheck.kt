@@ -239,6 +239,11 @@ private object NonTriggeringOccurrenceClassifier {
             "timber.log.Timber",
             "v", "d", "i", "w", "e", "wtf",
         ),
+        // Timber 5 declares log methods on Tree, which is extended by the Forest companion object.
+        loggingMatcher(
+            "timber.log.Timber.Tree",
+            "v", "d", "i", "w", "e", "wtf",
+        ),
         loggingMatcher(
             "android.util.Log",
             "v", "d", "i", "w", "e", "wtf", "println",
