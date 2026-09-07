@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -58,7 +57,7 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
         private const val DEFAULT_THRESHOLD = 3
         private const val MINIMAL_LITERAL_LENGTH = 5
         private val NO_SEPARATOR_REGEXP = Regex("\\w++")
-        private val COMPOSE_PREVIEW_CLASS_ID = ClassId.fromString("androidx/compose/ui/tooling/preview/Preview")
+        private const val PREVIEW_ANNOTATION_NAME = "Preview"
     }
 
     private data class LiteralCandidate(
@@ -187,14 +186,18 @@ class StringLiteralDuplicatedCheck : AbstractCheck() {
             node is KtStringTemplateExpression && !node.hasInterpolation() -> sequenceOf(node)
             node is KtAnnotationEntry -> emptySequence()
             node is KtCallExpression && node.isTodoCall() -> emptySequence()
-            // Preview functions contain design-time fixtures, rather than production string literals.
-            node is KtNamedFunction && node.annotationEntries.isNotEmpty() && node.isComposePreview() -> emptySequence()
+            node is KtNamedFunction && node.hasComposePreviewAnnotation() -> emptySequence()
             else -> node.children.asSequence().flatMap { collectStringTemplates(it) }
         }
 
-    private fun KtNamedFunction.isComposePreview(): Boolean = withKaSession {
-        symbol.annotations.any { it.classId == COMPOSE_PREVIEW_CLASS_ID }
-    }
+    /**
+     * Jetpack Compose Preview functions contain design-time fixtures, rather than production string literals.
+     * Reporting duplications in them has been a common source of user complaints.
+     * Match annotations by name rather than resolving class IDs because analysis may run without type information.
+     * Suppressing additional functions annotated with `Preview` that are not from Compose is an acceptable trade-off to reduce noise.
+     */
+    private fun KtNamedFunction.hasComposePreviewAnnotation(): Boolean =
+        annotationEntries.any { it.shortName?.asString() == PREVIEW_ANNOTATION_NAME }
 
     private fun KtCallExpression.isTodoCall(): Boolean =
         (calleeExpression as? KtNameReferenceExpression)?.getReferencedName() == "TODO"

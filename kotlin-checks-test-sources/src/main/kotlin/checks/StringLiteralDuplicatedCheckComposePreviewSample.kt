@@ -1,9 +1,6 @@
 package checks
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview as ComposePreview
-
-@ComposePreview
+@Preview
 fun directPreview(
     first: String = "preview default argument!",
     second: String = "preview default argument!",
@@ -32,14 +29,6 @@ fun ordinaryComposable() {
     println("ordinary composable remains in scope!")
 }
 
-@Preview
-fun unrelatedPreviewAnnotation() {
-    // Noncompliant@+1
-    println("unrelated Preview remains in scope!")
-    println("unrelated Preview remains in scope!")
-    println("unrelated Preview remains in scope!")
-}
-
 fun separatelyDeclaredPreviewHelper() {
     // Noncompliant@+1
     println("separate preview helper remains in scope!")
@@ -47,7 +36,7 @@ fun separatelyDeclaredPreviewHelper() {
     println("separate preview helper remains in scope!")
 }
 
-@ComposePreview
+@Preview
 fun previewUsingSeparateHelper() {
     separatelyDeclaredPreviewHelper()
 }
