@@ -16,4 +16,16 @@
  */
 package org.sonarsource.kotlin.checks
 
-class ClearTextProtocolCheckTest : CheckTest(ClearTextProtocolCheck())
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.testapi.KotlinVerifier
+
+class ClearTextProtocolCheckTest : CheckTest(ClearTextProtocolCheck()) {
+
+    @Test
+    fun `no issues are raised in test files`() {
+        KotlinVerifier(ClearTextProtocolCheck()) {
+            this.fileName = "ClearTextProtocolInTestFileSample.kt"
+            this.isTestFile = true
+        }.verifyNoIssue()
+    }
+}

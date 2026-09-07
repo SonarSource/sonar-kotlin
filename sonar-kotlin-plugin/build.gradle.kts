@@ -230,7 +230,20 @@ tasks.shadowJar {
 val distTask = tasks.register<ProGuardTask>("dist") {
     group = "build"
     description = "Assembles sonar-kotlin-plugin.jar for integration tests and publishing"
-    libraryjars("${System.getProperty("java.home")}/jmods/java.base.jmod")
+    // Give ProGuard every JDK module rather than a curated list. ProGuard rewrites stack map frames,
+    // and a type it cannot resolve is widened to java/lang/Object, which makes the class unverifiable
+    // (seen as VerifyError in woodstox' WstxEventReader.throwUnchecked); it also drops classes it
+    // cannot see as reachable. proguard.txt sets -dontwarn, so neither symptom is reported at build
+    // time, and a .jmod holds only its own module - java.desktop does not bring in java.datatransfer -
+    // so a hand-picked list silently rots as dependencies change.
+    val jdkModules = fileTree("${System.getProperty("java.home")}/jmods") { include("*.jmod") }
+    libraryjars(jdkModules)
+    doFirst {
+        check(!jdkModules.isEmpty) {
+            "No .jmod files under ${System.getProperty("java.home")}/jmods, so ProGuard would run with no " +
+                "JDK classpath and silently emit unverifiable bytecode. Build with a full JDK."
+        }
+    }
     injars(tasks.shadowJar.get().archiveFile)
     outjars("build/libs/sonar-kotlin-plugin.jar")
     configuration("proguard.txt")

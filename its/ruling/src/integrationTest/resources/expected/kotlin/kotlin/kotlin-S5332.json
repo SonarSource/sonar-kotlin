@@ -1,0 +1,16 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/buildSrc/src/main/kotlin/plugins/PublishedKotlinModule.kt": [
+55,
+67
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/configuration/ConfigureKotlinInProjectUtils.kt": [
+52,
+59
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/idl2k/src/main/kotlin/config.kt": [
+20
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-script-util/src/main/kotlin/org/jetbrains/kotlin/script/util/resolvers/maven.kt": [
+33
+]
+}

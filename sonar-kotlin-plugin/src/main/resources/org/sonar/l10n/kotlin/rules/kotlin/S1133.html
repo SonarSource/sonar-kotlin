@@ -5,4 +5,36 @@
 @Deprecated("") // Noncompliant
 class Example
 </pre>
+<h3>Exceptions</h3>
+<p>The following usages are not reported:</p>
+<ul>
+  <li><code>override</code> functions and properties. These implement an external API contract and cannot be removed unilaterally — the decision
+  belongs to the owner of the parent class or interface.
+    <pre>
+open class Base {
+    @Deprecated("Will be removed in the next major release")
+    open fun legacyMethod() {}
+}
+
+class Derived : Base() {
+    @Deprecated("Deprecated in parent class")
+    override fun legacyMethod() {} // Compliant - removal depends on the parent API
+}
+</pre></li>
+  <li><code>@Deprecated</code> with <code>level = DeprecationLevel.HIDDEN</code>. <code>HIDDEN</code> is Kotlin’s language-provided mechanism for
+  controlled, binary-compatible removal: the declaration is invisible to source-level callers but still present in compiled bytecode for existing
+  consumers. Raising a "do not forget to remove this" warning here would be redundant noise — the developer has already taken a more deliberate step
+  than a plain <code>@Deprecated</code>, and the removal process is explicitly underway.
+    <pre>
+@Deprecated("Hidden for binary compatibility", level = DeprecationLevel.HIDDEN)
+fun hiddenFunction() {} // Compliant
+</pre></li>
+  <li><code>@Deprecated</code> with <code>level = DeprecationLevel.ERROR</code>. <code>ERROR</code>-level deprecations are intentional compile-time
+  guards that prevent callers from using a declaration (for example, <code>DO NOT CALL</code> sentinels or deliberate overload-resolution blockers).
+  They are not legacy code awaiting cleanup — they are active API-design decisions, and removing them would change the public contract.
+    <pre>
+@Deprecated("DO NOT CALL - compile-time guard", level = DeprecationLevel.ERROR)
+fun errorGuard() {} // Compliant
+</pre></li>
+</ul>
 
