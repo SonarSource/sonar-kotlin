@@ -30,8 +30,14 @@ jobs:
         run: echo "GITHUB_JOB_ID=${{ job.check_run_id }}" >> $GITHUB_ENV
         shell: bash
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - &authenticate-git-clones
+        uses: ./.github/actions/authenticate-git-clones
+        with:
+          gh-token: ${{ github.token }}
       - &checkout-build-logic
         id: checkout-build-logic
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: git submodule update --init -- build-logic/common
       - &setup-mise
         uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
@@ -92,6 +98,7 @@ jobs:
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - *authenticate-git-clones
       - *checkout-build-logic
       - *setup-mise
       - id: secrets
