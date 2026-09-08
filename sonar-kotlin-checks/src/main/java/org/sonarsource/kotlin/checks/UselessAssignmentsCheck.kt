@@ -16,10 +16,16 @@
  */
 package org.sonarsource.kotlin.checks
 
+import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.analysis.api.diagnostics.KaSeverity
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors
+import org.jetbrains.kotlin.psi.KtDeclarationWithBody
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtPrefixExpression
+import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
@@ -29,7 +35,12 @@ import org.sonarsource.kotlin.api.visiting.withKaSession
 class UselessAssignmentsCheck : AbstractCheck() {
 
     override fun visitKtFile(file: KtFile, context: KotlinFileContext) {
-        context.kaDiagnostics
+        val diagnostics = context.kaDiagnostics.toList()
+        val declarationsWithErrors = diagnostics
+            .filter { it.severity == KaSeverity.ERROR }
+            .mapNotNullTo(mutableSetOf()) { containingDeclaration(it.psi) }
+
+        diagnostics
             .mapNotNull { diagnostic ->
                 when (diagnostic.factoryName) {
                     FirErrors.VARIABLE_INITIALIZER_IS_REDUNDANT.name ->
@@ -39,12 +50,24 @@ class UselessAssignmentsCheck : AbstractCheck() {
                         (diagnostic.psi as KtNamedDeclaration).identifyingElement!! to
                         "Remove this variable, which is assigned but never accessed."
 
-                    FirErrors.ASSIGNED_VALUE_IS_NEVER_READ.name -> withKaSession {
-                        diagnostic.psi.parent to "The value assigned here is never used."
-                    }
+                    FirErrors.ASSIGNED_VALUE_IS_NEVER_READ.name ->
+                        if (containingDeclaration(diagnostic.psi) in declarationsWithErrors) null
+                        else withKaSession { diagnostic.psi.parent to "The value assigned here is never used." }
 
                     else -> null
                 }
             }.forEach { (element, msg) -> context.reportIssue(element, msg) }
     }
+
+    private fun containingDeclaration(element: PsiElement): KtDeclarationWithBody? =
+        containingDeclarations(element).firstOrNull()
+
+    private fun containingDeclarations(element: PsiElement): Sequence<KtDeclarationWithBody> =
+        element.parentsWithSelf
+            .filterIsInstance<KtDeclarationWithBody>()
+            // Lambda and anonymous-function diagnostics belong to their enclosing named declaration.
+            .filter { declaration ->
+                declaration !is KtFunctionLiteral &&
+                    (declaration !is KtNamedFunction || declaration.name != null)
+            }
 }
