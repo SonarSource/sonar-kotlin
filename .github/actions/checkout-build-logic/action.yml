@@ -5,7 +5,13 @@ description: >
 
 inputs:
   gh-token:
-    description: Token used to authenticate git operations against github.com.
+    description: >
+      Token used to authenticate git operations against github.com. The only scope needed is
+      `contents: read` on the submodule's repository, so the job's own GITHUB_TOKEN with the
+      workflow-default permissions is enough - every call site passes github.token.
+      build-logic/common is a public repository: the token is not what grants access, it only
+      makes the request non-anonymous, which is what lifts the rate limit. A token with wider
+      scopes works but buys nothing.
     required: true
   depth:
     description: Depth of the submodule clone. Leave empty to clone the full history.
@@ -21,8 +27,13 @@ runs:
         DEPTH: ${{ inputs.depth }}
       run: |
         set -euo pipefail
-        # Positional params rather than an array: expanding an empty array under `set -u` is an
-        # error in bash < 4.4, whereas "$@" is safe everywhere.
+        # `set -- ARGS` reassigns this shell's positional parameters ($1, $2, ...); the git
+        # command below expands them as "$@", which is how the optional `--depth N` gets
+        # threaded into it. Bare `set --` clears them, i.e. the full-history case contributes
+        # no arguments at all.
+        #
+        # Positional params rather than an array because expanding an empty array under `set -u`
+        # is an error in bash < 4.4, whereas "$@" is safe everywhere.
         set --
         if [[ -n "$DEPTH" ]]; then
           set -- --depth "$DEPTH"
