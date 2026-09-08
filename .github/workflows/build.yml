@@ -38,7 +38,6 @@ jobs:
         uses: ./.github/actions/checkout-build-logic
         with:
           gh-token: ${{ github.token }}
-          depth: ''
       - &setup-mise
         uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
         with:
