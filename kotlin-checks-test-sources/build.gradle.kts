@@ -20,6 +20,16 @@ dependencies {
     implementation("com.google.guava:guava:30.1.1-jre")
     implementation("org.apache.commons:commons-lang3:3.17.0")
     implementation("commons-lang:commons-lang:2.6")
+    implementation("org.slf4j:slf4j-api:2.0.18")
+    implementation("org.apache.logging.log4j:log4j-api:2.26.1") {
+        isTransitive = false
+    }
+    implementation("io.github.oshai:kotlin-logging-jvm:8.0.4") {
+        isTransitive = false
+    }
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5") {
+        isTransitive = false
+    }
 }
 
 sonarqube.isSkipProject = true
