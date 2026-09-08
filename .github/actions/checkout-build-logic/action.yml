@@ -1,0 +1,47 @@
+name: Checkout build logic
+description: >
+  Fetch the build-logic/common submodule with authenticated requests, so the clone is not
+  subject to GitHub's anonymous rate limits.
+
+inputs:
+  gh-token:
+    description: Token used to authenticate git operations against github.com.
+    required: true
+  depth:
+    description: Depth of the submodule clone. Leave empty to clone the full history.
+    required: false
+    default: '1'
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.gh-token }}
+        DEPTH: ${{ inputs.depth }}
+      run: |
+        set -euo pipefail
+        # Positional params rather than an array: expanding an empty array under `set -u` is an
+        # error in bash < 4.4, whereas "$@" is safe everywhere.
+        set --
+        if [[ -n "$DEPTH" ]]; then
+          set -- --depth "$DEPTH"
+        fi
+        # The credential settings are passed with `-c` rather than written to the git config:
+        # git forwards them to the subprocess that clones the submodule, but they are gone once
+        # this step ends, so later steps keep using the credentials `actions/checkout` persisted.
+        # The helper reads GH_TOKEN at call time, keeping the token out of the config and argv.
+        #
+        # Both settings are scoped to github.com, so the token is never offered to another host
+        # this command happens to reach. The empty `credential.helper` first resets the helper
+        # list, dropping any helper that comes from the system or global config - notably the
+        # `manager` helper that Git for Windows installs, which would otherwise be asked first.
+        #
+        # `proactiveAuth` authenticates on the first request instead of waiting for a 401. GitHub
+        # throttles anonymous requests without issuing an auth challenge, so lazy authentication
+        # never kicks in and the clone fails instead of being retried with credentials.
+        git \
+          -c credential.helper= \
+          -c 'credential.https://github.com.helper=!f() { if test "$1" = get; then echo username=x-access-token; echo "password=$GH_TOKEN"; fi; }; f' \
+          -c http.https://github.com/.proactiveAuth=auto \
+          submodule update --init "$@" -- build-logic/common
