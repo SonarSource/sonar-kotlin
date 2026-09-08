@@ -32,11 +32,16 @@ runs:
         # this step ends, so later steps keep using the credentials `actions/checkout` persisted.
         # The helper reads GH_TOKEN at call time, keeping the token out of the config and argv.
         #
+        # Both settings are scoped to github.com, so the token is never offered to another host
+        # this command happens to reach. The empty `credential.helper` first resets the helper
+        # list, dropping any helper that comes from the system or global config - notably the
+        # `manager` helper that Git for Windows installs, which would otherwise be asked first.
+        #
         # `proactiveAuth` authenticates on the first request instead of waiting for a 401. GitHub
         # throttles anonymous requests without issuing an auth challenge, so lazy authentication
         # never kicks in and the clone fails instead of being retried with credentials.
         git \
           -c credential.helper= \
-          -c 'credential.helper=!f() { if test "$1" = get; then echo username=x-access-token; echo "password=$GH_TOKEN"; fi; }; f' \
-          -c http.proactiveAuth=auto \
+          -c 'credential.https://github.com.helper=!f() { if test "$1" = get; then echo username=x-access-token; echo "password=$GH_TOKEN"; fi; }; f' \
+          -c http.https://github.com/.proactiveAuth=auto \
           submodule update --init "$@" -- build-logic/common
