@@ -16,4 +16,23 @@
  */
 package org.sonarsource.kotlin.checks
 
-internal class UselessAssignmentsCheckTest : CheckTest(UselessAssignmentsCheck())
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.api.checks.AbstractCheck
+import org.sonarsource.kotlin.testapi.KotlinVerifier
+
+internal class UselessAssignmentsCheckTest : CheckTest(UselessAssignmentsCheck()) {
+
+    // The sample covers declarations containing compilation errors. An unreliable
+    // ASSIGNED_VALUE_IS_NEVER_READ diagnostic is suppressed when the assignment's nearest
+    // enclosing declaration with a body is one of those erroneous declarations. Assignments inside
+    // lambdas belong to their enclosing declaration. Other S6615 diagnostics remain enabled.
+    @Test
+    fun `with partial semantics`() {
+        verifier(check, "${checkName}SamplePartialSemantics.kt").verify()
+    }
+
+    private fun verifier(check: AbstractCheck, fileName: String) = KotlinVerifier(check) {
+        this.fileName = fileName
+        baseDir = NON_COMPILING_BASE_DIR
+    }
+}
