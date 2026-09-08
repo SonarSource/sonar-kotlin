@@ -21,6 +21,9 @@ jobs:
   build:
     runs-on: github-ubuntu-latest-s
     timeout-minutes: 30
+    permissions:
+      id-token: write  # Required for Vault OIDC authentication
+      contents: write  # Required by get-build-number to claim refs/build-number/*
     outputs:
       project-version: ${{ steps.project-version.outputs.project-version }}
     steps:
@@ -31,8 +34,11 @@ jobs:
         shell: bash
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - &checkout-build-logic
-        id: checkout-build-logic
-        run: git submodule update --init -- build-logic/common
+        name: Checkout build logic
+        uses: ./.github/actions/checkout-build-logic
+        with:
+          gh-token: ${{ github.token }}
+          depth: ''
       - &setup-mise
         uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
         with:
@@ -51,7 +57,7 @@ jobs:
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer username | ARTIFACTORY_DEPLOY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer access_token | ARTIFACTORY_DEPLOY_PASSWORD;
       - id: build-number
-        uses: SonarSource/ci-github-actions/get-build-number@v1
+        uses: SonarSource/ci-github-actions/get-build-number@v2
       - run: |
           ./gradlew \
               build \
@@ -252,7 +258,7 @@ jobs:
           fi
         env:
           NEEDS: ${{ toJSON(needs) }}
-      - uses: SonarSource/ci-github-actions/promote@v1
+      - uses: SonarSource/ci-github-actions/promote@v2
 
   notify_slack:
     name: Notify Slack on Failure
