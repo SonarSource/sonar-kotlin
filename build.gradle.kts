@@ -7,7 +7,7 @@ plugins {
     java
     id("jacoco")
     id("com.jfrog.artifactory") version "5.2.5"
-    id("org.sonarqube") version "7.3.1.8318"
+    id("org.sonarqube") version "7.5.0.8588"
     id("org.jetbrains.kotlin.jvm") apply false
     id("com.diffplug.spotless") version "6.25.0"
     `maven-publish`
