@@ -57,7 +57,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Ruling test running the analyzer through the sonar-scanner-integration-tester (SIT) instead of the orchestrator:
  * the scanner engine runs in-process against a mock server, so no SonarQube server and no license are needed.
  * Issues are read directly off the in-process scanner report and diffed here in Java against the golden files
- * under {@code src/integrationTest/resources/expected}, rather than routing through the sonar-lits-plugin.
+ * under {@code src/test/resources/expected}, rather than routing through the sonar-lits-plugin.
  * <p>
  * {@code test_kotlin_language_server} is not ported here: it needs a real Gradle build to supply the Java
  * classpath and its golden files are project-dir-relative. It stays on the orchestrator in {@code :its:sq-integration}.
@@ -71,7 +71,7 @@ class KotlinRulingTest {
   /** Analyses run against {@code its/}: golden component keys are {@code <projectKey>:sources/kotlin/<corpus>/...}. */
   private static final Path BASE_DIRECTORY = new File("..").toPath().toAbsolutePath().normalize();
 
-  private static final Path EXPECTED_ROOT = new File("src/integrationTest/resources/expected/kotlin").toPath();
+  private static final Path EXPECTED_ROOT = new File("src/test/resources/expected/kotlin").toPath();
 
   private static final Path ACTUAL_ROOT = new File("build/reports/ruling").toPath();
 
@@ -280,18 +280,12 @@ class KotlinRulingTest {
   }
 
   /**
-   * Golden files are named {@code <repoKey>-<rule>.json} (e.g. {@code kotlin-S100.json}). Decoding by stripping
-   * the known, fixed {@code "kotlin-"} prefix - rather than splitting on the first '-' - keeps the round-trip
-   * correct even if a rule id itself ever contained a dash; the ruling module only ever activates rules under
-   * the single, fixed "kotlin" repository key.
+   * Golden files are named {@code <ruleId>.json} (e.g. {@code S100.json}), stored under
+   * {@code src/test/resources/expected/<language>/<project>/}.
    */
   private static String ruleKeyFromFileName(String fileName) {
-    var base = fileName.substring(0, fileName.length() - ".json".length());
-    var prefix = REPO_KEY + "-";
-    if (!base.startsWith(prefix)) {
-      throw new IllegalStateException("Expected file name '" + fileName + "' does not start with '" + prefix + "'");
-    }
-    return REPO_KEY + ":" + base.substring(prefix.length());
+    var ruleId = fileName.substring(0, fileName.length() - ".json".length());
+    return REPO_KEY + ":" + ruleId;
   }
 
   private static String fileNameFromRuleKey(String ruleKey) {
@@ -299,7 +293,7 @@ class KotlinRulingTest {
     if (!ruleKey.startsWith(prefix)) {
       throw new IllegalStateException("Expected rule key '" + ruleKey + "' does not start with '" + prefix + "'");
     }
-    return REPO_KEY + "-" + ruleKey.substring(prefix.length()) + ".json";
+    return ruleKey.substring(prefix.length()) + ".json";
   }
 
   /**
