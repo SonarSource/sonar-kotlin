@@ -2,8 +2,27 @@
 <p>Duplicated string literals make the process of refactoring complex and error-prone, as any change would need to be propagated on all
 occurrences.</p>
 <h3>Exceptions</h3>
-<p>To prevent generating some false-positives, literals having 5 or less characters are excluded as well as literals containing only letters, digits
-and '_'.</p>
+<p>To reduce noise, the rule ignores:</p>
+<ul>
+  <li>String literals of five characters or fewer</li>
+  <li>String literals containing only letters, digits, or <code>_</code></li>
+  <li>String literals in annotations</li>
+  <li>Interpolated strings</li>
+  <li>String literals passed to Kotlin’s <code>TODO</code> function</li>
+  <li>Adjacent literal fragments in string concatenations</li>
+  <li>String literals in test files</li>
+  <li>String literals inside functions directly annotated with a Compose <code>@Preview</code> annotation (Jetpack Compose’s
+  <code>androidx.compose.ui.tooling.preview.Preview</code> or Compose Multiplatform’s <code>org.jetbrains.compose.ui.tooling.preview.Preview</code>).
+  This includes default arguments and local declarations. Helpers declared outside the function remain in scope</li>
+</ul>
+<p>Repeated literals in these contexts do not raise an issue on their own and are not counted towards the threshold:</p>
+<ul>
+  <li>Calls to recognized logging APIs: Android <code>Log</code>, Java Util Logging, Kermit, Kotlin Logging, Ktor Client Logging, Log4j 2, Napier,
+  SLF4J, and Timber</li>
+  <li>Arguments of exception constructors directly used in <code>throw</code> expressions</li>
+  <li>Calls to Kotlin’s <code>error</code>, <code>require</code>, and <code>check</code> functions</li>
+</ul>
+<p>If the same literal is duplicated enough times elsewhere, these occurrences are also reported as secondary locations.</p>
 <h2>How to fix it</h2>
 <p>Use constants to replace the duplicated string literals. Constants can be referenced from many places, but only need to be updated in a single
 place.</p>
@@ -11,6 +30,10 @@ place.</p>
 <h4>Noncompliant code example</h4>
 <p>With the default threshold of 3:</p>
 <pre data-diff-id="1" data-diff-type="noncompliant">
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+
 class A {
     fun run() {
         prepare("string literal")    // Noncompliant - "string literal" is duplicated 3 times
@@ -19,14 +42,26 @@ class A {
     }
 
     fun method() {
-        println("'")                 // Compliant - literal "'" has less than 5 characters and is excluded
+        println("'")                 // Compliant - literals of five characters or fewer are excluded
         println("'")
         println("'")
     }
 }
+
+@Preview
+@Composable
+fun preview() {
+    Text("preview placeholder")  // Compliant - literals inside directly annotated Compose previews are excluded
+    Text("preview placeholder")
+    Text("preview placeholder")
+}
 </pre>
 <h4>Compliant solution</h4>
 <pre data-diff-id="1" data-diff-type="compliant">
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+
 class A {
     companion object {
         const val CONSTANT = "string literal"
@@ -37,6 +72,20 @@ class A {
         execute(CONSTANT)
         release(CONSTANT)
     }
+
+    fun method() {
+        println("'")                 // Compliant - literals of five characters or fewer are excluded
+        println("'")
+        println("'")
+    }
+}
+
+@Preview
+@Composable
+fun preview() {
+    Text("preview placeholder")  // Compliant - literals inside directly annotated Compose previews are excluded
+    Text("preview placeholder")
+    Text("preview placeholder")
 }
 </pre>
 
