@@ -29,6 +29,6 @@ class UnusedLocalVariableCheckTest : CheckTestWithNoSemantics(UnusedLocalVariabl
             this.fileName = "${checkName}SamplePartialSemantics.kt"
             this.classpath = DEFAULT_KOTLIN_CLASSPATH + System.getProperty("java.class.path").split(File.pathSeparatorChar)
             this.deps = emptyList()
-        }.verifyNoIssue()
+        }.verify()
     }
 }
