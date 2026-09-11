@@ -80,7 +80,7 @@ jobs:
       rule-metadata-pr-labels: "skip-pvf"
       slack-channel: "squad-security-cloud-notifs"
       create-sli-ticket: true
-      sqs-ticket-edition: "Community Build"
+      sqs-ticket-edition: "Community Build & Server"
       sqs-sqc-ticket-team: "f1da89c9-3712-4d15-b194-a4b24406e3e4"
       runner-environment: sonar-xs
       release-process: "https://xtranet-sonarsource.atlassian.net/wiki/x/RADLAQE"
