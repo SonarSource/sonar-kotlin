@@ -1,49 +1,6 @@
 {
-"kotlin-kotlin-project:sources/kotlin/kotlin/build-common/test/org/jetbrains/kotlin/incremental/testingUtils/incrementalModificationUtils.kt": [
-95
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/buildSrc/src/main/kotlin/pill/render.kt": [
-30
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/android-tests/src/org/jetbrains/kotlin/android/tests/CodegenTestsOnAndroidRunner.kt": [
 170
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/cli/cli-common/src/org/jetbrains/kotlin/cli/common/arguments/InternalCompilerArgument.kt": [
-64
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/KotlinCompileDaemon.kt": [
-143
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend.java/src/org/jetbrains/kotlin/resolve/jvm/platform/JvmDefaultSuperCallChecker.kt": [
-24
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/constants/evaluate/ConstantExpressionEvaluator.kt": [
-618,
-640,
-653
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/codegen/ExpressionCodegen.kt": [
-113,
-521
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/test/MockLibraryUtil.kt": [
-115
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/core/descriptors.runtime/src/kotlin/reflect/jvm/internal/structure/ReflectJavaMember.kt": [
-93,
-94
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/CompletionSession.kt": [
-330
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/configuration/ModuleSourceRootMap.kt": [
-39
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/editor/BatchTemplateRunner.kt": [
-57
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/inspections/conventionNameCalls/ReplaceCallWithBinaryOperatorInspection.kt": [
-56
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/kotlin-jsr223-daemon-local-eval-example/src/test/kotlin/org/jetbrains/kotlin/script/jsr223/KotlinJsr223ScriptEngineIT.kt": [
 145,
@@ -53,85 +10,34 @@
 221,
 224
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/scripting/common/src/kotlin/script/experimental/api/scriptingEnvironment.kt": [
-36
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/runtime/arrayUtils.kt": [
 54,
 64
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/binary-compatibility-validator/src/main/kotlin/org.jetbrains.kotlin.tools/kotlinMetadataVisibilities.kt": [
-47
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidDaggerProject/app/src/main/java/com/example/dagger/kotlin/UseRJavaActivity.kt": [
-7
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/AndroidJackProject/Android/src/androidTest/java/org/jetbrains/kotlin/gradle/InternalDummyApplicationTest.kt": [
-28
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/classpathTest/src/main/kotlin/helloWorld.kt": [
-10,
-11,
 12,
 13,
 14
 ],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/multiplatformAndroidProject/libJvm/src/main/kotlin/javaLibUse.kt": [
-6
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/multiplatformMultipleCommonModules/libJvm/src/main/kotlin/javaLibUse.kt": [
-6
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/multiplatformProject/libJvm/src/main/kotlin/javaLibUse.kt": [
-6
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/multiprojectClassPathTest/subproject/src/main/kotlin/helloWorld.kt": [
-10,
-11,
 12,
 13,
 14
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/pluginsDsl/applyToSubprojects/subproject/src/main/kotlin/helloWorld.kt": [
-10,
-11,
 12,
 13,
 14
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/plugin/KotlinMultiplatformPlugin.kt": [
-163
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/plugin/KotlinPlugin.kt": [
-104,
-191,
-194,
-199,
-221
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/tasks/Tasks.kt": [
 525
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-classpath/src/main/kotlin/org/jetbrains/HelloWorld.kt": [
-10,
-11,
 12,
 13,
 14
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-stdlib-gen/src/templates/Ranges.kt": [
 116
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-stdlib-gen/src/templates/dsl/Templates.kt": [
-212
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlinp/src/org/jetbrains/kotlin/kotlinp/printers.kt": [
-504
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/plugins/kapt3/kapt3-idea/src/org/jetbrains/kotlin/kapt/idea/KaptProjectResolverExtension.kt": [
-194
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/ultimate/src/org/jetbrains/kotlin/idea/spring/generate/generateDependenciesUtils.kt": [
-195
 ]
 }
