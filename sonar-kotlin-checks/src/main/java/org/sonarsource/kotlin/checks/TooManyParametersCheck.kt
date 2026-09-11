@@ -47,7 +47,8 @@ class TooManyParametersCheck : AbstractCheck() {
         "PutMapping",
         "DeleteMapping",
         "PatchMapping",
-        "JsonCreator")
+        "JsonCreator",
+        "Composable")
 
     override fun visitNamedFunction(function: KtNamedFunction, kotlinFileContext: KotlinFileContext) {
         if (function.valueParameters.size > max
