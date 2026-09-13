@@ -34,7 +34,7 @@ dependencyResolutionManagement {
         val kotlinVersion: String by extra
         val analyzerCommonsVersionStr = "2.32.0.5319"
         val sonarPluginApi = "13.4.2.4284"
-        val slf4jApi = "1.7.36"
+        val slf4jApi = "2.0.19"
 
         create("libs") {
             val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
@@ -109,7 +109,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.gradle.develocity") version("3.19.2")
+    id("com.gradle.develocity") version("4.5.0")
 }
 
 val isCI: Boolean = System.getenv("CI") != null
