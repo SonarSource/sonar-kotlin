@@ -7,7 +7,7 @@ import java.util.Date
 import java.util.jar.JarInputStream
 
 plugins {
-    id("com.gradleup.shadow") version "8.3.11"
+    id("com.gradleup.shadow") version "9.6.1"
     kotlin("jvm")
     id("jacoco-report-aggregation")
     id("org.sonarsource.cloud-native.license-file-generator")
