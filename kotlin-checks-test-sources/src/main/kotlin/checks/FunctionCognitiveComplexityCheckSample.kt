@@ -1,6 +1,7 @@
 package checks
 
 class FunctionCognitiveComplexityCheckSample {
+    annotation class Composable
 
     val x: Boolean = false
     val y: Boolean = false
@@ -155,6 +156,42 @@ class FunctionCognitiveComplexityCheckSample {
         fun() {
             x && y || x && y || x && y
         }
+    }
+
+    @Composable
+    fun composableCompliant() { // Compliant - @Composable threshold is 45; complexity is 5 which exceeds the regular threshold of 4 but not the composable one
+        if (x) { // +1
+            if (y) { // +2
+                println()
+            }
+            if (z) { // +2
+                println()
+            }
+        }
+    }
+
+    @Composable
+    fun composableNoncompliant() { // Noncompliant {{Refactor this method to reduce its Cognitive Complexity from 46 to the 45 allowed.}} [[effortToFix=1]]
+        if (x) { // +1
+            if (x) { // +2
+                if (x) { // +3
+                    if (x) { // +4
+                        if (x) { // +5
+                            if (x) { // +6
+                                if (x) { // +7
+                                    if (x) { // +8
+                                        if (x) { // +9
+                                            println()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (x) println() // +1
     }
 
 }
