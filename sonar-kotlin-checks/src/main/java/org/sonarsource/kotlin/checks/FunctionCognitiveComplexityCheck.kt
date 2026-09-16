@@ -29,6 +29,7 @@ import java.util.stream.Collectors
 class FunctionCognitiveComplexityCheck : AbstractCheck() {
     companion object {
         private const val DEFAULT_THRESHOLD = 15
+        private const val COMPOSABLE_THRESHOLD = 45
     }
 
     @RuleProperty(key = "threshold",
@@ -38,16 +39,17 @@ class FunctionCognitiveComplexityCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext) {
         val nameIdentifier = function.nameIdentifier ?: return
+        val effectiveThreshold = if (function.annotationEntries.any { it.shortName?.asString() == "Composable" }) COMPOSABLE_THRESHOLD else threshold
         val complexity = CognitiveComplexity(function)
         val value = complexity.value()
-        if (value > threshold) {
+        if (value > effectiveThreshold) {
             context.reportIssue(
                 nameIdentifier,
-                "Refactor this method to reduce its Cognitive Complexity from $value to the $threshold allowed.",
+                "Refactor this method to reduce its Cognitive Complexity from $value to the $effectiveThreshold allowed.",
                 secondaryLocations = complexity.increments().stream()
                     .map { increment: CognitiveComplexity.Increment -> secondaryLocation(increment, context) }
                     .collect(Collectors.toList()),
-                gap = value.toDouble() - threshold,
+                gap = value.toDouble() - effectiveThreshold,
             )
         }
     }
