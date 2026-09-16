@@ -39,7 +39,7 @@ class FunctionCognitiveComplexityCheck : AbstractCheck() {
 
     override fun visitNamedFunction(function: KtNamedFunction, context: KotlinFileContext) {
         val nameIdentifier = function.nameIdentifier ?: return
-        val effectiveThreshold = if (function.annotationEntries.any { it.shortName?.asString() == "Composable" }) COMPOSABLE_THRESHOLD else threshold
+        val effectiveThreshold = if (function.annotationEntries.any { it.shortName?.asString() == "Composable" }) maxOf(threshold, COMPOSABLE_THRESHOLD) else threshold
         val complexity = CognitiveComplexity(function)
         val value = complexity.value()
         if (value > effectiveThreshold) {
