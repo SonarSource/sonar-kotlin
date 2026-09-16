@@ -71,7 +71,7 @@ class KotlinRulingTest {
   /** Analyses run against {@code its/}: golden component keys are {@code <projectKey>:sources/kotlin/<corpus>/...}. */
   private static final Path BASE_DIRECTORY = new File("..").toPath().toAbsolutePath().normalize();
 
-  private static final Path EXPECTED_ROOT = new File("src/test/resources/expected/kotlin").toPath();
+  private static final Path EXPECTED_ROOT = new File("src/test/resources/expected").toPath();
 
   private static final Path ACTUAL_ROOT = new File("build/reports/ruling").toPath();
 
@@ -198,7 +198,7 @@ class KotlinRulingTest {
     assertThat(result.exitCode()).describedAs("Scanner should succeed. Errors:%s", errorLogs).isZero();
 
     var actualIssuesByRule = groupActualIssues(projectKey, result.scannerOutputReader().getProject().getAllIssues());
-    var expectedIssuesByRule = REPORT_ALL ? Map.<String, SortedMap<String, List<Integer>>>of() : loadExpectedIssuesByRule(projectName);
+    var expectedIssuesByRule = REPORT_ALL ? Map.<String, SortedMap<String, List<Integer>>>of() : loadExpectedIssuesByRule(projectKey);
 
     var ruleKeys = new TreeSet<>(actualIssuesByRule.keySet());
     ruleKeys.addAll(expectedIssuesByRule.keySet());
@@ -206,7 +206,7 @@ class KotlinRulingTest {
     // Dump every rule that has a golden file, not just the ones that still fire: a rule that used to report
     // issues but now reports zero must still overwrite its golden file with an empty one when copied over,
     // otherwise the stale golden file keeps reporting "missing" forever.
-    dumpActualIssues(projectName, ruleKeys, actualIssuesByRule);
+    dumpActualIssues(projectKey, ruleKeys, actualIssuesByRule);
 
     var differences = new ArrayList<String>();
     for (var ruleKey : ruleKeys) {
@@ -241,9 +241,9 @@ class KotlinRulingTest {
     return byRule;
   }
 
-  private static Map<String, SortedMap<String, List<Integer>>> loadExpectedIssuesByRule(String projectName) throws IOException {
+  private static Map<String, SortedMap<String, List<Integer>>> loadExpectedIssuesByRule(String projectKey) throws IOException {
     Map<String, SortedMap<String, List<Integer>>> byRule = new TreeMap<>();
-    Path expectedDir = EXPECTED_ROOT.resolve(projectName);
+    Path expectedDir = EXPECTED_ROOT.resolve(projectKey);
     try (var files = Files.list(expectedDir)) {
       for (var file : files.sorted().toList()) {
         byRule.put(ruleKeyFromFileName(file.getFileName().toString()), readIssuesFile(file));
@@ -264,8 +264,8 @@ class KotlinRulingTest {
     return byComponent;
   }
 
-  private static void dumpActualIssues(String projectName, Set<String> ruleKeys, Map<String, SortedMap<String, List<Integer>>> actualIssuesByRule) throws IOException {
-    Path actualDir = ACTUAL_ROOT.resolve(projectName);
+  private static void dumpActualIssues(String projectKey, Set<String> ruleKeys, Map<String, SortedMap<String, List<Integer>>> actualIssuesByRule) throws IOException {
+    Path actualDir = ACTUAL_ROOT.resolve(projectKey);
     Files.createDirectories(actualDir);
     for (var ruleKey : ruleKeys) {
       var byComponent = actualIssuesByRule.getOrDefault(ruleKey, Collections.emptySortedMap());
@@ -280,20 +280,16 @@ class KotlinRulingTest {
   }
 
   /**
-   * Golden files are named {@code <ruleId>.json} (e.g. {@code S100.json}), stored under
-   * {@code src/test/resources/expected/<language>/<project>/}.
+   * Golden files are named {@code <language>-<ruleId>.json} (e.g. {@code kotlin-S100.json}), stored under
+   * {@code src/test/resources/expected/<project-key>/}.
    */
   private static String ruleKeyFromFileName(String fileName) {
     var ruleId = fileName.substring(0, fileName.length() - ".json".length());
-    return REPO_KEY + ":" + ruleId;
+    return ruleId.replace('-', ':');
   }
 
   private static String fileNameFromRuleKey(String ruleKey) {
-    var prefix = REPO_KEY + ":";
-    if (!ruleKey.startsWith(prefix)) {
-      throw new IllegalStateException("Expected rule key '" + ruleKey + "' does not start with '" + prefix + "'");
-    }
-    return ruleKey.substring(prefix.length()) + ".json";
+    return ruleKey.replace(':', '-') + ".json";
   }
 
   /**
