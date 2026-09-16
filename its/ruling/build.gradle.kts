@@ -25,6 +25,9 @@ integrationTest {
 
 tasks.integrationTest {
     dependsOn(":sonar-kotlin-plugin:dist")
+    inputs.dir("src/test/resources/expected")
+        .withPropertyName("rulingExpectations")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
     listOf("reportAll")
         .associateWith { System.getProperty(it) }
         .filter { it.value != null }

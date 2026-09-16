@@ -245,7 +245,7 @@ class KotlinRulingTest {
     Map<String, SortedMap<String, List<Integer>>> byRule = new TreeMap<>();
     Path expectedDir = EXPECTED_ROOT.resolve(projectKey);
     try (var files = Files.list(expectedDir)) {
-      for (var file : files.sorted().toList()) {
+      for (var file : files.filter(f -> f.toString().endsWith(".json")).sorted().toList()) {
         byRule.put(ruleKeyFromFileName(file.getFileName().toString()), readIssuesFile(file));
       }
     }
