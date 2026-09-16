@@ -16,4 +16,16 @@
  */
 package org.sonarsource.kotlin.checks
 
-class FunctionCognitiveComplexityCheckTest : CheckTest(FunctionCognitiveComplexityCheck().apply { threshold = 4 })
+import org.junit.jupiter.api.Test
+import org.sonarsource.kotlin.testapi.KotlinVerifier
+
+class FunctionCognitiveComplexityCheckTest : CheckTest(FunctionCognitiveComplexityCheck().apply { threshold = 4 }) {
+
+    @Test
+    fun `configured threshold above composable threshold takes precedence`() {
+        KotlinVerifier(FunctionCognitiveComplexityCheck().apply { threshold = 50 }) {
+            fileName = "FunctionCognitiveComplexityCheckHighThresholdSample.kt"
+        }.verifyNoIssue()
+    }
+
+}
