@@ -25,6 +25,12 @@ integrationTest {
 
 tasks.integrationTest {
     dependsOn(":sonar-kotlin-plugin:dist")
+    inputs.files(project(":sonar-kotlin-plugin").file("build/libs/sonar-kotlin-plugin.jar"))
+        .withPropertyName("analyzerUnderTest")
+        .withNormalizer(ClasspathNormalizer::class)
+    inputs.dir("src/test/resources/expected")
+        .withPropertyName("rulingExpectations")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
     listOf("reportAll")
         .associateWith { System.getProperty(it) }
         .filter { it.value != null }

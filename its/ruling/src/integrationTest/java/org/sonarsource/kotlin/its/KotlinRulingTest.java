@@ -57,7 +57,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Ruling test running the analyzer through the sonar-scanner-integration-tester (SIT) instead of the orchestrator:
  * the scanner engine runs in-process against a mock server, so no SonarQube server and no license are needed.
  * Issues are read directly off the in-process scanner report and diffed here in Java against the golden files
- * under {@code src/integrationTest/resources/expected}, rather than routing through the sonar-lits-plugin.
+ * under {@code src/test/resources/expected}, rather than routing through the sonar-lits-plugin.
  * <p>
  * {@code test_kotlin_language_server} is not ported here: it needs a real Gradle build to supply the Java
  * classpath and its golden files are project-dir-relative. It stays on the orchestrator in {@code :its:sq-integration}.
@@ -71,7 +71,7 @@ class KotlinRulingTest {
   /** Analyses run against {@code its/}: golden component keys are {@code <projectKey>:sources/kotlin/<corpus>/...}. */
   private static final Path BASE_DIRECTORY = new File("..").toPath().toAbsolutePath().normalize();
 
-  private static final Path EXPECTED_ROOT = new File("src/integrationTest/resources/expected/kotlin").toPath();
+  private static final Path EXPECTED_ROOT = new File("src/test/resources/expected").toPath();
 
   private static final Path ACTUAL_ROOT = new File("build/reports/ruling").toPath();
 
@@ -198,7 +198,7 @@ class KotlinRulingTest {
     assertThat(result.exitCode()).describedAs("Scanner should succeed. Errors:%s", errorLogs).isZero();
 
     var actualIssuesByRule = groupActualIssues(projectKey, result.scannerOutputReader().getProject().getAllIssues());
-    var expectedIssuesByRule = REPORT_ALL ? Map.<String, SortedMap<String, List<Integer>>>of() : loadExpectedIssuesByRule(projectName);
+    var expectedIssuesByRule = REPORT_ALL ? Map.<String, SortedMap<String, List<Integer>>>of() : loadExpectedIssuesByRule(projectKey);
 
     var ruleKeys = new TreeSet<>(actualIssuesByRule.keySet());
     ruleKeys.addAll(expectedIssuesByRule.keySet());
@@ -206,7 +206,7 @@ class KotlinRulingTest {
     // Dump every rule that has a golden file, not just the ones that still fire: a rule that used to report
     // issues but now reports zero must still overwrite its golden file with an empty one when copied over,
     // otherwise the stale golden file keeps reporting "missing" forever.
-    dumpActualIssues(projectName, ruleKeys, actualIssuesByRule);
+    dumpActualIssues(projectKey, ruleKeys, actualIssuesByRule);
 
     var differences = new ArrayList<String>();
     for (var ruleKey : ruleKeys) {
@@ -241,11 +241,11 @@ class KotlinRulingTest {
     return byRule;
   }
 
-  private static Map<String, SortedMap<String, List<Integer>>> loadExpectedIssuesByRule(String projectName) throws IOException {
+  private static Map<String, SortedMap<String, List<Integer>>> loadExpectedIssuesByRule(String projectKey) throws IOException {
     Map<String, SortedMap<String, List<Integer>>> byRule = new TreeMap<>();
-    Path expectedDir = EXPECTED_ROOT.resolve(projectName);
+    Path expectedDir = EXPECTED_ROOT.resolve(projectKey);
     try (var files = Files.list(expectedDir)) {
-      for (var file : files.sorted().toList()) {
+      for (var file : files.filter(f -> f.toString().endsWith(".json")).sorted().toList()) {
         byRule.put(ruleKeyFromFileName(file.getFileName().toString()), readIssuesFile(file));
       }
     }
@@ -264,8 +264,8 @@ class KotlinRulingTest {
     return byComponent;
   }
 
-  private static void dumpActualIssues(String projectName, Set<String> ruleKeys, Map<String, SortedMap<String, List<Integer>>> actualIssuesByRule) throws IOException {
-    Path actualDir = ACTUAL_ROOT.resolve(projectName);
+  private static void dumpActualIssues(String projectKey, Set<String> ruleKeys, Map<String, SortedMap<String, List<Integer>>> actualIssuesByRule) throws IOException {
+    Path actualDir = ACTUAL_ROOT.resolve(projectKey);
     Files.createDirectories(actualDir);
     for (var ruleKey : ruleKeys) {
       var byComponent = actualIssuesByRule.getOrDefault(ruleKey, Collections.emptySortedMap());
@@ -280,26 +280,16 @@ class KotlinRulingTest {
   }
 
   /**
-   * Golden files are named {@code <repoKey>-<rule>.json} (e.g. {@code kotlin-S100.json}). Decoding by stripping
-   * the known, fixed {@code "kotlin-"} prefix - rather than splitting on the first '-' - keeps the round-trip
-   * correct even if a rule id itself ever contained a dash; the ruling module only ever activates rules under
-   * the single, fixed "kotlin" repository key.
+   * Golden files are named {@code <language>-<ruleId>.json} (e.g. {@code kotlin-S100.json}), stored under
+   * {@code src/test/resources/expected/<project-key>/}.
    */
   private static String ruleKeyFromFileName(String fileName) {
-    var base = fileName.substring(0, fileName.length() - ".json".length());
-    var prefix = REPO_KEY + "-";
-    if (!base.startsWith(prefix)) {
-      throw new IllegalStateException("Expected file name '" + fileName + "' does not start with '" + prefix + "'");
-    }
-    return REPO_KEY + ":" + base.substring(prefix.length());
+    var ruleId = fileName.substring(0, fileName.length() - ".json".length());
+    return ruleId.replace('-', ':');
   }
 
   private static String fileNameFromRuleKey(String ruleKey) {
-    var prefix = REPO_KEY + ":";
-    if (!ruleKey.startsWith(prefix)) {
-      throw new IllegalStateException("Expected rule key '" + ruleKey + "' does not start with '" + prefix + "'");
-    }
-    return REPO_KEY + "-" + ruleKey.substring(prefix.length()) + ".json";
+    return ruleKey.replace(':', '-') + ".json";
   }
 
   /**
