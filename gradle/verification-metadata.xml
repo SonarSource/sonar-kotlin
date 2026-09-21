@@ -120,6 +120,11 @@
             <sha256 value="b25969972e1d980280ca2ae529197ed9b3160aae48b506cf1935f01bd1318667" origin="Verified"/>
          </artifact>
       </component>
+      <component group="com.diffplug.spotless" name="spotless-lib" version="4.10.2">
+         <artifact name="spotless-lib-4.10.2.jar">
+            <sha256 value="8039fbcb016ef404de2d9939486c3e8e567d56727c2b3c61a1a5cd475e05122b" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="com.diffplug.spotless" name="spotless-lib" version="4.8.0">
          <artifact name="spotless-lib-4.8.0.jar">
             <sha256 value="fea24fd8250f7049dcf83e9c537dca70d4eeddf27f6562cc05b73945d5586a15" origin="Verified"/>
@@ -130,6 +135,11 @@
             <sha256 value="602cbbcd3828ee9cfb2e30a7f9b30335c6927130771414d4cdd294d21fe5cb67" origin="Verified"/>
          </artifact>
       </component>
+      <component group="com.diffplug.spotless" name="spotless-lib-extra" version="4.10.2">
+         <artifact name="spotless-lib-extra-4.10.2.jar">
+            <sha256 value="a80d67a10f9cab563ff423965c2e9d10def07028871f1cc19fe1f98eb63facc4" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="com.diffplug.spotless" name="spotless-lib-extra" version="4.8.0">
          <artifact name="spotless-lib-extra-4.8.0.jar">
             <sha256 value="bdc89ac79ea77c55334736437fa32e86c516d5a09b6b221780e4579763deea6c" origin="Verified"/>
@@ -138,6 +148,11 @@
       <component group="com.diffplug.spotless" name="spotless-plugin-gradle" version="6.25.0">
          <artifact name="spotless-plugin-gradle-6.25.0.jar">
             <sha256 value="f5eb908a4c5da46299e7543faada0402d2c4b77d58c7b432d4b6e59349b280a3" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="com.diffplug.spotless" name="spotless-plugin-gradle" version="8.10.2">
+         <artifact name="spotless-plugin-gradle-8.10.2.jar">
+            <sha256 value="bd1d47e81838ff94251b382133141a062343790164a6589d1f1b90d6c420c2c9" origin="Verified"/>
          </artifact>
       </component>
       <component group="com.diffplug.spotless" name="spotless-plugin-gradle" version="8.8.0">
@@ -195,6 +210,11 @@
             <sha256 value="d255b4b863ff8ec714a8f96fa55c34621d43dbb82b82d3f57476496a4c09e1e7" origin="Verified"/>
          </artifact>
       </component>
+      <component group="com.fasterxml.jackson.core" name="jackson-annotations" version="2.15.4">
+         <artifact name="jackson-annotations-2.15.4.jar">
+            <sha256 value="f204ebbd552614a22b8531ffe350d47f8fd42c45bb60517c07974dc27a5a1dd3" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="com.fasterxml.jackson.core" name="jackson-annotations" version="2.18.3">
          <artifact name="jackson-annotations-2.18.3.jar">
             <sha256 value="8aa5740d80b5a5025508b41bbadbaa1fb3772267c628b2e30681a4f45f8b8931" origin="Verified"/>
@@ -208,6 +228,11 @@
       <component group="com.fasterxml.jackson.core" name="jackson-core" version="2.14.1">
          <artifact name="jackson-core-2.14.1.jar">
             <sha256 value="0114187e296b34c931c1bf9e5a84152b62bfab7d182f5623f3982dc2da35e526" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="com.fasterxml.jackson.core" name="jackson-core" version="2.15.4">
+         <artifact name="jackson-core-2.15.4.jar">
+            <sha256 value="8dc9210dd285db366f45f518dd1e6a9ccfeb0f1a8e184a899fe96d29edf1fd94" origin="Verified"/>
          </artifact>
       </component>
       <component group="com.fasterxml.jackson.core" name="jackson-core" version="2.18.3">
@@ -228,6 +253,11 @@
       <component group="com.fasterxml.jackson.core" name="jackson-databind" version="2.14.1">
          <artifact name="jackson-databind-2.14.1.jar">
             <sha256 value="423a0c806de4b3fa5eb4a28698305e3a3777c731e1bcfa1b2f3a3760c7b6e773" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="com.fasterxml.jackson.core" name="jackson-databind" version="2.15.4">
+         <artifact name="jackson-databind-2.15.4.jar">
+            <sha256 value="0f99ff7719eef3ee85608b3dee6ecf3c698003fe9d6e34eabbfabccdc9b5ac2c" origin="Verified"/>
          </artifact>
       </component>
       <component group="com.fasterxml.jackson.core" name="jackson-databind" version="2.18.3">
@@ -541,6 +571,11 @@
             <sha256 value="65db47266623cd6b2f414422f86679ebddde4b5554e235b7fe332f5e86c3b7bd" origin="Verified"/>
          </artifact>
       </component>
+      <component group="com.gradle" name="develocity-gradle-plugin" version="4.5.1">
+         <artifact name="develocity-gradle-plugin-4.5.1.jar">
+            <sha256 value="1d7b9aa7cacc4e14c5faae8cc893eadb5b74c2b8a289f4b1d570a3b9923634c3" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="com.gradleup.shadow" name="shadow-gradle-plugin" version="9.4.2">
          <artifact name="shadow-gradle-plugin-9.4.2.jar">
             <sha256 value="4223c08d65e4c7e1f120b4a96e7319df8fe3dfa655ddf2661f60bb56dacf91ac" origin="Verified"/>
@@ -549,6 +584,11 @@
       <component group="com.gradleup.shadow" name="shadow-gradle-plugin" version="9.5.1">
          <artifact name="shadow-gradle-plugin-9.5.1.jar">
             <sha256 value="e90bffe0a5172389e11bf26cd59cb5005c81189228f5003950bfe343454f3261" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="com.gradleup.shadow" name="shadow-gradle-plugin" version="9.6.1">
+         <artifact name="shadow-gradle-plugin-9.6.1.jar">
+            <sha256 value="7053bc4366cf80798f205e37f4f649cde516081e5e653a3c49ea6700b2047b11" origin="Verified"/>
          </artifact>
       </component>
       <component group="com.guardsquare" name="proguard-base" version="7.9.1">
@@ -1689,6 +1729,11 @@
             <sha256 value="a27c478d5f78bc3d95461f153a60efdf1623927502c68a457ad9a995a35c5a7c" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.eclipse.jgit" name="org.eclipse.jgit" version="7.7.1.202607240634-r">
+         <artifact name="org.eclipse.jgit-7.7.1.202607240634-r.jar">
+            <sha256 value="591abcc84955a6ad3363ec904bda79cf14427706efb4e06ffeb7bc3601503980" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.eclipse.lsp4j" name="org.eclipse.lsp4j.jsonrpc" version="0.22.0">
          <artifact name="org.eclipse.lsp4j.jsonrpc-0.22.0.jar">
             <sha256 value="98890f717e091ed1b2494aa14f042e50f74c82056598eeb27c5440a84addc4b9" origin="Verified"/>
@@ -2278,6 +2323,11 @@
       <component group="org.jetbrains.kotlin" name="kotlin-metadata-jvm" version="2.4.0">
          <artifact name="kotlin-metadata-jvm-2.4.0.jar">
             <sha256 value="9aadc51c588e76c8cf3d83d4090e46a4b687f2edaa1fdf65aa9fe44223294927" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.jetbrains.kotlin" name="kotlin-metadata-jvm" version="2.4.10">
+         <artifact name="kotlin-metadata-jvm-2.4.10.jar">
+            <sha256 value="233aaa84ca268e26d6d3a99ce30401e6dc111a7ae10e0a0b4794ce6351d7adc4" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.jetbrains.kotlin" name="kotlin-native-utils" version="2.3.20">
@@ -2943,6 +2993,11 @@
       <component group="org.slf4j" name="slf4j-api" version="2.0.18">
          <artifact name="slf4j-api-2.0.18.jar">
             <sha256 value="44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.slf4j" name="slf4j-api" version="2.0.19">
+         <artifact name="slf4j-api-2.0.19.jar">
+            <sha256 value="e91ff6d720609e7a194ffe758c3ed5c84e798617ae07b0a0f6a4fe229741b4bb" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.slf4j" name="slf4j-api" version="2.0.7">
