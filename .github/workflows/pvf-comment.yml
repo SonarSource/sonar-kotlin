@@ -1,0 +1,73 @@
+name: PVF /pvf comment
+
+# Public repos cannot dispatch a private reusable workflow directly (GitHub limitation), so this
+# repository_dispatches sonar-kotlin-pvf the same way build.yml's trigger_performance_validation
+# job does, carrying the PR number so sonar-kotlin-pvf can comment the dashboard link back here.
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  actions: write
+  contents: read
+  pull-requests: read
+  id-token: write
+  statuses: write
+
+concurrency:
+  group: pvf-comment-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  trigger:
+    if: >
+      github.event.issue.pull_request &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association) &&
+      contains(github.event.comment.body, '/pvf')
+    runs-on: github-ubuntu-latest-s
+    steps:
+      - name: Parse /pvf comment
+        id: pvf
+        uses: SonarSource/core-languages-tooling-public/pvf-comment@master
+        with:
+          comment: ${{ github.event.comment.body }}
+
+      - id: secrets
+        if: steps.pvf.outputs.found == 'true'
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/github/token/{REPO_OWNER_NAME_DASH}-pvf-trigger token | GITHUB_TOKEN;
+
+      - name: Trigger performance validation
+        if: steps.pvf.outputs.found == 'true'
+        env:
+          GH_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.issue.number }}
+          RULES_REQUEST: ${{ steps.pvf.outputs.rules-request }}
+        run: |
+          set -euo pipefail
+          pull="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}")"
+          head_sha="$(jq -r .head.sha <<<"$pull")"
+          for run_id in $(gh api \
+            "repos/${GITHUB_REPOSITORY}/actions/workflows/build.yml/runs?head_sha=${head_sha}&event=pull_request&per_page=10" \
+            --jq '.workflow_runs[].id'); do
+            if gh run download "$run_id" --repo "$GITHUB_REPOSITORY" -n pvf-version; then
+              break
+            fi
+          done
+          if [ ! -f pvf-version.txt ]; then
+            echo "No pvf-version artifact for ${head_sha}; wait for Build to finish" >&2
+            exit 1
+          fi
+          gh api repos/SonarSource/sonar-kotlin-pvf/dispatches \
+            --method POST \
+            -f event_type=sonar-kotlin-pr-pvf \
+            -f "client_payload[candidate-version]=$(cat pvf-version.txt)" \
+            -f "client_payload[baseline-version]=DEV" \
+            -f "client_payload[scannerDebug]=false" \
+            -f "client_payload[commit-sha]=${head_sha}" \
+            -f "client_payload[source-repo]=${GITHUB_REPOSITORY}" \
+            -f "client_payload[pr-number]=${PR_NUMBER}" \
+            -f "client_payload[rules-request]=${RULES_REQUEST}"

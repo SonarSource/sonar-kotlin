@@ -90,6 +90,13 @@ jobs:
         env:
           ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+      - name: Record plugin version for PVF
+        run: printf '%s\n' "${{ steps.project-version.outputs.project-version }}" > pvf-version.txt
+      - name: Upload plugin version for PVF
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: pvf-version
+          path: pvf-version.txt
 
   qa_plugin:
     runs-on: github-ubuntu-latest-s
@@ -172,17 +179,17 @@ jobs:
   # Public repos cannot call private reusable workflows (GitHub limitation).
   # Trigger PVF in private sonar-kotlin-pvf via repository_dispatch; results are
   # reported back as the `performance-validation` commit status.
+  # Runs on every push to master, comparing the just-built plugin against the plugin built for
+  # the previous master commit. PR runs happen only on demand via a `/pvf` PR comment
+  # (see pvf-comment.yml) — not automatically here.
   trigger_performance_validation:
     name: Trigger Performance Validation
     needs: [build]
     if: >-
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event_name == 'push' && github.ref_name == 'master' &&
       !cancelled() &&
       needs.build.result == 'success' &&
-      !contains(needs.*.result, 'failure') &&
-      !contains(github.event.pull_request.labels.*.name, 'skip-pvf') &&
-      !contains(github.event.pull_request.title, '[skip pvf]')
+      !contains(needs.*.result, 'failure')
     runs-on: github-ubuntu-latest-s
     timeout-minutes: 10
     permissions:
@@ -199,7 +206,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh api "repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha }}" \
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=pending \
             -f context=performance-validation \
             -f description="PVF triggered" \
@@ -214,19 +221,21 @@ jobs:
           gh api repos/SonarSource/sonar-kotlin-pvf/dispatches \
             --method POST \
             -f event_type=sonar-kotlin-pr-pvf \
-            -f "client_payload[baseline-version]=DEV" \
             -f "client_payload[candidate-version]=${CANDIDATE}" \
-            -f "client_payload[scannerDebug]=${{ contains(github.event.pull_request.labels.*.name, 'pvf-debug') }}" \
-            -f "client_payload[commit-sha]=${{ github.event.pull_request.head.sha }}" \
-            -f "client_payload[pr-number]=${{ github.event.pull_request.number }}" \
-            -f "client_payload[source-repo]=${{ github.repository }}"
+            -f "client_payload[scannerDebug]=false" \
+            -f "client_payload[commit-sha]=${{ github.sha }}" \
+            -f "client_payload[source-repo]=${{ github.repository }}" \
+            -f "client_payload[resolve-previous-master-baseline]=true" \
+            -f "client_payload[previous-sha]=${{ github.event.before }}" \
+            -f "client_payload[notify-sha]=${{ github.sha }}" \
+            -f "client_payload[merged-by]=${{ github.event.pusher.name }}"
       - name: Mark status error if dispatch failed
         if: failure()
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh api "repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha }}" \
+          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
             -f state=error \
             -f context=performance-validation \
             -f description="Failed to trigger PVF" \
