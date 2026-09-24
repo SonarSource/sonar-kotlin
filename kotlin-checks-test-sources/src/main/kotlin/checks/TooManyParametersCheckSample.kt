@@ -17,12 +17,16 @@ open class TooManyParametersCheckSample(p1: Int, p2: Int, p3: Int) {
     fun String.extension(p1: Int, p2: Int, p3: Int) = Unit
 
     annotation class GetMapping
+    annotation class Composable
 
     @GetMapping
     fun annotated(p1: Int, p2: Int, p3: Int) = Unit
 
     @checks.TooManyParametersCheckSample.GetMapping
     fun annotated2(p1: Int, p2: Int, p3: Int) = Unit
+
+    @Composable
+    fun composable(p1: Int, p2: Int, p3: Int) = Unit
 
     abstract class OverrideIsCompliant : TooManyParametersCheckSample() {
         override fun sample(p1: Int, p2: Int, p3: Int, p4: Int) = Unit

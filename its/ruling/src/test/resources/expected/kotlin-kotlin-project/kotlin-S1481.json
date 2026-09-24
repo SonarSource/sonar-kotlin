@@ -1,0 +1,43 @@
+{
+"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/android-tests/src/org/jetbrains/kotlin/android/tests/CodegenTestsOnAndroidRunner.kt": [
+170
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/kotlin-jsr223-daemon-local-eval-example/src/test/kotlin/org/jetbrains/kotlin/script/jsr223/KotlinJsr223ScriptEngineIT.kt": [
+145,
+148
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/examples/kotlin-jsr223-local-example/src/test/kotlin/org/jetbrains/kotlin/script/jsr223/KotlinJsr223ScriptEngineIT.kt": [
+221,
+224
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/runtime/arrayUtils.kt": [
+54,
+64
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/classpathTest/src/main/kotlin/helloWorld.kt": [
+12,
+13,
+14
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/multiprojectClassPathTest/subproject/src/main/kotlin/helloWorld.kt": [
+12,
+13,
+14
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/resources/testProject/pluginsDsl/applyToSubprojects/subproject/src/main/kotlin/helloWorld.kt": [
+12,
+13,
+14
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/tasks/Tasks.kt": [
+525
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-maven-plugin-test/src/it/test-classpath/src/main/kotlin/org/jetbrains/HelloWorld.kt": [
+12,
+13,
+14
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-stdlib-gen/src/templates/Ranges.kt": [
+116
+]
+}
