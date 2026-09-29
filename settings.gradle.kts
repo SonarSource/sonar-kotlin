@@ -34,7 +34,7 @@ dependencyResolutionManagement {
         val kotlinVersion: String by extra
         val analyzerCommonsVersionStr = "2.32.0.5319"
         val sonarPluginApi = "13.4.2.4284"
-        val slf4jApi = "2.0.19"
+        val slf4jApi = "2.0.20"
 
         create("libs") {
             val analyzerCommons = version("analyzerCommons", analyzerCommonsVersionStr)
@@ -99,7 +99,7 @@ dependencyResolutionManagement {
                 .version(sonarPluginApi)
             library("sonar-ws", "org.sonarsource.sonarqube", "sonar-ws").versionRef(sonarqube)
             library("sonarlint-core", "org.sonarsource.sonarlint.core", "sonarlint-core").versionRef(sonarlint)
-            library("logback-classic", "ch.qos.logback", "logback-classic").version("1.5.38")
+            library("logback-classic", "ch.qos.logback", "logback-classic").version("1.6.3")
             library("sit", "com.sonarsource.scanner.integrationtester", "sonar-scanner-integration-tester").versionRef(sit)
             // Without it, ScannerMain.<clinit> throws FactoryConfigurationError: Provider for class
             // javax.xml.parsers.SAXParserFactory cannot be created.
@@ -109,7 +109,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.gradle.develocity") version("4.5.1")
+    id("com.gradle.develocity") version("4.6.0")
 }
 
 val isCI: Boolean = System.getenv("CI") != null
