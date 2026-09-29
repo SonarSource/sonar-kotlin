@@ -73,7 +73,7 @@ class KotlinRulingTest {
 
   private static final Path EXPECTED_ROOT = new File("src/test/resources/expected").toPath();
 
-  private static final Path ACTUAL_ROOT = new File("build/reports/ruling").toPath();
+  private static final Path ACTUAL_ROOT = new File("target/actual").toPath();
 
   private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
