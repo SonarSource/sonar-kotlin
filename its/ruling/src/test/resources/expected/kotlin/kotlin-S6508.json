@@ -1,0 +1,26 @@
+{
+"kotlin:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/CompilerCallbackServicesFacade.kt": [
+84
+],
+"kotlin:sources/kotlin/kotlin/core/descriptors/src/org/jetbrains/kotlin/resolve/constants/constantValues.kt": [
+172
+],
+"kotlin:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/vfilefinder/IDEVirtualFileFinder.kt": [
+56,
+57
+],
+"kotlin:sources/kotlin/kotlin/idea/idea-android/src/org/jetbrains/kotlin/android/configure/KotlinAndroidGradleLibraryDataService.kt": [
+36
+],
+"kotlin:sources/kotlin/kotlin/idea/idea-gradle/src/org/jetbrains/kotlin/idea/configuration/KotlinGradleSourceSetDataService.kt": [
+66,
+86,
+107
+],
+"kotlin:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/versions/KotlinJsMetadataVersionIndex.kt": [
+40
+],
+"kotlin:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/versions/KotlinJvmMetadataVersionIndex.kt": [
+48
+]
+}

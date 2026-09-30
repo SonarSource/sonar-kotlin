@@ -15,14 +15,16 @@ Run a single ruling corpus with `--tests "org.sonarsource.kotlin.its.KotlinRulin
 
 ## Updating ruling expectations
 
+Project keys are the corpus directory names under `its/sources/kotlin/`, such as `corda` and `okio`. Expected and actual results use the same project keys.
+
 After changing a rule, inspect its actual JSON (written even when a test fails) and update each corpus it affects. For a standard corpus, copy the relevant rule file after reviewing the changed issues:
 
 ```shell
-cp its/ruling/build/reports/ruling/<projectKey>/kotlin-S<NNNN>.json \
+cp its/ruling/build/actual/<projectKey>/kotlin-S<NNNN>.json \
   its/ruling/src/test/resources/expected/<projectKey>/kotlin-S<NNNN>.json
 ```
 
-The Kotlin compiler corpus (`test_kotlin_compiler`) is skipped by default. Run it with `KOTLIN_COMPILER_IT_ENABLED=true ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon`; its actual and expected rule JSON use the same ruling paths above (project key `kotlin-kotlin-project`).
+The Kotlin compiler corpus (`test_kotlin_compiler`) is skipped by default. Run it with `KOTLIN_COMPILER_IT_ENABLED=true ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon`; its actual and expected rule JSON use the same ruling paths above (project key `kotlin`).
 
 The language-server corpus (`test_kotlin_language_server`) runs with `:its:sq-integration:integrationTest`. Review its actual file and update its separate expectation:
 

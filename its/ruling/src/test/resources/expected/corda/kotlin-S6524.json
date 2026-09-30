@@ -1,0 +1,19 @@
+{
+"corda:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/contracts/AmountTests.kt": [
+136,
+145,
+158
+],
+"corda:sources/kotlin/corda/experimental/behave/src/main/kotlin/net/corda/behave/file/LogSource.kt": [
+27
+],
+"corda:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/network/NetworkBootstrapper.kt": [
+170
+],
+"corda:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/PersistentMapTests.kt": [
+152
+],
+"corda:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/EnumEvolvabilityTests.kt": [
+183
+]
+}

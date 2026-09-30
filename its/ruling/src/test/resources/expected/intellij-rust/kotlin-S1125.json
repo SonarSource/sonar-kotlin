@@ -1,0 +1,14 @@
+{
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/typing/RsQuoteHandler.kt": [
+45
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/RsMacroDefinitionCompletionProvider.kt": [
+38
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/lexer/RustEscapesLexer.kt": [
+119
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/Fold.kt": [
+99
+]
+}

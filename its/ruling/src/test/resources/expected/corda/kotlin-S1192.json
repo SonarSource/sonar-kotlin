@@ -1,0 +1,15 @@
+{
+  "corda:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/network/NetworkBootstrapper.kt": [
+    53,
+    112
+  ],
+  "corda:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/network/NodeInfoFilesCopier.kt": [
+    51
+  ],
+  "corda:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/carpenter/ClassCarpenter.kt": [
+    307
+  ],
+  "corda:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/DriverDSLImpl.kt": [
+    226
+  ]
+}
