@@ -1,0 +1,85 @@
+{
+"corda:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/AggregatedList.kt": [
+83,
+89
+],
+"corda:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/ConcatenatedList.kt": [
+98,
+107,
+139,
+157,
+167,
+184,
+205
+],
+"corda:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/FlattenedList.kt": [
+70,
+90
+],
+"corda:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/MappedList.kt": [
+47,
+55
+],
+"corda:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/ReplayedList.kt": [
+43,
+51
+],
+"corda:sources/kotlin/corda/client/rpc/src/main/kotlin/net/corda/client/rpc/internal/RPCClientProxyHandler.kt": [
+309,
+332
+],
+"corda:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/contracts/Amount.kt": [
+165
+],
+"corda:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/internal/InternalUtils.kt": [
+91
+],
+"corda:sources/kotlin/corda/experimental/kryo-hook/src/main/kotlin/net/corda/kryohook/KryoHook.kt": [
+83
+],
+"corda:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/contracts/asset/Obligation.kt": [
+257
+],
+"corda:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/persistence/CordaPersistence.kt": [
+161
+],
+"corda:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/protonwrapper/engine/ConnectionStateMachine.kt": [
+137,
+371
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/Node.kt": [
+262
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/transitions/StartedFlowTransition.kt": [
+269
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/utilities/ObjectDiffer.kt": [
+101
+],
+"corda:sources/kotlin/corda/samples/attachment-demo/src/main/kotlin/net/corda/attachmentdemo/AttachmentDemo.kt": [
+158
+],
+"corda:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/DeserializedParameterizedType.kt": [
+88,
+100
+],
+"corda:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/FingerPrinter.kt": [
+110,
+141
+],
+"corda:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/SerializationHelper.kt": [
+46,
+177,
+185,
+194
+],
+"corda:sources/kotlin/corda/tools/demobench/src/main/kotlin/net/corda/demobench/views/NodeTabView.kt": [
+134
+],
+"corda:sources/kotlin/corda/tools/loadtest/src/main/kotlin/net/corda/loadtest/tests/CrossCashTest.kt": [
+280
+],
+"corda:sources/kotlin/corda/tools/shell/src/main/kotlin/net/corda/tools/shell/InteractiveShell.kt": [
+286
+]
+}

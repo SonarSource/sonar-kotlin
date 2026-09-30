@@ -1,0 +1,55 @@
+{
+"corda:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/AssociatedList.kt": [
+33
+],
+"corda:sources/kotlin/corda/client/rpc/src/main/kotlin/net/corda/client/rpc/internal/RPCClientProxyHandler.kt": [
+299,
+315
+],
+"corda:sources/kotlin/corda/docs/source/example-code/src/main/kotlin/net/corda/docs/ClientRpcTutorial.kt": [
+82
+],
+"corda:sources/kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/PrettyPrint.kt": [
+99
+],
+"corda:sources/kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/UniversalContract.kt": [
+191,
+256
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/messaging/RPCServer.kt": [
+300
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SingleThreadedStateMachineManager.kt": [
+605,
+624
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/transitions/DeliverSessionMessageTransition.kt": [
+58
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/transitions/TopLevelTransition.kt": [
+155
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/vault/HibernateQueryCriteriaParser.kt": [
+279
+],
+"corda:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/statemachine/FlowFrameworkTests.kt": [
+790
+],
+"corda:sources/kotlin/corda/samples/irs-demo/cordapp/src/test/kotlin/net/corda/irs/contract/IRSTests.kt": [
+58,
+144
+],
+"corda:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/FingerPrinter.kt": [
+140
+],
+"corda:sources/kotlin/corda/tools/explorer/src/main/kotlin/net/corda/explorer/views/LoginView.kt": [
+39
+],
+"corda:sources/kotlin/corda/tools/explorer/src/main/kotlin/net/corda/explorer/views/TransactionViewer.kt": [
+292
+],
+"corda:sources/kotlin/corda/tools/loadtest/src/main/kotlin/net/corda/loadtest/tests/CrossCashTest.kt": [
+162,
+189
+]
+}

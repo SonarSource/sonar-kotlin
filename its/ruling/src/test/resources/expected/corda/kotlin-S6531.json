@@ -1,0 +1,20 @@
+{
+"corda:sources/kotlin/corda/client/jfx/src/integration-test/kotlin/net/corda/client/jfx/NodeMonitorModelTest.kt": [
+175
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/CordaRPCOpsImpl.kt": [
+293,
+295,
+299
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/vault/HibernateQueryCriteriaParser.kt": [
+217,
+341,
+352,
+358,
+364,
+385,
+391,
+398
+]
+}
