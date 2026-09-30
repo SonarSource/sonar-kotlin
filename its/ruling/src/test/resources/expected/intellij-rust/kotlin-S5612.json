@@ -1,0 +1,55 @@
+{
+"intellij-rust:sources/kotlin/intellij-rust/debugger/src/main/kotlin/org/rust/debugger/runconfig/RsDebugRunner.kt": [
+134,
+148
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/formatter/impl/spacing.kt": [
+154
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/inspections/import/AutoImportFix.kt": [
+60
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/presentation/Utils.kt": [
+26
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/ImplLookup.kt": [
+57
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/ref/RsPathReferenceImpl.kt": [
+89
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/utils/RsDiagnostic.kt": [
+58
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/project/model/impl/CargoTomlWatcherIntegrationTest.kt": [
+18
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/cargo/util/CargoCommandCompletionProviderTest.kt": [
+100
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/ide/intentions/ExtractInlineModuleIntentionTest.kt": [
+39
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/resolve/RsOperatorsResolve.kt": [
+12
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/core/type/RsArithmeticOpsTest.kt": [
+58,
+82,
+112
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/stdext/AsyncValueTest.kt": [
+16
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/CargoProjectResolveTest.kt": [
+56,
+96,
+240
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/CargoProjectServiceTest.kt": [
+17
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/test/kotlin/org/rustSlowTests/CargoProjectStructureTest.kt": [
+57
+]
+}

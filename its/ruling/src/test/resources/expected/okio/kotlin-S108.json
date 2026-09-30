@@ -1,0 +1,22 @@
+{
+"okio:sources/kotlin/okio/okio/jvm/src/main/java/okio/AsyncTimeout.kt": [
+240
+],
+"okio:sources/kotlin/okio/okio/jvm/src/test/java/okio/BufferKotlinTest.kt": [
+31,
+36
+],
+"okio:sources/kotlin/okio/okio/jvm/src/test/java/okio/ByteStringKotlinTest.kt": [
+39,
+44
+],
+"okio:sources/kotlin/okio/okio/jvm/src/test/java/okio/OptionsTest.kt": [
+182,
+190,
+195
+],
+"okio:sources/kotlin/okio/okio/jvm/src/test/java/okio/SegmentSharingTest.kt": [
+51,
+57
+]
+}

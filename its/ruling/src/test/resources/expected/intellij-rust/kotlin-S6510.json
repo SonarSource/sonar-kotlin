@@ -1,0 +1,16 @@
+{
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/intentions/DemorgansLawIntention.kt": [
+107
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/template/macros/RsCollectionElementNameMacro.kt": [
+40,
+50
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/lexer/RustEscapesLexer.kt": [
+63,
+73
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/Fulfillment.kt": [
+185
+]
+}
