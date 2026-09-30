@@ -1,0 +1,52 @@
+{
+"okio:sources/kotlin/okio/okio/js/src/main/kotlin/okio/ByteString.kt": [
+86,
+146,
+166,
+208
+],
+"okio:sources/kotlin/okio/okio/js/src/main/kotlin/okio/platform.kt": [
+57,
+63,
+65
+],
+"okio:sources/kotlin/okio/okio/jvm/src/main/java/okio/Buffer.kt": [
+2133
+],
+"okio:sources/kotlin/okio/okio/jvm/src/main/java/okio/ByteString.kt": [
+142,
+217,
+237,
+318
+],
+"okio:sources/kotlin/okio/okio/jvm/src/main/java/okio/ForwardingSink.kt": [
+26
+],
+"okio:sources/kotlin/okio/okio/jvm/src/main/java/okio/ForwardingSource.kt": [
+26
+],
+"okio:sources/kotlin/okio/okio/jvm/src/main/java/okio/InflaterSource.kt": [
+91
+],
+"okio:sources/kotlin/okio/okio/jvm/src/main/java/okio/platform.kt": [
+44
+],
+"okio:sources/kotlin/okio/okio/src/main/kotlin/okio/SegmentPool.kt": [
+24
+],
+"okio:sources/kotlin/okio/okio/src/main/kotlin/okio/common/ByteString.kt": [
+32
+],
+"okio:sources/kotlin/okio/okio/src/main/kotlin/okio/platform.kt": [
+25,
+26,
+30,
+31,
+35,
+36,
+40,
+41,
+61,
+64
+]
+}

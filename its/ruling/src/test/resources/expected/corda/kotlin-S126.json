@@ -1,0 +1,53 @@
+{
+"corda:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/MapValuesList.kt": [
+48
+],
+"corda:sources/kotlin/corda/client/jfx/src/main/kotlin/net/corda/client/jfx/utils/ObservableUtilities.kt": [
+201
+],
+"corda:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/crypto/PartialMerkleTree.kt": [
+183
+],
+"corda:sources/kotlin/corda/experimental/behave/src/main/kotlin/net/corda/behave/process/Command.kt": [
+95
+],
+"corda:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/contracts/asset/Obligation.kt": [
+753
+],
+"corda:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/protonwrapper/engine/ConnectionStateMachine.kt": [
+308,
+379
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/JolokiaSlf4jAdapter.kt": [
+19
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/events/NodeSchedulerService.kt": [
+187
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/identity/IdentityServiceUtil.kt": [
+13
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/utilities/ObjectDiffer.kt": [
+140
+],
+"corda:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/AppendOnlyPersistentMapTest.kt": [
+234
+],
+"corda:sources/kotlin/corda/samples/network-visualiser/src/main/kotlin/net/corda/netmap/NetworkMapVisualiser.kt": [
+102,
+240,
+286
+],
+"corda:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/DeserializedParameterizedType.kt": [
+70,
+80
+],
+"corda:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/EvolutionSerializer.kt": [
+95
+],
+"corda:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/SerializationHelper.kt": [
+45,
+178,
+186
+]
+}

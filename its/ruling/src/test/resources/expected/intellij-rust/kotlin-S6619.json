@@ -1,0 +1,17 @@
+{
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/formatter/impl/utils.kt": [
+95,
+103
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/inspections/import/AutoImportFix.kt": [
+344
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/TypeInference.kt": [
+1382,
+1383,
+1514
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/test/kotlin/org/rust/lang/RsTestBase.kt": [
+210
+]
+}

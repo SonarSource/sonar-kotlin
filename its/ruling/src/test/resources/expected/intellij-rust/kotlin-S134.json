@@ -1,0 +1,30 @@
+{
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/inspections/import/AutoImportFix.kt": [
+86
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/typing/RsBraceMatcher.kt": [
+64,
+73,
+74
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/lexer/RustEscapesLexer.kt": [
+73
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/ItemResolution.kt": [
+105
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/NameResolution.kt": [
+228,
+444,
+611,
+637,
+638,
+639
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/utils/RsDiagnostic.kt": [
+87,
+90,
+94,
+97
+]
+}

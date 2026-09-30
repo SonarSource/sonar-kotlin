@@ -1,0 +1,15 @@
+{
+"okio:sources/kotlin/okio/okio/jvm/src/main/java/okio/Buffer.kt": [
+1517
+],
+"okio:sources/kotlin/okio/okio/jvm/src/main/java/okio/RealBufferedSource.kt": [
+220,
+300
+],
+"okio:sources/kotlin/okio/okio/src/main/kotlin/okio/Base64.kt": [
+33
+],
+"okio:sources/kotlin/okio/okio/src/main/kotlin/okio/common/ByteString.kt": [
+150
+]
+}

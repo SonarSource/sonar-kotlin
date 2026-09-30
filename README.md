@@ -69,7 +69,7 @@ update the golden files for every corpus that exercises it.
 #### Standard corpora (corda, okio, intellij-rust, …)
 
 Golden files live under `its/ruling/src/test/resources/expected/<projectKey>/`,
-where `<projectKey>` is e.g. `kotlin-corda-project`.
+where `<projectKey>` is the corpus directory name, e.g. `corda`.
 Actual results are always written to `its/ruling/build/reports/ruling/<projectKey>/` even when tests fail.
 
 #### kotlin corpus (`test_kotlin_compiler`)
@@ -79,7 +79,7 @@ Enable it with an environment variable:
 
     KOTLIN_COMPILER_IT_ENABLED=true ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon
 
-Actual results land in `its/ruling/build/reports/ruling/kotlin-kotlin-project/`.
+Actual results land in `its/ruling/build/reports/ruling/kotlin/`.
 
 #### kotlin-language-server corpus (`test_kotlin_language_server`)
 
