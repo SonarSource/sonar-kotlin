@@ -167,8 +167,11 @@ class KotlinRulingTest {
       "sonar.exclusions", "**/testData/**/*"));
   }
 
-  private void analyzeAndAssertDifferences(String projectName, Map<String, String> additionalProperties) throws IOException {
-    String projectKey = REPO_KEY + "-" + projectName + "-project";
+  /**
+   * The project key is the corpus directory name (e.g. {@code okio} for {@code its/sources/kotlin/okio}), and is also
+   * the name of the expected and actual result directories.
+   */
+  private void analyzeAndAssertDifferences(String projectKey, Map<String, String> additionalProperties) throws IOException {
 
     Map<String, String> properties = new HashMap<>(additionalProperties);
     properties.put("sonar.slang.converter.validation", "log");
@@ -176,7 +179,7 @@ class KotlinRulingTest {
     properties.put("sonar.kotlin.performance.measure", "true");
     properties.put("sonar.internal.analysis.failFast", "true");
 
-    Path performanceMeasuresDirectory = Path.of("build", "performance", projectName);
+    Path performanceMeasuresDirectory = Path.of("build", "performance", projectKey);
     Files.createDirectories(performanceMeasuresDirectory);
     properties.put("sonar.kotlin.performance.measure.json",
       performanceMeasuresDirectory.resolve("sonar.kotlin.performance.measure.json").toString());
