@@ -66,8 +66,6 @@ class KotlinRulingTest {
 
   private static final String LANGUAGE_KEY = "kotlin";
 
-  private static final String REPO_KEY = "kotlin";
-
   /** Analyses run against {@code its/}: golden component keys are {@code <projectKey>:sources/kotlin/<corpus>/...}. */
   private static final Path BASE_DIRECTORY = new File("..").toPath().toAbsolutePath().normalize();
 
