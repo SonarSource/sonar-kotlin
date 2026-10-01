@@ -45,8 +45,8 @@ git submodule update --init its/sources
 ./gradlew :its:plugin:integrationTest --info --console=plain --no-daemon
 
 # Update ruling golden files after changing a rule:
-# 1. Standard corpora — actual results go to its/ruling/target/actual/<projectKey>/ (even on failure):
-#    cp its/ruling/target/actual/<projectKey>/kotlin-S<NNNN>.json \
+# 1. Standard corpora — actual results go to its/ruling/build/actual/<projectKey>/ (even on failure):
+#    cp its/ruling/build/actual/<projectKey>/kotlin-S<NNNN>.json \
 #       its/ruling/src/test/resources/expected/<projectKey>/kotlin-S<NNNN>.json
 # 2. kotlin corpus (test_kotlin_compiler) — skipped by default, enable with:
 #    KOTLIN_COMPILER_IT_ENABLED=true ./gradlew :its:ruling:integrationTest ...
