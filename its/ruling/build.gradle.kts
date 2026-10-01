@@ -49,8 +49,4 @@ tasks.integrationTest {
     maxHeapSize = "4g"
 }
 
-tasks.clean {
-    delete("target/actual")
-}
-
 sonarqube.isSkipProject = true
