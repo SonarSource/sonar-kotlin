@@ -120,6 +120,8 @@ jobs:
   qa_ruling:
     runs-on: github-ubuntu-latest-m
     timeout-minutes: 60
+    outputs:
+      ruling-outcome: ${{ steps.ruling.outcome }}
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -133,7 +135,8 @@ jobs:
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
-      - run: |
+      - id: ruling
+        run: |
           ./gradlew \
               :its:ruling:integrationTest --info
         env:
@@ -142,6 +145,33 @@ jobs:
           ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+      # Upload the actual results written to its/ruling/build/actual, consumed by ruling_update_notify
+      # to open a PR updating the expected files.
+      - name: Prepare ruling artifact
+        if: ${{ always() && steps.ruling.outcome == 'failure' }}
+        uses: SonarSource/core-languages-tooling-public/prepare-ruling-artifact@master
+  ruling_update_notify:
+    name: Ruling Update and Notify
+    needs: [qa_ruling]
+    # qa_ruling itself still fails on ruling differences, so run whenever the ruling step completed;
+    # when ruling passes, this closes any stale fix PR. Fork PRs get a read-only token, skip them.
+    if: >-
+      always() && !cancelled() &&
+      contains(fromJSON('["success", "failure"]'), needs.qa_ruling.outputs.ruling-outcome) &&
+      (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: github-ubuntu-latest-s
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Update ruling and notify
+        uses: SonarSource/core-languages-tooling-public/ruling-update-and-notify@master
+        with:
+          ruling-failed: ${{ needs.qa_ruling.outputs.ruling-outcome == 'failure' }}
   qa_sq_integration:
     runs-on: github-ubuntu-latest-m
     timeout-minutes: 30
