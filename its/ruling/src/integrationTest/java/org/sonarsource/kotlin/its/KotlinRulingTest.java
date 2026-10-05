@@ -18,8 +18,6 @@ package org.sonarsource.kotlin.its;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sonar.orchestrator.locator.FileLocation;
 import com.sonarsource.scanner.integrationtester.dsl.EngineVersion;
@@ -46,6 +44,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -73,9 +72,9 @@ class KotlinRulingTest {
 
   private static final Path EXPECTED_ROOT = new File("src/test/resources/expected").toPath();
 
-  private static final Path ACTUAL_ROOT = new File("build/reports/ruling").toPath();
+  private static final Path ACTUAL_ROOT = new File("build/actual").toPath();
 
-  private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+  private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().create();
 
   private static final boolean REPORT_ALL = "true".equals(System.getProperty("reportAll"));
 
@@ -269,14 +268,24 @@ class KotlinRulingTest {
     Files.createDirectories(actualDir);
     for (var ruleKey : ruleKeys) {
       var byComponent = actualIssuesByRule.getOrDefault(ruleKey, Collections.emptySortedMap());
-      var json = new JsonObject();
-      for (var entry : byComponent.entrySet()) {
-        var lines = new JsonArray();
-        entry.getValue().forEach(lines::add);
-        json.add(entry.getKey(), lines);
-      }
-      Files.writeString(actualDir.resolve(fileNameFromRuleKey(ruleKey)), GSON.toJson(json));
+      Files.writeString(actualDir.resolve(fileNameFromRuleKey(ruleKey)), toGoldenJson(byComponent));
     }
+  }
+
+  /**
+   * Serializes issues in the same layout as the golden files (one value per line, no indentation, trailing
+   * newline), so that copying actual results over the expected ones only shows real issue changes in the diff.
+   */
+  private static String toGoldenJson(SortedMap<String, List<Integer>> byComponent) {
+    if (byComponent.isEmpty()) {
+      return "{}\n";
+    }
+    var components = byComponent.entrySet().stream()
+      .map(entry -> GSON.toJson(entry.getKey()) + ": [\n"
+        + entry.getValue().stream().map(String::valueOf).collect(Collectors.joining(",\n"))
+        + "\n]")
+      .collect(Collectors.joining(",\n"));
+    return "{\n" + components + "\n}\n";
   }
 
   /**

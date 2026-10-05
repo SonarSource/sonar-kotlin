@@ -70,7 +70,11 @@ update the golden files for every corpus that exercises it.
 
 Golden files live under `its/ruling/src/test/resources/expected/<projectKey>/`,
 where `<projectKey>` is e.g. `kotlin-corda-project`.
-Actual results are always written to `its/ruling/build/reports/ruling/<projectKey>/` even when tests fail.
+Actual results are always written to `its/ruling/build/actual/<projectKey>/` even when tests fail.
+
+When the `qa_ruling` CI job fails, the actual results are uploaded and a PR updating the golden files is
+opened automatically against the tested branch (see the `ruling_update_notify` job in `.github/workflows/build.yml`).
+On pull requests, a comment summarizing the ruling changes and linking to that PR is also posted.
 
 #### kotlin corpus (`test_kotlin_compiler`)
 
@@ -79,7 +83,7 @@ Enable it with an environment variable:
 
     KOTLIN_COMPILER_IT_ENABLED=true ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon
 
-Actual results land in `its/ruling/build/reports/ruling/kotlin-kotlin-project/`.
+Actual results land in `its/ruling/build/actual/kotlin-kotlin-project/`.
 
 #### kotlin-language-server corpus (`test_kotlin_language_server`)
 
