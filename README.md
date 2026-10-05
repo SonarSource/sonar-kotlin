@@ -72,6 +72,10 @@ Golden files live under `its/ruling/src/test/resources/expected/<projectKey>/`,
 where `<projectKey>` is e.g. `kotlin-corda-project`.
 Actual results are always written to `its/ruling/build/actual/<projectKey>/` even when tests fail.
 
+When the `qa_ruling` CI job fails, the actual results are uploaded and a PR updating the golden files is
+opened automatically against the tested branch (see the `ruling_update_notify` job in `.github/workflows/build.yml`).
+On pull requests, a comment summarizing the ruling changes and linking to that PR is also posted.
+
 #### kotlin corpus (`test_kotlin_compiler`)
 
 This corpus is skipped by default because it requires heavy Kotlin compiler sources.
