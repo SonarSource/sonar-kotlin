@@ -34,4 +34,52 @@ fun setCoordinates(p1: Point, p2: Point) {
 <h3>Exceptions</h3>
 <p>Methods annotated with Spring’s <code>@RequestMapping</code> (and related shortcut annotations, like <code>@GetRequest</code>) or
 <code>@JsonCreator</code> may have a lot of parameters, encapsulation being possible. Therefore the rule ignores such methods.</p>
+<p>Functions annotated with Jetpack Compose’s <code>@Composable</code> are also ignored, as it is a common pattern in Compose UI development to pass
+many parameters representing UI state. Even though such functions are excluded from this rule, it is still recommended to group related parameters
+into a data class when the list becomes unwieldy:</p>
+<pre>
+// Not flagged by the rule, but still worth refactoring
+
+@Composable
+fun UserProfile(
+    firstName: String,
+    lastName: String,
+    email: String,
+    age: Int,
+    city: String,
+    country: String,
+    avatarUrl: String,
+    phoneNumber: String,
+) {
+    // ...
+}
+</pre>
+<pre>
+// Preferred: group related state into a data class
+
+data class UserProfileState(
+    val firstName: String,
+    val lastName: String,
+    val email: String,
+    val age: Int,
+    val city: String,
+    val country: String,
+    val avatarUrl: String,
+)
+
+@Composable
+fun UserProfile(user: UserProfileState) {
+    // ...
+}
+</pre>
+<h2>Resources</h2>
+<h3>Articles &amp; blog posts</h3>
+<ul>
+  <li>Medium - <a href="https://medium.com/@callmeryan/fixing-huge-argument-lists-when-using-jetpack-compose-953c4754ccd9">Fixing Huge Argument Lists
+  When Using Jetpack Compose</a></li>
+</ul>
+<h3>Conference presentations</h3>
+<ul>
+  <li>YouTube - <a href="https://www.youtube.com/watch?v=SMOhl9RK0BA&amp;t=543s">Composable functions should be small and focused</a></li>
+</ul>
 
