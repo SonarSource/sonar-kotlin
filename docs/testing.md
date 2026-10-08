@@ -1,0 +1,20 @@
+# Testing Kotlin changes
+
+Choose a rule, API, integration or ruling check based on the boundary changed.
+Covers: `sonar-kotlin-checks/src/test/`, `kotlin-checks-test-sources/`, `sonar-kotlin-gradle/src/test/`, `sonar-kotlin-api/src/test/`, `its/`.
+
+| Change | Command | Inspect |
+| --- | --- | --- |
+| One rule | `./gradlew :sonar-kotlin-checks:test --tests 'org.sonarsource.kotlin.checks.CollectionShouldBeImmutableCheckTest'` | `*Sample.kt` annotations and no-semantics variants. |
+| Check module | `./gradlew :sonar-kotlin-checks:test` | Test report and `KotlinVerifier` assertions. |
+| One Gradle DSL rule | `./gradlew :sonar-kotlin-gradle:test --tests 'org.sonarsource.kotlin.gradle.checks.TaskDefinitionsCheckTest'` | `*Sample.kts` in `sonar-kotlin-gradle/src/test/samples/non-compiling/`. |
+| Gradle DSL module | `./gradlew :sonar-kotlin-gradle:test` | Gradle module tests and samples. |
+| Full build | `./gradlew build dist` | Build and distribution packaging. |
+| Formatting | `./gradlew spotlessCheck` | Root `build.gradle.kts` configures license headers for Kotlin/Java sources, ktlint for `*.gradle.kts`, and separate whitespace formatting for miscellaneous files. |
+| Ruling or scanner behavior | `./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon` | [Integration guide](integration-tests.md). |
+
+Java 21 is set in the root `build.gradle.kts`. Name rule test classes `{ClassName}Test`; follow nearby Kotlin tests for descriptive backtick-named functions and sample verification rather than Java-style naming rules.
+
+Dependency versions are catalogued in `settings.gradle.kts` (including the shared analyzer-commons version). After a bump, use `./gradlew --write-verification-metadata sha256 help` to refresh `gradle/verification-metadata.xml`; inspect added checksums and do not hand-prune existing entries. See [README.md](../README.md) for build and rule metadata commands.
+
+For AST inspection, use the `printAst` task described in [utils-kotlin/README.md](../utils-kotlin/README.md) rather than guessing PSI node kinds.
