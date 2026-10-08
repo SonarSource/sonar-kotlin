@@ -23,6 +23,10 @@ Useful links
 
 ### Build
 
+#### Requirements
+
+* Java 21
+
 #### Setup
 
 To configure build dependencies, run the following command:

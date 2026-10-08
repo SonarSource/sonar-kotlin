@@ -7,7 +7,6 @@ Covers: `AGENTS.md`, `sonar-kotlin-api/`, `sonar-kotlin-checks/`, `sonar-kotlin-
 - [Writing checks](writing-checks.md): visitors, matchers, registration and samples.
 - [Testing](testing.md): targeted checks and test conventions.
 - [Integration tests](integration-tests.md): ruling corpora and server-backed tests.
-- [Agent analysis](agent-analysis.md): end-of-turn analyzer check.
 
 ## Writing and maintaining these docs
 - Write for a new teammate: lead with the point, then short sections, bullets and tables.
