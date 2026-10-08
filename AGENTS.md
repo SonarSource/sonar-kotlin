@@ -4,7 +4,7 @@ Use this guide to find the smallest relevant check and the detailed development 
 
 ## Start here
 - [README.md](README.md) covers build setup, ruling inputs and rule metadata. Initialize shared logic with `git submodule update --init -- build-logic/common`; initialize `its/sources` before integration tests.
-- The shared Java conventions target **Java 21**. Gradle/Kotlin version catalogs are in `settings.gradle.kts`; Java formatting uses shared Spotless Eclipse and SonarSource import order.
+- Java 21 is configured in the root `build.gradle.kts`; dependency versions are in `settings.gradle.kts`. Spotless adds license headers to Kotlin/Java sources, runs ktlint on `*.gradle.kts`, and applies separate whitespace rules to miscellaneous files.
 
 ## Choose the smallest relevant check
 - One rule test: `./gradlew :sonar-kotlin-checks:test --tests 'org.sonarsource.kotlin.checks.CollectionShouldBeImmutableCheckTest'`; module: `./gradlew :sonar-kotlin-checks:test`; full build: `./gradlew build dist`.
@@ -12,12 +12,12 @@ Use this guide to find the smallest relevant check and the detailed development 
 - Ruling: `./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon`; plugin: `./gradlew :its:plugin:integrationTest --info --console=plain --no-daemon`. See [integration tests](docs/integration-tests.md) for special corpora and server-backed cases.
 
 ## Working agreements
-- Read implementation and adjacent tests first. Use the rule stub and metadata generators rather than hand-editing generated resources; register a check in `KotlinCheckList`.
+- Read implementation and adjacent tests first. Use the rule stub and metadata generators rather than hand-editing generated resources. Register Kotlin checks in `KotlinCheckList` and Gradle DSL checks in `KotlinGradleCheckList`; see [writing checks](docs/writing-checks.md) for their distinct sample and test locations.
 - Checks extend `AbstractCheck` or `CallAbstractCheck`; wrap K2 semantic access in `withKaSession`. Test semantic and missing-semantics cases when applicable. See [writing checks](docs/writing-checks.md).
-- Use explicit imports, immutable data where practical, clear `var` inference and suitable `final` fields. Keep short streams on one line, break long chains before each `.`, and avoid nested streams.
-- Name tests `{ClassName}Test`, use statically imported AssertJ `assertThat`, behavior-oriented names such as `shouldShowExpectedBehaviorWhenMeetsCondition`, and a class-under-test variable named after the class.
+- Follow nearby Kotlin implementations and tests for imports, naming and layout; prefer immutable values where practical.
+- Name rule tests `{ClassName}Test` and use descriptive backtick-named Kotlin test functions for additional cases. Follow the module's `CheckTest` and `KotlinVerifier` conventions.
 - Use invented, nonfunctional examples; never put real credentials into docs, fixtures, logs or prompts. Everything committed to this repository is public.
-- **Keep docs current.** If a change alters behavior, a command, a config key or a test workflow described in `AGENTS.md`, `docs/` or `private/docs/`, update the matching page in the same PR. Docs describe only the current state: rewrite or delete statements that are no longer true, and add no history or "previously…" notes. Follow [the docs guidelines](docs/README.md#writing-and-maintaining-these-docs).
+- **Keep docs current.** If a change alters behavior, a command, a config key or a test workflow described in `AGENTS.md` or `docs/`, update the matching page in the same PR. Docs describe only the current state: rewrite or delete statements that are no longer true, and add no history or "previously…" notes. Follow [the docs guidelines](docs/README.md#writing-and-maintaining-these-docs).
 
 ## Reference map
 - [Architecture](docs/architecture.md), [writing checks](docs/writing-checks.md), [testing](docs/testing.md), and [integration tests](docs/integration-tests.md).

@@ -11,13 +11,16 @@ Covers: `sonar-kotlin-api/`, `sonar-kotlin-checks/`, `sonar-kotlin-plugin/`, `so
 
 | Module | Responsibility |
 | --- | --- |
-| `sonar-kotlin-api/` | K2 standalone session, `KotlinFileContext`, visitor and matcher APIs. |
+| `sonar-kotlin-api/` | K2 standalone session, `KotlinFileContext`, visitors, `FunMatcher` and `ApiExtensions` helpers. |
 | `sonar-kotlin-checks/` | Kotlin rule implementations. |
-| `sonar-kotlin-test-api/` and `kotlin-checks-test-sources/` | `KotlinVerifier` and rule samples. |
-| `sonar-kotlin-plugin/` | Plugin assembly, check registration and rule metadata. |
-| `sonar-kotlin-gradle/` | Kotlin Gradle DSL checks. |
-| `sonar-kotlin-external-linters/`, `sonar-kotlin-metrics/`, `sonar-kotlin-surefire/` | External report import, metrics and test reports. |
+| `sonar-kotlin-test-api/` and `kotlin-checks-test-sources/` | `KotlinVerifier` and ordinary Kotlin rule samples. |
+| `sonar-kotlin-plugin/` | Plugin assembly, `KotlinCheckList` for `.kt` checks, and shared rule metadata. |
+| `sonar-kotlin-gradle/` | Kotlin Gradle DSL checks, `KotlinGradleCheckList`, and `.kts` samples in `src/test/samples/non-compiling/`. |
+| `sonar-kotlin-external-linters/` | Detekt, ktLint and AndroidLint report import. |
+| `sonar-kotlin-metrics/` | Complexity, lines of code and other metrics. |
+| `sonar-kotlin-surefire/` | JUnit/Surefire test report import. |
+| `utils-kotlin/` | AST printer and external linter mapping generators. |
 
-`KotlinFileVisitor.scan` creates and clears the analysis session around the visit. Access types and symbols through `withKaSession` inside that lifetime; avoid keeping `KaSession`-derived values beyond it. `KtChecksVisitor` dispatches PSI nodes to registered `AbstractCheck` visitors. The standalone K2 environment is set up by the API module.
+`KotlinTree` / `KotlinSyntaxStructure` parse the input with IntelliJ PSI and a K2 `StandaloneAnalysisAPISession`. `KotlinFileVisitor.scan` bounds the analysis session around the visit. `KtChecksVisitor` flattens the PSI tree and dispatches `KtElement` nodes to each registered `AbstractCheck` (`KtVisitor<Unit, KotlinFileContext>`) via `accept`. `KotlinFileContext` carries the `ktFile`, `kaSession`, `inputFileContext` for reporting, and `regexCache`. Access types and symbols through `withKaSession` inside that lifetime; do not retain `KaSession`-derived values beyond it. See [writing checks](writing-checks.md) for `CallAbstractCheck`, `FunMatcher` and separate check registries.
 
 Dependency versions are centralized in `settings.gradle.kts`. If changing them, use Gradle verification metadata generation described in [testing](testing.md); do not manually prune entries.
