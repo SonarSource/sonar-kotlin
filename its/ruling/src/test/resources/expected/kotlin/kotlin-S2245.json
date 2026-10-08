@@ -1,0 +1,11 @@
+{
+"kotlin:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/NetworkUtils.kt": [
+98
+],
+"kotlin:sources/kotlin/kotlin/compiler/daemon/src/org/jetbrains/kotlin/daemon/KotlinRemoteReplService.kt": [
+159
+],
+"kotlin:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/internal/makeBackup/MakeBackupCompileTask.kt": [
+25
+]
+}

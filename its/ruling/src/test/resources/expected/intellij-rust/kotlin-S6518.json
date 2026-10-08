@@ -1,0 +1,11 @@
+{
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/annotator/fixes/ConvertToTyUsingTryFromTraitFix.kt": [
+91
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/TraitRef.kt": [
+31
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/ty/TyTraitObject.kt": [
+24
+]
+}
