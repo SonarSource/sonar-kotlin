@@ -13,7 +13,7 @@
 
 # Code quality and security for Kotlin
 
-This repository contains the SonarQube analyzer for Kotlin. It analyzes Kotlin projects and imports results from external Kotlin linters and test-coverage tools.
+This repository contains the SonarQube analyzer for Kotlin. It analyzes Kotlin projects and imports issues from external Kotlin linters (Detekt, ktlint, Android Lint) and test results from Surefire reports.
 
 To learn more about Sonar’s Kotlin analysis, visit the [Sonar website](https://www.sonarsource.com/knowledge/languages/kotlin/).
 
