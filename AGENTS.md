@@ -25,7 +25,7 @@ SonarQube analyzer plugin for Kotlin: 140+ rules for Kotlin and Kotlin Gradle DS
 After changes, inspect the diff for generated files and secrets; run the narrowest meaningful checks.
 
 ## Always loaded
-Imported so they are always in context; needed for nearly every change.
+Claude Code imports these (needed for nearly every change); other agents: read them before changing checks or tests.
 @docs/writing-checks.md
 @docs/testing.md
 
