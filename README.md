@@ -8,7 +8,7 @@ This SonarSource project is a code analyzer for Kotlin projects to help develope
 Features
 --------
 
-* 50+ rules (including 10+ security rules using semantic)
+* 140+ rules (Kotlin and Kotlin Gradle DSL; including 10+ security rules using semantic)
 * Metrics (cognitive complexity, cyclomatic complexity, number of lines etc.)
 * Import of [test coverage reports](https://docs.sonarqube.org/display/PLUG/Code+Coverage+by+Unit+Tests+for+Java+Project)
 * Import of [external linters](https://docs.sonarqube.org/latest/analysis/external-issues/): Detekt, ktLint, AndroidLint
@@ -22,6 +22,10 @@ Useful links
 * [Community Forum](https://community.sonarsource.com/)
 
 ### Build
+
+#### Requirements
+
+* Java 21
 
 #### Setup
 
@@ -63,34 +67,9 @@ To run a single ruling test method, e.g.:
 
 ### Updating ruling golden files
 
-The ruling tests diff actual scanner output against golden files. After changing a rule,
-update the golden files for every corpus that exercises it.
+See [docs/integration-tests.md](docs/integration-tests.md) for the golden-file procedure, including the `test_kotlin_compiler` and `test_kotlin_language_server` corpora and `-DreportAll=true`.
 
-#### Standard corpora (corda, okio, intellij-rust, …)
-
-Golden files live under `its/ruling/src/test/resources/expected/<projectKey>/`,
-where `<projectKey>` is e.g. `kotlin-corda-project`.
-Actual results are always written to `its/ruling/build/reports/ruling/<projectKey>/` even when tests fail.
-
-#### kotlin corpus (`test_kotlin_compiler`)
-
-This corpus is skipped by default because it requires heavy Kotlin compiler sources.
-Enable it with an environment variable:
-
-    KOTLIN_COMPILER_IT_ENABLED=true ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon
-
-Actual results land in `its/ruling/build/reports/ruling/kotlin-kotlin-project/`.
-
-#### kotlin-language-server corpus (`test_kotlin_language_server`)
-
-This corpus is run by the `qa_sq_integration` CI job, not the `qa_ruling` job.
-Golden files live under `its/sq-integration/src/integrationTest/resources/expected/kotlin/kotlin-language-server/`.
-Actual results are written to `its/sq-integration/build/tmp/actual/kotlin/kotlin-language-server/` during the run.
-
-### Additional ruling parameters
-
-* `-DreportAll=true` — dump all actual issues instead of only the differences
-  (supported by `:its:ruling:integrationTest` and `:its:sq-integration:integrationTest`).
+### Additional sq-integration parameters
 
 The orchestrator-based `:its:sq-integration` tests additionally support:
 
