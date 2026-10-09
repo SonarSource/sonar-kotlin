@@ -13,7 +13,7 @@ Covers: `sonar-kotlin-checks/src/test/`, `kotlin-checks-test-sources/`, `sonar-k
 | Formatting | `./gradlew spotlessCheck` | Root `build.gradle.kts` configures license headers for Kotlin/Java sources, ktlint for `*.gradle.kts`, and separate whitespace formatting for miscellaneous files. |
 | Ruling or scanner behavior | `./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon` | [Integration guide](integration-tests.md). |
 
-Java 21 is set in the root `build.gradle.kts`. Name rule test classes `{ClassName}Test`; follow nearby Kotlin tests for descriptive backtick-named functions and sample verification rather than Java-style naming rules.
+Name rule test classes `{ClassName}Test`; follow nearby Kotlin tests for descriptive backtick-named functions and sample verification rather than Java-style naming rules.
 
 Dependency versions are catalogued in `settings.gradle.kts` (including the shared analyzer-commons version). After a bump, use `./gradlew --write-verification-metadata sha256 help` to refresh `gradle/verification-metadata.xml`; inspect added checksums and do not hand-prune existing entries. See [README.md](../README.md) for build and rule metadata commands.
 

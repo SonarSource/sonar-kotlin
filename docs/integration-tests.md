@@ -11,6 +11,8 @@ First initialize `git submodule update --init its/sources`.
 | Plugin (SIT) | `./gradlew :its:plugin:integrationTest --info --console=plain --no-daemon` | Scanner/plugin behavior. |
 | SQ integration | `./gradlew :its:sq-integration:integrationTest` | Server-backed and language-server corpus behavior. |
 
+Run a single ruling corpus with `--tests "org.sonarsource.kotlin.its.KotlinRulingTest.test_kotlin_corda"` appended to the ruling command.
+
 ## Updating ruling expectations
 
 After changing a rule, inspect its actual JSON (written even when a test fails) and update each corpus it affects. For a standard corpus, copy the relevant rule file after reviewing the changed issues:

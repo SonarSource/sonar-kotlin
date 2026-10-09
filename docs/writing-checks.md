@@ -4,7 +4,29 @@ Use the rule stub generator and the matching semantic test variant to keep regis
 Covers: `sonar-kotlin-api/src/main/java/org/sonarsource/kotlin/api/checks/`, `sonar-kotlin-checks/`, `kotlin-checks-test-sources/`, `sonar-kotlin-gradle/`, `sonar-kotlin-plugin/`.
 
 ## Rule shape
-`AbstractCheck` visits PSI nodes (`visitCallExpression`, `visitNamedFunction`, etc.) and reports with `kotlinFileContext.reportIssue(...)`. `CallAbstractCheck` declares `functionsToVisit` with `FunMatcher` (for example by qualifier/type, name, argument types, extension or suspend status) and implements `visitFunctionCall`. Access K2 symbols and types inside `withKaSession`; see [architecture](architecture.md).
+`AbstractCheck` visits PSI nodes (`visitCallExpression`, `visitNamedFunction`, etc.) and reports with `context.reportIssue(element, message)`, where `context` is the `KotlinFileContext` passed to the visit method. `CallAbstractCheck` declares `functionsToVisit` with `FunMatcher` (for example by qualifier/type, name, argument types, extension or suspend status) and implements `visitFunctionCall`. Access K2 symbols and types inside `withKaSession`; see [architecture](architecture.md).
+
+```kotlin
+@Rule(key = "S6526")
+class AbstractClassShouldBeInterfaceCheck : AbstractCheck() {
+    override fun visitClass(klass: KtClass, context: KotlinFileContext) {
+        if (!klass.isAbstract() || klass.isInterface()) return
+        context.reportIssue(klass.nameIdentifier!!, "Replace this abstract class with an interface, ...")
+    }
+}
+```
+
+The test class and sample (`AbstractClassShouldBeInterfaceCheckTest.kt`, `AbstractClassShouldBeInterfaceCheckSample.kt`) are the pattern to copy:
+
+```kotlin
+internal class AbstractClassShouldBeInterfaceCheckTest : CheckTest(AbstractClassShouldBeInterfaceCheck()),
+    CheckTestNonCompiling by DefaultCheckTestNonCompiling(AbstractClassShouldBeInterfaceCheck())
+```
+
+```kotlin
+abstract class ShapeA { // Noncompliant {{Replace this abstract class with an interface, ...}}
+interface ShapeB { // Compliant, we are using an interface here
+```
 
 | Rule | Stub command | Registry | Test and generated sample |
 | --- | --- | --- | --- |
@@ -17,8 +39,8 @@ Both tasks create the check, test, sample and registry entry, then invoke `:sona
 | Base | Use |
 | --- | --- |
 | `CheckTest` | Ordinary `.kt` sample with semantics (also the name of the Gradle module's `.kts` test base). |
-| `CheckTestWithNoSemantics` | `.kt` `*SampleNoSemantics.kt` with empty classpath and dependencies. |
-| `CheckTestNonCompiling` / `DefaultCheckTestNonCompiling` | `.kt` `*SampleNonCompiling.kt` under `kotlin-checks-test-sources/src/main/files/non-compiling/checks/`. |
+| `CheckTestWithNoSemantics` | `.kt` `*SampleNoSemantics.kt` with empty classpath and dependencies; asserts no issues unless `shouldReport = true`. |
+| `CheckTestNonCompiling` / `DefaultCheckTestNonCompiling` | `.kt` `*SampleNonCompiling.kt` under `kotlin-checks-test-sources/src/main/files/non-compiling/checks/`; add by delegation (`CheckTestNonCompiling by DefaultCheckTestNonCompiling(XCheck())`), which asserts no issues unless `shouldReport = true`. |
 | `CheckTestForAndroidOnly` | Android sample and `*SampleNonAndroid.kt` with no issues outside Android. |
 
-For ordinary Kotlin rules, keep the compiling `*Sample.kt` and optional no-semantics/non-Android variants in `kotlin-checks-test-sources/src/main/kotlin/checks/`. Gradle DSL tests use their module's `CheckTest` and `.kts` samples in the Gradle directory above; some tests exercise named `build.gradle.kts` or `settings.gradle.kts` inputs there. Annotate issue lines with `// Noncompliant {{message}}` and include compliant alternatives. `KotlinVerifier` checks reported issues against these annotations using the test classpath for semantic tests; the no-semantics variant passes an empty classpath and dependency list. See nearby tests and [testing](testing.md) before choosing a variant.
+For ordinary Kotlin rules, keep the compiling `*Sample.kt` and optional no-semantics/non-Android variants in `kotlin-checks-test-sources/src/main/kotlin/checks/`. Gradle DSL tests use their module's `CheckTest` and `.kts` samples in the Gradle directory above; some tests exercise named `build.gradle.kts` or `settings.gradle.kts` inputs there. `kotlin-checks-test-sources` is excluded from Spotless, so samples get no license headers. Annotate issue lines with `// Noncompliant {{message}}` and include compliant alternatives. `KotlinVerifier` checks reported issues against these annotations using the test classpath for semantic tests; the no-semantics variant passes an empty classpath and dependency list. See nearby tests and [testing](testing.md) before choosing a variant.
