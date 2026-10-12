@@ -1,0 +1,25 @@
+{
+"corda:sources/kotlin/corda/client/rpc/src/smoke-test/kotlin/net/corda/kotlin/rpc/StandaloneCordaRPClientTest.kt": [
+106,
+121
+],
+"corda:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/transactions/CompatibleTransactionTests.kt": [
+92
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/AbstractNode.kt": [
+177
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/keys/PersistentKeyManagementService.kt": [
+72
+],
+"corda:sources/kotlin/corda/samples/attachment-demo/src/main/kotlin/net/corda/attachmentdemo/AttachmentDemo.kt": [
+157
+],
+"corda:sources/kotlin/corda/samples/simm-valuation-demo/flows/src/main/kotlin/net/corda/vega/flows/SimmFlow.kt": [
+150,
+267
+],
+"corda:sources/kotlin/corda/samples/simm-valuation-demo/src/main/kotlin/net/corda/vega/api/PortfolioApiUtils.kt": [
+41
+]
+}

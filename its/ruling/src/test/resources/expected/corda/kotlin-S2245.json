@@ -1,0 +1,54 @@
+{
+"corda:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/internal/InternalUtils.kt": [
+115
+],
+"corda:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/internal/LazyStickyPool.kt": [
+22
+],
+"corda:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/crypto/CryptoUtilsTest.kt": [
+110,
+165,
+220,
+275,
+330,
+599
+],
+"corda:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/internal/X509EdDSAEngineTest.kt": [
+60,
+82,
+104
+],
+"corda:sources/kotlin/corda/finance/src/test/kotlin/net/corda/finance/contracts/asset/CashTests.kt": [
+504
+],
+"corda:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/NotaryChangeTests.kt": [
+171,
+172,
+173
+],
+"corda:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/HibernateConfigurationTest.kt": [
+141,
+659,
+739,
+746
+],
+"corda:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/transactions/ValidatingNotaryServiceTests.kt": [
+175,
+333
+],
+"corda:sources/kotlin/corda/samples/trader-demo/src/main/kotlin/net/corda/traderdemo/TraderDemoClientApi.kt": [
+52
+],
+"corda:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationOutputTests.kt": [
+1241
+],
+"corda:sources/kotlin/corda/testing/node-driver/src/main/kotlin/net/corda/testing/node/internal/DriverDSLImpl.kt": [
+742
+],
+"corda:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/internal/vault/VaultFiller.kt": [
+39
+],
+"corda:sources/kotlin/corda/tools/loadtest/src/main/kotlin/net/corda/loadtest/LoadTest.kt": [
+163
+]
+}

@@ -1,0 +1,24 @@
+{
+"corda:sources/kotlin/corda/docs/source/example-code/src/main/kotlin/net/corda/docs/tutorial/tearoffs/TutorialTearOffs.kt": [
+34,
+35,
+36
+],
+"corda:sources/kotlin/corda/samples/attachment-demo/src/main/kotlin/net/corda/attachmentdemo/AttachmentDemo.kt": [
+96
+],
+"corda:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/ErrorMessagesTests.kt": [
+63,
+66
+],
+"corda:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/GenericsTests.kt": [
+297,
+301
+],
+"corda:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/RoundTripTests.kt": [
+64
+],
+"corda:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/amqp/SerializationPropertyOrdering.kt": [
+38
+]
+}

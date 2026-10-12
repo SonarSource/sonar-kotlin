@@ -1,0 +1,18 @@
+{
+"corda:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/node/amqp/CertificateRevocationListNodeTests.kt": [
+171
+],
+"corda:sources/kotlin/corda/node/src/integration-test/kotlin/net/corda/services/messaging/RPCMQSecurityTest.kt": [
+30
+],
+"corda:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/persistence/HibernateConfigurationTest.kt": [
+704
+],
+"corda:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/utilities/PersistentMapTests.kt": [
+82,
+126
+],
+"corda:sources/kotlin/corda/serialization/src/test/kotlin/net/corda/serialization/internal/carpenter/CompositeMemberCompositeSchemaToClassCarpenterTests.kt": [
+210
+]
+}

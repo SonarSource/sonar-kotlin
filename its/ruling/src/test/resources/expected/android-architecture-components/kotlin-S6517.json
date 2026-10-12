@@ -1,0 +1,11 @@
+{
+"android-architecture-components:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/main/java/com/android/example/github/di/AppComponent.kt": [
+33
+],
+"android-architecture-components:sources/kotlin/android-architecture-components/GithubBrowserSample/app/src/main/java/com/android/example/github/ui/common/RetryCallback.kt": [
+22
+],
+"android-architecture-components:sources/kotlin/android-architecture-components/PagingWithNetworkSample/app/src/main/java/com/android/example/paging/pagingwithnetwork/reddit/repository/RedditPostRepository.kt": [
+26
+]
+}
