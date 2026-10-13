@@ -20,7 +20,7 @@ Project keys are the corpus directory names under `its/sources/kotlin/`, such as
 After changing a rule, inspect its actual JSON (written even when a test fails) and update each corpus it affects. For a standard corpus, copy the relevant rule file after reviewing the changed issues:
 
 ```shell
-cp its/ruling/build/actual/<projectKey>/kotlin-S<NNNN>.json \
+cp its/ruling/build/reports/ruling/<projectKey>/kotlin-S<NNNN>.json \
   its/ruling/src/test/resources/expected/<projectKey>/kotlin-S<NNNN>.json
 ```
 
