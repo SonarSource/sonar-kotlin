@@ -1,0 +1,122 @@
+{
+"kotlin:sources/kotlin/kotlin/build-common/src/org/jetbrains/kotlin/incremental/CacheVersion.kt": [
+81
+],
+"kotlin:sources/kotlin/kotlin/build-common/src/org/jetbrains/kotlin/incremental/LookupStorage.kt": [
+99
+],
+"kotlin:sources/kotlin/kotlin/build-common/test/org/jetbrains/kotlin/incremental/testingUtils/incrementalModificationUtils.kt": [
+141,
+147,
+163
+],
+"kotlin:sources/kotlin/kotlin/compiler/incremental-compilation-impl/src/org/jetbrains/kotlin/incremental/IncrementalCompilerRunner.kt": [
+70,
+229
+],
+"kotlin:sources/kotlin/kotlin/compiler/incremental-compilation-impl/src/org/jetbrains/kotlin/incremental/IncrementalJvmCompilerRunner.kt": [
+444
+],
+"kotlin:sources/kotlin/kotlin/compiler/incremental-compilation-impl/src/org/jetbrains/kotlin/incremental/InputsCache.kt": [
+79
+],
+"kotlin:sources/kotlin/kotlin/compiler/incremental-compilation-impl/test/org/jetbrains/kotlin/incremental/BuildDiffsStorageTest.kt": [
+39,
+74
+],
+"kotlin:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/jvm/compiler/AbstractKotlinCompilerIntegrationTest.kt": [
+84
+],
+"kotlin:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/cli/jvm/KotlinCliJavaFileManagerTest.kt": [
+196
+],
+"kotlin:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/daemon/CompilerDaemonTest.kt": [
+131
+],
+"kotlin:sources/kotlin/kotlin/compiler/tests/org/jetbrains/kotlin/jvm/compiler/Java9ModulesIntegrationTest.kt": [
+194
+],
+"kotlin:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/scratch/compile/KtCompilingExecutor.kt": [
+83
+],
+"kotlin:sources/kotlin/kotlin/idea/idea-repl/src/org/jetbrains/kotlin/console/KotlinConsoleRunner.kt": [
+264
+],
+"kotlin:sources/kotlin/kotlin/jps-plugin/jps-tests/test/org/jetbrains/kotlin/jps/build/AbstractLookupTrackerTest.kt": [
+105
+],
+"kotlin:sources/kotlin/kotlin/jps-plugin/jps-tests/test/org/jetbrains/kotlin/jps/build/SimpleKotlinJpsBuildTest.kt": [
+80
+],
+"kotlin:sources/kotlin/kotlin/jps-plugin/src/org/jetbrains/kotlin/jps/build/MarkerFile.kt": [
+49
+],
+"kotlin:sources/kotlin/kotlin/jps-plugin/src/org/jetbrains/kotlin/jps/platforms/KotlinJvmModuleBuildTarget.kt": [
+98
+],
+"kotlin:sources/kotlin/kotlin/libraries/stdlib/jvm/src/kotlin/io/files/Utils.kt": [
+31
+],
+"kotlin:sources/kotlin/kotlin/libraries/stdlib/jvm/test/io/FileTreeWalks.kt": [
+154,
+177,
+326,
+367,
+425,
+426,
+427
+],
+"kotlin:sources/kotlin/kotlin/libraries/stdlib/jvm/test/io/Files.kt": [
+469,
+470,
+479,
+480
+],
+"kotlin:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/BaseGradleIT.kt": [
+552
+],
+"kotlin:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/ExecutionStrategyIT.kt": [
+54
+],
+"kotlin:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/IncrementalCompilationMultiProjectIT.kt": [
+42,
+178,
+184,
+185,
+228
+],
+"kotlin:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/Kapt3IT.kt": [
+196
+],
+"kotlin:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/KaptIncrementalIT.kt": [
+160,
+175
+],
+"kotlin:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/KotlinGradlePluginIT.kt": [
+69,
+300,
+310,
+440
+],
+"kotlin:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/TestRootAffectedIT.kt": [
+48,
+66
+],
+"kotlin:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/UpToDatenessIT.kt": [
+150
+],
+"kotlin:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/compilerRunner/GradleKotlinCompilerRunner.kt": [
+120
+],
+"kotlin:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/plugin/KotlinGradleBuildServices.kt": [
+104
+],
+"kotlin:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/tasks/SyncOutputTask.kt": [
+129,
+156,
+208
+],
+"kotlin:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/tasks/Tasks.kt": [
+424
+]
+}

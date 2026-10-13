@@ -1,0 +1,38 @@
+{
+"kotlin:sources/kotlin/kotlin/compiler/android-tests/tests/org/jetbrains/kotlin/android/tests/AndroidTestGenerator.kt": [
+30,
+32
+],
+"kotlin:sources/kotlin/kotlin/compiler/javac-wrapper/src/org/jetbrains/kotlin/javac/JavacOptionsMapper.kt": [
+31
+],
+"kotlin:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/asJava/LightClassTestCommon.kt": [
+18
+],
+"kotlin:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/checkers/AbstractDiagnosticsTest.kt": [
+467
+],
+"kotlin:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/checkers/BaseDiagnosticsTest.kt": [
+192,
+322
+],
+"kotlin:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/checkers/CompilerTestLanguageVersionSettings.kt": [
+84
+],
+"kotlin:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/codegen/AbstractBytecodeTextTest.kt": [
+80,
+81
+],
+"kotlin:sources/kotlin/kotlin/idea/idea-android/src/org/jetbrains/kotlin/android/folding/ResourceFoldingBuilder.kt": [
+48
+],
+"kotlin:sources/kotlin/kotlin/idea/idea-android/src/org/jetbrains/kotlin/android/quickfix/KotlinAndroidQuickFixProvider.kt": [
+68
+],
+"kotlin:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/filters/KotlinExceptionFilter.kt": [
+135
+],
+"kotlin:sources/kotlin/kotlin/libraries/stdlib/jvm/test/text/RegexJVMTest.kt": [
+51
+]
+}

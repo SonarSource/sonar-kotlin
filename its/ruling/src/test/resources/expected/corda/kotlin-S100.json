@@ -1,0 +1,79 @@
+{
+"corda:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/node/services/VaultService.kt": [
+268,
+286
+],
+"corda:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/ProgressTracker.kt": [
+221,
+232
+],
+"corda:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/flows/ReceiveAllFlowTests.kt": [
+24
+],
+"corda:sources/kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/ContractFunctions.kt": [
+13,
+27
+],
+"corda:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/Currencies.kt": [
+33,
+34,
+35,
+47,
+48
+],
+"corda:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/contracts/CommercialPaper.kt": [
+94
+],
+"corda:sources/kotlin/corda/finance/src/main/kotlin/net/corda/finance/contracts/asset/Obligation.kt": [
+801,
+802
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/vault/NodeVaultService.kt": [
+410
+],
+"corda:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/internal/security/PasswordTest.kt": [
+27,
+87
+],
+"corda:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/rpc/ArtemisRpcTests.kt": [
+52,
+62,
+67,
+78
+],
+"corda:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/vault/VaultQueryTests.kt": [
+1989,
+2063,
+2104,
+2146
+],
+"corda:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/SerializationOutput.kt": [
+66
+],
+"corda:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/dsl/LedgerDSLInterpreter.kt": [
+80,
+98,
+108,
+115
+],
+"corda:sources/kotlin/corda/testing/test-utils/src/main/kotlin/net/corda/testing/dsl/TransactionDSLInterpreter.kt": [
+70,
+76
+],
+"corda:sources/kotlin/corda/tools/demobench/src/test/kotlin/net/corda/demobench/LoggingTestSuite.kt": [
+27
+],
+"corda:sources/kotlin/corda/tools/shell/src/main/kotlin/net/corda/tools/shell/InteractiveShell.kt": [
+123
+],
+"corda:sources/kotlin/corda/tools/shell/src/main/kotlin/net/corda/tools/shell/utlities/ANSIProgressRenderer.kt": [
+55
+],
+"corda:sources/kotlin/corda/tools/shell/src/test/kotlin/net/corda/tools/shell/StandaloneShellArgsParserTest.kt": [
+16,
+54,
+78,
+116,
+150
+]
+}

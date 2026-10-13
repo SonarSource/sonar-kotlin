@@ -1,0 +1,59 @@
+{
+"corda:sources/kotlin/corda/client/rpc/src/main/kotlin/net/corda/client/rpc/internal/RPCClientProxyHandler.kt": [
+305
+],
+"corda:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/utilities/Try.kt": [
+55
+],
+"corda:sources/kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/PrettyPrint.kt": [
+86,
+100,
+105,
+111,
+136
+],
+"corda:sources/kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/UniversalContract.kt": [
+50,
+73,
+193,
+220,
+258
+],
+"corda:sources/kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/Util.kt": [
+103
+],
+"corda:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/internal/config/ConfigUtilities.kt": [
+116
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/security/RPCSecurityManagerImpl.kt": [
+166
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/messaging/RPCServer.kt": [
+314
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/SingleThreadedStateMachineManager.kt": [
+754
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/statemachine/transitions/StartedFlowTransition.kt": [
+269
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/vault/HibernateQueryCriteriaParser.kt": [
+57,
+66,
+76,
+82,
+95,
+261,
+283,
+315
+],
+"corda:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/statemachine/FlowFrameworkTests.kt": [
+794
+],
+"corda:sources/kotlin/corda/samples/network-visualiser/src/main/kotlin/net/corda/netmap/NetworkMapVisualiser.kt": [
+346
+],
+"corda:sources/kotlin/corda/tools/explorer/src/main/kotlin/net/corda/explorer/views/cordapps/cash/NewTransaction.kt": [
+154
+]
+}
