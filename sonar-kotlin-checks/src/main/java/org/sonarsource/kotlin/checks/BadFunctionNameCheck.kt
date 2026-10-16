@@ -26,7 +26,21 @@ import org.sonarsource.kotlin.api.checks.overrides
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 import org.sonarsource.kotlin.api.visiting.withKaSession
 
-private val TEST_ANNOTATION_NAMES = setOf("Test", "ParameterizedTest", "RepeatedTest")
+private const val COMPOSABLE_ANNOTATION = "Composable"
+private const val PREVIEW_ANNOTATION = "Preview"
+
+/**
+ * Simple names of the annotations marking a function as a test or as a test lifecycle hook, covering JUnit 4 and 5,
+ * kotlin.test and TestNG. The name of such a function describes a scenario instead of being used to call it, so any
+ * naming style is appropriate. Matching on the simple name also accepts the annotations that projects compose or
+ * alias from these, which carry the same intent.
+ */
+private val TEST_ANNOTATION_NAMES = setOf(
+    "Test", "ParameterizedTest", "RepeatedTest", "TestFactory", "TestTemplate", "Theory",
+    "Before", "After", "BeforeEach", "AfterEach", "BeforeAll", "AfterAll",
+    "BeforeClass", "AfterClass", "BeforeTest", "AfterTest", "BeforeMethod", "AfterMethod",
+    "BeforeSuite", "AfterSuite", "BeforeGroups", "AfterGroups",
+)
 
 private val PASCAL_CASE_REGEX = Regex("^[A-Z][a-zA-Z0-9]*$")
 private val CAMEL_CASE_REGEX = Regex("^[a-z][a-zA-Z0-9]*$")
@@ -56,9 +70,10 @@ class BadFunctionNameCheck : AbstractCheck() {
         val name = function.name ?: /* in case of anonymous functions */ return
         if (function.hasModifier(KtTokens.EXTERNAL_KEYWORD)) return
         if (function.overrides()) return
-        if (isBacktickedAllowedFunction(function)) return
+        if (hasAnnotation(function, TEST_ANNOTATION_NAMES)) return
+        if (isBacktickedComposablePreview(function)) return
         if (name.matches(formatRegex)) return
-        if (hasAnnotation(function, setOf("Composable"))) {
+        if (hasAnnotation(function, COMPOSABLE_ANNOTATION)) {
             checkComposableNaming(function, name, kotlinFileContext)
         } else {
             kotlinFileContext.reportIssue(
@@ -90,13 +105,19 @@ class BadFunctionNameCheck : AbstractCheck() {
         }
     }
 
-    private fun isBacktickedAllowedFunction(function: KtNamedFunction): Boolean {
+    /**
+     * A `@Preview` composable is rendered in the Android Studio preview panel under its own name, which makes a
+     * backtick name a human-readable label there.
+     */
+    private fun isBacktickedComposablePreview(function: KtNamedFunction): Boolean {
         val nameIdentifierText = function.nameIdentifier?.text ?: return false
         if (!nameIdentifierText.startsWith('`')) return false
 
-        return hasAnnotation(function, TEST_ANNOTATION_NAMES)
-                || (hasAnnotation(function, setOf("Preview")) && hasAnnotation(function, setOf("Composable")))
+        return hasAnnotation(function, PREVIEW_ANNOTATION) && hasAnnotation(function, COMPOSABLE_ANNOTATION)
     }
+
+    private fun hasAnnotation(function: KtNamedFunction, annotation: String): Boolean =
+        function.annotationEntries.any { annotation == it.shortName?.asString() }
 
     private fun hasAnnotation(function: KtNamedFunction, annotations: Set<String>): Boolean =
         function.annotationEntries.any { annotations.contains(it.shortName?.asString()) }

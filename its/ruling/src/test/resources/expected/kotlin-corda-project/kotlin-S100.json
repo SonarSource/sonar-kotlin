@@ -7,9 +7,6 @@
 221,
 232
 ],
-"kotlin-corda-project:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/flows/ReceiveAllFlowTests.kt": [
-24
-],
 "kotlin-corda-project:sources/kotlin/corda/experimental/src/main/kotlin/net/corda/finance/contracts/universal/ContractFunctions.kt": [
 13,
 27
@@ -31,22 +28,6 @@
 "kotlin-corda-project:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/vault/NodeVaultService.kt": [
 410
 ],
-"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/internal/security/PasswordTest.kt": [
-27,
-87
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/rpc/ArtemisRpcTests.kt": [
-52,
-62,
-67,
-78
-],
-"kotlin-corda-project:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/services/vault/VaultQueryTests.kt": [
-1989,
-2063,
-2104,
-2146
-],
 "kotlin-corda-project:sources/kotlin/corda/serialization/src/main/kotlin/net/corda/serialization/internal/amqp/SerializationOutput.kt": [
 66
 ],
@@ -60,20 +41,10 @@
 70,
 76
 ],
-"kotlin-corda-project:sources/kotlin/corda/tools/demobench/src/test/kotlin/net/corda/demobench/LoggingTestSuite.kt": [
-27
-],
 "kotlin-corda-project:sources/kotlin/corda/tools/shell/src/main/kotlin/net/corda/tools/shell/InteractiveShell.kt": [
 123
 ],
 "kotlin-corda-project:sources/kotlin/corda/tools/shell/src/main/kotlin/net/corda/tools/shell/utlities/ANSIProgressRenderer.kt": [
 55
-],
-"kotlin-corda-project:sources/kotlin/corda/tools/shell/src/test/kotlin/net/corda/tools/shell/StandaloneShellArgsParserTest.kt": [
-16,
-54,
-78,
-116,
-150
 ]
 }
