@@ -1,5 +1,10 @@
 package checks
 
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.RepeatedTest
+import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.TestTemplate
+
 annotation class Test
 
 class BadFunctionNameCheckSample {
@@ -14,22 +19,6 @@ class BadFunctionNameCheckSample {
 
     val anonymousFunction = fun() {}
 
-    @Test
-    fun `should do A when B is called`() {} // Compliant - backtick name with @Test annotation
-
-    @kotlin.test.Test
-    fun `should do A when B is called (fq annotation)`() {}
-
-    @Test
-    fun `test with spaces in name`() {} // Compliant - backtick name with @Test annotation
-
-    @Test
-    fun regularTestName() {} // Compliant - regular name matches the regex
-
-    @Test
-    fun test_name_with_underscores() {} // Noncompliant {{Rename function "test_name_with_underscores" to match the regular expression ^[a-zA-Z][a-zA-Z0-9]*$}}
-//      ^^^^^^^^^^^^^^^^^^^^^^^^^^
-
     fun `non test backtick name with spaces`() {} // Noncompliant {{Rename function "non test backtick name with spaces" to match the regular expression ^[a-zA-Z][a-zA-Z0-9]*$}}
 //      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -38,6 +27,46 @@ class BadFunctionNameCheckSample {
     external fun generate_seed() // Compliant - external modifier
 
 }
+
+// region test functions — the name describes the scenario, so any naming style is appropriate
+class BadFunctionNameCheckTestSample {
+
+    @Test
+    fun `should do A when B is called`() {} // Compliant - test function
+
+    @kotlin.test.Test
+    fun `should do A when B is called (fq annotation)`() {} // Compliant - test function
+
+    @Test
+    fun regularTestName() {} // Compliant - regular name matches the regex
+
+    @Test
+    fun test_name_with_underscores() {} // Compliant - test function
+
+    @Test
+    fun oneNoteShortcut_isTypedByItsTarget() {} // Compliant - test function using the subject_scenario_expectation style
+
+    @TestFactory
+    fun `creates one dynamic test per input row`() {} // Compliant - test function
+
+    @TestTemplate
+    fun runs_against_every_context() {} // Compliant - test function
+
+    @RepeatedTest(3)
+    fun `retries the flaky call`() {} // Compliant - test function
+
+    @BeforeEach
+    fun set_up() {} // Compliant - test lifecycle hook
+
+    @kotlin.test.AfterTest
+    fun `tears down the fixture`() {} // Compliant - test lifecycle hook
+
+    // A helper that carries no test annotation is still subject to the naming convention
+    private fun build_fixture() {} // Noncompliant {{Rename function "build_fixture" to match the regular expression ^[a-zA-Z][a-zA-Z0-9]*$}}
+//              ^^^^^^^^^^^^^
+
+}
+// endregion
 
 // region override — name is fixed by the supertype contract, cannot be renamed
 open class BaseWithNonCompliantName {
