@@ -1,26 +1,4 @@
 {
-"kotlin-kotlin-project:sources/kotlin/kotlin/compiler/container/tests/org/jetbrains/kotlin/container/tests/ComponentContainerTest.kt": [
-26,
-34,
-40,
-53,
-75,
-95,
-108,
-123,
-139,
-156,
-176,
-206,
-229,
-238,
-248,
-273,
-294,
-325,
-336,
-354
-],
 "kotlin-kotlin-project:sources/kotlin/kotlin/compiler/daemon/daemon-common/src/org/jetbrains/kotlin/daemon/common/CompilerCallbackServicesFacade.kt": [
 47,
 50,
@@ -47,17 +25,6 @@
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-completion/src/org/jetbrains/kotlin/idea/completion/CompletionSession.kt": [
 223
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/idea/codeInsight/gradle/GradleConfiguratorTest.kt": [
-1039,
-1072,
-1105,
-1177
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-gradle/tests/org/jetbrains/kotlin/idea/codeInsight/gradle/GradleFacetImportTest.kt": [
-206,
-376,
-991
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-live-templates/tests/org/jetbrains/kotlin/idea/liveTemplates/LiveTemplatesTest.kt": [
 35,
@@ -106,9 +73,6 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/js/src/kotlin/regex.kt": [
 174,
 179
-],
-"kotlin-kotlin-project:sources/kotlin/kotlin/libraries/stdlib/test/collections/ListSpecificTest.kt": [
-15
 ],
 "kotlin-kotlin-project:sources/kotlin/kotlin/libraries/tools/kotlin-gradle-plugin-integration-tests/src/test/kotlin/org/jetbrains/kotlin/gradle/AbstractKotlinAndroidGradleTests.kt": [
 392
