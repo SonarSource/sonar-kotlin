@@ -27,10 +27,10 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
-import org.jetbrains.kotlin.psi2ir.deparenthesize
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.ConstructorMatcher
@@ -88,7 +88,7 @@ private fun KtElement.isHardCoded(secondaries: MutableList<PsiElement>): Boolean
     when (this) {
         is KtStringTemplateExpression -> true
         is KtParenthesizedExpression ->
-            deparenthesize().apply { secondaries.add(this) }.isHardCoded(secondaries)
+            KtPsiUtil.safeDeparenthesize(this).apply { secondaries.add(this) }.isHardCoded(secondaries)
         is KtDotQualifiedExpression ->
             (selectorExpression?.isHardCoded(secondaries) ?: false)
                 || receiverExpression

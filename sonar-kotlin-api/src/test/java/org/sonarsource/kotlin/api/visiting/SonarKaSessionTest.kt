@@ -19,8 +19,7 @@ package org.sonarsource.kotlin.api.visiting
 import com.intellij.openapi.util.Disposer
 import io.mockk.mockkClass
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
-import org.jetbrains.kotlin.analysis.api.components.KaCompilerTarget
-import org.jetbrains.kotlin.config.CompilerConfiguration
+import org.jetbrains.kotlin.analysis.api.components.KaCompilationOptions
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.psi.KtFile
@@ -57,10 +56,9 @@ private class SonarKaSessionTest {
         val ktFile = ktFile("")
         kaSession(ktFile) {
             withKaSession {
-                val c = mockkClass(CompilerConfiguration::class)
-                val t = mockkClass(KaCompilerTarget::class)
+                val options = mockkClass(KaCompilationOptions::class)
                 assertThrows<UnsupportedOperationException> {
-                    this.compile(ktFile, c, t) { _ -> false }
+                    this.compile(ktFile, options)
                 }
             }
         }
