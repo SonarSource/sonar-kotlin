@@ -20,10 +20,8 @@ import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.KaCompilationOptions
 import org.jetbrains.kotlin.analysis.api.components.KaCompilationResult
-import org.jetbrains.kotlin.analysis.api.components.KaCompilerTarget
-import org.jetbrains.kotlin.analysis.api.diagnostics.KaDiagnostic
-import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.psi.KtFile
 import org.sonarsource.kotlin.api.checks.InputFileContext
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
@@ -48,9 +46,7 @@ internal class SonarKaSession(
     @OptIn(KaExperimentalApi::class)
     override fun compile(
         file: KtFile,
-        configuration: CompilerConfiguration,
-        target: KaCompilerTarget,
-        allowedErrorFilter: (KaDiagnostic) -> Boolean,
+        options: KaCompilationOptions,
     ): KaCompilationResult =
         throw UnsupportedOperationException()
 }
