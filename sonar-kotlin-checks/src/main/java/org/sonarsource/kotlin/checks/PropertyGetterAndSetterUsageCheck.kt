@@ -28,7 +28,6 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isProtected
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
-import org.jetbrains.kotlin.util.isAnnotated
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.checks.isAbstract
@@ -76,7 +75,7 @@ class PropertyGetterAndSetterUsageCheck : AbstractCheck() {
     }
 }
 
-private fun KtProperty.isReadyForAccessorsConversion(): Boolean = isPrivate() && accessors.isEmpty() && !isAnnotated
+private fun KtProperty.isReadyForAccessorsConversion(): Boolean = isPrivate() && accessors.isEmpty() && annotationEntries.isEmpty()
 
 private fun isGetterOrSetter(parameterCount: Int, functionName: String) =
     (parameterCount == 0 && GETTER_PREFIX.find(functionName) != null) ||
@@ -120,7 +119,7 @@ private fun KaType.isNotNullable(classId: ClassId) = withKaSession {
     !isNullable && this@isNotNullable.isClassType(classId)
 }
 
-private fun KtNamedFunction.isIncompatiblePropertyAccessor(): Boolean = isAbstract() || overrides() || isAnnotated
+private fun KtNamedFunction.isIncompatiblePropertyAccessor(): Boolean = isAbstract() || overrides() || annotationEntries.isNotEmpty()
 
 private fun KtNamedFunction.isLessVisibleThan(other: KtNamedFunction): Boolean = when {
     isInternal() -> other.isPublic || other.isProtected()

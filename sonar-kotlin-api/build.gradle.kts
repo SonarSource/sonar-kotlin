@@ -2,7 +2,27 @@ plugins {
     kotlin("jvm")
 }
 
+// Since Kotlin 2.4.20, decompiler modules used by the Analysis API are no longer embedded into "kotlin-compiler".
+// They are taken from "kotlin-compiler-common-for-ide", whose other classes clash with the ones of "kotlin-compiler".
+val kotlinDecompiler: Configuration by configurations.creating {
+    isTransitive = false
+}
+
+val extractKotlinDecompiler = tasks.register<Sync>("extractKotlinDecompiler") {
+    group = "build"
+    description = "Extract decompiler classes required by the Analysis API from kotlin-compiler-common-for-ide"
+
+    from({ kotlinDecompiler.map(::zipTree) }) {
+        include(
+            "org/jetbrains/kotlin/analysis/decompiler/**",
+            "org/jetbrains/kotlin/analysis/decompiled/**",
+        )
+    }
+    into(layout.buildDirectory.dir("kotlin-decompiler"))
+}
+
 dependencies {
+    val kotlinVersion: String by project.ext
     listOf(
         // Source of these artifacts is
         // https://github.com/JetBrains/kotlin/tree/v2.0.21/prepare/ide-plugin-dependencies
@@ -16,12 +36,12 @@ dependencies {
         "org.jetbrains.kotlin:low-level-api-fir-for-ide",
         "org.jetbrains.kotlin:symbol-light-classes-for-ide",
     ).forEach {
-        val kotlinVersion: String by project.ext
         api("$it:$kotlinVersion") {
             // https://youtrack.jetbrains.com/issue/KT-61639/Standalone-Analysis-API-cannot-find-transitive-dependencies
             isTransitive = false
         }
     }
+    kotlinDecompiler("org.jetbrains.kotlin:kotlin-compiler-common-for-ide:$kotlinVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3")
     implementation("com.github.ben-manes.caffeine:caffeine:2.9.3")
     compileOnly(libs.sonar.plugin.api)
@@ -54,6 +74,7 @@ dependencies {
     testImplementation(testLibs.logback.classic)
     testImplementation(testLibs.sonar.plugin.api.test.fixtures)
     testImplementation(project(":sonar-kotlin-test-api"))
+    testRuntimeOnly(files(extractKotlinDecompiler))
 }
 
 val test: Test by tasks
@@ -78,4 +99,5 @@ val patchTask = tasks.register<JavaExec>("patchKotlinCompiler") {
 
 tasks.jar {
     from(patchTask)
+    from(extractKotlinDecompiler)
 }

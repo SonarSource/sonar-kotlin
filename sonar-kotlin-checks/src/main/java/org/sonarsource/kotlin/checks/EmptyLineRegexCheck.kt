@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi2ir.deparenthesize
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.sonar.check.Rule
 import org.sonarsource.analyzer.commons.regex.RegexParseResult
 import org.sonarsource.analyzer.commons.regex.ast.BoundaryTree
@@ -231,7 +231,7 @@ private fun extractArgument(resolvedCall: KaFunctionCall<*>): KtExpression? {
  *     - an empty String constant
  */
 private fun KtExpression.canBeEmpty(): Boolean = withKaSession {
-    when (val deparenthesized = this@canBeEmpty.deparenthesize()) {
+    when (val deparenthesized = KtPsiUtil.safeDeparenthesize(this@canBeEmpty)) {
         is KtNameReferenceExpression -> {
             val runtimeStringValue = deparenthesized.predictRuntimeStringValue()
             runtimeStringValue?.isEmpty()
