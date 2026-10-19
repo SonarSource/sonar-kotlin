@@ -39,6 +39,7 @@ import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
 import org.jetbrains.kotlin.analysis.api.types.KaErrorType
 import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstance
@@ -129,6 +130,11 @@ fun <K> example(list: ObservableList<K>) {
     }
 
     @Test
+    fun `returnType should return KaErrorType instead of raising exception on resolve error`() {
+        assertRecoversFromResolveError({ it.collectDescendantsOfType<KtProperty>().single().returnType }) { assertTrue(it is KaErrorType) }
+    }
+
+    @Test
     fun `collectDiagnostics should return no diagnostics instead of raising exception on resolve error`() {
         assertRecoversFromResolveError({ it.collectDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS) }) { assertTrue(it.isEmpty()) }
     }
@@ -150,7 +156,8 @@ fun isVar(target: DeclarationDescriptor?): Boolean? {
         is ClassDescriptor -> 2
         else -> return null
     }
-    return (target as? VariableDescriptor)?.let { it.isVar() }
+    val result = (target as? VariableDescriptor)?.let { it.isVar() }
+    return result
 }
         """.trimIndent(),
             classpath = listOf(File(VariableDescriptor::class.java.protectionDomain.codeSource.location.toURI()).path),

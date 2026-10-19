@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.idea.references.KtReference
 import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.psi.KtDeclarationWithReturnType
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
@@ -93,6 +94,12 @@ internal class SonarKaSession(
      */
     override val KtTypeReference.type: KaType
         get() = recoverFromResolveError({ buildClassType(ClassId.fromString("<error>")) }) { this@type.type }
+
+    /**
+     * Returns [org.jetbrains.kotlin.analysis.api.types.KaErrorType] on resolve error.
+     */
+    override val KtDeclarationWithReturnType.returnType: KaType
+        get() = recoverFromResolveError({ buildClassType(ClassId.fromString("<error>")) }) { this@returnType.returnType }
 
     /**
      * Returns no diagnostics on resolve error.
