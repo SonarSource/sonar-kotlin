@@ -20,8 +20,8 @@ import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
-import org.jetbrains.kotlin.psi2ir.deparenthesize
 import org.sonar.check.Rule
 import org.sonarsource.kotlin.api.checks.CallAbstractCheck
 import org.sonarsource.kotlin.api.checks.FunMatcher
@@ -45,7 +45,7 @@ class SimplifyFilteringBeforeTerminalOperationCheck : CallAbstractCheck() {
         val receiverExpression = callExpression.parent
             .let { it as? KtDotQualifiedExpression }
             ?.receiverExpression
-            ?.deparenthesize()
+            ?.let(KtPsiUtil::safeDeparenthesize)
         receiverExpression?.resolveToCall()?.successfulFunctionCallOrNull()
             ?.takeIf { callBeforeTerminalOp -> FILTER_MATCHER.matches(callBeforeTerminalOp) }
             ?.let { filterCallBeforeTerminalOp ->

@@ -4,8 +4,6 @@
 -dontwarn
 
 -keep class
-# META-INF/extensions/compiler.xml
-org.jetbrains.kotlin.plugin.references.SimpleNameReferenceExtension,
 # all projectService.serviceImplementation and applicationService.serviceImplementation from
 # META-INF/analysis-api/analysis-api-impl-base.xml
 org.jetbrains.kotlin.analysis.api.impl.base.java.KaBaseKotlinJavaPsiFacade,
@@ -27,10 +25,10 @@ org.jetbrains.kotlin.analysis.decompiler.konan.KlibLoadingMetadataCache,
 # all projectService.serviceImplementation and applicationService.serviceImplementation from
 # META-INF/analysis-api/low-level-api-fir.xml
 org.jetbrains.kotlin.analysis.low.level.api.fir.services.LLRealFirElementByPsiElementChooser,
-org.jetbrains.kotlin.analysis.low.level.api.fir.projectStructure.LLFirBuiltinsSessionFactory,
-org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.LLFirSessionCache,
-org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.LLFirSessionInvalidationService,
-org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.LLFirSessionInvalidationEventPublisher,
+org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.factory.LLFirBuiltinsSessionFactory,
+org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.cache.LLFirSessionCache,
+org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.cache.LLFirSessionInvalidationService,
+org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.cache.LLFirSessionInvalidationEventPublisher,
 org.jetbrains.kotlin.analysis.low.level.api.fir.LLFirGlobalResolveComponents,
 org.jetbrains.kotlin.analysis.low.level.api.fir.LLResolutionFacadeService,
 org.jetbrains.kotlin.analysis.low.level.api.fir.file.structure.LLFirDeclarationModificationService,
@@ -44,25 +42,25 @@ org.jetbrains.kotlin.light.classes.symbol.SymbolKotlinAsJavaSupport,
 # META-INF/analysis-api/analysis-api-fir-standalone-base.xml
 org.jetbrains.kotlin.analysis.api.standalone.base.declarations.KotlinStandaloneFirDirectInheritorsProvider,
 org.jetbrains.kotlin.analysis.decompiler.psi.BuiltinsVirtualFileProviderCliImpl,
+org.jetbrains.kotlin.analysis.api.standalone.base.references.ReadWriteAccessCheckerBaseImpl,
+org.jetbrains.kotlin.analysis.api.standalone.base.references.KaBaseArrayAccessReference$Provider,
+org.jetbrains.kotlin.analysis.api.standalone.base.references.KaBaseCollectionLiteralReference$Provider,
+org.jetbrains.kotlin.analysis.api.standalone.base.references.KaBaseConstructorDelegationReference$Provider,
+org.jetbrains.kotlin.analysis.api.standalone.base.references.KaBaseDefaultAnnotationArgumentReference$Provider,
+org.jetbrains.kotlin.analysis.api.standalone.base.references.KaBaseDestructuringDeclarationReference$Provider,
+org.jetbrains.kotlin.analysis.api.standalone.base.references.KaBaseForLoopInReference$Provider,
+org.jetbrains.kotlin.analysis.api.standalone.base.references.KaBaseInvokeFunctionReference$Provider,
+org.jetbrains.kotlin.analysis.api.standalone.base.references.KaBaseKDocReference$Provider,
+org.jetbrains.kotlin.analysis.api.standalone.base.references.KaBasePropertyDelegationMethodsReference$Provider,
+org.jetbrains.kotlin.analysis.api.standalone.base.references.KaBaseSimpleNameReference$Provider,
 # all projectService.serviceImplementation from
 # META-INF/analysis-api/analysis-api-fir.xml
 org.jetbrains.kotlin.analysis.api.fir.KaFirSessionProvider,
 org.jetbrains.kotlin.analysis.api.fir.modification.KaFirSourceModificationService,
 org.jetbrains.kotlin.analysis.api.fir.projectStructure.KaFirLibraryTargetPlatformContentScopeRefiner,
-org.jetbrains.kotlin.analysis.api.fir.references.KaFirArrayAccessReference$Provider,
-org.jetbrains.kotlin.analysis.api.fir.references.KaFirCollectionLiteralReference$Provider,
-org.jetbrains.kotlin.analysis.api.fir.references.KaFirConstructorDelegationReference$Provider,
-org.jetbrains.kotlin.analysis.api.fir.references.KaFirDestructuringDeclarationReference$Provider,
-org.jetbrains.kotlin.analysis.api.fir.references.KaFirForLoopInReference$Provider,
-org.jetbrains.kotlin.analysis.api.fir.references.KaFirInvokeFunctionReference$Provider,
-org.jetbrains.kotlin.analysis.api.fir.references.KaFirKDocReference$Provider,
-org.jetbrains.kotlin.analysis.api.fir.references.KaFirPropertyDelegationMethodsReference$Provider,
-org.jetbrains.kotlin.analysis.api.fir.references.KaFirSimpleNameReference$Provider,
-org.jetbrains.kotlin.analysis.api.fir.references.KaFirDefaultAnnotationArgumentReference$Provider,
 org.jetbrains.kotlin.analysis.api.fir.references.KaAdditionalKDocResolutionProviderAdapter,
-org.jetbrains.kotlin.analysis.api.fir.references.ReadWriteAccessCheckerFirImpl,
 org.jetbrains.kotlin.analysis.api.fir.references.KotlinFirKDocResolutionStrategyProviderService,
-org.jetbrains.kotlin.analysis.api.fir.KaFirDefaultImportsProvider,
+org.jetbrains.kotlin.analysis.api.fir.imports.KaFirDefaultImportsProvider,
 org.jetbrains.kotlin.analysis.api.fir.statistics.KaFirStatisticsService,
 org.jetbrains.kotlin.analysis.api.fir.utils.KaFirStopWorldCacheCleaner,
 org.jetbrains.kotlin.analysis.decompiler.psi.K2KotlinBuiltInDecompilationInterceptor,
@@ -87,9 +85,13 @@ org.sonarsource.kotlin.plugin.**
 
 -keepclassmembers class
 !org.jetbrains.kotlin.analysis.api.components.KaCompilerFacility**,
+!org.jetbrains.kotlin.analysis.api.compilation.**,
+!org.jetbrains.kotlin.analysis.api.internals.KaInternals,
+!org.jetbrains.kotlin.analysis.api.internals.KaInternalsCompilerFacility**,
 !org.jetbrains.kotlin.analysis.api.KaSession,
 !org.jetbrains.kotlin.analysis.api.impl.base.KaBaseSession,
 !org.jetbrains.kotlin.analysis.api.fir.components.KaFirCompilerFacility**,
+!org.jetbrains.kotlin.analysis.api.fir.components.bridges.KaCompilerFacilityBridge**,
 !org.jetbrains.kotlin.analysis.api.fir.KaFirSession,
 !org.jetbrains.kotlin.codegen.**,
 !org.jetbrains.kotlin.backend.**,

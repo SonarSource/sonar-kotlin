@@ -71,10 +71,11 @@ class AndroidPersistentUniqueIdentifierCheckSample {
             bluetoothAdapterFunParam.run { address } // Noncompliant
             bluetoothAdapterFunParam.apply { this.address } // Noncompliant
 
-            val localValGetAddressMethodRef = bluetoothAdapterFunParam::getAddress
-            localValGetAddressMethodRef() // FN
-            var localVarGetAddressMethodRef = bluetoothAdapterFunParam::getAddress
-            localVarGetAddressMethodRef() // FN
+            val localValGetAddressMethodRef = bluetoothAdapterFunParam::getAddress // Noncompliant
+            //                                                          ^^^^^^^^^^
+            localValGetAddressMethodRef()
+            var localVarGetAddressMethodRef = bluetoothAdapterFunParam::getAddress // Noncompliant
+            localVarGetAddressMethodRef()
         }
 
         fun compliantScenarios(

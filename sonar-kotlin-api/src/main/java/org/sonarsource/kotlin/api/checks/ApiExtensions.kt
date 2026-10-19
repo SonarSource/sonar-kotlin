@@ -62,6 +62,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
@@ -74,7 +75,6 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isNull
-import org.jetbrains.kotlin.psi2ir.deparenthesize
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.sonar.api.SonarProduct
 import org.sonar.api.batch.sensor.SensorContext
@@ -131,7 +131,7 @@ fun KtExpression.predictRuntimeBooleanValue() = withKaSession {
  */
 fun KtExpression.predictRuntimeValueExpression(
     declarations: MutableList<PsiElement> = mutableListOf(),
-): KtExpression = this.deparenthesize().let { deparenthesized ->
+): KtExpression = KtPsiUtil.safeDeparenthesize(this).let { deparenthesized ->
     when (deparenthesized) {
         is KtReferenceExpression -> run {
             val referenceTarget = deparenthesized.extractLetAlsoTargetExpression()
@@ -154,8 +154,8 @@ fun KtExpression.predictRuntimeValueExpression(
         else -> withKaSession {
             deparenthesized.resolveToCall()?.successfulFunctionCallOrNull()?.predictValueExpression()
         }
-    } ?: deparenthesized as? KtExpression
-} ?: this
+    } ?: deparenthesized
+}
 
 fun KtExpression.predictReceiverExpression(): KtExpression? = withKaSession {
     val resolvedCall = this@predictReceiverExpression.resolveToCall()?.successfulFunctionCallOrNull()
