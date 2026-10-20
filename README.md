@@ -116,7 +116,9 @@ For example, execute the following in the project root to fetch the metadata for
 
 If fetching from a branch:
 
-    ./gradlew :sonar-kotlin-plugin:ruleApiGenerateRuleKotlin -Prule=S4830 -Pbranch=a_branch
+```shell
+./gradlew :sonar-kotlin-plugin:ruleApiGenerateRuleKotlin -Prule=S4830 -Pbranch=a_branch
+```
 
 Alternatively, you can let the tool auto-detect the branch. If you do not provide a branch, it will look at the PRs
 open in the RSPEC repository that contain the rule key in their name. If it finds any, you will be presented with a
