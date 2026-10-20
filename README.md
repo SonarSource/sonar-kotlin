@@ -6,7 +6,7 @@
   </picture>
 </p>
 
-[![Quality gate status](https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=SonarSource_sonar-kotlin&metric=alert_status&token=squ_2cb73370c7b2519b9bfd4ad71c18e573ef17678e)](https://next.sonarqube.com/sonarqube/summary/new_code?id=SonarSource_sonar-kotlin) [![Coverage](https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=SonarSource_sonar-kotlin&metric=coverage&token=squ_2cb73370c7b2519b9bfd4ad71c18e573ef17678e)](https://next.sonarqube.com/sonarqube/summary/new_code?id=SonarSource_sonar-kotlin)
+[![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=SonarSource_sonar-kotlin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=SonarSource_sonar-kotlin) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=SonarSource_sonar-kotlin&metric=coverage)](https://sonarcloud.io/summary/new_code?id=SonarSource_sonar-kotlin)
 
 <!-- sonar-marketing:start -->
 <!-- Marketing maintains this section. For wording changes, consult the relevant Product Marketing Manager (PMM). Repository CODEOWNERS review accuracy and merge changes. -->
