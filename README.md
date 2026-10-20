@@ -6,7 +6,7 @@
   </picture>
 </p>
 
-[![Build Status](https://api.cirrus-ci.com/github/SonarSource/sonar-kotlin.svg?branch=master)](https://cirrus-ci.com/github/SonarSource/sonar-kotlin) [![Quality Gate Status](https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.kotlin%3Akotlin&metric=alert_status)](https://next.sonarqube.com/sonarqube/dashboard?id=org.sonarsource.kotlin%3Akotlin) [![Coverage](https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=org.sonarsource.kotlin%3Akotlin&metric=coverage)](https://next.sonarqube.com/sonarqube/dashboard?id=org.sonarsource.kotlin%3Akotlin)
+[![Quality gate status](https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=SonarSource_sonar-kotlin&metric=alert_status&token=squ_2cb73370c7b2519b9bfd4ad71c18e573ef17678e)](https://next.sonarqube.com/sonarqube/summary/new_code?id=SonarSource_sonar-kotlin) [![Coverage](https://next.sonarqube.com/sonarqube/api/project_badges/measure?project=SonarSource_sonar-kotlin&metric=coverage&token=squ_2cb73370c7b2519b9bfd4ad71c18e573ef17678e)](https://next.sonarqube.com/sonarqube/summary/new_code?id=SonarSource_sonar-kotlin)
 
 <!-- sonar-marketing:start -->
 <!-- Marketing maintains this section. For wording changes, consult the relevant Product Marketing Manager (PMM). Repository CODEOWNERS review accuracy and merge changes. -->
@@ -59,25 +59,35 @@ For more information see [README.md](https://github.com/SonarSource/cloud-native
 
 #### Build and run Unit Tests:
 
-    ./gradlew build dist
+```shell
+./gradlew build dist
+```
 
 ## Integration Tests
 
 Integration and ruling tests require the source projects submodule:
 
-    git submodule update --init its/sources
+```shell
+git submodule update --init its/sources
+```
 
 Run ruling tests (uses SIT — no SonarQube server needed):
 
-    ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon
+```shell
+./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon
+```
 
 Run plugin tests:
 
-    ./gradlew :its:plugin:integrationTest --info --console=plain --no-daemon
+```shell
+./gradlew :its:plugin:integrationTest --info --console=plain --no-daemon
+```
 
 To run a single ruling test method, e.g.:
 
-    ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon --tests "org.sonarsource.kotlin.its.KotlinRulingTest.test_kotlin_corda"
+```shell
+./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon --tests "org.sonarsource.kotlin.its.KotlinRulingTest.test_kotlin_corda"
+```
 
 ### Updating ruling golden files
 
@@ -100,7 +110,9 @@ The Gradle task `ruleApiGenerateRuleKotlin` will download the rule metadata from
 
 For example, execute the following in the project root to fetch the metadata for rule `S42`:
 
-    ./gradlew :sonar-kotlin-plugin:ruleApiGenerateRuleKotlin -Prule=S42
+```shell
+./gradlew :sonar-kotlin-plugin:ruleApiGenerateRuleKotlin -Prule=S42
+```
 
 If fetching from a branch:
 
@@ -120,7 +132,9 @@ choice of which branch to fetch the metadata from. Points to note about this fea
 
 If you want to update all rules' metadata, you can use:
 
-    ./gradlew :sonar-kotlin-plugin:ruleApiUpdateKotlin
+```shell
+./gradlew :sonar-kotlin-plugin:ruleApiUpdateKotlin
+```
 
 ### Implementing a new rule
 
@@ -130,11 +144,15 @@ will also put the rule into the list of checks and call `ruleApiGenerateRuleKotl
 To use this task, you need to know the rule key and a fitting name for the check class. For instance, if you want to implement the new
 rule `S42` in the class `AnswersEverythingCheck`, you can call the following in the root of the project:
 
-    ./gradlew setupRuleStubs -Prule=S42 -PclassName=AnswersEverythingCheck
+```shell
+./gradlew setupRuleStubs -Prule=S42 -PclassName=AnswersEverythingCheck
+```
 
 To create stubs for Kotlin Gradle DSL rules instead of Kotlin rules, use `setupGradleRuleStubs`, as in: 
 
-    ./gradlew setupGradleRuleStubs -Prule=S6626 -PclassName=TaskDefinitionsCheck
+```shell
+./gradlew setupGradleRuleStubs -Prule=S6626 -PclassName=TaskDefinitionsCheck
+```
 
 ### Updating external linter rule mappings
 
