@@ -3,7 +3,11 @@ plugins {
 }
 
 dependencies {
-    integrationTestImplementation(testLibs.sonarlint.core)
+    integrationTestImplementation(testLibs.sonarlint.core.test.utils) {
+        // The backend harness does not use the WebSocket test helper.
+        exclude(group = "org.java-websocket", module = "Java-WebSocket")
+    }
+    integrationTestImplementation(testLibs.awaitility)
     integrationTestImplementation(testLibs.sonar.orchestrator.junit5)
     integrationTestImplementation(testLibs.junit.jupiter)
     integrationTestRuntimeOnly("org.junit.platform:junit-platform-launcher")
