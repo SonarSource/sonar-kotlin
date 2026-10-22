@@ -384,6 +384,66 @@
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/idea-test-framework/test/org/jetbrains/kotlin/idea/test/TestFixtureExtension.kt": [
 34
 ],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertLambdaToReferenceIntention.kt": [
+46
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertReferenceToLambdaIntention.kt": [
+40
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertTryFinallyToUseCallIntention.kt": [
+35
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ConvertTwoComparisonsToRangeCheckIntention.kt": [
+35
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/FoldInitializerAndIfToElvisIntention.kt": [
+44
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ObjectLiteralToLambdaIntention.kt": [
+51
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveCurlyBracesFromTemplateIntention.kt": [
+25
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveEmptyClassBodyIntention.kt": [
+32
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveEmptyParenthesesFromLambdaCallIntention.kt": [
+31
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveEmptyPrimaryConstructorIntention.kt": [
+27
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveEmptySecondaryConstructorBodyIntention.kt": [
+26
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveExplicitSuperQualifierIntention.kt": [
+37
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveExplicitTypeArgumentsIntention.kt": [
+45
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/RemoveRedundantCallsOfConversionMethodsIntention.kt": [
+33
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ReplaceSingleLineLetIntention.kt": [
+24
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ReplaceSizeCheckWithIsNotEmptyIntention.kt": [
+24
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/ReplaceSizeZeroCheckWithIsEmptyIntention.kt": [
+24
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/SimplifyBooleanWithConstantsIntention.kt": [
+37
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/UsePropertyAccessSyntaxIntention.kt": [
+61
+],
+"kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/intentions/loopToCallChain/UseWithIndexIntention.kt": [
+28
+],
 "kotlin-kotlin-project:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/ui/KotlinChangeSignatureDialog.kt": [
 268
 ],

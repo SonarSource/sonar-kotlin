@@ -32,7 +32,7 @@ class SamConversionCheck : AbstractCheck() {
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration, context: KotlinFileContext) = withKaSession {
         val superTypeEntry = declaration.superTypeListEntries.singleOrNull() ?: return
         val typeReference = superTypeEntry.typeReference ?: return
-        if ((typeReference.type.isFunctionalInterface || typeReference.type.functionTypeKind != null) && declaration.hasExactlyOneFunctionAndNoProperties()) {
+        if ((typeReference.type.isFunctionalInterface || typeReference.type.functionTypeFamily != null) && declaration.hasExactlyOneFunctionAndNoProperties()) {
             val textRange = context.merge(declaration.getDeclarationKeyword()!!, superTypeEntry)
             context.reportIssue(textRange, "Replace explicit functional interface implementation with lambda expression.")
         }
