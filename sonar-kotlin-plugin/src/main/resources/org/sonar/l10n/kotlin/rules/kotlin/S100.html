@@ -16,8 +16,10 @@ fun DoSomething() {...}
   changed without breaking interoperability.</li>
   <li><strong>Override functions</strong> (declared with the <code>override</code> modifier): the name is dictated by the supertype contract and
   cannot be changed without breaking the override.</li>
-  <li><strong>Backtick-named test functions</strong>: functions annotated with <code>@Test</code>, <code>@ParameterizedTest</code>, or
-  <code>@RepeatedTest</code> may use backtick names with spaces to express human-readable test descriptions.</li>
+  <li><strong>Test functions</strong>: functions annotated with a test or test lifecycle annotation of JUnit 4 or 5, <code>kotlin.test</code>, or
+  TestNG, such as <code>@Test</code>, <code>@ParameterizedTest</code>, <code>@TestFactory</code>, or <code>@BeforeEach</code>. The name of such a
+  function describes a scenario instead of being used to call it, so backtick names with spaces and mixed styles such as
+  <code>deleteUser_whenNotFound_throwsNotFound</code> are equally appropriate.</li>
 </ul>
 <p>For functions annotated with <code>@Composable</code>, when the name does not match the configured <code>format</code>, the <a
 href="https://android.googlesource.com/platform/frameworks/support/+/androidx-main/compose/docs/compose-api-guidelines.md">Jetpack Compose API
