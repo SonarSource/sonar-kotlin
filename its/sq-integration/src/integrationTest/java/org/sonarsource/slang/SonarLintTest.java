@@ -18,69 +18,74 @@ package org.sonarsource.slang;
 
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 import com.sonar.orchestrator.locator.Locators;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import javax.annotation.Nullable;
-import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonarsource.sonarlint.core.analysis.AnalysisEngine;
-import org.sonarsource.sonarlint.core.analysis.api.ActiveRule;
-import org.sonarsource.sonarlint.core.analysis.api.ClientInputFile;
-import org.sonarsource.sonarlint.core.analysis.api.ClientModuleFileSystem;
-import org.sonarsource.sonarlint.core.analysis.api.ClientModuleInfo;
-import org.sonarsource.sonarlint.core.analysis.api.Issue;
-import org.sonarsource.sonarlint.core.analysis.api.AnalysisConfiguration;
-import org.sonarsource.sonarlint.core.analysis.api.AnalysisEngineConfiguration;
-import org.sonarsource.sonarlint.core.analysis.command.AnalyzeCommand;
-import org.sonarsource.sonarlint.core.analysis.command.RegisterModuleCommand;
-import org.sonarsource.sonarlint.core.commons.api.SonarLanguage;
-
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import org.sonarsource.sonarlint.core.commons.log.LogOutput;
-import org.sonarsource.sonarlint.core.commons.log.SonarLintLogger;
-import org.sonarsource.sonarlint.core.commons.progress.ProgressMonitor;
-import org.sonarsource.sonarlint.core.plugin.commons.PluginsLoader;
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.io.TempDir;
+import org.sonarsource.sonarlint.core.rpc.protocol.backend.analysis.AnalyzeFilesAndTrackParams;
+import org.sonarsource.sonarlint.core.rpc.protocol.backend.rules.StandaloneRuleConfigDto;
+import org.sonarsource.sonarlint.core.rpc.protocol.backend.rules.UpdateStandaloneRulesConfigurationParams;
+import org.sonarsource.sonarlint.core.rpc.protocol.common.ClientFileDto;
+import org.sonarsource.sonarlint.core.rpc.protocol.common.Language;
+import org.sonarsource.sonarlint.core.test.utils.junit5.SonarLintTestHarness;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
+import static org.awaitility.Awaitility.await;
 
 public class SonarLintTest {
 
-  @TempDir
-  public static Path temp;
+  private static final String CONFIG_SCOPE_ID = "testModule";
 
-  private static AnalysisEngine analysisEngine;
-  private final ProgressMonitor progressMonitor = new ProgressMonitor(null);
-
-  @BeforeAll
-  public static void prepare() {
-    SonarLintLogger.setTarget(new NoOpLogOutput());
-    var pluginJarLocations = getPluginJarLocations();
-    var pluginConfiguration = new PluginsLoader.Configuration(pluginJarLocations, Set.of(SonarLanguage.KOTLIN), false, Optional.empty());
-    // Closing pluginLoader here in prepare would make analysisEngine see 0 plugins during analysis
-    var pluginLoader = new PluginsLoader().load(pluginConfiguration, Set.of());
-    var analysisEngineConfiguration = AnalysisEngineConfiguration.builder()
-      .setWorkDir(temp)
+  @org.sonarsource.sonarlint.core.test.utils.junit5.SonarLintTest
+  void test_kotlin(SonarLintTestHarness harness, @TempDir Path baseDir) throws IOException {
+    var path = baseDir.resolve("foo.kt");
+    Files.writeString(path,
+      "fun foo_bar() {\n" +
+        "    if (true) { \n" +
+        "        val password = \"blabla\"\n" +
+        "    } \n" +
+        "}\n" +
+        "\n" +
+        "fun foo_bar_nosonar() {} // NOSONAR \n");
+    var inputFile = new ClientFileDto(path.toUri(), baseDir.relativize(path), CONFIG_SCOPE_ID,
+      false, null, path, null, Language.KOTLIN, true);
+    var client = harness.newFakeClient()
+      .withInitialFs(CONFIG_SCOPE_ID, baseDir, List.of(inputFile))
       .build();
-    var loadedPlugins = pluginLoader.getLoadedPlugins();
-    analysisEngine = new AnalysisEngine(analysisEngineConfiguration, loadedPlugins, new NoOpLogOutput());
+    var builder = harness.newBackend()
+      .withEnabledLanguageInStandaloneMode(Language.KOTLIN)
+      .withUnboundConfigScope(CONFIG_SCOPE_ID);
+    getPluginJarLocations().forEach(builder::withStandaloneEmbeddedPlugin);
+    var backend = builder.start(client);
+    var activeRules = Set.of("kotlin:S100", "kotlin:S1481", "kotlin:S1145");
+    var ruleConfiguration = backend.getRulesService().listAllStandaloneRulesDefinitions().join().getRulesByKey().keySet().stream()
+      .collect(Collectors.toMap(ruleKey -> ruleKey, ruleKey -> new StandaloneRuleConfigDto(activeRules.contains(ruleKey), Map.of())));
+    backend.getRulesService().updateStandaloneRulesConfiguration(new UpdateStandaloneRulesConfigurationParams(ruleConfiguration));
+
+    var analysis = backend.getAnalysisService().analyzeFilesAndTrack(new AnalyzeFilesAndTrackParams(
+      CONFIG_SCOPE_ID, UUID.randomUUID(), List.of(inputFile.getUri()), Map.of(), false)).join();
+
+    assertThat(analysis.getFailedAnalysisFiles()).isEmpty();
+    await().atMost(Duration.ofSeconds(30)).untilAsserted(() -> {
+      var issuesByFile = client.getRaisedIssuesForScopeId(CONFIG_SCOPE_ID);
+      assertThat(issuesByFile).containsOnlyKeys(inputFile.getUri());
+      assertThat(issuesByFile.get(inputFile.getUri()))
+        .extracting(issue -> issue.getRuleKey(), issue -> issue.getTextRange().getStartLine())
+        .containsExactlyInAnyOrder(
+          tuple("kotlin:S100", 1),
+          tuple("kotlin:S1481", 3),
+          tuple("kotlin:S1145", 2));
+    });
   }
 
-  private static @NotNull Set<Path> getPluginJarLocations() {
+  private static Set<Path> getPluginJarLocations() {
     var orchestratorBuilder = OrchestratorExtension.builderEnv();
     TestsHelper.addLanguagePlugins(orchestratorBuilder);
     var orchestrator = orchestratorBuilder
@@ -92,118 +97,6 @@ public class SonarLintTest {
       .filter(location -> !location.toString().contains("sonar-reset-data-plugin"))
       .map(plugin -> locators.locate(plugin).toPath())
       .collect(Collectors.toSet());
-  }
-
-  @AfterAll
-  public static void stop() {
-    SonarLintLogger.setTarget(null);
-    analysisEngine.stop();
-  }
-
-  @Test
-  void test_kotlin() throws Exception {
-    var inputFile = prepareInputFile("foo.kt",
-      "fun foo_bar() {\n" +
-        "    if (true) { \n" +
-        "        val password = \"blabla\"\n" +
-        "    } \n" +
-        "}\n" +
-        "\n" +
-        "fun foo_bar_nosonar() {} // NOSONAR \n");
-
-    var clientFileSystem = new ClientModuleFileSystem() {
-      @Override
-      public Stream<ClientInputFile> files(@NotNull String s, InputFile.@NotNull Type type) {
-        return Stream.of(inputFile);
-      }
-
-      @Override
-      public Stream<ClientInputFile> files() {
-        return Stream.of(inputFile);
-      }
-    };
-    var registerModuleCommand = new RegisterModuleCommand(new ClientModuleInfo("testModule", clientFileSystem));
-    analysisEngine.post(registerModuleCommand, progressMonitor).get();
-
-    var kotlinLanguageKey = SonarLanguage.KOTLIN.name();
-    var analysisConfiguration = AnalysisConfiguration.builder()
-      .setBaseDir(temp)
-      .addInputFile(inputFile)
-      .addActiveRules(
-        new ActiveRule("kotlin:S100", kotlinLanguageKey),
-        new ActiveRule("kotlin:S1481", kotlinLanguageKey),
-        new ActiveRule("kotlin:S1145", kotlinLanguageKey))
-      .build();
-    var issues = new ArrayList<Issue>();
-    var analyzeCommand = new AnalyzeCommand("testModule", analysisConfiguration, issues::add, new NoOpLogOutput());
-    analysisEngine.post(analyzeCommand, progressMonitor).get();
-
-    assertThat(issues).extracting(Issue::getRuleKey, Issue::getStartLine, issue -> issue.getInputFile().uri()).containsOnly(
-      tuple("kotlin:S100", 1, inputFile.uri()),
-      tuple("kotlin:S1481", 3, inputFile.uri()),
-      tuple("kotlin:S1145", 2, inputFile.uri()));
-  }
-
-  private ClientInputFile prepareInputFile(String relativePath, String content) throws IOException {
-    var file = new File(temp.toFile(), relativePath);
-    Files.writeString(file.toPath(), content, StandardCharsets.UTF_8);
-    return new PathBasedClientInputFile(file.toPath());
-  }
-
-  private static class PathBasedClientInputFile implements ClientInputFile {
-    private final Path path;
-
-    public PathBasedClientInputFile(Path path) {
-      this.path = path;
-    }
-
-    @Override
-    public URI uri() {
-      return path.toUri();
-    }
-
-    @Override
-    public String getPath() {
-      return path.toString();
-    }
-
-    @Override
-    public boolean isTest() {
-      return false;
-    }
-
-    @Override
-    public Charset getCharset() {
-      return StandardCharsets.UTF_8;
-    }
-
-
-    @Override
-    public <G> G getClientObject() {
-      return null;
-    }
-
-    @Override
-    public String contents() throws IOException {
-      return Files.readString(path);
-    }
-
-    @Override
-    public String relativePath() {
-      return path.toString();
-    }
-
-    @Override
-    public InputStream inputStream() throws IOException {
-      return Files.newInputStream(path);
-    }
-  }
-
-  private static class NoOpLogOutput implements LogOutput {
-    @Override
-    public void log(String formattedMessage, @NotNull Level level, @Nullable String stacktrace) {
-      /* Don't pollute logs */
-    }
   }
 
 }
