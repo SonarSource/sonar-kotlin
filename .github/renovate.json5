@@ -113,7 +113,7 @@
       ],
       "groupName": "kotlinVersion",
       "groupSlug": "kotlin-version"
-    }
+    },
     {
       "matchManagers": [
         "git-submodules"
