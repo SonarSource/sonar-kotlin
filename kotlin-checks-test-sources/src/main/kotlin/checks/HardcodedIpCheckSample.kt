@@ -105,6 +105,8 @@ class HardcodedIpCheckSample {
         "//[2003::1%eth0]:8080/path" // Noncompliant
         "127.0.0.1/7" // Noncompliant
         "127.0.0.1/8" // Compliant
+        "0.0.0.0/0" // Compliant
+        "::/0" // Compliant
         "1.2.3.4-foo" // Compliant
 
         // Preserve the OID exclusion on the extracted spelling.
