@@ -29,7 +29,7 @@ class HardcodedIpCheckSample {
         var notAnIp5 = "0.256.0.0";
 
         ip = "0.00.0.0"; // Compliant
-        ip = "1.2.03.4"; // Compliant
+        ip = "1.2.03.4"; // Compliant - ambiguous leading-zero decimal octet
 
         var fileName = "v0.0.1.200__do_something.sql"; // Compliant - suffixed and prefixed
         var version = "1.0.0.0-1"; // Compliant - suffixed
@@ -71,6 +71,7 @@ class HardcodedIpCheckSample {
         "https://[3FFE::1111:0:5EFE:131.107.129.8]:8080/";
 
         "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"; // Noncompliant
+        "224.0.0.1" // Noncompliant
 
         "192.0.3.1" // Noncompliant
         "198.51.101.10" // Noncompliant
@@ -97,6 +98,21 @@ class HardcodedIpCheckSample {
         "2001:db8:1f70::999:de8:7648:6e8";
         "::ffff:0:127.0.0.1"
         "::ffff:127.168.0.1"
+        "3fff::1" // Compliant - documentation
+        "http://[2001:0db8::1]:8080/" // Compliant - documentation
+
+        // Shared extraction of endpoints, URL hosts, and bare CIDR ranges.
+        "//[2003::1%eth0]:8080/path" // Noncompliant
+        "127.0.0.1/7" // Noncompliant
+        "127.0.0.1/8" // Compliant
+        "0.0.0.0/0" // Compliant
+        "::/0" // Compliant
+        "1.2.3.4-foo" // Compliant
+
+        // Preserve the OID exclusion on the extracted spelling.
+        "http://2.5.255.255/path" // Compliant
+        "2.5.255.255/24" // Compliant
+        "::ffff:2.5.255.255" // Noncompliant
     }
 
 }
