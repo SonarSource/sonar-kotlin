@@ -1026,6 +1026,11 @@
             <sha256 value="b15e605ca0a4b12c62ea7f657dad413c236c947e875854767349cdbe20df473c" origin="Verified"/>
          </artifact>
       </component>
+      <component group="com.squareup.okhttp3" name="okhttp-jvm" version="5.5.0">
+         <artifact name="okhttp-jvm-5.5.0.jar">
+            <sha256 value="234194a04aac54858df0a750d243af7b2e39df5e4eb86e9912043ad33a9f9a52" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="com.squareup.okhttp3" name="okhttp-urlconnection" version="4.12.0">
          <artifact name="okhttp-urlconnection-4.12.0.jar">
             <sha256 value="74c0e3f8c3df0b1d32ab9d839448c914586d3e8479611e4386fecfa6b3f0a26b" origin="Verified"/>
@@ -1054,6 +1059,11 @@
       <component group="com.squareup.okio" name="okio-jvm" version="3.17.0">
          <artifact name="okio-jvm-3.17.0.jar">
             <sha256 value="3b13dcc3e1573047c2d507fc4f7fcb0bb0cbcd9d395da21d20e09406e2cd6a73" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="com.squareup.okio" name="okio-jvm" version="3.18.1">
+         <artifact name="okio-jvm-3.18.1.jar">
+            <sha256 value="b97b640557a650d15411f2be29aef558c4e422a83653cb18ba494311dbed18be" origin="Verified"/>
          </artifact>
       </component>
       <component group="com.squareup.okio" name="okio-jvm" version="3.6.0">
