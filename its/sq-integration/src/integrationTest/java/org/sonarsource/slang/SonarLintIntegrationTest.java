@@ -33,17 +33,18 @@ import org.sonarsource.sonarlint.core.rpc.protocol.backend.rules.StandaloneRuleC
 import org.sonarsource.sonarlint.core.rpc.protocol.backend.rules.UpdateStandaloneRulesConfigurationParams;
 import org.sonarsource.sonarlint.core.rpc.protocol.common.ClientFileDto;
 import org.sonarsource.sonarlint.core.rpc.protocol.common.Language;
+import org.sonarsource.sonarlint.core.test.utils.junit5.SonarLintTest;
 import org.sonarsource.sonarlint.core.test.utils.junit5.SonarLintTestHarness;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.awaitility.Awaitility.await;
 
-public class SonarLintTest {
+public class SonarLintIntegrationTest {
 
   private static final String CONFIG_SCOPE_ID = "testModule";
 
-  @org.sonarsource.sonarlint.core.test.utils.junit5.SonarLintTest
+  @SonarLintTest
   void test_kotlin(SonarLintTestHarness harness, @TempDir Path baseDir) throws IOException {
     var path = baseDir.resolve("foo.kt");
     Files.writeString(path,

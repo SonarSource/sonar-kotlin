@@ -3935,19 +3935,9 @@
             <sha256 value="a080a9e0d8bf9f4293503f8802ce3c1b9455f1d8eb0a051b5e8f1cffb63c35ce" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.sonarlint.core" name="sonarlint-analysis-engine" version="10.13.0.79996">
-         <artifact name="sonarlint-analysis-engine-10.13.0.79996.jar">
-            <sha256 value="97555326cd251de7d99440eabc7fc160d6333a2416122c77f3fabe3927cc783e" origin="Verified"/>
-         </artifact>
-      </component>
       <component group="org.sonarsource.sonarlint.core" name="sonarlint-analysis-engine" version="12.1.1.87771">
          <artifact name="sonarlint-analysis-engine-12.1.1.87771.jar">
             <sha256 value="6e2e3a5dadbcf620084849c8391fda93050267a9a75304a8ce396b91e5a79f58" origin="Verified"/>
-         </artifact>
-      </component>
-      <component group="org.sonarsource.sonarlint.core" name="sonarlint-commons" version="10.13.0.79996">
-         <artifact name="sonarlint-commons-10.13.0.79996.jar">
-            <sha256 value="a0011e739e88e2df906d0433b57718a531d0a1b547dfad0d3fb67d495c9345b4" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.sonarsource.sonarlint.core" name="sonarlint-commons" version="12.1.1.87771">
@@ -3955,29 +3945,14 @@
             <sha256 value="91aa0716166e61bb239cb6672d10801f7a4a5c7993a19ed682257f8bd7758851" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.sonarlint.core" name="sonarlint-core" version="10.13.0.79996">
-         <artifact name="sonarlint-core-10.13.0.79996.jar">
-            <sha256 value="e82aaa3e94ecba1be9e8ea6794939d0449425f51772f4a94b5a3df1a3313cba1" origin="Verified"/>
-         </artifact>
-      </component>
       <component group="org.sonarsource.sonarlint.core" name="sonarlint-core" version="12.1.1.87771">
          <artifact name="sonarlint-core-12.1.1.87771.jar">
             <sha256 value="20a5e083195cac89edb67c3e1831d0a772c83a3e305fd83f5ab08e1719039067" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.sonarlint.core" name="sonarlint-core" version="9.5.0.76302">
-         <artifact name="sonarlint-core-9.5.0.76302.jar">
-            <sha256 value="7c380fe7b9ecfccf7b5af3fe3053c8825f5a30ee8c5dbad0fa51c00c1b717a4f" origin="Verified"/>
-         </artifact>
-      </component>
       <component group="org.sonarsource.sonarlint.core" name="sonarlint-core-test-utils" version="12.1.1.87771">
          <artifact name="sonarlint-core-test-utils-12.1.1.87771.jar">
             <sha256 value="9d367260fe95744df15dfdf5b2284cf512c93a98dc8045a8c2ef36278a8372a0" origin="Verified"/>
-         </artifact>
-      </component>
-      <component group="org.sonarsource.sonarlint.core" name="sonarlint-http" version="10.13.0.79996">
-         <artifact name="sonarlint-http-10.13.0.79996.jar">
-            <sha256 value="61710161476ecc719ba7767444feb1bb14a2227e2ceb0d316dc5da83529ac643" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.sonarsource.sonarlint.core" name="sonarlint-http" version="12.1.1.87771">
@@ -3990,19 +3965,9 @@
             <sha256 value="3645452b77924da1edaaa1a819d87835df23d21bd31413878c2c05203d51a48a" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.sonarlint.core" name="sonarlint-plugin-api" version="10.13.0.79996">
-         <artifact name="sonarlint-plugin-api-10.13.0.79996.jar">
-            <sha256 value="9bcaa9bbd83c5110cbe6353408009dcc8211d2f44ebc81288e867f347734d141" origin="Verified"/>
-         </artifact>
-      </component>
       <component group="org.sonarsource.sonarlint.core" name="sonarlint-plugin-api" version="12.1.1.87771">
          <artifact name="sonarlint-plugin-api-12.1.1.87771.jar">
             <sha256 value="aa92cdca43c660703972de3dd5c40660161427ea8d74b021789ad77017906905" origin="Verified"/>
-         </artifact>
-      </component>
-      <component group="org.sonarsource.sonarlint.core" name="sonarlint-plugin-commons" version="10.13.0.79996">
-         <artifact name="sonarlint-plugin-commons-10.13.0.79996.jar">
-            <sha256 value="538470f7ecef53189fd3b5a50fe64ba5301b0b7efee8cc795a5ceaf3d6e09200" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.sonarsource.sonarlint.core" name="sonarlint-plugin-commons" version="12.1.1.87771">
@@ -4020,19 +3985,9 @@
             <sha256 value="e8ab29b7d44592ee3a16be9b4773c0bbcda5e315c1f9e08eb540b369c323d880" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.sonarlint.core" name="sonarlint-rpc-protocol" version="10.13.0.79996">
-         <artifact name="sonarlint-rpc-protocol-10.13.0.79996.jar">
-            <sha256 value="64ee804b08d4fd743d5c787fcbc1bce88e76f6d693a7cd40959534469c0962c4" origin="Verified"/>
-         </artifact>
-      </component>
       <component group="org.sonarsource.sonarlint.core" name="sonarlint-rpc-protocol" version="12.1.1.87771">
          <artifact name="sonarlint-rpc-protocol-12.1.1.87771.jar">
             <sha256 value="710613edf8ee63d2cb88a56827587ad2aebc14fd98fe2237849f5cb776ed6ba7" origin="Verified"/>
-         </artifact>
-      </component>
-      <component group="org.sonarsource.sonarlint.core" name="sonarlint-rule-extractor" version="10.13.0.79996">
-         <artifact name="sonarlint-rule-extractor-10.13.0.79996.jar">
-            <sha256 value="85588a2c37c796eb35093390d5157c2cb50d501b9b4924fc35e1832a955c2322" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.sonarsource.sonarlint.core" name="sonarlint-rule-extractor" version="12.1.1.87771">
@@ -4040,29 +3995,14 @@
             <sha256 value="676f460fedb2173db0d94875f5b05f1b5d07467263077f61f63e2e2c51f1564d" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.sonarlint.core" name="sonarlint-server-api" version="10.13.0.79996">
-         <artifact name="sonarlint-server-api-10.13.0.79996.jar">
-            <sha256 value="678096b2e95fdf40df9e3499a30df35720de4ed64723e4094826d5241507792e" origin="Verified"/>
-         </artifact>
-      </component>
       <component group="org.sonarsource.sonarlint.core" name="sonarlint-server-api" version="12.1.1.87771">
          <artifact name="sonarlint-server-api-12.1.1.87771.jar">
             <sha256 value="f03c90f469752c3d1eee7963fb62ef540218ef5d4742458e271e27ac342a23be" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.sonarsource.sonarlint.core" name="sonarlint-server-connection" version="10.13.0.79996">
-         <artifact name="sonarlint-server-connection-10.13.0.79996.jar">
-            <sha256 value="7faef521da022b6c2a0f0a38cc03bbcad215e58f9381a89527c9194e54802959" origin="Verified"/>
-         </artifact>
-      </component>
       <component group="org.sonarsource.sonarlint.core" name="sonarlint-server-connection" version="12.1.1.87771">
          <artifact name="sonarlint-server-connection-12.1.1.87771.jar">
             <sha256 value="47f013e1aeb8f75a3476ea988227b699852894a6f81cc3ebd33f1e818867d06b" origin="Verified"/>
-         </artifact>
-      </component>
-      <component group="org.sonarsource.sonarlint.core" name="sonarlint-telemetry" version="10.13.0.79996">
-         <artifact name="sonarlint-telemetry-10.13.0.79996.jar">
-            <sha256 value="3426596643870fd88a72c3217d871b3f3851dbe696dbcb8064164217e98941ef" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.sonarsource.sonarlint.core" name="sonarlint-telemetry" version="12.1.1.87771">
