@@ -2074,6 +2074,11 @@
             <sha256 value="1953d9d443149769c8418fd4fb69284ba2f98adbbed304e9a050c360e28541c6" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.codehaus.woodstox" name="stax2-api" version="4.3.0">
+         <artifact name="stax2-api-4.3.0.jar">
+            <sha256 value="7c805f36129ea9fa42b696093b7ae1eb20bb6ccec65c8280d6f33db5609ca5e1" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.codehaus.woodstox" name="stax2-api" version="4.3.2">
          <artifact name="stax2-api-4.3.2.jar">
             <sha256 value="7fd6d60212696fb5d6dc422c2a1c8fb82c088d66dd7e4f30738d5d7606eabcd1" origin="Verified"/>
