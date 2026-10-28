@@ -45,11 +45,6 @@
             <sha256 value="3f63cbc593b91670f75890ab256aa47c123a9b125185939a272c720ca1417c2c" origin="Verified"/>
          </artifact>
       </component>
-      <component group="ch.qos.logback" name="logback-classic" version="1.5.38">
-         <artifact name="logback-classic-1.5.38.jar">
-            <sha256 value="afb439c61fa287c9e1925523b13baab03617e724406a389d48b61c2c3e46b700" origin="Verified"/>
-         </artifact>
-      </component>
       <component group="ch.qos.logback" name="logback-classic" version="1.6.5">
          <artifact name="logback-classic-1.6.5.jar">
             <sha256 value="2e8c73aadad525e854af1ac95793af3dc75ecedd53c010ea2389de44c08e729b" origin="Verified"/>
@@ -83,11 +78,6 @@
       <component group="ch.qos.logback" name="logback-core" version="1.3.16">
          <artifact name="logback-core-1.3.16.jar">
             <sha256 value="f153c7d582ad19219c906dd728df335232790663f5b3d2db187ac83d9e5a3b8b" origin="Verified"/>
-         </artifact>
-      </component>
-      <component group="ch.qos.logback" name="logback-core" version="1.5.38">
-         <artifact name="logback-core-1.5.38.jar">
-            <sha256 value="a855a0fc97b1d06f4efb1c3bba5ebd0eb508d8b58e68e89e4bbc23a85135c883" origin="Verified"/>
          </artifact>
       </component>
       <component group="ch.qos.logback" name="logback-core" version="1.6.5">
@@ -145,9 +135,9 @@
             <sha256 value="b25969972e1d980280ca2ae529197ed9b3160aae48b506cf1935f01bd1318667" origin="Verified"/>
          </artifact>
       </component>
-      <component group="com.diffplug.spotless" name="spotless-lib" version="4.10.2">
-         <artifact name="spotless-lib-4.10.2.jar">
-            <sha256 value="8039fbcb016ef404de2d9939486c3e8e567d56727c2b3c61a1a5cd475e05122b" origin="Verified"/>
+      <component group="com.diffplug.spotless" name="spotless-lib" version="4.10.4">
+         <artifact name="spotless-lib-4.10.4.jar">
+            <sha256 value="efd428f9e4fdf187dc0eca0aee020d639874cd839b458f39566bf105f61502aa" origin="Verified"/>
          </artifact>
       </component>
       <component group="com.diffplug.spotless" name="spotless-lib" version="4.10.4">
@@ -165,9 +155,9 @@
             <sha256 value="602cbbcd3828ee9cfb2e30a7f9b30335c6927130771414d4cdd294d21fe5cb67" origin="Verified"/>
          </artifact>
       </component>
-      <component group="com.diffplug.spotless" name="spotless-lib-extra" version="4.10.2">
-         <artifact name="spotless-lib-extra-4.10.2.jar">
-            <sha256 value="a80d67a10f9cab563ff423965c2e9d10def07028871f1cc19fe1f98eb63facc4" origin="Verified"/>
+      <component group="com.diffplug.spotless" name="spotless-lib-extra" version="4.10.4">
+         <artifact name="spotless-lib-extra-4.10.4.jar">
+            <sha256 value="8384f38f6f31fd902aecadf788877110d6b4031cd5c27e066044b1e7383b0a1b" origin="Verified"/>
          </artifact>
       </component>
       <component group="com.diffplug.spotless" name="spotless-lib-extra" version="4.10.4">
@@ -185,9 +175,9 @@
             <sha256 value="f5eb908a4c5da46299e7543faada0402d2c4b77d58c7b432d4b6e59349b280a3" origin="Verified"/>
          </artifact>
       </component>
-      <component group="com.diffplug.spotless" name="spotless-plugin-gradle" version="8.10.2">
-         <artifact name="spotless-plugin-gradle-8.10.2.jar">
-            <sha256 value="bd1d47e81838ff94251b382133141a062343790164a6589d1f1b90d6c420c2c9" origin="Verified"/>
+      <component group="com.diffplug.spotless" name="spotless-plugin-gradle" version="8.10.4">
+         <artifact name="spotless-plugin-gradle-8.10.4.jar">
+            <sha256 value="fab4152714c6087e36fd676c58ad15a5beaf71daea557b3e021950723284ccd7" origin="Verified"/>
          </artifact>
       </component>
       <component group="com.diffplug.spotless" name="spotless-plugin-gradle" version="8.10.4">
@@ -706,9 +696,9 @@
             <sha256 value="65db47266623cd6b2f414422f86679ebddde4b5554e235b7fe332f5e86c3b7bd" origin="Verified"/>
          </artifact>
       </component>
-      <component group="com.gradle" name="develocity-gradle-plugin" version="4.5.1">
-         <artifact name="develocity-gradle-plugin-4.5.1.jar">
-            <sha256 value="1d7b9aa7cacc4e14c5faae8cc893eadb5b74c2b8a289f4b1d570a3b9923634c3" origin="Verified"/>
+      <component group="com.gradle" name="develocity-gradle-plugin" version="4.6.1">
+         <artifact name="develocity-gradle-plugin-4.6.1.jar">
+            <sha256 value="fb61c937faae81a533da88e538b2429b57966b00c047603580091f484d1e870e" origin="Verified"/>
          </artifact>
       </component>
       <component group="com.gradleup.shadow" name="shadow-gradle-plugin" version="9.4.2">
@@ -726,9 +716,9 @@
             <sha256 value="7053bc4366cf80798f205e37f4f649cde516081e5e653a3c49ea6700b2047b11" origin="Verified"/>
          </artifact>
       </component>
-      <component group="com.guardsquare" name="proguard-base" version="7.9.1">
-         <artifact name="proguard-base-7.9.1.jar">
-            <sha256 value="007dc926e30588aec5a2d1c51f07f440894c716a06b42f83a7edd19a15f64270" origin="Verified"/>
+      <component group="com.guardsquare" name="proguard-base" version="7.10.0">
+         <artifact name="proguard-base-7.10.0.jar">
+            <sha256 value="022854eb4c6f4bd761b2e3ff19d832e98227ff498fd8fcc788b313f55810a555" origin="Verified"/>
          </artifact>
       </component>
       <component group="com.guardsquare" name="proguard-core" version="9.1.7">
@@ -736,14 +726,14 @@
             <sha256 value="db06fa9f6b43bb7d386420f854f41aa55a11023de36bad68e043c3ac3f33b8d5" origin="Verified"/>
          </artifact>
       </component>
-      <component group="com.guardsquare" name="proguard-core" version="9.3.2">
-         <artifact name="proguard-core-9.3.2.jar">
-            <sha256 value="37a9df23cb34dbc2574b0db68f14e2f92fb20f019400ed076b1657daac6172f3" origin="Verified"/>
+      <component group="com.guardsquare" name="proguard-core" version="9.4.0">
+         <artifact name="proguard-core-9.4.0.jar">
+            <sha256 value="7af7c47c173711aca9edee7482ec27b33eb0a20345279d88022cb34f71710407" origin="Verified"/>
          </artifact>
       </component>
-      <component group="com.guardsquare" name="proguard-gradle" version="7.9.1">
-         <artifact name="proguard-gradle-7.9.1.jar">
-            <sha256 value="91faeedc258c27248c5e6fdb8bbeafdd2dba0b20314d6f099b9567a3272a98ef" origin="Verified"/>
+      <component group="com.guardsquare" name="proguard-gradle" version="7.10.0">
+         <artifact name="proguard-gradle-7.10.0.jar">
+            <sha256 value="6ca2be4bbfeb41368c761be0b4f8ad506bb9ba23464cdaba76db8ca084c13f96" origin="Verified"/>
          </artifact>
       </component>
       <component group="com.h2database" name="h2" version="2.2.222">
@@ -1154,6 +1144,11 @@
       <component group="commons-fileupload" name="commons-fileupload" version="1.6.0">
          <artifact name="commons-fileupload-1.6.0.jar">
             <sha256 value="9383272c93569afeabedb16923a94a6dc8a5bd7a2f9f83bf326af4ee68434629" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="commons-io" name="commons-io" version="2.16.1">
+         <artifact name="commons-io-2.16.1.jar">
+            <sha256 value="f41f7baacd716896447ace9758621f62c1c6b0a91d89acee488da26fc477c84f" origin="Verified"/>
          </artifact>
       </component>
       <component group="commons-io" name="commons-io" version="2.18.0">
@@ -2074,14 +2069,19 @@
             <sha256 value="a61c48d553efad78bc01fffc4ac528bebbae64cbaec170b2a5e39cf61eb51abe" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.codehaus.woodstox" name="stax2-api" version="4.3.1">
+         <artifact name="stax2-api-4.3.1.jar">
+            <sha256 value="1953d9d443149769c8418fd4fb69284ba2f98adbbed304e9a050c360e28541c6" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.codehaus.woodstox" name="stax2-api" version="4.3.0">
          <artifact name="stax2-api-4.3.0.jar">
             <sha256 value="7c805f36129ea9fa42b696093b7ae1eb20bb6ccec65c8280d6f33db5609ca5e1" origin="Verified"/>
          </artifact>
       </component>
-      <component group="org.codehaus.woodstox" name="stax2-api" version="4.3.1">
-         <artifact name="stax2-api-4.3.1.jar">
-            <sha256 value="1953d9d443149769c8418fd4fb69284ba2f98adbbed304e9a050c360e28541c6" origin="Verified"/>
+      <component group="org.codehaus.woodstox" name="stax2-api" version="4.3.2">
+         <artifact name="stax2-api-4.3.2.jar">
+            <sha256 value="7fd6d60212696fb5d6dc422c2a1c8fb82c088d66dd7e4f30738d5d7606eabcd1" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.ec4j.core" name="ec4j-core" version="0.3.0">
@@ -3846,7 +3846,7 @@
       </component>
       <component group="org.slf4j" name="slf4j-nop" version="2.0.19">
          <artifact name="slf4j-nop-2.0.19.jar">
-            <sha256 value="d0226062f9b3a2793f62002f892a8e624eb07f396130fc949e01b1d5f4888cba" origin="Generated by Gradle"/>
+            <sha256 value="d0226062f9b3a2793f62002f892a8e624eb07f396130fc949e01b1d5f4888cba" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.slf4j" name="slf4j-nop" version="2.0.20">

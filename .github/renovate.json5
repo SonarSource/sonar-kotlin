@@ -109,7 +109,8 @@
       ],
       "matchPackageNames": [
         "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin",
-        "org.jetbrains.kotlin:kotlin-compiler"
+        "org.jetbrains.kotlin:kotlin-compiler",
+        "org.jetbrains.kotlin:kotlin-compiler-common-for-ide"
       ],
       "groupName": "kotlinVersion",
       "groupSlug": "kotlin-version"
