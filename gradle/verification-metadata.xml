@@ -3819,6 +3819,11 @@
             <sha256 value="44508fd1576500688c790b190acdd16fec4f8c79a3e0b900afd70503cf055f55" origin="Verified"/>
          </artifact>
       </component>
+      <component group="org.slf4j" name="slf4j-api" version="2.0.19">
+         <artifact name="slf4j-api-2.0.19.jar">
+            <sha256 value="e91ff6d720609e7a194ffe758c3ed5c84e798617ae07b0a0f6a4fe229741b4bb" origin="Verified"/>
+         </artifact>
+      </component>
       <component group="org.slf4j" name="slf4j-api" version="2.0.20">
          <artifact name="slf4j-api-2.0.20.jar">
             <sha256 value="7e1446499b359675d8aabe6af2de86b85e72ae8a2a932c0b40d0e5ba57097439" origin="Verified"/>
@@ -3832,6 +3837,11 @@
       <component group="org.slf4j" name="slf4j-nop" version="1.7.36">
          <artifact name="slf4j-nop-1.7.36.jar">
             <sha256 value="c214958b07816cb4412b30c7bdbd4308ffdc6ba2a83767b8f3a9229cbd9274d6" origin="Verified"/>
+         </artifact>
+      </component>
+      <component group="org.slf4j" name="slf4j-nop" version="2.0.19">
+         <artifact name="slf4j-nop-2.0.19.jar">
+            <sha256 value="d0226062f9b3a2793f62002f892a8e624eb07f396130fc949e01b1d5f4888cba" origin="Verified"/>
          </artifact>
       </component>
       <component group="org.slf4j" name="slf4j-nop" version="2.0.20">
