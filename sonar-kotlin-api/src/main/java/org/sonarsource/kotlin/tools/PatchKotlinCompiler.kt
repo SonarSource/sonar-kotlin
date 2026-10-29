@@ -29,6 +29,40 @@ private const val OUTPUT_DIR = "build/patch"
 fun main() {
     patchAppScheduledExecutorService()
     patchKtVisitor()
+    patchFileType()
+}
+
+/**
+ * Patches [com.intellij.openapi.fileTypes.FileType] to restore method `getDefaultExtension`,
+ * which was stripped from "kotlin-compiler" since Kotlin 2.4.20,
+ * but is still invoked by `org.jetbrains.kotlin.analysis.decompiler.stub.file.KotlinMetadataStubBuilder.isSupported`
+ * taken from "kotlin-compiler-common-for-ide".
+ * Without it, every call raises [NoSuchMethodError] and `.kotlin_builtins` files are not decompiled.
+ */
+private fun patchFileType() {
+    val cls = "com/intellij/openapi/fileTypes/FileType.class"
+    val bytes = object {}.javaClass
+        .getResourceAsStream("/$cls")!!
+        .use { it.readAllBytes() }
+    val classWriter = ClassWriter(0)
+
+    val classNode = ClassNode()
+    ClassReader(bytes).accept(classNode, 0)
+    check(classNode.methods.none { it.name == "getDefaultExtension" }) {
+        "FileType.getDefaultExtension is present in kotlin-compiler, so this patch can be removed"
+    }
+    classNode.visitMethod(
+        Opcodes.ACC_PUBLIC or Opcodes.ACC_ABSTRACT,
+        "getDefaultExtension",
+        "()Ljava/lang/String;",
+        null,
+        null
+    ).visitEnd()
+    classNode.accept(classWriter)
+
+    val output = File(OUTPUT_DIR).resolve(cls)
+    output.parentFile.mkdirs()
+    output.writeBytes(classWriter.toByteArray())
 }
 
 /**
