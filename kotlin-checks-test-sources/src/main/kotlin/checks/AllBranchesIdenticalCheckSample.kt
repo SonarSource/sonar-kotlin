@@ -1,5 +1,19 @@
 package checks
 
+sealed interface X
+
+data object A : X
+data class B(val s: String) : X
+data class C(val s: String) : X
+
+fun delegate(s: String) = s + "foo"
+
+fun delegatesWithExtractedData(value: X) = when (value) {
+    A -> ""
+    is B -> delegate(value.s) // Compliant
+    is C -> delegate(value.s)
+}
+
 class AllBranchesIdenticalCheckSample {
 
     fun f(x: Boolean, y: Boolean, z: Int, any: Any) {
@@ -8,14 +22,14 @@ class AllBranchesIdenticalCheckSample {
         }
         if (x) { foo() } else { bar() }
 
-        if (x) { // Noncompliant {{Remove this conditional structure or edit its code blocks so that they're not all the same.}}
+        if (x) {
             foo()
         } else {
             foo()
-        }
+        } // Compliant
 
-        if (x) foo() // Noncompliant {{Remove this conditional structure or edit its code blocks so that they're not all the same.}}
-        else foo()
+        if (x) foo()
+        else foo() // Compliant
 
         if (x) { foo() } else if (y) { foo() };
 
@@ -53,11 +67,10 @@ class AllBranchesIdenticalCheckSample {
         when (z) { 1 -> a; 2 -> a; else -> b; }
         when (z) { 1 -> a; 2 -> a; else -> a; } // Noncompliant
 
-        // TODO false-positive
-        when (any) { // Noncompliant
+        when (any) {
             is String -> any.foo()
             else -> any.foo()
-        }
+        } // Compliant
 
         if (true)
             else false

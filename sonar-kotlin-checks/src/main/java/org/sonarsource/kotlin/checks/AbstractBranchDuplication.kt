@@ -16,8 +16,11 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
@@ -44,7 +47,9 @@ abstract class AbstractBranchDuplication : AbstractCheck() {
 
     private fun checkConditionalStructure(ctx: KotlinFileContext, tree: KtElement, conditional: ConditionalStructure) {
         if (conditional.allBranchesArePresent && !conditional.hasEmptyThen && conditional.allBranchesAreIdentical()) {
-            onAllIdenticalBranches(ctx, tree)
+            if (!conditional.allBranchesOnlyCallAFunction()) {
+                onAllIdenticalBranches(ctx, tree)
+            }
         } else {
             checkDuplicatedBranches(ctx, tree, conditional.branches)
         }
@@ -95,4 +100,13 @@ private class ConditionalStructure {
             .drop(1)
             .all { branch -> SyntacticEquivalence.areEquivalent(firstBranch, branch) }
     }
+
+    fun allBranchesOnlyCallAFunction(): Boolean = branches.all { it.isFunctionCall() }
+}
+
+private fun KtElement.isFunctionCall(): Boolean = when (this) {
+    is KtCallExpression -> true
+    is KtQualifiedExpression -> selectorExpression is KtCallExpression
+    is KtBlockExpression -> statements.singleOrNull()?.isFunctionCall() == true
+    else -> false
 }
