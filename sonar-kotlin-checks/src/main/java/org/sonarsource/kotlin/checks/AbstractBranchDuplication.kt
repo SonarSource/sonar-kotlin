@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtWhenConditionIsPattern
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
 
@@ -117,7 +118,9 @@ private class ConditionalStructure {
 }
 
 private fun KtElement.references(subject: KtNameReferenceExpression): Boolean =
-    collectDescendantsOfType<KtNameReferenceExpression>().any { it.getReferencedName() == subject.getReferencedName() }
+    collectDescendantsOfType<KtNameReferenceExpression>().any {
+        it.getReferencedName() == subject.getReferencedName() && it.getQualifiedExpressionForSelector() == null
+    }
 
 private fun KtElement.isFunctionCall(): Boolean = when (this) {
     is KtCallExpression -> true
