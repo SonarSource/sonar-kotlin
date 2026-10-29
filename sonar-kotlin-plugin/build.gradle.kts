@@ -173,6 +173,7 @@ val preprocessKotlinCompiler = tasks.register<Copy>("preprocessKotlinCompiler") 
             "META-INF/*.kotlin_module",
             "org/jetbrains/kotlin/psi/KtVisitor.class", // patched version is included separately
             "com/intellij/util/concurrency/AppScheduledExecutorService\$MyThreadFactory.class", // patched version is included separately
+            "com/intellij/openapi/fileTypes/FileType.class", // patched version is included separately
             "META-INF/native/**/*jansi*",
             "pluginsCompatibleWithK2Mode.txt", // a text file that we don't use
 
