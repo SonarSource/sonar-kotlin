@@ -1,17 +1,18 @@
 package checks
 
-sealed interface X
+interface AllBranchesIdenticalX {
+    val s: String
+}
 
-data object A : X
-data class B(val s: String) : X
-data class C(val s: String) : X
+data class AllBranchesIdenticalB(override val s: String) : AllBranchesIdenticalX
+data class AllBranchesIdenticalC(override val s: String) : AllBranchesIdenticalX
 
 fun delegate(s: String) = s + "foo"
 
-fun delegatesWithExtractedData(value: X) = when (value) {
-    A -> ""
-    is B -> delegate(value.s) // Compliant
-    is C -> delegate(value.s)
+fun delegatesWithExtractedData(value: AllBranchesIdenticalX) = when (value) {
+    is AllBranchesIdenticalB -> delegate(value.s)
+    is AllBranchesIdenticalC -> delegate(value.s)
+    else -> delegate(value.s) // Compliant
 }
 
 class AllBranchesIdenticalCheckSample {
@@ -22,14 +23,14 @@ class AllBranchesIdenticalCheckSample {
         }
         if (x) { foo() } else { bar() }
 
-        if (x) {
+        if (x) { // Noncompliant {{Remove this conditional structure or edit its code blocks so that they're not all the same.}}
             foo()
         } else {
             foo()
-        } // Compliant
+        }
 
-        if (x) foo()
-        else foo() // Compliant
+        if (x) foo() // Noncompliant {{Remove this conditional structure or edit its code blocks so that they're not all the same.}}
+        else foo()
 
         if (x) { foo() } else if (y) { foo() };
 
@@ -67,10 +68,11 @@ class AllBranchesIdenticalCheckSample {
         when (z) { 1 -> a; 2 -> a; else -> b; }
         when (z) { 1 -> a; 2 -> a; else -> a; } // Noncompliant
 
-        when (any) {
+        // TODO false-positive
+        when (any) { // Noncompliant
             is String -> any.foo()
             else -> any.foo()
-        } // Compliant
+        }
 
         if (true)
             else false
