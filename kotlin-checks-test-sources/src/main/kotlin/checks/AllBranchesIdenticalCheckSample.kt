@@ -1,5 +1,28 @@
 package checks
 
+sealed interface AllBranchesIdenticalX
+
+data class AllBranchesIdenticalB(val s: String) : AllBranchesIdenticalX
+data class AllBranchesIdenticalC(val s: String) : AllBranchesIdenticalX
+
+val AllBranchesIdenticalX.s: String get() = ""
+
+fun delegate(s: String) = s + "foo"
+
+fun delegatesWithExtractedData(value: AllBranchesIdenticalX) = when (value) {
+    is AllBranchesIdenticalB -> delegate(value.s)
+    is AllBranchesIdenticalC -> delegate(value.s)
+    else -> delegate(value.s) // Compliant
+}
+
+class AllBranchesIdenticalHolder(val id: String)
+
+fun ignoresSelectorsNamedLikeSubject(id: Any, holder: AllBranchesIdenticalHolder) = when (id) { // Noncompliant
+    is String -> delegate(holder.id)
+    is Int -> delegate(holder.id)
+    else -> delegate(holder.id)
+}
+
 class AllBranchesIdenticalCheckSample {
 
     fun f(x: Boolean, y: Boolean, z: Int, any: Any) {

@@ -16,12 +16,19 @@
  */
 package org.sonarsource.kotlin.checks
 
+import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
+import org.jetbrains.kotlin.psi.KtWhenConditionIsPattern
 import org.jetbrains.kotlin.psi.KtWhenExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 import org.sonarsource.kotlin.api.checks.AbstractCheck
 import org.sonarsource.kotlin.api.frontend.KotlinFileContext
-import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 
 abstract class AbstractBranchDuplication : AbstractCheck() {
     protected abstract fun checkDuplicatedBranches(ctx: KotlinFileContext, tree: KtElement, branches: List<KtElement>)
@@ -44,7 +51,9 @@ abstract class AbstractBranchDuplication : AbstractCheck() {
 
     private fun checkConditionalStructure(ctx: KotlinFileContext, tree: KtElement, conditional: ConditionalStructure) {
         if (conditional.allBranchesArePresent && !conditional.hasEmptyThen && conditional.allBranchesAreIdentical()) {
-            onAllIdenticalBranches(ctx, tree)
+            if (!conditional.allBranchesDelegateWithSmartCast()) {
+                onAllIdenticalBranches(ctx, tree)
+            }
         } else {
             checkDuplicatedBranches(ctx, tree, conditional.branches)
         }
@@ -55,6 +64,7 @@ private class ConditionalStructure {
     var allBranchesArePresent = false
     var hasEmptyThen = false
     val branches: MutableList<KtElement> = mutableListOf()
+    private var whenExpression: KtWhenExpression? = null
 
     constructor(ifTree: KtIfExpression) {
         if (ifTree.then != null) {
@@ -81,6 +91,7 @@ private class ConditionalStructure {
     }
 
     constructor(tree: KtWhenExpression) {
+        whenExpression = tree
         for (caseTree in tree.entries) {
             caseTree.expression!!.let { branches.add(it) }
             if (caseTree.isElse) {
@@ -95,4 +106,25 @@ private class ConditionalStructure {
             .drop(1)
             .all { branch -> SyntacticEquivalence.areEquivalent(firstBranch, branch) }
     }
+
+    fun allBranchesDelegateWithSmartCast(): Boolean {
+        val expression = whenExpression ?: return false
+        val subject = expression.subjectExpression as? KtNameReferenceExpression ?: return false
+        return expression.entries.count { entry -> entry.conditions.any { it is KtWhenConditionIsPattern } } >= 2 &&
+            expression.entries.all { entry ->
+                entry.expression?.let { it.isFunctionCall() && it.references(subject) } == true
+            }
+    }
+}
+
+private fun KtElement.references(subject: KtNameReferenceExpression): Boolean =
+    collectDescendantsOfType<KtNameReferenceExpression>().any {
+        it.getReferencedName() == subject.getReferencedName() && it.getQualifiedExpressionForSelector() == null
+    }
+
+private fun KtElement.isFunctionCall(): Boolean = when (this) {
+    is KtCallExpression -> true
+    is KtQualifiedExpression -> selectorExpression is KtCallExpression
+    is KtBlockExpression -> statements.singleOrNull()?.isFunctionCall() == true
+    else -> false
 }
