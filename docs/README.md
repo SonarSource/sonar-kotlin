@@ -1,12 +1,13 @@
 # Kotlin development reference
 
 These pages expand the [agent guide](../AGENTS.md); the [README](../README.md) covers build and metadata setup.
-Covers: `AGENTS.md`, `sonar-kotlin-api/`, `sonar-kotlin-checks/`, `sonar-kotlin-gradle/`, `sonar-kotlin-plugin/`, `its/`.
+Covers: `AGENTS.md`, `sonar-kotlin-api/`, `sonar-kotlin-checks/`, `sonar-kotlin-gradle/`, `sonar-kotlin-plugin/`, `its/`, `.github/workflows/`.
 
 - [Architecture](architecture.md): K2 session and plugin boundaries.
 - [Writing checks](writing-checks.md): visitors, matchers, registration and samples.
 - [Testing](testing.md): targeted checks and test conventions.
 - [Integration tests](integration-tests.md): ruling corpora and server-backed tests.
+- [CI build pipeline](ci-build-pipeline.md): job dependencies, publication and performance validation in sonar-kotlin-pvf.
 
 ## Writing and maintaining these docs
 - Write for a new teammate or coding agent: lead with the point, then short sections, bullets and tables.

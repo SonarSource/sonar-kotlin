@@ -14,6 +14,9 @@ jobs:
       - name: Update Rule Metadata
         id: update-rule-metadata
         uses: SonarSource/release-github-actions/update-rule-metadata@v1
+        with:
+          # Metadata-only changes don't affect performance: skips PVF on the master push that merges the PR.
+          labels: skip-pvf
 
       - name: Check Rule Metadata Changes
         run: |
