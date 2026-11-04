@@ -280,11 +280,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+          gh api "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
             -f state=pending \
             -f context=performance-validation \
             -f description="PVF triggered" \
-            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
       - name: Dispatch PVF on sonar-kotlin-pvf
         if: steps.baseline.outputs.baseline-version != ''
         id: dispatch
@@ -292,6 +292,7 @@ jobs:
           GH_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
           BASELINE: ${{ steps.baseline.outputs.baseline-version }}
           BASELINE_SHA: ${{ steps.baseline.outputs.baseline-sha }}
+          PREVIOUS_SHA: ${{ github.event.before }}
           CANDIDATE: ${{ needs.build.outputs.project-version }}
           RUN_DESCRIPTION: ${{ steps.describe.outputs.run-description }}
         run: |
@@ -301,10 +302,10 @@ jobs:
             -f event_type=sonar-kotlin-pr-pvf \
             -f "client_payload[baseline-version]=${BASELINE}" \
             -f "client_payload[baseline-sha]=${BASELINE_SHA}" \
-            -f "client_payload[previous-sha]=${{ github.event.before }}" \
+            -f "client_payload[previous-sha]=${PREVIOUS_SHA}" \
             -f "client_payload[candidate-version]=${CANDIDATE}" \
-            -f "client_payload[commit-sha]=${{ github.sha }}" \
-            -f "client_payload[source-repo]=${{ github.repository }}" \
+            -f "client_payload[commit-sha]=${GITHUB_SHA}" \
+            -f "client_payload[source-repo]=${GITHUB_REPOSITORY}" \
             -f "client_payload[run-description]=${RUN_DESCRIPTION}"
       - name: Mark status error if dispatch failed
         if: failure() && steps.baseline.outputs.baseline-version != ''
@@ -312,11 +313,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh api "repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+          gh api "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
             -f state=error \
             -f context=performance-validation \
             -f description="Failed to trigger PVF" \
-            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
       - name: Notify the merger that the baseline could not be resolved
         if: failure() && steps.baseline.outcome == 'failure'
         uses: SonarSource/core-languages-tooling-public/pvf-notify-merger@master
