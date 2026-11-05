@@ -27,6 +27,7 @@ There, each commit gets its own concurrency group, so runs neither cancel nor wa
 | `trigger_performance_validation` | Default-branch pushes only, see below. |
 | `promote` | Promotes the build. Fails if `build` or a QA suite failed. |
 | `notify_slack` | Reports failures on the default branch, `branch-*` and `feature/*` when the run is not cancelled. |
+| `notify_pvf_failure` | Reports PVF trigger failures separately, so baseline resolution does not delay build and QA alerts. |
 
 Neither `prepare_pvf` nor the performance validation trigger is a dependency of `promote` or `notify_slack`.
 
@@ -56,4 +57,4 @@ The PR's Build run must have finished `prepare_pvf` first.
 A member or collaborator without write access, or a missing `candidate-version` artifact, gets a reply on the PR explaining why nothing was dispatched.
 
 The nightly run in sonar-kotlin-pvf at 05:10 UTC compares `DEV` with `LATEST_RELEASE`.
-Performance Slack notifications are enabled only for scheduled runs.
+Benchmark-result Slack notifications are enabled only for scheduled runs.
