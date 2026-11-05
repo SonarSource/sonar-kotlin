@@ -1,0 +1,50 @@
+name: PVF /pvf comment
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: write
+  id-token: write
+
+concurrency:
+  group: pvf-comment-${{ github.event.issue.number }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  trigger:
+    # Anyone with write access can run PVF on a PR with a comment starting with `/pvf`, optionally
+    # followed by the rules to activate (e.g. `/pvf S1234, S5678`).
+    if: >
+      github.event.issue.pull_request &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association) &&
+      startsWith(github.event.comment.body, '/pvf')
+    runs-on: github-ubuntu-latest-s
+    timeout-minutes: 5
+    steps:
+      - name: Get cross-repo dispatch token from Vault
+        id: secrets
+        uses: SonarSource/vault-action-wrapper@v3
+        with:
+          secrets: |
+            development/github/token/{REPO_OWNER_NAME_DASH}-pvf-trigger token | DISPATCH_TOKEN;
+
+      # Public repos cannot call private reusable workflows (GitHub limitation), so this dispatches
+      # performance-validation.yml in private sonar-kotlin-pvf, with the plugin version recorded by the
+      # PR's Build run as the candidate and the latest master build as the baseline. sonar-kotlin-pvf
+      # comments the dashboard link back on the PR.
+      - name: Trigger performance validation in sonar-kotlin-pvf
+        uses: SonarSource/core-languages-tooling-public/pvf-trigger@master
+        with:
+          comment: ${{ github.event.comment.body }}
+          pr-number: ${{ github.event.issue.number }}
+          target-repo: SonarSource/sonar-kotlin-pvf
+          target-ref: master
+          dispatch-token: ${{ fromJSON(steps.secrets.outputs.vault).DISPATCH_TOKEN }}
+          baseline-version: DEV
+          # The association gate above also lets read-only organization members through.
+          required-permission: write

@@ -10,8 +10,10 @@ on:
     - cron: "0 2 * * *" # at 02:00 UTC every day
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  # Master runs are keyed by commit and never cancelled, so each push gets its performance validation
+  # triggered, even while the trigger job waits for the previous push's build.
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || (github.ref_name == github.event.repository.default_branch && github.sha) || github.ref }}
+  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 
 permissions:
   id-token: write  # Required for Vault OIDC authentication
@@ -90,6 +92,20 @@ jobs:
         env:
           ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
+
+  # Records the deployed plugin version as the candidate-version artifact, read by the /pvf trigger
+  # (pvf-comment.yml) and as the baseline of the next master push's performance validation. A job of
+  # its own, so that a failure here cannot fail the build or the promotion.
+  prepare_pvf:
+    name: Prepare PVF
+    needs: [build]
+    if: ${{ !cancelled() && needs.build.result == 'success' }}
+    runs-on: github-ubuntu-latest-s
+    timeout-minutes: 5
+    steps:
+      - uses: SonarSource/core-languages-tooling-public/prepare-pvf@master
+        with:
+          build-version: ${{ needs.build.outputs.project-version }}
 
   qa_plugin:
     runs-on: github-ubuntu-latest-s
@@ -200,67 +216,117 @@ jobs:
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
   # Public repos cannot call private reusable workflows (GitHub limitation).
-  # Trigger PVF in private sonar-kotlin-pvf via repository_dispatch; results are
-  # reported back as the `performance-validation` commit status.
+  # On every push to master, trigger PVF in private sonar-kotlin-pvf via repository_dispatch,
+  # benchmarking the pushed plugin against the previous master commit's one; results are reported
+  # back as the `performance-validation` commit status, and on a regression or error as a comment on
+  # the merged PR. A merged PR with the skip-pvf label or [skip pvf] in its title skips it. On PRs,
+  # PVF runs on demand by commenting /pvf (see pvf-comment.yml).
   trigger_performance_validation:
     name: Trigger Performance Validation
     needs: [build]
     if: >-
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event_name == 'push' &&
+      github.ref_name == github.event.repository.default_branch &&
       !cancelled() &&
-      needs.build.result == 'success' &&
-      !contains(needs.*.result, 'failure') &&
-      !contains(github.event.pull_request.labels.*.name, 'skip-pvf') &&
-      !contains(github.event.pull_request.title, '[skip pvf]')
+      needs.build.result == 'success'
     runs-on: github-ubuntu-latest-s
-    timeout-minutes: 10
+    # Waits up to 45 minutes for the previous commit's Build run to record its plugin version.
+    timeout-minutes: 60
     permissions:
       id-token: write
       statuses: write
+      actions: read
+      contents: read
+      pull-requests: write
     steps:
+      # The dashboard shows master-push runs with the generic "manual" badge, so the description is
+      # what identifies the validated commit.
+      - name: Describe the master push
+        id: describe
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.sha }}
+          MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          # "<sha> <subject> (#<PR>)", from the subject line of the pushed commit.
+          subject="${MESSAGE%%$'\n'*}"
+          # On an HTTP error gh prints the error body on stdout, so the output is only used on success.
+          # The merged PR's number replaces the " (#<PR>)" suffix a squash merge adds, so it isn't
+          # repeated; without it, the subject is kept as it is.
+          if pr="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${SHA}/pulls" --jq '[.[] | select(.merged_at != null)][0].number // empty' 2>/dev/null)" \
+            && [[ -n "$pr" ]]; then
+            subject="$(sed -E 's/ \(#[0-9]+\)$//' <<<"$subject") (#${pr})"
+          fi
+          echo "run-description=${SHA:0:10} ${subject}" >> "$GITHUB_OUTPUT"
+      # Resolved here rather than in sonar-kotlin-pvf, which cannot read this repository's artifacts.
+      - name: Resolve the previous master build's plugin version
+        id: baseline
+        uses: SonarSource/core-languages-tooling-public/pvf-resolve-baseline@master
+        with:
+          previous-sha: ${{ github.event.before }}
+          # The job that records the plugin version.
+          publication-job: Prepare PVF
+          # Rule metadata and docs.
+          skip-paths: '(^|/)src/main/resources/(org|com)/sonar/l10n/[^/]+/rules/|sonarpedia\.json$|\.md$'
       - id: secrets
+        if: steps.baseline.outputs.baseline-version != ''
         uses: SonarSource/vault-action-wrapper@v3
         with:
           secrets: |
             development/github/token/{REPO_OWNER_NAME_DASH}-pvf-trigger token | GITHUB_TOKEN;
       - name: Set pending status
+        if: steps.baseline.outputs.baseline-version != ''
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh api "repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha }}" \
+          gh api "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
             -f state=pending \
             -f context=performance-validation \
             -f description="PVF triggered" \
-            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
       - name: Dispatch PVF on sonar-kotlin-pvf
+        if: steps.baseline.outputs.baseline-version != ''
         id: dispatch
         env:
           GH_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+          BASELINE: ${{ steps.baseline.outputs.baseline-version }}
+          BASELINE_SHA: ${{ steps.baseline.outputs.baseline-sha }}
+          PREVIOUS_SHA: ${{ github.event.before }}
           CANDIDATE: ${{ needs.build.outputs.project-version }}
+          RUN_DESCRIPTION: ${{ steps.describe.outputs.run-description }}
         run: |
           set -euo pipefail
           gh api repos/SonarSource/sonar-kotlin-pvf/dispatches \
             --method POST \
             -f event_type=sonar-kotlin-pr-pvf \
-            -f "client_payload[baseline-version]=DEV" \
+            -f "client_payload[baseline-version]=${BASELINE}" \
+            -f "client_payload[baseline-sha]=${BASELINE_SHA}" \
+            -f "client_payload[previous-sha]=${PREVIOUS_SHA}" \
             -f "client_payload[candidate-version]=${CANDIDATE}" \
-            -f "client_payload[scannerDebug]=${{ contains(github.event.pull_request.labels.*.name, 'pvf-debug') }}" \
-            -f "client_payload[commit-sha]=${{ github.event.pull_request.head.sha }}" \
-            -f "client_payload[pr-number]=${{ github.event.pull_request.number }}" \
-            -f "client_payload[source-repo]=${{ github.repository }}"
+            -f "client_payload[commit-sha]=${GITHUB_SHA}" \
+            -f "client_payload[source-repo]=${GITHUB_REPOSITORY}" \
+            -f "client_payload[run-description]=${RUN_DESCRIPTION}"
       - name: Mark status error if dispatch failed
-        if: failure()
+        if: failure() && steps.baseline.outputs.baseline-version != ''
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh api "repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha }}" \
+          gh api "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
             -f state=error \
             -f context=performance-validation \
             -f description="Failed to trigger PVF" \
-            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+      - name: Notify the merger that the baseline could not be resolved
+        if: failure() && steps.baseline.outcome == 'failure'
+        uses: SonarSource/core-languages-tooling-public/pvf-notify-merger@master
+        with:
+          merged-sha: ${{ github.sha }}
+          previous-sha: ${{ github.event.before }}
+          baseline-version: not resolved
+          candidate-version: ${{ needs.build.outputs.project-version }}
+          failed-jobs: Trigger Performance Validation
 
   promote:
     needs:
