@@ -374,3 +374,25 @@ jobs:
           slack-channel: "squad-security-cloud-notifs"
           icon: ':kotlin:'
           jobs: ${{ toJSON(needs) }}
+
+  notify_pvf_failure:
+    name: Notify Slack on PVF Trigger Failure
+    needs: [ trigger_performance_validation ]
+    if: >-
+      failure() && ! cancelled() &&
+      needs.trigger_performance_validation.result == 'failure' &&
+      (github.ref_name == github.event.repository.default_branch ||
+      startsWith(github.ref_name, 'branch-') ||
+      startsWith(github.ref_name, 'feature/'))
+    permissions:
+      id-token: write
+      statuses: read
+    runs-on: github-ubuntu-latest-s
+    timeout-minutes: 10
+    steps:
+      - uses: SonarSource/release-github-actions/notify-slack@v1
+        with:
+          project-name: "SonarKotlin"
+          slack-channel: "squad-security-cloud-notifs"
+          icon: ':kotlin:'
+          jobs: ${{ toJSON(needs) }}
