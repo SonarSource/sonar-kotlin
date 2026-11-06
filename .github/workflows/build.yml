@@ -239,8 +239,7 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      # The dashboard shows master-push runs with the generic "manual" badge, so the description is
-      # what identifies the validated commit.
+      # The description tells which merge a master-push report on the dashboard index validated.
       - name: Describe the master push
         id: describe
         env:

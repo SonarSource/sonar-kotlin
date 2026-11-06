@@ -45,13 +45,14 @@ It resolves the baseline here, as sonar-kotlin-pvf cannot read this repository's
   Without a baseline it skips validation with a warning.
 
 With a baseline, the job sets a pending `performance-validation` commit status and sends a `repository_dispatch` to sonar-kotlin-pvf.
-The dispatch carries the baseline, the candidate version and the report name, `<sha> <subject> (#<PR>)`, since the dashboard index shows master-push runs as manual ones.
+The dispatch carries the baseline, the candidate version and the report name, `<sha> <subject> (#<PR>)`, and the dashboard index lists the report as a master push.
 sonar-kotlin-pvf reports the result back as the `performance-validation` commit status.
 On a regression, a benchmark error or a failed validation, it also comments on the merged PR and mentions whoever merged it.
 If the baseline couldn't be resolved (e.g. the GitHub API kept failing), the trigger job itself posts that comment, with the shared [`pvf-notify-merger`](https://github.com/SonarSource/core-languages-tooling-public/tree/master/pvf-notify-merger) action.
 
 On a PR, a comment starting with `/pvf` from a user with write access to the repository (optionally followed by rules, e.g. `/pvf S1234, S5678`) triggers [`pvf-comment.yml`](../.github/workflows/pvf-comment.yml).
 It dispatches the validation in sonar-kotlin-pvf with the PR's `candidate-version` artifact as the candidate and `DEV` as the baseline, and sonar-kotlin-pvf comments the dashboard link on the PR.
+The dashboard index lists the report as a pull request run.
 The PR's Build run must have finished `prepare_pvf` first.
 A member or collaborator without write access, or a missing `candidate-version` artifact, gets a reply on the PR explaining why nothing was dispatched.
 
