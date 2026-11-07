@@ -100,7 +100,7 @@ dependencyResolutionManagement {
                 .version(sonarPluginApi)
             library("sonar-ws", "org.sonarsource.sonarqube", "sonar-ws").versionRef(sonarqube)
             library("sonarlint-core-test-utils", "org.sonarsource.sonarlint.core", "sonarlint-core-test-utils").versionRef(sonarlint)
-            library("logback-classic", "ch.qos.logback", "logback-classic").version("1.6.5")
+            library("logback-classic", "ch.qos.logback", "logback-classic").version("1.6.6")
             library("sit", "com.sonarsource.scanner.integrationtester", "sonar-scanner-integration-tester").versionRef(sit)
             // Without it, ScannerMain.<clinit> throws FactoryConfigurationError: Provider for class
             // javax.xml.parsers.SAXParserFactory cannot be created.
