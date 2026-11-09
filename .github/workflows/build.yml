@@ -165,7 +165,7 @@ jobs:
       # to open a PR updating the expected files.
       - name: Prepare ruling artifact
         if: ${{ always() && steps.ruling.outcome == 'failure' }}
-        uses: SonarSource/core-languages-tooling-public/prepare-ruling-artifact@c77c0e833bf27beb762f2f0cebd85cf9d5cfd3c6 # master as of 2026-10-26
+        uses: SonarSource/core-languages-tooling-public/prepare-ruling-artifact@a04d15c9fe09880db6870b01875e184ed57ca242
   ruling_update_notify:
     name: Ruling Update and Notify
     needs: [qa_ruling]
@@ -185,7 +185,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Update ruling and notify
-        uses: SonarSource/core-languages-tooling-public/ruling-update-and-notify@c77c0e833bf27beb762f2f0cebd85cf9d5cfd3c6 # master as of 2026-10-26
+        uses: SonarSource/core-languages-tooling-public/ruling-update-and-notify@a04d15c9fe09880db6870b01875e184ed57ca242
         with:
           ruling-failed: ${{ needs.qa_ruling.outputs.ruling-outcome == 'failure' }}
   qa_sq_integration:
