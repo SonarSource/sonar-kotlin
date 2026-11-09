@@ -58,7 +58,11 @@ jobs:
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer username | ARTIFACTORY_DEPLOY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer access_token | ARTIFACTORY_DEPLOY_PASSWORD;
       - id: build-number
-        uses: SonarSource/ci-github-actions/get-build-number@v2
+        uses: SonarSource/ci-github-actions/config-gradle@v2
+        env:
+          # Keep gradle.properties unchanged: the version comes from -DbuildNumber
+          CURRENT_VERSION: unused
+          PROJECT_VERSION: unused
       - run: |
           ./gradlew \
               build \
@@ -123,6 +127,13 @@ jobs:
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/github/token/licenses-ro token | GITHUB_TOKEN;
+      - &config-gradle-qa
+        uses: SonarSource/ci-github-actions/config-gradle@v2
+        env:
+          # QA publishes nothing: don't claim a build number or rewrite gradle.properties
+          BUILD_NUMBER: 0
+          CURRENT_VERSION: unused
+          PROJECT_VERSION: unused
       - uses: ./.github/actions/cache-orchestrator
       - run: |
           ./gradlew \
@@ -151,6 +162,7 @@ jobs:
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+      - *config-gradle-qa
       - id: ruling
         run: |
           ./gradlew \
@@ -205,6 +217,7 @@ jobs:
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/github/token/licenses-ro token | GITHUB_TOKEN;
+      - *config-gradle-qa
       - uses: ./.github/actions/cache-orchestrator
       - run: |
           ./gradlew \
