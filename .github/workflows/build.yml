@@ -152,8 +152,6 @@ jobs:
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          submodules: true
       - *setup-mise
       - id: secrets
         uses: SonarSource/vault-action-wrapper@v3
@@ -163,6 +161,9 @@ jobs:
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
       - *config-gradle-qa
+      # After config-gradle: its wrapper validation rejects the wrapper jars in its/sources
+      - &checkout-its-sources
+        run: git submodule update --init --depth=1
       - id: ruling
         run: |
           ./gradlew \
@@ -206,8 +207,6 @@ jobs:
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          submodules: true
       - *setup-mise
       - id: secrets
         uses: SonarSource/vault-action-wrapper@v3
@@ -218,6 +217,7 @@ jobs:
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/github/token/licenses-ro token | GITHUB_TOKEN;
       - *config-gradle-qa
+      - *checkout-its-sources
       - uses: ./.github/actions/cache-orchestrator
       - run: |
           ./gradlew \
