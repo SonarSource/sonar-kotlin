@@ -174,7 +174,7 @@ jobs:
     if: >-
       always() && !cancelled() &&
       contains(fromJSON('["success", "failure"]'), needs.qa_ruling.outputs.ruling-outcome) &&
-      (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+      github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: github-ubuntu-latest-s
     timeout-minutes: 15
     permissions:
