@@ -25,8 +25,9 @@ cp its/ruling/build/actual/<projectKey>/kotlin-S<NNNN>.json \
 When the `qa_ruling` CI job fails on a same-repository pull request, the actual results are uploaded
 and a PR updating the golden files is opened automatically against the tested branch (see the
 `ruling_update_notify` job in `.github/workflows/build.yml`). A comment summarizing the ruling
-changes and linking to that PR is also posted. The update job is skipped on default-branch runs
-and pull requests from forks, which only get a read-only token.
+changes and linking to that PR is also posted. The update job runs only on same-repository pull
+requests: it is skipped on push, scheduled and manual runs, and on pull requests from forks, which
+only get a read-only token.
 
 The Kotlin compiler corpus (`test_kotlin_compiler`) is skipped by default. Run it with `KOTLIN_COMPILER_IT_ENABLED=true ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon`; its actual and expected rule JSON use the same ruling paths above (project key `kotlin-kotlin-project`).
 
