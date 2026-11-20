@@ -23,7 +23,7 @@ There, each commit gets its own concurrency group, so runs neither cancel nor wa
 | `build` | Builds and tests the plugin, runs the Sonar analysis, deploys to the QA repository and exposes `project-version`. |
 | `prepare_pvf` | After a successful `build`, uploads the deployed plugin version as the `candidate-version` artifact. It is a job of its own, so its failure can't fail the build or the promotion. |
 | `qa_plugin`, `qa_ruling`, `qa_sq_integration` | Plugin, ruling and SonarQube integration suites. See [Integration tests](integration-tests.md). |
-| `ruling_update_notify` | After `qa_ruling`, runs the shared ruling update action, except on PRs from forks. |
+| `ruling_update_notify` | After `qa_ruling`, runs the shared ruling update action on same-repository PRs. |
 | `trigger_performance_validation` | Default-branch pushes only, see below. |
 | `promote` | Promotes the build. Fails if `build` or a QA suite failed. |
 | `notify_slack` | Reports failures on the default branch, `branch-*` and `feature/*` when the run is not cancelled. |
