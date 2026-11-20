@@ -1,0 +1,29 @@
+{
+"intellij-rust:sources/kotlin/intellij-rust/debugger/src/main/kotlin/org/rust/debugger/runconfig/RsDebugRunner.kt": [
+184
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/cargo/project/configurable/RustProjectConfigurable.kt": [
+120
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/annotator/RsErrorAnnotator.kt": [
+166
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/formatter/impl/spacing.kt": [
+172
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/inspections/RsSuspiciousAssignmentInspection.kt": [
+36
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/inspections/import/AutoImportFix.kt": [
+270
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/RsMacroDefinitionCompletionProvider.kt": [
+50
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/TypeInference.kt": [
+315
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/extractFunction/RsExtractFunctionConfig.kt": [
+173
+]
+}

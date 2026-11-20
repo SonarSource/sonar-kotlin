@@ -1,0 +1,31 @@
+{
+"corda:sources/kotlin/corda/core/src/main/kotlin/net/corda/core/flows/ContractUpgradeFlow.kt": [
+34,
+53
+],
+"corda:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/flows/AttachmentTests.kt": [
+144
+],
+"corda:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/internal/ResolveTransactionsFlowTest.kt": [
+205
+],
+"corda:sources/kotlin/corda/core/src/test/kotlin/net/corda/core/internal/concurrent/CordaFutureImplTest.kt": [
+82,
+89
+],
+"corda:sources/kotlin/corda/node-api/src/main/kotlin/net/corda/nodeapi/RPCApi.kt": [
+211
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/transactions/BFTNonValidatingNotaryService.kt": [
+74
+],
+"corda:sources/kotlin/corda/node/src/test/kotlin/net/corda/node/CordaRPCOpsImplTest.kt": [
+382
+],
+"corda:sources/kotlin/corda/samples/simm-valuation-demo/contracts-states/src/main/kotlin/net/corda/vega/contracts/PortfolioSwap.kt": [
+11
+],
+"corda:sources/kotlin/corda/tools/shell/src/main/kotlin/net/corda/tools/shell/InteractiveShell.kt": [
+417
+]
+}
