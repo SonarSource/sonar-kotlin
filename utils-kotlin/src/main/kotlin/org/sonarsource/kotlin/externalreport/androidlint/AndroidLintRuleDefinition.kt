@@ -36,12 +36,14 @@ private val WORDS = Regex("\\w+")
  * Android lint source code: https://android.googlesource.com/platform/tools/base/+/studio-master-dev/lint
  */
 fun main(vararg args: String?) {
+    val rulesFileArg = args.getOrNull(0)
     val rulesFile =
-        if (args.isNotEmpty() && !args[0].isNullOrBlank()) Path.of(args[0]!!)
+        if (!rulesFileArg.isNullOrBlank()) Path.of(rulesFileArg)
         else DEFAULT_RULES_FILE
 
+    val androidLintHelpArg = args.getOrNull(1)
     val androidLintHelpPath =
-        if (args.size > 1 && !args[1].isNullOrBlank()) Path.of(args[1]!!)
+        if (!androidLintHelpArg.isNullOrBlank()) Path.of(androidLintHelpArg)
         else ANDROID_LINT_HELP
 
 
