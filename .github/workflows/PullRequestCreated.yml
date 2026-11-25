@@ -15,10 +15,11 @@ jobs:
     timeout-minutes: 15
     permissions:
       id-token: write
-    # For external PR, ticket should be created manually
+    # Create tickets for PRs opened by humans and sonarqube-* bots.
     if: |
         github.event.pull_request.head.repo.full_name == github.repository
-        && github.event.sender.type != 'Bot'
+        && (github.event.sender.type != 'Bot'
+            || startsWith(github.event.sender.login, 'sonarqube-'))
     steps:
       - id: secrets
         uses: SonarSource/vault-action-wrapper@v3
