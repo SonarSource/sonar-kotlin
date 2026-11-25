@@ -62,6 +62,9 @@ jobs:
       - id: build-number
         uses: SonarSource/ci-github-actions/config-gradle@v2
         with:
+          # Keeps caching as before: no job caches ~/.gradle, and the Develocity build cache stays on. The
+          # action's cache key has no job name, so the four jobs would share one entry, and only the first
+          # job to finish would save its dependencies.
           disable-caching: true
         env:
           # Setting both keeps gradle.properties unchanged; build.gradle.kts derives the version from -DbuildNumber.
@@ -134,7 +137,7 @@ jobs:
       - &config-gradle-qa
         uses: SonarSource/ci-github-actions/config-gradle@v2
         with:
-          disable-caching: true
+          disable-caching: true  # See the build job.
         env:
           # QA publishes nothing: reuse build number 0 instead of claiming one, which needs `contents: write`.
           BUILD_NUMBER: 0
@@ -234,6 +237,7 @@ jobs:
       # Maven repository to it in ~/.m2/settings.xml.
       - uses: SonarSource/ci-github-actions/config-maven@v2
         with:
+          # Keeps caching as before: no job caches ~/.m2.
           disable-caching: true
         env:
           BUILD_NUMBER: 0
