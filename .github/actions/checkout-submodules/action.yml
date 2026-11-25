@@ -1,20 +1,26 @@
-name: Checkout build logic
+name: Checkout submodules
 description: >
-  Fetch the build-logic/common submodule with authenticated requests, so the clone is not
-  subject to GitHub's anonymous rate limits.
+  Fetch git submodules with authenticated requests, so the clones are not subject to GitHub's
+  anonymous rate limits.
 
 inputs:
   gh-token:
     description: >
       Token used to authenticate git operations against github.com. The only scope needed is
-      `contents: read` on the submodule's repository, so the job's own GITHUB_TOKEN with the
-      workflow-default permissions is enough - every call site passes github.token.
-      build-logic/common is a public repository: the token is not what grants access, it only
-      makes the request non-anonymous, which is what lifts the rate limit. A token with wider
-      scopes works but buys nothing.
+      `contents: read` on the repository behind every submodule listed in `submodules`, so the
+      job's own GITHUB_TOKEN with the workflow-default permissions is enough - every call site
+      passes github.token. build-logic/common and its/sources are public repositories: the token
+      is not what grants access, it only makes the request non-anonymous, which is what lifts the
+      rate limit. A token with wider scopes works but buys nothing.
     required: true
+  submodules:
+    description: >
+      Space-separated submodule paths to fetch. Leave empty to fetch every submodule declared in
+      .gitmodules.
+    required: false
+    default: build-logic/common
   depth:
-    description: Depth of the submodule clone. Leave empty to clone the full history.
+    description: Depth of the submodule clones. Leave empty to clone the full history.
     required: false
     default: '1'
 
@@ -24,6 +30,7 @@ runs:
     - shell: bash
       env:
         GH_TOKEN: ${{ inputs.gh-token }}
+        SUBMODULES: ${{ inputs.submodules }}
         DEPTH: ${{ inputs.depth }}
       run: |
         set -euo pipefail
@@ -51,8 +58,12 @@ runs:
         # `proactiveAuth` authenticates on the first request instead of waiting for a 401. GitHub
         # throttles anonymous requests without issuing an auth challenge, so lazy authentication
         # never kicks in and the clone fails instead of being retried with credentials.
+        #
+        # $SUBMODULES is unquoted on purpose: the input is a space-separated list of paths, and an
+        # empty list leaves only `--`, which selects every submodule.
+        # shellcheck disable=SC2086
         git \
           -c credential.helper= \
           -c 'credential.https://github.com.helper=!f() { if test "$1" = get; then echo username=x-access-token; echo "password=$GH_TOKEN"; fi; }; f' \
           -c http.https://github.com/.proactiveAuth=auto \
-          submodule update --init "$@" -- build-logic/common
+          submodule update --init "$@" -- $SUBMODULES

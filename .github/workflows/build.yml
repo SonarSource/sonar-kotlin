@@ -25,7 +25,7 @@ jobs:
     timeout-minutes: 30
     permissions:
       id-token: write  # Required for Vault OIDC authentication
-      contents: write  # Required by get-build-number to claim refs/build-number/*
+      contents: write  # Required by config-gradle to claim refs/build-number/*
     outputs:
       project-version: ${{ steps.project-version.outputs.project-version }}
     steps:
@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - &checkout-build-logic
         name: Checkout build logic
-        uses: ./.github/actions/checkout-build-logic
+        uses: ./.github/actions/checkout-submodules
         with:
           gh-token: ${{ github.token }}
       - &setup-mise
@@ -57,8 +57,19 @@ jobs:
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer username | ARTIFACTORY_DEPLOY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-qa-deployer access_token | ARTIFACTORY_DEPLOY_PASSWORD;
+      # Claims the build number and installs an init script that routes every Gradle repository through
+      # Repox. The plugin portal and Maven Central rate-limit CI otherwise.
       - id: build-number
-        uses: SonarSource/ci-github-actions/get-build-number@v2
+        uses: SonarSource/ci-github-actions/config-gradle@v2
+        with:
+          # Keeps caching as before: no job caches ~/.gradle, and the Develocity build cache stays on. The
+          # action's cache key has no job name, so the four jobs would share one entry, and only the first
+          # job to finish would save its dependencies.
+          disable-caching: true
+        env:
+          # Setting both keeps gradle.properties unchanged; build.gradle.kts derives the version from -DbuildNumber.
+          CURRENT_VERSION: unused
+          PROJECT_VERSION: unused
       - run: |
           ./gradlew \
               build \
@@ -123,6 +134,15 @@ jobs:
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/github/token/licenses-ro token | GITHUB_TOKEN;
+      - &config-gradle-qa
+        uses: SonarSource/ci-github-actions/config-gradle@v2
+        with:
+          disable-caching: true  # See the build job.
+        env:
+          # QA publishes nothing: reuse build number 0 instead of claiming one, which needs `contents: write`.
+          BUILD_NUMBER: 0
+          CURRENT_VERSION: unused
+          PROJECT_VERSION: unused
       - uses: ./.github/actions/cache-orchestrator
       - run: |
           ./gradlew \
@@ -141,8 +161,7 @@ jobs:
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          submodules: true
+      - *checkout-build-logic
       - *setup-mise
       - id: secrets
         uses: SonarSource/vault-action-wrapper@v3
@@ -151,6 +170,15 @@ jobs:
             development/kv/data/develocity token | DEVELOCITY_TOKEN;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
+      - *config-gradle-qa
+      # Only after config-gradle: its Gradle wrapper validation rejects the third-party wrapper jars in
+      # its/sources, such as the Kotlin compiler's.
+      - &checkout-its-sources
+        name: Checkout its/sources
+        uses: ./.github/actions/checkout-submodules
+        with:
+          gh-token: ${{ github.token }}
+          submodules: its/sources
       - id: ruling
         run: |
           ./gradlew \
@@ -194,8 +222,7 @@ jobs:
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          submodules: true
+      - *checkout-build-logic
       - *setup-mise
       - id: secrets
         uses: SonarSource/vault-action-wrapper@v3
@@ -205,12 +232,24 @@ jobs:
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader username | ARTIFACTORY_USERNAME;
             development/artifactory/token/{REPO_OWNER_NAME_DASH}-private-reader access_token | ARTIFACTORY_ACCESS_TOKEN;
             development/github/token/licenses-ro token | GITHUB_TOKEN;
+      - *config-gradle-qa
+      # The Maven projects analyzed by SurefireTest resolve through Repox too: config-maven mirrors every
+      # Maven repository to it in ~/.m2/settings.xml.
+      - uses: SonarSource/ci-github-actions/config-maven@v2
+        with:
+          # Keeps caching as before: no job caches ~/.m2.
+          disable-caching: true
+        env:
+          BUILD_NUMBER: 0
+      - *checkout-its-sources
       - uses: ./.github/actions/cache-orchestrator
       - run: |
           ./gradlew \
               :its:sq-integration:integrationTest --info -Dsonar.runtimeVersion=DEV
         env:
           DEVELOCITY_ACCESS_KEY: develocity-public.sonar.build=${{ fromJSON(steps.secrets.outputs.vault).DEVELOCITY_TOKEN }}
+          # Read with ARTIFACTORY_ACCESS_TOKEN by ~/.m2/settings.xml, so both must be the same reader's.
+          ARTIFACTORY_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PRIVATE_USERNAME: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}

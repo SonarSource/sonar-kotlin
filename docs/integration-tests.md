@@ -13,6 +13,8 @@ First initialize `git submodule update --init its/sources`.
 
 Run a single ruling corpus with `--tests "org.sonarsource.kotlin.its.KotlinRulingTest.test_kotlin_corda"` appended to the ruling command.
 
+In CI, the `config-gradle` and `config-maven` actions route all dependency resolution through Repox, including the nested Gradle build of `kotlin-language-server` and the Maven projects built by `:its:sq-integration`. Local runs resolve those nested builds from the repositories they declare. So a dependency that Repox does not proxy fails only in CI, with `Could not find` against `repox.jfrog.io`, until it is allowed on the matching Repox remote in `re-service-config`.
+
 ## Updating ruling expectations
 
 After changing a rule, inspect its actual JSON (written even when a test fails) and update each corpus it affects. For a standard corpus, copy the relevant rule file after reviewing the changed issues:
