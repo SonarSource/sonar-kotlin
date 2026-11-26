@@ -30,8 +30,8 @@ changes and linking to that PR is also posted.
 The Kotlin compiler corpus (`test_kotlin_compiler`) is skipped by default. Run it with `KOTLIN_COMPILER_IT_ENABLED=true ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon`; its actual and expected rule JSON use the same ruling paths above (project key `kotlin-kotlin-project`).
 
 The language-server corpus (`test_kotlin_language_server`) runs with `:its:sq-integration:integrationTest`.
-It reads JSON expectations from the ruling expectation tree. The LITS plugin generates SARIF results;
-review the actual file before updating an expectation:
+It reads SARIF expectations from the ruling expectation tree. Review the actual file before
+updating an expectation:
 
 ```shell
 cp its/sq-integration/build/tmp/actual/kotlin/kotlin-language-server/kotlin-S<NNNN>.sarif \
