@@ -31,11 +31,11 @@ only get a read-only token.
 
 The Kotlin compiler corpus (`test_kotlin_compiler`) is skipped by default. Run it with `KOTLIN_COMPILER_IT_ENABLED=true ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon`; its actual and expected rule JSON use the same ruling paths above (project key `kotlin-kotlin-project`).
 
-The language-server corpus (`test_kotlin_language_server`) runs with `:its:sq-integration:integrationTest` and uses SARIF expectations from the LITS plugin. Review its actual file and update its separate expectation:
+The language-server corpus (`test_kotlin_language_server`) runs with `:its:sq-integration:integrationTest` and uses JSON expectations. Review its actual file and update its separate expectation:
 
 ```shell
-cp its/sq-integration/build/tmp/actual/kotlin/kotlin-language-server/kotlin-S<NNNN>.sarif \
-  its/sq-integration/src/integrationTest/resources/expected/kotlin/kotlin-language-server/kotlin-S<NNNN>.sarif
+cp its/sq-integration/build/tmp/actual/kotlin/kotlin-language-server/kotlin-S<NNNN>.json \
+  its/sq-integration/src/integrationTest/resources/expected/kotlin/kotlin-language-server/kotlin-S<NNNN>.json
 ```
 
 Use `-DreportAll=true` to inspect all actual issues. See [README.md](../README.md) for additional server settings. Do not update expected files without inspecting the changed issues.
