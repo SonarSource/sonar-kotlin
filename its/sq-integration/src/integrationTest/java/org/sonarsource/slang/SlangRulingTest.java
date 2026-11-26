@@ -70,7 +70,7 @@ class SlangRulingTest {
       .activateLicense()
       .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion(System.getProperty(SQ_VERSION_PROPERTY, DEFAULT_SQ_VERSION))
-      .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin", "sonar-lits-plugin", "0.11.0.2659"))
+      .addPlugin(MavenLocation.of("org.sonarsource.sonar-lits-plugin", "sonar-lits-plugin", "0.13.0.16223"))
       .setServerProperty("sonar.telemetry.enable", "false");
 
     var plugin = "sonar-kotlin-plugin";

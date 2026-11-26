@@ -38,7 +38,7 @@ jobs:
       # PR's Build run as the candidate and the latest master build as the baseline. sonar-kotlin-pvf
       # comments the dashboard link back on the PR.
       - name: Trigger performance validation in sonar-kotlin-pvf
-        uses: SonarSource/core-languages-tooling-public/pvf-trigger@master
+        uses: SonarSource/core-languages-tooling-public/pvf-trigger@v1
         with:
           comment: ${{ github.event.comment.body }}
           pr-number: ${{ github.event.issue.number }}
