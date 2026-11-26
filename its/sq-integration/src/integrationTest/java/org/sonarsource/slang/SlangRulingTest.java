@@ -122,7 +122,7 @@ class SlangRulingTest {
       expectedDirectory = moduleDirectory.resolve(Path.of("build", "tmp", "empty"));
       Files.createDirectories(expectedDirectory);
     } else {
-      expectedDirectory = moduleDirectory.resolve(Path.of("src", "integrationTest", "resources", "expected")).resolve(projectRelativePath(project));
+      expectedDirectory = moduleDirectory.getParent().resolve(Path.of("ruling", "src", "test", "resources", "expected")).resolve(projectRelativePath(project));
     }
     Path actualDirectory = moduleDirectory.resolve(Path.of("build", "tmp", "actual", project));
     Files.createDirectories(actualDirectory);
