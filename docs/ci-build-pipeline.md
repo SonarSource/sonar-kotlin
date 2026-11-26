@@ -24,6 +24,7 @@ There, each commit gets its own concurrency group, so runs neither cancel nor wa
 | `prepare_pvf` | After a successful `build`, uploads the deployed plugin version as the `candidate-version` artifact. It is a job of its own, so its failure can't fail the build or the promotion. |
 | `qa_plugin`, `qa_ruling`, `qa_sq_integration` | Plugin, ruling and SonarQube integration suites. See [Integration tests](integration-tests.md). |
 | `ruling_update_notify` | After `qa_ruling`, runs the shared ruling update action on same-repository PRs. |
+| `prepare_sq_ruling_artifact`, `sq_ruling_update_notify` | After a failed `qa_sq_integration` run on a same-repository PR, upload SARIF results and commit them to the ruling expectation tree. |
 | `trigger_performance_validation` | Default-branch pushes only, see below. |
 | `promote` | Promotes the build. Fails if `build` or a QA suite failed. |
 | `notify_slack` | Reports failures on the default branch, `branch-*` and `feature/*` when the run is not cancelled. |

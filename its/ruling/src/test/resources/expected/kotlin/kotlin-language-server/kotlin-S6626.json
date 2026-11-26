@@ -1,0 +1,11 @@
+{
+"kotlin-kotlin-language-server-project:build.gradle.kts": [
+35
+],
+"kotlin-kotlin-language-server-project:server/build.gradle.kts": [
+76,
+88,
+97,
+105
+]
+}

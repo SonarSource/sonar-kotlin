@@ -168,15 +168,12 @@ jobs:
         uses: SonarSource/core-languages-tooling-public/prepare-ruling-artifact@c77c0e833bf27beb762f2f0cebd85cf9d5cfd3c6 # master as of 2026-10-26
   ruling_update_notify:
     name: Ruling Update and Notify
-    needs: [qa_ruling, qa_sq_integration, prepare_sq_ruling_artifact]
-    # When qa_ruling fails, include its JSON and any SQ SARIF artifact in a fix PR.
-    # When both suites pass, close a stale fix PR. Fork PRs have a read-only token.
+    needs: [qa_ruling]
+    # When qa_ruling fails, update its JSON expectations. When it passes, close a stale fix PR.
+    # Fork PRs have a read-only token.
     if: >-
       always() && !cancelled() &&
       contains(fromJSON('["success", "failure"]'), needs.qa_ruling.outputs.ruling-outcome) &&
-      contains(fromJSON('["success", "failure"]'), needs.qa_sq_integration.outputs.ruling-outcome) &&
-      (needs.qa_ruling.outputs.ruling-outcome == 'failure' || needs.qa_sq_integration.outputs.ruling-outcome == 'success') &&
-      (needs.qa_sq_integration.outputs.ruling-outcome == 'success' || needs.prepare_sq_ruling_artifact.result == 'success') &&
       github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: github-ubuntu-latest-s
     timeout-minutes: 15
@@ -230,7 +227,7 @@ jobs:
           if-no-files-found: error
   prepare_sq_ruling_artifact:
     name: Prepare SQ Ruling Artifact
-    needs: [qa_ruling, qa_sq_integration]
+    needs: [qa_sq_integration]
     if: >-
       always() && !cancelled() &&
       needs.qa_sq_integration.outputs.ruling-outcome == 'failure' &&
@@ -242,31 +239,16 @@ jobs:
         with:
           name: sq_ruling_results
           path: ${{ runner.temp }}/sq-ruling-results
-      - name: Prepare SARIF artifact for direct update
-        if: ${{ needs.qa_ruling.outputs.ruling-outcome == 'success' }}
+      - name: Prepare SARIF artifact
         uses: SonarSource/core-languages-tooling-public/prepare-ruling-artifact@2e24072fae25c572060041de3b3496a5ffe7c833 # v1 as of 2026-11-26
         with:
           artifact-name: actual_sq_integration
           actual-path: ${{ runner.temp }}/sq-ruling-results
-      - name: Wrap SARIF artifact for the JSON ruling updater
-        if: ${{ needs.qa_ruling.outputs.ruling-outcome == 'failure' }}
-        shell: bash
-        run: |
-          mkdir -p "$RUNNER_TEMP/sq-ruling-artifact/expected"
-          cp -R "$RUNNER_TEMP/sq-ruling-results/." "$RUNNER_TEMP/sq-ruling-artifact/expected/"
-      - name: Upload wrapped SARIF artifact
-        if: ${{ needs.qa_ruling.outputs.ruling-outcome == 'failure' }}
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: actual_sq_integration
-          path: ${{ runner.temp }}/sq-ruling-artifact/
-          if-no-files-found: error
   sq_ruling_update_notify:
     name: SQ Ruling Update and Notify
-    needs: [qa_ruling, qa_sq_integration, prepare_sq_ruling_artifact]
+    needs: [qa_sq_integration, prepare_sq_ruling_artifact]
     if: >-
       always() && !cancelled() &&
-      needs.qa_ruling.outputs.ruling-outcome == 'success' &&
       needs.qa_sq_integration.outputs.ruling-outcome == 'failure' &&
       needs.prepare_sq_ruling_artifact.result == 'success' &&
       github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository

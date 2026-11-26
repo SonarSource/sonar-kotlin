@@ -30,17 +30,17 @@ changes and linking to that PR is also posted.
 The Kotlin compiler corpus (`test_kotlin_compiler`) is skipped by default. Run it with `KOTLIN_COMPILER_IT_ENABLED=true ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon`; its actual and expected rule JSON use the same ruling paths above (project key `kotlin-kotlin-project`).
 
 The language-server corpus (`test_kotlin_language_server`) runs with `:its:sq-integration:integrationTest`.
-It reads SARIF expectations from the ruling expectation tree. Review its actual file before updating an expectation:
+It reads JSON expectations from the ruling expectation tree. The LITS plugin generates SARIF results;
+review the actual file before updating an expectation:
 
 ```shell
-mkdir -p its/ruling/src/test/resources/expected/kotlin/kotlin-language-server
 cp its/sq-integration/build/tmp/actual/kotlin/kotlin-language-server/kotlin-S<NNNN>.sarif \
   its/ruling/src/test/resources/expected/kotlin/kotlin-language-server/kotlin-S<NNNN>.sarif
 ```
 
-When `qa_sq_integration` alone fails on a same-repository pull request, its SARIF results are
-uploaded and `sq_ruling_update_notify` commits the updated expectations to the tested branch.
-If both ruling jobs fail, `ruling_update_notify` includes both artifacts in its fix PR. Neither
-update job runs on push, scheduled or manual runs, or on pull requests from forks.
+When `qa_sq_integration` fails on a same-repository pull request, its SARIF results are uploaded
+and `sq_ruling_update_notify` commits them to the ruling expectation tree on the tested branch.
+The existing `ruling_update_notify` job independently handles JSON results from `qa_ruling`.
+Neither update job runs on push, scheduled or manual runs, or on pull requests from forks.
 
 Use `-DreportAll=true` to inspect all actual issues. See [README.md](../README.md) for additional server settings. Do not update expected files without inspecting the changed issues.
