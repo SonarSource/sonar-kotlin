@@ -1,0 +1,73 @@
+{
+"intellij-rust:sources/kotlin/intellij-rust/debugger/src/main/kotlin/org/rust/debugger/runconfig/RsDebugRunner.kt": [
+125
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/annotator/RsCargoCheckAnnotator.kt": [
+144
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/formatter/impl/spacing.kt": [
+153
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/inspections/RsNamingInspection.kt": [
+111
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/inspections/import/AutoImportFix.kt": [
+60,
+221
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/presentation/Ty.kt": [
+21
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/typing/RsBraceMatcher.kt": [
+33
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/ide/utils/ExprUtils.kt": [
+93
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/completion/LookupElements.kt": [
+90
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/lexer/RustEscapesLexer.kt": [
+58
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/psi/ext/RsArrayType.kt": [
+20,
+22
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/ImplLookup.kt": [
+240
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/ItemResolution.kt": [
+33,
+48
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/resolve/NameResolution.kt": [
+193,
+421,
+494,
+502,
+568
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/Declarations.kt": [
+16
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/Fulfillment.kt": [
+171
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/core/types/infer/TypeInference.kt": [
+305,
+1476
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/extractFunction/RsExtractFunctionConfig.kt": [
+147
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/extractFunction/RsExtractFunctionHandlerAction.kt": [
+55
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/refactoring/implementMembers/impl.kt": [
+50
+],
+"intellij-rust:sources/kotlin/intellij-rust/src/main/kotlin/org/rust/lang/utils/RsDiagnostic.kt": [
+52
+]
+}

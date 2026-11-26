@@ -1,0 +1,8 @@
+{
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/internal/AbstractNode.kt": [
+418
+],
+"corda:sources/kotlin/corda/node/src/main/kotlin/net/corda/node/services/network/NetworkMapUpdater.kt": [
+84
+]
+}

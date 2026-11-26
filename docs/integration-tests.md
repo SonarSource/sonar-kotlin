@@ -17,7 +17,7 @@ In CI, the `config-gradle` and `config-maven` actions route all dependency resol
 
 ## Updating ruling expectations
 
-After changing a rule, inspect its actual JSON (written even when a test fails) and update each corpus it affects. For a standard corpus, copy the relevant rule file after reviewing the changed issues:
+After changing a rule, inspect its actual JSON (written even when a test fails) and update each corpus it affects. For a standard corpus, whose `<projectKey>` is its source directory name (for example `corda`), copy the relevant rule file after reviewing the changed issues:
 
 ```shell
 cp its/ruling/build/actual/<projectKey>/kotlin-S<NNNN>.json \
@@ -31,7 +31,7 @@ changes and linking to that PR is also posted. The update job runs only on same-
 requests: it is skipped on push, scheduled and manual runs, and on pull requests from forks, which
 only get a read-only token.
 
-The Kotlin compiler corpus (`test_kotlin_compiler`) is skipped by default. Run it with `KOTLIN_COMPILER_IT_ENABLED=true ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon`; its actual and expected rule JSON use the same ruling paths above (project key `kotlin-kotlin-project`).
+The Kotlin compiler corpus (`test_kotlin_compiler`) is skipped by default. Run it with `KOTLIN_COMPILER_IT_ENABLED=true ./gradlew :its:ruling:integrationTest --info --console=plain --no-daemon`; its actual and expected rule JSON use the same ruling paths above (project key `kotlin`).
 
 The language-server corpus (`test_kotlin_language_server`) runs with `:its:sq-integration:integrationTest`. Review its actual file and update its separate expectation:
 

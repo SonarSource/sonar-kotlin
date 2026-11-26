@@ -1,0 +1,81 @@
+{
+"kotlin:sources/kotlin/kotlin/compiler/cli/cli-common/src/org/jetbrains/kotlin/cli/common/arguments/argumentUtils.kt": [
+79
+],
+"kotlin:sources/kotlin/kotlin/compiler/container/tests/org/jetbrains/kotlin/container/tests/ComponentContainerTest.kt": [
+287,
+288,
+289,
+309
+],
+"kotlin:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/CallCompleter.kt": [
+84,
+96
+],
+"kotlin:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/checkers/InlineChecker.kt": [
+205
+],
+"kotlin:sources/kotlin/kotlin/compiler/frontend/src/org/jetbrains/kotlin/resolve/calls/tower/KotlinToResolvedCallTransformer.kt": [
+100
+],
+"kotlin:sources/kotlin/kotlin/compiler/ir/backend.js/src/org/jetbrains/kotlin/ir/backend/js/lower/IntrinsicifyCallsLowering.kt": [
+150
+],
+"kotlin:sources/kotlin/kotlin/compiler/ir/backend.js/src/org/jetbrains/kotlin/ir/backend/js/lower/SecondaryCtorLowering.kt": [
+202
+],
+"kotlin:sources/kotlin/kotlin/compiler/ir/backend.js/src/org/jetbrains/kotlin/ir/backend/js/transformers/irToJs/IrElementToJsExpressionTransformer.kt": [
+73
+],
+"kotlin:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/codegen/IrInlineCodegen.kt": [
+97
+],
+"kotlin:sources/kotlin/kotlin/compiler/ir/backend.jvm/src/org/jetbrains/kotlin/backend/jvm/codegen/IrSourceCompilerForInline.kt": [
+94
+],
+"kotlin:sources/kotlin/kotlin/compiler/ir/ir.tree/src/org/jetbrains/kotlin/ir/util/IrUtils.kt": [
+62
+],
+"kotlin:sources/kotlin/kotlin/compiler/tests-common/tests/org/jetbrains/kotlin/checkers/AbstractDiagnosticsTest.kt": [
+117
+],
+"kotlin:sources/kotlin/kotlin/core/descriptors.jvm/src/org/jetbrains/kotlin/load/kotlin/AbstractBinaryClassAnnotationAndConstantLoader.kt": [
+247
+],
+"kotlin:sources/kotlin/kotlin/core/descriptors/src/org/jetbrains/kotlin/descriptors/impl/AbstractTypeAliasDescriptor.kt": [
+88
+],
+"kotlin:sources/kotlin/kotlin/core/descriptors/src/org/jetbrains/kotlin/descriptors/impl/PackageFragmentDescriptorImpl.kt": [
+35
+],
+"kotlin:sources/kotlin/kotlin/core/descriptors/src/org/jetbrains/kotlin/descriptors/impl/TypeAliasConstructorDescriptor.kt": [
+109
+],
+"kotlin:sources/kotlin/kotlin/idea/idea-analysis/src/org/jetbrains/kotlin/idea/references/KtInvokeFunctionReference.kt": [
+49
+],
+"kotlin:sources/kotlin/kotlin/idea/idea-jvm/src/org/jetbrains/kotlin/idea/injection/InterpolatedStringInjectorProcessor.kt": [
+88
+],
+"kotlin:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/hierarchy/calls/callHierarchyUtils.kt": [
+73
+],
+"kotlin:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/inspections/KotlinRedundantOverrideInspection.kt": [
+30
+],
+"kotlin:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/KotlinChangeSignatureHandler.kt": [
+62
+],
+"kotlin:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/changeSignature/KotlinChangeSignatureUsageProcessor.kt": [
+305
+],
+"kotlin:sources/kotlin/kotlin/idea/src/org/jetbrains/kotlin/idea/refactoring/kotlinRefactoringUtil.kt": [
+105
+],
+"kotlin:sources/kotlin/kotlin/plugins/android-extensions/android-extensions-compiler/src/org/jetbrains/kotlin/android/parcel/ParcelableDeclarationChecker.kt": [
+119
+],
+"kotlin:sources/kotlin/kotlin/plugins/uast-kotlin/src/org/jetbrains/uast/kotlin/internal/kotlinInternalUastUtils.kt": [
+200
+]
+}
