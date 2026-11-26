@@ -114,7 +114,7 @@ jobs:
     runs-on: github-ubuntu-latest-s
     timeout-minutes: 5
     steps:
-      - uses: SonarSource/core-languages-tooling-public/prepare-pvf@master
+      - uses: SonarSource/core-languages-tooling-public/prepare-pvf@v1
         with:
           build-version: ${{ needs.build.outputs.project-version }}
 
@@ -197,8 +197,8 @@ jobs:
   ruling_update_notify:
     name: Ruling Update and Notify
     needs: [qa_ruling]
-    # qa_ruling itself still fails on ruling differences, so run whenever the ruling step completed;
-    # when ruling passes, this closes any stale fix PR. Fork PRs get a read-only token, skip them.
+    # When qa_ruling fails, update its JSON expectations. When it passes, close a stale fix PR.
+    # Fork PRs have a read-only token.
     if: >-
       always() && !cancelled() &&
       contains(fromJSON('["success", "failure"]'), needs.qa_ruling.outputs.ruling-outcome) &&
@@ -219,6 +219,8 @@ jobs:
   qa_sq_integration:
     runs-on: github-ubuntu-latest-m
     timeout-minutes: 30
+    outputs:
+      ruling-outcome: ${{ steps.ruling.outcome }}
     steps:
       - *configure_GITHUB_JOB_ID_environment_variable
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -243,7 +245,8 @@ jobs:
           BUILD_NUMBER: 0
       - *checkout-its-sources
       - uses: ./.github/actions/cache-orchestrator
-      - run: |
+      - id: ruling
+        run: |
           ./gradlew \
               :its:sq-integration:integrationTest --info -Dsonar.runtimeVersion=DEV
         env:
@@ -254,6 +257,54 @@ jobs:
           ARTIFACTORY_PRIVATE_PASSWORD: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           ARTIFACTORY_ACCESS_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).ARTIFACTORY_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ fromJSON(steps.secrets.outputs.vault).GITHUB_TOKEN }}
+      - name: Upload language-server results
+        if: ${{ always() && steps.ruling.outcome == 'failure' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: sq_ruling_results
+          path: its/sq-integration/build/tmp/actual/
+          if-no-files-found: error
+  prepare_sq_ruling_artifact:
+    name: Prepare SQ Ruling Artifact
+    needs: [qa_sq_integration]
+    if: >-
+      always() && !cancelled() &&
+      needs.qa_sq_integration.outputs.ruling-outcome == 'failure' &&
+      github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: github-ubuntu-latest-s
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: sq_ruling_results
+          path: ${{ runner.temp }}/sq-ruling-results
+      - name: Prepare SARIF artifact
+        uses: SonarSource/core-languages-tooling-public/prepare-ruling-artifact@2e24072fae25c572060041de3b3496a5ffe7c833 # v1 as of 2026-11-26
+        with:
+          artifact-name: actual_sq_integration
+          actual-path: ${{ runner.temp }}/sq-ruling-results
+  sq_ruling_update_notify:
+    name: SQ Ruling Update and Notify
+    needs: [qa_sq_integration, prepare_sq_ruling_artifact]
+    if: >-
+      always() && !cancelled() &&
+      needs.qa_sq_integration.outputs.ruling-outcome == 'failure' &&
+      needs.prepare_sq_ruling_artifact.result == 'success' &&
+      github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: github-ubuntu-latest-s
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Update language-server ruling and notify
+        uses: SonarSource/core-languages-tooling-public/ruling-update-and-notify@2e24072fae25c572060041de3b3496a5ffe7c833 # v1 as of 2026-11-26
+        with:
+          ruling-failed: 'true'
   # Public repos cannot call private reusable workflows (GitHub limitation).
   # On every push to master, trigger PVF in private sonar-kotlin-pvf via repository_dispatch,
   # benchmarking the pushed plugin against the previous master commit's one; results are reported
@@ -299,7 +350,7 @@ jobs:
       # Resolved here rather than in sonar-kotlin-pvf, which cannot read this repository's artifacts.
       - name: Resolve the previous master build's plugin version
         id: baseline
-        uses: SonarSource/core-languages-tooling-public/pvf-resolve-baseline@master
+        uses: SonarSource/core-languages-tooling-public/pvf-resolve-baseline@v1
         with:
           previous-sha: ${{ github.event.before }}
           # The job that records the plugin version.
@@ -358,7 +409,7 @@ jobs:
             -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
       - name: Notify the merger that the baseline could not be resolved
         if: failure() && steps.baseline.outcome == 'failure'
-        uses: SonarSource/core-languages-tooling-public/pvf-notify-merger@master
+        uses: SonarSource/core-languages-tooling-public/pvf-notify-merger@v1
         with:
           merged-sha: ${{ github.sha }}
           previous-sha: ${{ github.event.before }}

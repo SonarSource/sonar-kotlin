@@ -24,6 +24,7 @@ There, each commit gets its own concurrency group, so runs neither cancel nor wa
 | `prepare_pvf` | After a successful `build`, uploads the deployed plugin version as the `candidate-version` artifact. It is a job of its own, so its failure can't fail the build or the promotion. |
 | `qa_plugin`, `qa_ruling`, `qa_sq_integration` | Plugin, ruling and SonarQube integration suites. See [Integration tests](integration-tests.md). |
 | `ruling_update_notify` | After `qa_ruling`, runs the shared ruling update action on same-repository PRs. |
+| `prepare_sq_ruling_artifact`, `sq_ruling_update_notify` | After a failed `qa_sq_integration` run on a same-repository PR, upload SARIF results and commit them to the ruling expectation tree. |
 | `trigger_performance_validation` | Default-branch pushes only, see below. |
 | `promote` | Promotes the build. Fails if `build` or a QA suite failed. |
 | `notify_slack` | Reports failures on the default branch, `branch-*` and `feature/*` when the run is not cancelled. |
@@ -36,7 +37,7 @@ Neither `prepare_pvf` nor the performance validation trigger is a dependency of 
 `prepare_pvf` runs on every event, as both performance validation triggers read its `candidate-version` artifact.
 
 `trigger_performance_validation` runs on pushes to the default branch only, after a successful `build`.
-It resolves the baseline here, as sonar-kotlin-pvf cannot read this repository's artifacts, with the shared [`pvf-resolve-baseline`](https://github.com/SonarSource/core-languages-tooling-public/tree/master/pvf-resolve-baseline) action:
+It resolves the baseline here, as sonar-kotlin-pvf cannot read this repository's artifacts, with the shared [`pvf-resolve-baseline`](https://github.com/SonarSource/core-languages-tooling-public/tree/v1/pvf-resolve-baseline) action:
 
 - It skips validation when the merged PR opts out (see the controls above), or when the push only changes rule metadata, `sonarpedia.json` or `.md` files.
 - Otherwise the baseline is the `candidate-version` artifact of the previous commit's Build run.
@@ -49,7 +50,7 @@ With a baseline, the job sets a pending `performance-validation` commit status a
 The dispatch carries the baseline, the candidate version and the report name, `<sha> <subject> (#<PR>)`, and the dashboard index lists the report as a master push.
 sonar-kotlin-pvf reports the result back as the `performance-validation` commit status.
 On a regression, a benchmark error or a failed validation, it also comments on the merged PR and mentions whoever merged it.
-If the baseline couldn't be resolved (e.g. the GitHub API kept failing), the trigger job itself posts that comment, with the shared [`pvf-notify-merger`](https://github.com/SonarSource/core-languages-tooling-public/tree/master/pvf-notify-merger) action.
+If the baseline couldn't be resolved (e.g. the GitHub API kept failing), the trigger job itself posts that comment, with the shared [`pvf-notify-merger`](https://github.com/SonarSource/core-languages-tooling-public/tree/v1/pvf-notify-merger) action.
 
 On a PR, a comment starting with `/pvf` from a user with write access to the repository (optionally followed by rules, e.g. `/pvf S1234, S5678`) triggers [`pvf-comment.yml`](../.github/workflows/pvf-comment.yml).
 It dispatches the validation in sonar-kotlin-pvf with the PR's `candidate-version` artifact as the candidate and `DEV` as the baseline, and sonar-kotlin-pvf comments the dashboard link on the PR.
