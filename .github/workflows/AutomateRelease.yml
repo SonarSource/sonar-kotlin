@@ -60,7 +60,7 @@ jobs:
       actions: write
       pull-requests: write
     with:
-      jira-project-key: "SONARKT"
+      jira-project-key: "KOTLIN"
       project-name: "SonarKotlin"
       plugin-name: "kotlin"
       plugin-artifacts-sqs: "kotlin"
