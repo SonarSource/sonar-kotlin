@@ -31,7 +31,7 @@ Useful links
 ------------
 
 * [Project homepage](https://redirect.sonarsource.com/plugins/kotlin.html)
-* [Issue tracking](https://jira.sonarsource.com/browse/SONARKT/)
+* [Issue tracking](https://sonarsource.atlassian.net/browse/KOTLIN/)
 * [Available rules](https://rules.sonarsource.com/kotlin)
 * [Community Forum](https://community.sonarsource.com/)
 
