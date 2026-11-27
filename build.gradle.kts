@@ -267,7 +267,7 @@ sonarqube {
         property("sonar.links.ci", "https://cirrus-ci.com/github/SonarSource/sonar-kotlin")
         property("sonar.projectName", projectTitle)
         property("sonar.links.scm", "https://github.com/SonarSource/sonar-kotlin")
-        property("sonar.links.issue", "https://jira.sonarsource.com/browse/SONARKT")
+        property("sonar.links.issue", "https://sonarsource.atlassian.net/browse/KOTLIN")
         property("sonar.exclusions", "**/build/**/*")
         property("sonar.sca.exclusions", "**/its/**,**/kotlin-checks-test-sources/**,**/samples/**")
         property(
